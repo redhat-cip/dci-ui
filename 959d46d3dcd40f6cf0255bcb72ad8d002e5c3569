@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_4974219c",
+        "filename": "dci-ui.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-01-11T15:36:23Z",
+      "side": 1,
+      "message": "it is /etc/dci-ui/config.json doesn\u0027t it ?",
+      "revId": "959d46d3dcd40f6cf0255bcb72ad8d002e5c3569",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
