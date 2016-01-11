@@ -18,10 +18,10 @@ require('app')
 .controller('LoginCtrl', [
   '$scope', '$state', 'auth', function($scope, $state, auth) {
     $scope.authenticate = function(credentials) {
-      auth.login(credentials.username, credentials.password).then(function(){
+      auth.login(credentials.username, credentials.password).then(function() {
         $state.go('index');
       });
-    }
+    };
     $scope.unauthorized = auth.isUnauthorized();
   }
 ])
@@ -45,14 +45,13 @@ require('app')
       this[remoteci] = _.contains($state.params.remoteci, remoteci);
     }, $scope.remotecis);
 
-
-    $scope.search = function () {
+    $scope.search = function() {
       var params = {
         'status': _($scope.status).pick(_.identity).keys().join(','),
         'remoteci': _($scope.remotecis).pick(_.identity).keys().join(',')
-      }
+      };
       $state.go('jobs', params);
-    }
+    };
 
     $scope.isFiltering = !!(
       $state.params.status.length || $state.params.remoteci.length
@@ -84,12 +83,12 @@ require('app')
     test.updated_at = moment.format(test.updated_at);
 
     angular.forEach(job.jobstates, function(jobstate) {
-      jobstate.statusClass = 'bs-callout-' + status[jobstate.status]['color'];
+      jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
       api.getFiles(jobstate.id).then(function(files) {
         if (!opened && files.length) {
           opened = jobstate.isOpen = true;
         }
-        jobstate.files = files
+        jobstate.files = files;
       });
     });
     api.getComponents(job.jobdefinition.id).then(function(components) {
@@ -114,16 +113,17 @@ require('app')
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
-    }
+    };
 
     $scope.submitUser = function() {
-      if ($scope.userForm.$invalid) return;
+      if ($scope.userForm.$invalid) { return; }
       var user = {
         name: $scope.user.name,
         password: $scope.user.password,
         role: $scope.user.admin ? 'admin' : 'user',
         team_id: $scope.user.team
-      }
+      };
+
       api.postUser(user).then(
         function(user) {
           $scope.alerts.push({
@@ -135,12 +135,13 @@ require('app')
           $scope.alerts.push({
             msg: 'Error user "' + $scope.user.name + '" already exist',
             type: 'danger'
-          })
+          });
         }
       );
-    }
+    };
+
     $scope.submitTeam = function() {
-      if ($scope.teamForm.$invalid) return;
+      if ($scope.teamForm.$invalid) { return; }
       api.postTeam({name: $scope.team.name}).then(
         function(team) {
           $scope.teams.push(team);
@@ -153,9 +154,9 @@ require('app')
           $scope.alerts.push({
             msg: 'Error team "' + $scope.team.name + '" already exist',
             type: 'danger'
-          })
+          });
         }
       );
-    }
+    };
   }
 ]);

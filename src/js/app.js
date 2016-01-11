@@ -30,7 +30,7 @@ module.exports = angular.module('app', [
   moment.locale('en', {invalidDate: 'N/A'});
   moment.locale('fr', {invalidDate: 'N/A'});
   var parser = _.partialRight(moment, moment.ISO_8601, true);
-  return _.assign( parser, {
+  return _.assign(parser, {
     'moment': moment,
     'format': function(date) { return parser(date).format('LLLL'); }
   });
