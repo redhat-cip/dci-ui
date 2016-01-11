@@ -23,16 +23,16 @@ require('app')
 
 .value('user', {})
 
-.config(['$httpProvider', function ($httpProvider) {
+.config(['$httpProvider', function($httpProvider) {
   var interceptor = ['$q', 'user', 'userStatus', function($q, user, status) {
     var apiURL = new RegExp('api\/');
 
     return {
-      request: function (conf) {
-        if (!conf.url.match(apiURL)) return conf;
-        if (!user.token) return angular.extend(conf, {status: 401});
+      request: function(conf) {
+        if (!conf.url.match(apiURL)) { return conf; }
+        if (!user.token) { return angular.extend(conf, {status: 401}); }
 
-        conf.headers['Authorization'] = 'Basic ' + user.token;
+        conf.headers.Authorization = 'Basic ' + user.token;
         return conf;
       },
       responseError: function(error) {
@@ -48,7 +48,7 @@ require('app')
 }])
 .service('auth', [
   '$window', '$cookieStore', 'api', 'user', 'userStatus',
-  function ($window, $cookies, api, user, status) {
+  function($window, $cookies, api, user, status) {
     angular.extend(user, {status: status.DISCONNECTED}, $cookies.get('user'));
 
     this.user = user;
@@ -61,23 +61,24 @@ require('app')
         $cookies.put('user', user);
         return user;
       });
-    }
+    };
 
     this.isAuthenticated = function() {
       return user.status === status.AUTHENTICATED;
-    }
+    };
+
     this.isUnauthorized = function() {
       return user.status === status.UNAUTHORIZED;
-    }
+    };
 
     this.isAdmin = function() {
       return user.team.name === 'admin';
-    }
+    };
 
     this.logout = function() {
       $cookies.put('user', {});
       user.status = status.DISCONNECTED;
-    }
+    };
   }
 ])
 .run(['auth', angular.noop]);

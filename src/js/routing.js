@@ -19,14 +19,14 @@ require('app')
   '$stateProvider', '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     var scrollTop = ['$anchorScroll',
-      function ($anchorScroll) {$anchorScroll();}
+      function($anchorScroll) { $anchorScroll(); }
     ];
 
     $stateProvider
     .state('auth', {
       'abstract': true,
       resolve: {
-        _: ['auth', '$q', function (auth, $q) {
+        _: ['auth', '$q', function(auth, $q) {
           if (!auth.isAuthenticated()) {
             return $q.reject({status: 401});
           }
@@ -52,7 +52,7 @@ require('app')
       parent: 'auth',
       resolve: {
         _: ['$q', function($q) {
-          return $q.reject({status: 301})
+          return $q.reject({status: 301});
         }]
       }
     })
@@ -118,14 +118,14 @@ require('app')
 ])
 
 .controller('authCtrl', [
-  '$scope', '$state', 'auth', function ($scope, $state, auth) {
+  '$scope', '$state', 'auth', function($scope, $state, auth) {
     // currently just create roles and user when admin
     $scope.admin = auth.isAdmin();
 
-    $scope.logout = function () {
+    $scope.logout = function() {
       auth.logout();
       $state.go('login');
-    }
+    };
   }
 ])
 

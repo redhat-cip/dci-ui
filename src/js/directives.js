@@ -29,15 +29,14 @@ require('app')
       job.time_running = moment(job.updated_at).to(job.created_at, true);
       job.updated_at = moment(job.updated_at).from(moment.moment());
 
-      job.glyphicon = status[job.status]['glyphicon'];
-      job.statusClass = 'bs-callout-' + status[job.status]['color'];
-
+      job.glyphicon = status[job.status].glyphicon;
+      job.statusClass = 'bs-callout-' + status[job.status].color;
 
       scope.recheck = function() {
         api.recheckJob(job.id).then(function(job) {
           $state.go('job', {id: job.id});
         });
-      }
+      };
     },
     templateUrl: '/partials/dci-job.html'
   };
