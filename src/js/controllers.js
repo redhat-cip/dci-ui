@@ -72,15 +72,18 @@ require('app')
   function($scope, job, api, status, moment) {
     $scope.job = job;
     var opened = false;
-    job.jobdefinition.created_at = moment.format(job.jobdefinition.created_at);
-    job.jobdefinition.updated_at = moment.format(job.jobdefinition.updated_at);
 
-    job.remoteci.created_at = moment.format(job.remoteci.created_at);
-    job.remoteci.updated_at = moment.format(job.remoteci.updated_at);
+    job.jobdefinition.created_at = (moment(job.jobdefinition.created_at)
+                                    .local().format());
+    job.jobdefinition.updated_at = (moment(job.jobdefinition.updated_at)
+                                    .local().format());
+
+    job.remoteci.created_at = moment(job.remoteci.created_at).local().format();
+    job.remoteci.updated_at = moment(job.remoteci.updated_at).local().format();
 
     var test = job.jobdefinition.test;
-    test.created_at = moment.format(test.created_at);
-    test.updated_at = moment.format(test.updated_at);
+    test.created_at = moment(test.created_at).local().format();
+    test.updated_at = moment(test.updated_at).local().format();
 
     angular.forEach(job.jobstates, function(jobstate) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
@@ -93,7 +96,12 @@ require('app')
     });
     api.getComponents(job.jobdefinition.id).then(function(components) {
       $scope.components = components;
+      angular.forEach(components, function(component) {
+        component.created_at = moment(component.created_at).local().format();
+        component.updated_at = moment(component.updated_at).local().format();
+      });
     });
+
   }
 ])
 
