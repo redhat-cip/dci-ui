@@ -29,10 +29,11 @@ module.exports = angular.module('app', [
 .factory('moment', ['_', function(_) {
   moment.locale('en', {invalidDate: 'N/A'});
   moment.locale('fr', {invalidDate: 'N/A'});
-  var parser = _.partialRight(moment, moment.ISO_8601, true);
+  moment.defaultFormat = 'LLLL';
+
+  var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
   return _.assign(parser, {
-    'moment': moment,
-    'format': function(date) { return parser(date).format('LLLL'); }
+    'moment': moment.utc
   });
 }])
 .factory('_', function() {
