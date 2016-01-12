@@ -6,6 +6,7 @@ SHA=$(git rev-parse HEAD | cut -c1-8)
 
 # Create the proper filesystem hierarchy to proceed with srpm creatioon
 #
+rm -rf ~/rpmbuild
 rpmdev-setuptree
 cp ${PROJ_NAME}.spec ${HOME}/rpmbuild/SPECS/
 git archive master --format=tgz --output=${HOME}/rpmbuild/SOURCES/${PROJ_NAME}-0.0.${DATE}git${SHA}.tgz
