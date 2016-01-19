@@ -87,6 +87,8 @@ require('app')
 
     angular.forEach(job.jobstates, function(jobstate) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
+      jobstate.updated_at = moment(jobstate.updated_at).local().format();
+
       api.getFiles(jobstate.id).then(function(files) {
         if (!opened && files.length) {
           opened = jobstate.isOpen = true;

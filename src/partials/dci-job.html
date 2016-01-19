@@ -8,8 +8,12 @@
     <div class="title">
       <span class="glyphicon" ng-class="job.glyphicon"></span> {{job.status}}
     </div>
-    <div><span class="glyphicon glyphicon-calendar"></span> {{job.updated_at}}</div>
-    <div><span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}</div>
+    <div title="Test last run">
+      <span class="glyphicon glyphicon-calendar"></span> {{job.updated_at}}
+    </div>
+    <div title="Test running time">
+      <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
+    </div>
   </div>
   <div class="col-md-1">
     <a class="btn btn-default glyphicon glyphicon-minus-sign"

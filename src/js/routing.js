@@ -121,6 +121,7 @@ require('app')
   '$scope', '$state', 'auth', function($scope, $state, auth) {
     // currently just create roles and user when admin
     $scope.admin = auth.isAdmin();
+    $scope.user = auth.user;
 
     $scope.logout = function() {
       auth.logout();

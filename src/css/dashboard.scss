@@ -1,7 +1,16 @@
+@import "bootstrap/variables";
+
+$navbar-inverse-link-active-bg: $brand-primary;
+$navbar-side-size: 175px;
+$body-margin-top: 60px;
+
+$arrow-size: 15px;
+
 @import "bootstrap";
 
 body {
-  margin-top: 60px;
+  margin-top: $body-margin-top;
+  margin-left: $navbar-side-size;
 }
 
 pre {
@@ -18,7 +27,72 @@ pre {
 
 .navbar {
   .navbar-brand {
-    padding-top: 3px;
+    float: none;
+    display: block;
+    height: initial;
+    margin-bottom: 50px;
+  }
+}
+
+.navbar-fixed-left,
+.navbar-fixed-right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  margin-bottom: 0;
+  border-width: 0;
+  width: $navbar-side-size;
+
+  .navbar-nav > .active > a:after {
+    width: 0;
+    height: 0;
+    content: " ";
+    border-top: $arrow-size solid transparent;
+    border-bottom: $arrow-size solid transparent;
+    position: absolute;
+    top: 10px;
+    border-right: $arrow-size solid $body-bg;
+  }
+
+  .navbar-nav > li.user {
+    text-align: center;
+    cursor: default;
+    margin-bottom: 20px;
+
+    & > a:hover, & > a:focus {
+      color: $navbar-inverse-link-color;
+    }
+  }
+
+  @media (min-width: $grid-float-breakpoint) {
+    border-radius: 0;
+
+    .navbar-header, .navbar-nav, .navbar-nav > li  {
+      float: none;
+    }
+
+  }
+}
+
+#logout {
+  margin-top: 100px;
+  & > li > a {
+    color: $navbar-inverse-brand-hover-color;
+    cursor: pointer;
+  }
+}
+
+.navbar-fixed-left {
+  left: 0;
+  .navbar-nav > .active > a:after {
+    right: 0;
+  }
+}
+
+.navbar-fixed-right {
+  right: 0;
+  .navbar-nav > .active > a:after {
+    left: 0;
   }
 }
 
@@ -69,9 +143,6 @@ pre {
 
 /*!
  * jsonformatter
- *
- * Version: 0.4.1 - 2015-12-03T03:38:59.933Z
- * License: MIT
  */
 
 

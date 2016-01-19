@@ -12,18 +12,22 @@
             <small>
               : {{ jobstate.comment }}
             </small>
-            <button type="button" class="pull-right btn btn-primary btn-xs"
-              ng-if="jobstate.files.length" ng-click="jobstate.isOpen = !jobstate.isOpen">
-              <span ng-if="!jobstate.isOpen">
-                see details
-              </span>
-              <span ng-if="jobstate.isOpen">
-                close details
-              </span>
-            </button>
+            <small class="pull-right">{{ jobstate.updated_at }}</small>
           </h4>
-          <hr>
-
+        </div>
+        <div class="col-md-12" ng-if="jobstate.files.length">
+          <button type="button" class="btn btn-primary btn-xs pull-right"
+             ng-click="jobstate.isOpen = !jobstate.isOpen">
+            <span ng-if="!jobstate.isOpen">
+              see details
+            </span>
+            <span ng-if="jobstate.isOpen">
+              close details
+            </span>
+          </button>
+        </div>
+        <div class="col-md-12">
+        <hr>
         </div>
         <div collapse="!jobstate.isOpen" class="col-md-12">
           <div class="tile tile-file" ng-repeat="file in jobstate.files">
