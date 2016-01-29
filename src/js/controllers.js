@@ -140,7 +140,7 @@ require('app')
           });
         },
         function(error) {
-          var alert = { type: 'danger' };
+          var alert = {type: 'danger'};
           if (error.status === 422) {
             alert.msg = 'Error user "' + $scope.user.name + '" already exist';
           } else {
@@ -162,7 +162,7 @@ require('app')
           });
         },
         function(error) {
-          var alert = { type: 'danger' };
+          var alert = {type: 'danger'};
           if (error.status === 422) {
             alert.msg = 'Error team "' + $scope.team.name + '" already exist';
           } else {

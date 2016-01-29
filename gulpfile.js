@@ -14,24 +14,26 @@
 
 'use strict';
 
-var gulp   = require('gulp');
-var $      = require('gulp-load-plugins')();
-var del    = require('del');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var config = require('./config');
-var utils  = require('./utils');
+var gulp       = require('gulp');
+var $          = require('gulp-load-plugins')();
+var del        = require('del');
+var source     = require('vinyl-source-stream');
+var buffer     = require('vinyl-buffer');
+var jsonfile   = require('jsonfile');
+var config     = require('./config');
+var utils      = require('./utils');
 
-var DIST = 'static';
-var JS = ['src/js/**/*.js'];
-var SCSS = ['src/css/**/*.scss'];
+var DIST       = 'static';
+var JS         = ['src/js/**/*.js'];
+var SCSS       = ['src/css/**/*.scss'];
 var configFile = 'src/config.json';
+
 gulp.task('jscs', function() {
   return gulp.src(['src/**/*.js', 'test/**/*.js', 'gulpfile.js', 'utils.js'])
   .pipe($.jscs());
 });
 
-gulp.task('copy', ['clean'], function() {
+gulp.task('copy', ['rev'], function() {
   return gulp.src([
     'src/**/*',
     '!src/**/*.js',
@@ -40,8 +42,8 @@ gulp.task('copy', ['clean'], function() {
   ]).pipe(gulp.dest(DIST));
 });
 
-gulp.task('build', ['js', 'css', 'fonts', 'copy']);
-gulp.task('build:test', ['js:test', 'css', 'fonts', 'copy']);
+gulp.task('build', ['js', 'css', 'fonts', 'copy', 'rev']);
+gulp.task('build:test', ['js:test', 'css', 'fonts', 'copy', 'rev']);
 
 gulp.task('clean', function() {
   var entries = [DIST + '/**/*', '!' + DIST + '/.gitkeep'];
@@ -65,15 +67,15 @@ function buildJS(jsFiles) {
   .pipe(gulp.dest(DIST + '/js/'));
 }
 
-gulp.task('js', ['clean'], function() {
+gulp.task('js', function() {
   return buildJS(JS);
 });
 
-gulp.task('js:test', ['clean'], function() {
+gulp.task('js:test', function() {
   return buildJS(JS.concat('node_modules/angular-mocks/ngMockE2E.js'));
 });
 
-gulp.task('css', ['clean'], function() {
+gulp.task('css', function() {
   var conf = {
     includePaths: ['node_modules/bootstrap-sass/assets/stylesheets/']
   };
@@ -86,7 +88,7 @@ gulp.task('css', ['clean'], function() {
   .pipe(gulp.dest(DIST + '/css/'));
 });
 
-gulp.task('fonts', ['clean'], function() {
+gulp.task('fonts', function() {
   var entries = [
     'node_modules/bootstrap-sass/assets/fonts/**'
   ];
@@ -147,6 +149,15 @@ gulp.task('test:e2e:debug', ['build:test'], function(cb) {
   .fin(function() {
     server.close();
     cb(error);
+  });
+});
+
+gulp.task('rev', function(cb) {
+  utils.gitRev(function(rev) {
+    jsonfile.readFile(configFile, function(_, obj) {
+      obj.version = rev;
+      jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
+    });
   });
 });
 

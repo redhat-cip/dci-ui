@@ -28,6 +28,14 @@ var through      = require('through2');
 var browserify   = require('browserify');
 var globby       = require('globby');
 
+function gitRev(cb) {
+  childProcess.exec(
+    'git rev-parse --short HEAD', {cwd: __dirname}, function(_, stdout) {
+      cb(stdout.split('\n').join(''));
+    }
+  );
+}
+
 /*
  * The close function is async, so we wrap it in order
  * to make it return a promise
@@ -163,5 +171,6 @@ module.exports = {
   bundledStream: bundledStream,
   server: server,
   phantom: phantom,
-  protractor: protractor
+  protractor: protractor,
+  gitRev: gitRev
 };

@@ -68,9 +68,11 @@ module.exports = angular.module('app', [
 .value('config', {})
 .run(['$http', '$q', 'config', function($http, $q, config) {
   var d = $q.defer();
-  config.url = d.promise;
+  config.promise = d.promise;
+
   $http.get('/config.json').then(function(resp) {
-    d.resolve(resp.data.apiURL);
+    angular.extend(config, resp.data);
+    d.resolve();
   }, function(err) {
     d.reject(err);
   });

@@ -5,7 +5,7 @@
     "browserify": "~11.2.0",
     "connect": "^3.4.0",
     "connect-livereload": "^0.5.3",
-    "del": "~2.0.2",
+    "del": "~2.2.0",
     "globby": "~3.0.1",
     "gulp": "~3.9.0",
     "gulp-concat": "~2.6.0",
@@ -25,7 +25,8 @@
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.1.0",
     "angular-mocks": "~1.4.7",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "jsonfile": "~2.2.3"
   },
   "engines": {
     "node": ">=0.8.0"
