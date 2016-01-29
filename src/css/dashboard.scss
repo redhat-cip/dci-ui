@@ -2,14 +2,12 @@
 
 $navbar-inverse-link-active-bg: $brand-primary;
 $navbar-side-size: 200px;
-$body-margin-top: 60px;
 
 $arrow-size: 15px;
 
 @import "bootstrap";
 
 body {
-  margin-top: $body-margin-top;
   margin-left: $navbar-side-size;
 }
 
@@ -139,8 +137,11 @@ pre {
   }
 }
 
-.filtering .glyphicon {
-  margin-top: 1px;
+.filtering {
+  margin-bottom: 50px;
+  .glyphicon {
+    margin-top: 1px;
+  }
 }
 
 /*!
