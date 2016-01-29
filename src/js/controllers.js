@@ -53,9 +53,7 @@ require('app')
       $state.go('jobs', params);
     };
 
-    $scope.isFiltering = !!(
-      $state.params.status.length || $state.params.remoteci.length
-    );
+    $scope.isFiltering = true;
 
     if (!$scope.isFiltering) {
       $scope.pagination = {

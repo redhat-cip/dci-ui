@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-4 col-md-offset-8">
-    <button class="btn btn-default btn-block" ng-click="isFiltering = !isFiltering">
+    <button class="btn btn-default btn-block filtering" ng-click="isFiltering = !isFiltering">
+      <div class="glyphicon pull-right"
+        ng-class="{'glyphicon-menu-down': isFiltering, 'glyphicon-menu-up': !isFiltering}">
+      </div>
       Filters
-      <span class="glyphicon pull-right"
-        ng-class="{'glyphicon-menu-down': isFiltering, 'glyphicon-menu-right': !isFiltering}">
-      </span>
     </button>
   </div>
 </div>
