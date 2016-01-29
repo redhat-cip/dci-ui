@@ -28,7 +28,6 @@ pre {
     float: none;
     display: block;
     height: initial;
-    margin-bottom: 50px;
   }
 }
 
@@ -40,6 +39,7 @@ pre {
   margin-bottom: 0;
   border-width: 0;
   width: $navbar-side-size;
+
 
   .navbar-nav > .active > a:after {
     width: 0;
@@ -59,11 +59,15 @@ pre {
   @media (min-width: $grid-float-breakpoint) {
     border-radius: 0;
 
-    .navbar-header, .navbar-nav, .navbar-nav > li  {
+    .navbar-header, .navbar-nav, .navbar-nav > li, .navbar-text {
       float: none;
     }
 
   }
+}
+
+.navbar-text {
+  text-align: center;
 }
 
 .navbar-fixed-left {
@@ -126,15 +130,7 @@ pre {
 }
 
 .user {
-  margin-bottom: 50px;
-
-  & li:first-child  {
-    text-align: center;
-    cursor: default;
-    & > a:hover, & > a:focus {
-      color: $navbar-inverse-link-color;
-    }
-  }
+  margin: 50px 0 50px 0;
 }
 
 .filtering {

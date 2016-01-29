@@ -23,8 +23,18 @@ require('app')
     ];
 
     $stateProvider
+    .state('config', {
+      'abstract': true,
+      resolve: {
+        conf: ['config', function(config) {
+          return config.promise;
+        }]
+      },
+      template: '<ui-view></ui-view>'
+    })
     .state('auth', {
       'abstract': true,
+      parent: 'config',
       resolve: {
         _: ['auth', '$q', function(auth, $q) {
           if (!auth.isAuthenticated()) {
@@ -67,7 +77,8 @@ require('app')
           return parseInt($stateParams.page) || 1;
         }],
         jobs: [
-          '$stateParams', 'api', 'page', function($stateP, api, page) {
+          '$stateParams', 'api', 'page', 'conf',
+          function($stateP, api, page, _) {
             var remoteci = $stateP.remoteci;
             var status = $stateP.status;
 
@@ -80,7 +91,7 @@ require('app')
             }
           }
         ],
-        remotecis: ['api', function(api) {
+        remotecis: ['api', 'conf', function(api, _) {
           return api.getRemoteCIS();
         }]
       }
@@ -108,6 +119,7 @@ require('app')
       }
     })
     .state('login', {
+      parent: 'config',
       url: '/login',
       controller: 'LoginCtrl',
       templateUrl: '/partials/login.html',
@@ -118,7 +130,9 @@ require('app')
 ])
 
 .controller('authCtrl', [
-  '$scope', '$state', 'auth', function($scope, $state, auth) {
+  '$scope', '$state', 'auth', 'config',
+  function($scope, $state, auth, config) {
+    if (config.debug) { $scope.version = config.version; }
     // currently just create roles and user when admin
     $scope.admin = auth.isAdmin();
     $scope.user = auth.user;
