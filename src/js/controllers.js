@@ -113,10 +113,10 @@ require('app')
       admin: false,
       team: teams.length && teams[0].id
     };
-    $scope.alerts = [];
+    $scope.alerts = {user: [], team: []};
 
-    $scope.closeAlert = function(index) {
-      $scope.alerts.splice(index, 1);
+    $scope.closeAlert = function(index, type) {
+      $scope.alerts[type].splice(index, 1);
     };
 
     $scope.showError = function(form, field) {
@@ -134,16 +134,19 @@ require('app')
 
       api.postUser(user).then(
         function(user) {
-          $scope.alerts.push({
+          $scope.alerts.user.push({
             msg: 'Successfully created user "' + user.name + '"',
             type: 'success'
           });
         },
         function(error) {
-          $scope.alerts.push({
-            msg: 'Error user "' + $scope.user.name + '" already exist',
-            type: 'danger'
-          });
+          var alert = {type: 'danger'};
+          if (error.status === 422) {
+            alert.msg = 'Error user "' + $scope.user.name + '" already exist';
+          } else {
+            alert.msg = error.data.message;
+          }
+          $scope.alerts.user.push(alert);
         }
       );
     };
@@ -153,16 +156,19 @@ require('app')
       api.postTeam({name: $scope.team.name}).then(
         function(team) {
           $scope.teams.push(team);
-          $scope.alerts.push({
+          $scope.alerts.team.push({
             msg: 'Successfully created team "' + team.name + '"',
             type: 'success'
           });
         },
         function(error) {
-          $scope.alerts.push({
-            msg: 'Error team "' + $scope.team.name + '" already exist',
-            type: 'danger'
-          });
+          var alert = {type: 'danger'};
+          if (error.status === 422) {
+            alert.msg = 'Error team "' + $scope.team.name + '" already exist';
+          } else {
+            alert.msg = error.data.message;
+          }
+          $scope.alerts.team.push(alert);
         }
       );
     };
