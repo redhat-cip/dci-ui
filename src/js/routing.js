@@ -102,7 +102,7 @@ require('app')
       controller: 'JobCtrl',
       templateUrl: '/partials/job.html',
       resolve: {
-        job: ['$stateParams', 'api', function($stateParams, api) {
+        job: ['$stateParams', 'api', 'conf', function($stateParams, api, _) {
           return api.getJob($stateParams.id);
         }]
       }
@@ -113,7 +113,7 @@ require('app')
       controller: 'AdminCtrl',
       templateUrl: '/partials/admin.html',
       resolve: {
-        teams: ['api', function(api) {
+        teams: ['api', 'conf', function(api, _) {
           return api.getTeams();
         }]
       }

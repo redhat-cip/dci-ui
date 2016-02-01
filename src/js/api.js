@@ -17,18 +17,15 @@
 require('app')
 
 .factory('api', ['_', '$q', '$http', 'config', function(_, $q, $http, config) {
-  var api = {};
+  var api = {urls: {}};
 
   config.promise.then(function() {
-    api.urls = {
-      jobs: config.apiURL + '/api/v1/jobs/',
-      remotecis: config.apiURL + '/api/v1/remotecis/',
-      jobstates: config.apiURL + '/api/v1/jobstates/',
-      files: config.apiURL + '/api/v1/files/',
-      users: config.apiURL + '/api/v1/users/',
-      teams: config.apiURL + '/api/v1/teams/',
-      components: config.apiURL + '/api/v1/components/'
-    };
+    _.each([
+      'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
+      'components', 'jobdefinitions'
+    ], function(endpoint) {
+      api.urls[endpoint] = config.apiURL + '/api/v1/' + endpoint + '/';
+    });
   });
 
   api.getJobs = function(page) {
@@ -131,7 +128,12 @@ require('app')
   };
 
   api.getComponents = function(jobDef) {
-    return $http.get(api.urls.components).then(_.property('data.components'));
+    var url = (
+      jobDef ? api.urls.jobdefinitions + jobDef + '/components' :
+        api.url.components
+    );
+
+    return $http.get(url).then(_.property('data.components'));
   };
 
   api.getFiles = function(jobstateID) {

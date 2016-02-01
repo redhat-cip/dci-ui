@@ -69,6 +69,12 @@ require('app')
   '$scope', 'job', 'api', 'status', 'moment',
   function($scope, job, api, status, moment) {
     $scope.job = job;
+    $scope.collapses = {
+      test: true,
+      remoteci: true,
+      components: true,
+      jobdefinition: true
+    };
     var opened = false;
 
     job.jobdefinition.created_at = (moment(job.jobdefinition.created_at)
@@ -77,15 +83,13 @@ require('app')
                                     .local().format());
 
     job.remoteci.created_at = moment(job.remoteci.created_at).local().format();
-    job.remoteci.updated_at = moment(job.remoteci.updated_at).local().format();
 
     var test = job.jobdefinition.test;
     test.created_at = moment(test.created_at).local().format();
-    test.updated_at = moment(test.updated_at).local().format();
 
     angular.forEach(job.jobstates, function(jobstate) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
-      jobstate.updated_at = moment(jobstate.updated_at).local().format();
+      jobstate.created_at = moment(jobstate.created_at).local().format();
 
       api.getFiles(jobstate.id).then(function(files) {
         if (!opened && files.length) {
@@ -98,7 +102,6 @@ require('app')
       $scope.components = components;
       angular.forEach(components, function(component) {
         component.created_at = moment(component.created_at).local().format();
-        component.updated_at = moment(component.updated_at).local().format();
       });
     });
 
