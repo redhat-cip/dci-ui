@@ -18,11 +18,15 @@ require('app')
 .controller('LoginCtrl', [
   '$scope', '$state', 'auth', function($scope, $state, auth) {
     $scope.authenticate = function(credentials) {
-      auth.login(credentials.username, credentials.password).then(function() {
-        $state.go('index');
-      });
+      auth.login(credentials.username, credentials.password).then(
+        function() {
+          $state.go('index');
+        },
+        function(err) {
+          $scope.err = err.data;
+        }
+      );
     };
-    $scope.unauthorized = auth.isUnauthorized();
   }
 ])
 

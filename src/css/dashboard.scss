@@ -1,9 +1,11 @@
 @import "bootstrap/variables";
 
-$navbar-inverse-link-active-bg: $brand-primary;
-$navbar-side-size: 200px;
+$redhat-color                  : #cb2026;
 
-$arrow-size: 15px;
+$navbar-inverse-link-active-bg : $redhat-color;
+$navbar-side-size              : 200px;
+
+$arrow-size                    : 15px;
 
 @import "bootstrap";
 
@@ -21,6 +23,37 @@ pre {
 
 .tab-content {
   margin-top: 20px;
+}
+
+.login {
+  position:absolute;
+  right:0;
+  left:0;
+  bottom: 200px;
+  background-color: $gray-darker;
+  overflow:hidden;
+  color: #fff;
+
+  .page-header img {
+    margin-top: -10px;
+  }
+
+  .text-danger {
+    color: $redhat-color;
+  }
+  .btn-primary {
+    background-color: $redhat-color;
+    border-color: darken($redhat-color, 5%);
+
+    &:hover {
+      background-color: darken($redhat-color, 10%);
+      border-color: darken($redhat-color, 17%);
+    }
+  }
+
+  form {
+    padding-bottom: 20px;
+  }
 }
 
 .navbar {
