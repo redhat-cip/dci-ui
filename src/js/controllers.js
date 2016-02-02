@@ -93,7 +93,9 @@ require('app')
 
     angular.forEach(job.jobstates, function(jobstate) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
-      jobstate.created_at = moment(jobstate.created_at).local().format();
+      jobstate.created_at = (
+        moment(jobstate.created_at).local().format('dddd DD, MMMM h:mm:ss A')
+      );
 
       api.getFiles(jobstate.id).then(function(files) {
         if (!opened && files.length) {
