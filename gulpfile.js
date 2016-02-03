@@ -27,23 +27,30 @@ var DIST       = 'static';
 var JS         = ['src/js/**/*.js'];
 var SCSS       = ['src/css/**/*.scss'];
 var configFile = 'src/config.json';
+var configFileTplt = 'src/config.json.tplt';
 
 gulp.task('jscs', function() {
   return gulp.src(['src/**/*.js', 'test/**/*.js', 'gulpfile.js', 'utils.js'])
   .pipe($.jscs());
 });
 
-gulp.task('copy', ['rev'], function() {
+function copy() {
   return gulp.src([
     'src/**/*',
     '!src/**/*.js',
     '!src/**/*.scss',
     configFile
   ]).pipe(gulp.dest(DIST));
-});
+}
+
+gulp.task('copy', ['rev'], copy);
+gulp.task('copy:pkg', ['rev:pkg'], copy);
 
 gulp.task('build', ['js', 'css', 'fonts', 'copy', 'rev']);
+gulp.task('build:pkg', ['js', 'css', 'fonts', 'copy:pkg', 'rev:pkg'])
 gulp.task('build:test', ['js:test', 'css', 'fonts', 'copy', 'rev']);
+
+gulp.task('test', ['jscs', 'test:e2e']);
 
 gulp.task('clean', function() {
   var entries = [DIST + '/**/*', '!' + DIST + '/.gitkeep'];
@@ -152,13 +159,22 @@ gulp.task('test:e2e:debug', ['build:test'], function(cb) {
   });
 });
 
-gulp.task('rev', function(cb) {
-  utils.gitRev(function(rev) {
-    jsonfile.readFile(configFile, function(_, obj) {
+function getRev(revFn, cb) {
+  revFn(function(err, rev) {
+    if (err) { return cb(err); }
+
+    jsonfile.readFile(configFileTplt, function(err, obj) {
+      if (err) { return cb(err); }
       obj.version = rev;
       jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
     });
   });
+}
+
+gulp.task('rev', function(cb) {
+  getRev(utils.rev, cb);
 });
 
-gulp.task('test', ['jscs', 'test:e2e']);
+gulp.task('rev:pkg', function(cb) {
+  getRev(utils.revPKG, cb);
+});

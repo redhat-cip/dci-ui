@@ -15,6 +15,7 @@ BuildRequires:  nodejs
 BuildRequires:  npm
 BuildRequires:  tar
 BuildRequires:  bzip2
+BuildRequires:  git
 
 %description
 DCI UI static files
@@ -26,7 +27,7 @@ DCI UI static files
 npm config set prefix '/tmp/npm-global'
 npm install -g gulp
 npm install
-/tmp/npm-global/bin/gulp build
+/tmp/npm-global/bin/gulp build:pkg
 
 %install
 install -d -m0755 %{buildroot}/srv/www/dci-ui
