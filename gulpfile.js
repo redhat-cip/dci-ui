@@ -27,6 +27,7 @@ var DIST       = 'static';
 var JS         = ['src/js/**/*.js'];
 var SCSS       = ['src/css/**/*.scss'];
 var configFile = 'src/config.json';
+var configFileTplt = 'src/config.json.tplt';
 
 gulp.task('jscs', function() {
   return gulp.src(['src/**/*.js', 'test/**/*.js', 'gulpfile.js', 'utils.js'])
@@ -153,8 +154,11 @@ gulp.task('test:e2e:debug', ['build:test'], function(cb) {
 });
 
 gulp.task('rev', function(cb) {
-  utils.gitRev(function(rev) {
-    jsonfile.readFile(configFile, function(_, obj) {
+  utils.gitRev(function(err, rev) {
+    if (err) { return cb(err); }
+
+    jsonfile.readFile(configFileTplt, function(err, obj) {
+      if (err) { return cb(err); }
       obj.version = rev;
       jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
     });

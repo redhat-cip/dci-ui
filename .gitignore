@@ -1,3 +1,4 @@
 static
 node_modules
 junitresults.xml
+src/config.json

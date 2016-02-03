@@ -30,8 +30,9 @@ var globby       = require('globby');
 
 function gitRev(cb) {
   childProcess.exec(
-    'git rev-parse --short HEAD', {cwd: __dirname}, function(_, stdout) {
-      cb(stdout.split('\n').join(''));
+    'git rev-parse --short HEAD', {cwd: __dirname}, function(err, stdout) {
+      if (err) { return cb(err); }
+      cb(false, stdout.split('\n').join(''));
     }
   );
 }

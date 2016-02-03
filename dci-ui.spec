@@ -15,6 +15,7 @@ BuildRequires:  nodejs
 BuildRequires:  npm
 BuildRequires:  tar
 BuildRequires:  bzip2
+BuildRequires:  git
 
 %description
 DCI UI static files
