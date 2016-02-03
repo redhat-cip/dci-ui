@@ -28,12 +28,18 @@ var through      = require('through2');
 var browserify   = require('browserify');
 var globby       = require('globby');
 
-function gitRev(cb) {
+
+module.exports.rev = function(cb) {
   childProcess.exec(
-    'git rev-parse --short HEAD', {cwd: __dirname}, function(_, stdout) {
-      cb(stdout.split('\n').join(''));
+    'git rev-parse --short HEAD', {cwd: __dirname}, function(err, stdout) {
+      if (err) { return cb(err); }
+      cb(false, stdout.split('\n').join(''));
     }
   );
+}
+
+module.exports.revPKG = function(cb) {
+  cb(false, __dirname.split('git')[1].slice(0,8));
 }
 
 /*
@@ -50,7 +56,7 @@ function closePromise(obj) {
   };
 }
 
-function bundledStream(entries) {
+module.exports.bundledStream = function(entries) {
   var bundledStream = through();
 
   globby(entries).then(function(entries) {
@@ -70,7 +76,7 @@ function bundledStream(entries) {
   return bundledStream;
 }
 
-function server(root, port, livereload) {
+module.exports.server = function(root, port, livereload) {
   var d = Q.defer();
   var api = process.env.API_PORT_5000_TCP + '/api' || config.api;
   var app = connect();
@@ -114,7 +120,7 @@ function server(root, port, livereload) {
   return d.promise;
 }
 
-function phantom() {
+module.exports.phantom = function() {
   var d = Q.defer();
 
   var child = childProcess.execFile(
@@ -141,7 +147,7 @@ function phantom() {
   return d.promise;
 }
 
-function protractor(address, configFile, debug) {
+module.exports.protractor = function(address, configFile, debug) {
   var args = [configFile, '--baseUrl', url.format(address)];
   var d = Q.defer();
 
@@ -166,11 +172,3 @@ function protractor(address, configFile, debug) {
 
   return d.promise;
 }
-
-module.exports = {
-  bundledStream: bundledStream,
-  server: server,
-  phantom: phantom,
-  protractor: protractor,
-  gitRev: gitRev
-};
