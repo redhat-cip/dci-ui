@@ -115,6 +115,9 @@ require('app')
       resolve: {
         teams: ['api', 'conf', function(api, _) {
           return api.getTeams();
+        }],
+        audits: ['api', 'conf',  function(api) {
+          return api.getAudits();
         }]
       }
     })
