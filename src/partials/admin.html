@@ -60,3 +60,16 @@
     </div>
   </div>
 </div>
+
+<div class="col-md-12">
+  <h2 class="page-header">Audit Logs</h2>
+    <div class="audit-logs">
+      <div class="table-responsive">
+        <table class="table">
+          <tr><td>User ID</td><td>Team ID</td><td>Action</td></tr>
+          <tr ng-repeat="audit in audits"><td>{{ audit.user_id }}</td><td>{{ audit.team_id }}</td><td>{{ audit.action }}</td></tr>
+        </table>
+      </div>
+    </div>
+</div>
+

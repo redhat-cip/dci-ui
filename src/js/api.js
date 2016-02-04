@@ -22,7 +22,7 @@ require('app')
   config.promise.then(function() {
     _.each([
       'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
-      'components', 'jobdefinitions'
+      'components', 'jobdefinitions', 'audits'
     ], function(endpoint) {
       api.urls[endpoint] = config.apiURL + '/api/v1/' + endpoint + '/';
     });
@@ -167,5 +167,12 @@ require('app')
   api.postUser = function(user) {
     return $http.post(api.urls.users, user).then(_.property('data.user'));
   };
+ 
+  api.getAudits = function() {
+    return api.url.then(function(url) {
+      return $http.get(url.audit).then(_.property('data.audits'));
+    });
+  };
+
   return api;
 }]);
