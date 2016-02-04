@@ -132,8 +132,8 @@ require('app')
 .controller('authCtrl', [
   '$scope', '$state', 'auth', 'config',
   function($scope, $state, auth, config) {
-    if (config.debug) { $scope.version = config.version; }
     // currently just create roles and user when admin
+    $scope.version = config.version;
     $scope.admin = auth.isAdmin();
     $scope.user = auth.user;
 
