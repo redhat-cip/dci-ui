@@ -115,8 +115,9 @@ require('app')
 ])
 
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'api', function($scope, teams, api) {
+  '$scope', 'teams', 'audits', 'api', function($scope, teams, audits, api) {
     $scope.teams = teams;
+    $scope.audits = audits;
     $scope.team = {};
     $scope.user = {
       admin: false,
