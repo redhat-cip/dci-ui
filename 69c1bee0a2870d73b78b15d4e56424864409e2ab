@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aa7f18b_64d58a42",
+        "filename": "src/js/api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-02-05T13:03:38Z",
+      "side": 1,
+      "message": "this promise is no longer needed you can directly call $http on api.urls.audits",
+      "revId": "69c1bee0a2870d73b78b15d4e56424864409e2ab",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_44d08e53",
+        "filename": "src/js/routing.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-02-05T13:03:38Z",
+      "side": 1,
+      "message": "add a dependency on conf in order to be sure that the config is correctly loaded before calling the API",
+      "revId": "69c1bee0a2870d73b78b15d4e56424864409e2ab",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_84e68643",
+        "filename": "src/partials/admin.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-02-05T13:03:38Z",
+      "side": 1,
+      "message": "add a table-stripped here, it will be more lisible",
+      "revId": "69c1bee0a2870d73b78b15d4e56424864409e2ab",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_e4d97a84",
+        "filename": "src/partials/admin.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-02-05T13:03:38Z",
+      "side": 1,
+      "message": "use thead for the headers of the table",
+      "revId": "69c1bee0a2870d73b78b15d4e56424864409e2ab",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_a4e38232",
+        "filename": "src/partials/admin.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-02-05T13:03:38Z",
+      "side": 1,
+      "message": "can you place the action as the first column ?",
+      "revId": "69c1bee0a2870d73b78b15d4e56424864409e2ab",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
