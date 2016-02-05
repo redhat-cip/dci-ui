@@ -65,6 +65,34 @@ module.exports = angular.module('app', [
     'glyphicon': 'glyphicon-record'
   }
 })
+.factory('utils', ['$q', '_', function($q, _) {
+  /*
+   * synchronize calls against a promises stack, callback is
+   * called in order of the promises stack, if it returns
+   * false, then the synchronization stops.
+   */
+  function synchronize(promises, cb, index) {
+    var d = $q.defer();
+    var p = promises.shift();
+    if (!p) {
+      d.resolve();
+    } else {
+      p.then(function(res) {
+        if (cb(res, index) === false) {
+          d.resolve();
+        } else {
+          synchronize(promises, cb, index + 1).then(d.resolve);
+        }
+      });
+    }
+    return d.promise;
+  }
+
+  return {
+    lo: _,
+    synchronize: _.partialRight(synchronize, 0)
+  };
+}])
 .value('config', {})
 .run(['$http', '$q', 'config', function($http, $q, config) {
   var d = $q.defer();
