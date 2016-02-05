@@ -26,7 +26,8 @@ require('app')
 
       var job = scope.job;
       var start = moment(job.created_at);
-      job.time_running = moment(job.updated_at).to(job.created_at, true);
+      job.time_running = (moment(job.updated_at)
+                          .to(moment.moment(job.created_at), true));
       job.updated_at = moment(job.updated_at).from(moment.moment());
 
       job.glyphicon = status[job.status].glyphicon;
