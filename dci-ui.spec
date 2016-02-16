@@ -10,7 +10,9 @@ Source0:        dci-ui-%{version}.tgz
 
 Summary:        DCI UI
 
+%if 0%{?rhel}
 BuildRequires:  epel-release
+%endif
 BuildRequires:  nodejs
 BuildRequires:  npm
 BuildRequires:  tar

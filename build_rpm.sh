@@ -20,17 +20,24 @@ rpmbuild -bs ${HOME}/rpmbuild/SPECS/${PROJ_NAME}.spec
 
 # Build the RPMs in a clean chroot environment with mock to detect missing
 # BuildRequires lines.
-arch=epel-7-x86_64
+for arch in fedora-23-x86_64 epel-7-x86_64; do
 
-# NOTE(spredzy) Add signing options
-#
-mkdir -p ${HOME}/.mock
-cp /etc/mock/${arch}.cfg ${HOME}/.mock/${arch}.cfg
-sed -i "\$aconfig_opts['plugin_conf']['sign_enable'] = True" ${HOME}/.mock/${arch}.cfg
-sed -i "\$aconfig_opts['plugin_conf']['sign_opts'] = {}" ${HOME}/.mock/${arch}.cfg
-sed -i "\$aconfig_opts['plugin_conf']['sign_opts']['cmd'] = 'rpmsign'" ${HOME}/.mock/${arch}.cfg
-sed -i "\$aconfig_opts['plugin_conf']['sign_opts']['opts'] = '--addsign %(rpms)s'" ${HOME}/.mock/${arch}.cfg
+    if [[ "$arch" == "fedora-23-x86_64" ]]; then
+        RPATH='fedora/23/x86_64'
+    else
+        RPATH='el/7/x86_64'
+    fi
 
-RPATH='el/7/x86_64'
-mkdir -p development
-mock -r ${HOME}/.mock/${arch}.cfg rebuild --resultdir=development/${RPATH} ${HOME}/rpmbuild/SRPMS/${PROJ_NAME}*
+    # NOTE(spredzy) Add signing options
+    #
+    mkdir -p ${HOME}/.mock
+    cp /etc/mock/${arch}.cfg ${HOME}/.mock/${arch}.cfg
+    sed -i "\$aconfig_opts['plugin_conf']['sign_enable'] = True" ${HOME}/.mock/${arch}.cfg
+    sed -i "\$aconfig_opts['plugin_conf']['sign_opts'] = {}" ${HOME}/.mock/${arch}.cfg
+    sed -i "\$aconfig_opts['plugin_conf']['sign_opts']['cmd'] = 'rpmsign'" ${HOME}/.mock/${arch}.cfg
+    sed -i "\$aconfig_opts['plugin_conf']['sign_opts']['opts'] = '--addsign %(rpms)s'" ${HOME}/.mock/${arch}.cfg
+
+    mkdir -p development
+    mock -r ${HOME}/.mock/${arch}.cfg rebuild --resultdir=development/${RPATH} ${HOME}/rpmbuild/SRPMS/${PROJ_NAME}*
+
+done
