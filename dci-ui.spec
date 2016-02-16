@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+
 Name:           dci-ui
 Version:        0.0.VERS
 Release:        1%{?dist}
@@ -8,9 +10,9 @@ License:        ASL 2.0
 URL:            https://github.com/redhat-cip/dci-ui
 Source0:        dci-ui-%{version}.tgz
 
-Summary:        DCI UI
-
+%if 0%{?rhel}
 BuildRequires:  epel-release
+%endif
 BuildRequires:  nodejs
 BuildRequires:  npm
 BuildRequires:  tar
