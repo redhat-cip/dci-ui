@@ -49,13 +49,13 @@ require('app')
     $scope.remotecis = {};
     $scope.status = {};
     _.each(statuses, function(status) {
-      this[status] = _.contains($state.params.status, status);
-    }, $scope.status);
+      $scope.status[status] = _.includes($state.params.status, status);
+    });
 
     _.each(remotecis, function(remoteci) {
       var remoteci = remoteci.name;
-      this[remoteci] = _.contains($state.params.remoteci, remoteci);
-    }, $scope.remotecis);
+      $scope.remotecis[remoteci] = _.includes($state.params.remoteci, remoteci);
+    });
 
     $scope.search = function() {
       var params = {
@@ -81,6 +81,7 @@ require('app')
   '$scope', 'job', 'api', 'status', 'moment', 'utils',
   function($scope, job, api, status, moment, utils) {
     $scope.job = job;
+    $scope.job.detail = true;
     $scope.collapses = {
       test: true,
       remoteci: true,
@@ -133,7 +134,6 @@ require('app')
         }
       });
     });
-
   }
 ])
 

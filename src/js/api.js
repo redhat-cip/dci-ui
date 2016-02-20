@@ -16,15 +16,23 @@
 
 require('app')
 
-.factory('api', ['_', '$q', '$http', 'config', function(_, $q, $http, config) {
+.factory('api', ['$injector', function($injector) {
+  var _ = $injector.get('_');
+  var $q = $injector.get('$q');
+  var $http = $injector.get('$http');
+  var $window = $injector.get('$window');
+  var config = $injector.get('config');
+  var user = $injector.get('user');
   var api = {urls: {}};
+  var urlize = _.rest(_.partialRight(_.join, '/'));
+  var urlPttrn = new RegExp('(https?://)(.*)');
 
   config.promise.then(function() {
     _.each([
       'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
       'components', 'jobdefinitions', 'audits', 'topics'
     ], function(endpoint) {
-      api.urls[endpoint] = config.apiURL + '/api/v1/' + endpoint + '/';
+      api.urls[endpoint] = urlize(config.apiURL, 'api', 'v1', endpoint);
     });
   });
 
@@ -38,7 +46,7 @@ require('app')
   };
 
   api.getJobStates = function(job) {
-    url = api.urls.jobs + job + '/jobstates';
+    url = urlize(api.urls.jobs, job, 'jobstates');
     return $http.get(url).then(_.property('data.jobstates'));
   };
 
@@ -54,7 +62,12 @@ require('app')
         'where': 'status:' + status,
         'embed': 'remoteci,jobdefinition,jobdefinition.test'
       }};
-      return $http.get(api.urls.jobs, conf);
+      return $http.get(api.urls.jobs, config).then(_.property('data'));
+    };
+
+    api.getJobStates = function(job) {
+      url = urlize(api.urls.jobs, job, 'jobstates');
+      return $http.get(url).then(_.property('data.jobstates'));
     };
 
     function retrieveJsRCI(remoteciResps) {
@@ -84,7 +97,7 @@ require('app')
       if (SSJobs.length && RCISJobs.length) {
         var RCISJobsIds = _.pluck(RCISJobs, 'id');
         return _.filter(SSJobs, function(job) {
-          return _.contains(RCISJobsIds, job.id);
+          return _.includes(RCISJobsIds, job.id);
         });
       } else {
         return SSJobs.concat(RCISJobs);
@@ -93,6 +106,10 @@ require('app')
     .then(function(jobs) {
       return {'jobs': jobs};
     });
+  };
+  api.updateJob = function(job_id, etag, data) {
+    config = {'headers': {'If-Match': etag}};
+    return $http.put(urlize(api.urls.jobs, job_id), data, config);
   };
 
   api.getJob = function(job) {
@@ -121,15 +138,15 @@ require('app')
     var JSconf = {'params': {'sort': '-created_at'}};
 
     return $q.all([
-      $http.get(api.urls.jobs + job, conf),
-      $http.get(api.urls.jobs + job + '/jobstates', JSconf)
+      $http.get(urlize(api.urls.jobs, job), conf),
+      $http.get(urlize(api.urls.jobs, job, 'jobstates'), JSconf)
     ])
     .then(retrieveFiles);
   };
 
   api.getComponents = function(jobDef) {
     var url = (
-      jobDef ? api.urls.jobdefinitions + jobDef + '/components' :
+      jobDef ? urlize(api.urls.jobdefinitions, jobDef, 'components') :
         api.url.components
     );
 
@@ -137,14 +154,25 @@ require('app')
   };
 
   api.getJobFiles = function(job) {
-    var url = api.urls.jobs + job + '/files';
+    var url = urlize(api.urls.jobs, job, 'files');
 
     return $http.get(url).then(_.property('data.files'));
   };
 
   api.getFiles = function(jobstateID) {
     var conf = {'params': {'where': 'jobstate_id:' + jobstateID}};
-    return $http.get(api.urls.files, conf).then(_.property('data.files'));
+    return $http.get(api.urls.files, conf)
+    .then(_.property('data.files'))
+    .then(_.partialRight(_.map, function(elt) {
+      // build link in the form of
+      // http(s)://username:password@apiURL/files/file_id/content
+      elt.dl_link = api.urls.files.replace(urlPttrn, function(_, g1, g2) {
+        return urlize(
+          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
+        );
+      });
+      return elt;
+    }));
   };
 
   api.getRemoteCIS = function() {
@@ -153,7 +181,7 @@ require('app')
   };
 
   api.recheckJob = function(jobID) {
-    var url = api.urls.jobs + jobID + '/recheck';
+    var url = urlize(api.urls.jobs, jobID, 'recheck');
     return $http.post(url).then(_.property('data.job'));
   };
 
