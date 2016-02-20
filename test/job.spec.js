@@ -31,11 +31,11 @@ describe('DCI homepage', function() {
 
         $httpBackend.whenGET(/\/config.json/).respond(configResp);
         $httpBackend.whenGET(/^\/partials\//).passThrough();
-        $httpBackend.whenGET(/\/remotecis\//).respond(remotecisResp);
+        $httpBackend.whenGET(/\/remotecis/).respond(remotecisResp);
         $httpBackend.whenGET(/\/jobs\/.*?\/jobstates/).respond(jobstatesResp);
         $httpBackend.whenPOST(/\/jobs\/foo\/recheck/).respond(jobRecheck);
         $httpBackend.whenGET(/\/jobs\/bar/).respond(jobRecheck);
-        $httpBackend.whenGET(/\/jobs\//).respond(jobsResp);
+        $httpBackend.whenGET(/\/jobs/).respond(jobsResp);
       }]);
     });
   });

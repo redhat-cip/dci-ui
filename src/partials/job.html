@@ -1,41 +1,44 @@
-<div class="job">
   <h1 class="page-header">Job</h1>
   <div dci-job></div>
   <div tabset>
     <div tab heading="Files">
-
       <div ng-repeat="jobstate in job.jobstates" class="row" ng-class="jobstate.statusClass">
         <div class="col-md-12">
           <h4>
-            <span class="title">
-              {{ jobstate.status }}
-            </span>
-            <small>
-              : {{ jobstate.comment }}
-            </small>
-            <small class="pull-right">{{ jobstate.created_at }}</small>
-          </h4>
-        </div>
-        <div class="col-md-12" ng-if="jobstate.files.length">
-          <button type="button" class="btn btn-primary btn-xs pull-right"
-            ng-click="jobstate.isOpen = !jobstate.isOpen">
+          <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-click="jobstate.isOpen = !jobstate.isOpen"
+                                ng-if="jobstate.files.length">
             <span ng-if="!jobstate.isOpen">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="jobstate.isOpen">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
-        </div>
-        <div class="col-md-12">
-          <hr>
-        </div>
+          <span class="title">
+            {{ jobstate.status }}
+          </span>
+          <small>
+            : {{ jobstate.comment }}
+          </small>
+
+        </h4>
+
+      </div>
+      <div class="col-md-12" >
+        <small >{{ jobstate.created_at }}</small>
+      </div>
         <div collapse="!jobstate.isOpen" class="col-md-12">
           <div class="tile tile-file" ng-repeat="file in jobstate.files">
-            <h5>{{file.name}}</h5>
+            <h5><a href="{{file.dl_link}}" class="pull-right"><span class="glyphicon glyphicon-download-alt"></span> download</a>{{file.name}}</h5>
             <pre>{{file.content}}</pre>
           </div>
 
+        </div>
+        <div class="col-md-12">
+          <hr>
         </div>
       </div>
 
@@ -43,12 +46,14 @@
     <div tab heading="Details">
       <div class="row">
         <h3 class="col-md-12 page-header">Remote CI
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.remoteci = !collapses.remoteci">
             <span ng-if="collapses.remoteci">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.remoteci">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -69,12 +74,14 @@
 
       <div class="row">
         <h3 class="col-md-12 page-header">Job definition
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.jobdefinition = !collapses.jobdefinition">
             <span ng-if="collapses.jobdefinition">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.jobdefinition">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -91,12 +98,14 @@
 
       <div class="row">
         <h3 class="col-md-12 page-header">Test
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.test = !collapses.test">
             <span ng-if="collapses.test">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.test">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -117,12 +126,14 @@
 
       <div class="row">
         <h3 class="col-md-12 page-header">Components
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.components = !collapses.components">
             <span ng-if="collapses.components">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.components">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -143,15 +154,18 @@
         </div>
       </div>
     </div>
+    <div tab heading="Edit job"><div tab-edit="job"></div></div>
     <div tab heading="Context">
       <div ng-repeat="file in files" class="row">
         <h3 class="col-md-12 page-header">{{ file.name }}
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="file.collapse = !file.collapse">
             <span ng-if="file.collapse">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!file.collapse">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>

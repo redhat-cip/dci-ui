@@ -18,6 +18,9 @@
 var config = require('./protractor.conf.js').config;
 
 config.capabilities.browserName = 'chrome';
+config.capabilities.chromeOptions = {
+  'args': ['no-sandbox']
+};
 config.directConnect = true;
 config.chromeDriver = '/usr/local/bin/chromedriver';
 
