@@ -29,8 +29,13 @@ require('app')
       job.time_running = moment(job.updated_at).to(start, true);
       job.updated_at = moment(job.updated_at).from(moment.moment());
 
-      job.glyphicon = status[job.status].glyphicon;
-      job.statusClass = 'bs-callout-' + status[job.status].color;
+      job.processStatus = function(s) {
+        job.status = s;
+        job.statusClass = 'bs-callout-' + status[s].color;
+        job.glyphicon = status[s].glyphicon;
+      };
+
+      job.processStatus(job.status);
 
       scope.recheck = function() {
         api.recheckJob(job.id).then(function(job) {
@@ -39,5 +44,55 @@ require('app')
       };
     },
     templateUrl: '/partials/dci-job.html'
+  };
+}])
+.directive('tabEdit', ['$log', '_', 'api', function($log, _, api) {
+  return {
+    templateUrl: '/partials/tabEdit.html',
+    scope: {
+      job: '=tabEdit'
+    },
+    link: function(scope) {
+      var job = scope.job;
+      scope.alerts = [];
+
+      scope.reset = _.partial(_.assign, scope.form = {}, {
+        comment: job.comment,
+        status: false
+      });
+      scope.reset();
+
+      scope.isEditableStatus = (
+        _.indexOf(['success', 'failure'], job.status) !== -1
+      );
+
+      scope.submit = function() {
+        var data = _.transform(scope.form, function(result, value, key) {
+          if (_.includes([null, false], value)) { return; }
+          if (key == 'status') {
+            value = job.status == 'success' ? 'failure' : 'success';
+          }
+          result[key] = value;
+        }, {});
+        if (!_.isEmpty(data)) {
+          api.updateJob(job.id, job.etag, data).then(
+            function(resp) {
+              job.processStatus(data.status || job.status);
+              job.comment = data.comment || job.comment;
+              job.etag = resp.headers('etag');
+              scope.alerts.push({type: 'success', msg: 'Successfully updated'});
+              scope.reset();
+            },
+            function(error) {
+              var str = [
+                error.status, error.statusText + ':', error.data.message
+              ];
+              scope.alerts.push({type: 'danger', msg: str.join(' ')});
+              $log.error(error);
+            }
+          );
+        }
+      };
+    }
   };
 }]);
