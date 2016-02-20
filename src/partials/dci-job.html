@@ -3,6 +3,13 @@
     <a ui-sref="job({id: job.id})" class="title">
       {{job.remoteci.name}} / {{job.jobdefinition.name}}
     </a>
+    <div class="text-muted" ng-if="job.comment && !job.detail">
+      "{{job.comment | limit:75:"..." }}"
+    </div>
+    <div class="text-muted" ng-if="job.comment && job.detail">
+      "{{job.comment}}"
+    </div>
+
   </div>
   <div class="col-md-5">
     <div class="title">

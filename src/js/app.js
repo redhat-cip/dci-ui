@@ -94,6 +94,14 @@ module.exports = angular.module('app', [
   };
 }])
 .value('config', {})
+.filter('limit', function() {
+  return function(input, size, term) {
+    if (size && input.length > size) {
+      input = input.slice(0, size) + (term ? term : '');
+    }
+    return input;
+  };
+})
 .run(['$http', '$q', 'config', function($http, $q, config) {
   var d = $q.defer();
   config.promise = d.promise;
