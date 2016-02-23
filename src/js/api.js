@@ -136,6 +136,12 @@ require('app')
     return $http.get(url).then(_.property('data.components'));
   };
 
+  api.getJobFiles = function(job) {
+    var url = api.urls.jobs + job + '/files';
+
+    return $http.get(url).then(_.property('data.files'));
+  };
+
   api.getFiles = function(jobstateID) {
     var conf = {'params': {'where': 'jobstate_id:' + jobstateID}};
     return $http.get(api.urls.files, conf).then(_.property('data.files'));

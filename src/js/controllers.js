@@ -111,6 +111,15 @@ require('app')
       });
     });
 
+    api.getJobFiles(job.id).then(function(files) {
+      $scope.files = files;
+      angular.forEach(files, function(file) {
+        if (file.mime == 'application/json') {
+          file.content = angular.fromJson(file.content);
+        }
+      });
+    });
+
   }
 ])
 
