@@ -143,4 +143,28 @@
         </div>
       </div>
     </div>
+    <div tab heading="Context">
+      <div ng-repeat="file in files" class="row">
+        <h3 class="col-md-12 page-header">{{ file.name }}
+          <button type="button" class="btn btn-primary btn-xs pull-right"
+            ng-click="collapses.file = !collapses.file">
+            <span ng-if="collapses.file">
+              see details
+            </span>
+            <span ng-if="!collapses.file">
+              close details
+            </span>
+          </button>
+        </h3>
+        <div class="col-md-12" collapse="collapses.file">
+          <table class="table table-striped">
+            <tr>
+              <th>data</th>
+                <td ng-if="file.mime == 'application/json'"><div json-formatter json="file.content" open="1"></div></td>
+                <td ng-if="file.mime != 'application/json'"><pre>{{file.content}}</pre></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>

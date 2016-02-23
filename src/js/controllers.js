@@ -111,6 +111,10 @@ require('app')
       });
     });
 
+    api.getJobFiles(job.id).then(function(files) {
+      $scope.files = files;
+    });
+
   }
 ])
 
