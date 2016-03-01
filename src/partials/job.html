@@ -147,16 +147,16 @@
       <div ng-repeat="file in files" class="row">
         <h3 class="col-md-12 page-header">{{ file.name }}
           <button type="button" class="btn btn-primary btn-xs pull-right"
-            ng-click="collapses.file = !collapses.file">
-            <span ng-if="collapses.file">
+            ng-click="file.collapse = !file.collapse">
+            <span ng-if="file.collapse">
               see details
             </span>
-            <span ng-if="!collapses.file">
+            <span ng-if="!file.collapse">
               close details
             </span>
           </button>
         </h3>
-        <div class="col-md-12" collapse="collapses.file">
+        <div class="col-md-12" collapse="file.collapse">
           <table class="table table-striped" ng-if="file.mime == 'application/json'">
             <tr>
                 <th>data</th>
