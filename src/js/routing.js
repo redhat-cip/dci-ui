@@ -121,6 +121,26 @@ require('app')
         }]
       }
     })
+    .state('informations', {
+      parent: 'auth',
+      url: '/informations',
+      controller: 'InformationCtrl',
+      templateUrl: '/partials/informations.html',
+      resolve: {
+        user: ['api', 'conf', 'user', function(api, _, user) {
+          return api.getUser(user.name);
+        }],
+        teams: ['api', 'conf', function(api, _) {
+          return api.getTeams();
+        }],
+        topics: ['api', 'conf', function(api, _) {
+          return api.getTopics();
+        }],
+        remotecis: ['api', 'conf', function(api, _) {
+          return api.getRemoteCIS();
+        }],
+      }
+    })
     .state('login', {
       parent: 'config',
       url: '/login',

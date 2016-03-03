@@ -30,6 +30,19 @@ require('app')
   }
 ])
 
+.controller('InformationCtrl', [
+  '$scope', 'user', 'teams', 'topics', 'remotecis',
+  function($scope, user, teams, topics, remotecis) {
+    $scope.teams = teams;
+    $scope.topics = topics;
+    $scope.remotecis = remotecis;
+    $scope.user = {
+      admin: false,
+      team: teams.length && teams[0].id
+    };
+
+  }
+])
 .controller('ListJobsCtrl', [
   '$injector', '$scope', 'jobs', 'remotecis', 'page',
   function($injector, $scope, jobs, remotecis, page) {
