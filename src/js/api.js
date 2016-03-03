@@ -22,7 +22,7 @@ require('app')
   config.promise.then(function() {
     _.each([
       'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
-      'components', 'jobdefinitions', 'audits'
+      'components', 'jobdefinitions', 'audits', 'topics'
     ], function(endpoint) {
       api.urls[endpoint] = config.apiURL + '/api/v1/' + endpoint + '/';
     });
@@ -160,6 +160,10 @@ require('app')
   api.getUser = function(name) {
     var conf = {'params': {'embed': 'team'}};
     return $http.get(api.urls.users + name, conf).then(_.property('data.user'));
+  };
+
+  api.getTopics = function() {
+    return $http.get(api.urls.topics).then(_.property('data.topics'));
   };
 
   api.getTeams = function() {
