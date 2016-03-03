@@ -144,7 +144,10 @@
       </div>
     </div>
     <div tab heading="Context">
-      <div ng-repeat="file in files" class="row">
+      <div ng-if="files.length == 0">
+        No file uploaded.
+      </div>
+      <div ng-if="files.length != 0" ng-repeat="file in files" class="row">
         <h3 class="col-md-12 page-header">{{ file.name }}
           <button type="button" class="btn btn-primary btn-xs pull-right"
             ng-click="file.collapse = !file.collapse">
