@@ -155,7 +155,6 @@ require('app')
 
   api.getJobFiles = function(job) {
     var url = urlize(api.urls.jobs, job, 'files');
-
     return $http.get(url).then(_.property('data.files'));
   };
 
@@ -186,8 +185,9 @@ require('app')
   };
 
   api.getUser = function(name) {
+    var url = urlize(api.urls.users, name);
     var conf = {'params': {'embed': 'team'}};
-    return $http.get(api.urls.users + name, conf).then(_.property('data.user'));
+    return $http.get(url, conf).then(_.property('data.user'));
   };
 
   api.getTopics = function() {
