@@ -187,7 +187,7 @@ require('app')
 
   api.getUser = function(name) {
     var conf = {'params': {'embed': 'team'}};
-    return $http.get(api.urls.users + name, conf).then(_.property('data.user'));
+    return $http.get(urlize(api.urls.users, name), conf).then(_.property('data.user'));
   };
 
   api.getTopics = function() {
