@@ -186,12 +186,9 @@ require('app')
   };
 
   api.getUser = function(name) {
+    var url = urlize(api.urls.users, name);
     var conf = {'params': {'embed': 'team'}};
-    return $http.get(api.urls.users + name, conf).then(_.property('data.user'));
-  };
-
-  api.getTopics = function() {
-    return $http.get(api.urls.topics).then(_.property('data.topics'));
+    return $http.get(url, conf).then(_.property('data.user'));
   };
 
   api.getTeams = function() {
