@@ -22,6 +22,7 @@
       <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
     </div>
   </div>
+  <span class="btn glyphicon glyphicon-remove" ng-click="remove_job()"></span>
   <div class="col-md-1">
     <a class="btn btn-default glyphicon glyphicon-minus-sign"
       disabled="disabled" ng-if="job.recheck" title="Job currently rechecking">
