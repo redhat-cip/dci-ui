@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a65312a_1731b6a2",
+        "filename": "src/js/directives.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-07T14:42:59Z",
+      "side": 1,
+      "message": "pass the job array and remove the element instead of reloading the page, it will look smoother",
+      "revId": "8558fde5e0cabe9eba19fa5eb784a1444a36ee6a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
