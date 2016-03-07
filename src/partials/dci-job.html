@@ -23,6 +23,10 @@
     </div>
   </div>
   <div class="col-md-1">
+    <button type="button" class="close" ng-click="remove_job(jobs, $index)">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
     <a class="btn btn-default glyphicon glyphicon-minus-sign"
       disabled="disabled" ng-if="job.recheck" title="Job currently rechecking">
     <a class="btn btn-default glyphicon glyphicon-repeat" title="Recheck job"

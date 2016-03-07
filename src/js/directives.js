@@ -42,6 +42,16 @@ require('app')
           $state.go('job', {id: job.id});
         });
       };
+
+      scope.remove_job = function(jobs, index) {
+        api.removeJob(job.id, job.etag).then(function(job) {
+          if (!jobs || !index) {
+            $state.go('index');
+          } else {
+            jobs.splice(index, 1);
+          }
+        });
+      };
     },
     templateUrl: '/partials/dci-job.html'
   };

@@ -184,6 +184,12 @@ require('app')
     return $http.post(url).then(_.property('data.job'));
   };
 
+  api.removeJob = function(jobID, jobEtag) {
+    var url = urlize(api.urls.jobs, jobID);
+    config = {'headers': {'If-Match': jobEtag}};
+    return $http.delete(url, config);
+  };
+
   api.getUser = function(name) {
     var url = urlize(api.urls.users, name);
     var conf = {'params': {'embed': 'team'}};
