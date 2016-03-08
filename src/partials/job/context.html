@@ -1,0 +1,27 @@
+<div ng-if="files.length == 0">
+No file uploaded.
+</div>
+<div ng-if="files.length != 0" ng-repeat="file in files" class="row">
+  <h3 class="col-md-12 page-header">{{ file.name }}
+    <button type="button" class="btn btn-default btn-xs pull-right"
+                          ng-click="file.collapse = !file.collapse">
+      <span ng-if="file.collapse">
+        <span class="glyphicon glyphicon-menu-up"></span>
+        see details
+      </span>
+      <span ng-if="!file.collapse">
+        <span class="glyphicon glyphicon-menu-down"></span>
+        close details
+      </span>
+    </button>
+  </h3>
+  <div class="col-md-12" collapse="file.collapse">
+    <table class="table table-striped" ng-if="file.mime == 'application/json'">
+      <tr>
+        <th>data</th>
+        <td class="col-md-10"><div json-formatter json="file.content" open="1"></div></td>
+      </tr>
+    </table>
+    <pre ng-if="file.mime != 'application/json'">{{file.content}}</pre>
+  </div>
+</div>
