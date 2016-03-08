@@ -1,0 +1,9 @@
+<h2 class="page-header">Topics list</h2>
+<div class="topics-list">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tr><th>Topic name</th><th>Topic ID</th><th>Date</th><th>Actions</th></tr>
+      <tr ng-repeat="topic in topics"><td>{{ topic.name }}</td><td>{{ topic.id }}</td><td>{{ topic.created_at }}</td><td><span class="btn glyphicon glyphicon-trash" ng-click="remove_topic(topics, $index)"></span></td></tr>
+    </table>
+  </div>
+</div>

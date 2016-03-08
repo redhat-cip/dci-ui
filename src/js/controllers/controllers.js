@@ -78,8 +78,9 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', 'messages',
-  function($scope, teams, audits, api, msg) {
+  '$scope', 'remotecis', 'teams', 'topics', 'users', 'audits', 'api',
+  'messages',
+  function($scope, remotecis, teams, topics, users, audits, api, msg) {
 
     var errCb = function(entity, value) {
       return function(error) {
@@ -90,10 +91,16 @@ require('app')
         }
       };
     };
+
     $scope.teamForm = {};
     $scope.userForm = {};
+    $scope.remoteciForm = {};
+    $scope.remotecis = remotecis;
     $scope.teams = teams;
+    $scope.topics = topics;
+    $scope.users = users;
     $scope.audits = audits;
+    $scope.remoteci = {};
     $scope.team = {};
     $scope.user = {
       admin: false,
@@ -102,6 +109,30 @@ require('app')
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.remove_user = function(user, index) {
+      api.removeUser(user.id, user.etag).then(function(user) {
+        users.splice(index, 1);
+      });
+    };
+
+    $scope.remove_team = function(team, index) {
+      api.removeTeam(team.id, team.etag).then(function(team) {
+        teams.splice(index, 1);
+      });
+    };
+
+    $scope.remove_topic = function(topic, index) {
+      api.removeTopic(topic.id, topic.etag).then(function(topic) {
+        topics.splice(index, 1);
+      });
+    };
+
+    $scope.remove_remoteci = function(remoteci, index) {
+      api.removeRemoteCI(remoteci.id, remoteci.etag).then(function(remoteci) {
+        remotecis.splice(index, 1);
+      });
     };
 
     $scope.submitUser = function() {
@@ -131,5 +162,17 @@ require('app')
         }, errCb('team', $scope.team.name)
       );
     };
+
+    $scope.submitRemoteCI = function() {
+      if ($scope.remoteciForm.$invalid) { return; }
+      api.postRemoteCI({name: $scope.remoteci.name}, $scope.user.team).then(
+        function(remoteci) {
+          $scope.remotecis.push(remoteci);
+          msg.alert('remoteci "' + remoteci.name + '" has been created',
+                    'success');
+        }, errCb('remoteci', $scope.remoteci.name)
+      );
+    };
+
   }
 ]);

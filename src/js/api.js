@@ -179,6 +179,17 @@ require('app')
     return $http.get(api.urls.remotecis).then(extractRemoteCIS);
   };
 
+  api.postRemoteCI = function(remoteci, team) {
+    return $http.post(api.urls.remotecis, _.merge(remoteci, {'team_id': team}))
+    .then(_.property('data.remoteci'));
+  };
+
+  api.removeRemoteCI = function(remoteciID, remoteciEtag) {
+    var url = urlize(api.urls.remotecis, remoteciID);
+    config = {'headers': {'If-Match': remoteciEtag}};
+    return $http.delete(url, config);
+  };
+
   api.recheckJob = function(jobID) {
     var url = urlize(api.urls.jobs, jobID, 'recheck');
     return $http.post(url).then(_.property('data.job'));
@@ -196,8 +207,32 @@ require('app')
     return $http.get(url, conf).then(_.property('data.user'));
   };
 
+  api.getUsers = function() {
+    return $http.get(api.urls.users).then(_.property('data.users'));
+  };
+
+  api.postUser = function(user) {
+    return $http.post(api.urls.users, user).then(_.property('data.user'));
+  };
+
+  api.removeUser = function(userID, userEtag) {
+    var url = urlize(api.urls.users, userID);
+    config = {'headers': {'If-Match': userEtag}};
+    return $http.delete(url, config);
+  };
+
   api.getTopics = function() {
     return $http.get(api.urls.topics).then(_.property('data.topics'));
+  };
+
+  api.postTopic = function(topic) {
+    return $http.post(api.urls.topics, topic).then(_.property('data.topic'));
+  };
+
+  api.removeTopic = function(topicID, topicEtag) {
+    var url = urlize(api.urls.topics, topicID);
+    config = {'headers': {'If-Match': topicEtag}};
+    return $http.delete(url, config);
   };
 
   api.getTeams = function() {
@@ -208,8 +243,10 @@ require('app')
     return $http.post(api.urls.teams, team).then(_.property('data.team'));
   };
 
-  api.postUser = function(user) {
-    return $http.post(api.urls.users, user).then(_.property('data.user'));
+  api.removeTeam = function(teamID, teamEtag) {
+    var url = urlize(api.urls.teams, teamID);
+    config = {'headers': {'If-Match': teamEtag}};
+    return $http.delete(url, config);
   };
 
   api.getAudits = function() {
