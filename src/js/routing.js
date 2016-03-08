@@ -121,11 +121,11 @@ require('app')
         }]
       }
     })
-    .state('informations', {
+    .state('information', {
       parent: 'auth',
-      url: '/informations',
+      url: '/information',
       controller: 'InformationCtrl',
-      templateUrl: '/partials/informations.html',
+      templateUrl: '/partials/information.html',
       resolve: {
         teams: ['api', 'conf', function(api, _) {
           return api.getTeams();
