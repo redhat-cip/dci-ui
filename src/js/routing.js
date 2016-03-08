@@ -51,7 +51,7 @@ require('app')
       template: '<ui-view></ui-view>',
       resolve: {
         _: ['auth', '$q', function(auth, $q) {
-          if (!auth.isAdmin()) {
+          if (!auth.isAdminInTeam()) {
             return $q.reject({status: 401});
           }
         }]
@@ -121,11 +121,11 @@ require('app')
         }]
       }
     })
-    .state('informations', {
+    .state('information', {
       parent: 'auth',
-      url: '/informations',
+      url: '/information',
       controller: 'InformationCtrl',
-      templateUrl: '/partials/informations.html',
+      templateUrl: '/partials/information.html',
       resolve: {
         teams: ['api', 'conf', function(api, _) {
           return api.getTeams();
@@ -154,7 +154,8 @@ require('app')
   function($scope, $state, auth, config) {
     // currently just create roles and user when admin
     $scope.version = config.version;
-    $scope.admin = auth.isAdmin();
+    $scope.admin = auth.isAdminInTeam();
+    $scope.global_admin = auth.isAdmin();
     $scope.user = auth.user;
 
     $scope.logout = function() {
