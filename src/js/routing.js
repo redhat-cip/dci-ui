@@ -121,8 +121,17 @@ require('app')
       controller: 'AdminCtrl',
       templateUrl: '/partials/admin.html',
       resolve: {
+        remotecis: ['api', 'conf', function(api, _) {
+          return api.getRemoteCIS();
+        }],
         teams: ['api', 'conf', function(api, _) {
           return api.getTeams();
+        }],
+        topics: ['api', 'conf', function(api, _) {
+          return api.getTopics();
+        }],
+        users: ['api', 'conf', function(api, _) {
+          return api.getUsers();
         }],
         audits: ['api', 'conf',  function(api) {
           return api.getAudits();

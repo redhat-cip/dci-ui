@@ -78,8 +78,8 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', 'messages',
-  function($scope, teams, audits, api, msg) {
+  '$scope', 'remotecis', 'teams', 'topics', 'users', 'audits', 'api', 'messages',
+  function($scope, remotecis, teams, topics, users, audits, api, msg) {
 
     var errCb = function(entity, value) {
       return function(error) {
@@ -90,9 +90,13 @@ require('app')
         }
       }
     }
+
     $scope.teamForm = {};
     $scope.userForm = {};
+    $scope.remotecis = remotecis;
     $scope.teams = teams;
+    $scope.topics = topics;
+    $scope.users = users;
     $scope.audits = audits;
     $scope.team = {};
     $scope.user = {
@@ -102,6 +106,30 @@ require('app')
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.remove_user = function(user, index) {
+      api.removeUser(user.id, user.etag).then(function(user) {
+        users.splice(index, 1);
+      });
+    };
+
+    $scope.remove_team = function(team, index) {
+      api.removeTeam(team.id, team.etag).then(function(team) {
+        teams.splice(index, 1);
+      });
+    };
+
+    $scope.remove_topic = function(topic, index) {
+      api.removeTopic(topic.id, topic.etag).then(function(topic) {
+        topics.splice(index, 1);
+      });
+    };
+
+    $scope.remove_remoteci = function(remoteci, index) {
+      api.removeRemoteCI(remoteci.id, remoteci.etag).then(function(remoteci) {
+        remotecis.splice(index, 1);
+      });
     };
 
     $scope.submitUser = function() {
@@ -129,6 +157,28 @@ require('app')
           $scope.teams.push(team);
           msg.alert('team "' + team.name + '" has been created', 'success');
         }, errCb('team', $scope.team.name)
+      );
+    };
+
+    $scope.submitTopic = function() {
+      if ($scope.topicForm.$invalid) { return; }
+      api.postTopic({name: $scope.topic.name}).then(
+        function(topic) {
+          $scope.topics.push(topic);
+          $scope.alerts.topic.push({
+            msg: 'Successfully created topic "' + topic.name + '"',
+            type: 'success'
+          });
+        },
+        function(error) {
+          var alert = {type: 'danger'};
+          if (error.status === 422) {
+            alert.msg = 'Error topic "' + $scope.topic.name + '" already exist';
+          } else {
+            alert.msg = error.data.message;
+          }
+          $scope.alerts.topic.push(alert);
+        }
       );
     };
   }
