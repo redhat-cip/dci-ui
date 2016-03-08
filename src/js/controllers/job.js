@@ -76,9 +76,8 @@ require('app')
 ])
 
 .controller('EditCtrl', [
-  '$scope', '$log', '_', 'api', function($scope, $log, _, api) {
+  '$scope', '_', 'api', 'messages', function($scope, _, api, messages) {
     var job = $scope.job;
-    $scope.alerts = [];
 
     $scope.reset = function() {
       $scope.form = {
@@ -106,15 +105,14 @@ require('app')
             job.processStatus(data.status || job.status);
             job.comment = data.comment || job.comment;
             job.etag = resp.headers('etag');
-            $scope.alerts.push({type: 'success', msg: 'Successfully updated'});
+            messages.alert('job updated', 'success');
             $scope.reset();
           },
           function(error) {
             var str = [
-              error.status, error.statusText + ':', error.data.message
+              error.status, error.statusText + '-', error.data.message
             ];
-            $scope.alerts.push({type: 'danger', msg: str.join(' ')});
-            $log.error(error);
+            messages.alert(str.join(' '), 'danger');
           }
         );
       }
