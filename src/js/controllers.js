@@ -138,8 +138,12 @@ require('app')
 ])
 
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', function($scope, teams, audits, api) {
+  '$scope', 'remotecis', 'teams', 'topics', 'users', 'audits', 'api',
+  function($scope, remotecis, teams, topics, users, audits, api) {
+    $scope.remotecis = remotecis;
     $scope.teams = teams;
+    $scope.topics = topics;
+    $scope.users = users;
     $scope.audits = audits;
     $scope.team = {};
     $scope.user = {
@@ -154,6 +158,30 @@ require('app')
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.remove_user = function(user, index) {
+      api.removeUser(user.id, user.etag).then(function(user) {
+        users.splice(index, 1);
+      });
+    };
+
+    $scope.remove_team = function(team, index) {
+      api.removeTeam(team.id, team.etag).then(function(team) {
+        teams.splice(index, 1);
+      });
+    };
+
+    $scope.remove_topic = function(topic, index) {
+      api.removeTopic(topic.id, topic.etag).then(function(topic) {
+        topics.splice(index, 1);
+      });
+    };
+
+    $scope.remove_remoteci = function(remoteci, index) {
+      api.removeRemoteCI(remoteci.id, remoteci.etag).then(function(remoteci) {
+        remotecis.splice(index, 1);
+      });
     };
 
     $scope.submitUser = function() {
@@ -202,6 +230,28 @@ require('app')
             alert.msg = error.data.message;
           }
           $scope.alerts.team.push(alert);
+        }
+      );
+    };
+
+    $scope.submitTopic = function() {
+      if ($scope.topicForm.$invalid) { return; }
+      api.postTopic({name: $scope.topic.name}).then(
+        function(topic) {
+          $scope.topics.push(topic);
+          $scope.alerts.topic.push({
+            msg: 'Successfully created topic "' + topic.name + '"',
+            type: 'success'
+          });
+        },
+        function(error) {
+          var alert = {type: 'danger'};
+          if (error.status === 422) {
+            alert.msg = 'Error topic "' + $scope.topic.name + '" already exist';
+          } else {
+            alert.msg = error.data.message;
+          }
+          $scope.alerts.topic.push(alert);
         }
       );
     };
