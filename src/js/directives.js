@@ -66,10 +66,12 @@ require('app')
       var job = scope.job;
       scope.alerts = [];
 
-      scope.reset = _.partial(_.assign, scope.form = {}, {
-        comment: job.comment,
-        status: false
-      });
+      scope.reset = function() {
+        scope.form = {
+          comment: job.comment,
+          status: false
+        }
+      };
       scope.reset();
 
       scope.isEditableStatus = (
