@@ -78,8 +78,7 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', 'messages',
-  function($scope, teams, audits, api, msg) {
+  '$scope', 'data', 'api', 'messages', function($scope, data, api, msg) {
 
     var errCb = function(entity, value) {
       return function(error) {
@@ -90,18 +89,50 @@ require('app')
         }
       };
     };
+
+    $scope.topicForm = {};
     $scope.teamForm = {};
     $scope.userForm = {};
-    $scope.teams = teams;
-    $scope.audits = audits;
+    $scope.remoteciForm = {};
+    $scope.remotecis = data.remotecis;
+    $scope.teams = data.teams;
+    $scope.topics = data.topics;
+    $scope.users = data.users;
+    $scope.audits = data.audits;
+    $scope.topic = {};
+    $scope.remoteci = {};
     $scope.team = {};
     $scope.user = {
       admin: false,
-      team: teams.length && teams[0].id
+      team: data.teams.length && data.teams[0].id
     };
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.remove_user = function(user, index) {
+      api.removeUser(user.id, user.etag).then(function(user) {
+        users.splice(index, 1);
+      });
+    };
+
+    $scope.remove_team = function(team, index) {
+      api.removeTeam(team.id, team.etag).then(function(team) {
+        teams.splice(index, 1);
+      });
+    };
+
+    $scope.remove_topic = function(topic, index) {
+      api.removeTopic(topic.id, topic.etag).then(function(topic) {
+        topics.splice(index, 1);
+      });
+    };
+
+    $scope.remove_remoteci = function(remoteci, index) {
+      api.removeRemoteCI(remoteci.id, remoteci.etag).then(function(remoteci) {
+        remotecis.splice(index, 1);
+      });
     };
 
     $scope.submitUser = function() {
@@ -131,5 +162,27 @@ require('app')
         }, errCb('team', $scope.team.name)
       );
     };
+
+    $scope.submitRemoteCI = function() {
+      if ($scope.remoteciForm.$invalid) { return; }
+      api.postRemoteCI({name: $scope.remoteci.name}).then(
+        function(remoteci) {
+          $scope.remotecis.push(remoteci);
+          msg.alert('remoteci "' + remoteci.name + '" has been created',
+                    'success');
+        }, errCb('remoteci', $scope.remoteci.name)
+      );
+    };
+
+    $scope.submitTopic = function() {
+      if ($scope.topicForm.$invalid) { return; }
+      api.postTopic({name: $scope.topic.name}).then(
+        function(topic) {
+          $scope.topics.push(topic);
+          msg.alert('topic "' + topic.name + '" has been created', 'success');
+        }, errCb('topic', $scope.topic.name)
+      );
+    };
+
   }
 ]);
