@@ -22,6 +22,7 @@ require('app')
       var api = $injector.get('api');
       var moment = $injector.get('moment');
       var status = $injector.get('status');
+      var messages = $injector.get('messages');
       var $state = $injector.get('$state');
 
       var job = scope.job;
@@ -44,12 +45,15 @@ require('app')
       };
 
       scope.remove_job = function(jobs, index) {
-        api.removeJob(job.id, job.etag).then(function(job) {
+        api.removeJob(job.id, job.etag).then(function() {
           if (!jobs || !index) {
             $state.go('index');
           } else {
             jobs.splice(index, 1);
           }
+          messages.alert('Job "' + job.id + '" deleted !', 'success');
+        }, function(err){
+          messages.alert('Something went bad: ' + err.data.message, 'danger');
         });
       };
     },
