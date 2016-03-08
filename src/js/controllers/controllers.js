@@ -78,8 +78,7 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', 'messages',
-  function($scope, teams, audits, api, msg) {
+  '$scope', 'data', 'api', 'messages', function($scope, data, api, msg) {
 
     var errCb = function(entity, value) {
       return function(error) {
@@ -90,18 +89,61 @@ require('app')
         }
       };
     };
+
+    $scope.topicForm = {};
     $scope.teamForm = {};
     $scope.userForm = {};
-    $scope.teams = teams;
-    $scope.audits = audits;
+    $scope.remoteciForm = {};
+    $scope.topics = data.topics;
+    $scope.remotecis = data.remotecis;
+    $scope.teams = data.teams;
+    $scope.users = data.users;
+    $scope.topic = {};
+    $scope.remoteci = {};
     $scope.team = {};
     $scope.user = {
       admin: false,
-      team: teams.length && teams[0].id
+      team: data.teams.length && data.teams[0].id
     };
 
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.remove_user = function(user, index) {
+      $scope.user_name = user.name;
+      api.removeUser(user.id, user.etag).then(function(user) {
+        $scope.users.splice(index, 1);
+        msg.alert('user "' + $scope.user_name + '" has been removed',
+                  'success');
+      }, errCb('user', $scope.user.name));
+    };
+
+    $scope.remove_team = function(team, index) {
+      $scope.team_name = team.name;
+      api.removeTeam(team.id, team.etag).then(function(team) {
+        $scope.teams.splice(index, 1);
+        msg.alert('team "' + $scope.team_name + '" has been removed',
+                  'success');
+      }, errCb('team', $scope.team.name));
+    };
+
+    $scope.remove_topic = function(topic, index) {
+      $scope.topic_name = topic.name;
+      api.removeTopic(topic.id, topic.etag).then(function(topic) {
+        $scope.topics.splice(index, 1);
+        msg.alert('topic "' + $scope.topic_name + '" has been removed',
+                  'success');
+      }, errCb('topic', $scope.topic.name));
+    };
+
+    $scope.remove_remoteci = function(remoteci, index) {
+      $scope.remoteci_name = remoteci.name;
+      api.removeRemoteCI(remoteci.id, remoteci.etag).then(function(remoteci) {
+        $scope.remotecis.splice(index, 1);
+        msg.alert('remoteci "' + $scope.remoteci_name + '" has been removed',
+                  'success');
+      }, errCb('remoteci', $scope.remoteci.name));
     };
 
     $scope.submitUser = function() {
@@ -115,6 +157,7 @@ require('app')
 
       api.postUser(user).then(
         function(user) {
+          $scope.users.push(user);
           msg.alert(
             'user "' + user.name + '" has been created',
             'success');
@@ -131,5 +174,27 @@ require('app')
         }, errCb('team', $scope.team.name)
       );
     };
+
+    $scope.submitRemoteCI = function() {
+      if ($scope.remoteciForm.$invalid) { return; }
+      api.postRemoteCI({name: $scope.remoteci.name}).then(
+        function(remoteci) {
+          $scope.remotecis.push(remoteci);
+          msg.alert('remoteci "' + remoteci.name + '" has been created',
+                    'success');
+        }, errCb('remoteci', $scope.remoteci.name)
+      );
+    };
+
+    $scope.submitTopic = function() {
+      if ($scope.topicForm.$invalid) { return; }
+      api.postTopic({name: $scope.topic.name}).then(
+        function(topic) {
+          $scope.topics.push(topic);
+          msg.alert('topic "' + topic.name + '" has been created', 'success');
+        }, errCb('topic', $scope.topic.name)
+      );
+    };
+
   }
 ]);

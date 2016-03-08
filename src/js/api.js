@@ -179,6 +179,17 @@ require('app')
     return $http.get(api.urls.remotecis).then(extractRemoteCIS);
   };
 
+  api.postRemoteCI = function(remoteci) {
+    return $http.post(api.urls.remotecis,
+                      _.merge(remoteci, {'team_id': user.team.id}))
+    .then(_.property('data.remoteci'));
+  };
+
+  api.removeRemoteCI = function(remoteciID, remoteciEtag) {
+    var url = urlize(api.urls.remotecis, remoteciID);
+    return $http.delete(url, {'headers': {'If-Match': remoteciEtag}});
+  };
+
   api.recheckJob = function(jobID) {
     var url = urlize(api.urls.jobs, jobID, 'recheck');
     return $http.post(url).then(_.property('data.job'));
@@ -186,8 +197,7 @@ require('app')
 
   api.removeJob = function(jobID, jobEtag) {
     var url = urlize(api.urls.jobs, jobID);
-    config = {'headers': {'If-Match': jobEtag}};
-    return $http.delete(url, config);
+    return $http.delete(url, {'headers': {'If-Match': jobEtag}});
   };
 
   api.getUser = function(name) {
@@ -196,8 +206,30 @@ require('app')
     return $http.get(url, conf).then(_.property('data.user'));
   };
 
+  api.getUsers = function() {
+    return $http.get(api.urls.users).then(_.property('data.users'));
+  };
+
+  api.postUser = function(user) {
+    return $http.post(api.urls.users, user).then(_.property('data.user'));
+  };
+
+  api.removeUser = function(userID, userEtag) {
+    var url = urlize(api.urls.users, userID);
+    return $http.delete(url, {'headers': {'If-Match': userEtag}});
+  };
+
   api.getTopics = function() {
     return $http.get(api.urls.topics).then(_.property('data.topics'));
+  };
+
+  api.postTopic = function(topic) {
+    return $http.post(api.urls.topics, topic).then(_.property('data.topic'));
+  };
+
+  api.removeTopic = function(topicID, topicEtag) {
+    var url = urlize(api.urls.topics, topicID);
+    return $http.delete(url, config, {'headers': {'If-Match': topicEtag}});
   };
 
   api.getTeams = function() {
@@ -208,8 +240,9 @@ require('app')
     return $http.post(api.urls.teams, team).then(_.property('data.team'));
   };
 
-  api.postUser = function(user) {
-    return $http.post(api.urls.users, user).then(_.property('data.user'));
+  api.removeTeam = function(teamID, teamEtag) {
+    var url = urlize(api.urls.teams, teamID);
+    return $http.delete(url, {'headers': {'If-Match': teamEtag}});
   };
 
   api.getAudits = function() {
