@@ -102,8 +102,16 @@ require('app')
       controller: 'JobCtrl',
       templateUrl: '/partials/job.html',
       resolve: {
-        job: ['$stateParams', 'api', 'conf', function($stateParams, api, _) {
-          return api.getJob($stateParams.id);
+        job: ['$injector', '$stateParams', 'conf', function($injector, $stateParams) {
+          var api = $injector.get('api');
+
+          return api.getJob($stateParams.id).catch(function(err) {
+              $injector.get('$state').go('index');
+              $injector.get('messages').alert(
+                err.data && err.data.message || 'Something went wrong', 'danger'
+              );
+            }
+          );
         }]
       }
     })
