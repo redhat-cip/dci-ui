@@ -125,11 +125,18 @@ require('app')
       controller: 'AdminCtrl',
       templateUrl: '/partials/admin.html',
       resolve: {
-        teams: ['api', 'conf', function(api, _) {
-          return api.getTeams();
-        }],
-        audits: ['api', 'conf',  function(api) {
-          return api.getAudits();
+        data: ['$q', 'api', 'conf', function($q, api) {
+          return $q.all([api.getRemoteCIS(), api.getTeams(),
+                         api.getTopics(), api.getUsers(), api.getAudits()])
+          .then(function(results) {
+            return {
+              'remotecis': results[0],
+              'teams': results[1],
+              'topics': results[2],
+              'users': results[3],
+              'audits': results[4]
+            };
+          });
         }]
       }
     })
