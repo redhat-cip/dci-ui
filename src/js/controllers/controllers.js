@@ -78,58 +78,86 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', 'messages',
-  function($scope, teams, audits, api, msg) {
+  '$scope', '$injector', 'data', function($scope, $injector, data) {
 
-    var errCb = function(entity, value) {
-      return function(error) {
-        if (error.status === 422) {
-          msg.alert(entity + ' "' + value + '" already exists', 'danger');
-        } else {
+    var api = $injector.get('api');
+    var user = $injector.get('user');
+    var msg = $injector.get('messages');
+    var _ = $injector.get('_');
+
+    var rm = function(entity, collection, method) {
+      var tplt = _.template('<%= key %> "<%= value %>" has been removed');
+      return function(value, index) {
+        method(value.id, value.etag).then(function() {
+          collection.splice(index, 1);
+          msg.alert(tplt({key: entity, value: value.name}), 'success');
+        }, function(err) {
           msg.alert(error.data.message, 'danger');
-        }
+        })
+      }
+    }
+    var add = function(entity, collection, method, form, value) {
+      var tplt = _.template('<%= key %> "<%= value %>" has been created');
+      var tpltErr = _.template('<%= key %> "<%= value %>" already exists');
+
+      return  function() {
+        if (form.$invalid) { return; }
+        method(value).then(
+          function(res) {
+            collection.push(res);
+            msg.alert(tplt({key: entity, value: res.name}), 'success');
+          },
+          function(err) {
+            if (err.status === 422) {
+              msg.alert(tpltErr({key: entity, value: value.name}), 'danger');
+            } else {
+              msg.alert(err.data.message, 'danger');
+            }
+          }
+        );
       };
     };
-    $scope.teamForm = {};
-    $scope.userForm = {};
-    $scope.teams = teams;
-    $scope.audits = audits;
-    $scope.team = {};
-    $scope.user = {
-      admin: false,
-      team: teams.length && teams[0].id
-    };
+    _.assign($scope, {
+      topicForm: {}, teamForm: {}, userForm: {}, remoteciForm: {},
+      data: data,
+      topic: {}, team: {}, remoteci: {team_id: user.team.id},
+      user: {
+        role: 'user',
+        team_id: data.teams.length && data.teams[0].id
+      }
+    });
 
+    $scope.role = function(value) {
+      if (arguments.length) {
+        return ($scope.user.role = value ? 'admin': 'user');
+      } else {
+        return $scope.user.role === 'admin';
+      }
+    }
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
     };
 
-    $scope.submitUser = function() {
-      if ($scope.userForm.$invalid) { return; }
-      var user = {
-        name: $scope.user.name,
-        password: $scope.user.password,
-        role: $scope.user.admin ? 'admin' : 'user',
-        team_id: $scope.user.team
-      };
+    $scope.removeUser = rm('user', $scope.data.users, api.removeUser);
+    $scope.removeTeam = rm('team', $scope.data.teams, api.removeTeam);
+    $scope.removeTopic = rm('topic', $scope.data.topics, api.removeTopic);
+    $scope.removeRemoteCI = rm(
+      'remote CI', $scope.data.remotecis, api.removeRemoteCI
+    );
 
-      api.postUser(user).then(
-        function(user) {
-          msg.alert(
-            'user "' + user.name + '" has been created',
-            'success');
-        }, errCb('user', user.name)
-      );
-    };
-
-    $scope.submitTeam = function() {
-      if ($scope.teamForm.$invalid) { return; }
-      api.postTeam({name: $scope.team.name}).then(
-        function(team) {
-          $scope.teams.push(team);
-          msg.alert('team "' + team.name + '" has been created', 'success');
-        }, errCb('team', $scope.team.name)
-      );
-    };
+    $scope.submitUser = add(
+      'user', $scope.data.users, api.postUser, $scope.userForm, $scope.user
+    );
+    $scope.submitTeam = add(
+      'team', $scope.data.teams, api.postTeam, $scope.teamForm, $scope.team
+    );
+    $scope.submitTopic = add(
+      'topic', $scope.data.topics, api.postTopic, $scope.topicForm,
+      $scope.topic
+    );
+    $scope.submitRemoteCI = add(
+      'remote CI', $scope.data.remotecis, api.postRemoteCI,
+      $scope.remoteciForm, $scope.remoteci
+    );
   }
 ]);

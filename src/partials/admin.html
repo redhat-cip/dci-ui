@@ -1,75 +1,21 @@
 <h1 class="page-header">Administration</h1>
-<div class="col-md-6">
-  <h2 class="page-header">Create user</h2>
-  <form name="userForm" ng-submit="submitUser()" novalidate>
-    <div class="form-group"
-      ng-class="{'has-error': showError(userForm, userForm.userName)}">
-
-      <label class="control-label" for="user-name">Name</label>
-      <input type="text" class="form-control" id="user-name" name="userName"
-      ng-model="user.name" required>
-    </div>
-    <div class="form-group"
-      ng-class="{'has-error': showError(userForm, userForm.userPassword)}">
-
-      <label class="control-label" for="user-password">Password</label>
-      <input type="password" class="form-control" id="user-password"
-      name="userPassword" ng-model="user.password" required>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="user.admin"> Admin
-      </label>
-    </div>
-    <div class="form-group">
-      <label for="user-team" class="control-label">Team</label>
-      <select class="form-control" id="user-team" name="userTeam"
-        ng-options="team.id as team.name for team in teams"
-        ng-model="user.team">
-      </select>
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-  <div class="alerts">
-    <div ng-repeat="alert in alerts.user">
-      <div alert type="{{alert.type}}" close="closeAlert($index, 'user')">
-        {{alert.msg}}
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="col-md-6" ng-if="global_admin">
-  <h2 class="page-header">Create team</h2>
-  <form name="teamForm" ng-submit="submitTeam()" novalidate>
-    <div class="form-group"
-      ng-class="{'has-error': showError(teamForm, teamForm.teamName)}">
-
-      <label for="team-name" class="control-label">Name</label>
-      <input type="text" class="form-control" id="team-name" name="teamName"
-      ng-model="team.name" required>
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-  <div class="alerts">
-    <div ng-repeat="alert in alerts.team">
-      <div alert type="{{alert.type}}" close="closeAlert($index, 'team')">
-        {{alert.msg}}
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="col-md-12">
-  <h2 class="page-header">Audit Logs</h2>
-    <div class="audit-logs">
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <tr><th>Action</th><th>User ID</th><th>Team ID</th><th>Date</th></tr>
-          <tr ng-repeat="audit in audits"><td>{{ audit.action }}</td><td>{{ audit.user_id }}</td><td>{{ audit.team_id }}</td><td>{{ audit.created_at }}</td></tr>
-        </table>
-      </div>
+  <div tabset>
+    <div tab heading="Users">
+      <div ng-include="'/partials/admin/users.html'"></div>
     </div>
+    <div tab heading="Teams" ng-if="global_admin">
+      <div ng-include="'/partials/admin/teams.html'"></div>
+    </div>
+    <div tab heading="RemoteCIs">
+      <div ng-include="'/partials/admin/remotecis.html'"></div>
+    </div>
+    <div tab heading="Topics" ng-if="global_admin">
+      <div ng-include="'/partials/admin/topics.html'"></div>
+    </div>
+    <div tab heading="Audit">
+      <div ng-include="'/partials/admin/audits.html'"></div>
+    </div>
+  </div>
 </div>
 
