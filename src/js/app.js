@@ -24,7 +24,7 @@ require('angular-bootstrap');
 require('jsonformatter');
 
 module.exports = angular.module('app', [
-  'ngCookies', 'ui.router', 'ui.bootstrap', 'jsonFormatter'
+  'ngCookies', 'ui.router', 'ui.bootstrap', 'jsonFormatter', 'dci.messages'
 ])
 .factory('moment', ['_', function(_) {
   moment.locale('en', {invalidDate: 'N/A'});

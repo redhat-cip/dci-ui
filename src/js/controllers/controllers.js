@@ -78,18 +78,26 @@ require('app')
   }
 ])
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', function($scope, teams, audits, api) {
+  '$scope', 'teams', 'audits', 'api', 'messages',
+  function($scope, teams, audits, api, msg) {
+
+    var errCb = function(entity, value) {
+      return function(error) {
+        if (error.status === 422) {
+          msg.alert(entity + ' "' + value + '" already exists', 'danger');
+        } else {
+          msg.alert(error.data.message, 'danger');
+        }
+      };
+    };
+    $scope.teamForm = {};
+    $scope.userForm = {};
     $scope.teams = teams;
     $scope.audits = audits;
     $scope.team = {};
     $scope.user = {
       admin: false,
       team: teams.length && teams[0].id
-    };
-    $scope.alerts = {user: [], team: []};
-
-    $scope.closeAlert = function(index, type) {
-      $scope.alerts[type].splice(index, 1);
     };
 
     $scope.showError = function(form, field) {
@@ -107,20 +115,10 @@ require('app')
 
       api.postUser(user).then(
         function(user) {
-          $scope.alerts.user.push({
-            msg: 'Successfully created user "' + user.name + '"',
-            type: 'success'
-          });
-        },
-        function(error) {
-          var alert = {type: 'danger'};
-          if (error.status === 422) {
-            alert.msg = 'Error user "' + $scope.user.name + '" already exist';
-          } else {
-            alert.msg = error.data.message;
-          }
-          $scope.alerts.user.push(alert);
-        }
+          msg.alert(
+            'user "' + user.name + '" has been created',
+            'success');
+        }, errCb('user', user.name)
       );
     };
 
@@ -129,20 +127,8 @@ require('app')
       api.postTeam({name: $scope.team.name}).then(
         function(team) {
           $scope.teams.push(team);
-          $scope.alerts.team.push({
-            msg: 'Successfully created team "' + team.name + '"',
-            type: 'success'
-          });
-        },
-        function(error) {
-          var alert = {type: 'danger'};
-          if (error.status === 422) {
-            alert.msg = 'Error team "' + $scope.team.name + '" already exist';
-          } else {
-            alert.msg = error.data.message;
-          }
-          $scope.alerts.team.push(alert);
-        }
+          msg.alert('team "' + team.name + '" has been created', 'success');
+        }, errCb('team', $scope.team.name)
       );
     };
   }

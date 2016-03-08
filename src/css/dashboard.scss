@@ -137,6 +137,15 @@ pre {
   }
 }
 
+
+.messages {
+  position: fixed;
+  z-index: 9999;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+}
+
 @each $name, $color in
 (primary, $brand-primary), (success, $brand-success), (info, $brand-info),
 (warning, $brand-warning), (danger, $brand-danger) {
