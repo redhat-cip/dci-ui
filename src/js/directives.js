@@ -15,6 +15,23 @@
 'use strict';
 
 require('app')
+.directive('dciAdmin', ['$injector', function($injector) {
+  return {
+    link: function(scope) {
+      var _ = $injector.get('_');
+      var api = $injector.get('api');
+
+      var user = scope.user;
+
+      scope.remove_user = function() {
+        api.removeJob(user.id, user.etag).then(function(job) {
+          $state.go('index');
+        });
+      };
+    },
+    templateUrl: '/partials/admin.html'
+  };
+}])
 .directive('dciJob', ['$injector', function($injector) {
   return {
     link: function(scope) {

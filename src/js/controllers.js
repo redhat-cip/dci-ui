@@ -138,8 +138,12 @@ require('app')
 ])
 
 .controller('AdminCtrl', [
-  '$scope', 'teams', 'audits', 'api', function($scope, teams, audits, api) {
+  '$scope', 'remotecis', 'teams', 'topics', 'users', 'audits', 'api',
+  function($scope, remotecis, teams, topics, users, audits, api) {
+    $scope.remotecis = remotecis;
     $scope.teams = teams;
+    $scope.topics = topics;
+    $scope.users = users;
     $scope.audits = audits;
     $scope.team = {};
     $scope.user = {
@@ -202,6 +206,28 @@ require('app')
             alert.msg = error.data.message;
           }
           $scope.alerts.team.push(alert);
+        }
+      );
+    };
+
+    $scope.submitTopic = function() {
+      if ($scope.topicForm.$invalid) { return; }
+      api.postTopic({name: $scope.topic.name}).then(
+        function(topic) {
+          $scope.topics.push(topic);
+          $scope.alerts.topic.push({
+            msg: 'Successfully created topic "' + topic.name + '"',
+            type: 'success'
+          });
+        },
+        function(error) {
+          var alert = {type: 'danger'};
+          if (error.status === 422) {
+            alert.msg = 'Error topic "' + $scope.topic.name + '" already exist';
+          } else {
+            alert.msg = error.data.message;
+          }
+          $scope.alerts.topic.push(alert);
         }
       );
     };
