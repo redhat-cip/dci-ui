@@ -1,0 +1,26 @@
+<h2 class="page-header">Teams list</h2>
+<div class="teams-list">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tr><th>Team name</th><th>Team ID</th><th>Date</th><th>Actions</th></tr>
+      <tr ng-repeat="team in teams"><td>{{ team.name }}</td><td>{{ team.id }}</td><td>{{ team.created_at }}</td><td><span class="btn glyphicon glyphicon-trash" ng-click="remove_team(team, $index)"></span></td></tr>
+    </table>
+  </div>
+</div>
+<h2 class="page-header">Create team</h2>
+<form name="teamForm" ng-submit="submitTeam()" novalidate>
+  <div class="form-group"
+       ng-class="{'has-error': showError(teamForm, teamForm.teamName)}">
+    <label for="team-name" class="control-label">Name</label>
+    <input type="text" class="form-control" id="team-name" name="teamName"
+           ng-model="team.name" required>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<div class="alerts">
+  <div ng-repeat="alert in alerts.team">
+    <div alert type="{{alert.type}}" close="closeAlert($index, 'team')">
+      {{alert.msg}}
+    </div>
+  </div>
+</div>
