@@ -3,12 +3,14 @@
   <div tabset>
       <div class="row">
         <h3 class="col-md-12 page-header">Teams
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.team = !collapses.team">
             <span ng-if="collapses.team">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.team">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -23,12 +25,14 @@
       </div>
       <div class="row">
         <h3 class="col-md-12 page-header">Remote CI
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.remoteci = !collapses.remoteci">
             <span ng-if="collapses.remoteci">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.remoteci">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
@@ -44,12 +48,14 @@
       </div>
       <div class="row">
         <h3 class="col-md-12 page-header">Topics
-          <button type="button" class="btn btn-primary btn-xs pull-right"
+          <button type="button" class="btn btn-default btn-xs pull-right"
             ng-click="collapses.topic = !collapses.topic">
             <span ng-if="collapses.topic">
+              <span class="glyphicon glyphicon-menu-up"></span>
               see details
             </span>
             <span ng-if="!collapses.topic">
+              <span class="glyphicon glyphicon-menu-down"></span>
               close details
             </span>
           </button>
