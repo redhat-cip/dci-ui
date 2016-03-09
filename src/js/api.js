@@ -216,5 +216,11 @@ require('app')
     return $http.get(api.urls.audits).then(_.property('data.audits'));
   };
 
+  api.getJobdefinitions = function(topic_id) {
+    var url = urlize(api.urls.topics, topic_id ,'jobdefinitions')
+    var config = {'params': {'embed': 'jobdefinition_component'}};
+    return $http.get(url, config).then(_.property('data.jobdefinitions'));
+  };
+
   return api;
 }]);

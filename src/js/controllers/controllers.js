@@ -77,6 +77,16 @@ require('app')
     }
   }
 ])
+.controller('GstatusCtrl', [
+  '$scope', 'topics', function($scope, topics) {
+  $scope.topics = topics;
+  }
+])
+.controller('GstatuspanelCtrl', [
+  '$scope', 'jobdefs', function($scope, jobdefs) {
+  $scope.jobdefs = jobdefs;
+  }
+])
 .controller('AdminCtrl', [
   '$scope', 'teams', 'audits', 'api', 'messages',
   function($scope, teams, audits, api, msg) {
