@@ -1,0 +1,9 @@
+<h1 class="page-header">Global status</h1>
+<table class="table table-striped">
+  <tr>
+    <th style="width:200px">Components</th>
+  </tr>
+  <tr ng-repeat="compo in compos">
+    <td><a ui-sref="gstatuspanel({id: topic, compotype: compo.name})">{{compo.name}}</a></td>
+  </tr>
+</table>

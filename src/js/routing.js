@@ -231,6 +231,50 @@ require('app')
         }],
       }
     })
+    .state('gstatus', {
+      parent: 'auth',
+      url: '/gstatus',
+      controller: 'GstatusCtrl',
+      templateUrl: '/partials/gstatus.html',
+      resolve: {
+        topics: ['api', 'conf', function(api, _) {
+          return api.getTopics();
+        }]
+      }
+    })
+    .state('gstatuscompo', {
+      parent: 'auth',
+      url: '/gstatus/:id', 
+      controller: 'GstatusCompoCtrl',
+      templateUrl: '/partials/gstatuscompo.html',
+      resolve: {
+        components: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+          return api.getComponentsPerTopic($stateParams.id);
+        }],
+        topic: ['$stateParams', 'conf', function($stateParams) {
+          return $stateParams.id;
+        }]
+      }
+    })
+    .state('gstatuspanel', {
+      parent: 'auth',
+      url: '/gstatus/:id/:compotype',
+      controller: 'GstatuspanelCtrl',
+      templateUrl: '/partials/gstatuspanel.html',
+      resolve: {
+        jobdefs: ['$stateParams', 'api', 'conf',
+                  function($stateParams, api) {
+                    return api.getJobdefinitions($stateParams.id);
+                  }],
+        puddles: ['$stateParams', 'api', 'conf',
+                  function($stateParams, api) {
+                    return api.getComponentsPerType($stateParams.id, $stateParams.compotype);
+                  }],
+        jobstatus: ['api', 'conf', function(api) {
+          return api.getJobsAll();
+        }],
+      }
+    })
     .state('login', {
       parent: 'config',
       url: '/login',
