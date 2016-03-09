@@ -119,7 +119,7 @@ require('app')
         ]
       }
     })
-    .state('job.index', {url: '/'})
+    .state('job.files', {url: '/files'})
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
     .state('job.context', {url: '/context'})
@@ -144,6 +144,20 @@ require('app')
         }]
       }
     })
+    .state('administrate.users', {url: '/users'})
+    .state('administrate.teams', {url: '/teams'})
+    .state('administrate.remotecis', {
+      url: '/remotecis',
+      resolve: {
+        _: ['auth', '$q', function(auth, $q) {
+          if (!auth.isAdmin()) {
+            return $q.reject({status: 401});
+          }
+        }]
+      }
+    })
+    .state('administrate.topics', {url: '/topics'})
+    .state('administrate.audits', {url: '/audits'})
     .state('information', {
       parent: 'auth',
       url: '/information',
