@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_d28f44cb",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T14:26:40Z",
+      "side": 1,
+      "message": "no need to break line",
+      "revId": "756d91988e738be64b132fa53764ebbf13c28a8e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_32bcd06c",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T14:26:40Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "756d91988e738be64b132fa53764ebbf13c28a8e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
