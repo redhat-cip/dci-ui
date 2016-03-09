@@ -119,6 +119,10 @@ require('app')
         ]
       }
     })
+    .state('job.index', {url: '/'})
+    .state('job.details', {url: '/details'})
+    .state('job.edit', {url: '/edit'})
+    .state('job.context', {url: '/context'})
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',
