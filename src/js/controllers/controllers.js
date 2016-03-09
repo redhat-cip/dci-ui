@@ -77,6 +77,24 @@ require('app')
     }
   }
 ])
+.controller('GstatusCtrl', [
+  '$scope', 'topics', function($scope, topics) {
+  $scope.topics = topics;
+  }
+])
+.controller('GstatuspanelCtrl', [
+  '$injector', '$scope', 'jobdefs', 'puddles',function($injector, $scope, jobdefs, puddles) {
+  var _ = $injector.get('_');
+  $scope.gstatus = null;
+  $scope.jobdefs = jobdefs;
+  $scope.puddles = puddles;
+  _.each(jobdefs, function(jobdef) {
+    _.each(puddles, function(puddle) {
+      $scope.gstatus[jobdef][puddle] = "N/A";
+    });
+  });
+  }
+])
 .controller('AdminCtrl', [
   '$scope', 'teams', 'audits', 'api', 'messages',
   function($scope, teams, audits, api, msg) {

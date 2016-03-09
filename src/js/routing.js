@@ -150,6 +150,31 @@ require('app')
         }],
       }
     })
+    .state('gstatus', {
+      parent: 'auth',
+      url: '/gstatus',
+      controller: 'GstatusCtrl',
+      templateUrl: '/partials/gstatus.html',
+      resolve: {
+        topics: ['api', 'conf', function(api, _) {
+          return api.getTopics();
+        }]
+      }
+    })
+    .state('gstatuspanel', {
+      parent: 'auth',
+      url: '/gstatus/:id',
+      controller: 'GstatuspanelCtrl',
+      templateUrl: '/partials/gstatuspanel.html',
+      resolve: {
+        jobdefs: ['api', '$stateParams', 'conf', function(api, $stateParams, _) {
+          return api.getJobdefinitions($stateParams.id);
+        }],
+        puddles: ['api', '$stateParams', function(api, $stateParams) {
+          return api.getComponentsPerType($stateParams.id, 'puddle');
+        }]
+      }
+    })
     .state('login', {
       parent: 'config',
       url: '/login',
