@@ -231,6 +231,39 @@ require('app')
         }],
       }
     })
+    .state('gstatus', {
+      parent: 'auth',
+      url: '/gstatus',
+      controller: 'GstatusCtrl',
+      templateUrl: '/partials/gstatus.html',
+      resolve: {
+        topics: ['api', 'conf', function(api, _) {
+          return api.getTopics();
+        }]
+      }
+    })
+    .state('gstatuspanel', {
+      parent: 'auth',
+      url: '/gstatus/:id',
+      controller: 'GstatuspanelCtrl',
+      templateUrl: '/partials/gstatuspanel.html',
+      resolve: {
+        jobdefs: ['$injector', '$stateParams', 'conf',
+                  function($injector, $stateParams) {
+                    var api = $injector.get('api');
+                    return api.getJobdefinitions($stateParams.id);
+                  }],
+        puddles: ['$injector', '$stateParams', 'conf',
+                  function($injector, $stateParams) {
+                    var api = $injector.get('api');
+                    return api.getComponentsPerType($stateParams.id, 'package');
+                  }],
+        jobstatus: ['$injector', 'conf', function($injector) {
+          var api = $injector.get('api');
+          return api.getJobsAll();
+        }],
+      }
+    })
     .state('login', {
       parent: 'config',
       url: '/login',

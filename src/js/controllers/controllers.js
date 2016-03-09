@@ -76,4 +76,47 @@ require('app')
       };
     }
   }
+])
+.controller('GstatusCtrl', [
+  '$scope', 'topics', function($scope, topics) {
+    $scope.topics = topics;
+  }
+])
+.controller('GstatuspanelCtrl', [
+  '$injector', '$scope', 'jobdefs', 'puddles', 'jobstatus',
+  function($injector, $scope, jobdefs, puddles, jobstatus) {
+    var _ = $injector.get('_');
+    var api = $injector.get('api');
+    var gstatus = {};
+    var jstatus = null;
+    var component;
+    var def_id;
+    $scope.puddles = puddles;
+    $scope.jobdefs = jobdefs;
+    var jobarraystatus = _.reduce(jobstatus, function(result, obj) {
+      component = obj.jobdefinition.jobdefinition_component.component_id;
+      def_id = obj.jobdefinition.id;
+      (result[def_id] || (result[def_id] = [])).push(component);
+      result[def_id + '_status'] = obj.status;
+      return result;
+    }, {});
+    _.each(jobdefs, function(jobdef) {
+      _.each(puddles, function(puddle) {
+        if (!_.isObject(gstatus[jobdef.name])) {
+          gstatus[jobdef.name] = {};
+        }
+        if (!_.isObject(gstatus[jobdef.name][puddle.name])) {
+          gstatus[jobdef.name][puddle.name] = {};
+        }
+        if (_.indexOf(jobarraystatus[jobdef.id], puddle.id) >= 0) {
+          jstatus = jobarraystatus[jobdef.id + '_status'];
+          gstatus[jobdef.name][puddle.name] = jstatus;
+        }
+        if (_.isEmpty(gstatus[jobdef.name][puddle.name])) {
+          gstatus[jobdef.name][puddle.name] = 'N/A';
+        }
+      });
+    });
+    $scope.gstatus = gstatus;
+  }
 ]);
