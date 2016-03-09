@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_322cd04a",
+        "filename": "src/js/api.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "the user service is already injected into this service, you can use it instead of asking the team",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_1231cca2",
+        "filename": "src/js/api.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "this will break in validation. tmp variables are here for avoiding breaking the 80 chars limit, you can reduce the amount of lines by writing\n\n    var url \u003d urlize(api.urls.remotecis, remoteciID);\n    return $http.delete(url, {\u0027headers\u0027: {\u0027If-Match\u0027: remoteciEtag}});",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_7226586a",
+        "filename": "src/js/api.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_522b5430",
+        "filename": "src/js/api.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_b21f2009",
+        "filename": "src/js/api.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "and same here",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_52e23404",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "the api service got the user service, no need to bring it from here",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_921c9c15",
+        "filename": "src/js/routing.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "it start to be redundant we will use the $q service to write something like this:\n\n    resolve: {\n      data: [\u0027$q\u0027, \u0027api\u0027, \u0027conf\u0027, function($q, api) {\n          return $q.all([api.getRemoteCIS(), api.getTeams(), \n                         api.getTopics(), api.getUsers(), api.getAudits()])\n            .then(function(results) {\n                return {\n                  \u0027remotecis\u0027: results[0],\n                  \u0027teams\u0027: results[1],\n                  \u0027topics\u0027: results[2],\n                  \u0027users\u0027: results[3],\n                  \u0027audits\u0027: result[4]\n                }\n          });\n      }]\n    }",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_f219a823",
+        "filename": "src/partials/admin/audits.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "maybe break this line a bit",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_d21624f1",
+        "filename": "src/partials/admin/remotecis.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "break this line a bit",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_32d3303a",
+        "filename": "src/partials/admin/teams.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "break this line a bit",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_12d8ac52",
+        "filename": "src/partials/admin/topics.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "break this line a bit",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_72ddb842",
+        "filename": "src/partials/admin/users.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-09T10:40:53Z",
+      "side": 1,
+      "message": "break this line a bit",
+      "revId": "321be8667bc990323a4319dd1aa84826ea74424d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
