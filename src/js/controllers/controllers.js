@@ -76,4 +76,94 @@ require('app')
       };
     }
   }
+])
+.controller('GstatusCtrl', [
+  '$scope', 'topics', function($scope, topics) {
+  $scope.topics = topics;
+  }
+])
+.controller('GstatuspanelCtrl', [
+  '$injector', '$scope', 'jobdefs', 'puddles', 'jobstatus', function($injector, $scope, jobdefs, puddles, jobstatus) {
+  var _ = $injector.get('_');
+  var api = $injector.get('api');
+  $scope.gstatus = {};
+  $scope.puddles = puddles;
+  $scope.jobdefs = jobdefs;
+  var jobarraystatus = _.reduce(jobstatus, function(result, obj) {
+    (result[obj.jobdefinition.id] || (result[obj.jobdefinition.id] = [])).push(obj['jobdefinition']['jobdefinition_component']['component_id']);
+    result[obj.jobdefinition.id + '_status'] = obj.status;
+    return result;
+  }, {});
+  _.each(jobdefs, function(jobdef) {
+    _.each(puddles, function(puddle) {
+      if (typeof $scope.gstatus[jobdef.name] == 'undefined') {
+        $scope.gstatus[jobdef.name] = {};
+      }
+      if (typeof $scope.gstatus[jobdef.name][puddle.name] == 'undefined') {
+        $scope.gstatus[jobdef.name][puddle.name] = {};
+      }
+      if (_.indexOf(jobarraystatus[jobdef.id], puddle.id) >= 0) {
+        $scope.gstatus[jobdef.name][puddle.name] = jobarraystatus[jobdef.id + '_status'];
+      } else {
+        $scope.gstatus[jobdef.name][puddle.name] = "N/A"
+      }
+    });
+  });
+  }
+])
+.controller('AdminCtrl', [
+  '$scope', 'teams', 'audits', 'api', 'messages',
+  function($scope, teams, audits, api, msg) {
+
+    var errCb = function(entity, value) {
+      return function(error) {
+        if (error.status === 422) {
+          msg.alert(entity + ' "' + value + '" already exists', 'danger');
+        } else {
+          msg.alert(error.data.message, 'danger');
+        }
+      };
+    };
+    $scope.teamForm = {};
+    $scope.userForm = {};
+    $scope.teams = teams;
+    $scope.audits = audits;
+    $scope.team = {};
+    $scope.user = {
+      admin: false,
+      team: teams.length && teams[0].id
+    };
+
+    $scope.showError = function(form, field) {
+      return field.$invalid && (field.$dirty || form.$submitted);
+    };
+
+    $scope.submitUser = function() {
+      if ($scope.userForm.$invalid) { return; }
+      var user = {
+        name: $scope.user.name,
+        password: $scope.user.password,
+        role: $scope.user.admin ? 'admin' : 'user',
+        team_id: $scope.user.team
+      };
+
+      api.postUser(user).then(
+        function(user) {
+          msg.alert(
+            'user "' + user.name + '" has been created',
+            'success');
+        }, errCb('user', user.name)
+      );
+    };
+
+    $scope.submitTeam = function() {
+      if ($scope.teamForm.$invalid) { return; }
+      api.postTeam({name: $scope.team.name}).then(
+        function(team) {
+          $scope.teams.push(team);
+          msg.alert('team "' + team.name + '" has been created', 'success');
+        }, errCb('team', $scope.team.name)
+      );
+    };
+  }
 ]);
