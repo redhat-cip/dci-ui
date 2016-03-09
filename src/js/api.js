@@ -294,5 +294,30 @@ require('app')
     return $http.get(api.urls.audits).then(_.property('data.audits'));
   };
 
+  api.getJobdefinitions = function(topic_id) {
+    var url = urlize(api.urls.topics, topic_id ,'jobdefinitions');
+    return $http.get(url).then(_.property('data.jobdefinitions'));
+  };
+
+  api.getComponentsPerType = function(topic_id, type) {
+    var url = urlize(api.urls.topics, topic_id ,'components');
+    var config = {'params': {'where': 'type:' + type}};
+    return $http.get(url, config).then(_.property('data.components'));
+  };
+
+  api.getJobsAll = function() {
+    var config = {
+      'params': {
+        'embed': 'jobdefinition,jobdefinition.jobdefinition_component'
+      }
+    };
+    return $http.get(api.urls.jobs, config).then(_.property('data.jobs'));
+  };
+
+  api.getComponentsPerTopic = function(topic_id) {
+    var url = urlize(api.urls.topics, topic_id ,'components');
+    return $http.get(url).then(_.property('data.components'));
+  };
+
   return api;
 }]);

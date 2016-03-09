@@ -1,0 +1,11 @@
+<h1 class="page-header">Global status</h1>
+<table class="table table-striped">
+  <tr>
+    <th>Jobdefinitions</th>
+    <th ng-repeat="puddle in puddles">{{puddle.name}}</th>
+  </tr>
+  <tr ng-repeat="jobdef in jobdefs">
+    <td style="width:200px">{{jobdef}}</td>
+    <td ng-repeat="puddle in puddles">{{gstatus[jobdef][puddle.name]}}</td>
+  </tr>
+</table>

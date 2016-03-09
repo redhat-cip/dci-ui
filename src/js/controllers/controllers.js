@@ -76,4 +76,68 @@ require('app')
       };
     }
   }
+])
+.controller('GstatusCtrl', [
+  '$scope', 'topics', function($scope, topics) {
+    $scope.topics = topics;
+  }
+])
+.controller('GstatusCompoCtrl', [
+  '$scope', 'components', 'topic', function($scope, components, topic) {
+    var compo_type = [];
+    _.each(components, function(component) {
+      if (_.isUndefined(_.find(compo_type, { 'name': component.type }))) {
+        compo_type = _.concat(compo_type, {'name': component.type });
+      }
+    });
+    $scope.compos = compo_type;
+    $scope.topic = topic;
+  }
+])
+.controller('GstatuspanelCtrl', [
+  '$injector', '$scope', 'jobdefs', 'puddles', 'jobstatus',
+  function($injector, $scope, jobdefs, puddles, jobstatus) {
+    var _ = $injector.get('_');
+    var api = $injector.get('api');
+    var gstatus = {};
+    var jstatus = null;
+    var component;
+    var def_id;
+    var def_name;
+    $scope.puddles = puddles;
+    //TODO(cedric)
+    // When we have job template we can delete the reduce
+    $scope.jobdefs = _.reduce(jobdefs, function(result, obj) {
+      if (_.indexOf(result, obj.name) == -1) {
+        return _.concat(result, obj.name);
+      }
+      return result;
+    }, []);
+    
+    $scope.jobarraystatus = _.reduce(jobstatus, function(result, obj) {
+      component = obj.jobdefinition.jobdefinition_component.component_id;
+      def_name = obj.jobdefinition.name;
+      (result[def_name] || (result[def_name] = [])).push(component);
+      result[def_name + '_status'] = obj.status;
+      return result;
+    }, {});
+    _.each($scope.jobdefs, function(jobdef) {
+      _.each(puddles, function(puddle) {
+        if (!_.isObject(gstatus[jobdef])) {
+          gstatus[jobdef] = {};
+        }
+        if (!_.isObject(gstatus[jobdef][puddle])) {
+          gstatus[jobdef][puddle.name] = {};
+        }
+        if (_.indexOf($scope.jobarraystatus[jobdef], puddle.id) >= 0) {
+          jstatus = $scope.jobarraystatus[jobdef + '_status'];
+          gstatus[jobdef][puddle.name] = jstatus;
+        }
+        if (_.isEmpty(gstatus[jobdef][puddle.name])) {
+          gstatus[jobdef][puddle.name] = 'N/A';
+        }
+      });
+    });
+    $scope.gstatus = gstatus;
+  }
 ]);
