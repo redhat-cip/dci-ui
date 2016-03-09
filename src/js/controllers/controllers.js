@@ -80,9 +80,10 @@ require('app')
 .controller('AdminCtrl', [
   '$scope', '$injector', 'data', function($scope, $injector, data) {
 
-    var api = $injector.get('api');
-    var user = $injector.get('user');
+    var $state = $injector.get('$state');
     var msg = $injector.get('messages');
+    var user = $injector.get('user');
+    var api = $injector.get('api');
     var _ = $injector.get('_');
 
     var rm = function(entity, collection, method) {
@@ -119,12 +120,16 @@ require('app')
     };
     _.assign($scope, {
       topicForm: {}, teamForm: {}, userForm: {}, remoteciForm: {},
-      data: data,
+      data: data, active: {}, go: $state.go,
       topic: {}, team: {}, remoteci: {team_id: user.team.id},
       user: {
         role: 'user',
         team_id: data.teams.length && data.teams[0].id
       }
+    });
+
+    _.each(['users', 'teams', 'remotecis', 'topics', 'audits'], function(tab) {
+      $scope.active[tab] = $state.is('administrate.' + tab);
     });
 
     $scope.role = function(value) {

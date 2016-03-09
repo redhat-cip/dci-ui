@@ -1,16 +1,16 @@
 <h1 class="page-header">Job</h1>
 <div dci-job></div>
 <div tabset>
-  <div tab heading="Files" >
-    <div ng-include="'/partials/job/files.html'"></div>
+  <div tab heading="Files" select="go('^.files')" active="active.index">
+    <div ng-include="'/partials/job/files.html'" ></div>
   </div>
-  <div tab heading="Details">
+  <div tab heading="Details" select="go('^.details')" active="active.details">
     <div ng-include="'/partials/job/details.html'"></div>
   </div>
-  <div tab heading="Edit job">
+  <div tab heading="Edit job" select="go('^.edit')" active="active.edit">
     <div ng-include="'/partials/job/edit.html'"></div>
   </div>
-  <div tab heading="Context">
+  <div tab heading="Context" select="go('^.context')" active="active.context">
     <div ng-include="'/partials/job/context.html'"></div>
   </div>
 </div>
