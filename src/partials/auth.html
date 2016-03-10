@@ -1,24 +1,36 @@
 <nav class="navbar navbar-fixed-left navbar-inverse">
-  <div class="navbar-header">
-    <a class="navbar-brand" ui-sref="index">
-      <img src="images/redhat.png">
-    </a>
-  </div>
-  <p class="navbar-text">build: {{ version }}</p>
+<div class="navbar-header">
+  <button type="button"
+          class="navbar-toggle collapsed"
+          aria-expanded="false"
+          ng-click="isCollapsed = !isCollapsed">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+
+
+  <a class="navbar-brand" ui-sref="index">
+    <img src="images/redhat.png" class="hidden-xs">
+    <img src="images/redhat-mini.png" class="visible-xs-block">
+  </a>
+</div>
+<div class="collapse navbar-collapse" collapse="isCollapsed">
+  <p class="navbar-text hidden-xs">build: {{ version }}</p>
   <ul class="nav navbar-nav user">
     <li><p class="navbar-text">{{ user.name }} - {{ user.team.name }}</a></li>
     <li>
-    <a ng-click="logout()" href=''>
-      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
-    </a>
+      <a ng-click="logout()" href=''>
+        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
+      </a>
     </li>
   </ul>
-
   <ul class="nav navbar-nav">
     <li ng-class="{active: ('jobs'|includedByState) || ('job'|includedByState)}">
-    <a ui-sref="jobs">
-      <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
-    </a>
+      <a ui-sref="jobs">
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
+      </a>
     </li>
     <li ng-class="{active: ('administrate'|includedByState)}" ng-if="admin">
       <a ui-sref="administrate.users">
@@ -26,11 +38,12 @@
       </a>
     </li>
     <li ui-sref-active="active">
-    <a ui-sref="information">
-      <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Information
-    </a>
+      <a ui-sref="information">
+        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Information
+      </a>
     </li>
   </ul>
+</div>
 </nav>
 <div class="messages" data-dci-messages></div>
 <div ui-view class="container"></div>
