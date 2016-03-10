@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_58aa55d5",
+        "filename": "src/partials/users.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 247
+      },
+      "writtenOn": "2016-03-10T16:36:03Z",
+      "side": 1,
+      "message": "WIP or accidental add?",
+      "revId": "da6acda867aaa2a38e7b03e674bc89d6dfbd5602",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
