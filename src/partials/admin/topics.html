@@ -8,6 +8,8 @@
         <td>{{ topic.id }}</td>
         <td>{{ topic.created_at }}</td>
         <td>
+          <span class="btn glyphicon glyphicon-pencil" ng-click="removeTopic(topic, $index)">
+          </span>
           <span class="btn glyphicon glyphicon-trash" ng-click="removeTopic(topic, $index)">
           </span>
         </td>

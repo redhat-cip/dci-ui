@@ -10,6 +10,8 @@
         <td>{{ remoteci.id }}</td>
         <td>{{ remoteci.created_at }}</td>
         <td>
+          <span class="btn glyphicon glyphicon-pencil" ng-click="removeRemoteCI(remoteci, $index)">
+          </span>
           <span class="btn glyphicon glyphicon-trash" ng-click="removeRemoteCI(remoteci, $index)">
           </span>
         </td>

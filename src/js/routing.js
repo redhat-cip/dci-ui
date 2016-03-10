@@ -162,7 +162,34 @@ require('app')
       url: '/login',
       controller: 'LoginCtrl',
       templateUrl: '/partials/login.html',
-    });
+    })
+    .state('user', {
+      parent: 'auth',
+      url: '/users/:id',
+      controller: 'UserCtrl',
+      templateUrl: '/partials/users.html',
+      resolve: {
+        user: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.getUser($stateParams.id).catch(function(err) {
+                // #$injector.get('$state').go('index');
+                $injector.get('messages').alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              }
+            );
+          }
+        ]
+      }
+    })
+    .state('user.edit', {url: '/edit'})
+    .state('team.edit', {url: '/edit'})
+    .state('remoteci.edit', {url: '/edit'})
+    .state('topic.edit', {url: '/edit'});
 
     $urlRouterProvider.otherwise('/');
   }
