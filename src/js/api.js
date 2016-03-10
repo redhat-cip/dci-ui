@@ -174,6 +174,11 @@ require('app')
     }));
   };
 
+  api.getRemoteCI = function(name) {
+    var url = urlize(api.urls.remotecis, name);
+    return $http.get(url).then(_.property('data.remoteci'));
+  };
+
   api.getRemoteCIS = function() {
     var extractRemoteCIS = _.partialRight(_.get, 'data.remotecis');
     return $http.get(api.urls.remotecis).then(extractRemoteCIS);
@@ -184,6 +189,12 @@ require('app')
       api.urls.remotecis, _.merge(remoteci, {'team_id': user.team.id})
     )
     .then(_.property('data.remoteci'));
+  };
+
+  api.putRemoteCI = function(remoteci) {
+    var url = urlize(api.urls.remotecis, remoteci.id);
+    return $http.put(url, {'name': remoteci.name},
+                     {'headers': {'If-Match': remoteci.etag}});
   };
 
   api.removeRemoteCI = function(remoteciID, remoteciEtag) {
@@ -220,6 +231,11 @@ require('app')
     return $http.delete(url, {'headers': {'If-Match': userEtag}});
   };
 
+  api.getTopic = function(name) {
+    var url = urlize(api.urls.topics, name);
+    return $http.get(url).then(_.property('data.topic'));
+  };
+
   api.getTopics = function() {
     return $http.get(api.urls.topics).then(_.property('data.topics'));
   };
@@ -228,9 +244,20 @@ require('app')
     return $http.post(api.urls.topics, topic).then(_.property('data.topic'));
   };
 
+  api.putTopic = function(topic) {
+    var url = urlize(api.urls.topics, topic.id);
+    return $http.put(url, {'name': topic.name},
+                     {'headers': {'If-Match': topic.etag}});
+  };
+
   api.removeTopic = function(topicID, topicEtag) {
     var url = urlize(api.urls.topics, topicID);
     return $http.delete(url, config, {'headers': {'If-Match': topicEtag}});
+  };
+
+  api.getTeam = function(name) {
+    var url = urlize(api.urls.teams, name);
+    return $http.get(url).then(_.property('data.team'));
   };
 
   api.getTeams = function() {
@@ -239,6 +266,12 @@ require('app')
 
   api.postTeam = function(team) {
     return $http.post(api.urls.teams, team).then(_.property('data.team'));
+  };
+
+  api.putTeam = function(team) {
+    var url = urlize(api.urls.teams, team.id);
+    return $http.put(url, {'name': team.name},
+                     {'headers': {'If-Match': team.etag}});
   };
 
   api.removeTeam = function(teamID, teamEtag) {
