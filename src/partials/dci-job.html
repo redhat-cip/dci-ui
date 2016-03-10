@@ -1,9 +1,10 @@
 <div class="bs-callout container-fluid job" ng-class="job.statusClass">
-  <div class="col-md-6">
-    <a ui-sref="job.files({id: job.id})" class="title">
+  <div class="col-md-11 col-sm-10 col-xs-9">
+    <div class="col-md-7 col-sm-6 col-xs-12">
+    <a ui-sref="job.files({id: job.id})"  class="title">
       {{job.remoteci.name}} / {{job.jobdefinition.name}}
     </a>
-    <div class="text-muted" ng-if="job.comment && !job.detail">
+    <div class="text-muted hidden-xs hidden-sm" ng-if="job.comment && !job.detail">
       "{{job.comment | limit:75:"..." }}"
     </div>
     <div class="text-muted" ng-if="job.comment && job.detail">
@@ -11,7 +12,7 @@
     </div>
 
   </div>
-  <div class="col-md-5">
+  <div class="col-md-5 col-sm-6 hidden-xs">
     <div class="title">
       <span class="glyphicon" ng-class="job.glyphicon"></span> {{job.status}}
     </div>
@@ -22,7 +23,8 @@
       <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
     </div>
   </div>
-  <div class="col-md-1">
+  </div>
+  <div class="col-md-1 col-sm-2 col-xs-3">
     <button type="button" class="close" ng-click="remove_job(jobs, $index)">
       <span aria-hidden="true">×</span>
       <span class="sr-only">Close</span>

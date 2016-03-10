@@ -281,6 +281,7 @@ require('app')
     $scope.admin = auth.isAdminInTeam();
     $scope.global_admin = auth.isAdmin();
     $scope.user = auth.user;
+    $scope.isCollapsed = true;
 
     $scope.logout = function() {
       auth.logout();
