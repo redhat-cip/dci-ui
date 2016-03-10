@@ -174,6 +174,11 @@ require('app')
     }));
   };
 
+  api.getRemoteCI = function(name) {
+    var url = urlize(api.urls.remotecis, name);
+    return $http.get(url).then(_.property('data.remoteci'));
+  };
+
   api.getRemoteCIS = function() {
     var extractRemoteCIS = _.partialRight(_.get, 'data.remotecis');
     return $http.get(api.urls.remotecis).then(extractRemoteCIS);
@@ -220,6 +225,11 @@ require('app')
     return $http.delete(url, {'headers': {'If-Match': userEtag}});
   };
 
+  api.getTopic = function(name) {
+    var url = urlize(api.urls.topics, name);
+    return $http.get(url).then(_.property('data.topic'));
+  };
+
   api.getTopics = function() {
     return $http.get(api.urls.topics).then(_.property('data.topics'));
   };
@@ -231,6 +241,11 @@ require('app')
   api.removeTopic = function(topicID, topicEtag) {
     var url = urlize(api.urls.topics, topicID);
     return $http.delete(url, config, {'headers': {'If-Match': topicEtag}});
+  };
+
+  api.getTeam = function(name) {
+    var url = urlize(api.urls.teams, name);
+    return $http.get(url).then(_.property('data.team'));
   };
 
   api.getTeams = function() {
