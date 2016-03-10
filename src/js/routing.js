@@ -146,16 +146,7 @@ require('app')
     })
     .state('administrate.users', {url: '/users'})
     .state('administrate.teams', {url: '/teams'})
-    .state('administrate.remotecis', {
-      url: '/remotecis',
-      resolve: {
-        _: ['auth', '$q', function(auth, $q) {
-          if (!auth.isAdmin()) {
-            return $q.reject({status: 401});
-          }
-        }]
-      }
-    })
+    .state('administrate.remotecis', {url: '/remotecis'})
     .state('administrate.topics', {url: '/topics'})
     .state('administrate.audits', {url: '/audits'})
     .state('information', {
@@ -180,7 +171,103 @@ require('app')
       url: '/login',
       controller: 'LoginCtrl',
       templateUrl: '/partials/login.html',
-    });
+    })
+    .state('user', {
+      parent: 'auth',
+      url: '/users/:id',
+      controller: 'UserCtrl',
+      templateUrl: '/partials/users.html',
+      resolve: {
+        user: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.getUser($stateParams.id).catch(function(err) {
+                // #$injector.get('$state').go('index');
+                $injector.get('messages').alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              }
+            );
+          }
+        ]
+      }
+    })
+    .state('user.edit', {url: '/edit'})
+    .state('team', {
+      parent: 'auth',
+      url: '/teams/:id',
+      controller: 'TeamCtrl',
+      templateUrl: '/partials/teams.html',
+      resolve: {
+        team: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.getTeam($stateParams.id).catch(function(err) {
+                // #$injector.get('$state').go('index');
+                $injector.get('messages').alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              }
+            );
+          }
+        ]
+      }
+    })
+    .state('team.edit', {url: '/edit'})
+    .state('remoteci', {
+      parent: 'auth',
+      url: '/remotecis/:id',
+      controller: 'RemoteCICtrl',
+      templateUrl: '/partials/remoteci.html',
+      resolve: {
+        remoteci: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.getRemoteCI($stateParams.id).catch(function(err) {
+                // #$injector.get('$state').go('index');
+                $injector.get('messages').alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              }
+            );
+          }
+        ]
+      }
+    })
+    .state('remoteci.edit', {url: '/edit'})
+    .state('topic', {
+      parent: 'auth',
+      url: '/topics/:id',
+      controller: 'TopicCtrl',
+      templateUrl: '/partials/topics.html',
+      resolve: {
+        topic: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.getTopic($stateParams.id).catch(function(err) {
+                // #$injector.get('$state').go('index');
+                $injector.get('messages').alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              }
+            );
+          }
+        ]
+      }
+    })
+    .state('topic.edit', {url: '/edit'});
 
     $urlRouterProvider.otherwise('/');
   }
