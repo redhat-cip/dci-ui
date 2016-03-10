@@ -10,7 +10,9 @@ $arrow-size                    : 15px;
 @import "bootstrap";
 
 body {
-  margin-left: $navbar-side-size;
+  @media (min-width: $screen-sm) {
+    margin-left: $navbar-side-size;
+  }
 }
 
 pre {
@@ -66,39 +68,51 @@ pre {
 
 .navbar-fixed-left,
 .navbar-fixed-right {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  margin-bottom: 0;
-  border-width: 0;
-  width: $navbar-side-size;
-
-
-  .navbar-nav > .active > a:after {
-    width: 0;
-    height: 0;
-    content: " ";
-    border-top: $arrow-size solid transparent;
-    border-bottom: $arrow-size solid transparent;
-    position: absolute;
-    top: 10px;
-    border-right: $arrow-size solid $body-bg;
+  @media (max-width: $screen-sm) {
+    .navbar-brand img {
+      margin: -12px 0;
+    }
+    .navbar-nav {
+      margin: 20px 0;
+    }
   }
 
+  border-radius: 0;
   .glyphicon {
     margin: 0 15px 0 10px;
   }
 
   @media (min-width: $grid-float-breakpoint) {
-    border-radius: 0;
-
+    .navbar-nav > .active > a:after {
+      width: 0;
+      height: 0;
+      content: " ";
+      border-top: $arrow-size solid transparent;
+      border-bottom: $arrow-size solid transparent;
+      position: absolute;
+      top: 10px;
+      border-right: $arrow-size solid $body-bg;
+    }
     .navbar-header, .navbar-nav, .navbar-nav > li, .navbar-text {
       float: none;
     }
 
   }
+
+  @media (min-width: $screen-sm) {
+    z-index: 9999; // just behind messages alerts
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    margin-bottom: 0;
+    border-width: 0;
+    width: $navbar-side-size;
+  }
 }
 
+.navbar-collapse {
+  padding: 0;
+}
 .navbar-text {
   text-align: center;
 }
