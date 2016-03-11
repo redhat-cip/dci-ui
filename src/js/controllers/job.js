@@ -16,40 +16,30 @@
 
 require('app')
 .controller('JobCtrl', [
-  '$scope', '$injector', 'job', function($scope, $injector, job) {
-    var $state = $injector.get('$state');
-    var api = $injector.get('api');
-    var status = $injector.get('status');
-    var moment = $injector.get('moment');
-    var utils = $injector.get('utils');
-    var _ = $injector.get('_');
-
+  '$scope', 'job', 'api', 'status', 'moment', 'utils',
+  function($scope, job, api, status, moment, utils) {
+    $scope.job = job;
+    $scope.job.detail = true;
+    $scope.collapses = {
+      test: true,
+      remoteci: true,
+      components: true,
+      jobdefinition: true
+    };
     var filePromises = [];
     var opened = false;
 
-    _.assign($scope, {
-      job: job, active: {}, go: $state.go,
-      collapses: {
-        test: true, remoteci: true, components: true, jobdefinition: true
-      }
-    });
+    job.jobdefinition.created_at = (moment(job.jobdefinition.created_at)
+                                    .local().format());
+    job.jobdefinition.updated_at = (moment(job.jobdefinition.updated_at)
+                                    .local().format());
 
-    _.each(['index', 'details', 'edit', 'context'], function(tab) {
-      $scope.active[tab] = $state.is('job.' + tab);
-    });
-
-    job.jobdefinition.created_at = (
-      moment(job.jobdefinition.created_at).local().format()
-    );
-    job.jobdefinition.updated_at = (
-      moment(job.jobdefinition.updated_at).local().format()
-    );
-    job.jobdefinition.test.created_at = (
-      moment(job.jobdefinition.test.created_at).local().format()
-    );
     job.remoteci.created_at = moment(job.remoteci.created_at).local().format();
 
-    _.each(job.jobstates, function(jobstate, i) {
+    var test = job.jobdefinition.test;
+    test.created_at = moment(test.created_at).local().format();
+
+    angular.forEach(job.jobstates, function(jobstate, i) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
       jobstate.created_at = (
         moment(jobstate.created_at).local().format('dddd DD, MMMM h:mm:ss A')
@@ -68,14 +58,14 @@ require('app')
 
     api.getComponents(job.jobdefinition.id).then(function(components) {
       $scope.components = components;
-      _.each(components, function(component) {
+      angular.forEach(components, function(component) {
         component.created_at = moment(component.created_at).local().format();
       });
     });
 
     api.getJobFiles(job.id).then(function(files) {
       $scope.files = files;
-      _.each(files, function(file) {
+      angular.forEach(files, function(file) {
         file.collapse = false;
         if (file.mime == 'application/json') {
           file.content = angular.fromJson(file.content);
