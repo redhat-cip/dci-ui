@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7af0899e_6e7caf73",
+        "filename": "src/js/api.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-15T15:54:19Z",
+      "side": 1,
+      "message": "javascript indentation is not the same as python :x\n\nIf it does not fit in a line, better create intermediary variable",
+      "revId": "4badf04f89fcbb9df45191a2a22aad8b5bf42cdf",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_4e81f349",
+        "filename": "src/js/api.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-15T15:54:19Z",
+      "side": 1,
+      "message": "same",
+      "revId": "4badf04f89fcbb9df45191a2a22aad8b5bf42cdf",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_ae95f789",
+        "filename": "src/js/api.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-15T15:54:19Z",
+      "side": 1,
+      "message": "same",
+      "revId": "4badf04f89fcbb9df45191a2a22aad8b5bf42cdf",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_aef857c5",
+        "filename": "src/js/controllers/remoteci.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-15T15:54:19Z",
+      "side": 1,
+      "message": "remove $state.go",
+      "revId": "4badf04f89fcbb9df45191a2a22aad8b5bf42cdf",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
