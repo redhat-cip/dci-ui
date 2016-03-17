@@ -193,8 +193,8 @@ require('app')
 
   api.putRemoteCI = function(remoteci) {
     var url = urlize(api.urls.remotecis, remoteci.id);
-    return $http.put(url, {'name': remoteci.name},
-                     {'headers': {'If-Match': remoteci.etag}});
+    var headers = {'headers': {'If-Match': remoteci.etag}}
+    return $http.put(url, {'name': remoteci.name}, headers);
   };
 
   api.removeRemoteCI = function(remoteciID, remoteciEtag) {
@@ -246,8 +246,8 @@ require('app')
 
   api.putTopic = function(topic) {
     var url = urlize(api.urls.topics, topic.id);
-    return $http.put(url, {'name': topic.name},
-                     {'headers': {'If-Match': topic.etag}});
+    var headers = {'headers': {'If-Match': topic.etag}};
+    return $http.put(url, {'name': topic.name}, headers);
   };
 
   api.removeTopic = function(topicID, topicEtag) {
@@ -270,8 +270,8 @@ require('app')
 
   api.putTeam = function(team) {
     var url = urlize(api.urls.teams, team.id);
-    return $http.put(url, {'name': team.name},
-                     {'headers': {'If-Match': team.etag}});
+    var headers = {'headers': {'If-Match': team.etag}}
+    return $http.put(url, {'name': team.name}, headers);
   };
 
   api.removeTeam = function(teamID, teamEtag) {

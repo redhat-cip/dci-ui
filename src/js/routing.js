@@ -22,6 +22,34 @@ require('app')
       function($anchorScroll) { $anchorScroll(); }
     ];
 
+    var edit = function(title) {
+      var plural = title.toLowerCase() + 's'
+      var successMsg = title + ' has been updated';
+      var errorMsg = title + ' has failed updating';
+
+      var obj = ['$stateParams','api', 'conf', function($stateParams, api) {
+        return api['get' + title]($stateParams.id).then(
+          function(res) {
+            res.meta = {
+              redirect: 'administrate.' + plural, method: api['put' + title],
+              msg: {success: successMsg, error: errorMsg}
+            };
+            return res;
+          },
+          function(err) {
+            $injector.get('messages').alert(
+              err.data && err.data.message || 'Something went wrong', 'danger'
+            );
+          }
+        );
+      }];
+      return {
+        url: '/administrate/'+ plural + '/:id',
+        templateUrl: '/partials/admin/' + plural + 'Edit.html',
+        controller: 'EditMixinCtrl', resolve: {obj: obj}
+      };
+    };
+
     $stateProvider
     .state('config', {
       'abstract': true,
@@ -149,6 +177,16 @@ require('app')
     .state('administrate.remotecis', {url: '/remotecis'})
     .state('administrate.topics', {url: '/topics'})
     .state('administrate.audits', {url: '/audits'})
+
+    .state('edit', {
+      'abstract': true,
+      parent: 'authAdmin',
+      template: '<ui-view></ui-view>'
+    })
+    .state('edit.user', edit('User'))
+    .state('edit.team', edit('Team'))
+    .state('edit.remoteci', edit('RemoteCI'))
+    .state('edit.topic', edit('Topic'))
     .state('information', {
       parent: 'auth',
       url: '/information',
@@ -171,103 +209,7 @@ require('app')
       url: '/login',
       controller: 'LoginCtrl',
       templateUrl: '/partials/login.html',
-    })
-    .state('user', {
-      parent: 'auth',
-      url: '/users/:id',
-      controller: 'UserCtrl',
-      templateUrl: '/partials/users.html',
-      resolve: {
-        user: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
-            return api.getUser($stateParams.id).catch(function(err) {
-                // #$injector.get('$state').go('index');
-                $injector.get('messages').alert(
-                  err.data && err.data.message ||
-                  'Something went wrong', 'danger'
-                );
-              }
-            );
-          }
-        ]
-      }
-    })
-    .state('user.edit', {url: '/edit'})
-    .state('team', {
-      parent: 'auth',
-      url: '/teams/:id',
-      controller: 'TeamCtrl',
-      templateUrl: '/partials/teams.html',
-      resolve: {
-        team: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
-            return api.getTeam($stateParams.id).catch(function(err) {
-                // #$injector.get('$state').go('index');
-                $injector.get('messages').alert(
-                  err.data && err.data.message ||
-                  'Something went wrong', 'danger'
-                );
-              }
-            );
-          }
-        ]
-      }
-    })
-    .state('team.edit', {url: '/edit'})
-    .state('remoteci', {
-      parent: 'auth',
-      url: '/remotecis/:id',
-      controller: 'RemoteCICtrl',
-      templateUrl: '/partials/remoteci.html',
-      resolve: {
-        remoteci: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
-            return api.getRemoteCI($stateParams.id).catch(function(err) {
-                // #$injector.get('$state').go('index');
-                $injector.get('messages').alert(
-                  err.data && err.data.message ||
-                  'Something went wrong', 'danger'
-                );
-              }
-            );
-          }
-        ]
-      }
-    })
-    .state('remoteci.edit', {url: '/edit'})
-    .state('topic', {
-      parent: 'auth',
-      url: '/topics/:id',
-      controller: 'TopicCtrl',
-      templateUrl: '/partials/topics.html',
-      resolve: {
-        topic: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
-            return api.getTopic($stateParams.id).catch(function(err) {
-                // #$injector.get('$state').go('index');
-                $injector.get('messages').alert(
-                  err.data && err.data.message ||
-                  'Something went wrong', 'danger'
-                );
-              }
-            );
-          }
-        ]
-      }
-    })
-    .state('topic.edit', {url: '/edit'});
+    });
 
     $urlRouterProvider.otherwise('/');
   }

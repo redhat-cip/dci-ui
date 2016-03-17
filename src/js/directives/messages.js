@@ -55,7 +55,7 @@ angular.module('dci.messages', ['ui.bootstrap'])
     return {
       restrict: 'A',
       scope: {},
-      templateUrl: '/partials/messages.html',
+      templateUrl: '/partials/directives/messages.html',
       link: function(scope) {
         scope.alerts = messages.alerts;
 

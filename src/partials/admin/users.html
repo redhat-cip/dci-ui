@@ -12,7 +12,7 @@
         <td>{{ user.role }}</td>
         <td>{{ user.created_at }}</td>
         <td>
-          <span class="btn glyphicon glyphicon-pencil" ui-sref="user.edit({id: user.id})"></span>
+          <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.user({id: user.id})"></span>
           <span class="btn glyphicon glyphicon-trash" ng-click="removeUser(user, $index)"></span>
         </td>
       </tr>

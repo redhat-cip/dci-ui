@@ -10,7 +10,7 @@
         <td>{{ team.id }}</td>
         <td>{{ team.created_at }}</td>
         <td>
-          <span class="btn glyphicon glyphicon-pencil" ui-sref="team.edit({id: team.id})"></span>
+          <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.team({id: team.id})"></span>
           <span class="btn glyphicon glyphicon-trash" ng-click="removeTeam(team, $index)"></span>
         </td>
       </tr>

@@ -1,20 +1,23 @@
 <h1 class="page-header">User: {{ user.name }}</h1>
 <div>
-<form name="userForm" ng-submit="submitUser()" novalidate>
+<form name="objForm" ng-submit="update()" novalidate>
   <div class="form-group"
-   ng-class="{'has-error': showError(userForm, userForm.userName)}">
+   ng-class="{'has-error': showError(objForm, objForm.userName)}">
     <label class="control-label" for="user-name">Name</label>
     <input type="text" class="form-control" id="user-name" name="userName"
            ng-model="user.name" required>
   </div>
   <div class="form-group"
-   ng-class="{'has-error': showError(userForm, userForm.userPassword)}">
+   ng-class="{'has-error': showError(objForm, objForm.userPassword) || showError(objForm, objForm.userPasswordCompare)}">
     <label class="control-label" for="user-password">Password</label>
     <input type="password" class="form-control" id="user-password"
            name="userPassword" ng-model="user.password" required>
-    <label class="control-label" for="user-password">Repeat Password</label>
-    <input type="password" class="form-control" id="user-password"
-           name="userPassword" ng-model="user.password" required>
+
+    <label class="control-label" for="user-password-compare">
+      Repeat Password <span ng-if="showError(objForm, objForm.userPasswordCompare)">(passwords are different)</span>
+    </label>
+    <input type="password" class="form-control" id="user-password-compare"
+           name="userPasswordCompare" ng-model="password" compare-to="user.password" required>
   </div>
   <div class="checkbox">
     <label>
@@ -29,5 +32,5 @@
     </select>
   </div>
   <button type="submit" class="btn btn-default">Update</button>
-  <button type="cancel" class="btn btn-default">Cancel</button>
+  <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>
