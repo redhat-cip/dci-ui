@@ -8,7 +8,7 @@
         <td>{{ topic.id }}</td>
         <td>{{ topic.created_at }}</td>
         <td>
-          <span class="btn glyphicon glyphicon-pencil" ui-sref="topic.edit({id: topic.id})">
+          <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.topic({id: topic.id})">
           </span>
           <span class="btn glyphicon glyphicon-trash" ng-click="removeTopic(topic, $index)">
           </span>
