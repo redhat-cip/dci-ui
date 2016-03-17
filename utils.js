@@ -64,7 +64,9 @@ module.exports.bundledStream = function(entries) {
       debug: true
     })
     .require('./src/js/app.js', {'expose': 'app'})
-    .require('./src/js/jsonformatter.js', {'expose': 'jsonformatter'})
+    .require(
+      './src/js/directives/jsonformatter.js', {'expose': 'jsonformatter'}
+    )
     .bundle()
     .pipe(bundledStream);
   }).catch(function(err) {
