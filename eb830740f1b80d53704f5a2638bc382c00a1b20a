@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7af0899e_42ff0202",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-21T10:53:19Z",
+      "side": 1,
+      "message": "move component and def_id declaration to the reduce function it is not used elsewhere and will save some comprehension\n\n(this does not affect performances: http://jsperf.com/qodijqsodih)",
+      "revId": "eb830740f1b80d53704f5a2638bc382c00a1b20a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_a20fc62d",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-21T10:53:19Z",
+      "side": 1,
+      "message": "105 to 110 can be replaced by:\n\n    _.defaultsDeep(gstatus, {jobdef.name: {puddle.name: {}})",
+      "revId": "eb830740f1b80d53704f5a2638bc382c00a1b20a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_5717c651",
+        "filename": "src/js/routing.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-21T10:53:19Z",
+      "side": 1,
+      "message": "as we only retrieve api from $injector, inject it directly, it will saves some chars:\n\n    [\u0027$stateParams\u0027, \u0027api\u0027, \u0027conf\u0027, function($stateParams, api) {\n      ...\n     }]",
+      "revId": "eb830740f1b80d53704f5a2638bc382c00a1b20a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_b70b8a2a",
+        "filename": "src/js/routing.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-21T10:53:19Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "eb830740f1b80d53704f5a2638bc382c00a1b20a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7af0899e_97080e2f",
+        "filename": "src/js/routing.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-03-21T10:53:19Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "eb830740f1b80d53704f5a2638bc382c00a1b20a",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
