@@ -151,6 +151,7 @@ require('app')
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
     .state('job.context', {url: '/context'})
+    .state('job.metrics', {url: '/metrics'})
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',

@@ -34,7 +34,7 @@ require('app')
       }
     });
 
-    _.each(['index', 'details', 'edit', 'context'], function(tab) {
+    _.each(['index', 'details', 'edit', 'context', 'metrics'], function(tab) {
       $scope.active[tab] = $state.is('job.' + tab);
     });
 
