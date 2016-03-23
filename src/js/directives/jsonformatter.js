@@ -217,7 +217,7 @@ module.export = angular.module('jsonFormatter', ['RecursionHelper'])
     }
 
     return {
-      templateUrl: '/partials/jsonformatter.html',
+      templateUrl: '/partials/directives/jsonformatter.html',
       replace: true,
       scope: {
         json: '=',

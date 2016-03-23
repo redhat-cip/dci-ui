@@ -17,8 +17,10 @@
 require('app')
 .controller('JobCtrl', [
   '$scope', '$injector', 'job', function($scope, $injector, job) {
+    var $sce = $injector.get('$sce');
     var $state = $injector.get('$state');
     var api = $injector.get('api');
+    var config = $injector.get('config');
     var status = $injector.get('status');
     var moment = $injector.get('moment');
     var utils = $injector.get('utils');
@@ -34,9 +36,14 @@ require('app')
       }
     });
 
-    _.each(['index', 'details', 'edit', 'context'], function(tab) {
+    _.each(['index', 'details', 'edit', 'context', 'metrics'], function(tab) {
       $scope.active[tab] = $state.is('job.' + tab);
     });
+
+    job.dashboard_url = $sce.trustAsResourceUrl(config.grafanaURL + '/dashboard-solo/db/testing-dci-table' + job.id.replace(/-/g, '') + '?panelId=1&fullscreen&theme=light');
+    job.dashboard_url_2 = $sce.trustAsResourceUrl(config.grafanaURL + '/dashboard-solo/db/testing-dci-table' + job.id.replace(/-/g, '') + '?panelId=2&fullscreen&theme=light');
+    job.dashboard_url_3 = $sce.trustAsResourceUrl(config.grafanaURL + '/dashboard-solo/db/testing-dci-table' + job.id.replace(/-/g, '') + '?panelId=4&fullscreen&theme=light');
+    job.dashboard_url_4 = $sce.trustAsResourceUrl(config.grafanaURL + '/dashboard-solo/db/testing-dci-table' + job.id.replace(/-/g, '') + '?panelId=5&fullscreen&theme=light');
 
     job.jobdefinition.created_at = (
       moment(job.jobdefinition.created_at).local().format()
