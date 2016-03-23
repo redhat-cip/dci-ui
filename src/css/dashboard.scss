@@ -208,6 +208,18 @@ pre {
   margin-top: 50px;
 }
 
+.topic-teams {
+  ul {
+    list-style: none;
+    li {
+      padding: 10px;
+    }
+    button {
+      margin-top: -7px;
+    }
+  }
+}
+
 /*!
  * jsonformatter
  */

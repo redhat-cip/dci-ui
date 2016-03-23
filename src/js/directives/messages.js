@@ -18,8 +18,8 @@ require('angular-bootstrap');
 
 angular.module('dci.messages', ['ui.bootstrap'])
 .service('messages', [
-  '$timeout', '$log', '_', 'messagesConfig',
-  function($timeout, $log, _, config) {
+  '$timeout', '$log', 'messagesConfig',
+  function($timeout, $log, config) {
     var that = this;
     var log = {
       'danger': $log.error,

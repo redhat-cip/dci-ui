@@ -16,7 +16,8 @@
 
 var moment = require('moment');
 var angular = require('angular');
-var lodash = require('lodash');
+
+var _ = require('lodash');
 
 require('angular-cookies');
 require('angular-ui-router');
@@ -26,7 +27,7 @@ require('jsonformatter');
 module.exports = angular.module('app', [
   'ngCookies', 'ui.router', 'ui.bootstrap', 'jsonFormatter', 'dci.messages'
 ])
-.factory('moment', ['_', function(_) {
+.factory('moment', function() {
   moment.locale('en', {invalidDate: 'N/A'});
   moment.locale('fr', {invalidDate: 'N/A'});
   moment.defaultFormat = 'LLLL';
@@ -35,9 +36,6 @@ module.exports = angular.module('app', [
   return _.assign(parser, {
     'moment': moment.utc
   });
-}])
-.factory('_', function() {
-  return lodash;
 })
 .constant('status', {
   'failure': {
@@ -65,7 +63,7 @@ module.exports = angular.module('app', [
     'glyphicon': 'glyphicon-record'
   }
 })
-.factory('utils', ['$q', '_', function($q, _) {
+.factory('utils', ['$q', function($q) {
   /*
    * synchronize calls against a promises stack, callback is
    * called in order of the promises stack, if it returns
