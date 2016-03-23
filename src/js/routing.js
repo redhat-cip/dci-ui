@@ -16,39 +16,11 @@
 
 require('app')
 .config([
-  '$stateProvider', '$urlRouterProvider',
-  function($stateProvider, $urlRouterProvider) {
+  '$stateProvider', '$urlRouterProvider', 'utils',
+  function($stateProvider, $urlRouterProvider, utils) {
     var scrollTop = ['$anchorScroll',
       function($anchorScroll) { $anchorScroll(); }
     ];
-
-    var edit = function(title) {
-      var plural = title.toLowerCase() + 's';
-      var successMsg = title + ' has been updated';
-      var errorMsg = title + ' has failed updating';
-      var errorCb = function(err) {
-        $injector.get('messages').alert(
-          err.data && err.data.message || 'Something went wrong', 'danger'
-        );
-      };
-      var obj = ['$stateParams','api', 'conf', function($stateParams, api) {
-        return api['get' + title]($stateParams.id).then(
-          function(res) {
-            res.meta = {
-              redirect: 'administrate.' + plural, method: api['put' + title],
-              msg: {success: successMsg, error: errorMsg}
-            };
-            return res;
-          },
-          errorCb);
-      }];
-
-      return {
-        url: '/administrate/' + plural + '/:id',
-        templateUrl: '/partials/admin/' + plural + 'Edit.html',
-        controller: 'EditMixinCtrl', resolve: {obj: obj}, errorCb: errorCb
-      };
-    };
 
     $stateProvider
     .state('config', {
@@ -106,7 +78,7 @@ require('app')
         }],
         jobs: [
           '$stateParams', 'api', 'page', 'conf',
-          function($stateP, api, page, _) {
+          function($stateP, api, page) {
             var remoteci = $stateP.remoteci;
             var status = $stateP.status;
 
@@ -119,7 +91,7 @@ require('app')
             }
           }
         ],
-        remotecis: ['api', 'conf', function(api, _) {
+        remotecis: ['api', 'conf', function(api) {
           return api.getRemoteCIS();
         }]
       }
@@ -136,13 +108,13 @@ require('app')
             var api = $injector.get('api');
 
             return api.getJob($stateParams.id).catch(function(err) {
-                $injector.get('$state').go('index');
-                $injector.get('messages').alert(
-                  err.data && err.data.message ||
+              $injector.get('$state').go('index');
+              $injector.get('messages').alert(
+                err.data && err.data.message ||
                   'Something went wrong', 'danger'
-                );
-              }
-            );
+              );
+            }
+                                                    );
           }
         ]
       }
@@ -159,16 +131,16 @@ require('app')
       resolve: {
         data: ['$q', 'api', 'conf', function($q, api) {
           return $q.all([api.getRemoteCIS(), api.getTeams(),
-                         api.getTopics(), api.getUsers(), api.getAudits()])
-          .then(function(results) {
-            return {
-              'remotecis': results[0],
-              'teams': results[1],
-              'topics': results[2],
-              'users': results[3],
-              'audits': results[4]
-            };
-          });
+                        api.getTopics(), api.getUsers(), api.getAudits()])
+                        .then(function(results) {
+                          return {
+                            'remotecis': results[0],
+                            'teams': results[1],
+                            'topics': results[2],
+                            'users': results[3],
+                            'audits': results[4]
+                          };
+                        });
         }]
       }
     })
@@ -184,49 +156,83 @@ require('app')
       template: '<ui-view></ui-view>'
     })
     .state('edit.user', (function() {
-      var stateConfig = edit('User');
-      var successMsg = 'User has been updated';
-      var errorMsg = 'User has failed updating';
+      function EditUser() { utils.Edit.call(this, 'User'); }
+      EditUser.prototype = Object.create(utils.Edit.prototype);
+      EditUser.prototype.constructor = EditUser;
 
-      stateConfig.resolve.obj = [
-        '$stateParams', '$q', 'api', 'conf', function($stateParams, $q, api) {
-          return $q.all([api.getUser($stateParams.id, true), api.getTeams()])
-          .then(
-            function(results) {
-              var res = results[0];
-              res.role = res.role === 'admin';
-              res.meta = {
-                redirect: 'administrate.users', method: api.putUser,
-                teams: results[1], msg: {success: successMsg, error: errorMsg},
-              };
-              return res;
-            },
-            function(errors) {
-              angular.forEach(errors, function(error) {
-                stateConfig.errorCb(error);
-              });
-            }
+      EditUser.prototype.cb = function($stateParams, $injector) {
+        var api = $injector.get('api');
+        return $injector.get('$q').all([
+          api.getUser($stateParams.id, true),
+          api.getTeams()
+        ]).then(
+        this.successCb($injector), this.errorCb($injector)
+        );
+      };
+      EditUser.prototype.successCb = function($injector) {
+        var that = this;
+        return function(res) {
+          return _.merge(
+            utils.Edit.prototype.successCb.call(that, $injector)(res[0]),
+            {role: res[0].role === 'admin'},
+            {meta: {teams: res[1]}}
           );
-        }
-      ];
-      return stateConfig;
+        };
+      };
+      EditUser.prototype.errorCb = function($injector) {
+        return function(errs) {
+          _.each(errs, _.partial(utils.Edit.prototype.errorCb(that)));
+        };
+      };
+      return (new EditUser()).genState();
     })())
-    .state('edit.team', edit('Team'))
-    .state('edit.remoteci', edit('RemoteCI'))
-    .state('edit.topic', edit('Topic'))
+    .state('edit.team', (new utils.Edit('Team').genState()))
+    .state('edit.remoteci', (new utils.Edit('RemoteCI')).genState())
+    .state('edit.topic', (function() {
+      function EditTopic() { utils.Edit.call(this, 'Topic'); }
+      EditTopic.prototype = Object.create(utils.Edit.prototype);
+      EditTopic.prototype.constructor = EditTopic;
+
+      EditTopic.prototype.cb = function($stateParams, $injector) {
+        var api = $injector.get('api');
+        return $injector.get('$q').all([
+          api.getTopic($stateParams.id),
+          api.getTeams(),
+          api.getTopicTeams($stateParams.id)
+        ]).then(
+        this.successCb($injector), this.errorCb($injector)
+        );
+      };
+      EditTopic.prototype.successCb = function($injector) {
+        var that = this;
+        return function(res) {
+          return _.merge(
+            utils.Edit.prototype.successCb.call(that, $injector)(res[0]),
+            {meta: {teams: res[1]}}, {teams: res[2]}
+          );
+        };
+      };
+      EditTopic.prototype.errorCb = function($injector) {
+        return function(errs) {
+          _.each(errs, _.partial(utils.Edit.prototype.errorCb(that)));
+        };
+      };
+      return (new EditTopic()).genState();
+
+    })())
     .state('information', {
       parent: 'auth',
       url: '/information',
       controller: 'InformationCtrl',
       templateUrl: '/partials/information.html',
       resolve: {
-        teams: ['api', 'conf', function(api, _) {
+        teams: ['api', 'conf', function(api) {
           return api.getTeams();
         }],
-        topics: ['api', 'conf', function(api, _) {
+        topics: ['api', 'conf', function(api) {
           return api.getTopics();
         }],
-        remotecis: ['api', 'conf', function(api, _) {
+        remotecis: ['api', 'conf', function(api) {
           return api.getRemoteCIS();
         }],
       }
@@ -251,7 +257,6 @@ require('app')
     $scope.global_admin = auth.isAdmin();
     $scope.user = auth.user;
     $scope.isCollapsed = true;
-
     $scope.logout = function() {
       auth.logout();
       $state.go('login');

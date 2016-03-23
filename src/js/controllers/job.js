@@ -22,7 +22,6 @@ require('app')
     var status = $injector.get('status');
     var moment = $injector.get('moment');
     var utils = $injector.get('utils');
-    var _ = $injector.get('_');
 
     var filePromises = [];
     var opened = false;
@@ -86,7 +85,7 @@ require('app')
 ])
 
 .controller('EditCtrl', [
-  '$scope', '_', 'api', 'messages', function($scope, _, api, messages) {
+  '$scope', 'api', 'messages', function($scope, api, messages) {
     var job = $scope.job;
 
     $scope.reset = function() {
