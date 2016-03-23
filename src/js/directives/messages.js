@@ -18,8 +18,8 @@ require('angular-bootstrap');
 
 angular.module('dci.messages', ['ui.bootstrap'])
 .service('messages', [
-  '$timeout', '$log', '_', 'messagesConfig',
-  function($timeout, $log, _, config) {
+  '$timeout', '$log', 'messagesConfig',
+  function($timeout, $log, config) {
     var that = this;
     var log = {
       'danger': $log.error,
@@ -37,9 +37,6 @@ angular.module('dci.messages', ['ui.bootstrap'])
         msg: msg
       };
       log[type](msg);
-      $timeout(function() {
-        _.pullAt(that.alerts, _.indexOf(that.alerts, alert));
-      }, config.autoFadeDelay * 1000);
       this.alerts.push(alert);
       this.alerts.splice(config.max);
       return alert;
@@ -68,7 +65,6 @@ angular.module('dci.messages', ['ui.bootstrap'])
 })
 .constant('messagesConfig', {
   max: 5,
-  autoFadeDelay: 5,
   defaultType: 'info',
   title: {
     danger: 'Error',

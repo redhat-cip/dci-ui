@@ -21,8 +21,7 @@ require('app')
     var api = $injector.get('api');
     var status = $injector.get('status');
     var moment = $injector.get('moment');
-    var utils = $injector.get('utils');
-    var _ = $injector.get('_');
+    var helpers = $injector.get('helpers');
 
     var filePromises = [];
     var opened = false;
@@ -60,7 +59,7 @@ require('app')
       }));
     });
 
-    utils.synchronize(filePromises, function(files, i) {
+    helpers.synchronize(filePromises, function(files, i) {
       // cast files.length to boolean
       job.jobstates[i].isOpen = opened = !!files.length;
       return !opened;
@@ -86,7 +85,7 @@ require('app')
 ])
 
 .controller('EditCtrl', [
-  '$scope', '_', 'api', 'messages', function($scope, _, api, messages) {
+  '$scope', 'api', 'messages', function($scope, api, messages) {
     var job = $scope.job;
 
     $scope.reset = function() {
@@ -129,4 +128,3 @@ require('app')
     };
   }
 ]);
-

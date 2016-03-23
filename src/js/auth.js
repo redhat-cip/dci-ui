@@ -86,4 +86,3 @@ require('app')
   }
 ])
 .run(['auth', angular.noop]);
-

@@ -22,7 +22,6 @@ require('app')
     var msg = $injector.get('messages');
     var user = $injector.get('user');
     var api = $injector.get('api');
-    var _ = $injector.get('_');
 
     var rm = function(entity, collection, method) {
       var tplt = _.template('<%= key %> "<%= value %>" has been removed');
@@ -109,7 +108,6 @@ require('app')
     var $state = $injector.get('$state');
     var msg = $injector.get('messages');
     var api = $injector.get('api');
-    var _ = $injector.get('_');
 
     _.assign($scope, {obj: obj, objForm: {}});
 
@@ -130,6 +128,58 @@ require('app')
           } else {
             msg.alert(err.data.message, 'danger');
           }
+        }
+      );
+    };
+  }
+])
+.controller('EditTopicCtrl', [
+  '$scope', '$injector', function($scope, $injector) {
+    var $q = $injector.get('$q');
+
+    var api = $injector.get('api');
+    var msg = $injector.get('messages');
+
+    var obj = $scope.obj;
+    var old_teams = _.map(obj.teams, function(elt) {
+      return _.get(elt, 'id');
+    });
+    _.pullAllWith(obj.meta.teams, obj.teams, _.isEqual);
+
+    $scope.add = function(i, team) {
+      obj.teams.push(team);
+      _.pullAt(obj.meta.teams, i);
+    };
+
+    $scope.remove = function(i, team) {
+      obj.meta.teams.push(team);
+      _.pullAt(obj.teams, i);
+    };
+
+    $scope.update = function() {
+      if ($scope.objForm.$invalid) { return; }
+      $q.all(_.map(old_teams, _.partial(api.removeTopicTeam, obj.id)))
+      .then(function() {
+        return $q.all(_.concat(
+          api.putTopic(_.omit(obj, ['meta', 'teams'])),
+          _.map(obj.teams, function(team) {
+            return api.postTopicTeam(obj.id, team.id);
+          })
+        ));
+      })
+      .then(
+        function() {
+          $injector.get('$state').go(obj.meta.redirect);
+          msg.alert(obj.meta.msg.success, 'success');
+        },
+        function(errs) {
+          _.each(errs, function(err) {
+            if (err.status === 422) {
+              msg.alert(obj.meta.msg.error);
+            } else {
+              msg.alert(err.data.message, 'danger');
+            }
+          });
         }
       );
     };

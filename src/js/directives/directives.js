@@ -18,7 +18,6 @@ require('app')
 .directive('dciJob', ['$injector', function($injector) {
   return {
     link: function(scope) {
-      var _ = $injector.get('_');
       var api = $injector.get('api');
       var moment = $injector.get('moment');
       var status = $injector.get('status');

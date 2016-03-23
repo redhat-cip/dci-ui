@@ -17,7 +17,6 @@
 require('app')
 
 .factory('api', ['$injector', function($injector) {
-  var _ = $injector.get('_');
   var $q = $injector.get('$q');
   var $http = $injector.get('$http');
   var $window = $injector.get('$window');
@@ -242,9 +241,24 @@ require('app')
     return $http.put(url, data, headers);
   };
 
-  api.getTopic = function(name) {
-    var url = urlize(api.urls.topics, name);
+  api.getTopic = function(id) {
+    var url = urlize(api.urls.topics, id);
     return $http.get(url).then(_.property('data.topic'));
+  };
+
+  api.getTopicTeams = function(id) {
+    var url = urlize(api.urls.topics, id, 'teams');
+    return $http.get(url).then(_.property('data.teams'));
+  };
+
+  api.removeTopicTeam = function(topicId, teamId) {
+    var url = urlize(api.urls.topics, topicId, 'teams', teamId);
+    return $http.delete(url);
+  };
+
+  api.postTopicTeam = function(topicId, teamId) {
+    var url = urlize(api.urls.topics, topicId, 'teams');
+    return $http.post(url, {'team_id': teamId});
   };
 
   api.getTopics = function() {

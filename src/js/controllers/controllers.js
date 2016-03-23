@@ -41,7 +41,6 @@ require('app')
 .controller('ListJobsCtrl', [
   '$injector', '$scope', 'jobs', 'remotecis', 'page',
   function($injector, $scope, jobs, remotecis, page) {
-    var _ = $injector.get('_');
     var $state = $injector.get('$state');
     var statuses = ['failure', 'success', 'running', 'new',
                     'pre-run', 'post-run'];
