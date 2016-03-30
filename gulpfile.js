@@ -17,8 +17,6 @@
 var gulp       = require('gulp');
 var $          = require('gulp-load-plugins')();
 var del        = require('del');
-var source     = require('vinyl-source-stream');
-var buffer     = require('vinyl-buffer');
 var jsonfile   = require('jsonfile');
 var config     = require('./config');
 var utils      = require('./utils');
@@ -66,11 +64,12 @@ gulp.task('watch', function() {
 });
 
 function buildJS(jsFiles) {
-  return utils.bundledStream(jsFiles)
-  .pipe(source('app.js'))
-  .pipe(buffer())
+  return gulp.src(jsFiles, {read: false})
+  .pipe(utils.browserify())
+  .pipe(utils.source('app.js'))
+  .pipe(utils.buffer())
   .pipe($.sourcemaps.init({loadMaps: true}))
-  .pipe($.sourcemaps.write('./'))
+  .pipe($.sourcemaps.write())
   .pipe(gulp.dest(DIST + '/js/'));
 }
 
@@ -91,7 +90,7 @@ gulp.task('css', function() {
   .pipe($.sass(conf).on('error', $.sass.logError))
   .pipe($.sourcemaps.init({loadMaps: true}))
   .pipe($.concat('dashboard.css'))
-  .pipe($.sourcemaps.write('./'))
+  .pipe($.sourcemaps.write())
   .pipe(gulp.dest(DIST + '/css/'));
 });
 
