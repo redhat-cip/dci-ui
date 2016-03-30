@@ -26,7 +26,6 @@ var serveStatic  = require('serve-static');
 var childProcess = require('child_process');
 var through      = require('through2');
 var browserify   = require('browserify');
-var globby       = require('globby');
 
 module.exports.rev = function(cb) {
   childProcess.exec(
@@ -55,26 +54,93 @@ function closePromise(obj) {
   };
 }
 
-module.exports.bundledStream = function(entries) {
-  var bundledStream = through();
+module.exports.browserify = function(options) {
+  var b = browserify(options || {debug: true});
+  var s = through.obj(
+    function(file, _, cb) {
+      b.add(file.path);
+      cb();
+    },
+    function() {
+      b
+      .require('./src/js/app.js', {'expose': 'app'})
+      .require(
+        './src/js/directives/jsonformatter.js', {'expose': 'jsonformatter'}
+      )
+      .bundle()
+      .on('error', function(err) {
+        var message = new gutil.PluginError('browserify', err.toString());
+        gutil.log(message.toString());
+        s.emit('end');
+      })
+      .on('data', function(chunk) { s.push(chunk); })
+      .on('end', function() { s.emit('end'); });
+    }
+  );
 
-  globby(entries).then(function(entries) {
-    browserify({
-      entries: entries,
-      debug: true
-    })
-    .require('./src/js/app.js', {'expose': 'app'})
-    .require(
-      './src/js/directives/jsonformatter.js', {'expose': 'jsonformatter'}
-    )
-    .bundle()
-    .pipe(bundledStream);
-  }).catch(function(err) {
-    // ensure any errors from globby are handled
-    bundledStream.emit('error', err);
+  return s;
+};
+
+module.exports.source = function(filename) {
+  var ins = through();
+
+  return through.obj(function(chunk, _, cb) {
+    if (!this._ins) {
+      this._ins = ins;
+      this.push(new gutil.File({contents: ins, path: filename}));
+    }
+
+    ins.push(chunk);
+    cb();
+  }, function() {
+    ins.push(null);
+    this.push(null);
+  });
+};
+
+module.exports.merge = function(/* streams... */) {
+  var sources = [];
+  var output  = gutil.noop();
+
+  function remove(source) {
+    sources = sources.filter(function(it) { return it !== source; });
+    if (!sources.length && output.readable) { output.end(); }
+  }
+
+  output.on('unpipe', remove);
+
+  Array.prototype.slice.call(arguments).forEach(function(source) {
+    sources.push(source);
+    source.once('end', remove.bind(null, source));
+    source.pipe(output, {end: false});
   });
 
-  return bundledStream;
+  return output;
+};
+
+module.exports.buffer = function() {
+  return through.obj(function(file, _, cb) {
+    var that = this;
+    var bufs = [];
+
+    if (file.isNull() || file.isBuffer()) {
+      that.push(file);
+      return cb();
+    }
+
+    file.contents.pipe(through.obj(
+      function(data, _, cb) {
+        bufs.push(Buffer.isBuffer(data) ? data : new Buffer(buf));
+        cb();
+      },
+      function() {
+        file = file.clone();
+        file.contents = Buffer.concat(bufs);
+        that.push(file);
+        cb();
+      }
+    ));
+  });
 };
 
 module.exports.server = function(root, port, livereload) {
