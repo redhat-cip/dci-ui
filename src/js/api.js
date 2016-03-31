@@ -37,11 +37,11 @@ require('app')
 
   api.getJobs = function(page) {
     var offset = 20 * (page - 1);
-    var config = {'params': {
+    var conf = {'params': {
       'limit': 20, 'offset': offset, 'sort': '-updated_at',
       'embed': 'remoteci,jobdefinition,jobdefinition.test'
     }};
-    return $http.get(api.urls.jobs, config).then(_.property('data'));
+    return $http.get(api.urls.jobs, conf).then(_.property('data'));
   };
 
   api.getJobStates = function(job) {
@@ -50,7 +50,6 @@ require('app')
   };
 
   api.searchJobs = function(remotecis, statuses) {
-
     function retrieveRCIs(remoteci) {
       var conf = {'params': {'where': 'name:' + remoteci}};
       return $http.get(api.urls.remotecis, conf);
@@ -61,7 +60,7 @@ require('app')
         'where': 'status:' + status,
         'embed': 'remoteci,jobdefinition,jobdefinition.test'
       }};
-      return $http.get(api.urls.jobs, config).then(_.property('data'));
+      return $http.get(api.urls.jobs, conf);
     };
 
     api.getJobStates = function(job) {
@@ -94,7 +93,7 @@ require('app')
       var SSJobs = getJobs.plant(_.last(data)).value();
 
       if (SSJobs.length && RCISJobs.length) {
-        var RCISJobsIds = _.pluck(RCISJobs, 'id');
+        var RCISJobsIds = _.map(RCISJobs, 'id');
         return _.filter(SSJobs, function(job) {
           return _.includes(RCISJobsIds, job.id);
         });
@@ -107,8 +106,8 @@ require('app')
     });
   };
   api.updateJob = function(job_id, etag, data) {
-    config = {'headers': {'If-Match': etag}};
-    return $http.put(urlize(api.urls.jobs, job_id), data, config);
+    conf = {'headers': {'If-Match': etag}};
+    return $http.put(urlize(api.urls.jobs, job_id), data, conf);
   };
 
   api.getJob = function(job) {
@@ -277,7 +276,7 @@ require('app')
 
   api.removeTopic = function(topicID, topicEtag) {
     var url = urlize(api.urls.topics, topicID);
-    return $http.delete(url, config, {'headers': {'If-Match': topicEtag}});
+    return $http.delete(url, {'headers': {'If-Match': topicEtag}});
   };
 
   api.getTeam = function(name) {

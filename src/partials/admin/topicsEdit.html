@@ -4,27 +4,9 @@
     <div class="form-group"
          ng-class="{'has-error': showError(objForm, objForm.name)}">
       <label for="topic-name" class="control-label">Name</label>
-      <input type="text" class="form-control" id="topic-name" name="name"
-                                                              ng-model="obj.name" required>
+      <input type="text" class="form-control" id="topic-name" name="name" ng-model="obj.name" required />
     </div>
     <div class="row topic-teams" >
-      <div class="col-md-6 col-sm-6">
-        <table class="table table-striped">
-          <thead><tr><th>Topic teams</th></tr></thead>
-          <tbody>
-            <tr ng-repeat="team in obj.teams">
-              <td>
-                <div>
-                  {{team.name}}
-                  <button class="btn btn-primary pull-right" ng-click="remove($index, team)">
-                    -
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div class="col-md-6 col-sm-6">
         <table class="table table-striped">
           <thead><tr><th>Available teams</th></tr></thead>
@@ -36,6 +18,23 @@
                     +
                   </button>
 
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 col-sm-6">
+        <table class="table table-striped">
+          <thead><tr><th>Topic teams</th></tr></thead>
+          <tbody>
+            <tr ng-repeat="team in obj.teams">
+              <td>
+                <div>
+                  {{team.name}}
+                  <button class="btn btn-primary pull-right" ng-click="remove($index, team)">
+                    -
+                  </button>
                 </div>
               </td>
             </tr>
