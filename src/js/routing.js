@@ -96,6 +96,7 @@ require('app')
         ]
       }
     })
+    .state('job.results', {url: '/results'})
     .state('job.files', {url: '/files'})
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
