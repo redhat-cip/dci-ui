@@ -71,30 +71,7 @@ require('app')
       url: '/jobs?status&remoteci&page',
       onEnter: scrollTop,
       templateUrl: '/partials/jobs.html',
-      controller: 'ListJobsCtrl',
-      resolve: {
-        page: ['$stateParams', function($stateParams) {
-          return parseInt($stateParams.page) || 1;
-        }],
-        jobs: [
-          '$stateParams', 'api', 'page', 'conf',
-          function($stateP, api, page) {
-            var remoteci = $stateP.remoteci;
-            var status = $stateP.status;
-
-            $stateP.remoteci = remoteci = remoteci ? remoteci.split(',') : [];
-            $stateP.status = status = status ? status.split(',') : [];
-            if (remoteci.length || status.length) {
-              return api.searchJobs(remoteci, status);
-            } else {
-              return api.getJobs(page);
-            }
-          }
-        ],
-        remotecis: ['api', 'conf', function(api) {
-          return api.getRemoteCIS();
-        }]
-      }
+      controller: 'ListJobsCtrl'
     })
     .state('job', {
       parent: 'auth',
@@ -127,22 +104,7 @@ require('app')
       parent: 'authAdmin',
       url: '/administrate',
       controller: 'AdminCtrl',
-      templateUrl: '/partials/admin.html',
-      resolve: {
-        data: ['$q', 'api', 'conf', function($q, api) {
-          return $q.all([api.getRemoteCIS(), api.getTeams(),
-                        api.getTopics(), api.getUsers(), api.getAudits()])
-                        .then(function(results) {
-                          return {
-                            'remotecis': results[0],
-                            'teams': results[1],
-                            'topics': results[2],
-                            'users': results[3],
-                            'audits': results[4]
-                          };
-                        });
-        }]
-      }
+      templateUrl: '/partials/admin.html'
     })
     .state('administrate.users', {url: '/users'})
     .state('administrate.teams', {url: '/teams'})
@@ -225,17 +187,6 @@ require('app')
       url: '/information',
       controller: 'InformationCtrl',
       templateUrl: '/partials/information.html',
-      resolve: {
-        teams: ['api', 'conf', function(api) {
-          return api.getTeams();
-        }],
-        topics: ['api', 'conf', function(api) {
-          return api.getTopics();
-        }],
-        remotecis: ['api', 'conf', function(api) {
-          return api.getRemoteCIS();
-        }],
-      }
     })
     .state('login', {
       parent: 'config',
