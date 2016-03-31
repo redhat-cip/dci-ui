@@ -1,7 +1,11 @@
 <h1 class="page-header">Job</h1>
 <div dci-job></div>
 <div tabset>
-  <div tab heading="Files" select="go('^.files')" active="active.index">
+  <div tab heading="Description" select="go('^.description')" active="active.description">
+    <div ng-include="'/partials/job/description.html'" ></div>
+  </div>
+
+  <div tab heading="Files" select="go('^.files')" active="active.files">
     <div ng-include="'/partials/job/files.html'" ></div>
   </div>
   <div tab heading="Details" select="go('^.details')" active="active.details">

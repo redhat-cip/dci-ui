@@ -25,6 +25,7 @@ require('app')
 
     var filePromises = [];
     var opened = false;
+    var tabs = ['description', 'files', 'details', 'edit', 'context'];
 
     function date(d, format) { return moment(d).local().format(format) };
 
@@ -35,7 +36,7 @@ require('app')
       }
     });
 
-    _.each(['index', 'details', 'edit', 'context'], function(tab) {
+    _.each(tabs, function(tab) {
       $scope.active[tab] = $state.is('job.' + tab);
     });
 
@@ -69,12 +70,13 @@ require('app')
 
     api.getJobFiles(job.id).then(function(files) {
       $scope.files = files;
-      _.each(files, function(file) {
+      $scope.context_files = _.remove(files, function(file) {
         file.collapse = false;
-        if (file.mime == 'application/json') {
+        if (file.mime == 'application/json' || file.mime == 'application/junit') {
           file.content = angular.fromJson(file.content);
         }
-      });
+        return file.mime == 'application/junit';
+      })
     });
   }
 ])
