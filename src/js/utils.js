@@ -30,38 +30,75 @@ require('app')
       };
     }
 
-    Edit.prototype.successCb = function($injector) {
-      return _.bind(function(res) {
-        return _.merge(
-          res, {meta: this.meta},
-          {meta: {method: $injector.get('api')['put' + this.title]}}
+    _.assign(Edit.prototype, {
+      successCb: function($injector) {
+        return _.bind(function(res) {
+          return _.merge(
+            res, {meta: this.meta},
+            {meta: {method: $injector.get('api')['put' + this.title]}}
+          );
+        }, this);
+      },
+      errorCb: function($injector) {
+        return function(err) {
+          $injector.get('messages').alert(
+            err.data && err.data.message || 'Something went wrong', 'danger'
+          );
+        };
+      },
+      cb: function($stateParams, $injector) {
+        return $injector.get('api')['get' + this.title]($stateParams.id).then(
+          this.successCb($injector), this.errorCb($injector)
         );
-      }, this);
-    };
+      },
+      genState: function() {
+        return {
+          url: '/administrate/' + this.plural + '/:id',
+          templateUrl: '/partials/admin/' + this.plural + 'Edit.html',
+          controller: 'EditMixinCtrl',
+          resolve: {obj: this.injecting.concat(_.bind(this.cb, this))}
+        };
+      }
+    });
 
-    Edit.prototype.errorCb = function($injector) {
-      var that = this;
-      return function(err) {
-        $injector.get('messages').alert(
-          err.data && err.data.message || 'Something went wrong', 'danger'
-        );
-      };
-    };
-
-    Edit.prototype.cb = function($stateParams, $injector) {
-      return $injector.get('api')['get' + this.title]($stateParams.id).then(
-        this.successCb($injector), this.errorCb($injector)
-      );
-    };
-
-    Edit.prototype.genState = function() {
-      return {
-        url: '/administrate/' + this.plural + '/:id',
-        templateUrl: '/partials/admin/' + this.plural + 'Edit.html',
-        controller: 'EditMixinCtrl',
-        resolve: {obj: this.injecting.concat(_.bind(this.cb, this))}
-      };
-    };
     return Edit;
+  })(),
+  'Entity': (function() {
+    function Entity(name, get, del, post) {
+      this.name = name;
+      this.get = get;
+      this.del = del;
+      this.post = post;
+      this.data = [];
+      this.input = {};
+
+      this.retrieve();
+    }
+    _.assign(Entity.prototype, {
+      retrieve: function() {
+        var that = this;
+        return this.get().then(function(data){
+          _.each(data, function(d) { that.data.push(d); });
+          return data;
+        });
+      },
+      remove: function(index) {
+        var value = this.data[index];
+        var that = this;
+        return this.del(value.id, value.etag).then(function() {
+          that.data.splice(index, 1);
+        });
+      },
+      submit: function() {
+        var that = this;
+        if (this.form.$invalid) { return; }
+        return this.post(this.input).then(function(res) {
+            that.data.push(res);
+            return res;
+          }
+        );
+      }
+    });
+    return Entity;
   })()
 });
