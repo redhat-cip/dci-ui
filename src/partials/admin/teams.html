@@ -1,29 +1,39 @@
 <h2 class="page-header">Teams list</h2>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4" ng-if="!teams.data">
+    <progressbar class="progress-striped active" max="1" value="1">
+    <i>Loading</i>
+    </progressbar>
+  </div>
+  <div class="col-md-12" ng-if="teams.data && !teams.data.length">
+    <h3 class="bs-callout bs-callout-danger text-center">No teams</h3>
+  </div>
+</div>
 <div class="teams-list">
   <div class="table-responsive">
     <table class="table table-striped">
       <tr>
         <th>Team name</th><th>Team ID</th><th>Date</th><th>Actions</th>
       </tr>
-      <tr ng-repeat="team in data.teams">
+      <tr ng-repeat="team in teams.data">
         <td>{{ team.name }}</td>
         <td>{{ team.id }}</td>
         <td>{{ team.created_at }}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.team({id: team.id})"></span>
-          <span class="btn glyphicon glyphicon-trash" ng-click="removeTeam(team, $index)"></span>
+          <span class="btn glyphicon glyphicon-trash" ng-click="teams.remove($index)"></span>
         </td>
       </tr>
     </table>
   </div>
 </div>
 <h2 class="page-header">Create team</h2>
-<form name="teamForm" ng-submit="submitTeam()" novalidate>
+<form name="teams.form" ng-submit="teams.submit()" novalidate>
   <div class="form-group"
-       ng-class="{'has-error': showError(teamForm, teamForm.teamName)}">
+       ng-class="{'has-error': showError(teams.form, teams.form.name)}">
     <label for="team-name" class="control-label">Name</label>
-    <input type="text" class="form-control" id="team-name" name="teamName"
-           ng-model="team.name" required>
+    <input type="text" class="form-control" id="team-name" name="name"
+           ng-model="teams.input.name" required>
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
