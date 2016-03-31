@@ -99,6 +99,11 @@ module.exports = angular.module('app', [
     return input;
   };
 })
+.filter('isEmpty', function() {
+  return function(object) {
+    return angular.equals({}, object);
+  };
+})
 .run(['$http', '$q', 'config', function($http, $q, config) {
   var d = $q.defer();
   config.promise = d.promise;

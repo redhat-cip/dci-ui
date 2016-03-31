@@ -1,18 +1,28 @@
 <h2 class="page-header">RemoteCIs list</h2>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4" ng-if="!remotecis.data">
+    <progressbar class="progress-striped active" max="1" value="1">
+    <i>Loading</i>
+    </progressbar>
+  </div>
+  <div class="col-md-12" ng-if="remotecis.data && !remotecis.data.length">
+    <h3 class="bs-callout bs-callout-danger text-center">No remote CIs</h3>
+  </div>
+</div>
 <div class="remotecis-list">
   <div class="table-responsive">
     <table class="table table-striped">
       <tr>
         <th>RemoteCI name</th><th>RemoteCI ID</th><th>Date</th><th>Actions</th>
       </tr>
-      <tr ng-repeat="remoteci in data.remotecis">
+      <tr ng-repeat="remoteci in remotecis.data">
         <td>{{ remoteci.name }}</td>
         <td>{{ remoteci.id }}</td>
         <td>{{ remoteci.created_at }}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.remoteci({id: remoteci.id})">
           </span>
-          <span class="btn glyphicon glyphicon-trash" ng-click="removeRemoteCI(remoteci, $index)">
+          <span class="btn glyphicon glyphicon-trash" ng-click="remotecis.remove($index)">
           </span>
         </td>
       </tr>
@@ -20,12 +30,12 @@
   </div>
 </div>
 <h2 class="page-header">Create remote CI</h2>
-<form name="remoteciForm" ng-submit="submitRemoteCI()" novalidate>
+<form name="remotecis.form" ng-submit="remotecis.submit()" novalidate>
   <div class="form-group"
-       ng-class="{'has-error': showError(remoteciForm, remoteciForm.remoteciName)}">
+       ng-class="{'has-error': showError(remotecis.form, remotecis.form.name)}">
     <label for="remoteci-name" class="control-label">Name</label>
-    <input type="text" class="form-control" id="remoteci-name" name="remoteciName"
-           ng-model="remoteci.name" required>
+    <input type="text" class="form-control" id="remoteci-name" name="name"
+           ng-model="remotecis.input.name" required>
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>

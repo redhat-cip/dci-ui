@@ -26,6 +26,8 @@ require('app')
     var filePromises = [];
     var opened = false;
 
+    function date(d, format) { return moment(d).local().format(format); };
+
     _.assign($scope, {
       job: job, active: {}, go: $state.go,
       collapses: {
@@ -37,21 +39,15 @@ require('app')
       $scope.active[tab] = $state.is('job.' + tab);
     });
 
-    job.jobdefinition.created_at = (
-      moment(job.jobdefinition.created_at).local().format()
-    );
-    job.jobdefinition.updated_at = (
-      moment(job.jobdefinition.updated_at).local().format()
-    );
-    job.jobdefinition.test.created_at = (
-      moment(job.jobdefinition.test.created_at).local().format()
-    );
-    job.remoteci.created_at = moment(job.remoteci.created_at).local().format();
+    job.jobdefinition.created_at = date(job.jobdefinition.created_at);
+    job.jobdefinition.updated_at = date(job.jobdefinition.updated_at);
+    job.jobdefinition.test.created_at = date(job.jobdefinition.test.created_at);
+    job.remoteci.created_at = date(job.remoteci.created_at);
 
     _.each(job.jobstates, function(jobstate, i) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
-      jobstate.created_at = (
-        moment(jobstate.created_at).local().format('dddd DD, MMMM h:mm:ss A')
+      jobstate.created_at = date(
+        jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
 
       filePromises.push(api.getFiles(jobstate.id).then(function(files) {
@@ -68,7 +64,7 @@ require('app')
     api.getComponents(job.jobdefinition.id).then(function(components) {
       $scope.components = components;
       _.each(components, function(component) {
-        component.created_at = moment(component.created_at).local().format();
+        component.created_at = date(component.created_at);
       });
     });
 

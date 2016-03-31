@@ -15,92 +15,105 @@
 'use strict';
 
 require('app')
-.controller('AdminCtrl', [
-  '$scope', '$injector', 'data', function($scope, $injector, data) {
+.factory('entities', [
+  'messages', 'api', 'utils', 'user', function(msg, api, utils, user) {
+    function Entity(name, get, del, post) {
+      utils.Entity.call(this, name, get, del, post);
+      this.tplt = _.template('<%= key %> "<%= value %>" <%= msg %>');
+    }
 
-    var $state = $injector.get('$state');
-    var msg = $injector.get('messages');
-    var user = $injector.get('user');
-    var api = $injector.get('api');
+    Entity.prototype = _.create(utils.Entity.prototype, {
+      constructor: Entity,
+      submit: function() {
+        var promise = utils.Entity.prototype.submit.call(this);
+        var v = {key: this.name, value: this.input.name};
+        var addMsg = this.tplt(_.assign({msg: 'has been created'}, v));
+        var errMsg = this.tplt(_.assign({msg: 'already exists'}, v));
 
-    var rm = function(entity, collection, method) {
-      var tplt = _.template('<%= key %> "<%= value %>" has been removed');
-      return function(value, index) {
-        method(value.id, value.etag).then(function() {
-          collection.splice(index, 1);
-          msg.alert(tplt({key: entity, value: value.name}), 'success');
-        }, function(err) {
-          msg.alert(error.data.message, 'danger');
-        });
-      };
-    };
-    var add = function(entity, collection, method, form, value) {
-      var tplt = _.template('<%= key %> "<%= value %>" has been created');
-      var tpltErr = _.template('<%= key %> "<%= value %>" already exists');
-
-      return function() {
-        if (form.$invalid) { return; }
-        method(value).then(
-          function(res) {
-            collection.push(res);
-            msg.alert(tplt({key: entity, value: res.name}), 'success');
-          },
-          function(err) {
-            if (err.status === 422) {
-              msg.alert(tpltErr({key: entity, value: value.name}), 'danger');
-            } else {
-              msg.alert(err.data.message, 'danger');
+        if (_.hasIn(promise, 'then')) {
+          promise.then(
+            _.bind(msg.alert, msg, addMsg, 'success'),
+            function(err) {
+              if (err.status === 422) {
+                msg.alert(errMsg, 'danger');
+              } else {
+                msg.alert(err.data.message, 'danger');
+              }
             }
-          }
+          );
+        }
+        return promise;
+      },
+      remove: function(index) {
+        var message = this.tplt({
+          key: this.name, value: this.data[index].name, msg: 'has been removed'
+        });
+        utils.Entity.prototype.remove.call(this, index).then(
+          _.bind(msg.alert, msg, message, 'success'),
+          function(err) { msg.danger(err.data.message); }
         );
-      };
-    };
-    _.assign($scope, {
-      topicForm: {}, teamForm: {}, userForm: {}, remoteciForm: {},
-      data: data, active: {}, go: $state.go,
-      topic: {}, team: {}, remoteci: {team_id: user.team.id},
-      user: {
-        role: 'user',
-        team_id: data.teams.length && data.teams[0].id
       }
     });
 
-    _.each(['users', 'teams', 'remotecis', 'topics', 'audits'], function(tab) {
-      $scope.active[tab] = $state.is('administrate.' + tab);
+    function RemoteCIEntity() {
+      Entity.call(
+        this, 'remote CI', api.getRemoteCIS, api.removeRemoteCI,
+        api.postRemoteCI
+      );
+    }
+    RemoteCIEntity.prototype = _.create(Entity.prototype, {
+      constructor: RemoteCIEntity,
+      retrieve: function() {
+        var that = this;
+        Entity.prototype.retrieve.call(this).then(function(data) {
+          that.input.team_id = user.team.id;
+        });
+      }
+    });
+
+    function UserEntity() {
+      Entity.call(this, 'user', api.getUsers, api.removeUser, api.postUser);
+    }
+    UserEntity.prototype = _.create(Entity.prototype, {
+      constructor: UserEntity,
+      retrieve: function() {
+        var that = this;
+        Entity.prototype.retrieve.call(this).then(function(data) {
+          if (data.length) { that.input.team_id = data[0].id; }
+          that.input.team_id = user.team.id;
+        });
+      }
+    });
+    return {
+      'users': new UserEntity(),
+      'teams': new Entity('team', api.getTeams, api.removeTeam, api.postTeam),
+      'topics': new Entity(
+        'topic', api.getTopics, api.removeTopic, api.postTopic
+      ),
+      'remotecis': new RemoteCIEntity(),
+      'audits': new Entity('audit', api.getAudits, null, null)
+    };
+  }
+])
+.controller('AdminCtrl', [
+  '$scope', '$state', 'entities', function($scope, $state, entities) {
+    _.assign($scope, {active: {}, go: $state.go, user: {role: 'user'}});
+
+    _.each(entities, function(entity, id) {
+      $scope.active[id] = $state.is('administrate.' + id);
+      $scope[id] = entity;
     });
 
     $scope.role = function(value) {
       if (arguments.length) {
-        return $scope.user.role = value ? 'admin' : 'user';
+        return $scope.users.input.role = value ? 'admin' : 'user';
       } else {
-        return $scope.user.role === 'admin';
+        return $scope.users.input.role === 'admin';
       }
     };
     $scope.showError = function(form, field) {
       return field.$invalid && (field.$dirty || form.$submitted);
     };
-
-    $scope.removeUser = rm('user', $scope.data.users, api.removeUser);
-    $scope.removeTeam = rm('team', $scope.data.teams, api.removeTeam);
-    $scope.removeTopic = rm('topic', $scope.data.topics, api.removeTopic);
-    $scope.removeRemoteCI = rm(
-      'remote CI', $scope.data.remotecis, api.removeRemoteCI
-    );
-
-    $scope.submitUser = add(
-      'user', $scope.data.users, api.postUser, $scope.userForm, $scope.user
-    );
-    $scope.submitTeam = add(
-      'team', $scope.data.teams, api.postTeam, $scope.teamForm, $scope.team
-    );
-    $scope.submitTopic = add(
-      'topic', $scope.data.topics, api.postTopic, $scope.topicForm,
-      $scope.topic
-    );
-    $scope.submitRemoteCI = add(
-      'remote CI', $scope.data.remotecis, api.postRemoteCI,
-      $scope.remoteciForm, $scope.remoteci
-    );
   }
 ])
 .controller('EditMixinCtrl', [

@@ -19,60 +19,58 @@ require('app')
   '$scope', '$state', 'auth', function($scope, $state, auth) {
     $scope.authenticate = function(credentials) {
       auth.login(credentials.username, credentials.password).then(
-        function() {
-          $state.go('index');
-        },
-        function(err) {
-          $scope.err = err.data;
-        }
+        _.partial($state.go, 'index'), function(err) { $scope.err = err.data; }
       );
     };
   }
 ])
-
-.controller('InformationCtrl', [
-  '$scope',  'teams', 'topics', 'remotecis',
-  function($scope, teams, topics, remotecis) {
-    $scope.teams = teams;
-    $scope.topics = topics;
-    $scope.remotecis = remotecis;
-  }
-])
+.controller('InformationCtrl', ['$scope', 'api', function($scope, api) {
+  api.getTeams().then(_.partial(_.set, $scope, 'teams'));
+  api.getTopics().then(_.partial(_.set, $scope, 'topics'));
+  api.getRemoteCIS().then(_.partial(_.set, $scope, 'remotecis'));
+}])
 .controller('ListJobsCtrl', [
-  '$injector', '$scope', 'jobs', 'remotecis', 'page',
-  function($injector, $scope, jobs, remotecis, page) {
-    var $state = $injector.get('$state');
-    var statuses = ['failure', 'success', 'running', 'new',
-                    'pre-run', 'post-run'];
-    $scope.jobs = jobs.jobs;
-    $scope.remotecis = {};
-    $scope.status = {};
-    _.each(statuses, function(status) {
-      $scope.status[status] = _.includes($state.params.status, status);
-    });
+  '$state', '$scope', 'api', function($state, $scope, api) {
+    var page = parseInt($state.params.page) || 1;
+    var remoteci = $state.params.remoteci;
+    var status = $state.params.status;
 
-    _.each(remotecis, function(remoteci) {
-      var remoteci = remoteci.name;
-      $scope.remotecis[remoteci] = _.includes($state.params.remoteci, remoteci);
-    });
+    _.assign($scope, {remotecis: {}, status: {}, isFiltering: true});
 
-    $scope.search = function() {
-      var params = {
-        'status': _($scope.status).pick(_.identity).keys().join(','),
-        'remoteci': _($scope.remotecis).pick(_.identity).keys().join(',')
-      };
-      $state.go('jobs', params);
-    };
+    remoteci = remoteci ? remoteci.split(',') : [];
+    status = status ? status.split(',') : [];
 
-    $scope.isFiltering = true;
-
-    if (!$scope.isFiltering) {
+    function pagination(data) {
       $scope.pagination = {
-        total: jobs._meta.count, page: page,
+        total: data._meta.count, page: page,
         pageChanged: function() {
           $state.go('jobs', $scope.pagination);
         }
       };
-    }
+      return data;
+    };
+
+    (remoteci.length || status.length ?
+     api.searchJobs(remoteci, status) : api.getJobs(page).then(pagination)
+    ).then(function(data) { $scope.jobs = data.jobs; });
+    _.each(
+      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run'],
+      function(status) {
+        $scope.status[status] = _.includes($state.params.status, status);
+      }
+    );
+    api.getRemoteCIS()
+    .then(_.partialRight(_.each, function(remoteci) {
+      var remoteci = remoteci.name;
+      $scope.remotecis[remoteci] = _.includes($state.params.remoteci, remoteci);
+    }));
+
+    $scope.search = function() {
+      $state.go('jobs', {
+        'status': _($scope.status).pickBy(_.identity).keys().join(','),
+        'remoteci': _($scope.remotecis).pickBy(_.identity).keys().join(','),
+        'page': null
+      });
+    };
   }
 ]);
