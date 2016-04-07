@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afa9182_4cd61fc7",
+        "filename": "src/js/controllers/job.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2016-04-07T10:20:22Z",
+      "side": 1,
+      "message": "s/description/results",
+      "revId": "3f30eb8e218c0791f1c75738aae68eedbbc43a2d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afa9182_acda23e7",
+        "filename": "src/js/routing.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2016-04-07T10:20:22Z",
+      "side": 1,
+      "message": "s/description/results",
+      "revId": "3f30eb8e218c0791f1c75738aae68eedbbc43a2d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afa9182_8cd767bf",
+        "filename": "src/partials/directives/dci-job.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2016-04-07T10:20:22Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "3f30eb8e218c0791f1c75738aae68eedbbc43a2d",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
