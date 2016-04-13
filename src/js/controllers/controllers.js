@@ -73,4 +73,18 @@ require('app')
       });
     };
   }
-]);
+])
+.controller('fileJunitStatusController', ['$scope', function($scope) {
+    $scope.bucket = $scope.file.content.testscases;
+    $scope.input = {passed: false, skipped: false, failure: false, error: false}
+
+    $scope.filterjunit = function() {
+       if (!$scope.input['passed'] && !$scope.input['skipped'] && !$scope.input['failure'] && !$scope.input['error']) {
+        $scope.bucket = $scope.file.content.testscases;
+      } else {
+        $scope.bucket = _.filter($scope.file.content.testscases, function (testcase) {
+          return  $scope.input[testcase.result.action]
+        });
+      }
+   };
+}]);

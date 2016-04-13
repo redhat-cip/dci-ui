@@ -12,12 +12,47 @@
     </span>
   </button>
 </h3>
-<div class="col-md-12" collapse="file.collapse">
+<!-- {{ file.content }} -->
+<div ng-controller="fileJunitStatusController">
+<!-- <div> -->
+  <input type="checkbox" ng-change="filterjunit()" ng-model="input.passed" /><span class="label label-success">Passed</span>
+  <input type="checkbox" ng-change="filterjunit()" ng-model="input.failure" /><span class="label label-danger">Failure</span>
+  <input type="checkbox" ng-change="filterjunit()" ng-model="input.error" /><span class="label label-default">Error</span>
+  <input type="checkbox" ng-change="filterjunit()" ng-model="input.skipped" /><span class="label label-warning">Skipped</span>
+<table class="table table-striped">
+    <tr>
+      <th>Totals</th>
+      <th>Passes</th>
+      <th>Failures</th>
+      <th>Errors</th>
+      <th>Skips</th>
+      <th>Time</th>
+    </tr>
+    <tr>
+      <td><span class="label label-primary">{{file.content.total}}</span></td>
+      <td><span class="label label-success">{{file.content.total - file.content.failures - file.content.errors - file.content.skips}}</span></td>
+      <td><span class="label label-danger">{{file.content.failures || 0}}</span></td>
+      <td><span class="label label-default">{{file.content.errors || 0}}</span></td>
+      <td><span class="label label-warning">{{file.content.skips || 0}}</span></td>
+      <td>{{file.content.time}} sec</td>
+    </tr>
+  </table>
+
   <table class="table table-striped">
     <tr>
-      <th>data</th>
-      <td class="col-md-10"><div json-formatter json="file.content" open="1"></div></td>
+      <th>Status</th>
+      <th>Classname</th>
+      <th>Time</th>
+    </tr>
+    <tr ng-repeat="testcase in bucket">
+      <td>
+        <span ng-if="testcase.result.action == 'skipped'" class="label label-warning">Skip</span>
+        <span ng-if="testcase.result.action == 'failure'" class="label label-danger">Failure</span>
+        <span ng-if="testcase.result.action == 'error'" class="label label-default">Error</span>
+        <span ng-if="testcase.result.action == 'passed'" class="label label-success">Pass</span>
+      </td>
+      <td>{{testcase.classname || testcase.name}}</td>
+      <td>{{testcase.time}} sec</td>
     </tr>
   </table>
 </div>
-
