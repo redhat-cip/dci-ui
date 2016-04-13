@@ -6,7 +6,7 @@ $navbar-inverse-link-active-bg : $redhat-color;
 $navbar-side-size              : 200px;
 
 $arrow-size                    : 15px;
-
+$table-bg-hover                : $gray-lighter;
 @import "bootstrap";
 
 body {
@@ -213,6 +213,24 @@ pre {
     padding: 8px;
     button {
       margin: -7px;
+    }
+  }
+}
+
+.table-results {
+  tr.result-details {
+    cursor: auto;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  tr {
+    cursor: pointer;
+
+    & td[colspan="3"] {
+      border-top: none;
     }
   }
 }
