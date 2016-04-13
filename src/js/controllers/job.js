@@ -126,4 +126,24 @@ require('app')
       }
     };
   }
+])
+.controller('fileJunitStatusController', ['$scope', function($scope) {
+    $scope.bucket = $scope.file.content.testscases;
+    $scope.input = {
+      passed: false, skipped: false, failure: false, error: false
+    };
+
+    console.log($scope.bucket);
+    $scope.filterjunit = function() {
+      if (!_.some(_.values($scope.input))) {
+        $scope.bucket = $scope.file.content.testscases;
+      } else {
+        $scope.bucket = _.filter(
+          $scope.file.content.testscases, function(testcase) {
+            return $scope.input[testcase.result.action];
+          }
+        );
+      }
+    };
+  }
 ]);
