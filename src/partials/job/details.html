@@ -51,34 +51,6 @@
 </div>
 
 <div class="row">
-  <h3 class="col-md-12 page-header">Test
-    <button type="button" class="btn btn-default btn-xs pull-right"
-                          ng-click="collapses.test = !collapses.test">
-      <span ng-if="collapses.test">
-        <span class="glyphicon glyphicon-menu-up"></span>
-        see details
-      </span>
-      <span ng-if="!collapses.test">
-        <span class="glyphicon glyphicon-menu-down"></span>
-        close details
-      </span>
-    </button>
-  </h3>
-  <div class="col-md-12" collapse="collapses.test">
-    <h4>{{ job.jobdefinition.test.name }}</h4>
-    <table class="table table-striped">
-      <tr><th>id</th><td>{{ job.jobdefinition.test.id }}</td></tr>
-      <tr><th>created at</th><td>{{ job.jobdefinition.test.created_at }}</td></tr>
-      <tr><th>data</th>
-        <td>
-          <div json-formatter json="job.jobdefinition.test.data" open="1"></div>
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
-
-<div class="row">
   <h3 class="col-md-12 page-header">Components
     <button type="button" class="btn btn-default btn-xs pull-right"
                           ng-click="collapses.components = !collapses.components">

@@ -30,9 +30,7 @@ require('app')
 
     _.assign($scope, {
       job: job, active: {}, go: $state.go,
-      collapses: {
-        test: true, remoteci: true, components: true, jobdefinition: true
-      }
+      collapses: {remoteci: true, components: true, jobdefinition: true}
     });
 
     _.each(['index', 'details', 'edit', 'context'], function(tab) {
@@ -41,7 +39,6 @@ require('app')
 
     job.jobdefinition.created_at = date(job.jobdefinition.created_at);
     job.jobdefinition.updated_at = date(job.jobdefinition.updated_at);
-    job.jobdefinition.test.created_at = date(job.jobdefinition.test.created_at);
     job.remoteci.created_at = date(job.remoteci.created_at);
 
     _.each(job.jobstates, function(jobstate, i) {

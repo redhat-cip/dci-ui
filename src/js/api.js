@@ -39,7 +39,7 @@ require('app')
     var offset = 20 * (page - 1);
     var conf = {'params': {
       'limit': 20, 'offset': offset, 'sort': '-updated_at',
-      'embed': 'remoteci,jobdefinition,jobdefinition.test'
+      'embed': 'remoteci,jobdefinition'
     }};
     return $http.get(api.urls.jobs, conf).then(_.property('data'));
   };
@@ -57,8 +57,7 @@ require('app')
 
     function retrieveJobs(status) {
       var conf = {'params': {
-        'where': 'status:' + status,
-        'embed': 'remoteci,jobdefinition,jobdefinition.test'
+        'where': 'status:' + status, 'embed': 'remoteci,jobdefinition'
       }};
       return $http.get(api.urls.jobs, conf);
     };
@@ -75,7 +74,7 @@ require('app')
       .map(_.property('id'))
       .map(function(remoteci) {
         var conf = {'params': {
-          'embed': 'remoteci,jobdefinition,jobdefinition.test',
+          'embed': 'remoteci,jobdefinition',
           'where': 'remoteci_id:' + remoteci,
         }};
         return $http.get(api.urls.jobs, conf);
@@ -130,9 +129,7 @@ require('app')
 
       return _.last(data);
     };
-    var conf = {'params': {
-      'embed': 'remoteci,jobdefinition,jobdefinition.test'
-    }};
+    var conf = {'params': {'embed': 'remoteci,jobdefinition'}};
     var JSconf = {'params': {'sort': '-created_at'}};
 
     return $q.all([
