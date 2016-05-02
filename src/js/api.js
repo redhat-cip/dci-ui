@@ -44,6 +44,14 @@ require('app')
     return $http.get(api.urls.jobs, conf).then(_.property('data'));
   };
 
+  api.getJobDefs = function(page) {
+    var offset = 20 * (page - 1);
+    var conf = {
+      'params': {'limit': 20, 'offset': offset, 'sort': '-updated_at'}
+    };
+    return $http.get(api.urls.jobdefinitions, conf).then(_.property('data'));
+  };
+
   api.getJobStates = function(job) {
     url = urlize(api.urls.jobs, job, 'jobstates');
     return $http.get(url).then(_.property('data.jobstates'));
