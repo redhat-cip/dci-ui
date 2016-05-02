@@ -73,4 +73,27 @@ require('app')
       });
     };
   }
+])
+.controller('ListJobDefsCtrl', [
+  '$injector', '$scope', function($injector, $scope) {
+    var $state = $injector.get('$state');
+    var moment = $injector.get('moment');
+    var api = $injector.get('api');
+
+    var page = parseInt($state.params.page) || 1;
+    api.getJobDefs(page)
+    .then(function(data) {
+      $scope.jobdefs = data.jobdefinitions;
+      _.each(data.jobdefinitions, function(jobdef) {
+        jobdef.created_at = moment(jobdef.created_at).local().format();
+      });
+      $scope.pagination = {
+        total: data._meta.count, page: page,
+        pageChanged: function() {
+          $state.go('jobdefs', $scope.pagination);
+        }
+      };
+
+    });
+  }
 ]);

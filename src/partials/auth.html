@@ -32,6 +32,11 @@
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
       </a>
     </li>
+    <li ui-sref-active="active">
+      <a ui-sref="jobdefs">
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Job definitions
+      </a>
+    </li>
     <li ng-class="{active: ('administrate'|includedByState) || ('edit'|includedByState)}"
       ng-if="admin">
       <a ui-sref="administrate.users">
