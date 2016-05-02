@@ -90,8 +90,7 @@ require('app')
                 err.data && err.data.message ||
                   'Something went wrong', 'danger'
               );
-            }
-                                                    );
+            });
           }
         ]
       }
@@ -101,6 +100,13 @@ require('app')
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
     .state('job.context', {url: '/context'})
+    .state('jobdefs', {
+      parent: 'auth',
+      url: '/job-definitions?page',
+      onEnter: scrollTop,
+      controller: 'ListJobDefsCtrl',
+      templateUrl: '/partials/jobdefs.html'
+    })
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',
@@ -112,7 +118,6 @@ require('app')
     .state('administrate.remotecis', {url: '/remotecis'})
     .state('administrate.topics', {url: '/topics'})
     .state('administrate.audits', {url: '/audits'})
-
     .state('edit', {
       'abstract': true,
       parent: 'authAdmin',
