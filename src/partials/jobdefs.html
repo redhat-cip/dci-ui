@@ -1,0 +1,41 @@
+<h1 class="page-header">Job Definitions</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>ID</th>
+      <th class="text-center">Created At</th>
+      <th class="text-right">Priority</th>
+      <th class="text-right">Active</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat-start="jobdef in jobdefs" ng-click="jobdef.opened = !jobdef.opened">
+      <td>
+        <span class="glyphicon glyphicon-exclamation-sign pull-right"
+          ng-if="jobdef.comment"
+          aria-hidden="true">
+        </span>
+        {{ jobdef.name }}
+      </td>
+      <td>{{ jobdef.id }}</td>
+      <td class="text-center">{{ jobdef.created_at }}</td>
+      <td class="text-right">{{ jobdef.priority }}</td>
+      <td class="text-right">{{ jobdef.active }}</td>
+    </tr>
+    <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
+      <td colspan="6">
+        {{ jobdef.comment }}
+      </td>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  <div pagination total-items="pagination.total" max-size="5"
+    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+  </div>
+</div>
