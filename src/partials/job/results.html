@@ -1,4 +1,7 @@
-<div ng-if="files.length != 0" ng-repeat="file in context_files" class="row">
+<div ng-if="junit_files.length == 0">
+No JUnit result uploaded.
+</div>
+<div ng-if="junit_files.length != 0" ng-repeat="file in junit_files" class="row">
 <h3 class="col-md-12 page-header">{{ file.name }}
   <button type="button" class="btn btn-default btn-xs pull-right"
                         ng-click="file.collapse = !file.collapse">

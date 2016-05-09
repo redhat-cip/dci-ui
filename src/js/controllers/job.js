@@ -69,7 +69,7 @@ require('app')
 
     api.getJobFiles(job.id).then(function(files) {
       $scope.files = files;
-      $scope.context_files = _.remove(files, function(file) {
+      $scope.junit_files = _.remove(files, function(file) {
         file.collapse = false;
         if (_.indexOf(jsonMimes, file.mime) != -1) {
           file.content = angular.fromJson(file.content);
