@@ -18,7 +18,6 @@ require('app')
 .constant('utils', {
   'Edit': (function() {
     function Edit(title) {
-      this.title = title;
       this.plural = title.toLowerCase() + 's';
       this.injecting = ['$stateParams','$injector', 'conf'];
       this.meta = {
@@ -32,12 +31,14 @@ require('app')
 
     _.assign(Edit.prototype, {
       successCb: function($injector) {
-        return _.bind(function(res) {
+        var that = this;
+        var endpoint = $injector.get('api')[that.plural];
+        return function(res) {
           return _.merge(
-            res, {meta: this.meta},
-            {meta: {method: $injector.get('api')['put' + this.title]}}
+            res, {meta: that.meta},
+            {meta: {method: _.bind(endpoint.update, endpoint)}}
           );
-        }, this);
+        };
       },
       errorCb: function($injector) {
         return function(err) {
@@ -47,7 +48,7 @@ require('app')
         };
       },
       cb: function($stateParams, $injector) {
-        return $injector.get('api')['get' + this.title]($stateParams.id).then(
+        return $injector.get('api')[this.plural].get($stateParams.id).then(
           this.successCb($injector), this.errorCb($injector)
         );
       },
@@ -64,11 +65,9 @@ require('app')
     return Edit;
   })(),
   'Entity': (function() {
-    function Entity(name, get, del, post) {
+    function Entity(name, endpoint) {
       this.name = name;
-      this.get = get;
-      this.del = del;
-      this.post = post;
+      this.endpoint = endpoint;
       this.data = null;
       this.input = {};
 
@@ -77,27 +76,24 @@ require('app')
     _.assign(Entity.prototype, {
       retrieve: function() {
         var that = this;
-        return this.get().then(function(data) {
-          that.data = [];
-          _.each(data, function(d) { that.data.push(d); });
-          return data;
+        return this.endpoint.list(null, true).then(function(data) {
+          return that.data = data;
         });
       },
       remove: function(index) {
         var value = this.data[index];
         var that = this;
-        return this.del(value.id, value.etag).then(function() {
+        return this.endpoint.remove(value.id, value.etag).then(function() {
           that.data.splice(index, 1);
         });
       },
       submit: function() {
         var that = this;
         if (this.form.$invalid) { return; }
-        return this.post(this.input).then(function(res) {
-            that.data.push(res);
-            return res;
-          }
-        );
+        return this.endpoint.create(this.input).then(function(res) {
+          that.data.push(res);
+          return res;
+        });
       }
     });
     return Entity;

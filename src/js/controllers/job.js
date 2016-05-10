@@ -49,9 +49,11 @@ require('app')
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
 
-      filePromises.push(api.getFiles(jobstate.id).then(function(files) {
-        return jobstate.files = files;
-      }));
+      filePromises.push(
+        api.jobstates.files(jobstate.id).then(function(files) {
+          return jobstate.files = files;
+        })
+      );
     });
 
     helpers.synchronize(filePromises, function(files, i) {
@@ -60,14 +62,15 @@ require('app')
       return !opened;
     });
 
-    api.getComponents(job.jobdefinition.id).then(function(components) {
+    api.jobdefinitions.components(job.jobdefinition.id)
+    .then(function(components) {
       $scope.components = components;
       _.each(components, function(component) {
         component.created_at = date(component.created_at);
       });
     });
 
-    api.getJobFiles(job.id).then(function(files) {
+    api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
       $scope.junit_files = _.remove(files, function(file) {
         file.collapse = false;
@@ -81,7 +84,7 @@ require('app')
 ])
 
 .controller('EditCtrl', [
-  '$scope', 'api', 'messages', function($scope, api, messages) {
+  '$scope', 'api', 'messages', function($scope, api, msg) {
     var job = $scope.job;
 
     $scope.reset = function() {
@@ -97,30 +100,34 @@ require('app')
     );
 
     $scope.submit = function() {
+      // process and clean data
       var data = _.transform($scope.form, function(result, value, key) {
         if (_.includes([null, false], value)) { return; }
         if (key == 'status') {
           value = job.status == 'success' ? 'failure' : 'success';
         }
         result[key] = value;
-      }, {});
-      if (!_.isEmpty(data)) {
-        api.updateJob(job.id, job.etag, data).then(
-          function(resp) {
-            job.processStatus(data.status || job.status);
-            job.comment = data.comment || job.comment;
-            job.etag = resp.headers('etag');
-            messages.alert('job updated', 'success');
-            $scope.reset();
-          },
-          function(error) {
-            var str = [
-              error.status, error.statusText + '-', error.data.message
-            ];
-            messages.alert(str.join(' '), 'danger');
+      }, _.pick(job, ['id', 'etag']));
+
+      // api call for updating job
+      api.jobs.update(data).then(
+        function(resp) {
+          job.processStatus(data.status || job.status);
+          job.comment = data.comment || job.comment;
+          job.etag = resp.headers('etag');
+          msg.alert('job updated', 'success');
+          $scope.reset();
+        },
+        function(error) {
+          if (error === 'empty') {
+            return msg.alert('No data provided for update', 'danger');
           }
-        );
-      }
+          var str = [
+            error.status, error.statusText + '-', error.data.message
+          ];
+          msg.alert(str.join(' '), 'danger');
+        }
+      );
     };
   }
 ])

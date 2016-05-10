@@ -25,9 +25,9 @@ require('app')
   }
 ])
 .controller('InformationCtrl', ['$scope', 'api', function($scope, api) {
-  api.getTeams().then(_.partial(_.set, $scope, 'teams'));
-  api.getTopics().then(_.partial(_.set, $scope, 'topics'));
-  api.getRemoteCIS().then(_.partial(_.set, $scope, 'remotecis'));
+  _.each(['teams', 'topics', 'remotecis'], function(id) {
+    api[id].list(null, true).then(_.partial(_.set, $scope, id));
+  });
 }])
 .controller('ListJobsCtrl', [
   '$state', '$scope', 'api', function($state, $scope, api) {
@@ -51,15 +51,17 @@ require('app')
     };
 
     (remoteci.length || status.length ?
-     api.searchJobs(remoteci, status) : api.getJobs(page).then(pagination)
-    ).then(function(data) { $scope.jobs = data.jobs; });
+     api.jobs.search(remoteci, status) : api.jobs.list(page).then(pagination)
+    )
+    .then(function(data) { $scope.jobs = data.jobs; });
+
     _.each(
       ['failure', 'success', 'running', 'new', 'pre-run', 'post-run'],
       function(status) {
         $scope.status[status] = _.includes($state.params.status, status);
       }
     );
-    api.getRemoteCIS()
+    api.remotecis.list(null, true)
     .then(_.partialRight(_.each, function(remoteci) {
       var remoteci = remoteci.name;
       $scope.remotecis[remoteci] = _.includes($state.params.remoteci, remoteci);
@@ -81,7 +83,7 @@ require('app')
     var api = $injector.get('api');
 
     var page = parseInt($state.params.page) || 1;
-    api.getJobDefs(page)
+    api.jobdefinitions.list(page)
     .then(function(data) {
       $scope.jobdefs = data.jobdefinitions;
       _.each(data.jobdefinitions, function(jobdef) {

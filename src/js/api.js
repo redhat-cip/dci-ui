@@ -26,53 +26,194 @@ require('app')
   var urlize = _.rest(_.partialRight(_.join, '/'));
   var urlPttrn = new RegExp('(https?://)(.*)');
 
+  // Initialize an API object which consists into a simple javascript
+  // object, containing all the endpoints and then the methods associated
+  // Here is a quick example:
+  //
+  // api = {
+  //  jobs: {
+  //    url: "an/endpoint/url"
+  //    get: function... ,
+  //    create: function... ,
+  //    list: function... ,
+  //    remove: function... ,
+  //    update: function...
+  //  },
+  //  remotecis: {
+  //    ...
+  //  }
+  // }
+  _.each([
+    'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
+    'components', 'jobdefinitions', 'audits', 'topics'
+  ], function(endpoint) {
+    api[endpoint] = {
+      get: function(id) {
+        // remove the trailing "s"
+        var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
+        var conf = this.embed ? {'embed': this.embed} : {};
+        return $http.get(urlize(this.url, id), conf).then(_.property(extract));
+      },
+      remove: function(id, etag) {
+        var conf = {'headers': {'If-Match': etag}};
+        return $http.delete(urlize(this.url, id), conf);
+      },
+      create: function(obj) {
+        // remove the trailing "s"
+        var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
+        return $http.post(this.url, obj).then(_.property(extract));
+      },
+      list: function(page, extract) {
+        var params = _.assign(
+          {'sort': '-updated_at'},
+          page ? {'limit': 20, 'offset': 20 * (page - 1)} : null,
+          this.embed ? {'embed': this.embed} : null
+        );
+        extract = extract ? 'data.' + endpoint : 'data';
+        return $http.get(this.url, {params: params}).then(_.property(extract));
+      },
+      update: function(obj) {
+        var url = urlize(this.url, obj.id);
+        var headers = {'headers': {'If-Match': obj.etag}};
+        // parse method call is a bit crapy but it is more expressive
+        if (_.isEmpty(obj = this.update.parse(obj))) {
+          return $q.reject('empty');
+        } else {
+          return $http.put(url, obj, headers);
+        }
+      }
+    };
+  });
+
   config.promise.then(function() {
-    _.each([
-      'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
-      'components', 'jobdefinitions', 'audits', 'topics'
-    ], function(endpoint) {
-      api.urls[endpoint] = urlize(config.apiURL, 'api', 'v1', endpoint);
+    _.each(api, function(endpoint, name) {
+      endpoint.url = urlize(config.apiURL, 'api', 'v1', name);
     });
   });
 
-  api.getJobs = function(page) {
-    var offset = 20 * (page - 1);
-    var conf = {'params': {
-      'limit': 20, 'offset': offset, 'sort': '-updated_at',
-      'embed': 'remoteci,jobdefinition'
-    }};
-    return $http.get(api.urls.jobs, conf).then(_.property('data'));
+  /*                              JOBDEFINITIONS                              */
+  api.jobdefinitions.components = function(jobdef) {
+    var url = urlize(this.url, jobdef, 'components');
+    return $http.get(url).then(_.property('data.components'));
   };
 
-  api.getJobDefs = function(page) {
-    var offset = 20 * (page - 1);
-    var conf = {
-      'params': {'limit': 20, 'offset': offset, 'sort': '-updated_at'}
+  /*                                  AUDITS                                  */
+  api.audits.list = function(page, extract) {
+    // Audits does not provide the common api features, so we make a
+    // simple call here.
+    extract = extract ? 'data.audits' : 'data';
+    return $http.get(this.url).then(_.property(extract));
+  };
+
+  /*                                REMOTE CIS                                */
+  api.remotecis.update.parse = _.partialRight(_.pick, ['name']);
+  api.remotecis.create = function(remoteci) {
+    return $http.post(
+      this.url, _.merge(remoteci, {'team_id': user.team.id})
+    )
+    .then(_.property('data.remoteci'));
+  };
+
+  /*                                  TEAMS                                   */
+  api.teams.update.parse = _.partialRight(_.pick, ['name']);
+
+  /*                                  USERS                                   */
+  api.users.embed = 'team';
+  api.users.get = function(name, withoutTeam) {
+    var conf = withoutTeam ? {} : {'params': {'embed': 'team'}};
+    return $http.get(urlize(this.url, name), conf)
+    .then(_.property('data.user'));
+  };
+  api.users.update.parse = function(user) {
+    return _.assign(
+      {'role': user.role ? 'admin' : 'user'},
+      _.pick(user, ['name', 'team_id', 'password'])
+    );
+  };
+
+  /*                                  TOPICS                                  */
+  api.topics.update.parse = _.partialRight(_.pick, ['name']);
+  api.topics.teams = function(id) {
+    var url = urlize(api.topics.url, id, 'teams');
+    return $http.get(url).then(_.property('data.teams'));
+  };
+  api.topics.teams.post = function(id, team) {
+    var url = urlize(api.topics.url, id, 'teams');
+    return $http.post(url, {'team_id': team});
+  };
+  api.topics.teams.remove = function(id, team) {
+    var url = urlize(api.topics.url, id, 'teams', team);
+    return $http.delete(url);
+  };
+
+  /*                                JOBSTATES                                 */
+  api.jobstates.files = function(jobstate) {
+    var conf = {'params': {'where': 'jobstate_id:' + jobstate}};
+    return $http.get(api.files.url, conf)
+    .then(_.property('data.files'))
+    .then(_.partialRight(_.map, function(elt) {
+      // build link in the form of
+      // http(s)://username:password@apiURL/files/file_id/content
+      elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
+        return urlize(
+          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
+        );
+      });
+      return elt;
+    }));
+  };
+
+  /*                                   JOBS                                   */
+  api.jobs.embed = 'remoteci,jobdefinition';
+  api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
+
+  api.jobs.recheck = function(id) {
+    var url = urlize(this.url, id, 'recheck');
+    return $http.post(url).then(_.property('data.job'));
+  };
+  api.jobs.files = function(job) {
+    var url = urlize(this.url, job, 'files');
+    return $http.get(url).then(_.property('data.files'));
+  };
+  api.jobs.get = function(job) {
+    var retrieveFiles = function(data) {
+      return _.assign(
+        _.first(data).data.job,
+        {'jobstates': _.last(data).data.jobstates}
+      );
     };
-    return $http.get(api.urls.jobdefinitions, conf).then(_.property('data'));
-  };
 
-  api.getJobStates = function(job) {
-    url = urlize(api.urls.jobs, job, 'jobstates');
-    return $http.get(url).then(_.property('data.jobstates'));
-  };
+    var parseFiles = function(data) {
+      _(data)
+      .initial()
+      .map(_.property('data.files'))
+      .zip(_.last(data).jobstates)
+      .map(function(elt) {
+        return _.assign(_.last(elt), {'files': _.first(elt)});
+      })
+      .value();
 
-  api.searchJobs = function(remotecis, statuses) {
+      return _.last(data);
+    };
+    var conf = {'params': {'embed': 'remoteci,jobdefinition'}};
+    var JSconf = {'params': {'sort': 'created_at'}};
+    return $q.all([
+      $http.get(urlize(this.url, job), conf),
+      $http.get(urlize(this.url, job, 'jobstates'), JSconf)
+    ])
+    .then(retrieveFiles);
+  };
+  api.jobs.search = function(remotecis, statuses) {
     function retrieveRCIs(remoteci) {
       var conf = {'params': {'where': 'name:' + remoteci}};
-      return $http.get(api.urls.remotecis, conf);
+      return $http.get(api.remotecis.url, conf);
     };
 
     function retrieveJobs(status) {
       var conf = {'params': {
         'where': 'status:' + status, 'embed': 'remoteci,jobdefinition'
       }};
-      return $http.get(api.urls.jobs, conf);
-    };
-
-    api.getJobStates = function(job) {
-      url = urlize(api.urls.jobs, job, 'jobstates');
-      return $http.get(url).then(_.property('data.jobstates'));
+      return $http.get(api.jobs.url, conf);
     };
 
     function retrieveJsRCI(remoteciResps) {
@@ -85,7 +226,7 @@ require('app')
           'embed': 'remoteci,jobdefinition',
           'where': 'remoteci_id:' + remoteci,
         }};
-        return $http.get(api.urls.jobs, conf);
+        return $http.get(api.jobs.url, conf);
       })
       .thru($q.all)
       .value();
@@ -111,205 +252,6 @@ require('app')
     .then(function(jobs) {
       return {'jobs': jobs};
     });
-  };
-  api.updateJob = function(job_id, etag, data) {
-    var conf = {'headers': {'If-Match': etag}};
-    return $http.put(urlize(api.urls.jobs, job_id), data, conf);
-  };
-
-  api.getJob = function(job) {
-    var retrieveFiles = function(data) {
-      return _.assign(
-        _.first(data).data.job,
-        {'jobstates': _.last(data).data.jobstates}
-      );
-    };
-
-    var parseFiles = function(data) {
-      _(data)
-      .initial()
-      .map(_.property('data.files'))
-      .zip(_.last(data).jobstates)
-      .map(function(elt) {
-        return _.assign(_.last(elt), {'files': _.first(elt)});
-      })
-      .value();
-
-      return _.last(data);
-    };
-    var conf = {'params': {'embed': 'remoteci,jobdefinition'}};
-    var JSconf = {'params': {'sort': 'created_at'}};
-
-    return $q.all([
-      $http.get(urlize(api.urls.jobs, job), conf),
-      $http.get(urlize(api.urls.jobs, job, 'jobstates'), JSconf)
-    ])
-    .then(retrieveFiles);
-  };
-
-  api.getComponents = function(jobDef) {
-    var url = (
-      jobDef ? urlize(api.urls.jobdefinitions, jobDef, 'components') :
-        api.url.components
-    );
-
-    return $http.get(url).then(_.property('data.components'));
-  };
-
-  api.getJobFiles = function(job) {
-    var url = urlize(api.urls.jobs, job, 'files');
-    return $http.get(url).then(_.property('data.files'));
-  };
-
-  api.getFiles = function(jobstateID) {
-    var conf = {'params': {'where': 'jobstate_id:' + jobstateID}};
-    return $http.get(api.urls.files, conf)
-    .then(_.property('data.files'))
-    .then(_.partialRight(_.map, function(elt) {
-      // build link in the form of
-      // http(s)://username:password@apiURL/files/file_id/content
-      elt.dl_link = api.urls.files.replace(urlPttrn, function(_, g1, g2) {
-        return urlize(
-          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
-        );
-      });
-      return elt;
-    }));
-  };
-
-  api.getRemoteCI = function(name) {
-    var url = urlize(api.urls.remotecis, name);
-    return $http.get(url).then(_.property('data.remoteci'));
-  };
-
-  api.getRemoteCIS = function() {
-    var extractRemoteCIS = _.partialRight(_.get, 'data.remotecis');
-    return $http.get(api.urls.remotecis).then(extractRemoteCIS);
-  };
-
-  api.postRemoteCI = function(remoteci) {
-    return $http.post(
-      api.urls.remotecis, _.merge(remoteci, {'team_id': user.team.id})
-    )
-    .then(_.property('data.remoteci'));
-  };
-
-  api.putRemoteCI = function(remoteci) {
-    var url = urlize(api.urls.remotecis, remoteci.id);
-    var headers = {'headers': {'If-Match': remoteci.etag}};
-    return $http.put(url, {'name': remoteci.name}, headers);
-  };
-
-  api.removeRemoteCI = function(remoteciID, remoteciEtag) {
-    var url = urlize(api.urls.remotecis, remoteciID);
-    return $http.delete(url, {'headers': {'If-Match': remoteciEtag}});
-  };
-
-  api.recheckJob = function(jobID) {
-    var url = urlize(api.urls.jobs, jobID, 'recheck');
-    return $http.post(url).then(_.property('data.job'));
-  };
-
-  api.removeJob = function(jobID, jobEtag) {
-    var url = urlize(api.urls.jobs, jobID);
-    return $http.delete(url, {'headers': {'If-Match': jobEtag}});
-  };
-
-  api.getUser = function(name, withoutTeam) {
-    var url = urlize(api.urls.users, name);
-    var conf = withoutTeam ? {} : {'params': {'embed': 'team'}};
-    return $http.get(url, conf).then(_.property('data.user'));
-  };
-
-  api.getUsers = function() {
-    return $http.get(api.urls.users).then(_.property('data.users'));
-  };
-
-  api.postUser = function(user) {
-    return $http.post(api.urls.users, user).then(_.property('data.user'));
-  };
-
-  api.removeUser = function(userID, userEtag) {
-    var url = urlize(api.urls.users, userID);
-    return $http.delete(url, {'headers': {'If-Match': userEtag}});
-  };
-
-  api.putUser = function(user) {
-    var url = urlize(api.urls.users, user.id);
-    var headers = {'headers': {'If-Match': user.etag}};
-    var data = {
-      'name': user.name, 'team_id': user.team_id,
-      'role': user.role ? 'admin' : 'user',
-    };
-    if (user.password) { data.password = user.password; }
-    return $http.put(url, data, headers);
-  };
-
-  api.getTopic = function(id) {
-    var url = urlize(api.urls.topics, id);
-    return $http.get(url).then(_.property('data.topic'));
-  };
-
-  api.getTopicTeams = function(id) {
-    var url = urlize(api.urls.topics, id, 'teams');
-    return $http.get(url).then(_.property('data.teams'));
-  };
-
-  api.removeTopicTeam = function(topicId, teamId) {
-    var url = urlize(api.urls.topics, topicId, 'teams', teamId);
-    return $http.delete(url);
-  };
-
-  api.postTopicTeam = function(topicId, teamId) {
-    var url = urlize(api.urls.topics, topicId, 'teams');
-    return $http.post(url, {'team_id': teamId});
-  };
-
-  api.getTopics = function() {
-    return $http.get(api.urls.topics).then(_.property('data.topics'));
-  };
-
-  api.postTopic = function(topic) {
-    return $http.post(api.urls.topics, topic).then(_.property('data.topic'));
-  };
-
-  api.putTopic = function(topic) {
-    var url = urlize(api.urls.topics, topic.id);
-    var headers = {'headers': {'If-Match': topic.etag}};
-    return $http.put(url, {'name': topic.name}, headers);
-  };
-
-  api.removeTopic = function(topicID, topicEtag) {
-    var url = urlize(api.urls.topics, topicID);
-    return $http.delete(url, {'headers': {'If-Match': topicEtag}});
-  };
-
-  api.getTeam = function(name) {
-    var url = urlize(api.urls.teams, name);
-    return $http.get(url).then(_.property('data.team'));
-  };
-
-  api.getTeams = function() {
-    return $http.get(api.urls.teams).then(_.property('data.teams'));
-  };
-
-  api.postTeam = function(team) {
-    return $http.post(api.urls.teams, team).then(_.property('data.team'));
-  };
-
-  api.putTeam = function(team) {
-    var url = urlize(api.urls.teams, team.id);
-    var headers = {'headers': {'If-Match': team.etag}};
-    return $http.put(url, {'name': team.name}, headers);
-  };
-
-  api.removeTeam = function(teamID, teamEtag) {
-    var url = urlize(api.urls.teams, teamID);
-    return $http.delete(url, {'headers': {'If-Match': teamEtag}});
-  };
-
-  api.getAudits = function() {
-    return $http.get(api.urls.audits).then(_.property('data.audits'));
   };
 
   return api;
