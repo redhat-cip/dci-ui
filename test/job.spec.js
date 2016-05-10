@@ -33,6 +33,10 @@ describe('DCI homepage', function() {
         $httpBackend.whenGET(/^\/partials\//).passThrough();
         $httpBackend.whenGET(/\/remotecis/).respond(remotecisResp);
         $httpBackend.whenGET(/\/jobs\/.*?\/jobstates/).respond(jobstatesResp);
+        $httpBackend.whenPOST(/\/jobs\/foo\/edit/, {'comment': 'bob'}).response('');
+        $httpBackend.whenPOST(/\/jobs\/foo\/edit/).respond(function(method, url, data) {
+            return [200, '', ''];
+        });
         $httpBackend.whenPOST(/\/jobs\/foo\/recheck/).respond(jobRecheck);
         $httpBackend.whenGET(/\/jobs\/bar/).respond(jobRecheck);
         $httpBackend.whenGET(/\/jobs/).respond(jobsResp);
@@ -53,5 +57,10 @@ describe('DCI homepage', function() {
     browser.get('/#/jobs');
     element(by.css('.glyphicon-repeat')).click();
     expect(browser.getLocationAbsUrl()).toMatch('/jobs/bar$');
+  });
+  it('should be possible to adjust a job comment', function() {
+    browser.get('/#/jobs/foo/edit');
+    element(by.id('comment')).sendKeys('Cassandra');
+    element(by.css('.btn-primary')).click();
   });
 });
