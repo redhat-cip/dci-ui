@@ -26,6 +26,7 @@ require('app')
 
       var job = scope.job;
       var start = moment(job.created_at);
+
       job.time_running = moment(job.updated_at).to(start, true);
       job.updated_at = moment(job.updated_at).from(moment.moment());
 
@@ -38,8 +39,8 @@ require('app')
       job.processStatus(job.status);
 
       scope.recheck = function() {
-        api.recheckJob(job.id).then(function(job) {
-          $state.go('job', {id: job.id});
+        api.jobs.recheck(job.id).then(function(job) {
+          $state.go('job.results', {id: job.id});
         });
       };
 

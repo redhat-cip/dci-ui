@@ -49,9 +49,11 @@ require('app')
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
 
-      filePromises.push(api.getFiles(jobstate.id).then(function(files) {
-        return jobstate.files = files;
-      }));
+      filePromises.push(
+        api.jobstates.files(jobstate.id).then(function(files) {
+          return jobstate.files = files;
+        })
+      );
     });
 
     helpers.synchronize(filePromises, function(files, i) {
@@ -60,14 +62,15 @@ require('app')
       return !opened;
     });
 
-    api.getComponents(job.jobdefinition.id).then(function(components) {
+    api.jobdefinitions.components(job.jobdefinition.id)
+    .then(function(components) {
       $scope.components = components;
       _.each(components, function(component) {
         component.created_at = date(component.created_at);
       });
     });
 
-    api.getJobFiles(job.id).then(function(files) {
+    api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
       $scope.junit_files = _.remove(files, function(file) {
         file.collapse = false;
