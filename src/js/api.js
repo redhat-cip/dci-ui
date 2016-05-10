@@ -105,7 +105,7 @@ require('app')
     });
   };
   api.updateJob = function(job_id, etag, data) {
-    conf = {'headers': {'If-Match': etag}};
+    var conf = {'headers': {'If-Match': etag}};
     return $http.put(urlize(api.urls.jobs, job_id), data, conf);
   };
 
