@@ -23,7 +23,7 @@
         <td>{{ user.created_at }}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.user({id: user.id})"></span>
-          <span class="btn glyphicon glyphicon-trash" ng-click="users.remove(user, $index)"></span>
+          <span class="btn glyphicon glyphicon-trash" ng-click="users.remove($index)"></span>
         </td>
       </tr>
     </table>
