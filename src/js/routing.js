@@ -84,7 +84,7 @@ require('app')
           function($injector, $stateParams) {
             var api = $injector.get('api');
 
-            return api.getJob($stateParams.id).catch(function(err) {
+            return api.jobs.get($stateParams.id).catch(function(err) {
               $injector.get('$state').go('index');
               $injector.get('messages').alert(
                 err.data && err.data.message ||
@@ -131,8 +131,7 @@ require('app')
       EditUser.prototype.cb = function($stateParams, $injector) {
         var api = $injector.get('api');
         return $injector.get('$q').all([
-          api.getUser($stateParams.id, true),
-          api.getTeams()
+          api.users.get($stateParams.id, true), api.teams.list(null, true)
         ]).then(
         this.successCb($injector), this.errorCb($injector)
         );
@@ -164,12 +163,11 @@ require('app')
       EditTopic.prototype.cb = function($stateParams, $injector) {
         var api = $injector.get('api');
         return $injector.get('$q').all([
-          api.getTopic($stateParams.id),
-          api.getTeams(),
-          api.getTopicTeams($stateParams.id)
-        ]).then(
-        this.successCb($injector), this.errorCb($injector)
-        );
+          api.topics.get($stateParams.id),
+          api.teams.list(null, true),
+          api.topics.teams($stateParams.id)
+        ])
+        .then(this.successCb($injector), this.errorCb($injector));
       };
       EditTopic.prototype.successCb = function($injector) {
         var that = this;

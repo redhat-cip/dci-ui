@@ -17,8 +17,8 @@
 require('app')
 .factory('entities', [
   'messages', 'api', 'utils', 'user', function(msg, api, utils, user) {
-    function Entity(name, get, del, post) {
-      utils.Entity.call(this, name, get, del, post);
+    function Entity(name, endpoint) {
+      utils.Entity.call(this, name, endpoint);
       this.tplt = _.template('<%= key %> "<%= value %>" <%= msg %>');
     }
 
@@ -56,10 +56,7 @@ require('app')
     });
 
     function RemoteCIEntity() {
-      Entity.call(
-        this, 'remote CI', api.getRemoteCIS, api.removeRemoteCI,
-        api.postRemoteCI
-      );
+      Entity.call(this, 'remote CI', api.remotecis);
     }
     RemoteCIEntity.prototype = _.create(Entity.prototype, {
       constructor: RemoteCIEntity,
@@ -72,7 +69,7 @@ require('app')
     });
 
     function UserEntity() {
-      Entity.call(this, 'user', api.getUsers, api.removeUser, api.postUser);
+      Entity.call(this, 'user', api.users);
     }
     UserEntity.prototype = _.create(Entity.prototype, {
       constructor: UserEntity,
@@ -86,12 +83,10 @@ require('app')
     });
     return {
       'users': new UserEntity(),
-      'teams': new Entity('team', api.getTeams, api.removeTeam, api.postTeam),
-      'topics': new Entity(
-        'topic', api.getTopics, api.removeTopic, api.postTopic
-      ),
+      'teams': new Entity('team', api.teams),
+      'topics': new Entity('topic', api.topics),
       'remotecis': new RemoteCIEntity(),
-      'audits': new Entity('audit', api.getAudits, null, null)
+      'audits': new Entity('audit', api.audits)
     };
   }
 ])
@@ -171,12 +166,12 @@ require('app')
 
     $scope.update = function() {
       if ($scope.objForm.$invalid) { return; }
-      $q.all(_.map(old_teams, _.partial(api.removeTopicTeam, obj.id)))
+      $q.all(_.map(old_teams, _.partial(api.topics.teams.remove, obj.id)))
       .then(function() {
         return $q.all(_.concat(
-          api.putTopic(_.omit(obj, ['meta', 'teams'])),
+          api.topics.update(_.omit(obj, ['meta', 'teams'])),
           _.map(obj.teams, function(team) {
-            return api.postTopicTeam(obj.id, team.id);
+            return api.topics.teams.post(obj.id, team.id);
           })
         ));
       })
