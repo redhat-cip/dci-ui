@@ -35,7 +35,7 @@ require('app')
     var remoteci = $state.params.remoteci;
     var status = $state.params.status;
 
-    _.assign($scope, {remotecis: {}, status: {}, isFiltering: true});
+    _.assign($scope, {status: {}, isFiltering: true});
 
     remoteci = remoteci ? remoteci.split(',') : [];
     status = status ? status.split(',') : [];
@@ -62,15 +62,19 @@ require('app')
       }
     );
     api.remotecis.list(null, true)
-    .then(_.partialRight(_.each, function(remoteci) {
-      var remoteci = remoteci.name;
-      $scope.remotecis[remoteci] = _.includes($state.params.remoteci, remoteci);
-    }));
+    .then(function(remotecis) {
+      $scope.remotecis = _.map(remotecis, function(remoteci) {
+        return {
+          name: remoteci.name,
+          search: _.includes($state.params.remoteci, remoteci.name)
+        };
+      });
+    });
 
     $scope.search = function() {
       $state.go('jobs', {
         'status': _($scope.status).pickBy(_.identity).keys().join(','),
-        'remoteci': _($scope.remotecis).pickBy(_.identity).keys().join(','),
+        'remoteci': _($scope.remotecis).filter('search').map('name').join(','),
         'page': null
       });
     };
