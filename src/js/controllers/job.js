@@ -32,7 +32,7 @@ require('app')
 
     _.assign($scope, {
       job: job, active: {}, go: $state.go,
-      collapses: {remoteci: true, components: true, jobdefinition: true}
+      collapses: {remoteci: false, components: false, jobdefinition: false}
     });
 
     _.each(tabs, function(tab) {
