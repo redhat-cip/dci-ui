@@ -130,7 +130,10 @@ require('app')
       return _.last(data);
     };
     var conf = {'params': {'embed': 'remoteci,jobdefinition'}};
-    var JSconf = {'params': {'sort': '-created_at'}};
+    var JSconf = {'params': {
+      'sort': '-created_at',
+      'embed': 'file'
+    }};
 
     return $q.all([
       $http.get(urlize(api.urls.jobs, job), conf),
