@@ -42,6 +42,9 @@ module.exports = angular.module('app', [
     'color': 'danger',
     'glyphicon': 'glyphicon-remove'
   },
+  'killed': {
+    'glyphicon': 'glyphicon-ban-circle'
+  },
   'success': {
     'color': 'success',
     'glyphicon': 'glyphicon-ok'

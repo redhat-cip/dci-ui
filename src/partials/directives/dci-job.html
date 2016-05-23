@@ -20,10 +20,14 @@
       <span class="glyphicon glyphicon-calendar"></span> {{job.updated_at}}
     </div>
     <div title="Test running time">
-      <span ng-if="job.status == 'success' || job.status == 'failure'">
+      <span ng-if="job.status == 'success' ||
+                   job.status == 'failure' ||
+                   job.status == 'killed'">
         <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
       </span>
-      <span ng-if="job.status != 'success' && job.status != 'failure'">
+      <span ng-if="job.status != 'success' &&
+                   job.status != 'failure' &&
+                   job.status != 'killed'">
         <span class="glyphicon glyphicon-time"></span> running since {{job.time_running}}
       </span>
     </div>
