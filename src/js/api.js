@@ -149,6 +149,10 @@ require('app')
   /*                                JOBSTATES                                 */
   api.jobstates.files = function(jobstate) {
     var conf = {'params': {'where': 'jobstate_id:' + jobstate}};
+    var conf = {'params': {
+        'where': 'jobstate_id:' + jobstate,
+        'sort': 'created_at'
+    }};
     return $http.get(api.files.url, conf)
     .then(_.property('data.files'))
     .then(_.partialRight(_.map, function(elt) {
