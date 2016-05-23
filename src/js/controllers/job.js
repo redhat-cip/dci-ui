@@ -76,6 +76,10 @@ require('app')
         file.collapse = false;
         if (_.indexOf(jsonMimes, file.mime) != -1) {
           file.content = angular.fromJson(file.content);
+          file.content.skips = _.reduce(file.content.testscases, function(sum, testcase) {
+            return sum + (testcase.result.action == 'skipped' ? 1 : 0);
+          }, 0)
+
         }
         return file.mime == 'application/junit';
       });
