@@ -215,7 +215,9 @@ require('app')
 
     function retrieveJobs(status) {
       var conf = {'params': {
-        'where': 'status:' + status, 'embed': 'remoteci,jobdefinition'
+        'where': 'status:' + status,
+        'embed': 'remoteci,jobdefinition',
+        'sort': '-created_at'
       }};
       return $http.get(api.jobs.url, conf);
     };
