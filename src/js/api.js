@@ -146,27 +146,6 @@ require('app')
     return $http.delete(url);
   };
 
-  /*                                JOBSTATES                                 */
-  api.jobstates.files = function(jobstate) {
-    var conf = {'params': {'where': 'jobstate_id:' + jobstate}};
-    var conf = {'params': {
-      'where': 'jobstate_id:' + jobstate,
-      'sort': 'created_at'
-    }};
-    return $http.get(api.files.url, conf)
-    .then(_.property('data.files'))
-    .then(_.partialRight(_.map, function(elt) {
-      // build link in the form of
-      // http(s)://username:password@apiURL/files/file_id/content
-      elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
-        return urlize(
-          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
-        );
-      });
-      return elt;
-    }));
-  };
-
   /*                                   JOBS                                   */
   api.jobs.embed = 'remoteci,jobdefinition';
   api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
@@ -180,32 +159,27 @@ require('app')
     return $http.get(url).then(_.property('data.files'));
   };
   api.jobs.get = function(job) {
-    var retrieveFiles = function(data) {
-      return _.assign(
-        _.first(data).data.job,
-        {'jobstates': _.last(data).data.jobstates}
-      );
-    };
-
-    var parseFiles = function(data) {
-      _(data)
-      .initial()
-      .map(_.property('data.files'))
-      .zip(_.last(data).jobstates)
-      .map(function(elt) {
-        return _.assign(_.last(elt), {'files': _.first(elt)});
-      })
-      .value();
-
-      return _.last(data);
-    };
-    var conf = {'params': {'embed': 'remoteci,jobdefinition'}};
-    var JSconf = {'params': {'sort': 'created_at'}};
+    var confJ = {'params': {'embed': 'remoteci,jobdefinition'}};
+    var confJS = {'params': {'sort': 'created_at', 'embed': 'files'}};
     return $q.all([
-      $http.get(urlize(this.url, job), conf),
-      $http.get(urlize(this.url, job, 'jobstates'), JSconf)
+      $http.get(urlize(this.url, job), confJ),
+      $http.get(urlize(this.url, job, 'jobstates'), confJS)
     ])
-    .then(retrieveFiles);
+    .then(function(results) {
+      var job = _.first(results).data.job;
+      var jobstates = _.last(results).data.jobstates;
+      job.jobstates = jobstates;
+      _.each(jobstates, function(jobstate) {
+        _.each(jobstate.files, function(file) {
+          file.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
+            return urlize(
+              g1 + $window.atob(user.token) + '@' + g2, file.id, 'content'
+            );
+          });
+        });
+      });
+      return job;
+    });
   };
   api.jobs.search = function(remotecis, statuses) {
     function retrieveRCIs(remoteci) {
@@ -258,6 +232,11 @@ require('app')
     .then(function(jobs) {
       return {'jobs': jobs};
     });
+  };
+
+  /*                                  FILES                                  */
+  api.files.content = function(file) {
+    return $http.get(urlize(this.url, file, 'content'));
   };
 
   return api;
