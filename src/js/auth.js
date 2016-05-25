@@ -24,6 +24,9 @@ require('app')
 .value('user', {})
 
 .config(['$httpProvider', function($httpProvider) {
+  // Set header to help detect XHR request
+  $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
   var interceptor = ['$q', 'user', 'userStatus', function($q, user, status) {
     var apiURL = new RegExp('api\/');
 
