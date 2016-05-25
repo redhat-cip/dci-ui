@@ -21,12 +21,9 @@ require('app')
     var api = $injector.get('api');
     var status = $injector.get('status');
     var moment = $injector.get('moment');
-    var helpers = $injector.get('helpers');
 
-    var filePromises = [];
     var opened = false;
     var tabs = ['results', 'files', 'details', 'edit', 'context'];
-    var jsonMimes = ['application/json', 'application/junit'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
@@ -48,20 +45,7 @@ require('app')
       jobstate.created_at = date(
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
-
-      filePromises.push(
-        api.jobstates.files(jobstate.id).then(function(files) {
-          return jobstate.files = files;
-        })
-      );
     });
-
-    helpers.synchronize(filePromises, function(files, i) {
-      // cast files.length to boolean
-      job.jobstates[i].isOpen = opened = !!files.length;
-      return !opened;
-    });
-
     api.jobdefinitions.components(job.jobdefinition.id)
     .then(function(components) {
       $scope.components = components;
@@ -70,17 +54,28 @@ require('app')
       });
     });
 
+    $scope.retrieveFiles = function(jobstate) {
+      jobstate.isOpen = !jobstate.isOpen;
+      _.each(jobstate.files, function(file) {
+        api.files.content(file.id).then(function(res) {
+          file.content = res.data;
+        });
+      });
+    };
+
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
       $scope.junit_files = _.remove(files, function(file) {
         file.collapse = false;
-        if (_.indexOf(jsonMimes, file.mime) != -1) {
-          file.content = angular.fromJson(file.content);
-          file.content.skips = _.reduce(file.content.testscases,
-            function(sum, testcase) {
+        api.files.content(file.id).then(function(res) {
+          file.content = res.data;
+          if (!file.content.testscases) { return; }
+          file.content.skips = _.reduce(
+            file.content.testscases, function(sum, testcase) {
               return sum + (testcase.result.action == 'skipped' ? 1 : 0);
-            }, 0);
-        }
+            }, 0
+          );
+        });
         return file.mime == 'application/junit';
       });
     });
@@ -141,7 +136,6 @@ require('app')
       passed: false, skipped: false, failure: false, error: false
     };
 
-    console.log($scope.bucket);
     $scope.filterjunit = function() {
       if (!_.some(_.values($scope.input))) {
         $scope.bucket = $scope.file.content.testscases;
