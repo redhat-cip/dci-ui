@@ -1,0 +1,16 @@
+<h1 class="page-header">Global status for topic {{ topic.name }} of type {{ componentType }}</h1>
+<table class="table table-striped">
+  <tr>
+    <th>Job Types</th>
+    <th ng-repeat="jobdef in jobdefs">{{ jobdef.name }}</th>
+  </tr>
+  <tr ng-repeat="component in components">
+    <td style="width:200px">{{ component.name }}</td>
+    <td ng-repeat="jobdef in jobdefs">
+      <div class="job-status" ng-repeat="job in (jobs[component.id][jobdef.id] || ['N/A'])" ng-class="job.css.color">
+        <span ng-class="title">{{job.status || "N/A"}}</span>
+        <span ng-class="job.css.glyphicon"></span>
+      </div>
+    </td>
+  </tr>
+</table>
