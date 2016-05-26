@@ -1,0 +1,9 @@
+<h1 class="page-header">Global status</h1>
+<table class="table table-striped">
+  <tr>
+    <th style="width:200px">Topics</th>
+  </tr>
+  <tr ng-repeat="topic in topics">
+    <td><a ui-sref="gpaneltopic({id: topic.id})">{{topic.name}}</a></td>
+  </tr>
+</table>
