@@ -48,6 +48,12 @@
         <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Information
       </a>
     </li>
+    <li ng-class="{active: ('gpanel'|includedByState) || ('edit'|includedByState)}"
+      ng-if="admin">
+      <a ui-sref="gpanel">
+        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Global Status
+      </a>
+    </li>
   </ul>
 </div>
 </nav>

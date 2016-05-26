@@ -108,6 +108,37 @@ require('app')
       controller: 'ListJobDefsCtrl',
       templateUrl: '/partials/jobdefs.html'
     })
+    .state('gpanel', {
+      parent: 'authAdmin',
+      url: '/gpanel',
+      controller: 'GpanelTopicCtrl',
+      templateUrl: '/partials/gpanel.html',
+    })
+    .state('gpaneltopic', {
+      parent: 'auth',
+      url: '/gpanel/:id',
+      controller: 'GpanelCompoCtrl',
+      templateUrl: '/partials/gpanelcompo.html',
+      resolve: {
+        topic: ['$stateParams', 'conf', function($stateParams) {
+          return $stateParams.id;
+        }]
+      }
+    })
+    .state('gpanelstatus', {
+      parent: 'auth',
+      url: '/gpanel/:id/type/:componentType',
+      controller: 'GpanelStatusCtrl',
+      templateUrl: '/partials/gpanelstatus.html',
+      resolve: {
+        topic: ['$stateParams', 'conf', function($stateParams) {
+          return $stateParams.id;
+        }],
+        componentType: ['$stateParams', 'conf', function($stateParams) {
+          return $stateParams.componentType;
+        }]
+      }
+    })
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',
