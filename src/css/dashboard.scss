@@ -170,10 +170,12 @@ pre {
     .title {
       color: $color;
     }
-
     a.title:hover {
       color: darken($color, 15%)
     }
+  }
+  .job-status.#{$name} {
+    color: $color;
   }
 }
 
