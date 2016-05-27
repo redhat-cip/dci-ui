@@ -45,7 +45,7 @@ require('app')
       };
 
       scope.remove_job = function(jobs, index) {
-        api.removeJob(job.id, job.etag).then(function() {
+        api.jobs.remove(job.id, job.etag).then(function() {
           if (!jobs || !index) {
             $state.go('index');
           } else {
