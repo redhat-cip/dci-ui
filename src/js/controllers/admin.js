@@ -65,6 +65,10 @@ require('app')
         Entity.prototype.retrieve.call(this).then(function(data) {
           that.input.team_id = user.team.id;
         });
+      },
+      lock: function(remoteci) {
+        remoteci.active = !remoteci.active;
+        api.remotecis.update(remoteci);
       }
     });
 
