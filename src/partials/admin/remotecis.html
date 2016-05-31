@@ -13,14 +13,20 @@
   <div class="table-responsive">
     <table class="table table-striped">
       <tr>
-        <th>RemoteCI name</th><th>RemoteCI ID</th><th>Date</th><th>Actions</th>
+        <th>Status</th><th>RemoteCI name</th><th>RemoteCI ID</th><th>Date</th><th>Actions</th>
       </tr>
       <tr ng-repeat="remoteci in remotecis.data">
+        <td>
+          <span ng-if="!remoteci.active" class="label label-danger">Locked</span>
+          <span ng-if="remoteci.active" class="label label-success">Active</span>
+        </td>
         <td>{{ remoteci.name }}</td>
         <td>{{ remoteci.id }}</td>
         <td>{{ remoteci.created_at }}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.remoteci({id: remoteci.id})">
+          </span>
+          <span class="btn glyphicon glyphicon-lock" ng-click="remotecis.lock($index)">
           </span>
           <span class="btn glyphicon glyphicon-trash" ng-click="remotecis.remove($index)">
           </span>
