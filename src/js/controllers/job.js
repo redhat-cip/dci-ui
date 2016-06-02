@@ -25,8 +25,8 @@ require('app')
 
     var filePromises = [];
     var opened = false;
-    var tabs = ['results', 'files', 'details', 'edit', 'context'];
-    var jsonMimes = ['application/json', 'application/junit'];
+    var tabs = ['results', 'files', 'details', 'edit', 'context', 'stackdetails'];
+    var jsonMimes = ['application/json', 'application/junit', 'application/tripleostackdetails'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
@@ -82,6 +82,13 @@ require('app')
             }, 0);
         }
         return file.mime == 'application/junit';
+      });
+      $scope.tripleostackdetails_files = _.remove(files, function(file) {
+        file.collapse = false;
+        if (_.indexOf(jsonMimes, file.mime) != -1) {
+          file.content = angular.fromJson(file.content);
+        }
+        return file.mime == 'application/tripleostackdetails';
       });
     });
   }
