@@ -1,0 +1,11 @@
+<div ng-if="!job.configuration">
+No Stack Details results uploaded.
+</div>
+<div ng-if="job.configuration" class="row">
+    <table class="table">
+      <tr>
+        <th>Details</th>
+        <td class="col-md-10"><div json-formatter json="job.configuration" open="42"></div></td>
+      </tr>
+    </table>
+</div>
