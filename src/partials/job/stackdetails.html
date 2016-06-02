@@ -1,0 +1,30 @@
+<div ng-if="!job.configuration.stacks">
+No Stack Details results uploaded.
+</div>
+<div ng-if="job.configuration.stacks" class="row">
+
+    <table class="table table-striped">
+      <tr>
+        <th>Status</th>
+        <th>Stack Name</th>
+        <th>Stack Status Reason </th>
+      </tr>
+      <tr ng-repeat="(stack, content) in job.configuration.stacks">
+        <td>
+          <span ng-if="content.stack_status == 'UPDATE_COMPLETE'" class="label label-success">{{ content.stack_status }}</span>
+          <span ng-if="content.stack_status == 'CREATE_COMPLETE'" class="label label-success">{{ content.stack_status }}</span>
+          <span ng-if="content.stack_status == 'UPDATE_FAILED'" class="label label-danger">{{ content.stack_status }}</span>
+          <span ng-if="content.stack_status == 'CREATE_FAILED'" class="label label-danger">{{ content.stack_status }}</span>
+        </td>
+        <td>{{ content.stack_name }}</td>
+        <td>{{ content.stack_status_reason }}</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <tr>
+        <th>Overcloud Parameters</th>
+        <td class="col-md-10"><div json-formatter json="job.configuration.stacks.overcloud.outputs.parameters" open="1"></div></td>
+      </tr>
+    </table>
+</div>
