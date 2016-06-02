@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a106d94_1b93a6fb",
+        "filename": "src/js/routing.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-02T08:12:40Z",
+      "side": 1,
+      "message": "replace this by api.audits.list() due to patch https://github.com/redhat-cip/dci-ui/commit/abee11460aeb4736655abd36554c4c977d8cf53c the api object does not provide the same entry points",
+      "revId": "7ccec864eb65c8e49ddacd7e48f2eb51184120c3",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_fb8faaca",
+        "filename": "src/partials/admin.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-02T08:12:40Z",
+      "side": 1,
+      "message": "can you wrap tds on multiple lines ? It will help reading the template code",
+      "revId": "7ccec864eb65c8e49ddacd7e48f2eb51184120c3",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
