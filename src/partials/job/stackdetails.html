@@ -1,0 +1,11 @@
+<div ng-if="!job.configuration">
+No Stack Details results uploaded.
+</div>
+<div ng-if="job.configuration" class="row">
+    <table class="table">
+      <tr>
+        <th>Overcloud Parameters</th>
+        <td class="col-md-10"><div json-formatter json="job.configuration.stacks.overcloud.outputs.parameters" open="1"></div></td>
+      </tr>
+    </table>
+</div>

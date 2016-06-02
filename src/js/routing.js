@@ -100,6 +100,7 @@ require('app')
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
     .state('job.context', {url: '/context'})
+    .state('job.stackdetails', {url: '/stackdetails'})
     .state('jobdefs', {
       parent: 'auth',
       url: '/job-definitions?page',
