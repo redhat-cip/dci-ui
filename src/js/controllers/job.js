@@ -25,7 +25,7 @@ require('app')
 
     var filePromises = [];
     var opened = false;
-    var tabs = ['results', 'files', 'details', 'edit', 'context'];
+    var tabs = ['results', 'files', 'details', 'edit', 'context', 'stackdetails'];
     var jsonMimes = ['application/json', 'application/junit'];
 
     function date(d, format) { return moment(d).local().format(format); };
@@ -42,6 +42,7 @@ require('app')
     job.jobdefinition.created_at = date(job.jobdefinition.created_at);
     job.jobdefinition.updated_at = date(job.jobdefinition.updated_at);
     job.remoteci.created_at = date(job.remoteci.created_at);
+    job.configuration = angular.fromJson(job.configuration);
 
     _.each(job.jobstates, function(jobstate, i) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
