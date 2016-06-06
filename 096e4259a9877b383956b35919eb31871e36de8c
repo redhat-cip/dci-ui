@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a106d94_db3bc936",
+        "filename": "src/partials/job/stackdetails.html",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-06T15:08:08Z",
+      "side": 1,
+      "message": "if we only manipulate this part of the config, can\u0027t we change job.configuration to take directly what we need ? (i.e: job.configuration.stacks.overcloud.outputs.parameters)\n\nfurthermore, open\u003d\"1\" can\u0027t be done with open\u003d\"True\" ?",
+      "revId": "096e4259a9877b383956b35919eb31871e36de8c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
