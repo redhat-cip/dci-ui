@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a106d94_1ebb8f0f",
+        "filename": "src/js/api.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "can you replace id by topic ? It seems more understandable of what we are providing to the url",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_fe4af325",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "componentTypes (yes in javascript it is camel case)",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_7e3723b1",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "do not ask for $injector to retrieve \"api\", call directly \"api\" as a requirement (replace $injector with api line 24)",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_be419b0d",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "this part is really not clear, can you break it in multiple parts ?",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_de47371c",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "componentType",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_9e465f22",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "same remark as line 26, just ask for \"api\" instead of \"$injector\"",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_3e55abc6",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "line 48 to 54 become: \n\n    $scope.components \u003d _.filter(components, [\u0027type\u0027, componentType]); \n\nNot sure this will works check https://lodash.com/docs#filter",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_1e526fdd",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "space between comma and true is missing",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_9e5dbfec",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-06-07T12:22:29Z",
+      "side": 1,
+      "message": "if (jobdefs.topic_id \u003d\u003d topic \u0026\u0026 !_.includes(result, jobdef.name))",
+      "revId": "03674f23c9d9ded3a98b997a04718a76c3619b2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
