@@ -56,7 +56,7 @@ require('app')
     .then(function(data) { $scope.jobs = data.jobs; });
 
     _.each(
-      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run'],
+      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run', 'killed'],
       function(status) {
         $scope.status[status] = _.includes($state.params.status, status);
       }
