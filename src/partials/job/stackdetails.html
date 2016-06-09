@@ -15,6 +15,8 @@ No Stack Details results uploaded.
           <span ng-if="content.stack_status == 'CREATE_COMPLETE'" class="label label-success">{{ content.stack_status }}</span>
           <span ng-if="content.stack_status == 'UPDATE_FAILED'" class="label label-danger">{{ content.stack_status }}</span>
           <span ng-if="content.stack_status == 'CREATE_FAILED'" class="label label-danger">{{ content.stack_status }}</span>
+          <span ng-if="content.stack_status == 'UPDATE_IN_PROGRESS'" class="label label-warning">{{ content.stack_status }}</span>
+          <span ng-if="content.stack_status == 'CREATE_IN_PROGRESS'" class="label label-warning">{{ content.stack_status }}</span>
         </td>
         <td>{{ content.stack_name }}</td>
         <td>{{ content.stack_status_reason }}</td>
