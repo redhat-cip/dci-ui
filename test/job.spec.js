@@ -18,32 +18,10 @@
 describe('DCI homepage', function() {
 
   beforeEach(function() {
-    browser.addMockModule('APIMock', function() {
-      angular.module('APIMock', ['ngMockE2E'])
-
-      .run(['$httpBackend', function($httpBackend) {
-        var configResp = {'apiURL': 'http://urlEndpoint'};
-        var jobRecheck = {'job': {'id': 'bar'}};
-        var remotecisResp = {'remotecis': []};
-        var jobsResp = {'jobs': [{'id': 'foo', 'status': 'new'}],
-                        '_meta': {'count': 1}};
-        var jobstatesResp = {'jobstates': []};
-
-        $httpBackend.whenGET(/\/config.json/).respond(configResp);
-        $httpBackend.whenGET(/^\/partials\//).passThrough();
-        $httpBackend.whenGET(/\/remotecis/).respond(remotecisResp);
-        $httpBackend.whenGET(/\/jobs\/.*?\/jobstates/).respond(jobstatesResp);
-        $httpBackend.whenPOST(/\/jobs\/foo\/recheck/).respond(jobRecheck);
-        $httpBackend.whenGET(/\/jobs\/bar/).respond(jobRecheck);
-        $httpBackend.whenGET(/\/jobs/).respond(jobsResp);
-      }]);
-    });
-  });
-
-  beforeEach(function() {
     var cookie = JSON.stringify({
       status: 2,
-      team: {name: 'admin'}
+      team: {name: 'admin'},
+      token: Buffer('admin:admin', 'binary').toString('base64')
     });
     browser.get('/');
     browser.manage().addCookie('user', encodeURIComponent(cookie), '/');
@@ -52,6 +30,6 @@ describe('DCI homepage', function() {
   it('should be possible to recheck a job', function() {
     browser.get('/#/jobs');
     element(by.css('.glyphicon-repeat')).click();
-    expect(browser.getLocationAbsUrl()).toMatch('/jobs/bar/results$');
+    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
   });
 });

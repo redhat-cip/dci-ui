@@ -20,7 +20,6 @@ var http         = require('http');
 var url          = require('url');
 var path         = require('path');
 var Q            = require('q');
-var proxy        = require('proxy-middleware');
 var gutil        = require('gulp-util');
 var serveStatic  = require('serve-static');
 var childProcess = require('child_process');
@@ -38,6 +37,14 @@ module.exports.rev = function(cb) {
 
 module.exports.revPKG = function(cb) {
   cb(false, __dirname.split('git')[1].slice(0,8));
+};
+
+module.exports.apiURL = function() {
+  var api = process.env.API_PORT_5000_TCP;
+  if (!api) { return; }
+  api = url.parse(api);
+  api.protocol = 'http';
+  return url.format(api);
 };
 
 /*
@@ -145,13 +152,7 @@ module.exports.buffer = function() {
 
 module.exports.server = function(root, port, livereload) {
   var d = Q.defer();
-  var api = process.env.API_PORT_5000_TCP + '/api' || config.api;
   var app = connect();
-
-  api = url.parse(api);
-  // must be present here in the case of using docker compose
-  api.protocol = 'http:';
-  api.route = '/api';
 
   if (livereload) {
     var options = {host: config.host, port: 35729};
@@ -162,7 +163,6 @@ module.exports.server = function(root, port, livereload) {
     app.use(require('connect-livereload')({port: options.port}));
   }
   app.use(serveStatic(root));
-  app.use(proxy(api));
 
   var server = http.createServer(app);
   closePromise(server);
