@@ -46,7 +46,6 @@ gulp.task('copy:pkg', ['rev:pkg'], copy);
 
 gulp.task('build', ['js', 'css', 'fonts', 'copy', 'rev']);
 gulp.task('build:pkg', ['js', 'css', 'fonts', 'copy:pkg', 'rev:pkg']);
-gulp.task('build:test', ['js:test', 'css', 'fonts', 'copy', 'rev']);
 
 gulp.task('test', ['jscs', 'test:e2e']);
 
@@ -63,22 +62,14 @@ gulp.task('watch', function() {
   gulp.watch('src/**', ['reload']);
 });
 
-function buildJS(jsFiles) {
-  return gulp.src(jsFiles, {read: false})
+gulp.task('js', function() {
+  return gulp.src(JS, {read: false})
   .pipe(utils.browserify())
   .pipe(utils.source('app.js'))
   .pipe(utils.buffer())
   .pipe($.sourcemaps.init({loadMaps: true}))
   .pipe($.sourcemaps.write())
   .pipe(gulp.dest(DIST + '/js/'));
-}
-
-gulp.task('js', function() {
-  return buildJS(JS);
-});
-
-gulp.task('js:test', function() {
-  return buildJS(JS.concat('node_modules/angular-mocks/ngMockE2E.js'));
 });
 
 gulp.task('css', function() {
@@ -111,7 +102,7 @@ gulp.task('serve:dev', ['build', 'watch'], function() {
   return utils.server(DIST, config.port, true);
 });
 
-gulp.task('test:e2e', ['build:test'], function(cb) {
+gulp.task('test:e2e', ['build'], function(cb) {
   var Q = require('q');
   var d = Q.defer();
   var phantom;
@@ -141,7 +132,7 @@ gulp.task('test:e2e', ['build:test'], function(cb) {
   });
 });
 
-gulp.task('test:e2e:debug', ['build:test'], function(cb) {
+gulp.task('test:e2e:debug', ['build'], function(cb) {
   var server;
   var error;
   utils.server(DIST, config.portTest, false)
@@ -158,22 +149,23 @@ gulp.task('test:e2e:debug', ['build:test'], function(cb) {
   });
 });
 
-function getRev(revFn, cb) {
+function setConf(revFn, cb) {
   revFn(function(err, rev) {
     if (err) { return cb(err); }
 
     jsonfile.readFile(configFileTplt, function(err, obj) {
       if (err) { return cb(err); }
       obj.version = rev;
+      obj.apiURL = utils.apiURL() || obj.apiURL;
       jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
     });
   });
 }
 
 gulp.task('rev', function(cb) {
-  getRev(utils.rev, cb);
+  setConf(utils.rev, cb);
 });
 
 gulp.task('rev:pkg', function(cb) {
-  getRev(utils.revPKG, cb);
+  setConf(utils.revPKG, cb);
 });
