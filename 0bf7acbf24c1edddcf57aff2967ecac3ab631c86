@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "facab960_82fe2f6a",
+        "filename": "src/partials/gpanelstatus.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-06-21T19:49:42Z",
+      "side": 1,
+      "message": "typo: /Jobdefinitions/Job Definitions",
+      "revId": "0bf7acbf24c1edddcf57aff2967ecac3ab631c86",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
