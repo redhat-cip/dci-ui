@@ -76,4 +76,15 @@ require('app')
       });
     }
   };
-});
+})
+.directive('componentItem', ['$injector', function($injector) {
+  return {
+    link: function(scope){
+      var component = scope.component;
+      var topic = scope.topic;
+      var moment = $injector.get('moment');
+      component.created_at = moment(component.created_at);
+    },
+    templateUrl: 'partials/directives/component-item.html'
+  };
+}]);
