@@ -102,4 +102,51 @@ require('app')
 
     });
   }
-]);
+])
+.controller('ListTopicsCtrl', [
+  '$injector', '$scope', function($injector, $scope) {
+    var $state = $injector.get('$state');
+    var moment = $injector.get('moment');
+    var api = $injector.get('api');
+    var page = parseInt($state.params.page) || 1;
+
+    api.topics.list(page)
+      .then(function(data) {
+        $scope.topics = data.topics;
+        _.each(data.topics, function(topic) {
+          topic.created_at = moment(topic.created_at).local().format();
+        });
+        $scope.pagination = {
+          total: data._meta.count,
+          page: page,
+          pageChanged: function() {
+            $state.go('topics', $scope.pagination);
+          }
+        };
+      });
+  }
+])
+.controller('ListComponentsCtrl',[
+  '$injector', '$scope', 'topic', function($injector, $scope, topic) {
+    var api = $injector.get('api');
+    var $state = $injector.get('$state');
+    var moment = $injector.get('moment');
+    var page = parseInt($state.params.page) || 1;
+
+    $scope.topic = topic;
+
+    api.topics.components(topic.id)
+      .then(function(data) {
+        var type;
+        $scope.componentsByTopic = {};
+        _.each(data, function(component) {
+          _.update($scope.componentsByTopic, component.type,
+                   function(components) {
+                     component.created_at = moment(component.created_at);
+                     return _.concat(components || [], component);
+                   });
+        });
+      });
+  }
+])
+;
