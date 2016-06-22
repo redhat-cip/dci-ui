@@ -145,6 +145,10 @@ require('app')
     var url = urlize(api.topics.url, id, 'teams', team);
     return $http.delete(url);
   };
+  api.topics.components = function(id) {
+    var url = urlize(api.topics.url, id, 'components');
+    return $http.get(url).then(_.property('data.components'));
+  };
 
   /*                                   JOBS                                   */
   api.jobs.embed = 'remoteci,jobdefinition';
@@ -204,7 +208,7 @@ require('app')
       .map(function(remoteci) {
         var conf = {'params': {
           'embed': 'remoteci,jobdefinition',
-          'where': 'remoteci_id:' + remoteci,
+          'where': 'remoteci_id:' + remoteci
         }};
         return $http.get(api.jobs.url, conf);
       })
