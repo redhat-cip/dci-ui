@@ -108,6 +108,34 @@ require('app')
       controller: 'ListJobDefsCtrl',
       templateUrl: '/partials/jobdefs.html'
     })
+    .state('topics', {
+      parent: 'auth',
+      url: '/topics?page',
+      onEnter: scrollTop,
+      controller: 'ListTopicsCtrl',
+      templateUrl: '/partials/topics.html'
+    })
+    .state('topic', {
+      parent: 'auth',
+      url: '/topics/:id',
+      templateUrl: '/partials/topic.html',
+      controller: 'ListComponentsCtrl',
+      resolve: {
+        topic: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.topics.get($stateParams.id).catch(function(err) {
+              $injector.get('$state').go('index');
+              $injector.get('messages').alert(
+                err.data && err.data.message ||
+                  'Something went wrong', 'danger');
+            });
+          }
+        ]
+      }
+    })
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',

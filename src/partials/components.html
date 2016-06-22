@@ -1,0 +1,37 @@
+<h1 class="page-header">Components</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>ID</th>
+      <th class="text-center">Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat-start="component in components" ng-click="component.opened = !component.opened">
+      <td>
+        <span class="glyphicon glyphicon-exclamation-sign pull-right"
+          ng-if="jobdef.comment"
+          aria-hidden="true">
+        </span>
+        {{ component.name }}
+      </td>
+      <td>{{ component.id }}</td>
+      <td class="text-center">{{ component.created_at }}</td>
+    </tr>
+    <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
+      <td colspan="6">
+        {{ jobdef.comment }}
+      </td>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  <div pagination total-items="pagination.total" max-size="5"
+    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+  </div>
+</div>
