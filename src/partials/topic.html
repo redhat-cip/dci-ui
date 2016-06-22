@@ -1,0 +1,43 @@
+<h1 class="page-header">Components of {{ topic.name }}</h1>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>ID</th>
+      <th>Type</th>
+      <th class="text-center">Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat-start="component in components | orderBy:'type'"
+      ng-click="component.opened = !component.opened">
+        <td>
+          <span class="glyphicon glyphicon-chevron-up pull-left">
+        {{ component.name }}
+      </td>
+      <td>{{ component.id }}</td>
+      <td>{{ component.type }}</td>
+      <td class="text-center">{{ component.created_at }}</td>
+      </tr>
+      <tr ng-repeat-end ng-if="component.opened">
+        <td colspan="4">
+          <div class="form-group">
+            <label>Title</label><input type="text" class="form-control" value="{{ component.title }}" readonly/>
+          </div>
+          <div class="form-group">
+            <label>Data</label><textarea class="form-control" readonly>{{ component.data }}</textarea>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  <div pagination total-items="pagination.total" max-size="5"
+    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+  </div>
+</div>
