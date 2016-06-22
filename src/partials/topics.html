@@ -1,0 +1,29 @@
+<h1 class="page-header">Topics</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>ID</th>
+      <th class="text-center">Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="topic in topics">
+      <td>
+        <a ui-sref="topic({id: topic.id})" class="title">{{ topic.name }}</a>
+      </td>
+      <td>{{ topic.id }}</td>
+      <td class="text-center">{{ topic.created_at }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  <div pagination total-items="pagination.total" max-size="5"
+    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+  </div>
+</div>

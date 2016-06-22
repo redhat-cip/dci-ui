@@ -1,0 +1,15 @@
+<h1 class="page-header">Components of {{ topic.name }}</h1>
+<h2>Type</h2>
+<accordion ng-repeat="(type, components) in componentsByTopic">
+  <accordion-group is-open="status.isCustomHeaderOpen" heading="{{ type }}">
+    <div components-table></div>
+  </accordion-group>
+</accordion>
+
+
+<div class="pagination">
+  <div pagination total-items="pagination.total" max-size="5"
+    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+  </div>
+</div>
