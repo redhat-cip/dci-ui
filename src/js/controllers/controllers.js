@@ -102,4 +102,28 @@ require('app')
 
     });
   }
-]);
+])
+.controller('ListTopicsCtrl', [
+  '$injector', '$scope', function($injector, $scope) {
+    var $state = $injector.get('$state');
+    var moment = $injector.get('moment');
+    var api = $injector.get('api');
+    var page = parseInt($state.params.page) || 1;
+
+    api.topics.list(page)
+      .then(function(data) {
+        $scope.topics = data.topics;
+        _.each(data.topics, function(topic) {
+          topic.created_at = moment(topic.created_at).local().format();
+        });
+        $scope.pagination = {
+          total: data._meta.count,
+          page: page,
+          pageChanged: function() {
+            $state.go('topics', $scope.pagination);
+          }
+        };
+      });
+  }
+])
+;

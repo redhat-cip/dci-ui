@@ -108,6 +108,18 @@ require('app')
       controller: 'ListJobDefsCtrl',
       templateUrl: '/partials/jobdefs.html'
     })
+    .state('topics', {
+      parent: 'auth',
+      url: '/topics?page',
+      onEnter: scrollTop,
+      controller: 'ListTopicsCtrl',
+      templateUrl: '/partials/topics.html'
+    })
+    .state('topic', {
+      parent: 'auth',
+      url: '/topics/:id',
+      templateUrl: '/partials/topic.html'
+    })
     .state('administrate', {
       parent: 'authAdmin',
       url: '/administrate',
