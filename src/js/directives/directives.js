@@ -76,4 +76,15 @@ require('app')
       });
     }
   };
-});
+})
+.directive('componentsTable', ['$injector', function($injector) {
+  return {
+    link: function(scope) {
+      var moment = $injector.get('moment');
+      _.each(scope.components, function(component) {
+        component.created_at = moment(component.created_at);
+      });
+    },
+    templateUrl: 'partials/directives/components-table.html'
+  };
+}]);
