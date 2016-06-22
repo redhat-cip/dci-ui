@@ -1,0 +1,35 @@
+<h1 class="page-header">Components of {{ topic.name }}</h1>
+<h2>Type</h2>
+<accordion ng-repeat="(type, components) in componentsByTopic">
+  <accordion-group is-open="status.isCustomHeaderOpen" heading="{{ type }}">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th class="text-center">Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat-start="c in components"
+            ng-click="c.opened = !c.opened">
+            <td>{{ c.name }}</td>
+            <td>{{ c.id }}</td>
+            <td class="text-center">{{ c.created_at }}</td>
+          </tr>
+          <tr ng-repeat-end ng-if="c.opened">
+            <td colspan="4">
+              <div class="form-group">
+                <label>Title</label><input type="text" class="form-control" value="{{ c.title }}" readonly/>
+              </div>
+              <div class="form-group">
+                <label>Data</label><textarea class="form-control" readonly>{{ c.data }}</textarea>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </accordion-group>
+</accordion>
