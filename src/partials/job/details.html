@@ -12,7 +12,7 @@
     </span>
   </button>
 </h3>
-<div class="col-md-12" collapse="collapses.remoteci">
+<div class="col-md-12" uib-collapse="collapses.remoteci">
   <h4>{{ job.remoteci.name }}</h4>
   <table class="table table-striped">
     <tr><th>id</th><td>{{ job.remoteci.id }}</td></tr>
@@ -40,7 +40,7 @@
       </span>
     </button>
   </h3>
-  <div class="col-md-12" collapse="collapses.jobdefinition">
+  <div class="col-md-12" uib-collapse="collapses.jobdefinition">
     <h4>{{ job.jobdefinition.name }}</h4>
     <table class="table table-striped">
       <tr><th>id</th><td>{{ job.jobdefinition.id }}</td></tr>
@@ -64,7 +64,7 @@
       </span>
     </button>
   </h3>
-  <div collapse="collapses.components">
+  <div uib-collapse="collapses.components">
     <div class="col-md-6" ng-repeat="component in components">
       <h4>{{ component.name }}</h4>
       <table class="table table-striped">
