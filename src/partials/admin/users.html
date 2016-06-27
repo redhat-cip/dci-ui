@@ -2,9 +2,9 @@
 <div class="users-list">
   <div class="row">
     <div class="col-md-4 col-md-offset-4" ng-if="!users.data">
-      <progressbar class="progress-striped active" max="1" value="1">
+      <div uib-progressbar class="progress-striped active" max="1" value="1">
       <i>Loading</i>
-      </progressbar>
+      </div>
     </div>
     <div class="col-md-12" ng-if="users.data && !users.data.length">
       <h3 class="bs-callout bs-callout-danger text-center">No users</h3>

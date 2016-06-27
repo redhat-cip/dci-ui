@@ -14,7 +14,7 @@
 
 'use strict';
 
-require('angular-bootstrap');
+require('angular-ui-bootstrap');
 
 angular.module('dci.messages', ['ui.bootstrap'])
 .service('messages', [

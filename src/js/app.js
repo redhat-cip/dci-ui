@@ -20,12 +20,14 @@ var angular = require('angular');
 var _ = require('lodash');
 
 require('angular-cookies');
+require('angular-animate');
 require('angular-ui-router');
-require('angular-bootstrap');
+require('angular-ui-bootstrap');
 require('jsonformatter');
 
 module.exports = angular.module('app', [
-  'ngCookies', 'ui.router', 'ui.bootstrap', 'jsonFormatter', 'dci.messages'
+  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'jsonFormatter',
+  'dci.messages'
 ])
 .factory('moment', function() {
   moment.locale('en', {invalidDate: 'N/A'});
