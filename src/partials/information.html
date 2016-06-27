@@ -15,7 +15,7 @@
             </span>
           </button>
         </h3>
-        <div class="col-md-12" collapse="collapses.team">
+        <div class="col-md-12" uib-collapse="collapses.team">
           <table class="table table-striped">
             <tr ng-repeat="team in teams">
               <th>{{ team.name }}</th><td>{{ team.id }}</td>
@@ -37,7 +37,7 @@
             </span>
           </button>
         </h3>
-        <div class="col-md-12" collapse="collapses.remoteci">
+        <div class="col-md-12" uib-collapse="collapses.remoteci">
           <table ng-if="remotecis.length != 0"class="table table-striped">
             <tr ng-repeat="remoteci in remotecis">
               <th>{{ remoteci.name }}</th><td>{{ remoteci.id }}</td>
@@ -60,7 +60,7 @@
             </span>
           </button>
         </h3>
-        <div class="col-md-12" collapse="collapses.topic">
+        <div class="col-md-12" uib-collapse="collapses.topic">
           <table ng-if="topics.length != 0"class="table table-striped">
             <tr ng-repeat="topic in topics">
               <th>{{ topic.name }}</th><td>{{ topic.id }}</td>
