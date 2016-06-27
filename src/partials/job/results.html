@@ -15,7 +15,10 @@ No JUnit result uploaded.
     </span>
   </button>
 </h3>
-<div ng-controller="fileJunitStatusController" class="form col-md-12" ng-if="file.content" collapse="file.collapse">
+<div ng-controller="fileJunitStatusController"
+  class="form col-md-12"
+  ng-if="file.content"
+  uib-collapse="file.collapse">
   <div class="form-group">
     <label class="checkbox-inline">
       <input type="checkbox" ng-change="filterjunit()" ng-model="input.passed" />

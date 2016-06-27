@@ -9,7 +9,7 @@
     </button>
   </div>
   <div class="row">
-    <form ng-submit="search()" collapse="collapse" class="col-md-12">
+    <form ng-submit="search()" uib-collapse="collapse" class="col-md-12">
       <div class="form-group">
         <h4> Status </h4>
         <label ng-repeat="(key, _) in status" class="checkbox-inline">
@@ -20,9 +20,9 @@
       <div class="form-group">
         <h4> RemoteCI </h4>
         <div class="col-md-4 col-md-offset-4" ng-if="!remotecis">
-          <progressbar class="progress-striped active" max="1" value="1">
+          <div uib-progressbar class="progress-striped active" max="1" value="1">
           <i>Loading</i>
-          </progressbar>
+          </div>
         </div>
         <h3 ng-if="remotecis && !remotecis.length"
           class="bs-callout bs-callout-danger text-center">
@@ -43,7 +43,7 @@
 <div ng-repeat="job in jobs" dci-job></div>
 
 <div class="pagination" ng-if="pagination">
-  <div pagination total-items="pagination.total" max-size="5"
+  <div uib-pagination total-items="pagination.total" max-size="5"
     ng-model="pagination.page" class="pagination-sm" boundary-links="true"
     rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
   </div>
