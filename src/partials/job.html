@@ -1,23 +1,23 @@
 <h1 class="page-header">Job</h1>
 <div dci-job></div>
-<div tabset>
-  <div tab heading="Results" select="go('^.results')" active="active.results">
+<div uib-tabset>
+  <div uib-tab heading="Results" select="go('^.results')" active="active.results">
     <div ng-include="'/partials/job/results.html'" ></div>
   </div>
 
-  <div tab heading="Files" select="go('^.files')" active="active.files">
+  <div uib-tab heading="Files" select="go('^.files')" active="active.files">
     <div ng-include="'/partials/job/files.html'" ></div>
   </div>
-  <div tab heading="Details" select="go('^.details')" active="active.details">
+  <div uib-tab heading="Details" select="go('^.details')" active="active.details">
     <div ng-include="'/partials/job/details.html'"></div>
   </div>
-  <div tab heading="Edit job" select="go('^.edit')" active="active.edit">
+  <div uib-tab heading="Edit job" select="go('^.edit')" active="active.edit">
     <div ng-include="'/partials/job/edit.html'"></div>
   </div>
-  <div tab heading="Context" select="go('^.context')" active="active.context">
+  <div uib-tab heading="Context" select="go('^.context')" active="active.context">
     <div ng-include="'/partials/job/context.html'"></div>
   </div>
-  <div tab heading="Stack Details" select="go('^.stackdetails')" active="active.stackdetails">
+  <div uib-tab heading="Stack Details" select="go('^.stackdetails')" active="active.stackdetails">
     <div ng-include="'/partials/job/stackdetails.html'"></div>
   </div>
 </div>

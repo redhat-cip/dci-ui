@@ -26,7 +26,7 @@
 <div class="col-md-12" >
   <small >{{ jobstate.created_at }}</small>
 </div>
-  <div collapse="!jobstate.isOpen" class="col-md-12">
+  <div uib-collapse="!jobstate.isOpen" class="col-md-12">
     <div class="tile tile-file" ng-repeat="file in jobstate.files">
       <h5>
         <a ng-href="{{file.dl_link}}" class="pull-right">
