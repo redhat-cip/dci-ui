@@ -15,7 +15,7 @@
     "gulp-sourcemaps": "~1.5.2",
     "gulp-util": "^3.0.7",
     "jasmine-reporters": "^2.0.7",
-    "phantomjs": "^1.9.18",
+    "phantomjs": "^2.1.7",
     "protractor": "^2.5.1",
     "q": "^1.4.1",
     "serve-static": "^1.10.0",

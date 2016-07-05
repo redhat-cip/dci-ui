@@ -14,17 +14,21 @@
 
 'use strict';
 
+var utils = require('./utils');
+
 /*globals describe, it, expect, element, browser*/
 describe('DCI homepage', function() {
 
   beforeEach(function() {
+    var promise;
     var cookie = JSON.stringify({
       status: 2,
       team: {name: 'admin'},
       token: Buffer('admin:admin', 'binary').toString('base64')
     });
     browser.get('/');
-    browser.manage().addCookie('user', encodeURIComponent(cookie), '/');
+    promise = browser.manage().addCookie('user', encodeURIComponent(cookie));
+    promise.then(utils.noop, utils.noop);
   });
 
   it('should be possible to recheck a job', function() {
