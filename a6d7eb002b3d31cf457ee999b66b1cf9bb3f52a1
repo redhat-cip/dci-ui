@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_e51f12b6",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-05T14:06:48Z",
+      "side": 1,
+      "message": "lines 141 to 149 can be replaced by\n\n        $scope.components \u003d {};\n        _.each(data, function(component) {\n          _.update($scope.components, component.type, function(components) {\n            return _.concat(components || [], component);\n          });\n        });",
+      "revId": "a6d7eb002b3d31cf457ee999b66b1cf9bb3f52a1",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_051dd6bd",
+        "filename": "src/js/directives/directives.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-05T14:06:48Z",
+      "side": 1,
+      "message": "no need for a directive here, this does not provide complex data manipulation and furthermore it is only use once in a small file. Just use plain html",
+      "revId": "a6d7eb002b3d31cf457ee999b66b1cf9bb3f52a1",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_2579fafc",
+        "filename": "src/js/routing.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-05T14:06:48Z",
+      "side": 1,
+      "message": "wrong indent here \n\n    $injector.get(\u0027messages\u0027).alert(\n       err.data \u0026\u0026 err.data.message || \u0027Something went wrong\u0027,\u0027danger\u0027\n    )",
+      "revId": "a6d7eb002b3d31cf457ee999b66b1cf9bb3f52a1",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
