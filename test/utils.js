@@ -15,6 +15,8 @@
 'use strict';
 var fs = require('fs');
 
+module.exports.noop = function () {};
+
 module.exports.log = function() {
   return browser.manage().logs().get('browser').then(function(browserLog) {
     // Uncomment to actually see the log.
