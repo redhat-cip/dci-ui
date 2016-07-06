@@ -14,7 +14,10 @@
 
 'use strict';
 
-var utils = require('./utils');
+var utils  = require('./utils');
+var api    = require('./api');
+var config = require('../config');
+var Q      = require('q');
 
 /*globals describe, it, expect, element, browser*/
 describe('DCI homepage', function() {
@@ -29,6 +32,27 @@ describe('DCI homepage', function() {
     browser.get('/');
     promise = browser.manage().addCookie('user', encodeURIComponent(cookie));
     promise.then(utils.noop, utils.noop);
+  });
+
+  beforeEach(function(done) {
+    // create a job before launching test
+    api.job().then(done);
+  });
+
+  afterEach(function(done) {
+    // take advantage of the cascading deletion, topic removal will also remove
+    // components, jobs, jobdefinitions
+    api.topic.cache.get()
+      .then(function(topic) {
+        return topic.remove();
+      })
+      .then(function() {
+        return api.remoteci.cache.get();
+      })
+      .then(function(remoteci) {
+        return remoteci.remove();
+      })
+      .then(done);
   });
 
   it('should be possible to recheck a job', function() {
