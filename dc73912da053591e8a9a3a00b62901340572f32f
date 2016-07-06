@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_8811fbae",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_a8e6bf14",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_68dd9742",
         "filename": "src/js/controllers/controllers.js",
         "patchSetId": 13
@@ -30,6 +48,24 @@
       "writtenOn": "2016-07-06T09:05:58Z",
       "side": 1,
       "message": "this variable is not needed anymore",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_680cb795",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_68dd9742",
       "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_4817f3a3",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "The indentation is like this because the line exceeds 80 chars.\n\n(The indentation in the function is automatically set by emacs)",
+      "parentUuid": "9ad9bd40_c8e30304",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_e8f0c7cb",
         "filename": "src/js/directives/directives.js",
         "patchSetId": 13
@@ -64,6 +118,24 @@
       "writtenOn": "2016-07-06T09:05:58Z",
       "side": 1,
       "message": "not accurate, remove this change",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_a825df0b",
+        "filename": "src/js/directives/directives.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_e8f0c7cb",
       "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_c8222301",
+        "filename": "src/js/routing.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_08eecbec",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_889e5b55",
         "filename": "src/partials/topic.html",
         "patchSetId": 13
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_e81fe7b5",
+        "filename": "src/partials/topic.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_889e5b55",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_a8a23f98",
         "filename": "src/partials/topics.html",
         "patchSetId": 13
@@ -115,6 +223,24 @@
       "writtenOn": "2016-07-06T12:06:53Z",
       "side": 1,
       "message": "same remark, see https://github.com/angular-ui/bootstrap/wiki/Migration-guide-for-prefixes",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_081debbd",
+        "filename": "src/partials/topics.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T13:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_a8a23f98",
       "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
