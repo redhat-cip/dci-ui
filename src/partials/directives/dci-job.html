@@ -1,7 +1,7 @@
 <div class="bs-callout container-fluid job" ng-class="job.statusClass">
   <div class="col-md-11 col-sm-10 col-xs-9">
     <div class="col-md-7 col-sm-6 col-xs-12">
-    <a ui-sref="job.results({id: job.id})"  class="title">
+    <a ui-sref="job.logs({id: job.id})"  class="title">
       {{job.remoteci.name}} / {{job.jobdefinition.name}}
     </a>
     <div class="text-muted hidden-xs hidden-sm" ng-if="job.comment && !job.detail">
