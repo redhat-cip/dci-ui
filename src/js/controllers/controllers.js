@@ -25,9 +25,19 @@ require('app')
   }
 ])
 .controller('InformationCtrl', ['$scope', 'api', function($scope, api) {
-  _.each(['teams', 'topics', 'remotecis'], function(id) {
+  _.each(['teams', 'topics'], function(id) {
     api[id].list(null, true).then(_.partial(_.set, $scope, id));
   });
+
+  api.remotecis.list(null, true).then(_.partial(_.set, $scope, 'remotecis'))
+    .then(function() {
+      _.each($scope.remotecis, function(remoteci) {
+        api.jobs.remoteci.latest(remoteci.id).then(function(job) {
+          remoteci.updated_at = job.updated_at;
+        });
+      });
+    }
+  );
 }])
 .controller('ListJobsCtrl', [
   '$state', '$scope', 'api', function($state, $scope, api) {
