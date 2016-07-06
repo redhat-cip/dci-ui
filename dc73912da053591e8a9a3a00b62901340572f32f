@@ -84,6 +84,40 @@
       "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_889e5b55",
+        "filename": "src/partials/topic.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T12:06:53Z",
+      "side": 1,
+      "message": "this will no longer work as we update to angular-bootstrap 1.3.3\n\nsee https://github.com/angular-ui/bootstrap/wiki/Migration-guide-for-prefixes for more informations",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_a8a23f98",
+        "filename": "src/partials/topics.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T12:06:53Z",
+      "side": 1,
+      "message": "same remark, see https://github.com/angular-ui/bootstrap/wiki/Migration-guide-for-prefixes",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
     }
   ]
 }
