@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_33d06053",
+        "filename": "src/partials/information.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2016-07-06T20:26:22Z",
+      "side": 1,
+      "message": "This field is not updated when there is some activity coming from a remoteci.\n\nMaybe we can just get date of the last jobstate associated to the remoteci.\n\n    select jobstates.created_at from jobstates,jobs where jobstates.job_id\u003djobs.id and jobs.remoteci_id\u003d\u00274f8faddd-102b-400b-b295-e648501d16f8\u0027 order by jobstates.created_at desc limit 1;",
+      "revId": "fec50c55bcae97219dc2ab4c7fdea6a1c354078b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
