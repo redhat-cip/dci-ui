@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_73f3c80a",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-06T20:01:04Z",
+      "side": 1,
+      "message": "Actually it is needed. It is placed in the header of the page.",
+      "parentUuid": "9ad9bd40_48c1b3e3",
+      "revId": "37d541a1aad7cd584d802a59e1028ebffd4df7db",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_68d117cd",
         "filename": "src/partials/components.html",
         "patchSetId": 14
