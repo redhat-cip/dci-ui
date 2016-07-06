@@ -34,6 +34,6 @@ describe('DCI homepage', function() {
   it('should be possible to recheck a job', function() {
     browser.get('/#/jobs');
     element(by.css('.glyphicon-repeat')).click();
-    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
+    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/logs$');
   });
 });
