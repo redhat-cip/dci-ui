@@ -15,6 +15,8 @@
 'use strict';
 
 var utils = require('./utils');
+var api = require('./api');
+var config = require('../config');
 
 /*globals describe, it, expect, element, browser*/
 describe('DCI homepage', function() {
@@ -29,6 +31,11 @@ describe('DCI homepage', function() {
     browser.get('/');
     promise = browser.manage().addCookie('user', encodeURIComponent(cookie));
     promise.then(utils.noop, utils.noop);
+  });
+
+  beforeEach(function(done) {
+    // create a job before launching test
+    api.job().then(done);
   });
 
   it('should be possible to recheck a job', function() {
