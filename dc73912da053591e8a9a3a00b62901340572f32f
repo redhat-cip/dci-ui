@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_a8e6bf14",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T09:05:58Z",
+      "side": 1,
+      "message": "page seems not being used, can we remove it ?",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_68dd9742",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T09:05:58Z",
+      "side": 1,
+      "message": "this variable is not needed anymore",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_c8e30304",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T09:05:58Z",
+      "side": 1,
+      "message": "strange indentation here just write this \n\n    _.update($scope.componentsByTopic, component.type, function(components) {\n      component.created_at \u003d moment(component.created_at);\n      return _.concat(components || [], component);\n    });",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_e8f0c7cb",
+        "filename": "src/js/directives/directives.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T09:05:58Z",
+      "side": 1,
+      "message": "not accurate, remove this change",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_08eecbec",
+        "filename": "src/js/routing.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-06T09:05:58Z",
+      "side": 1,
+      "message": "bad indent just write\n\n    $injector.get(\u0027messages\u0027).alert(\n      err.data \u0026\u0026 err.data.message || \u0027Something went wrong\u0027, \u0027danger\u0027\n    );",
+      "revId": "dc73912da053591e8a9a3a00b62901340572f32f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
