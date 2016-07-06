@@ -157,6 +157,12 @@ require('app')
   api.jobs.embed = 'remoteci,jobdefinition';
   api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
 
+  api.jobs.remoteci.latest = function(remoteci_id) {
+    var conf = {'params':
+      {'sort': 'updated_at', 'limit': 1, 'where': 'remoteci_id:' + remoteci_id}
+    };
+    return $http.get(this.url, conf).then(_.property('data.jobs[0]'));
+  };
   api.jobs.recheck = function(id) {
     var url = urlize(this.url, id, 'recheck');
     return $http.post(url).then(_.property('data.job'));

@@ -39,8 +39,11 @@
         </h3>
         <div class="col-md-12" uib-collapse="collapses.remoteci">
           <table ng-if="remotecis.length != 0"class="table table-striped">
+            <tr>
+              <th>Name</th><th>UUID</th><th>Last Activities</th>
+            </tr>
             <tr ng-repeat="remoteci in remotecis">
-              <th>{{ remoteci.name }}</th><td>{{ remoteci.id }}</td>
+              <th>{{ remoteci.name }}</th><td>{{ remoteci.id }}</td><td>{{ remoteci.updated_at }}</td>
             </tr>
           </table>
           <div ng-if="remotecis.length == 0">No Remote CI attached to this team.</div>
