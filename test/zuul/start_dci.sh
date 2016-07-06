@@ -11,6 +11,6 @@ cd "$DCI_SERVER_DIR"
 sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 sh scripts/start_es.sh
-python scripts/db_provisioning.py -y
+python scripts/db_provisioning.py -ym
 python scripts/runtestserver.py &
 cd -
