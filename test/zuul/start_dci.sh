@@ -1,4 +1,4 @@
-set -e
+set -ex
 
 # for all that script we assume that it as been launched from the root of this
 # repository and that https://github.com/redhat-cip/dci-control-server as been
