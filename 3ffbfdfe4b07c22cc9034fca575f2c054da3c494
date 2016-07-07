@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_935dacec",
+        "filename": "src/js/controllers/job.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2016-07-07T07:26:43Z",
+      "side": 1,
+      "message": "I disagree with this change. The order should remain as it was before.\n\nWhat you are interested in first is the Tests Results not the installation logs. Once installation well setup you don\u0027t care anymore about the log and want to land on the result page first.\n\nTaking Jenkins as an example you first land in the result page and then (if necessary and/or if interested) you click on \"Console Log\" to see if/what went wrong.",
+      "revId": "3ffbfdfe4b07c22cc9034fca575f2c054da3c494",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
