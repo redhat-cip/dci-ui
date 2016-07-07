@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_b3c9d05c",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-07T12:55:39Z",
+      "side": 1,
+      "message": "if it is displayed it must have been attached to scope or at least initialized, here I see nothing of those",
+      "parentUuid": "9ad9bd40_73f3c80a",
+      "revId": "37d541a1aad7cd584d802a59e1028ebffd4df7db",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_68d117cd",
         "filename": "src/partials/components.html",
         "patchSetId": 14
