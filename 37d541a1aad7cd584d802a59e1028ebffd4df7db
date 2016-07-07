@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_7383c8cc",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-07T13:19:01Z",
+      "side": 1,
+      "message": "You are right. I was not thinking when I wrote this.",
+      "parentUuid": "9ad9bd40_b3c9d05c",
+      "revId": "37d541a1aad7cd584d802a59e1028ebffd4df7db",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_68d117cd",
         "filename": "src/partials/components.html",
         "patchSetId": 14
