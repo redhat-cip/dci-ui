@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_41c194e3",
+        "filename": "src/js/api.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-18T12:55:57Z",
+      "side": 1,
+      "message": "Can you use a API call that matches the style:\napi.jobs.remoteci.latest",
+      "revId": "2f2e6e93a5d27625ce9c1abb7fc549bcde194c6e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_81bb9c71",
+        "filename": "src/partials/information.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-18T12:55:57Z",
+      "side": 1,
+      "message": "remove the tabs.",
+      "revId": "2f2e6e93a5d27625ce9c1abb7fc549bcde194c6e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
