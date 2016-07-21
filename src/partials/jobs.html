@@ -5,39 +5,55 @@
       <div class="glyphicon pull-right"
         ng-class="{'glyphicon-menu-down': collapse, 'glyphicon-menu-up': !collapse}">
       </div>
-      Filter
+      Search
     </button>
   </div>
   <div class="row">
-    <form ng-submit="search()" uib-collapse="collapse" class="col-md-12">
-      <div class="form-group">
-        <h4> Status </h4>
-        <label ng-repeat="(key, _) in status" class="checkbox-inline">
-          <input ng-model="status[key]" type="checkbox"/>
-          {{key}}
-        </label>
-      </div>
-      <div class="form-group">
-        <h4> RemoteCI </h4>
-        <div class="col-md-4 col-md-offset-4" ng-if="!remotecis">
-          <div uib-progressbar class="progress-striped active" max="1" value="1">
-          <i>Loading</i>
-          </div>
+    <div uib-collapse="collapse">
+      <form ng-submit="search()" class="col-md-6">
+        <div class="form-group">
+          <h4>Status</h4>
+          <label ng-repeat="(key, _) in status" class="checkbox-inline">
+            <input ng-model="status[key]" type="checkbox"/>
+            {{key}}
+          </label>
         </div>
-        <h3 ng-if="remotecis && !remotecis.length"
-          class="bs-callout bs-callout-danger text-center">
-          No remote CI
-        </h3>
+        <div class="form-group">
+          <h4> RemoteCI </h4>
+          <div class="col-md-8 col-md-offset-2" ng-if="!remotecis">
+            <div uib-progressbar class="progress-striped active" max="1" value="1">
+              <i>Loading</i>
+            </div>
+          </div>
+          <h3 ng-if="remotecis && !remotecis.length"
+              class="bs-callout bs-callout-danger text-center">
+            No remote CI
+          </h3>
 
-        <label ng-repeat="remoteci in remotecis" class="checkbox-inline">
-          <input ng-model="remoteci.search" type="checkbox"/>
-          {{remoteci.name}}
-        </label>
-      </div>
-      <button ng-if="remotecis" type="submit" class="btn btn-primary col-md-3">
-        Apply
-      </button>
-    </form>
+          <label ng-repeat="remoteci in remotecis" class="checkbox-inline">
+            <input ng-model="remoteci.search" type="checkbox"/>
+            {{remoteci.name}}
+          </label>
+        </div>
+        <button ng-if="remotecis" type="submit" class="btn btn-primary col-md-6">
+          Apply
+        </button>
+      </form>
+      <form ng-submit="retrieveLogs()" class="col-md-6">
+        <div class="form-group">
+          <label class="h4" for="patternSearch">Log search</label>
+          <input type="input" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
+        </div>
+        <div class="form-group invisible">
+          <input type="input" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary col-md-6">
+          Search
+        </button>
+      </form>
+
+    </div>
   </div>
 </div>
 <div ng-repeat="job in jobs" dci-job></div>

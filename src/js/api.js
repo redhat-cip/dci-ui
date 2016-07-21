@@ -51,7 +51,7 @@ require('app')
       get: function(id) {
         // remove the trailing "s"
         var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
-        var conf = this.embed ? {'embed': this.embed} : {};
+        var conf = this.embed ? {'params': {'embed': this.embed}} : {};
         return $http.get(urlize(this.url, id), conf).then(_.property(extract));
       },
       remove: function(id, etag) {
@@ -84,11 +84,14 @@ require('app')
       }
     };
   });
+  // add the search endpoint
+  api.search = {};
 
   config.promise.then(function() {
     _.each(api, function(endpoint, name) {
       endpoint.url = urlize(config.apiURL, 'api', 'v1', name);
     });
+    api.search.url = urlize(config.apiURL, 'api', 'v1', 'search');
   });
 
   /*                              JOBDEFINITIONS                              */
@@ -162,7 +165,11 @@ require('app')
     var url = urlize(this.url, job, 'files');
     return $http.get(url).then(_.property('data.files'));
   };
-  api.jobs.get = function(job) {
+  api.jobs.get = function(job, partial) {
+    if (partial) {
+      return $http.get(urlize(this.url, job)).then(_.property('data.job'));
+    }
+
     var confJ = {'params': {'embed': 'remoteci,jobdefinition'}};
     var confJS = {'params': {'sort': 'created_at', 'embed': 'files'}};
     return $q.all([
@@ -238,9 +245,17 @@ require('app')
     });
   };
 
+  /*                                JOBSTATES                                */
+  api.jobstates.embed = 'job';
+
   /*                                  FILES                                  */
   api.files.content = function(file) {
     return $http.get(urlize(this.url, file, 'content'));
+  };
+
+  /*                                  SEARCH                                 */
+  api.search.create = function(pattern) {
+    return $http.post(this.url, {pattern: pattern}).then(_.property('data'));
   };
 
   return api;
