@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5adbc538_fd732713",
+        "filename": "src/css/dashboard.scss",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-21T15:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5adbc538_bd3b5f37",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5adbc538_7d11d7ab",
         "filename": "src/js/controllers/gpanel.js",
         "patchSetId": 13
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5adbc538_1dc7f313",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-21T15:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5adbc538_7d11d7ab",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5adbc538_5d833bcc",
         "filename": "src/js/controllers/gpanel.js",
         "patchSetId": 13
@@ -47,6 +83,24 @@
       "writtenOn": "2016-07-21T13:30:08Z",
       "side": 1,
       "message": ".\n    var path \u003d [\u0027jobs\u0027, component.id, job.jobdefinition_id, job.status];\n    _.update($scope, path, _.partial(_.add, 1));",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_bd851faf",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-21T15:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5adbc538_5d833bcc",
       "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
