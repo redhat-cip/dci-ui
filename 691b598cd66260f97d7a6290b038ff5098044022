@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5adbc538_1d18d383",
+        "filename": "src/js/controllers/controllers.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 33
+      },
+      "writtenOn": "2016-07-21T17:44:23Z",
+      "side": 1,
+      "message": "To improve the readability, I would create a new variable `last_job` and copy the job there. And in the template use `remoteci.last_job.updated_at`.",
+      "revId": "691b598cd66260f97d7a6290b038ff5098044022",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
