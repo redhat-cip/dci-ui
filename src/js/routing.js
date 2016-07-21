@@ -73,6 +73,12 @@ require('app')
       templateUrl: '/partials/jobs.html',
       controller: 'ListJobsCtrl'
     })
+    .state('logs', {
+      parent: 'auth',
+      url: '/logs?pattern',
+      templateUrl: '/partials/logs.html',
+      controller: 'LogsCtrl'
+    })
     .state('job', {
       parent: 'auth',
       url: '/jobs/:id',
