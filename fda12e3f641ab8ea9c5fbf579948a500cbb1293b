@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5adbc538_bd3b5f37",
+        "filename": "src/css/dashboard.scss",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "I do not see any use of those classes",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_7d11d7ab",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": ".\n    var type \u003d {\u0027name\u0027: component.type};\n    if (_.findIndex($scope.componentTypes, type) \u003d\u003d -1) {\n      $scope.componentTypes.push(type);\n    }",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_5d833bcc",
+        "filename": "src/js/controllers/gpanel.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": ".\n    var path \u003d [\u0027jobs\u0027, component.id, job.jobdefinition_id, job.status];\n    _.update($scope, path, _.partial(_.add, 1));",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_9d25c30c",
+        "filename": "src/js/routing.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "as we do not want to prevent the resolution of the page, nor doing something special with stateParams, directly call the $state service in the controller and retrieve the id param",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_bd227fff",
+        "filename": "src/js/routing.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_dd1f4bb6",
+        "filename": "src/js/routing.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_3d302f56",
+        "filename": "src/partials/gpanel.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "never inline css, use a class or a bootstrap class helper",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_5d35fb44",
+        "filename": "src/partials/gpanelcompo.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "same comment as previous file",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_7d3ab737",
+        "filename": "src/partials/gpanelstatus.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "never use style attr",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5adbc538_9d3ea328",
+        "filename": "src/partials/gpanelstatus.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 186
+      },
+      "writtenOn": "2016-07-21T13:30:08Z",
+      "side": 1,
+      "message": "maybe use a function for determining classes, I think there is too much logic in the html otherwise",
+      "revId": "fda12e3f641ab8ea9c5fbf579948a500cbb1293b",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
