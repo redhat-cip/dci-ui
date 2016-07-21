@@ -164,7 +164,7 @@ require('app')
   };
   api.jobs.get = function(job) {
     var confJ = {'params': {'embed': 'remoteci,jobdefinition'}};
-    var confJS = {'params': {'sort': 'created_at', 'embed': 'files'}};
+    var confJS = {'params': {'sort': 'created_at,-files.created_at', 'embed': 'files'}};
     return $q.all([
       $http.get(urlize(this.url, job), confJ),
       $http.get(urlize(this.url, job, 'jobstates'), confJS)
