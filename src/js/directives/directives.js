@@ -27,7 +27,7 @@ require('app')
       var job = scope.job;
       var start = moment(job.created_at);
 
-      job.time_running = moment(job.updated_at).to(start, true);
+      job.time_running = moment(job.created_at).to(start, true);
       job.updated_at = moment(job.updated_at).from(moment.moment());
 
       job.processStatus = function(s) {

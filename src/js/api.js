@@ -65,7 +65,7 @@ require('app')
       },
       list: function(page, extract) {
         var params = _.assign(
-          {'sort': '-updated_at'},
+          {'sort': '-created_at'},
           page ? {'limit': 20, 'offset': 20 * (page - 1)} : null,
           this.embed ? {'embed': this.embed} : null
         );

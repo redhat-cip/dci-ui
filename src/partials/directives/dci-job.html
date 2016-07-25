@@ -17,7 +17,7 @@
       <span class="glyphicon" ng-class="job.glyphicon"></span> {{job.status}}
     </div>
     <div title="Test last run">
-      <span class="glyphicon glyphicon-calendar"></span> {{job.updated_at}}
+      <span class="glyphicon glyphicon-calendar"></span> {{job.created_at}}
     </div>
     <div title="Test running time">
       <span ng-if="job.status == 'success' ||
