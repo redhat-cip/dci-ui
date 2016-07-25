@@ -89,24 +89,18 @@ require('app')
     var job = $scope.job;
 
     $scope.reset = function() {
+      $scope.status = ['failure', 'success', 'running', 'new', 'pre-run', 'post-run', 'killed'];
       $scope.form = {
         comment: job.comment,
-        status: false
+        status: job.status
       };
     };
     $scope.reset();
-
-    $scope.isEditableStatus = (
-      _.indexOf(['success', 'failure'], job.status) !== -1
-    );
 
     $scope.submit = function() {
       // process and clean data
       var data = _.transform($scope.form, function(result, value, key) {
         if (_.includes([null, false], value)) { return; }
-        if (key == 'status') {
-          value = job.status == 'success' ? 'failure' : 'success';
-        }
         result[key] = value;
       }, _.pick(job, ['id', 'etag']));
 
