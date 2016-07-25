@@ -3,13 +3,15 @@
     <label for="comment">Comment</label>
     <textarea id="comment" class="form-control" ng-model="form.comment" rows="8"></textarea>
   </div>
-  <div class="checkbox" ng-if="isEditableStatus">
-    <label>
-      <input type="checkbox" ng-model="form.status"> Change state
-      <p class="text-danger" ng-if="form.status"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        This is a dangerous option, be sure that you know what you are doing, before submitting
-        this.</p>
+
+  <div class="form-group">
+    <h4>Change Status</h4>
+    <label ng-repeat="label in status" class="radio-inline">
+      <input ng-model="form.status" ng-checked="label == job.status" ng-value="label" value="label" type="radio"/>
+      {{label}}
     </label>
+    <p class="text-danger" ng-if="form.status != job.status"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      This is a dangerous option, be sure that you know what you are doing, before submitting this.</p>
   </div>
 
   <button type="submit" class="btn btn-primary" ng-click="submit()">Submit</button>
