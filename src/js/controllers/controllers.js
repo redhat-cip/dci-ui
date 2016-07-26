@@ -176,7 +176,9 @@ require('app')
         $scope.componentsByTopic = {};
         _.each(data, function(component) {
           _.update($scope.componentsByTopic, component.type, function(target) {
-            component.created_at = moment(component.created_at);
+            component.created_at = moment(component.created_at)
+              .local()
+              .format();
             return _.concat(target || [], component);
           });
         });
