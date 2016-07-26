@@ -4,15 +4,19 @@
   <table class="table table-striped">
     <thead>
     <tr>
+      <th class="text-center">Status</th>
       <th>Name</th>
       <th>ID</th>
       <th class="text-center">Created At</th>
       <th class="text-right">Priority</th>
-      <th class="text-right">Active</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat-start="jobdef in jobdefs" ng-click="jobdef.opened = !jobdef.opened">
+      <td class="text-center">
+        <span ng-if="!jobdef.active" class="label label-danger">Locked</span>
+        <span ng-if="jobdef.active" class="label label-success">Active</span>
+      </td>
       <td>
         <span class="glyphicon glyphicon-exclamation-sign pull-right"
           ng-if="jobdef.comment"
@@ -23,7 +27,6 @@
       <td>{{ jobdef.id }}</td>
       <td class="text-center">{{ jobdef.created_at }}</td>
       <td class="text-right">{{ jobdef.priority }}</td>
-      <td class="text-right">{{ jobdef.active }}</td>
     </tr>
     <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
       <td colspan="6">
