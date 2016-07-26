@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5adbc538_a376ded6",
+        "filename": "src/js/api.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2016-07-26T13:11:17Z",
+      "side": 1,
+      "message": "As I said in my previous message, this sort by updated_at won\u0027t work. If we update a comment, it will be at the top of the list. It\u0027s the same if we update the status manually.",
+      "revId": "f13fa027127e405dd65f6095228f98ae50ed4bf5",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
