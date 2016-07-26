@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5adbc538_23a1eea9",
+        "filename": "src/js/controllers/job.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2016-07-26T09:06:12Z",
+      "side": 1,
+      "message": "running, new, pre-run, post-run are intermediate status. A job should never end up with them. So, there is now point allowing to set them manually.",
+      "revId": "af8c91223db39cfe89cded384af344e52a09a82f",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
