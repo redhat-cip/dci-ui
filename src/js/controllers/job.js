@@ -89,7 +89,8 @@ require('app')
     var job = $scope.job;
 
     $scope.reset = function() {
-      $scope.status = ['failure', 'success', 'killed'];
+      $scope.status = ['failure', 'success', 'killed', 'product-failure',
+                       'deployment-failure'];
       $scope.form = {
         comment: job.comment,
         status: job.status
