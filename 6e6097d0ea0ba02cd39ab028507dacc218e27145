@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5adbc538_2663bc1b",
+        "filename": "src/js/api.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2016-07-27T13:37:17Z",
+      "side": 1,
+      "message": "This won\u0027t work if some decide to clean up some jobs:\nhttps://github.com/redhat-cip/dci-ui/issues/18#issuecomment-235552180",
+      "revId": "6e6097d0ea0ba02cd39ab028507dacc218e27145",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
