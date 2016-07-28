@@ -86,6 +86,8 @@ require('app')
   });
   // add the search endpoint
   api.search = {};
+  // add the issues endpoint
+  api.issues = {};
 
   config.promise.then(function() {
     _.each(api, function(endpoint, name) {
@@ -196,6 +198,22 @@ require('app')
     var url = urlize(this.url, job, 'files');
     return $http.get(url).then(_.property('data.files'));
   };
+  api.issues.list = function(job) {
+    var url = urlize(api.jobs.url, job, 'issues');
+    return $http.get(url).then(_.property('data.issues'));
+  };
+
+  api.issues.create = function(job, issue) {
+    var url = urlize(api.jobs.url, job, 'issues');
+    return $http.post(url, {'url': issue})
+      .then(_.partial(api.issues.list, job));
+  };
+
+  api.issues.remove = function(job, id, etag) {
+    var url = urlize(api.jobs.url, job, 'issues', id);
+    return $http.delete(url, {'headers': {'If-Match': etag}});
+  };
+
   api.jobs.get = function(job, partial) {
     if (partial) {
       return $http.get(urlize(this.url, job)).then(_.property('data.job'));

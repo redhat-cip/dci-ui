@@ -20,4 +20,8 @@
   <div uib-tab heading="Stack Details" select="go('^.stackdetails')" active="active.stackdetails">
     <div ng-include="'/partials/job/stackdetails.html'"></div>
   </div>
+  <div uib-tab  select="go('^.issues')" active="active.issues">
+    <div uib-tab-heading><span class="badge">{{ job.issues.length }}</span> Issues</div>
+    <div ng-include="'/partials/job/issues.html'"></div>
+  </div>
 </div>

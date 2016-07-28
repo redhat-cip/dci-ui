@@ -1,17 +1,4 @@
 <div class="row">
-  <h3 class="col-md-12 page-header">Components
-    <button type="button" class="btn btn-default btn-xs pull-right"
-                          ng-click="collapses.components = !collapses.components">
-      <span ng-if="collapses.components">
-        <span class="glyphicon glyphicon-menu-down"></span>
-        see details
-      </span>
-      <span ng-if="!collapses.components">
-        <span class="glyphicon glyphicon-menu-up"></span>
-        close details
-      </span>
-    </button>
-  </h3>
   <div uib-collapse="collapses.components">
     <div class="col-md-6" ng-repeat="component in components">
       <h4>{{ component.name }}</h4>
