@@ -24,7 +24,7 @@ require('app')
 
     var opened = false;
     var tabs = ['results', 'files', 'details', 'edit', 'context',
-                'stackdetails'];
+                'stackdetails', 'issues'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
@@ -48,6 +48,7 @@ require('app')
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
     });
+
     api.jobdefinitions.components(job.jobdefinition.id)
     .then(function(components) {
       $scope.components = components;
@@ -55,6 +56,7 @@ require('app')
         component.created_at = date(component.created_at);
       });
     });
+
 
     $scope.retrieveFiles = function(jobstate) {
       jobstate.isOpen = !jobstate.isOpen;
@@ -64,6 +66,10 @@ require('app')
         });
       });
     };
+
+    api.jobs.issues(job.id).then(function(issues) {
+      $scope.issues = issues;
+    });
 
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;

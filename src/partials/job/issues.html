@@ -1,0 +1,39 @@
+<div ng-if="!job.issues">
+No issue attached to this job.
+</div>
+<div ng-repeat="issue in job.issues" class="row">
+    <table class="table">
+      <tr>
+        <th>Title</th>
+        <td>{{ issue.title }}</td>
+      </tr>
+      <tr>
+        <th>Product</th>
+        <td>{{ issue.product }}</td>
+        <th>Component</th>
+        <td>{{ issue.component }}</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>{{ issue.status }}</td>
+        <th>Bug ID</th>
+        <td>{{ issue.issue_id }}</td>
+      </tr>
+      <tr>
+        <th>Created</th>
+        <td>{{ issue.created_at }}</td>
+        <th>Last Updated</th>
+        <td>{{ issue.updated_at }}</td>
+      </tr>
+      <tr>
+        <th>Reported</th>
+        <td>{{ issue.reporter }}</td>
+        <th>Assignee</th>
+        <td>{{ issue.assignee }}</td>
+      </tr>
+      <tr>
+        <th>Full link</th>
+        <td>{{ issue.url }}</td>
+      </tr>
+    </table>
+</div>

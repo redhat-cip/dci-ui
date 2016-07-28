@@ -45,7 +45,7 @@ require('app')
   // }
   _.each([
     'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
-    'components', 'jobdefinitions', 'audits', 'topics'
+    'components', 'jobdefinitions', 'audits', 'topics', 'issues'
   ], function(endpoint) {
     api[endpoint] = {
       get: function(id) {
@@ -195,6 +195,10 @@ require('app')
   api.jobs.files = function(job) {
     var url = urlize(this.url, job, 'files');
     return $http.get(url).then(_.property('data.files'));
+  };
+  api.jobs.issues = function(job) {
+    var url = urlize(this.url, job, 'issues');
+    return $http.get(url).then(_.property('data.issues'));
   };
   api.jobs.get = function(job, partial) {
     if (partial) {
