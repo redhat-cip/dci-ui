@@ -24,13 +24,13 @@ require('app')
 
     var opened = false;
     var tabs = ['results', 'files', 'details', 'edit', 'context',
-                'stackdetails'];
+                'stackdetails', 'issues'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
     _.assign($scope, {
       job: job, active: {}, go: $state.go,
-      collapses: {remoteci: false, components: false, jobdefinition: false}
+      collapses: {remoteci: false, jobdefinition: false}
     });
 
     _.each(tabs, function(tab) {
@@ -47,13 +47,6 @@ require('app')
       jobstate.created_at = date(
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
       );
-    });
-    api.jobdefinitions.components(job.jobdefinition.id)
-    .then(function(components) {
-      $scope.components = components;
-      _.each(components, function(component) {
-        component.created_at = date(component.created_at);
-      });
     });
 
     $scope.retrieveFiles = function(jobstate) {
@@ -83,7 +76,24 @@ require('app')
     });
   }
 ])
-
+.controller('IssueCtrl', ['$scope', 'api', function($scope, api) {
+  $scope.submit = function() {
+    api.issues.create($scope.job.id, $scope.issue).then(function(issues) {
+      $scope.job.issues.push(_.last(issues));
+      $scope.issue = null;
+    });
+  };
+}])
+.filter('titlecase', function() {
+  return function(input) {
+    return input.charAt(0).toUpperCase() + input.slice(1);
+  };
+})
+.filter('point', function() {
+  return function(input) {
+    return input + (input.charAt(input.length - 1) === '.' ? '' : '.');
+  };
+})
 .controller('EditCtrl', [
   '$scope', 'api', 'messages', function($scope, api, msg) {
     var job = $scope.job;

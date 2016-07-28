@@ -1,0 +1,52 @@
+<div ng-controller="IssueCtrl" class="row">
+  <div class="col-md-4 col-md-offset-4" ng-if="!job.issues">
+    <div uib-progressbar class="progress-striped active" max="1" value="1">
+      <i>Loading</i>
+    </div>
+  </div>
+  <div class="col-md-12" ng-if="job.issues && !job.issues.length">
+    <h3 class="bs-callout bs-callout-danger text-center">No issue attached to this job.</h3>
+  </div>
+  <div ng-repeat="issue in job.issues" class=" col-md-12">
+      <h3>
+        <a ng-href="{{issue.url}}">
+        {{ issue.title|titlecase|point }}
+        </a>
+      </h3>
+    <table class="table">
+      <tr>
+        <th>Product</th>
+        <td>{{ issue.product }}</td>
+        <th>Component</th>
+        <td>{{ issue.component }}</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>{{ issue.status }}</td>
+        <th>Bug ID</th>
+        <td>{{ issue.issue_id }}</td>
+      </tr>
+      <tr>
+        <th>Created</th>
+        <td>{{ issue.created_at }}</td>
+        <th>Last Updated</th>
+        <td>{{ issue.updated_at }}</td>
+      </tr>
+      <tr>
+        <th>Reported</th>
+        <td>{{ issue.reporter }}</td>
+        <th>Assignee</th>
+        <td>{{ issue.assignee }}</td>
+      </tr>
+    </table>
+  </div>
+  <h2 class="page-header col-md-12">Add an issue</h2>
+  <form name="issueForm" ng-submit="submit()" class="col-md-12" novalidate>
+    <div class="form-group">
+      <label for="issue-name" class="control-label">Issue URL</label>
+      <input type="url" class="form-control" id="issue-url" name="issue"
+                                                            ng-model="issue" required>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
