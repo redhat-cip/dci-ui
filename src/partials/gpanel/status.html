@@ -1,0 +1,35 @@
+<h1 class="page-header">Global status for topic {{ topic.name }} of type {{ componentType }}</h1>
+
+<table class="table">
+  <tr>
+    <th>Job Types</th>
+    <th>Job Definitions</th>
+  </tr>
+  <tr ng-repeat-start="component in components">
+    <td rowspan="{{ jobdefs.length }}" class="col-md-4">{{component.name}}</td>
+    <td>
+      <b>{{jobdefs[0].name}}</b>
+      <ul class="list-inline">
+        <li ng-repeat="(key, value) in (jobs[component.id][jobdefs[0].id] || {'N/A': 0})">
+          <span ng-class="status(key)">{{ value }} {{ key }}</span>
+        </li>
+        <li ng-if="!jobs[component.id][jobdefs[0].id]">
+          <span class="label label-default">0 N/A</span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr ng-repeat-end ng-repeat="jobdef in jobdefs" ng-if="!$first">
+    <td>
+      <b>{{jobdef.name}}</b>
+      <ul class="list-inline">
+        <li ng-repeat="(key, value) in jobs[component.id][jobdef.id]">
+          <span ng-class="status(key)">{{ value }} {{ key }}</span>
+        </li>
+        <li ng-if="!jobs[component.id][jobdef.id]">
+          <span class="label label-default">0 N/A</span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+</table>

@@ -145,33 +145,18 @@ require('app')
     .state('gpanel', {
       parent: 'authAdmin',
       url: '/gpanel',
+      controller: 'GpanelIndexCtrl',
+      templateUrl: '/partials/gpanel/index.html',
+    })
+    .state('gpanel.topic', {
+      url: '/:id',
       controller: 'GpanelTopicCtrl',
-      templateUrl: '/partials/gpanel.html'
+      templateUrl: '/partials/gpanel/topic.html'
     })
-    .state('gpaneltopic', {
-      parent: 'auth',
-      url: '/gpanel/:id',
-      controller: 'GpanelCompoCtrl',
-      templateUrl: '/partials/gpanelcompo.html',
-      resolve: {
-        topic: ['$stateParams', function($stateParams) {
-          return $stateParams.id;
-        }]
-      }
-    })
-    .state('gpanelstatus', {
-      parent: 'auth',
-      url: '/gpanel/:id/type/:componentType',
+    .state('gpanel.topic.status', {
+      url: '/type/:componentType',
       controller: 'GpanelStatusCtrl',
-      templateUrl: '/partials/gpanelstatus.html',
-      resolve: {
-        topic: ['$stateParams', 'conf', function($stateParams) {
-          return $stateParams.id;
-        }],
-        componentType: ['$stateParams', 'conf', function($stateParams) {
-          return $stateParams.componentType;
-        }]
-      }
+      templateUrl: '/partials/gpanel/status.html'
     })
     .state('administrate', {
       parent: 'authAdmin',
@@ -265,7 +250,7 @@ require('app')
       templateUrl: '/partials/login.html',
     });
 
-    $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/');
   }
 ])
 
