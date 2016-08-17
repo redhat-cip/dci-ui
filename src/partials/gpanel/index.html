@@ -1,11 +1,19 @@
 <div ui-view>
   <h1 class="page-header">Global status</h1>
   <table class="table table-striped">
+    <thead>
     <tr>
-      <th style="width:200px">Topics</th>
+      <th>Topic</th>
+      <th>ID</th>
+      <th class="text-center">Created At</th>
     </tr>
+    </thead>
+    <tbody>
     <tr ng-repeat="topic in topics">
       <td><a ui-sref="gpanel.topic({id: topic.id})">{{topic.name}}</a></td>
+      <td>{{topic.id}}</td>
+      <td class="text-center">{{topic.created_at}}</td>
     </tr>
+    </tbody>
   </table>
 </div>
