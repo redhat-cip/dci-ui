@@ -58,7 +58,11 @@ require('app')
       api.topics.components.jobs(topic, component.id).then(function(jobs) {
         _.each(jobs, function(job) {
           var path = ['jobs', component.id, job.jobdefinition_id, job.status];
-          _.update($scope, path, _.partial(_.add, 1));
+          _.update($scope, path, function(target) {
+            job.created_at = moment(job.created_at).local().format();
+            job.updated_at = moment(job.updated_at).local().format();
+            return _.concat(target || [], job);
+          });
         });
       });
       return component;

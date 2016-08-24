@@ -6,30 +6,51 @@
     <th>Job Definitions</th>
   </tr>
   <tr ng-repeat-start="component in components">
-    <td rowspan="{{ jobdefs.length }}" class="col-md-4">{{component.name}}</td>
+    <td rowspan="{{jobdefs.length}}" class="col-md-2">{{component.name}}</td>
     <td>
       <b>{{jobdefs[0].name}}</b>
-      <ul class="list-inline">
-        <li ng-repeat="(key, value) in (jobs[component.id][jobdefs[0].id])">
-          <span ng-class="status(key)">{{ value }} {{ key }}</span>
-        </li>
-        <li ng-if="!jobs[component.id][jobdefs[0].id]">
-          <span class="label label-default">0 N/A</span>
-        </li>
+      <uib-tabset type="pills">
+        <uib-tab ng-repeat="(key, values) in (jobs[component.id][jobdefs[0].id])" heading="{{values.length}} {{key}}" classes="ng-class: status(key);">
+          <table class="table">
+            <thead>
+              <th>Created at</th>
+              <th>Updated at</th>
+              <th>Message</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in values">
+                <td>{{item.created_at}}</td> <td>{{item.updated_at}}</td> <td>{{item.comment}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </uib-tab>
+        <uib-tab ng-if="!jobs[component.id][jobdefs[0].id]" disable="true" heading="0 N/A"></uib-tab>
+      </uib-tabset>
       </ul>
     </td>
   </tr>
+
   <tr ng-repeat-end ng-repeat="jobdef in jobdefs" ng-if="!$first">
     <td>
       <b>{{jobdef.name}}</b>
-      <ul class="list-inline">
-        <li ng-repeat="(key, value) in jobs[component.id][jobdef.id]">
-          <span ng-class="status(key)">{{ value }} {{ key }}</span>
-        </li>
-        <li ng-if="!jobs[component.id][jobdef.id]">
-          <span class="label label-default">0 N/A</span>
-        </li>
-      </ul>
+      <uib-tabset type="pills">
+        <uib-tab ng-repeat="(key, values) in jobs[component.id][jobdef.id]" heading="{{values.length}} {{key}}" classes="ng-class: status(key);">
+          <table class="table">
+            <thead>
+              <th>Created at</th>
+              <th>Updated at</th>
+              <th>Message</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in values">
+                <td>{{item.created_at}}</td> <td>{{item.updated_at}}</td> <td>{{item.comment}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </uib-tab>
+        <uib-tab ng-if="!jobs[component.id][jobdef.id]" disable="true" heading="0 N/A"></uib-tab>
+      </uib-tabset>
     </td>
   </tr>
+
 </table>
