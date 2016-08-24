@@ -53,6 +53,7 @@ module.exports = angular.module('app', [
     'glyphicon': 'glyphicon-remove'
   },
   'killed': {
+    'color': 'warning',
     'glyphicon': 'glyphicon-ban-circle'
   },
   'success': {
@@ -60,7 +61,7 @@ module.exports = angular.module('app', [
     'glyphicon': 'glyphicon-ok'
   },
   'running': {
-    'color': 'warning',
+    'color': 'info',
     'glyphicon': 'glyphicon-play'
   },
   'new': {
