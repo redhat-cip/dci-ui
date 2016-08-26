@@ -10,26 +10,56 @@
     <td>
       <b>{{jobdefs[0].name}}</b>
       <ul class="list-inline">
-        <li ng-repeat="(key, value) in (jobs[component.id][jobdefs[0].id])">
-          <span ng-class="status(key)">{{ value }} {{ key }}</span>
+        <li ng-repeat="(s, jobs) in (jobs[component.id][jobdefs[0].id])"
+          ng-click="collapse(component.id, jobs)">
+          <a ng-class="status(s)">{{ jobs.length }} {{ s }}</a>
         </li>
         <li ng-if="!jobs[component.id][jobdefs[0].id]">
           <span class="label label-default">0 N/A</span>
         </li>
       </ul>
+      <div uib-collapse="display!=component.id">
+        <table class="table">
+          <thead>
+            <th>Created at</th>
+            <th>Updated at</th>
+            <th>Message</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="job in jobs_">
+              <td>{{job.created_at}}</td> <td>{{job.updated_at}}</td> <td>{{job.comment}}</td>
+            </tr>
+          </tbody>
+        </table>
+			</div>
     </td>
   </tr>
   <tr ng-repeat-end ng-repeat="jobdef in jobdefs" ng-if="!$first">
     <td>
       <b>{{jobdef.name}}</b>
       <ul class="list-inline">
-        <li ng-repeat="(key, value) in jobs[component.id][jobdef.id]">
-          <span ng-class="status(key)">{{ value }} {{ key }}</span>
+        <li ng-repeat="(s, jobs) in jobs[component.id][jobdef.id]"
+          ng-click="collapse(component.id, jobs)">
+          <a ng-class="status(s)">{{ jobs.length }} {{ s }}</a>
         </li>
         <li ng-if="!jobs[component.id][jobdef.id]">
           <span class="label label-default">0 N/A</span>
         </li>
       </ul>
+      <div uib-collapse="display!=component.id">
+        <table class="table">
+          <thead>
+            <th>Created at</th>
+            <th>Updated at</th>
+            <th>Message</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="job in jobs_">
+              <td>{{job.created_at}}</td> <td>{{job.updated_at}}</td> <td>{{job.comment}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </td>
   </tr>
 </table>
