@@ -46,9 +46,25 @@ require('app')
 
     var topic = $stateParams.id;
     var componentType = $scope.componentType = $stateParams.componentType;
+    var jobdef = {};
 
     $scope.status = function(s) {
       return ['label', 'label-' + _.get(status, [s, 'color'])];
+    };
+
+    $scope.collapse = function(jobs, jd, status) {
+      if (jobdef.id != jd.id) {
+        jobdef.display = false;
+        jobdef = jd;
+        jobdef.display = true;
+        jobdef.status = status;
+      } else if (jobdef.status == status) {
+        jobdef.display = !jobdef.display;
+      } else {
+        jobdef.status = status;
+      }
+
+      $scope.jobs_ = jobs;
     };
 
     api.topics.get(topic).then(_.partial(_.set, $scope, 'topic'));
@@ -58,7 +74,11 @@ require('app')
       api.topics.components.jobs(topic, component.id).then(function(jobs) {
         _.each(jobs, function(job) {
           var path = ['jobs', component.id, job.jobdefinition_id, job.status];
-          _.update($scope, path, _.partial(_.add, 1));
+          _.update($scope, path, function(target) {
+            job.created_at = moment(job.created_at).local().format();
+            job.updated_at = moment(job.updated_at).local().format();
+            return _.concat(target || [], job);
+          });
         });
       });
       return component;
