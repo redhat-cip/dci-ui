@@ -147,7 +147,7 @@ require('app')
       parent: 'authAdmin',
       url: '/gpanel',
       controller: 'GpanelIndexCtrl',
-      templateUrl: '/partials/gpanel/index.html',
+      templateUrl: '/partials/gpanel/index.html'
     })
     .state('gpanel.topic', {
       url: '/:id',
