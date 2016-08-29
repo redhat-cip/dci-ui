@@ -172,6 +172,10 @@ require('app')
     var moment = $injector.get('moment');
 
     $scope.topic = topic;
+    $scope.create = function(componentId) {
+      api.components.create(JSON.stringify(this.c));
+    };
+
     api.topics.components(topic.id)
       .then(function(data) {
         $scope.componentsByTopic = {};
@@ -180,6 +184,7 @@ require('app')
             component.created_at = moment(component.created_at)
               .local()
               .format();
+            component.data = JSON.stringify(component.data);
             return _.concat(target || [], component);
           });
         });
