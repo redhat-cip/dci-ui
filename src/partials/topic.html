@@ -6,7 +6,7 @@
       <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': opened, 'glyphicon-chevron-right': !opened}"></i>
     </uib-accordion-heading>
     <div class="table-responsive">
-      <table class="table table-hover">
+      <table class="table">
         <thead>
           <tr>
             <th>Name</th>
@@ -23,12 +23,45 @@
           </tr>
           <tr ng-repeat-end ng-if="c.opened">
             <td colspan="4">
-              <div class="form-group">
-                <label>Title</label><input type="text" class="form-control" value="{{ c.title }}" readonly/>
-              </div>
-              <div class="form-group">
-                <label>Data</label><textarea class="form-control" readonly>{{ c.data }}</textarea>
-              </div>
+              <form ng-submit="update(c)" novalidate>
+                <input type="hidden" ng-model="c.id" ng-init="c.id=c.id"/>
+                <input type="hidden" ng-model="c.topic_id" ng-init="c.topic_id=topic.id"/>
+                <div class="form-group"><label>Name</label>
+                  <input class="form-control" type="text" ng-model="c.name" required/>
+                </div>
+                <div class="form-group"><label>Type</label>
+                  <input type="text" class="form-control" ng-model="c.type" required/>
+                </div>
+                <div class="form-group"><label>Canonical Project Name</label>
+                  <textarea class="form-control" ng-model="c.canonical_project_name"></textarea>
+                </div>
+                <div class="form-group"><label>Data</label>
+                  <textarea class="form-control" ng-model="c.data"></textarea>
+                </div>
+                <div class="form-group"><label>Sha</label>
+                  <textarea class="form-control" ng-model="c.sha"></textarea>
+                </div>
+                <div class="form-group"><label>Title</label>
+                  <textarea class="form-control" ng-model="c.title"></textarea>
+                </div>
+                <div class="form-group"><label>Message</label>
+                  <textarea class="form-control" ng-model="c.message"></textarea>
+                </div>
+                <div class="form-group"><label>URL</label>
+                  <textarea class="form-control" ng-model="c.url"></textarea>
+                </div>
+                <div class="form-group"><label>Git</label>
+                  <textarea class="form-control" ng-model="c.git"></textarea>
+                </div>
+                <div class="form-group"><label>Ref</label>
+                  <textarea class="form-control" ng-model="c.ref"></textarea>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">Update</button>
+                  <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+               <input type="hidden" ng-model="target.topic_id"/>
+              </form>
             </td>
           </tr>
         </tbody>
@@ -36,3 +69,42 @@
     </div>
   </uib-accordion-group>
 </uib-accordion>
+
+<h2>Create new component</h2>
+<form name="createComponent" ng-submit="create()" novalidate>
+  <input type="hidden" ng-model="c.topic_id" ng-init="c.topic_id=topic.id"/>
+  <div class="form-group"><label>Name</label>
+    <input class="form-control" type="text" ng-model="c.name" required/>
+  </div>
+  <div class="form-group"><label>Type</label>
+    <input type="text" class="form-control" ng-model="c.type" required/>
+  </div>
+  <div class="form-group"><label>Canonical Project Name</label>
+    <textarea class="form-control" ng-model="c.canonical_project_name"></textarea>
+  </div>
+  <div class="form-group"><label>Data</label>
+    <textarea class="form-control" ng-model="c.data"></textarea>
+  </div>
+  <div class="form-group"><label>Sha</label>
+    <textarea class="form-control" ng-model="c.sha"></textarea>
+  </div>
+  <div class="form-group"><label>Title</label>
+    <textarea class="form-control" ng-model="c.title"></textarea>
+  </div>
+  <div class="form-group"><label>Message</label>
+    <textarea class="form-control" ng-model="c.message"></textarea>
+  </div>
+  <div class="form-group"><label>URL</label>
+    <textarea class="form-control" ng-model="c.url"></textarea>
+  </div>
+  <div class="form-group"><label>Git</label>
+    <textarea class="form-control" ng-model="c.git"></textarea>
+  </div>
+  <div class="form-group"><label>Ref</label>
+    <textarea class="form-control" ng-model="c.ref"></textarea>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Update</button>
+    <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+  </div>
+</form>

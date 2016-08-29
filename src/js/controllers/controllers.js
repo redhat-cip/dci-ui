@@ -170,8 +170,34 @@ require('app')
   '$injector', '$scope', 'topic', function($injector, $scope, topic) {
     var api = $injector.get('api');
     var moment = $injector.get('moment');
+    var msg = $injector.get('messages');
 
     $scope.topic = topic;
+    $scope.create = function(componentId) {
+      if($scope.objForm.$invalid) {
+        return;
+      }
+      api.components.create(JSON.stringify(this.c))
+        .then(
+          function(res) {
+            msg.alert('Create component successfully', 'success');
+          },
+          function(err) {
+            msg.alert(err.data.message, 'danger');
+          });
+    };
+
+    $scope.update = function(component) {
+      api.components.update(JSON.stringify(this.c))
+        .then(
+          function(res) {
+            msg.alert('Component successfully updated', 'success');
+          },
+          function(err) {
+            msg.alert(err.data.message, 'danger');
+          });
+    };
+
     api.topics.components(topic.id)
       .then(function(data) {
         $scope.componentsByTopic = {};
@@ -180,6 +206,7 @@ require('app')
             component.created_at = moment(component.created_at)
               .local()
               .format();
+            component.data = JSON.stringify(component.data);
             return _.concat(target || [], component);
           });
         });
