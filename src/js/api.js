@@ -111,7 +111,7 @@ require('app')
   };
 
   /*                                REMOTE CIS                                */
-  api.remotecis.update.parse = _.partialRight(_.pick, ['name']);
+  api.remotecis.update.parse = _.partialRight(_.pick, ['name', 'data']);
   api.remotecis.create = function(remoteci) {
     return $http.post(
       this.url, _.merge(remoteci, {'team_id': user.team.id})
