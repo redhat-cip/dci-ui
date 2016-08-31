@@ -206,7 +206,26 @@ require('app')
       return (new EditUser()).genState();
     })())
     .state('edit.team', (new utils.Edit('Team').genState()))
-    .state('edit.remoteci', (new utils.Edit('RemoteCI')).genState())
+    .state('edit.remoteci', (function() {
+      function EditRemoteCI() { utils.Edit.call(this, 'RemoteCI'); }
+      EditRemoteCI.prototype = Object.create(utils.Edit.prototype);
+      EditRemoteCI.prototype.constructor = EditRemoteCI;
+
+      EditRemoteCI.prototype.cb = function($stateParams, $injector) {
+        var that = this;
+        return utils.Edit.prototype.cb.call(that, $stateParams, $injector)
+        .then(function(obj) {
+          var method = obj.meta.method;
+          obj.meta.method = function(obj) {
+            obj.data = angular.fromJson(obj.data);
+            return method(obj);
+          }
+          return _.assign(obj, {'data': angular.toJson(obj.data, true)});
+        });
+      }
+
+      return (new EditRemoteCI()).genState();
+    })())
     .state('edit.topic', (function() {
       function EditTopic() { utils.Edit.call(this, 'Topic'); }
       EditTopic.prototype = Object.create(utils.Edit.prototype);
