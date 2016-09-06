@@ -265,7 +265,8 @@ require('app')
       .map(function(remoteci) {
         var conf = {'params': {
           'embed': 'remoteci,jobdefinition',
-          'where': 'remoteci_id:' + remoteci
+          'where': 'remoteci_id:' + remoteci,
+          'sort': '-created_at'
         }};
         return $http.get(api.jobs.url, conf);
       })
