@@ -34,30 +34,21 @@ describe('DCI homepage', function() {
     promise.then(utils.noop, utils.noop);
   });
 
-  beforeEach(function(done) {
-    // create a job before launching test
-    api.job().then(done);
-  });
-
-  afterEach(function(done) {
-    // take advantage of the cascading deletion, topic removal will also remove
-    // components, jobs, jobdefinitions
-    api.topic.cache.get()
-      .then(function(topic) {
-        return topic.remove();
-      })
-      .then(function() {
-        return api.remoteci.cache.get();
-      })
-      .then(function(remoteci) {
-        return remoteci.remove();
-      })
-      .then(done);
-  });
-
   it('should be possible to recheck a job', function() {
-    browser.get('/#/jobs');
-    element(by.css('.glyphicon-repeat')).click();
+    browser.get('/');
+    element.all(by.css('.glyphicon-repeat')).first().click();
     expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
+  });
+
+  it('should be possible to view job details', function() {
+    browser.get('/');
+    element.all(by.css('a.title')).first().click();
+    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
+  });
+
+  it('should be able to search for a job', function() {
+    browser.get('/');
+    element(by.id('patternSearch')).sendKeys('Dell_1').submit();
+    expect(browser.getLocationAbsUrl()).toBe('/logs?pattern=Dell_1');
   });
 });
