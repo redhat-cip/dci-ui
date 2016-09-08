@@ -17,7 +17,7 @@
 exports.config = {
   framework: 'jasmine2',
   seleniumAddress: 'http://localhost:9515',
-  specs: ['test/job.spec.js'],
+  specs: ['test/*.spec.js'],
   capabilities: {
     browserName: 'phantomjs'
   },
