@@ -3,15 +3,14 @@
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>Topic</th>
-      <th>ID</th>
-      <th class="text-center">Created At</th>
+      <th>Topic</th><th>ID</th><th>Label</th><th class="text-center">Created At</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="topic in topics">
       <td><a ui-sref="gpanel.topic({id: topic.id})">{{topic.name}}</a></td>
       <td>{{topic.id}}</td>
+      <td>{{topic.label}}</td>
       <td class="text-center">{{topic.created_at}}</td>
     </tr>
     </tbody>

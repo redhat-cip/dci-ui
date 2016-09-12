@@ -13,11 +13,14 @@
 <div class="topics-list">
   <div class="table-responsive">
     <table class="table table-striped">
-      <tr><th>Topic name</th><th>Topic ID</th><th>Date</th><th>Actions</th></tr>
+      <tr>
+        <th>Topic name</th><th>ID</th><th>Label</th><th>Created At</th><th class="text-center">Actions</th>
+      </tr>
       <tr ng-repeat="topic in topics.data">
-        <td>{{ topic.name }}</td>
-        <td>{{ topic.id }}</td>
-        <td>{{ topic.created_at }}</td>
+        <td>{{topic.name}}</td>
+        <td>{{topic.id}}</td>
+        <td>{{topic.label}}</td>
+        <td>{{topic.created_at}}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.topic({id: topic.id})">
           </span>
