@@ -39,7 +39,7 @@ ln -sf /srv/www/dci-ui/config.json %{buildroot}/etc/dci-ui/config.json
 
 %files
 /srv/www/dci-ui/*
-/etc/dci-ui/config.json
+%config(noreplace) /etc/dci-ui/config.json
 
 %changelog
 * Mon Jan 11 2016 Yanis Guenane <yguenane@redhat.com> 0.0-1
