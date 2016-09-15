@@ -1,12 +1,17 @@
-<h1 class="page-header">Components of {{ topic.name }}</h1>
-<h2>Type</h2>
+<h1 class="page-header">Components</h1>
+
+<ol class="breadcrumb">
+  <li><a ui-sref="topics">Home</a></li>
+  <li class="active">Topic: {{topic.name}}</li>
+</ol>
+
 <uib-accordion close-others="true">
   <uib-accordion-group ng-repeat="(type, components) in componentsByTopic" is-open="opened">
     <uib-accordion-heading>{{ type }}
       <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': opened, 'glyphicon-chevron-right': !opened}"></i>
     </uib-accordion-heading>
     <div class="table-responsive">
-      <table class="table">
+      <table class="table table-condensed">
         <thead>
           <tr>
             <th>Name</th>
@@ -70,7 +75,11 @@
   </uib-accordion-group>
 </uib-accordion>
 
-<h2>Create new component</h2>
+<h2 ng-show="admin">Create new Component
+<button ng-click="showCreateForm = !showCreateForm" class="btn btn-default glyphicon glyphicon-plus-sign" title="Create new component"></button>
+</h2>
+
+<div ng-show="showCreateForm">
 <form name="createComponent" ng-submit="create()" novalidate>
   <input type="hidden" ng-model="c.topic_id" ng-init="c.topic_id=topic.id"/>
   <div class="form-group"><label>Name</label>
@@ -108,3 +117,4 @@
     <button type="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
   </div>
 </form>
+</div>
