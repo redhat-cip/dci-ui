@@ -14,7 +14,6 @@
 
 'use strict';
 
-var moment = require('moment');
 var angular = require('angular');
 
 var _ = require('lodash');
@@ -29,16 +28,6 @@ module.exports = angular.module('app', [
   'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'jsonFormatter',
   'dci.messages'
 ])
-.factory('moment', function() {
-  moment.locale('en', {invalidDate: 'N/A'});
-  moment.locale('fr', {invalidDate: 'N/A'});
-  moment.defaultFormat = 'LLLL';
-
-  var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-  return _.assign(parser, {
-    'moment': moment.utc
-  });
-})
 .value('config', {})
 .filter('limit', function() {
   return function(input, size, term) {
