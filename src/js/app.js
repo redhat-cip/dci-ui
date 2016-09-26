@@ -39,44 +39,6 @@ module.exports = angular.module('app', [
     'moment': moment.utc
   });
 })
-.constant('status', {
-  'failure': {
-    'color': 'danger',
-    'glyphicon': 'glyphicon-remove'
-  },
-  'product-failure': {
-    'color': 'danger',
-    'glyphicon': 'glyphicon-remove'
-  },
-  'deployment-failure': {
-    'color': 'danger',
-    'glyphicon': 'glyphicon-remove'
-  },
-  'killed': {
-    'color': 'warning',
-    'glyphicon': 'glyphicon-ban-circle'
-  },
-  'success': {
-    'color': 'success',
-    'glyphicon': 'glyphicon-ok'
-  },
-  'running': {
-    'color': 'info',
-    'glyphicon': 'glyphicon-play'
-  },
-  'new': {
-    'color': 'primary',
-    'glyphicon': 'glyphicon-record'
-  },
-  'pre-run': {
-    'color': 'info',
-    'glyphicon': 'glyphicon-record'
-  },
-  'post-run': {
-    'color': 'info',
-    'glyphicon': 'glyphicon-record'
-  }
-})
 .value('config', {})
 .filter('limit', function() {
   return function(input, size, term) {
