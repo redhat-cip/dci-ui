@@ -65,66 +65,61 @@ require('app')
       });
   }
 ])
-  .controller('ListJobsCtrl', ['$state', '$scope', 'api', 'appCache',
-                               function($state, $scope, api, appCache) {
-    var page = parseInt($state.params.page) || 1;
-    var remoteci = $state.params.remoteci;
-    var status = $state.params.status;
+.controller('ListJobsCtrl', ['$state', '$scope', 'api', 'status', 'appCache', function($state, $scope, api, status, appCache) {
+  var page = parseInt($state.params.page) || 1;
 
-    _.assign($scope, {status: {}, isFiltering: true});
+  $scope.selected = {};
+  $scope.selected.remoteci = $state.params.remoteci ?
+    _.split($state.params.remoteci, ',') : [];
+  $scope.selected.status = $state.params.status ?
+    _.split($state.params.status, ',') : [];
 
-    remoteci = remoteci ? remoteci.split(',') : [];
-    status = status ? status.split(',') : [];
+  $scope.status = _.map(status, function(value, key) {
+    value.name = key;
+    return value;
+  });
 
-    _.each(
-      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run',
-       'killed', 'product-failure', 'deployment-failure'],
-      function(status) {
-        $scope.status[status] = _.includes($state.params.status, status);
-      }
-    );
-
-    $scope.remotecis = appCache.get('remotecis');
-    if (!$scope.remotecis) {
-      api.remotecis.list(null, true)
-        .then(function(remotecis) {
-          $scope.remotecis = _.map(remotecis, function(remoteci) {
-            return {
-              name: remoteci.name,
-              search: _.includes($state.params.remoteci, remoteci.name)
-            };
-          });
-          appCache.put('remotecis', $scope.remotecis);
-        });
-    }
-
-    function pagination(data) {
-      $scope.pagination = {
-        total: data._meta.count, page: page,
-        pageChanged: function() {
-          $state.go('jobs', $scope.pagination);
-        }
-      };
-      return data;
-    };
-
-    (remoteci.length || status.length ?
-     api.jobs.search(remoteci, status) : api.jobs.list(page).then(pagination)
-    )
-    .then(function(data) { $scope.jobs = data.jobs; });
-
-    $scope.retrieveLogs = function() {
-      $state.go('logs', {'pattern': $scope.pattern});
-    };
-
-    $scope.search = function() {
-      $state.go('jobs', {
-        'status': _($scope.status).pickBy(_.identity).keys().join(','),
-        'remoteci': _($scope.remotecis).filter('search').map('name').join(','),
-        'page': null
+  $scope.remotecis = appCache.get('remotecis');
+  if (!$scope.remotecis) {
+    api.remotecis.list(null, true)
+      .then(function(remotecis) {
+        $scope.remotecis = remotecis;
+        appCache.put('remotecis', $scope.remotecis);
       });
-    };
   }
+
+  function pagination(data) {
+    $scope.pagination = {
+      total: data._meta.count, page: page,
+      pageChanged: function() {
+        $state.go('jobs', $scope.pagination);
+      }
+    };
+    return data;
+  };
+
+  if ($scope.selected.remoteci.length || $scope.selected.status.length) {
+    api.jobs.search($state.params.remoteci, $state.params.status)
+      .then(function(data) { $scope.jobs = data.jobs; });
+  } else {
+    api.jobs.list(page).then(pagination)
+      .then(function(data) { $scope.jobs = data.jobs; });
+  }
+
+  $scope.retrieveLogs = function() {
+    $state.go('logs', {'pattern': $scope.pattern});
+  };
+
+  $scope.filters = function() {
+    var statuses = _($scope.selected.status).map('name').join(',');
+    var remotes = _($scope.selected.remoteci).map('name').join(',');
+    $state.go('jobs', {
+      'status': statuses,
+      'remoteci': remotes,
+      'page': page
+    });
+  };
+}
 ])
 .controller('ListJobDefsCtrl', [
   '$injector', '$scope', function($injector, $scope) {
