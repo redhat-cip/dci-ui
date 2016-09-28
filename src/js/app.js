@@ -22,11 +22,13 @@ require('angular-cookies');
 require('angular-animate');
 require('angular-ui-router');
 require('angular-ui-bootstrap');
+require('ui-select');
+require('angular-sanitize');
 require('jsonformatter');
 
 module.exports = angular.module('app', [
-  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'jsonFormatter',
-  'dci.messages'
+  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select',
+  'jsonFormatter', 'dci.messages', 'ngSanitize'
 ])
 .value('config', {})
 .filter('limit', function() {
