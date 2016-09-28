@@ -14,6 +14,7 @@
 
 'use strict';
 
+var merge      = require('merge-stream');
 var gulp       = require('gulp');
 var $          = require('gulp-load-plugins')();
 var del        = require('del');
@@ -23,7 +24,6 @@ var utils      = require('./utils');
 
 var DIST       = 'static';
 var JS         = ['src/js/**/*.js'];
-var SCSS       = ['src/css/**/*.scss'];
 var configFile = 'src/config.json';
 var configFileTplt = 'src/config.json.tplt';
 
@@ -76,13 +76,18 @@ gulp.task('css', function() {
   var conf = {
     includePaths: ['node_modules/bootstrap-sass/assets/stylesheets/']
   };
+  var SCSS  = ['src/css/**/*.scss'];
 
-  return gulp.src(SCSS)
-  .pipe($.sass(conf).on('error', $.sass.logError))
-  .pipe($.sourcemaps.init({loadMaps: true}))
-  .pipe($.concat('dashboard.css'))
-  .pipe($.sourcemaps.write())
-  .pipe(gulp.dest(DIST + '/css/'));
+  var scssStream = gulp.src(SCSS)
+        .pipe($.sass(conf).on('error', $.sass.logError))
+        .pipe($.concat('scss_out'));
+
+  var cssStream = gulp.src(['node_modules/ui-select/dist/select.css'])
+        .pipe($.concat('css_out'));
+
+  return merge(scssStream, cssStream)
+        .pipe($.concat('dashboard.css'))
+        .pipe(gulp.dest(DIST + '/css/'));
 });
 
 gulp.task('fonts', function() {
