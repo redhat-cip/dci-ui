@@ -19,15 +19,17 @@ var angular = require('angular');
 
 var _ = require('lodash');
 
-require('angular-cookies');
 require('angular-animate');
+require('angular-cookies');
+require('angular-sanitize');
 require('angular-ui-router');
+require('ui-select');
 require('angular-ui-bootstrap');
 require('jsonformatter');
 
 module.exports = angular.module('app', [
-  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'jsonFormatter',
-  'dci.messages'
+  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select',
+  'jsonFormatter', 'dci.messages', 'ngSanitize'
 ])
 .factory('moment', function() {
   moment.locale('en', {invalidDate: 'N/A'});
@@ -93,7 +95,7 @@ module.exports = angular.module('app', [
   $http.get('/config.json').then(function(resp) {
     angular.extend(config, resp.data);
     d.resolve();
-  }, function(err) {
+  }, function(err) {
     d.reject(err);
   });
 }]);
