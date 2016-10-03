@@ -224,10 +224,13 @@ require('app')
                              'embed': 'files'}};
     return $q.all([
       $http.get(urlize(this.url, job), confJ),
-      $http.get(urlize(this.url, job, 'jobstates'), confJS)
+      $http.get(urlize(this.url, job, 'components')),
+      $http.get(urlize(this.url, job, 'jobstates'), confJS),
     ])
     .then(function(results) {
       var job = _.first(results).data.job;
+      var components = results[1].data.components;
+      job.components = components;
       var jobstates = _.last(results).data.jobstates;
       job.jobstates = jobstates;
       _.each(jobstates, function(jobstate) {
