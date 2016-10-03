@@ -5,7 +5,7 @@
     <th>Job Types</th>
     <th>Job Definitions</th>
   </tr>
-  <tr ng-repeat-start="component in components">
+  <tr ng-repeat-start="component in components | orderBy: '-created_at'">
     <td rowspan="{{ jobdefs.length }}" class="col-md-4">{{component.name}}</td>
     <td>
       <b>{{jobdefs[0].name}}</b>
