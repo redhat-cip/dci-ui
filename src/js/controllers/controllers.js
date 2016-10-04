@@ -66,7 +66,7 @@ require('app')
   }
 ])
 .controller('ListJobsCtrl', [
-  '$state', '$scope', 'api', function($state, $scope, api) {
+  '$state', '$scope', 'api', 'appCache', function($state, $scope, api, appCache) {
     var page = parseInt($state.params.page) || 1;
     var remoteci = $state.params.remoteci;
     var status = $state.params.status;
@@ -75,6 +75,28 @@ require('app')
 
     remoteci = remoteci ? remoteci.split(',') : [];
     status = status ? status.split(',') : [];
+
+    _.each(
+      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run',
+       'killed', 'product-failure', 'deployment-failure'],
+      function(status) {
+        $scope.status[status] = _.includes($state.params.status, status);
+      }
+    );
+
+    $scope.remotecis = appCache.get('remotecis');
+    if(!$scope.remotecis) {
+      api.remotecis.list(null, true)
+        .then(function(remotecis) {
+          $scope.remotecis = _.map(remotecis, function(remoteci) {
+            return {
+              name: remoteci.name,
+              search: _.includes($state.params.remoteci, remoteci.name)
+            };
+          });
+          appCache.put('remotecis', $scope.remotecis);
+        });
+    }
 
     function pagination(data) {
       $scope.pagination = {
@@ -91,22 +113,6 @@ require('app')
     )
     .then(function(data) { $scope.jobs = data.jobs; });
 
-    _.each(
-      ['failure', 'success', 'running', 'new', 'pre-run', 'post-run',
-       'killed', 'product-failure', 'deployment-failure'],
-      function(status) {
-        $scope.status[status] = _.includes($state.params.status, status);
-      }
-    );
-    api.remotecis.list(null, true)
-    .then(function(remotecis) {
-      $scope.remotecis = _.map(remotecis, function(remoteci) {
-        return {
-          name: remoteci.name,
-          search: _.includes($state.params.remoteci, remoteci.name)
-        };
-      });
-    });
     $scope.retrieveLogs = function() {
       $state.go('logs', {'pattern': $scope.pattern});
     };
