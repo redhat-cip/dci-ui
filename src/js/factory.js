@@ -16,13 +16,18 @@
 
 var moment = require('moment');
 
-angular.module('app').factory('moment', function() {
-  moment.locale('en', {invalidDate: 'N/A'});
-  moment.locale('fr', {invalidDate: 'N/A'});
-  moment.defaultFormat = 'LLLL';
+angular.module('app')
+  .factory('moment', function() {
+    moment.locale('en', {invalidDate: 'N/A'});
+    moment.locale('fr', {invalidDate: 'N/A'});
+    moment.defaultFormat = 'LLLL';
 
-  var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-  return _.assign(parser, {
-    'moment': moment.utc
-  });
-});
+    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
+    return _.assign(parser, {
+      'moment': moment.utc
+    });
+  })
+  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('dci-app-cache');
+  }])
+;
