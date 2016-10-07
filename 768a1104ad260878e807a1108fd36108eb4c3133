@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_5e4fa292",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2016-10-07T20:04:29Z",
+      "side": 1,
+      "message": "Could you try to be a bit more chatty here. It would be nice if you could also use a more meaningful title to your patchset.",
+      "revId": "768a1104ad260878e807a1108fd36108eb4c3133",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
