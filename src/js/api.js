@@ -15,7 +15,6 @@
 'use strict';
 
 require('app')
-
 .factory('api', ['$injector', function($injector) {
   var $q = $injector.get('$q');
   var $http = $injector.get('$http');
@@ -255,58 +254,20 @@ require('app')
       return job;
     });
   };
-  api.jobs.search = function(remotecis, statuses) {
-    function retrieveRCIs(remoteci) {
-      var conf = {'params': {'where': 'name:' + remoteci}};
-      return $http.get(api.remotecis.url, conf);
-    };
+  api.jobs.search = function(remotecis, statuses, page) {
+    var wheres = _.concat(
+      _.map(remotecis, function(item) { return 'remoteci_id:' + item; }),
+      _.map(statuses, function(item) { return 'status:' + item; })
+    );
 
-    function retrieveJobs(status) {
-      var conf = {'params': {
-        'where': 'status:' + status,
-        'embed': 'remoteci,jobdefinition',
-        'sort': '-created_at'
-      }};
-      return $http.get(api.jobs.url, conf);
-    };
+    var conf = {'params': {
+      'where[]': wheres,
+      'embed': 'remoteci,jobdefinition',
+      'sort': '-created_at',
+      'page': page ? page : 1
+    }};
 
-    function retrieveJsRCI(remoteciResps) {
-      return _(remoteciResps)
-      .map(_.property('data.remotecis'))
-      .flatten()
-      .map(_.property('id'))
-      .map(function(remoteci) {
-        var conf = {'params': {
-          'embed': 'remoteci,jobdefinition',
-          'where': 'remoteci_id:' + remoteci,
-          'sort': '-created_at'
-        }};
-        return $http.get(api.jobs.url, conf);
-      })
-      .thru($q.all)
-      .value();
-    }
-    return $q.all([
-      _(remotecis).map(retrieveRCIs).thru($q.all).value().then(retrieveJsRCI),
-      _(statuses).map(retrieveJobs).thru($q.all).value()
-    ])
-    .then(function(data) {
-      var getJobs = _().map(_.property('data.jobs')).flatten();
-      var RCISJobs = getJobs.plant(_.first(data)).value();
-      var SSJobs = getJobs.plant(_.last(data)).value();
-
-      if (SSJobs.length && RCISJobs.length) {
-        var RCISJobsIds = _.map(RCISJobs, 'id');
-        return _.filter(SSJobs, function(job) {
-          return _.includes(RCISJobsIds, job.id);
-        });
-      } else {
-        return SSJobs.concat(RCISJobs);
-      }
-    })
-    .then(function(jobs) {
-      return {'jobs': jobs};
-    });
+    return $http.get(api.jobs.url, conf).then(_.property('data'));
   };
 
   /*                                JOBSTATES                                */
