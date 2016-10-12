@@ -6,9 +6,10 @@
       <form ng-submit="filters()">
         <div class="form-group col-xs-4">
           <ui-select ng-model="selected.status" theme="bootstrap" multiple sortable="true">
-            <ui-select-match placeholder="Filter by Status">{{$item.name}}</ui-select-match>
+            <ui-select-match placeholder="Filter by Status">
+              <span class="glyphicon" ng-class="[$item.glyphicon, 'text-' + $item.color]">{{$item.name}}</span></ui-select-match>
             <ui-select-choices repeat="s in status">
-              <div ng-bind-html="s.name | highlight: $select.search"></div>
+              <span class="glyphicon" ng-class="[s.glyphicon, 'text=' + s.color]"></span>{{s.name}}
             </ui-select-choices>
           </ui-select>
         </div>
