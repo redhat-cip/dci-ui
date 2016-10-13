@@ -11,6 +11,8 @@ export DCI_SETTINGS_FILE="$(pwd)/test/zuul/settings.py"
 DCI_SERVER_DIR="../dci-control-server"
 
 cd "$DCI_SERVER_DIR"
+
+sudo pip install -r requirements.txt
 sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 sh scripts/start_es.sh
