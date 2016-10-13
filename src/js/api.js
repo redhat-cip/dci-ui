@@ -225,12 +225,22 @@ require('app')
     return $q.all([
       $http.get(urlize(this.url, job), confJ),
       $http.get(urlize(this.url, job, 'components')),
+      $http.get(urlize(this.url, job, 'files')),
       $http.get(urlize(this.url, job, 'jobstates'), confJS),
     ])
     .then(function(results) {
       var job = _.first(results).data.job;
       var components = results[1].data.components;
       job.components = components;
+      var files = results[2].data.files;
+      job.files = files;
+      _.each(files, function(file) {
+        file.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
+          return urlize(
+            g1 + $window.atob(user.token) + '@' + g2, file.id, 'content'
+          );
+        });
+      });
       var jobstates = _.last(results).data.jobstates;
       job.jobstates = jobstates;
       _.each(jobstates, function(jobstate) {
