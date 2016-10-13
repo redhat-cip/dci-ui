@@ -24,7 +24,7 @@ require('app')
 
     var opened = false;
     var tabs = ['results', 'files', 'details', 'edit', 'context',
-                'stackdetails', 'issues'];
+                'stackdetails', 'issues', 'downloads'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
