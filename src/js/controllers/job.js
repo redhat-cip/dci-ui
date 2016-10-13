@@ -24,7 +24,7 @@ require('app')
 
     var opened = false;
     var tabs = ['results', 'files', 'details', 'edit', 'context',
-                'stackdetails', 'issues'];
+                'stackdetails', 'issues', 'downloads'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
@@ -60,6 +60,14 @@ require('app')
 
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
+
+      $scope.text_files = _.remove(files, function(file) {
+        api.files.content(file.id).then(function(res) {
+          file.content = res.data;
+        });
+        return file.mime == 'text/plain';
+      });
+
       $scope.junit_files = _.remove(files, function(file) {
         file.collapse = false;
         api.files.content(file.id).then(function(res) {
