@@ -29,9 +29,6 @@
   <div uib-collapse="!jobstate.isOpen" class="col-md-12">
     <div class="tile tile-file" ng-repeat="file in jobstate.files">
       <h5>
-        <a ng-href="{{file.dl_link}}" class="pull-right">
-          <span class="glyphicon glyphicon-download-alt"></span> download
-        </a>
         {{file.name}}
       </h5>
       <pre>{{file.content}}</pre>
