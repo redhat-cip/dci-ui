@@ -1,42 +1,24 @@
-<div ng-repeat="jobstate in job.jobstates" class="row" ng-class="jobstate.statusClass">
-<div class="col-md-12">
-  <h4>
-    <button type="button" class="btn btn-default btn-xs pull-right"
-                          ng-click="retrieveFiles(jobstate)"
-                          ng-if="jobstate.files.length">
-      <span ng-if="!jobstate.isOpen">
-        <span class="glyphicon glyphicon-menu-down"></span>
-        see details
-      </span>
-      <span ng-if="jobstate.isOpen">
-        <span class="glyphicon glyphicon-menu-up"></span>
-        close details
-      </span>
-    </button>
-    <span class="title">
-      {{ jobstate.status }}
-    </span>
-    <small>
-      : {{ jobstate.comment }}
-    </small>
-
-  </h4>
-
+<div class="col-md-12" ng-if="job.files && !job.files.length">
+  <h3 class="bs-callout bs-callout-danger text-center">No file attached to this job.</h3>
 </div>
-<div class="col-md-12" >
-  <small >{{ jobstate.created_at }}</small>
-</div>
-  <div uib-collapse="!jobstate.isOpen" class="col-md-12">
-    <div class="tile tile-file" ng-repeat="file in jobstate.files">
-      <h5>
-        {{file.name}}
-      </h5>
-      <pre>{{file.content}}</pre>
+<div class="col-md-12" ng-if="job.files.length">
+  <h2 class="page-header">Files list</h2>
+  <div class="downloads-list">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <tr>
+          <th>Filename</th><th>Size</th><th>mime-type</th><th>Download</th></tr>
+        <tr ng-repeat="download in job.files">
+          <td>{{ download.name }}</td>
+          <td>{{ download.size }} Bytes</td>
+          <td>{{ download.mime }}</td>
+          <td>
+            <a ng-href="{{download.dl_link}}">
+              <span class="glyphicon glyphicon-download-alt"></span> download
+            </a>
+          </td>
+        </tr>
+      </table>
     </div>
-
   </div>
-  <div class="col-md-12">
-    <hr>
-  </div>
-</div>
 </div>

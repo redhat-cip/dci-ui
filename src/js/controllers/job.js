@@ -23,8 +23,8 @@ require('app')
     var moment = $injector.get('moment');
 
     var opened = false;
-    var tabs = ['results', 'files', 'details', 'edit', 'context',
-                'stackdetails', 'issues', 'downloads'];
+    var tabs = ['results', 'logs', 'details', 'edit', 'context',
+                'stackdetails', 'issues', 'files'];
 
     function date(d, format) { return moment(d).local().format(format); };
 
