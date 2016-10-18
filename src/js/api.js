@@ -25,6 +25,17 @@ require('app')
   var urlize = _.rest(_.partialRight(_.join, '/'));
   var urlPttrn = new RegExp('(https?://)(.*)');
 
+  var handleError = function(data, status) {
+    var error = 'Unknown Error: ';
+    if (Math.floor(status, 100) == 4) {
+      error = 'Invalid Request: ' + data.message;
+    }
+    if (Math.floor(status, 100) == 5) {
+      error = 'Server Error: ' + data.message;
+    }
+    $injector.get('messages').alert(error, 'danger');
+  };
+
   // Initialize an API object which consists into a simple javascript
   // object, containing all the endpoints and then the methods associated
   // Here is a quick example:
@@ -51,7 +62,8 @@ require('app')
         // remove the trailing "s"
         var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
         var conf = this.embed ? {'params': {'embed': this.embed}} : {};
-        return $http.get(urlize(this.url, id), conf).then(_.property(extract));
+        return $http.get(urlize(this.url, id), conf).then(_.property(extract),
+                                                          handleError);
       },
       remove: function(id, etag) {
         var conf = {'headers': {'If-Match': etag}};
@@ -60,7 +72,7 @@ require('app')
       create: function(obj) {
         // remove the trailing "s"
         var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
-        return $http.post(this.url, obj).then(_.property(extract));
+        return $http.post(this.url, obj).then(_.property(extract), handleError);
       },
       list: function(page, extract) {
         var params = _.assign(
@@ -69,7 +81,8 @@ require('app')
           this.embed ? {'embed': this.embed} : null
         );
         extract = extract ? 'data.' + endpoint : 'data';
-        return $http.get(this.url, {params: params}).then(_.property(extract));
+        return $http.get(this.url, {params: params}).then(_.property(extract),
+                                                          handleError);
       },
       update: function(obj) {
         var url = urlize(this.url, obj.id);
@@ -98,7 +111,7 @@ require('app')
   /*                              JOBDEFINITIONS                              */
   api.jobdefinitions.components = function(jobdef) {
     var url = urlize(this.url, jobdef, 'components');
-    return $http.get(url).then(_.property('data.components'));
+    return $http.get(url).then(_.property('data.components'), handleError);
   };
 
   /*                                  AUDITS                                  */
@@ -106,7 +119,7 @@ require('app')
     // Audits does not provide the common api features, so we make a
     // simple call here.
     extract = extract ? 'data.audits' : 'data';
-    return $http.get(this.url).then(_.property(extract));
+    return $http.get(this.url).then(_.property(extract), handleError);
   };
 
   /*                                REMOTE CIS                                */
@@ -115,7 +128,7 @@ require('app')
     return $http.post(
       this.url, _.merge(remoteci, {'team_id': user.team.id})
     )
-    .then(_.property('data.remoteci'));
+      .then(_.property('data.remoteci'), handleError);
   };
 
   /*                                  TEAMS                                   */
@@ -126,7 +139,7 @@ require('app')
   api.users.get = function(name, withoutTeam) {
     var conf = withoutTeam ? {} : {'params': {'embed': 'team'}};
     return $http.get(urlize(this.url, name), conf)
-    .then(_.property('data.user'));
+      .then(_.property('data.user'), handleError);
   };
   api.users.update.parse = function(user) {
     return _.assign(
@@ -151,38 +164,38 @@ require('app')
   };
   api.topics.components = function(topic) {
     var url = urlize(api.topics.url, topic, 'components');
-    return $http.get(url).then(_.property('data.components'));
+    return $http.get(url).then(_.property('data.components'), handleError);
   };
   api.topics.components.jobs = function(topic, component) {
     var url = urlize(api.topics.url, topic, 'components', component, 'jobs');
-    return $http.get(url).then(_.property('data.jobs'));
+    return $http.get(url).then(_.property('data.jobs'), handleError);
   };
   api.topics.jobdefinitions = function(topic) {
     var url = urlize(api.topics.url, topic, 'jobdefinitions');
-    return $http.get(url).then(_.property('data.jobdefinitions'));
+    return $http.get(url).then(_.property('data.jobdefinitions'), handleError);
   };
 
   /*                                JOBSTATES                                 */
   api.jobstates.list = function(page, extract) {
     var conf = {'params': {'embed': 'job'}};
     extract = extract ? 'data.jobstates' : 'data';
-    return $http.get(this.url, conf).then(_.property(extract));
+    return $http.get(this.url, conf).then(_.property(extract), handleError);
   };
 
   api.jobstates.files = function(jobstate) {
     var conf = {'params': {'where': 'jobstate_id:' + jobstate}};
     return $http.get(api.files.url, conf)
-    .then(_.property('data.files'))
-    .then(_.partialRight(_.map, function(elt) {
-      // build link in the form of
-      // http(s)://username:password@apiURL/files/file_id/content
-      elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
-        return urlize(
-          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
-        );
-      });
-      return elt;
-    }));
+      .then(_.property('data.files'), handleError)
+      .then(_.partialRight(_.map, function(elt) {
+        // build link in the form of
+        // http(s)://username:password@apiURL/files/file_id/content
+        elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
+          return urlize(
+            g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
+          );
+        });
+        return elt;
+      }));
   };
 
   /*                                   JOBS                                   */
@@ -191,21 +204,21 @@ require('app')
 
   api.jobs.recheck = function(id) {
     var url = urlize(this.url, id, 'recheck');
-    return $http.post(url).then(_.property('data.job'));
+    return $http.post(url).then(_.property('data.job'), handleError);
   };
   api.jobs.files = function(job) {
     var url = urlize(this.url, job, 'files');
-    return $http.get(url).then(_.property('data.files'));
+    return $http.get(url).then(_.property('data.files'), handleError);
   };
   api.issues.list = function(job) {
     var url = urlize(api.jobs.url, job, 'issues');
-    return $http.get(url).then(_.property('data.issues'));
+    return $http.get(url).then(_.property('data.issues'), handleError);
   };
 
   api.issues.create = function(job, issue) {
     var url = urlize(api.jobs.url, job, 'issues');
     return $http.post(url, {'url': issue})
-      .then(_.partial(api.issues.list, job));
+      .then(_.partial(api.issues.list, job), handleError);
   };
 
   api.issues.remove = function(job, id, etag) {
@@ -215,7 +228,8 @@ require('app')
 
   api.jobs.get = function(job, partial) {
     if (partial) {
-      return $http.get(urlize(this.url, job)).then(_.property('data.job'));
+      return $http.get(urlize(this.url, job)).then(_.property('data.job'),
+                                                   handleError);
     }
 
     var confJ = {'params': {'embed': 'remoteci,jobdefinition'}};
@@ -267,7 +281,7 @@ require('app')
       'page': page ? page : 1
     }};
 
-    return $http.get(api.jobs.url, conf).then(_.property('data'));
+    return $http.get(api.jobs.url, conf).then(_.property('data'), handleError);
   };
 
   /*                                JOBSTATES                                */
@@ -280,7 +294,8 @@ require('app')
 
   /*                                  SEARCH                                 */
   api.search.create = function(pattern) {
-    return $http.post(this.url, {pattern: pattern}).then(_.property('data'));
+    return $http.post(this.url, {pattern: pattern})
+      .then(_.property('data'), handleError);
   };
 
   return api;
