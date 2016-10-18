@@ -24,6 +24,9 @@
     </h3>
   </div>
   <div class="col-md-12">
+    <div ng-show="logs">
+      <uib-progress value="1" max="1" class="progress-striped active">Loading</uib-progress>
+    </div>
     <div ng-repeat="log in logs">
       <div class="panel" ng-class="status(log)">
         <a class="panel-heading" ui-sref="job.results({id: log.job.id})"><b>Job: </b>{{ log.job.id }}</a>
@@ -31,11 +34,5 @@
           <b>File: </b>{{ log._source.name }}
         </div>
       </div>
-      <!--   <h4>
-        <b>File: </b>{{ log._source.name }}
-        </h4>
-
-        </div> -->
   </div>
 </div>
-
