@@ -105,13 +105,17 @@ require('app')
   }
 
   function pagination(data) {
-    $scope.pagination = {
-      total: data._meta.count, page: page,
-      pageChanged: function() {
-        $state.go('jobs', $scope.pagination);
-      }
-    };
-    return data;
+    if (data) {
+      $scope.pagination = {
+        total: data._meta.count, page: page,
+        pageChanged: function() {
+          $state.go('jobs', $scope.pagination);
+        }
+      };
+      return data;
+    } else {
+      return Promise.reject();
+    }
   }
 
   if (statuses.length || remotes.length) {
