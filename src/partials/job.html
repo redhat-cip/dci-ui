@@ -5,8 +5,8 @@
     <div ng-include="'/partials/job/results.html'" ></div>
   </div>
 
-  <div uib-tab heading="Files" select="go('^.files')" active="active.files">
-    <div ng-include="'/partials/job/files.html'" ></div>
+  <div uib-tab heading="Logs" select="go('^.logs')" active="active.logs">
+    <div ng-include="'/partials/job/logs.html'" ></div>
   </div>
   <div uib-tab heading="Details" select="go('^.details')" active="active.details">
     <div ng-include="'/partials/job/details.html'"></div>
@@ -24,7 +24,8 @@
     <div uib-tab-heading><span class="badge">{{ job.issues.length }}</span> Issues</div>
     <div ng-include="'/partials/job/issues.html'"></div>
   </div>
-  <div uib-tab heading="Downloads" select="go('^.downloads')" active="active.downloads">
-    <div ng-include="'/partials/job/downloads.html'" ></div>
+  <div uib-tab select="go('^.files')" active="active.files">
+    <div uib-tab-heading><span class="badge">{{ job.files.length }}</span> Files</div>
+    <div ng-include="'/partials/job/files.html'" ></div>
   </div>
 </div>

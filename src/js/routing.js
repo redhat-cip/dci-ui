@@ -102,13 +102,13 @@ require('app')
       }
     })
     .state('job.results', {url: '/results'})
-    .state('job.files', {url: '/files'})
+    .state('job.logs', {url: '/logs'})
     .state('job.details', {url: '/details'})
     .state('job.edit', {url: '/edit'})
     .state('job.context', {url: '/context'})
     .state('job.stackdetails', {url: '/stackdetails'})
     .state('job.issues', {url: '/issues'})
-    .state('job.downloads', {url: '/downloads'})
+    .state('job.files', {url: '/files'})
     .state('jobdefs', {
       parent: 'auth',
       url: '/job-definitions?page',

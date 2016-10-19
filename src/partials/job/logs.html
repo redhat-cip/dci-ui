@@ -1,0 +1,42 @@
+<div ng-repeat="jobstate in job.jobstates" class="row" ng-class="jobstate.statusClass">
+<div class="col-md-12">
+  <h4>
+    <button type="button" class="btn btn-default btn-xs pull-right"
+                          ng-click="retrieveFiles(jobstate)"
+                          ng-if="jobstate.files.length">
+      <span ng-if="!jobstate.isOpen">
+        <span class="glyphicon glyphicon-menu-down"></span>
+        see details
+      </span>
+      <span ng-if="jobstate.isOpen">
+        <span class="glyphicon glyphicon-menu-up"></span>
+        close details
+      </span>
+    </button>
+    <span class="title">
+      {{ jobstate.status }}
+    </span>
+    <small>
+      : {{ jobstate.comment }}
+    </small>
+
+  </h4>
+
+</div>
+<div class="col-md-12" >
+  <small >{{ jobstate.created_at }}</small>
+</div>
+  <div uib-collapse="!jobstate.isOpen" class="col-md-12">
+    <div class="tile tile-file" ng-repeat="file in jobstate.files">
+      <h5>
+        {{file.name}}
+      </h5>
+      <pre>{{file.content}}</pre>
+    </div>
+
+  </div>
+  <div class="col-md-12">
+    <hr>
+  </div>
+</div>
+</div>
