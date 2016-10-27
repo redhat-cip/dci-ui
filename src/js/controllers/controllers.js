@@ -72,6 +72,30 @@ require('app')
   var statuses = [];
   var remotes = [];
 
+  function getJobs() {
+    if (statuses.length || remotes.length) {
+      api.jobs.search(remotes, statuses).then(pagination)
+        .then(function(data) { $scope.jobs = data.jobs; });
+    } else {
+      api.jobs.list(page).then(pagination)
+        .then(function(data) { $scope.jobs = data.jobs; });
+    }
+  }
+
+  function pagination(data) {
+    if (data) {
+      $scope.pagination = {
+        total: data._meta.count, page: page,
+        pageChanged: function() {
+          $state.go('jobs', $scope.pagination);
+        }
+      };
+      return data;
+    } else {
+      return Promise.reject();
+    }
+  }
+
   $scope.selected = {remotecis: [], status: []};
   $scope.status = _.map(status, function(value, key) {
     value.name = key;
@@ -94,6 +118,7 @@ require('app')
         $scope.selected.remotecis = _.filter($scope.remotecis, function(iter) {
           return _.includes(remotes, iter.name);
         });
+        getJobs();
       });
   } else {
     if ($state.params.remoteci) {
@@ -101,29 +126,8 @@ require('app')
       $scope.selected.remotecis = _.filter($scope.remotecis, function(iter) {
         return _.includes(remotes, iter.name);
       });
+      getJobs();
     }
-  }
-
-  function pagination(data) {
-    if (data) {
-      $scope.pagination = {
-        total: data._meta.count, page: page,
-        pageChanged: function() {
-          $state.go('jobs', $scope.pagination);
-        }
-      };
-      return data;
-    } else {
-      return Promise.reject();
-    }
-  }
-
-  if (statuses.length || remotes.length) {
-    api.jobs.search(remotes, statuses).then(pagination)
-      .then(function(data) { $scope.jobs = data.jobs; });
-  } else {
-    api.jobs.list(page).then(pagination)
-      .then(function(data) { $scope.jobs = data.jobs; });
   }
 
   $scope.retrieveLogs = function() {
