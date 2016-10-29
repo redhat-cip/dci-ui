@@ -22,23 +22,17 @@
           id="inputPassword" class="form-control"
           placeholder="Password" required>
         </div>
-        <p ng-class="{invisible: !err}">
-        <span class="text-danger glyphicon glyphicon-remove"></span>
-        <span ng-if="err._status == 'Unauthorized'">Login or/and Password Incorrect</span>
-
-        <!-- This is here for debugging unexpected errors -->
-        <span ng-if="err._status != 'Unauthorized'">{{ err }}</span>
-        </p>
+        <div class="form-group" ng-if="err">
+          <p class="text-danger">
+            <span ng-if="err.status === 401">Login or/and Password Incorrect</span>
+            <span ng-if="err.status === -1">Distributed CI server is unreachable</span>
+            <!-- This is here for debugging unexpected errors -->
+            <span ng-if="err.status !== 401 && err.status !== -1">{{ err }}</span>
+          </p>
+        </div>
         <button class="btn btn-primary pull-right" type="submit">Sign in</button>
 
       </form>
-
-      <p class="text-danger" ng-if="unauthorized">
-      Login or/and Password Incorrect
-      </p>
-      <p class="text-danger" ng-if="error">
-      {{ error }}
-      </p>
     </div>
   </div>
 </div>
