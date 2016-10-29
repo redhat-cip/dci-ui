@@ -19,7 +19,7 @@ require('app')
   '$scope', '$state', 'auth', function($scope, $state, auth) {
     $scope.authenticate = function(credentials) {
       auth.login(credentials.username, credentials.password).then(
-        _.partial($state.go, 'index'), function(err) { $scope.err = err.data; }
+        _.partial($state.go, 'index'), function(err) { $scope.err = err; }
       );
     };
   }
