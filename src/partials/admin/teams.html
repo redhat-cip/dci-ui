@@ -13,11 +13,13 @@
   <div class="table-responsive">
     <table class="table table-striped">
       <tr>
-        <th>Team name</th><th>Team ID</th><th>Date</th><th>Actions</th>
+        <th>Team name</th><th>Team ID</th><th>Team email</th><th>Notification</th><th>Date</th><th>Actions</th>
       </tr>
       <tr ng-repeat="team in teams.data">
         <td>{{ team.name }}</td>
         <td>{{ team.id }}</td>
+        <td>{{ team.email }}</td>
+        <td>{{ team.notification }}</td>
         <td>{{ team.created_at }}</td>
         <td>
           <span class="btn glyphicon glyphicon-pencil" ui-sref="edit.team({id: team.id})"></span>
@@ -34,6 +36,17 @@
     <label for="team-name" class="control-label">Name</label>
     <input type="text" class="form-control" id="team-name" name="name"
            ng-model="teams.input.name" required>
+  </div>
+  <div class="form-group"
+       ng-class="{'has-error': showError(teams.form, teams.form.email)}">
+    <label for="team-email" class="control-label">eMail</label>
+    <input type="text" class="form-control" id="team-email" name="email"
+           ng-model="teams.input.email" required>
+  </div>
+  <div class="checkbox">
+  <label>
+    <input type="checkbox" ng-model="obj.notification"> Notification
+  </label>
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
