@@ -112,10 +112,10 @@ require('app')
       }
     };
     return data;
-  }
+  };
 
   if (statuses.length || remotes.length) {
-    api.jobs.search(remotes, statuses).then(pagination)
+    api.jobs.search(remotes, statuses)
       .then(function(data) { $scope.jobs = data.jobs; });
   } else {
     api.jobs.list(page).then(pagination)
