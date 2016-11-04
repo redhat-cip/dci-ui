@@ -120,7 +120,7 @@ require('app')
   };
 
   /*                                  TEAMS                                   */
-  api.teams.update.parse = _.partialRight(_.pick, ['name']);
+  api.teams.update.parse = _.partialRight(_.pick, ['name','email','notification']);
 
   /*                                  USERS                                   */
   api.users.embed = 'team';
