@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat-start="component in components" ng-click="component.opened = !component.opened">
+    <tr ng-repeat-start="component in components | orderBy: '-created_at'" ng-click="component.opened = !component.opened">
       <td>
         <span class="glyphicon glyphicon-exclamation-sign pull-right"
           ng-if="jobdef.comment"
