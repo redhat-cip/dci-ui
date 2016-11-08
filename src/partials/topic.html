@@ -14,19 +14,24 @@
       <table class="table table-condensed">
         <thead>
           <tr>
+            <th class="text-center" ng-if="global_admin">Export Control</th>
             <th>Name</th>
             <th>ID</th>
             <th class="text-center">Created At</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat-start="c in components"
+          <tr ng-repeat-start="c in components | orderBy: '-created_at'"
             ng-click="c.opened = !c.opened">
+            <td class="text-center" ng-if="global_admin">
+              <span ng-if="!c.export_control" class="label label-danger">Not Allowed</span>
+              <span ng-if="c.export_control" class="label label-success">Allowed</span>
+            </td>
             <td>{{ c.name }}</td>
             <td>{{ c.id }}</td>
             <td class="text-center">{{ c.created_at }}</td>
           </tr>
-          <tr ng-repeat-end ng-if="c.opened">
+          <tr ng-show="admin" ng-repeat-end ng-if="c.opened">
             <td colspan="4">
               <form ng-submit="update(c)" novalidate>
                 <input type="hidden" ng-model="c.id" ng-init="c.id=c.id"/>
