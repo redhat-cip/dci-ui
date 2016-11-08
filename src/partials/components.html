@@ -4,13 +4,22 @@
   <table class="table table-condensed">
     <thead>
     <tr>
+      <div ng-if="global_admin">
+        <th>Export Control</th>
+      </div>
       <th>Name</th>
       <th>ID</th>
       <th class="text-center">Created At</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat-start="component in components" ng-click="component.opened = !component.opened">
+    <tr ng-repeat-start="component in components | orderBy: '-created_at'" ng-click="component.opened = !component.opened">
+      <div ng-if="global_admin">
+        <td>
+          <span ng-if="!component.export_control" class="label label-danger">Not Allowed</span>
+          <span ng-if="component.export_control" class="label label-success">Allowed</span>
+        </td>
+      </div>
       <td>
         <span class="glyphicon glyphicon-exclamation-sign pull-right"
           ng-if="jobdef.comment"
