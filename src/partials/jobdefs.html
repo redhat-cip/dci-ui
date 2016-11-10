@@ -25,7 +25,7 @@
         {{ jobdef.name }}
       </td>
       <td>{{ jobdef.id }}</td>
-      <td class="text-center">{{ jobdef.created_at }}</td>
+      <td class="text-center">{{ jobdef.created_at_formatted }}</td>
       <td class="text-right">{{ jobdef.priority }}</td>
     </tr>
     <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
