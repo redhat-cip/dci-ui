@@ -29,7 +29,7 @@
             </td>
             <td>{{ c.name }}</td>
             <td>{{ c.id }}</td>
-            <td class="text-center">{{ c.created_at }}</td>
+            <td class="text-center">{{ c.created_at_formatted }}</td>
           </tr>
           <tr ng-show="admin" ng-repeat-end ng-if="c.opened">
             <td colspan="4">

@@ -21,6 +21,7 @@ require('app')
   var $http = $injector.get('$http');
   var $window = $injector.get('$window');
   var config = $injector.get('config');
+  var moment = $injector.get('moment');
   var user = $injector.get('user');
   var api = {urls: {}};
   var urlize = _.rest(_.partialRight(_.join, '/'));
@@ -235,6 +236,14 @@ require('app')
       var job = _.first(results).data.job;
       var components = results[1].data.components;
       job.components = components;
+      _.each(components, function(component) {
+        component.created_at_formatted = moment(component.created_at)
+          .local()
+          .format();
+        component.updated_at_formatted = moment(component.updated_at)
+          .local()
+          .format();
+      });
       var files = results[2].data.files;
       job.files = files;
       _.each(files, function(file) {

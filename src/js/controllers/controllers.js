@@ -148,7 +148,12 @@ require('app')
     .then(function(data) {
       $scope.jobdefs = data.jobdefinitions;
       _.each(data.jobdefinitions, function(jobdef) {
-        jobdef.created_at = moment(jobdef.created_at).local().format();
+        jobdef.created_at_formatted = moment(jobdef.created_at)
+          .local()
+          .format();
+        jobdef.updated_at_formatted = moment(jobdef.updated_at)
+          .local()
+          .format();
       });
       $scope.pagination = {
         total: data._meta.count, page: page,
@@ -171,7 +176,12 @@ require('app')
       .then(function(data) {
         $scope.topics = data.topics;
         _.each(data.topics, function(topic) {
-          topic.created_at = moment(topic.created_at).local().format();
+          topic.created_at_formatted = moment(topic.created_at)
+            .local()
+            .format();
+          topic.updated_at_formatted = moment(topic.updated_at)
+            .local()
+            .format();
         });
         $scope.pagination = {
           total: data._meta.count,
@@ -225,7 +235,10 @@ require('app')
         $scope.componentsByTopic = {};
         _.each(data, function(component) {
           _.update($scope.componentsByTopic, component.type, function(target) {
-            component.created_at = moment(component.created_at)
+            component.created_at_formatted = moment(component.created_at)
+              .local()
+              .format();
+            component.updated_at_formatted = moment(component.updated_at)
               .local()
               .format();
             component.data = JSON.stringify(component.data);
