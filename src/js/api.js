@@ -96,6 +96,9 @@ require('app')
     api.search.url = urlize(config.apiURL, 'api', 'v1', 'search');
   });
 
+  /*                                COMPONENTS                                */
+  api.components.update.parse = _.partialRight(_.pick, ['export_control']);
+
   /*                              JOBDEFINITIONS                              */
   api.jobdefinitions.components = function(jobdef) {
     var url = urlize(this.url, jobdef, 'components');
