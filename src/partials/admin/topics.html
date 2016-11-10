@@ -16,7 +16,7 @@
       <tr>
         <th>Topic name</th><th>ID</th><th>Label</th><th>Created At</th><th class="text-center">Actions</th>
       </tr>
-      <tr ng-repeat="topic in topics.data">
+      <tr ng-repeat="topic in topics.data | orderBy: 'name'">
         <td>{{topic.name}}</td>
         <td>{{topic.id}}</td>
         <td>{{topic.label}}</td>

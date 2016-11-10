@@ -8,7 +8,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="topic in topics">
+    <tr ng-repeat="topic in topics | orderBy: 'name'">
       <td>
         <a ui-sref="topic({id: topic.id})" class="title">{{topic.name}}</a>
       </td>

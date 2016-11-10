@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="topic in topics">
+    <tr ng-repeat="topic in topics | orderBy: 'name'">
       <td><a ui-sref="gpanel.topic({id: topic.id})">{{topic.name}}</a></td>
       <td>{{topic.id}}</td>
       <td>{{topic.label}}</td>

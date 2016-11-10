@@ -15,7 +15,7 @@
       <tr>
         <th>Username</th><th>User ID</th><th>Team ID</th><th>Role</th><th>Date</th><th>Actions</th>
       </tr>
-      <tr ng-repeat="user in users.data">
+      <tr ng-repeat="user in users.data | orderBy: 'name'">
         <td>{{ user.name }}</td>
         <td>{{ user.id }}</td>
         <td>{{ user.team_id }}</td>

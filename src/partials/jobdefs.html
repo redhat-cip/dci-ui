@@ -12,7 +12,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat-start="jobdef in jobdefs" ng-click="jobdef.opened = !jobdef.opened">
+    <tr ng-repeat-start="jobdef in jobdefs | orderBy: 'name'" ng-click="jobdef.opened = !jobdef.opened">
       <td class="text-center">
         <span ng-if="!jobdef.active" class="label label-danger">Locked</span>
         <span ng-if="jobdef.active" class="label label-success">Active</span>

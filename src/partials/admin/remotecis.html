@@ -15,7 +15,7 @@
       <tr>
         <th>Status</th><th>RemoteCI name</th><th>RemoteCI ID</th><th>Date</th><th>Actions</th>
       </tr>
-      <tr ng-repeat="remoteci in remotecis.data">
+      <tr ng-repeat="remoteci in remotecis.data | orderBy: 'name'">
         <td>
           <span ng-if="!remoteci.active" class="label label-danger">Locked</span>
           <span ng-if="remoteci.active" class="label label-success">Active</span>

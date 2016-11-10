@@ -15,7 +15,7 @@
       <tr>
         <th>Team name</th><th>Team ID</th><th>Date</th><th>Actions</th>
       </tr>
-      <tr ng-repeat="team in teams.data">
+      <tr ng-repeat="team in teams.data | orderBy: 'name'">
         <td>{{ team.name }}</td>
         <td>{{ team.id }}</td>
         <td>{{ team.created_at }}</td>
