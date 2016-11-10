@@ -189,6 +189,9 @@ require('app')
     var moment = $injector.get('moment');
     var msg = $injector.get('messages');
 
+
+    _.assign($scope, {objForm: {}});
+
     $scope.topic = topic;
     $scope.create = function(componentId) {
       if ($scope.objForm.$invalid) {
@@ -208,7 +211,7 @@ require('app')
       if ($scope.objForm.$invalid) {
         return;
       }
-      api.components.update(JSON.stringify(this.c))
+      api.components.update(this.c)
         .then(
           function(res) {
             msg.alert('Component successfully updated', 'success');
