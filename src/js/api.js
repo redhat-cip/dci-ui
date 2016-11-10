@@ -180,10 +180,10 @@ require('app')
     .then(_.property('data.files'))
     .then(_.partialRight(_.map, function(elt) {
       // build link in the form of
-      // http(s)://username:password@apiURL/files/file_id/content
+      // http(s)://apiURL/files/file_id/content
       elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
         return urlize(
-          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
+          g1 + g2, elt.id, 'content'
         );
       });
       return elt;
