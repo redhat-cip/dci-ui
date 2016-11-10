@@ -28,7 +28,7 @@ require('app')
       var start = moment(job.created_at);
 
       job.time_running = moment(job.updated_at).to(start, true);
-      job.updated_at = moment(job.updated_at).from(moment.moment());
+      job.updated_at_formatted = moment(job.updated_at).from(moment.moment());
 
       job.processStatus = function(s) {
         job.status = s;

@@ -37,15 +37,19 @@ require('app')
       $scope.active[tab] = $state.is('job.' + tab);
     });
 
-    job.jobdefinition.created_at = date(job.jobdefinition.created_at);
-    job.jobdefinition.updated_at = date(job.jobdefinition.updated_at);
-    job.remoteci.created_at = date(job.remoteci.created_at);
+    job.jobdefinition.created_at_formatted = date(job.jobdefinition.created_at);
+    job.jobdefinition.updated_at_formatted = date(job.jobdefinition.updated_at);
+    job.remoteci.created_at_formatted = date(job.remoteci.created_at);
+    job.remoteci.updated_at_formatted = date(job.remoteci.updated_at);
     job.configuration = angular.fromJson(job.configuration);
 
     _.each(job.jobstates, function(jobstate, i) {
       jobstate.statusClass = 'bs-callout-' + status[jobstate.status].color;
-      jobstate.created_at = date(
+      jobstate.created_at_formatted = date(
         jobstate.created_at, 'dddd DD, MMMM h:mm:ss A'
+      );
+      jobstate.updated_at_formatted = date(
+        jobstate.updated_at, 'dddd DD, MMMM h:mm:ss A'
       );
     });
 

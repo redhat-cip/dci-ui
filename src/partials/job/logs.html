@@ -24,7 +24,7 @@
 
 </div>
 <div class="col-md-12" >
-  <small >{{ jobstate.created_at }}</small>
+  <small >{{ jobstate.created_at_formatted }}</small>
 </div>
   <div uib-collapse="!jobstate.isOpen" class="col-md-12">
     <div class="tile tile-file" ng-repeat="file in jobstate.files">
