@@ -31,7 +31,7 @@
             <td>{{ c.id }}</td>
             <td class="text-center">{{ c.created_at_formatted }}</td>
           </tr>
-          <tr ng-show="admin" ng-repeat-end ng-if="c.opened">
+          <tr ng-show="global_admin" ng-repeat-end ng-if="c.opened">
             <td colspan="4">
               <form name="objForm" ng-submit="update(c)" novalidate>
                 <input type="hidden" ng-model="c.id" ng-init="c.id=c.id"/>
@@ -75,7 +75,7 @@
   </uib-accordion-group>
 </uib-accordion>
 
-<h2 ng-show="admin">Create new Component
+<h2 ng-show="global_admin">Create new Component
 <button ng-click="showCreateForm = !showCreateForm" class="btn btn-default glyphicon glyphicon-plus-sign" title="Create new component"></button>
 </h2>
 
