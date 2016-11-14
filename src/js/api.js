@@ -174,22 +174,6 @@ require('app')
     return $http.get(this.url, conf).then(_.property(extract));
   };
 
-  api.jobstates.files = function(jobstate) {
-    var conf = {'params': {'where': 'jobstate_id:' + jobstate}};
-    return $http.get(api.files.url, conf)
-    .then(_.property('data.files'))
-    .then(_.partialRight(_.map, function(elt) {
-      // build link in the form of
-      // http(s)://username:password@apiURL/files/file_id/content
-      elt.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
-        return urlize(
-          g1 + $window.atob(user.token) + '@' + g2, elt.id, 'content'
-        );
-      });
-      return elt;
-    }));
-  };
-
   /*                                   JOBS                                   */
   api.jobs.embed = 'remoteci,jobdefinition';
   api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
@@ -259,15 +243,6 @@ require('app')
       });
       var jobstates = _.last(results).data.jobstates;
       job.jobstates = jobstates;
-      _.each(jobstates, function(jobstate) {
-        _.each(jobstate.files, function(file) {
-          file.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
-            return urlize(
-              g1 + $window.atob(user.token) + '@' + g2, file.id, 'content'
-            );
-          });
-        });
-      });
       return job;
     });
   };
