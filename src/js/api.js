@@ -248,8 +248,12 @@ require('app')
       job.files = files;
       _.each(files, function(file) {
         file.dl_link = api.files.url.replace(urlPttrn, function(_, g1, g2) {
+          var token = $window.atob(user.token);
+          var tkn_username = token.substring(0, token.indexOf(':'));
+          var tkn_password = escape(token.substring(token.indexOf(':') + 1));
+
           return urlize(
-            g1 + $window.atob(user.token) + '@' + g2, file.id, 'content'
+            g1 + tkn_username + ':' + tkn_password + '@' + g2, file.id, 'content'
           );
         });
       });
