@@ -1,3 +1,4 @@
+<div ng-controller="FileCtrl2" class="row">
 <div class="col-md-12" ng-if="job.files && !job.files.length">
   <h3 class="bs-callout bs-callout-danger text-center">No file attached to this job.</h3>
 </div>
@@ -13,6 +14,9 @@
           <td>{{ download.size }} Bytes</td>
           <td>{{ download.mime }}</td>
           <td>
+            <a href download="{{name}}" ng-click="content(download.id)">
+              <span class="glyphicon glyphicon-download-alt"></span> download
+            </a>
             <a ng-href="{{download.dl_link}}">
               <span class="glyphicon glyphicon-download-alt"></span> download
             </a>
@@ -21,4 +25,5 @@
       </table>
     </div>
   </div>
+</div>
 </div>

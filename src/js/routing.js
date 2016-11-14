@@ -73,6 +73,28 @@ require('app')
       templateUrl: '/partials/jobs.html',
       controller: 'ListJobsCtrl'
     })
+    .state('file', {
+      parent: 'auth',
+      url: '/files/:id',
+      controller: 'FileCtrl',
+      resolve: {
+        file: [
+          '$injector', '$stateParams', 'conf',
+          function($injector, $stateParams) {
+            var api = $injector.get('api');
+
+            return api.files.get($stateParams.id).catch(function(err) {
+              $injector.get('$state').go('index');
+              $injector.get('messages').alert(
+                err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+              );
+            });
+          }
+        ]
+      }
+    })
+    .state('file.content', {url: '/content'})
     .state('logs', {
       parent: 'auth',
       url: '/logs?pattern',

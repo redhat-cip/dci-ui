@@ -107,6 +107,15 @@ require('app')
       });
   };
 }])
+.controller('FileCtrl', ['$scope', 'api', 'file', function($scope, api, file) {
+  return api.files.content(file.id);
+}])
+.controller('FileCtrl2', ['$scope', 'api', function($scope, api) {
+  $scope.content = function(file) {
+    console.log(file)
+    return api.files.content(file);
+  };
+}])
 .filter('titlecase', function() {
   return function(input) {
     return input.charAt(0).toUpperCase() + input.slice(1);
