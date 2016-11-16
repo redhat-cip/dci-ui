@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_02230a06",
+        "filename": "src/js/api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 28
+      },
+      "writtenOn": "2016-11-16T11:01:45Z",
+      "side": 1,
+      "message": "You\u0027re using this value twice, I\u0027d suggest to put it in a variable to avoid errors later.",
+      "range": {
+        "startLine": 252,
+        "startChar": 49,
+        "endLine": 252,
+        "endChar": 60
+      },
+      "revId": "179669030a16f7a05c28bf219ea8e2a8ad6334b6",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_e225260b",
+        "filename": "src/js/api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 28
+      },
+      "writtenOn": "2016-11-16T11:01:45Z",
+      "side": 1,
+      "message": "According to [1]:\n\n1/ the escape function is deprecated and I guess we should avoid its use\n\n2/ \"This function encodes special characters, with the exception of: * @ - _ + . /\" as we don\u0027t (and shouldn\u0027t) limit what characters can be used in a password, this function does not enough. \n\nAs recommended in [1], I\u0027d vote to use \"encodeURIComponent()\"[2] instead. \n\n[1] http://www.w3schools.com/jsref/jsref_escape.asp \n[2] http://www.w3schools.com/jsref/jsref_encodeuricomponent.asp",
+      "range": {
+        "startLine": 253,
+        "startChar": 29,
+        "endLine": 253,
+        "endChar": 35
+      },
+      "revId": "179669030a16f7a05c28bf219ea8e2a8ad6334b6",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
