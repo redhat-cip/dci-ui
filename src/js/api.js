@@ -100,6 +100,11 @@ require('app')
   /*                                COMPONENTS                                */
   api.components.update.parse = _.partialRight(_.pick, ['export_control']);
 
+  api.components.files = function(component) {
+    var url = urlize(this.url, component, 'files');
+    return $http.get(url).then(_.property('data.component_files'));
+  };
+
   /*                              JOBDEFINITIONS                              */
   api.jobdefinitions.components = function(jobdef) {
     var url = urlize(this.url, jobdef, 'components');
@@ -156,7 +161,32 @@ require('app')
   };
   api.topics.components = function(topic) {
     var url = urlize(api.topics.url, topic, 'components');
-    return $http.get(url).then(_.property('data.components'));
+
+    return $http.get(url)
+      .then(_.property('data.components'))
+      .then(function(results) {
+        _.each(results, function(component) {
+          api.components.files(component.id).then(function(components) {
+            component.files = components;
+            _.each(component.files, function(file) {
+              file.dl_link = api.files.url.replace(
+                  urlPttrn, function(_, g1, g2) {
+                    var token = $window.atob(user.token);
+                    var tkn_index = token.indexOf(':');
+                    var tkn_username = token.substring(0, tkn_index);
+                    var tkn_password = encodeURIComponent(
+                        token.substring(tkn_index + 1)
+                    );
+                    return urlize(
+                        g1 + tkn_username + ':' + tkn_password + '@' + g2,
+                        file.id, 'content'
+                    );
+                  });
+            });
+          });
+        });
+        return results;
+      });
   };
   api.topics.components.jobs = function(topic, component) {
     var url = urlize(api.topics.url, topic, 'components', component, 'jobs');
