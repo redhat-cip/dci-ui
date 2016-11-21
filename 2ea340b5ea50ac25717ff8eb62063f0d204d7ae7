@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_78ed758b",
+        "filename": "src/partials/topic.html",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2016-11-21T09:31:05Z",
+      "side": 1,
+      "message": "The ng-show\u003d\"admin\" conditional should be removed. A regular user should be able to download files attached to a component.",
+      "revId": "2ea340b5ea50ac25717ff8eb62063f0d204d7ae7",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
