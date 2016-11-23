@@ -17,7 +17,29 @@
 require('app')
 .controller('GpanelIndexCtrl', [
   '$scope', 'api', function($scope, api) {
-    api.topics.list(null, true).then(_.partial(_.set, $scope, 'topics'));
+
+    api.topics.list(null, true)
+    .then(function(topics) {
+      $scope.topics = topics;
+      _.each(topics, function(topic) {
+        api.topics.status(topic.id).then(function(jobs) {
+          topic.jobs = jobs;
+          _.each(jobs, function(job) {
+            if (['new', 'pre-run', 'post-run']
+                .indexOf(job.job_status) !== -1) {
+              job.state = 'text-info';
+            } else if (['failure', 'product-failure', 'deployment-failure']
+                       .indexOf(job.job_status) !== -1) {
+              job.state = 'text-danger';
+            } else if (job.job_status == 'success') {
+              job.state = 'text-success';
+            } else if (job.job_status == 'killed') {
+              job.state = 'text-warning';
+            }
+          });
+        });
+      });
+    });
   }
 ])
 .controller('GpanelTopicCtrl', [
