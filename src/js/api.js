@@ -196,6 +196,10 @@ require('app')
     var url = urlize(api.topics.url, topic, 'jobdefinitions');
     return $http.get(url).then(_.property('data.jobdefinitions'));
   };
+  api.topics.status = function(topic) {
+    var url = urlize(api.topics.url, topic, 'type/git/status');
+    return $http.get(url).then(_.property('data.jobs'));
+  };
 
   /*                                JOBSTATES                                 */
   api.jobstates.list = function(page, extract) {
