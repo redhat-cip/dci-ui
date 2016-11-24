@@ -110,6 +110,10 @@ require('app')
     var url = urlize(this.url, jobdef, 'components');
     return $http.get(url).then(_.property('data.components'));
   };
+  api.jobdefinitions.tests = function(jobdef) {
+    var url = urlize(this.url, jobdef, 'tests');
+    return $http.get(url).then(_.property('data.tests'));
+  };
 
   /*                                  AUDITS                                  */
   api.audits.list = function(page, extract) {

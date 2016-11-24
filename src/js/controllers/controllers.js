@@ -148,6 +148,9 @@ require('app')
     .then(function(data) {
       $scope.jobdefs = data.jobdefinitions;
       _.each(data.jobdefinitions, function(jobdef) {
+        api.jobdefinitions.tests(jobdef.id).then(function(tests) {
+          jobdef.tests = tests;
+        });
         jobdef.created_at_formatted = moment(jobdef.created_at)
           .local()
           .format();
