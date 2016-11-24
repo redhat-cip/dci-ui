@@ -18,19 +18,30 @@
         <span ng-if="jobdef.active" class="label label-success">Active</span>
       </td>
       <td>
-        <span class="glyphicon glyphicon-exclamation-sign pull-right"
-          ng-if="jobdef.comment"
-          aria-hidden="true">
-        </span>
         {{ jobdef.name }}
       </td>
       <td>{{ jobdef.id }}</td>
       <td class="text-center">{{ jobdef.created_at_formatted }}</td>
       <td class="text-right">{{ jobdef.priority }}</td>
     </tr>
-    <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
-      <td colspan="6">
-        {{ jobdef.comment }}
+    <tr ng-repeat-end>
+      <td colspan="12">
+        <div ng-if="jobdef.comment"><label>Comment:</label> {{ jobdef.comment || "No comment" }}</div>
+        <div><label>Associated Test(s):</label><br/>
+        <div ng-if="jobdef.tests.length == 0">No test associated with this job definition<br/></div>
+        <table ng-if="jobdef.tests.length != 0" class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="test in jobdef.tests | orderBy: '-name'">
+                  <td>{{test.name}}</td>
+                  <td><div json-formatter json="test.data" open="1"></div></td>
+              </tr>
+        </table>
       </td>
     </tr>
     </tbody>
