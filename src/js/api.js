@@ -225,6 +225,14 @@ require('app')
     var url = urlize(this.url, job, 'files');
     return $http.get(url).then(_.property('data.files'));
   };
+  api.jobs.metas = function(job) {
+    var url = urlize(this.url, job, 'metas');
+    return $http.get(url).then(_.property('data.metas'));
+  };
+  api.jobs.metas.post = function(job, data) {
+    var url = urlize(api.jobs.url, job.id, 'metas');
+    return $http.post(url, data);
+  };
   api.issues.list = function(job) {
     var url = urlize(api.jobs.url, job, 'issues');
     return $http.get(url).then(_.property('data.issues'));

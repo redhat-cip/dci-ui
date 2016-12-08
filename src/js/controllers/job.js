@@ -62,6 +62,10 @@ require('app')
       });
     };
 
+    api.jobs.metas(job.id).then(function(metas) {
+      $scope.metas = metas;
+    });
+
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
 
@@ -128,6 +132,7 @@ require('app')
         comment: job.comment,
         status: job.status
       };
+      $scope.metas = job.metas;
     };
     $scope.reset();
 
@@ -145,6 +150,30 @@ require('app')
           job.comment = data.comment || job.comment;
           job.etag = resp.headers('etag');
           msg.alert('job updated', 'success');
+          $scope.reset();
+        },
+        function(error) {
+          if (error === 'empty') {
+            return msg.alert('No data provided for update', 'danger');
+          }
+          var str = [
+            error.status, error.statusText + '-', error.data.message
+          ];
+          msg.alert(str.join(' '), 'danger');
+        }
+      );
+    };
+
+    $scope.add = function() {
+      // process and clean data
+      var data = _.pick($scope.form, ['name', 'value']);
+
+      // api call for updating job
+      api.jobs.metas.post(job, data).then(
+        function(resp) {
+          // job.processStatus(data.name);
+          job.metas = _.concat(job.metas, data);
+          msg.alert('Meta Data added', 'success');
           $scope.reset();
         },
         function(error) {
