@@ -175,7 +175,7 @@ require('app')
           api.components.files(component.id).then(function(components) {
             component.files = components;
             _.each(component.files, function(file) {
-              file.dl_link = api.files.url.replace(
+              file.dl_link = api.components.url.replace(
                   urlPttrn, function(_, g1, g2) {
                     var token = $window.atob(user.token);
                     var tkn_index = token.indexOf(':');
@@ -185,7 +185,7 @@ require('app')
                     );
                     return urlize(
                         g1 + tkn_username + ':' + tkn_password + '@' + g2,
-                        file.id, 'content'
+                        component.id, 'files', file.id, 'content'
                     );
                   });
             });
