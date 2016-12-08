@@ -79,4 +79,51 @@
   </div>
 </div>
 
-
+<div class="row">
+  <h3 class="col-md-12 page-header">Tests
+    <button type="button" class="btn btn-default btn-xs pull-right"
+                          ng-click="collapses.tests = !collapses.tests">
+      <span ng-if="collapses.tests">
+        <span class="glyphicon glyphicon-menu-down"></span>
+        see details
+      </span>
+      <span ng-if="!collapses.tests">
+        <span class="glyphicon glyphicon-menu-up"></span>
+        close details
+      </span>
+    </button>
+  </h3>
+  <div class="col-md-12" uib-collapse="collapses.tests">
+    <h4>Jobdefinitions Tests</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="test in jtests | orderBy: '-name'">
+            <td>{{test.name}}</td>
+            <td><div json-formatter json="test.data" open="1"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <h4>RemoteCI Tests</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="test in rtests | orderBy: '-name'">
+            <td>{{test.name}}</td>
+            <td><div json-formatter json="test.data" open="1"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
