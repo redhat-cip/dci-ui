@@ -130,6 +130,10 @@ require('app')
     )
     .then(_.property('data.remoteci'));
   };
+  api.remotecis.tests = function(remoteci) {
+    var url = urlize(api.remotecis.url, remoteci, 'tests');
+    return $http.get(url).then(_.property('data.tests'));
+  };
 
   /*                                  TEAMS                                   */
   api.teams.update.parse = _.partialRight(_.pick, ['name',

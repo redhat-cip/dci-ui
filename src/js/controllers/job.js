@@ -66,6 +66,14 @@ require('app')
       $scope.metas = metas;
     });
 
+    api.jobdefinitions.tests(job.jobdefinition.id).then(function(tests) {
+      $scope.jtests = tests;
+    });
+
+    api.remotecis.tests(job.remoteci.id).then(function(tests) {
+      $scope.rtests = tests;
+    });
+
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
 
