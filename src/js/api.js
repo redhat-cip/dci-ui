@@ -65,7 +65,6 @@ require('app')
       },
       list: function(page, extract) {
         var params = _.assign(
-          {'sort': '-created_at'},
           page ? {'limit': 20, 'offset': 20 * (page - 1)} : null,
           this.embed ? {'embed': this.embed} : null
         );
@@ -254,8 +253,7 @@ require('app')
     function retrieveJobs(status) {
       var conf = {'params': {
         'where': 'status:' + status,
-        'embed': 'remoteci,jobdefinition',
-        'sort': '-created_at'
+        'embed': 'remoteci,jobdefinition'
       }};
       return $http.get(api.jobs.url, conf);
     };
@@ -268,8 +266,7 @@ require('app')
       .map(function(remoteci) {
         var conf = {'params': {
           'embed': 'remoteci,jobdefinition',
-          'where': 'remoteci_id:' + remoteci,
-          'sort': '-created_at'
+          'where': 'remoteci_id:' + remoteci
         }};
         return $http.get(api.jobs.url, conf);
       })
