@@ -71,7 +71,7 @@ require('app')
             file.content = res.data;
           });
         }
-        return file.mime == 'text/plain';
+        return file.mime == 'text/plain' && !file.jobstate_id;
       });
 
       $scope.junit_files = _.remove(files, function(file) {

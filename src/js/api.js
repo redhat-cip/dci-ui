@@ -283,6 +283,9 @@ require('app')
           );
         });
       });
+      _.remove(job.files, function(file) {
+        return file.jobstate_id;
+      });
       var jobstates = _.last(results).data.jobstates;
       job.jobstates = jobstates;
       return job;
