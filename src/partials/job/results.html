@@ -62,6 +62,7 @@ No JUnit result uploaded.
     <tr>
       <th>Status</th>
       <th>Classname</th>
+      <th>Name</th>
       <th>Time</th>
     </tr>
     </thead>
@@ -74,6 +75,7 @@ No JUnit result uploaded.
         <span ng-if="testcase.result.action == 'passed'" class="label label-success">Pass</span>
       </td>
       <td>{{testcase.classname || testcase.name}}</td>
+      <td>{{testcase.name}}</td>
       <td>{{testcase.time}} sec</td>
     </tr>
     <tr ng-repeat-end ng-show="testcase.opened" class="result-details"
