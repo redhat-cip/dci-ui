@@ -18,12 +18,17 @@ exports.config = {
   framework: 'jasmine2',
   seleniumAddress: 'http://localhost:9515',
   specs: ['test/*.spec.js'],
+  allScriptsTimeout: 60000,
+  getPageTimeout: 30000,
   capabilities: {
-    browserName: 'phantomjs'
+    browserName: 'phantomjs',
+    newCommandTimeout: 60,
+    maxSessions: 1,
   },
 
   onPrepare: function () {
     var jasmineReporters = require('jasmine-reporters');
+    browser.manage().timeouts().implicitlyWait(5000);
     jasmine.getEnv().addReporter(
       new jasmineReporters.JUnitXmlReporter()
     );
@@ -32,6 +37,6 @@ exports.config = {
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000
+    defaultTimeoutInterval: 60000
   }
 }

@@ -218,12 +218,16 @@ require('app')
   };
 
   /*                                   JOBS                                   */
-  api.jobs.embed = 'remoteci,jobdefinition';
+  api.jobs.embed = 'remoteci,jobdefinition,jobdefinition.tests';
   api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
 
   api.jobs.recheck = function(id) {
     var url = urlize(this.url, id, 'recheck');
     return $http.post(url).then(_.property('data.job'));
+  };
+  api.jobs.results = function(job) {
+    var url = urlize(this.url, job, 'results');
+    return $http.get(url).then(_.property('data.results'));
   };
   api.jobs.files = function(job) {
     var url = urlize(this.url, job, 'files');
