@@ -218,7 +218,7 @@ require('app')
   };
 
   /*                                   JOBS                                   */
-  api.jobs.embed = 'remoteci,jobdefinition';
+  api.jobs.embed = 'remoteci,jobdefinition,jobdefinition.tests';
   api.jobs.update.parse = _.partialRight(_.pick, ['status', 'comment']);
 
   api.jobs.recheck = function(id) {

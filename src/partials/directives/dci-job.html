@@ -1,6 +1,5 @@
-<div class="bs-callout container-fluid job" ng-class="job.statusClass">
-  <div class="col-md-11 col-sm-10 col-xs-9">
-    <div class="col-md-7 col-sm-6 col-xs-12">
+<div class="bs-callout container-fluid job row" ng-class="job.statusClass">
+  <div class="col-md-4">
     <a ui-sref="job.results({id: job.id})"  class="title">
       {{job.remoteci.name}} / {{job.jobdefinition.name}}
     </a>
@@ -10,9 +9,19 @@
     <div class="text-muted" ng-if="job.comment && job.detail">
       "{{job.comment}}"
     </div>
-
   </div>
-  <div class="col-md-5 col-sm-6 hidden-xs">
+  <div class="col-md-3">
+    <div class="title">
+      Tests
+    </div>
+    <div class="text-muted hidden-xs hidden-sm">
+	    Tempest: <span class="glyphicon glyphicon-ok">
+    </div>
+    <div class="text-muted hidden-xs hidden-sm">
+	    Rally: <span class="glyphicon glyphicon-remove">
+    </div>
+  </div>
+  <div class="col-md-4">
     <div class="title">
       <span class="glyphicon" ng-class="job.glyphicon"></span> {{job.status}}
     </div>
@@ -35,8 +44,7 @@
         <span class="glyphicon glyphicon-info-sign"></span> {{ job.user_agent }} ({{job.client_version}})
     </div>
   </div>
-  </div>
-  <div class="col-md-1 col-sm-2 col-xs-3">
+  <div class="col-md-1">
     <button type="button" class="close" ng-click="remove_job(jobs, $index)">
       <span aria-hidden="true">×</span>
       <span class="sr-only">Close</span>
