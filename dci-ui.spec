@@ -8,7 +8,7 @@ Summary:        DCI UI static files
 License:        ASL 2.0
 
 URL:            https://github.com/redhat-cip/dci-ui
-Source0:        dci-ui-%{version}.tgz
+Source0:        dci-ui-%{version}.tar.gz
 
 %if 0%{?rhel}
 BuildRequires:  epel-release
