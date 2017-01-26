@@ -140,7 +140,7 @@ require('app')
         comment: job.comment,
         status: job.status
       };
-      $scope.metas = job.metas;
+      //$scope.metas = metas;
     };
     $scope.reset();
 
@@ -172,7 +172,7 @@ require('app')
       );
     };
 
-    $scope.add = function() {
+    $scope.metasadd = function() {
       // process and clean data
       var data = _.pick($scope.form, ['name', 'value']);
 
@@ -180,8 +180,30 @@ require('app')
       api.jobs.metas.post(job, data).then(
         function(resp) {
           // job.processStatus(data.name);
-          job.metas = _.concat(job.metas, data);
+          $scope.metas = _.concat($scope.metas, data);
           msg.alert('Meta Data added', 'success');
+          $scope.reset();
+        },
+        function(error) {
+          if (error === 'empty') {
+            return msg.alert('No data provided for update', 'danger');
+          }
+          var str = [
+            error.status, error.statusText + '-', error.data.message
+          ];
+          msg.alert(str.join(' '), 'danger');
+        }
+      );
+    };
+    $scope.metasremove = function(obj) {
+      // process and clean data
+
+      // api call for updating job
+      api.jobs.metas.delete($scope.job.id, $scope.metas[obj].id).then(
+        function(resp) {
+          _.pullAt($scope.metas, obj)
+
+          msg.alert('Meta Data deleted', 'success');
           $scope.reset();
         },
         function(error) {

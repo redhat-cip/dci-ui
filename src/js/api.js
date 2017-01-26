@@ -230,12 +230,16 @@ require('app')
     return $http.get(url).then(_.property('data.files'));
   };
   api.jobs.metas = function(job) {
-    var url = urlize(this.url, job, 'metas');
+    var url = urlize(api.jobs.url, job, 'metas');
     return $http.get(url).then(_.property('data.metas'));
   };
   api.jobs.metas.post = function(job, data) {
     var url = urlize(api.jobs.url, job.id, 'metas');
     return $http.post(url, data);
+  };
+  api.jobs.metas.delete = function(job, id) {
+    var url = urlize(api.jobs.url, job, 'metas', id);
+    return $http.delete(url);
   };
   api.issues.list = function(job) {
     var url = urlize(api.jobs.url, job, 'issues');

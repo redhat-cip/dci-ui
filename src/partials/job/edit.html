@@ -3,13 +3,23 @@
     <label for="metadata">Meta data</label>
     <div>
       <table class="table table-striped">
-        <tr><th>Key</th><th>Value</th></tr>
-        <tr ng-repeat="meta in metas"><td>{{ meta.name }}</td><td>{{ meta.value }}</td></tr>
-        <tr><td><input id="name" class="form-control" ng-model="form.name"></td><td><input id="value" class="form-control" ng-model="form.value"></td></tr>
+        <tr><th>Key</th><th>Value</th><th>Actions</th></tr>
+        <tr ng-repeat="meta in metas">
+            <td>{{ meta.name }}</td>
+            <td>{{ meta.value }}</td>
+            <td>
+              <span class="btn glyphicon glyphicon-trash" ng-click="metasremove($index)"></span>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="name" class="form-control" ng-model="form.name"></td>
+            <td><input id="value" class="form-control" ng-model="form.value"></td>
+            <td></td>
+        </tr>
       </table>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary" ng-click="add()">Add</button>
+  <button type="submit" class="btn btn-primary" ng-click="metasadd()">Add</button>
   <br><br>
   <div class="form-group">
     <label for="comment">Comment</label>
