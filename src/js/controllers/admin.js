@@ -67,7 +67,11 @@ require('app')
         });
       },
       lock: function(remoteci) {
-        remoteci.active = !remoteci.active;
+        if (remoteci.state == 'active') {
+          remoteci.state = 'inactive';
+        } else {
+          remoteci.state = 'active';
+        }
         api.remotecis.update(remoteci);
       }
     });
