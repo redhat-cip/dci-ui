@@ -94,6 +94,7 @@
     </button>
   </h3>
   <div class="col-md-12" uib-collapse="collapses.tests">
+    <div ng-if="jtests.length">
     <h4>Jobdefinitions Tests</h4>
     <table class="table table-striped">
       <thead>
@@ -109,7 +110,9 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <br>
+    <div ng-if="rtests.length">
     <h4>RemoteCI Tests</h4>
     <table class="table table-striped">
       <thead>
@@ -125,5 +128,6 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </div>
