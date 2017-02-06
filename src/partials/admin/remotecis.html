@@ -17,8 +17,8 @@
       </tr>
       <tr ng-repeat="remoteci in remotecis.data | orderBy: 'name'">
         <td>
-          <span ng-if="!remoteci.active" class="label label-danger">Locked</span>
-          <span ng-if="remoteci.active" class="label label-success">Active</span>
+          <span ng-if="remoteci.state == 'inactive'" class="label label-danger">Locked</span>
+          <span ng-if="remoteci.state == 'active'" class="label label-success">Active</span>
         </td>
         <td>{{ remoteci.name }}</td>
         <td>{{ remoteci.id }}</td>
