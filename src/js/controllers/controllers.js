@@ -116,10 +116,36 @@ require('app')
 
   if (statuses.length || remotes.length) {
     api.jobs.search(remotes, statuses)
-      .then(function(data) { $scope.jobs = data.jobs; });
+      .then(function(data) {
+        $scope.jobs = data.jobs;
+        _.each(data.jobs, function(job) {
+          api.jobs.results(job.id).then(function(results) {
+            _.each(job.jobdefinition.tests, function(test_jobdef) {
+              _.each(results, function(result) {
+                if (test_jobdef.name == result.filename) {
+                  test_jobdef.result = result;
+                };
+              });
+            });
+          });
+        });
+      });
   } else {
     api.jobs.list(page).then(pagination)
-      .then(function(data) { $scope.jobs = data.jobs; });
+      .then(function(data) {
+        $scope.jobs = data.jobs;
+        _.each(data.jobs, function(job) {
+          api.jobs.results(job.id).then(function(results) {
+            _.each(job.jobdefinition.tests, function(test_jobdef) {
+              _.each(results, function(result) {
+                if (test_jobdef.name == result.filename) {
+                  test_jobdef.result = result;
+                };
+              });
+            });
+          });
+        });
+      });
   }
 
   $scope.retrieveLogs = function() {
