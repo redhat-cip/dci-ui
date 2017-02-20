@@ -1,54 +1,65 @@
 <h1 class="page-header">Jobs</h1>
 <div class="filtering">
-  <div class="row">
-    <div>
-      <h4>Filters</h4>
-      <form ng-submit="filters()">
-        <div class="form-group col-xs-4">
+  <form ng-submit="filters()">
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Filters</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="form-group">
           <ui-select ng-model="selected.status" theme="bootstrap" multiple sortable="true">
             <ui-select-match placeholder="Filter by Status">
-              <span class="glyphicon" ng-class="[$item.glyphicon, 'text-' + $item.color]">{{$item.name}}</span></ui-select-match>
+              <span class="glyphicon" ng-class="[$item.glyphicon, 'text-' + $item.color]">{{$item.name}}</span>
+            </ui-select-match>
             <ui-select-choices repeat="s in status">
               <span class="glyphicon" ng-class="[s.glyphicon, 'text=' + s.color]"></span>{{s.name}}
             </ui-select-choices>
           </ui-select>
         </div>
-        <div class="form-group col-xs-4">
+      </div>
+      <div class="col-xs-4">
+        <div class="form-group">
           <ui-select ng-model="selected.remotecis" theme="bootstrap" multiple sortable="true">
             <ui-select-match placeholder="Filter by Remote CI">{{$item.name}}</ui-select-match>
             <ui-select-choices repeat="remote in remotecis">
               <div ng-bind-html="remote.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
-
         </div>
-        <div class="form-group">
+      </div>
+      <div class="col-xs-4">
         <button type="submit" class="btn btn-primary">
           Apply
         </button>
-        </div>
-      </form>
-
-      <form ng-submit="retrieveLogs()">
+      </div>
+    </div>
+  </form>
+  <form ng-submit="retrieveLogs()">
+    <div class="row">
+      <div class="col-xs-12">
         <h4>Log search</h4>
-        <div class="form-group col-xs-8">
-          <input type="input" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
-        </div>
-        <div class="form-group">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-8">
+        <input type="input" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
+      </div>
+      <div class="col-xs-4">
         <button type="submit" class="btn btn-primary">
           Search
         </button>
-        </div>
-      </form>
-
+      </div>
     </div>
-  </div>
+  </form>
 </div>
+
 <div ng-repeat="job in jobs" dci-job></div>
 
 <div class="pagination" ng-if="pagination">
   <div uib-pagination total-items="pagination.total" max-size="5"
-    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
-    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+       ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+       rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
   </div>
 </div>
