@@ -14,20 +14,15 @@
 
 'use strict';
 
-var moment = require('moment');
-
 require('app')
-  .factory('moment', function() {
-    moment.locale('en', {invalidDate: 'N/A'});
-    moment.locale('fr', {invalidDate: 'N/A'});
-    moment.defaultFormat = 'LLLL';
-
-    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-    return _.assign(parser, {
-      'moment': moment.utc
-    });
-  })
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }])
-;
+.controller('LoginCtrl', [
+  '$scope', '$state', 'auth', function($scope, $state, auth) {
+    $scope.authenticate = function(credentials) {
+      auth.login(credentials.username, credentials.password).then(
+        _.partial($state.go, 'index'), function(err) {
+          $scope.err = err;
+        }
+      );
+    };
+  }
+]);

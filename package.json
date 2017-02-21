@@ -30,6 +30,7 @@
     "node": ">=0.8.0"
   },
   "scripts": {
+    "dev": "gulp serve:dev",
     "test": "gulp test"
   },
   "dependencies": {
