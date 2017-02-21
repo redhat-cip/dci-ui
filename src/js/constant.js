@@ -14,7 +14,7 @@
 
 'use strict';
 
-angular.module('app')
+require('app')
   .constant('status', {
     'failure': {
       'color': 'danger',

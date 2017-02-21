@@ -14,20 +14,21 @@
 
 'use strict';
 
-var moment = require('moment');
-
 require('app')
-  .factory('moment', function() {
-    moment.locale('en', {invalidDate: 'N/A'});
-    moment.locale('fr', {invalidDate: 'N/A'});
-    moment.defaultFormat = 'LLLL';
+.directive('compareTo', function() {
+  return {
+    require: 'ngModel',
+    scope: {
+      compareTo: '='
+    },
+    link: function(scope, element, attributes, ngModel) {
+      ngModel.$validators.compareTo = function(modelValue) {
+        return modelValue === scope.compareTo;
+      };
 
-    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-    return _.assign(parser, {
-      'moment': moment.utc
-    });
-  })
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }])
-;
+      scope.$watch('compareTo', function() {
+        ngModel.$validate();
+      });
+    }
+  };
+});

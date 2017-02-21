@@ -14,20 +14,12 @@
 
 'use strict';
 
-var moment = require('moment');
-
 require('app')
-  .factory('moment', function() {
-    moment.locale('en', {invalidDate: 'N/A'});
-    moment.locale('fr', {invalidDate: 'N/A'});
-    moment.defaultFormat = 'LLLL';
-
-    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-    return _.assign(parser, {
-      'moment': moment.utc
+  .controller('InformationCtrl', ['$scope', 'api', function ($scope, api) {
+    _.each(['teams', 'topics', 'remotecis'], function (id) {
+      api[id].list(null, true).then(_.partial(_.set, $scope, id));
     });
-  })
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }])
-;
+  }]);
+
+
+
