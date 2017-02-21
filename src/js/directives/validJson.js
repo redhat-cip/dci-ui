@@ -14,20 +14,22 @@
 
 'use strict';
 
-var moment = require('moment');
-
 require('app')
-  .factory('moment', function() {
-    moment.locale('en', {invalidDate: 'N/A'});
-    moment.locale('fr', {invalidDate: 'N/A'});
-    moment.defaultFormat = 'LLLL';
-
-    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-    return _.assign(parser, {
-      'moment': moment.utc
-    });
-  })
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }])
-;
+.directive('validJson', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attributes, ngModel) {
+      ngModel.$validators.validJson = function(modelValue) {
+        if (!modelValue.length) {
+          return true;
+        }
+        try {
+          angular.fromJson(modelValue);
+        } catch (e) {
+          return false;
+        }
+        return true;
+      };
+    }
+  };
+});

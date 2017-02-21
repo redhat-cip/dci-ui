@@ -59,39 +59,4 @@ require('app')
     },
     templateUrl: '/partials/directives/dci-job.html'
   };
-}])
-.directive('compareTo', function() {
-  return {
-    require: 'ngModel',
-    scope: {
-      compareTo: '='
-    },
-    link: function(scope, element, attributes, ngModel) {
-      ngModel.$validators.compareTo = function(modelValue) {
-        return modelValue === scope.compareTo;
-      };
-
-      scope.$watch('compareTo', function() {
-        ngModel.$validate();
-      });
-    }
-  };
-})
-.directive('validJson', function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, element, attributes, ngModel) {
-      ngModel.$validators.validJson = function(modelValue) {
-        if (!modelValue.length) {
-          return true;
-        }
-        try {
-          angular.fromJson(modelValue);
-        } catch (e) {
-          return false;
-        }
-        return true;
-      };
-    }
-  };
-});
+}]);
