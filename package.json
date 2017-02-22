@@ -4,27 +4,26 @@
   "repository": "https://github.com/redhat-cip/dci-ui",
   "license": "Apache-2.0",
   "devDependencies": {
-    "browserify": "~11.2.0",
+    "browserify": "^14.1.0",
     "connect": "^3.4.0",
-    "connect-livereload": "^0.5.3",
+    "connect-livereload": "^0.6.0",
     "del": "~2.2.0",
     "gulp": "~3.9.0",
     "gulp-concat": "~2.6.0",
-    "gulp-jscs": "~2.0.0",
+    "gulp-jscs": "^4.0.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-load-plugins": "~1.0.0-rc.1",
-    "gulp-sass": "~2.0.4",
-    "gulp-sourcemaps": "~1.5.2",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.4.1",
     "gulp-util": "^3.0.7",
     "jasmine-reporters": "^2.0.7",
+    "jsonfile": "^2.4.0",
     "merge-stream": "^1.0.0",
     "phantomjs": "^2.1.7",
     "protractor": "^2.5.1",
     "q": "^1.4.1",
     "serve-static": "^1.10.0",
-    "through2": "~2.0.0",
-    "lodash": "~4.13.1",
-    "jsonfile": "~2.2.3"
+    "through2": "~2.0.0"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -42,6 +41,7 @@
     "angular-ui-router": "~0.2.15",
     "ui-select": "~0.19.0",
     "bootstrap-sass": "~3.3.6",
+    "lodash": "~4.13.1",
     "moment": "~2.10.6"
   }
 }
