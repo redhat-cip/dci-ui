@@ -74,18 +74,13 @@ gulp.task('js', function() {
 
 gulp.task('css', function() {
   var conf = {
-    includePaths: ['node_modules/bootstrap-sass/assets/stylesheets/']
+    includePaths: [
+      'node_modules/bootstrap-sass/assets/stylesheets/',
+      'node_modules/'
+    ]
   };
-  var SCSS  = ['src/css/**/*.scss'];
-
-  var scssStream = gulp.src(SCSS)
+  return gulp.src(['src/css/**/*.scss'])
         .pipe($.sass(conf).on('error', $.sass.logError))
-        .pipe($.concat('scss_out'));
-
-  var cssStream = gulp.src(['node_modules/ui-select/dist/select.css'])
-        .pipe($.concat('css_out'));
-
-  return merge(scssStream, cssStream)
         .pipe($.concat('dashboard.css'))
         .pipe(gulp.dest(DIST + '/css/'));
 });
