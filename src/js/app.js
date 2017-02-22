@@ -16,37 +16,37 @@
 
 var angular = require('angular');
 
-var _ = require('lodash');
-
+require('lodash');
 require('angular-animate');
 require('angular-cookies');
 require('angular-sanitize');
 require('angular-ui-router');
 require('ui-select');
 require('angular-ui-bootstrap');
-require('jsonformatter');
+
+require('directives/jsonformatter');
 
 module.exports = angular.module('app', [
   'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select',
   'jsonFormatter', 'dci.messages', 'ngSanitize'
 ])
-.value('config', {})
-.filter('limit', function() {
-  return function(input, size, term) {
-    if (size && input.length > size) {
-      input = input.slice(0, size) + (term ? term : '');
-    }
-    return input;
-  };
-})
-.run(['$http', '$q', 'config', function($http, $q, config) {
-  var d = $q.defer();
-  config.promise = d.promise;
+  .value('config', {})
+  .filter('limit', function() {
+    return function(input, size, term) {
+      if (size && input.length > size) {
+        input = input.slice(0, size) + (term ? term : '');
+      }
+      return input;
+    };
+  })
+  .run(['$http', '$q', 'config', function($http, $q, config) {
+    var d = $q.defer();
+    config.promise = d.promise;
 
-  $http.get('/config.json').then(function(resp) {
-    angular.extend(config, resp.data);
-    d.resolve();
-  }, function(err) {
-    d.reject(err);
-  });
-}]);
+    $http.get('/config.json').then(function(resp) {
+      angular.extend(config, resp.data);
+      d.resolve();
+    }, function(err) {
+      d.reject(err);
+    });
+  }]);
