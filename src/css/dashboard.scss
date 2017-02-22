@@ -9,6 +9,7 @@ $navbar-side-size              : 200px;
 $arrow-size                    : 15px;
 $table-bg-hover                : $gray-lighter;
 @import "bootstrap";
+@import "ui-select/dist/select";
 
 body {
   @media (min-width: $screen-sm) {
