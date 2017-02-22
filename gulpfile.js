@@ -14,22 +14,22 @@
 
 'use strict';
 
-var merge      = require('merge-stream');
-var gulp       = require('gulp');
-var $          = require('gulp-load-plugins')();
-var del        = require('del');
-var jsonfile   = require('jsonfile');
-var config     = require('./config');
-var utils      = require('./utils');
+var merge = require('merge-stream');
+var gulp = require('gulp');
+var $ = require('gulp-load-plugins')();
+var del = require('del');
+var jsonfile = require('jsonfile');
+var config = require('./config');
+var utils = require('./utils');
 
-var DIST       = 'static';
-var JS         = ['src/js/**/*.js'];
+var DIST = 'static';
+var JS = ['src/js/**/*.js'];
 var configFile = 'src/config.json';
 var configFileTplt = 'src/config.json.tplt';
 
 gulp.task('jscs', function() {
   return gulp.src(['src/**/*.js', 'test/**/*.js', 'gulpfile.js', 'utils.js'])
-  .pipe($.jscs());
+    .pipe($.jscs());
 });
 
 function copy() {
@@ -49,7 +49,7 @@ gulp.task('build:pkg', ['js', 'css', 'fonts', 'copy:pkg', 'rev:pkg']);
 
 gulp.task('test', ['jscs', 'test:e2e']);
 
-gulp.task('clean', function() {
+gulp.task('clean', function() {
   var entries = [DIST + '/**/*', '!' + DIST + '/.gitkeep'];
   return del(entries);
 });
@@ -64,30 +64,25 @@ gulp.task('watch', function() {
 
 gulp.task('js', function() {
   return gulp.src(JS, {read: false})
-  .pipe(utils.browserify())
-  .pipe(utils.source('app.js'))
-  .pipe(utils.buffer())
-  .pipe($.sourcemaps.init({loadMaps: true}))
-  .pipe($.sourcemaps.write())
-  .pipe(gulp.dest(DIST + '/js/'));
+    .pipe(utils.browserify())
+    .pipe(utils.source('app.js'))
+    .pipe(utils.buffer())
+    .pipe($.sourcemaps.init({loadMaps: true}))
+    .pipe($.sourcemaps.write())
+    .pipe(gulp.dest(DIST + '/js/'));
 });
 
 gulp.task('css', function() {
   var conf = {
-    includePaths: ['node_modules/bootstrap-sass/assets/stylesheets/']
+    includePaths: [
+      'node_modules/bootstrap-sass/assets/stylesheets/',
+      'node_modules/'
+    ]
   };
-  var SCSS  = ['src/css/**/*.scss'];
-
-  var scssStream = gulp.src(SCSS)
-        .pipe($.sass(conf).on('error', $.sass.logError))
-        .pipe($.concat('scss_out'));
-
-  var cssStream = gulp.src(['node_modules/ui-select/dist/select.css'])
-        .pipe($.concat('css_out'));
-
-  return merge(scssStream, cssStream)
-        .pipe($.concat('dashboard.css'))
-        .pipe(gulp.dest(DIST + '/css/'));
+  return gulp.src(['src/css/**/*.scss'])
+    .pipe($.sass(conf).on('error', $.sass.logError))
+    .pipe($.concat('dashboard.css'))
+    .pipe(gulp.dest(DIST + '/css/'));
 });
 
 gulp.task('fonts', function() {
@@ -96,7 +91,7 @@ gulp.task('fonts', function() {
   ];
 
   return gulp.src(entries)
-  .pipe(gulp.dest(DIST + '/fonts/'));
+    .pipe(gulp.dest(DIST + '/fonts/'));
 });
 
 gulp.task('serve', ['build'], function() {
@@ -118,48 +113,52 @@ gulp.task('test:e2e', ['build'], function(cb) {
     utils.server(DIST, config.portTest, false),
     utils.phantom()
   ])
-  .then(function(results) {
-    phantom = results.pop();
-    server = results.pop();
-    return utils.protractor(server.address, 'protractor.conf.js');
-  })
-  .fail(function(err) {
-    error = err;
-  })
-  .fin(function() {
-    return Q.all([
-      phantom.close(),
-      server.close()
-    ]);
-  })
-  .then(function() {
-    cb(error);
-  });
+    .then(function(results) {
+      phantom = results.pop();
+      server = results.pop();
+      return utils.protractor(server.address, 'protractor.conf.js');
+    })
+    .fail(function(err) {
+      error = err;
+    })
+    .fin(function() {
+      return Q.all([
+        phantom.close(),
+        server.close()
+      ]);
+    })
+    .then(function() {
+      cb(error);
+    });
 });
 
 gulp.task('test:e2e:debug', ['build'], function(cb) {
   var server;
   var error;
   utils.server(DIST, config.portTest, false)
-  .then(function(s) {
-    server = s;
-    return utils.protractor(server.address, 'protractor.conf.debug.js', true);
-  })
-  .fail(function(err) {
-    error = err;
-  })
-  .fin(function() {
-    server.close();
-    cb(error);
-  });
+    .then(function(s) {
+      server = s;
+      return utils.protractor(server.address, 'protractor.conf.debug.js', true);
+    })
+    .fail(function(err) {
+      error = err;
+    })
+    .fin(function() {
+      server.close();
+      cb(error);
+    });
 });
 
 function setConf(revFn, cb) {
   revFn(function(err, rev) {
-    if (err) { return cb(err); }
+    if (err) {
+      return cb(err);
+    }
 
     jsonfile.readFile(configFileTplt, function(err, obj) {
-      if (err) { return cb(err); }
+      if (err) {
+        return cb(err);
+      }
       obj.version = rev;
       obj.apiURL = utils.apiURL() || obj.apiURL;
       jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
@@ -167,7 +166,7 @@ function setConf(revFn, cb) {
   });
 }
 
-gulp.task('rev', function(cb) {
+gulp.task('rev', function(cb) {
   setConf(utils.rev, cb);
 });
 
