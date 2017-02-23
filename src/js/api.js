@@ -307,19 +307,29 @@ require('app')
       return job;
     });
   };
-  api.jobs.search = function(remotecis, statuses) {
+  api.jobs.search = function(remotecis, statuses, params) {
     function retrieveRCIs(remoteci) {
-      var conf = {'params': {'where': 'name:' + remoteci}};
+      var conf = {
+        params: {
+          where: 'name:' + remoteci,
+          limit: params.limit,
+          offset: params.offset
+        }
+      };
       return $http.get(api.remotecis.url, conf);
-    };
+    }
 
     function retrieveJobs(status) {
-      var conf = {'params': {
-        'where': 'status:' + status,
-        'embed': 'remoteci,jobdefinition,jobdefinition.tests'
-      }};
+      var conf = {
+        params: {
+          where: 'status:' + status,
+          embed: 'remoteci,jobdefinition,jobdefinition.tests',
+          limit: params.limit,
+          offset: params.offset
+        }
+      };
       return $http.get(api.jobs.url, conf);
-    };
+    }
 
     function retrieveJsRCI(remoteciResps) {
       return _(remoteciResps)
@@ -327,10 +337,14 @@ require('app')
       .flatten()
       .map(_.property('id'))
       .map(function(remoteci) {
-        var conf = {'params': {
-          'embed': 'remoteci,jobdefinition,jobdefinition.tests',
-          'where': 'remoteci_id:' + remoteci
-        }};
+        var conf = {
+          params: {
+            embed: 'remoteci,jobdefinition,jobdefinition.tests',
+            where: 'remoteci_id:' + remoteci,
+            limit: params.limit,
+            offset: params.offset
+          }
+        };
         return $http.get(api.jobs.url, conf);
       })
       .thru($q.all)
