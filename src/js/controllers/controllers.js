@@ -86,7 +86,7 @@ require('app')
 
   $scope.remotecis = appCache.get('remotecis');
   if (!$scope.remotecis) {
-    api.remotecis.list(null, true)
+    api.remotecis.list(page, true)
       .then(function(remotecis) {
         $scope.remotecis = remotecis;
         appCache.put('remotecis', $scope.remotecis);
@@ -112,10 +112,10 @@ require('app')
       }
     };
     return data;
-  };
+  }
 
   if (statuses.length || remotes.length) {
-    api.jobs.search(remotes, statuses)
+    api.jobs.search(remotes, statuses, {limit: 20, offset: 20 * (page - 1)})
       .then(function(data) {
         $scope.jobs = data.jobs;
         _.each(data.jobs, function(job) {
@@ -124,7 +124,7 @@ require('app')
               _.each(results, function(result) {
                 if (test_jobdef.name == result.filename) {
                   test_jobdef.result = result;
-                };
+                }
               });
             });
           });
@@ -140,7 +140,7 @@ require('app')
               _.each(results, function(result) {
                 if (test_jobdef.name == result.filename) {
                   test_jobdef.result = result;
-                };
+                }
               });
             });
           });
