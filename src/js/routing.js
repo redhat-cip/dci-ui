@@ -202,7 +202,25 @@ require('app')
       };
       return (new EditUser()).genState();
     })())
-    .state('edit.team', (new utils.Edit('Team').genState()))
+    .state('edit.team', {
+      url: '/administrate/teams/:id',
+      templateUrl: '/partials/admin/teamsEdit.html',
+      controller: 'TeamsCtrl',
+      resolve: {
+        team: [
+          '$stateParams', 'messages', 'api',
+          function($stateParams, messages, api) {
+            return api.teams.get($stateParams.id)
+              .catch(function(err) {
+                messages.alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              });
+          }
+        ]
+      }
+    })
     .state('edit.remoteci', (function() {
       function EditRemoteCI() { utils.Edit.call(this, 'RemoteCI'); }
       EditRemoteCI.prototype = Object.create(utils.Edit.prototype);
