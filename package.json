@@ -32,6 +32,7 @@
     "node": ">=0.8.0"
   },
   "scripts": {
+    "start": "gulp serve",
     "build": "gulp build",
     "dev": "gulp serve:dev",
     "test": "gulp test"

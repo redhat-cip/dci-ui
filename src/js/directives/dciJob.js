@@ -14,16 +14,13 @@
 
 'use strict';
 
+
 require('app')
-.directive('dciJob', ['$injector', function($injector) {
+.directive('dciJob', [
+    '$state', 'api', 'moment', 'status', 'messages',
+    function($state, api, moment, status, messages) {
   return {
     link: function(scope) {
-      var api = $injector.get('api');
-      var moment = $injector.get('moment');
-      var status = $injector.get('status');
-      var messages = $injector.get('messages');
-      var $state = $injector.get('$state');
-
       var job = scope.job;
       var start = moment(job.created_at);
 

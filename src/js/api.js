@@ -15,14 +15,9 @@
 'use strict';
 
 require('app')
-
-.factory('api', ['$injector', function($injector) {
-  var $q = $injector.get('$q');
-  var $http = $injector.get('$http');
-  var $window = $injector.get('$window');
-  var config = $injector.get('config');
-  var moment = $injector.get('moment');
-  var user = $injector.get('user');
+.factory('api', ['' +
+ '$q', '$http', '$window', 'config', 'moment', 'user',
+ function($q, $http, $window, config, moment, user) {
   var api = {urls: {}};
   var urlize = _.rest(_.partialRight(_.join, '/'));
   var urlPttrn = new RegExp('(https?://)(.*)');

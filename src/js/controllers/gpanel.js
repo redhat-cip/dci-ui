@@ -60,11 +60,8 @@ require('app')
   }
 ])
 .controller('GpanelStatusCtrl', [
-  '$injector', '$scope', '$stateParams',
-  function($injector, $scope, $stateParams) {
-    var api = $injector.get('api');
-    var moment = $injector.get('moment');
-    var status = $injector.get('status');
+  '$scope', '$stateParams', 'api', 'moment', 'status',
+  function($scope, $stateParams, api, moment, status) {
     var topic = $stateParams.id;
     var componentType = $scope.componentType = $stateParams.componentType;
     $scope.jobs_ = [];

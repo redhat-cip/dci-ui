@@ -86,13 +86,11 @@ require('app')
       templateUrl: '/partials/job.html',
       resolve: {
         job: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
+          '$stateParams', '$state', 'messages', 'api',
+          function($stateParams, $state, messages, api) {
             return api.jobs.get($stateParams.id).catch(function(err) {
-              $injector.get('$state').go('index');
-              $injector.get('messages').alert(
+              $state.go('index');
+              messages.alert(
                 err.data && err.data.message ||
                   'Something went wrong', 'danger'
               );
@@ -130,13 +128,11 @@ require('app')
       controller: 'ListComponentsCtrl',
       resolve: {
         topic: [
-          '$injector', '$stateParams', 'conf',
-          function($injector, $stateParams) {
-            var api = $injector.get('api');
-
+          '$stateParams', '$state', 'messages', 'api',
+          function($stateParams, $state, messages, api) {
             return api.topics.get($stateParams.id).catch(function(err) {
-              $injector.get('$state').go('index');
-              $injector.get('messages').alert(
+              $state.go('index');
+              messages.alert(
                 err.data && err.data.message ||
                   'Something went wrong', 'danger');
             });
