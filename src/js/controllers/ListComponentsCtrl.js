@@ -16,11 +16,7 @@
 
 require('app')
 .controller('ListComponentsCtrl', [
-  '$injector', '$scope', 'topic', function($injector, $scope, topic) {
-    var api = $injector.get('api');
-    var moment = $injector.get('moment');
-    var msg = $injector.get('messages');
-
+  '$scope', 'messages', 'api', 'moment', 'topic', function($scope, messages, api, moment, topic) {
     _.assign($scope, {objForm: {}});
 
     $scope.topic = topic;
@@ -31,10 +27,10 @@ require('app')
       api.components.create(JSON.stringify(this.c))
         .then(
           function(res) {
-            msg.alert('Create component successfully', 'success');
+            messages.alert('Create component successfully', 'success');
           },
           function(err) {
-            msg.alert(err.data.message, 'danger');
+            messages.alert(err.data.message, 'danger');
           });
     };
 
@@ -45,10 +41,10 @@ require('app')
       api.components.update(this.c)
         .then(
           function(res) {
-            msg.alert('Component successfully updated', 'success');
+            messages.alert('Component successfully updated', 'success');
           },
           function(err) {
-            msg.alert(err.data.message, 'danger');
+            messages.alert(err.data.message, 'danger');
           });
     };
 

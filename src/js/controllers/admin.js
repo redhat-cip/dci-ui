@@ -120,11 +120,8 @@ require('app')
   }
 ])
 .controller('EditMixinCtrl', [
-  '$scope', '$injector', 'obj', function($scope, $injector, obj) {
-    var $state = $injector.get('$state');
-    var msg = $injector.get('messages');
-    var api = $injector.get('api');
-
+    '$scope', '$state', 'obj', 'messages',
+    function($scope, $state, obj, messages) {
     _.assign($scope, {obj: obj, objForm: {}});
 
     $scope.cancel = _.partial($state.go, obj.meta.redirect);
@@ -137,12 +134,12 @@ require('app')
       if ($scope.objForm.$invalid) { return; }
       $state.go(obj.meta.redirect);
       obj.meta.method($scope.obj).then(
-        function(res) { msg.alert(obj.meta.msg.success, 'success'); },
+        function(res) {messages.alert(obj.meta.msg.success, 'success'); },
         function(err) {
           if (err.status === 422) {
-            msg.alert(obj.meta.msg.error);
+           messages.alert(obj.meta.msg.error);
           } else {
-            msg.alert(err.data.message, 'danger');
+           messages.alert(err.data.message, 'danger');
           }
         }
       );
@@ -150,12 +147,8 @@ require('app')
   }
 ])
 .controller('EditTopicCtrl', [
-  '$scope', '$injector', function($scope, $injector) {
-    var $q = $injector.get('$q');
-
-    var api = $injector.get('api');
-    var msg = $injector.get('messages');
-
+    '$scope', '$q', '$state', 'messages', 'api',
+    function($scope, $q, messages, api, $state) {
     var obj = $scope.obj;
     var old_teams = _.map(obj.teams, function(elt) {
       return _.get(elt, 'id');
@@ -185,15 +178,15 @@ require('app')
       })
       .then(
         function() {
-          $injector.get('$state').go(obj.meta.redirect);
-          msg.alert(obj.meta.msg.success, 'success');
+          $state.go(obj.meta.redirect);
+          messages.alert(obj.meta.msg.success, 'success');
         },
         function(errs) {
           _.each(errs, function(err) {
             if (err.status === 422) {
-              msg.alert(obj.meta.msg.error);
+              messages.alert(obj.meta.msg.error);
             } else {
-              msg.alert(err.data.message, 'danger');
+              messages.alert(err.data.message, 'danger');
             }
           });
         }

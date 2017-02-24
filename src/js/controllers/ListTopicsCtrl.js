@@ -16,10 +16,7 @@
 
 require('app')
 .controller('ListTopicsCtrl', [
-  '$injector', '$scope', function($injector, $scope) {
-    var $state = $injector.get('$state');
-    var moment = $injector.get('moment');
-    var api = $injector.get('api');
+    '$state', '$scope', 'api', 'moment', function($state, $scope, api, moment) {
     var page = parseInt($state.params.page) || 1;
 
     api.topics.list(page)

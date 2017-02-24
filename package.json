@@ -38,10 +38,11 @@
     "node": ">=0.8.0"
   },
   "scripts": {
-    "test:unit": "karma start test/unit/karma.conf.js",
+    "start": "gulp serve",
     "build": "gulp build",
     "dev": "gulp serve:dev",
-    "test": "gulp test"
+    "test": "gulp test",
+    "test:unit": "karma start test/unit/karma.conf.js"
   },
   "dependencies": {
     "angular": "~1.5.7",

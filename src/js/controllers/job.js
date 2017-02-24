@@ -16,12 +16,8 @@
 
 require('app')
 .controller('JobCtrl', [
-  '$scope', '$injector', 'job', function($scope, $injector, job) {
-    var $state = $injector.get('$state');
-    var api = $injector.get('api');
-    var status = $injector.get('status');
-    var moment = $injector.get('moment');
-
+  '$scope', '$state', 'job', 'api', 'status', 'moment',
+    function($scope, $state, job, api, status, moment) {
     var opened = false;
     var tabs = ['results', 'logs', 'details', 'edit', 'context',
                 'stackdetails', 'issues', 'files'];
