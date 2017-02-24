@@ -4,6 +4,7 @@
   "repository": "https://github.com/redhat-cip/dci-ui",
   "license": "Apache-2.0",
   "devDependencies": {
+    "angular-mocks": "~1.5.7",
     "browserify": "^14.1.0",
     "chai": "^3.5.0",
     "connect": "^3.4.0",
@@ -22,6 +23,7 @@
     "jsonfile": "^2.4.0",
     "karma": "^1.3.0",
     "karma-chai": "^0.1.0",
+    "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "lodash": "~4.13.1",
     "merge-stream": "^1.0.0",
@@ -42,7 +44,7 @@
     "build": "gulp build",
     "dev": "gulp serve:dev",
     "test": "gulp test",
-    "test:unit": "karma start test/unit/karma.conf.js"
+    "test:unit": "npm run build && karma start test/unit/karma.conf.js"
   },
   "dependencies": {
     "angular": "~1.5.7",
