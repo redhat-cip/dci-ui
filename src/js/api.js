@@ -129,6 +129,10 @@ require('app')
         var url = urlize(api.remotecis.url, remoteci, 'tests');
         return $http.get(url).then(_.property('data.tests'));
       };
+      api.remotecis.refreshToken = function(remoteci) {
+        var url = urlize(api.remotecis.url, remoteci.id, 'api_secret');
+        return $http.put(url).then(_.property('data.api_secret'));
+      };
 
       /*                                  TEAMS                                   */
       api.teams.update.parse = _.partialRight(_.pick, ['name',
