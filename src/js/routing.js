@@ -221,26 +221,25 @@ require('app')
         ]
       }
     })
-    .state('edit.remoteci', (function() {
-      function EditRemoteCI() { utils.Edit.call(this, 'RemoteCI'); }
-      EditRemoteCI.prototype = Object.create(utils.Edit.prototype);
-      EditRemoteCI.prototype.constructor = EditRemoteCI;
-
-      EditRemoteCI.prototype.cb = function($stateParams, $injector) {
-        var that = this;
-        return utils.Edit.prototype.cb.call(that, $stateParams, $injector)
-        .then(function(obj) {
-          var method = obj.meta.method;
-          obj.meta.method = function(obj) {
-            obj.data = angular.fromJson(obj.data);
-            return method(obj);
-          };
-          return _.assign(obj, {'data': angular.toJson(obj.data, true)});
-        });
-      };
-
-      return (new EditRemoteCI()).genState();
-    })())
+    .state('edit.remoteci', {
+      url: '/administrate/remotecis/:id',
+      templateUrl: '/partials/admin/remotecisEdit.html',
+      controller: 'RemoteCIsCtrl',
+      resolve: {
+        remoteci: [
+          '$stateParams', 'messages', 'api',
+          function($stateParams, messages, api) {
+            return api.remotecis.get($stateParams.id)
+              .catch(function(err) {
+                messages.alert(
+                  err.data && err.data.message ||
+                  'Something went wrong', 'danger'
+                );
+              });
+          }
+        ]
+      }
+    })
     .state('edit.topic', (function() {
       function EditTopic() { utils.Edit.call(this, 'Topic'); }
       EditTopic.prototype = Object.create(utils.Edit.prototype);
