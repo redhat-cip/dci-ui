@@ -11,6 +11,10 @@ $table-bg-hover                : $gray-lighter;
 
 @import "ui-select/dist/select";
 
+.glyphicon--button{
+  cursor: pointer;
+}
+
 pre {
   white-space: pre-wrap;       /* css-3 */
   white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */

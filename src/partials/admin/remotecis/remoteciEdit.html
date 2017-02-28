@@ -12,6 +12,18 @@
                required>
       </div>
       <div class="form-group">
+        <label for="remoteciApiSecret" class="control-label">
+          Api secret
+          <i class="glyphicon glyphicon--button glyphicon-refresh" ng-click="$ctrl.refreshApiSecret()"></i>
+        </label>
+        <input id="remoteciApiSecret"
+               type="text"
+               class="form-control"
+               name="token"
+               ng-model="remoteci.api_secret"
+               readonly>
+      </div>
+      <div class="form-group">
         <label for="remoteciData" class="control-label">Data</label>
         <textarea class="form-control" ng-model="$ctrl.remoteci.data" id="remoteciData" name="data" rows="5" json-text>
         </textarea>
