@@ -28,4 +28,17 @@ describe('admin remoteci edit component', function() {
     expect(element.scope().remoteci.name).toBe('Admin Remote CI');
     expect(element.scope().remoteci.state).toBe('active');
   });
+
+  it('should refresh api secret', function() {
+    var controller = element.controller('adminRemoteciEdit');
+    expect(controller.remoteci.api_secret).toBe('736d3c54d96946954a2948db63266779');
+    $httpBackend
+      .expectPUT('https://api.example.org/api/v1/remotecis/c76c40a2-82c7-40e8-959b-0883d32edda8/api_secret', {})
+      .respond({api_secret: '9db63266779736d54a29483c54d96946', etag: '54d96946'});
+    controller.refreshApiSecretConfirmed();
+    $httpBackend.flush();
+    expect(controller.remoteci.api_secret).toBe('9db63266779736d54a29483c54d96946');
+    expect(controller.remoteci.etag).toBe('54d96946');
+    expect(element.scope().remoteci.id).toBe('c76c40a2-82c7-40e8-959b-0883d32edda8');
+  });
 });

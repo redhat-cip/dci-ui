@@ -17,13 +17,13 @@
 require('app')
   .component('adminRemoteciEdit', {
     templateUrl: '/partials/admin/remotecis/remoteciEdit.html',
-    controller: ['$state', 'api', 'messages', adminRemoteciCtrl],
+    controller: ['$state', '$uibModal', 'api', 'messages', adminRemoteciCtrl],
     bindings: {
       remoteci: '='
     }
   });
 
-function adminRemoteciCtrl($state, api, messages) {
+function adminRemoteciCtrl($state, $uibModal, api, messages) {
   var $ctrl = this;
 
   $ctrl.update = function() {
@@ -36,5 +36,32 @@ function adminRemoteciCtrl($state, api, messages) {
       .catch(function(err) {
         messages.alert('cannot update remoteci ' + remoteciName + ' (' + err.data.message + ')', 'danger');
       });
+  };
+
+  $ctrl.refreshApiSecretConfirmed = function() {
+    api.remotecis.refreshApiSecret($ctrl.remoteci).then(function(remoteci) {
+        messages.alert('remoteci api secret has been refreshed', 'success');
+        $ctrl.remoteci = _.assign({}, $ctrl.remoteci, remoteci);
+      },
+      function() {
+        messages.alert('can\'t refresh api secret', 'danger');
+      });
+  };
+
+  $ctrl.refreshApiSecret = function() {
+    var refreshApiSecretModal = $uibModal.open({
+      component: 'confirmDestructiveAction',
+      resolve: {
+        data: function() {
+          return {
+            title: 'Refresh remoteci api secret',
+            body: 'Are you you want to refresh remoteci api secret?',
+            okButton: 'Yes refresh it',
+            cancelButton: 'oups no!'
+          }
+        }
+      }
+    });
+    refreshApiSecretModal.result.then($ctrl.refreshApiSecretConfirmed);
   };
 }
