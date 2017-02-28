@@ -34,7 +34,7 @@ require('app')
           promise.then(
             _.bind(msg.alert, msg, addMsg, 'success'),
             function(err) {
-              if (err.status === 422) {
+              if (err.status === 409) {
                 msg.alert(errMsg, 'danger');
               } else {
                 msg.alert(err.data.message, 'danger');
@@ -136,7 +136,7 @@ require('app')
       obj.meta.method($scope.obj).then(
         function(res) {messages.alert(obj.meta.msg.success, 'success'); },
         function(err) {
-          if (err.status === 422) {
+          if (err.status === 409) {
            messages.alert(obj.meta.msg.error);
           } else {
            messages.alert(err.data.message, 'danger');
@@ -183,7 +183,7 @@ require('app')
         },
         function(errs) {
           _.each(errs, function(err) {
-            if (err.status === 422) {
+            if (err.status === 409) {
               messages.alert(obj.meta.msg.error);
             } else {
               messages.alert(err.data.message, 'danger');
