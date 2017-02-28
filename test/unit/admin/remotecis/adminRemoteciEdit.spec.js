@@ -25,6 +25,7 @@ describe('admin remoteci edit component', function() {
     expect(component.remoteci.id).toBe('c76c40a2-82c7-40e8-959b-0883d32edda8');
     expect(component.remoteci.name).toBe('Admin Remote CI');
     expect(component.remoteci.state).toBe('active');
+    expect(component.remoteci.etag).toBe('48db63266779736d3c54d96946954a29');
   });
 
   it('should update if data are valid', function() {
@@ -64,5 +65,18 @@ describe('admin remoteci edit component', function() {
       data: 'error'
     };
     component.update();
+  });
+
+  it('should refresh api secret', function() {
+    expect(component.remoteci.api_secret).toBe('736d3c54d96946954a2948db63266779');
+    $httpBackend
+      .expectPUT(
+        'https://api.example.org/api/v1/remotecis/c76c40a2-82c7-40e8-959b-0883d32edda8/api_secret', {})
+      .respond({api_secret: '9db63266779736d54a29483c54d96946', etag: '54d96946'});
+    component.refreshApiSecretConfirmed();
+    $httpBackend.flush();
+    expect(component.remoteci.api_secret).toBe('9db63266779736d54a29483c54d96946');
+    expect(component.remoteci.etag).toBe('54d96946');
+    expect(component.remoteci.id).toBe('c76c40a2-82c7-40e8-959b-0883d32edda8');
   });
 });
