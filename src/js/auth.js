@@ -22,7 +22,6 @@ require('app')
 })
 
 .value('user', {})
-
 .config(['$httpProvider', function($httpProvider) {
   // Set header to help detect XHR request
   $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -47,45 +46,45 @@ require('app')
     };
   }];
   $httpProvider.interceptors.push(interceptor);
-
 }])
-.service('auth', [
+.factory('auth', [
   '$window', '$cookieStore', 'api', 'user', 'userStatus',
   function($window, $cookies, api, user, status) {
+
     angular.extend(user, {status: status.DISCONNECTED}, $cookies.get('user'));
 
-    this.user = user;
+    return {
+      user: user,
+      login: function(username, password) {
+        user.token = $window.btoa(username.concat(':', password));
 
-    this.login = function(username, password) {
-      user.token = $window.btoa(username.concat(':', password));
+        return api.users.get(username).then(function(userRes) {
+          angular.extend(user, userRes, {status: status.AUTHENTICATED});
+          $cookies.put('user', user);
+          return user;
+        });
+      },
+      isAuthenticated: function() {
+        return user.status === status.AUTHENTICATED;
+      },
 
-      return api.users.get(username).then(function(userRes) {
-        angular.extend(user, userRes, {status: status.AUTHENTICATED});
-        $cookies.put('user', user);
-        return user;
-      });
-    };
+      isUnauthorized: function() {
+        return user.status === status.UNAUTHORIZED;
+      },
 
-    this.isAuthenticated = function() {
-      return user.status === status.AUTHENTICATED;
-    };
+      isAdminInTeam: function() {
+        return user.role === 'admin';
+      },
 
-    this.isUnauthorized = function() {
-      return user.status === status.UNAUTHORIZED;
-    };
+      isAdmin: function() {
+        return user.team.name === 'admin';
+      },
 
-    this.isAdminInTeam = function() {
-      return user.role === 'admin';
-    };
-
-    this.isAdmin = function() {
-      return user.team.name === 'admin';
-    };
-
-    this.logout = function() {
-      $cookies.put('user', {});
-      user.status = status.DISCONNECTED;
-    };
+      logout: function() {
+        $cookies.put('user', {});
+        user.status = status.DISCONNECTED;
+      },
+    }
   }
 ])
 .run(['auth', angular.noop]);
