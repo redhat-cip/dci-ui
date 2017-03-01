@@ -75,6 +75,7 @@ gulp.task('js', function() {
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe($.sourcemaps.init({loadMaps: true}))
+    .pipe($.uglify())
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest(DIST + '/js/'));
 
