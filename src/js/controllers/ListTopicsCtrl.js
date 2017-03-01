@@ -15,28 +15,28 @@
 'use strict';
 
 require('app')
-.controller('ListTopicsCtrl', [
+  .controller('ListTopicsCtrl', [
     '$state', '$scope', 'api', 'moment', function($state, $scope, api, moment) {
-    var page = parseInt($state.params.page) || 1;
+      var page = parseInt($state.params.page) || 1;
 
-    api.topics.list(page)
-      .then(function(data) {
-        $scope.topics = data.topics;
-        _.each(data.topics, function(topic) {
-          topic.created_at_formatted = moment(topic.created_at)
-            .local()
-            .format();
-          topic.updated_at_formatted = moment(topic.updated_at)
-            .local()
-            .format();
+      api.topics.list(page)
+        .then(function(data) {
+          $scope.topics = data.topics;
+          _.each(data.topics, function(topic) {
+            topic.created_at_formatted = moment(topic.created_at)
+              .local()
+              .format();
+            topic.updated_at_formatted = moment(topic.updated_at)
+              .local()
+              .format();
+          });
+          $scope.pagination = {
+            total: data._meta.count,
+            page: page,
+            pageChanged: function() {
+              $state.go('topics', $scope.pagination);
+            }
+          };
         });
-        $scope.pagination = {
-          total: data._meta.count,
-          page: page,
-          pageChanged: function() {
-            $state.go('topics', $scope.pagination);
-          }
-        };
-      });
-  }
-]);
+    }
+  ]);

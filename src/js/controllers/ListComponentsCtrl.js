@@ -15,54 +15,54 @@
 'use strict';
 
 require('app')
-.controller('ListComponentsCtrl', [
-  '$scope', 'messages', 'api', 'moment', 'topic', function($scope, messages, api, moment, topic) {
-    _.assign($scope, {objForm: {}});
+  .controller('ListComponentsCtrl', [
+    '$scope', 'messages', 'api', 'moment', 'topic', function($scope, messages, api, moment, topic) {
+      _.assign($scope, {objForm: {}});
 
-    $scope.topic = topic;
-    $scope.create = function(componentId) {
-      if ($scope.objForm.$invalid) {
-        return;
-      }
-      api.components.create(JSON.stringify(this.c))
-        .then(
-          function(res) {
-            messages.alert('Create component successfully', 'success');
-          },
-          function(err) {
-            messages.alert(err.data.message, 'danger');
-          });
-    };
+      $scope.topic = topic;
+      $scope.create = function() {
+        if ($scope.objForm.$invalid) {
+          return;
+        }
+        api.components.create(JSON.stringify(this.c))
+          .then(
+            function() {
+              messages.alert('Create component successfully', 'success');
+            },
+            function(err) {
+              messages.alert(err.data.message, 'danger');
+            });
+      };
 
-    $scope.update = function(component) {
-      if ($scope.objForm.$invalid) {
-        return;
-      }
-      api.components.update(this.c)
-        .then(
-          function(res) {
-            messages.alert('Component successfully updated', 'success');
-          },
-          function(err) {
-            messages.alert(err.data.message, 'danger');
-          });
-    };
+      $scope.update = function() {
+        if ($scope.objForm.$invalid) {
+          return;
+        }
+        api.components.update(this.c)
+          .then(
+            function() {
+              messages.alert('Component successfully updated', 'success');
+            },
+            function(err) {
+              messages.alert(err.data.message, 'danger');
+            });
+      };
 
-    api.topics.components(topic.id)
-      .then(function(data) {
-        $scope.componentsByTopic = {};
-        _.each(data, function(component) {
-          _.update($scope.componentsByTopic, component.type, function(target) {
-            component.created_at_formatted = moment(component.created_at)
-              .local()
-              .format();
-            component.updated_at_formatted = moment(component.updated_at)
-              .local()
-              .format();
-            component.data = JSON.stringify(component.data);
-            return _.concat(target || [], component);
+      api.topics.components(topic.id)
+        .then(function(data) {
+          $scope.componentsByTopic = {};
+          _.each(data, function(component) {
+            _.update($scope.componentsByTopic, component.type, function(target) {
+              component.created_at_formatted = moment(component.created_at)
+                .local()
+                .format();
+              component.updated_at_formatted = moment(component.updated_at)
+                .local()
+                .format();
+              component.data = JSON.stringify(component.data);
+              return _.concat(target || [], component);
+            });
           });
         });
-      });
-  }
-]);
+    }
+  ]);

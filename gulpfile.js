@@ -14,7 +14,6 @@
 
 'use strict';
 
-var merge = require('merge-stream');
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
@@ -34,7 +33,7 @@ var configFile = 'src/config.json';
 var configFileTplt = 'src/config.json.tplt';
 
 gulp.task('lint', function() {
-  return gulp.src(['**/*.js', '!node_modules/**', '!static/**'])
+  return gulp.src(['src/**/*.js'])
     .pipe($.eslint())
     .pipe($.eslint.format())
     .pipe($.eslint.failAfterError());
@@ -126,7 +125,6 @@ gulp.task('serve:dev', ['build', 'watch'], function() {
 
 gulp.task('test:e2e', ['build'], function(cb) {
   var Q = require('q');
-  var d = Q.defer();
   var phantom;
   var server;
   var error;
