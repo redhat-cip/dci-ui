@@ -15,14 +15,14 @@
 'use strict';
 
 require('app')
-.controller('LoginCtrl', [
-  '$scope', '$state', 'auth', function($scope, $state, auth) {
-    $scope.authenticate = function(credentials) {
-      auth.login(credentials.username, credentials.password).then(
-        _.partial($state.go, 'index'), function(err) {
-          $scope.err = err;
-        }
-      );
-    };
-  }
-]);
+  .controller('LoginCtrl', [
+    '$scope', '$state', 'auth', function($scope, $state, auth) {
+      $scope.authenticate = function(credentials) {
+        auth.login(credentials.username, credentials.password).then(
+          _.partial($state.go, 'index'), function(err) {
+            $scope.err = err;
+          }
+        );
+      };
+    }
+  ]);

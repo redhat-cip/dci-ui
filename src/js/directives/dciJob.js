@@ -16,44 +16,44 @@
 
 
 require('app')
-.directive('dciJob', [
+  .directive('dciJob', [
     '$state', 'api', 'moment', 'status', 'messages',
     function($state, api, moment, status, messages) {
-  return {
-    link: function(scope) {
-      var job = scope.job;
-      var start = moment(job.created_at);
+      return {
+        link: function(scope) {
+          var job = scope.job;
+          var start = moment(job.created_at);
 
-      job.time_running = moment(job.updated_at).to(start, true);
-      job.updated_at_formatted = moment(job.updated_at).from(moment.moment());
+          job.time_running = moment(job.updated_at).to(start, true);
+          job.updated_at_formatted = moment(job.updated_at).from(moment.moment());
 
-      job.processStatus = function(s) {
-        job.status = s;
-        job.statusClass = 'bs-callout-' + status[s].color;
-        job.glyphicon = status[s].glyphicon;
+          job.processStatus = function(s) {
+            job.status = s;
+            job.statusClass = 'bs-callout-' + status[s].color;
+            job.glyphicon = status[s].glyphicon;
+          };
+
+          job.processStatus(job.status);
+
+          scope.recheck = function() {
+            api.jobs.recheck(job.id).then(function(job) {
+              $state.go('job.results', {id: job.id});
+            });
+          };
+
+          scope.remove_job = function(jobs, index) {
+            api.jobs.remove(job.id, job.etag).then(function() {
+              if (!jobs || !index) {
+                $state.go('index');
+              } else {
+                jobs.splice(index, 1);
+              }
+              messages.alert('Job "' + job.id + '" deleted !', 'success');
+            }, function(err) {
+              messages.alert('Something went bad: ' + err.data.message, 'danger');
+            });
+          };
+        },
+        templateUrl: '/partials/directives/dci-job.html'
       };
-
-      job.processStatus(job.status);
-
-      scope.recheck = function() {
-        api.jobs.recheck(job.id).then(function(job) {
-          $state.go('job.results', {id: job.id});
-        });
-      };
-
-      scope.remove_job = function(jobs, index) {
-        api.jobs.remove(job.id, job.etag).then(function() {
-          if (!jobs || !index) {
-            $state.go('index');
-          } else {
-            jobs.splice(index, 1);
-          }
-          messages.alert('Job "' + job.id + '" deleted !', 'success');
-        }, function(err) {
-          messages.alert('Something went bad: ' + err.data.message, 'danger');
-        });
-      };
-    },
-    templateUrl: '/partials/directives/dci-job.html'
-  };
-}]);
+    }]);
