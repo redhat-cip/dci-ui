@@ -1,0 +1,18 @@
+{
+  "extends": "eslint:recommended",
+  "rules": {
+  },
+  "globals": {
+    "require": true,
+    "angular": true,
+    "module": true,
+    "window": true,
+    "_": true,
+    "chai": true,
+    "describe": true,
+    "beforeEach": true,
+    "inject": true,
+    "afterEach": true,
+    "it": true
+  }
+}

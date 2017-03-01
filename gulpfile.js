@@ -33,9 +33,11 @@ var JS = ['src/js/**/*.js'];
 var configFile = 'src/config.json';
 var configFileTplt = 'src/config.json.tplt';
 
-gulp.task('jscs', function() {
-  return gulp.src(['src/**/*.js', 'test/**/*.js', 'gulpfile.js', 'utils.js'])
-    .pipe($.jscs());
+gulp.task('lint', function() {
+  return gulp.src(['**/*.js', '!node_modules/**', '!static/**'])
+    .pipe($.eslint())
+    .pipe($.eslint.format())
+    .pipe($.eslint.failAfterError());
 });
 
 function copy() {
@@ -53,7 +55,7 @@ gulp.task('copy:pkg', ['rev:pkg'], copy);
 gulp.task('build', ['js', 'css', 'fonts', 'copy', 'rev']);
 gulp.task('build:pkg', ['js', 'css', 'fonts', 'copy:pkg', 'rev:pkg']);
 
-gulp.task('test', ['jscs', 'test:e2e']);
+gulp.task('test', ['lint', 'test:e2e']);
 
 gulp.task('clean', function() {
   var entries = [DIST + '/**/*', '!' + DIST + '/.gitkeep'];
