@@ -17,59 +17,57 @@
 require('angular-ui-bootstrap');
 
 angular.module('dci.messages', ['ui.bootstrap'])
-.service('messages', [
-  '$timeout', '$log', 'messagesConfig',
-  function($timeout, $log, config) {
-    var that = this;
-    var log = {
-      'danger': $log.error,
-      'warning': $log.warn,
-      'info': $log.info,
-      'success': $log.log
-    };
-    this.alerts = [];
-
-    this.alert = function(msg, type) {
-      type = type || config.defaultType;
-      var alert = {
-        type: type,
-        msgTitle: config.title[type],
-        msg: msg
+  .constant('messagesConfig', {
+    max: 5,
+    defaultType: 'info',
+    title: {
+      danger: 'Error',
+      warning: 'Warning',
+      info: 'Info',
+      success: 'Success',
+    }
+  })
+  .factory('messages', ['messagesConfig', '$log',
+    function(messagesConfig, $log) {
+      var log = {
+        'danger': $log.error,
+        'warning': $log.warn,
+        'info': $log.info,
+        'success': $log.log
       };
-      log[type](msg);
-      this.alerts.push(alert);
-      this.alerts.splice(config.max);
-      return alert;
-    };
 
-    this.clearAllMessages = function() {
-      this.alerts.length = 0;
-    };
-  }
-])
-.directive({
-  dciMessages: ['messages', function(messages) {
-    return {
-      restrict: 'A',
-      scope: {},
-      templateUrl: '/partials/directives/messages.html',
-      link: function(scope) {
-        scope.alerts = messages.alerts;
+      var alerts = [];
 
-        scope.closeAlert = function(index) {
-          scope.alerts.splice(index, 1);
-        };
+      return {
+        alerts: alerts,
+        alert: function(msg, type) {
+          type = type || messagesConfig.defaultType;
+          var alert = {
+            type: type,
+            msgTitle: messagesConfig.title[type],
+            msg: msg
+          };
+          log[type](msg);
+          alerts.push(alert);
+          alerts.splice(messagesConfig.max);
+          return alert;
+        }
       }
-    };
-  }]
-})
-.constant('messagesConfig', {
-  max: 5,
-  defaultType: 'info',
-  title: {
-    danger: 'Error',
-    warning: 'Warning',
-    info: 'Info',
-    success: 'Success',
-  }
-});
+    }
+  ])
+  .directive({
+    dciMessages: ['messages', function(messages) {
+      return {
+        restrict: 'A',
+        scope: {},
+        templateUrl: '/partials/directives/messages.html',
+        link: function(scope) {
+          scope.alerts = messages.alerts;
+
+          scope.closeAlert = function(index) {
+            scope.alerts.splice(index, 1);
+          };
+        }
+      };
+    }]
+  });
