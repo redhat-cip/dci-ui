@@ -88,7 +88,7 @@ require('app')
           templateUrl: '/partials/job.html',
           resolve: {
             job: [
-              '$stateParams', '$state', 'messages', 'api',
+              '$stateParams', '$state', 'messages', 'api', 'conf',
               function($stateParams, $state, messages, api) {
                 return api.jobs.get($stateParams.id).catch(function(err) {
                   $state.go('index');
