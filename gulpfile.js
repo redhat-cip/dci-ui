@@ -109,7 +109,7 @@ gulp.task('css', function() {
 
 gulp.task('fonts', function() {
   var entries = [
-    'node_modules/bootstrap-sass/assets/fonts/**'
+    'node_modules/patternfly/dist/fonts/**'
   ];
 
   return gulp.src(entries)
