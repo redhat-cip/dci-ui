@@ -8,14 +8,11 @@ $navbar-side-size              : 200px;
 
 $arrow-size                    : 15px;
 $table-bg-hover                : $gray-lighter;
-@import "bootstrap";
-@import "ui-select/dist/select";
 
-body {
-  @media (min-width: $screen-sm) {
-    margin-left: $navbar-side-size;
-  }
-}
+@import "rcue/dist/css/rcue";
+@import "rcue/dist/css/rcue-additions";
+
+@import "ui-select/dist/select";
 
 pre {
   white-space: pre-wrap;       /* css-3 */
@@ -29,35 +26,22 @@ pre {
   margin-top: 20px;
 }
 
-.login {
-  position:absolute;
-  right:0;
-  left:0;
-  bottom: 200px;
-  background-color: $gray-darker;
-  overflow:hidden;
-  color: #fff;
+.app .app__ui-view{
+  height: 100%;
+}
 
-  .page-header img {
-    margin-top: -10px;
-  }
+.login-pf{
+  height: 100vh;
+}
 
-  .text-danger {
-    color: $redhat-color;
-  }
-  .btn-primary {
-    background-color: $redhat-color;
-    border-color: darken($redhat-color, 5%);
+.login--brand{
+  font-size: 2.2em;
+}
 
-    &:hover {
-      background-color: darken($redhat-color, 10%);
-      border-color: darken($redhat-color, 17%);
-    }
-  }
-
-  form {
-    padding-bottom: 20px;
-  }
+.login--background-dark {
+  color: white;
+  background: url(/images/bg-login.jpg) no-repeat center center fixed;
+  background-size: cover;
 }
 
 a.panel-heading {
