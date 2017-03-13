@@ -18,11 +18,12 @@ require('app')
   .controller('GpanelIndexCtrl', [
     '$scope', 'api', function($scope, api) {
 
-      api.topics.list(null, true)
-        .then(function(topics) {
-          $scope.topics = topics;
-          _.each(topics, function(topic) {
-            api.topics.status(topic.id).then(function(jobs) {
+      api.topics.list(null, true).then(function(topics) {
+        $scope.topics = topics;
+        _.each(topics, function(topic) {
+          api.topics.jobdefinitions(topic.id).then(function(jobDefinition) {
+            topic.jobdefinition_type = encodeURI(jobDefinition[0]['component_types'][0]) || 'puddle_osp';
+            api.topics.status(topic).then(function(jobs) {
               topic.jobs = jobs;
               _.each(jobs, function(job) {
                 if (['new', 'pre-run', 'post-run']
@@ -40,6 +41,7 @@ require('app')
             });
           });
         });
+      });
     }
   ]);
 

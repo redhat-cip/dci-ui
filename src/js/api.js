@@ -201,7 +201,7 @@ require('app')
         return $http.get(url).then(_.property('data.jobdefinitions'));
       };
       api.topics.status = function(topic) {
-        var url = urlize(api.topics.url, topic, 'type/puddle_osp/status');
+        var url = urlize(api.topics.url, topic.id, 'type/' + topic.jobdefinition_type + '/status');
         return $http.get(url).then(_.property('data.jobs'));
       };
 
