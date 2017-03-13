@@ -1,0 +1,79 @@
+<div class="row toolbar-pf">
+  <div class="col-sm-12">
+    <form class="toolbar-pf-actions form-inline">
+      <div class="form-group pl-0">
+        <ui-select class="form-control" multiple ng-model="$ctrl.selected.status" theme="bootstrap"
+                   style="min-width: 200px">
+          <ui-select-match placeholder="Filter By Status...">{{$item}}</ui-select-match>
+          <ui-select-choices repeat="status in $ctrl.status">
+            <div ng-bind-html="status | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+        <button class="btn btn-default" type="button">Filter</button>
+      </div>
+      <div class="form-group">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group" role="group" ng-repeat="remoteci in $ctrl.remotecis">
+            <button type="button" class="btn btn-default">{{remoteci.name}}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="row toolbar-pf-results">
+      <div class="col-sm-12">
+        <h5>1 Result</h5>
+        <p>Active filters:</p>
+        <ul class="list-inline">
+          <li>
+            <span class="label label-info">
+            Status: killed
+            <a href="#"><span class="pficon pficon-close"></span></a>
+            </span>
+          </li>
+          <li>
+            <span class="label label-info">
+            Remote: HP_1
+            <a href="#"><span class="pficon pficon-close"></span></a>
+            </span>
+          </li>
+        </ul>
+        <p>
+          <a href="#">Clear All Filters</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="list-group list-view-pf-stacked">
+    <div class="list-group-item" ng-repeat="job in $ctrl.jobs">
+      <div class="list-view-pf-checkbox">
+        <input type="checkbox">
+      </div>
+      <div class="list-view-pf-actions">
+        <button class="btn btn-primary">Details</button>
+      </div>
+      <div class="list-view-pf-main-info">
+        <div class="list-view-pf-body">
+          <div class="list-view-pf-description">
+            <div class="list-group-item-heading">
+              {{job.remoteci.name}}
+            </div>
+            <div class="list-group-item-text">
+              <span class="label label-default">{{job.status}}</span>
+            </div>
+          </div>
+          <div class="list-view-pf-additional-info">
+            <div ng-repeat="test in job.jobdefinition.tests" class="mr-5">
+              <div style="width: 200px">{{test.name}}</div>
+              <span class="label label-success">{{test.result.success || 0}}</span>
+              <span class="label label-warning">{{test.result.skips || 0}}</span>
+              <span class="label label-default">{{test.result.errors || 0}}</span>
+              <span class="label label-danger">{{test.result.failures || 0}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
