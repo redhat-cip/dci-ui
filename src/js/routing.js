@@ -81,6 +81,19 @@ require('app')
           templateUrl: '/partials/jobs.html',
           controller: 'ListJobsCtrl'
         })
+        .state('dashboard', {
+          parent: 'auth',
+          url: '/dashboard',
+          template: '<dci-dashboard jobs="$resolve.jobs" remotecis="$resolve.remotecis"></dci-dashboard>',
+          resolve: {
+            jobs: ['api', 'conf', function(api) {
+              return api.jobs.list(1, true);
+            }],
+            remotecis: ['api', 'conf', function(api) {
+              return api.remotecis.list(null, true);
+            }]
+          }
+        })
         .state('logs', {
           parent: 'auth',
           url: '/logs?pattern',
@@ -281,7 +294,7 @@ require('app')
       $rootScope.$on('$stateChangeError', function(e, tS, tPs, fS, fPs, err) {
         if (err.status === 401) {
           $state.go('login', {}, {reload: true});
-        } else if (err.status == 301) {
+        } else if (err.status === 301) {
           $state.go('jobs', {}, {reload: true, inherit: false});
         } else {
           $log.error(err);
