@@ -97,6 +97,27 @@ require("app")
           templateUrl: "/partials/jobs.html",
           controller: "ListJobsCtrl"
         })
+        .state("dashboard", {
+          parent: "auth",
+          url: "/dashboard",
+          template: '<dci-dashboard jobs="$resolve.jobs" remotecis="$resolve.remotecis"></dci-dashboard>',
+          resolve: {
+            jobs: [
+              "api",
+              "conf",
+              function(api) {
+                return api.jobs.list(1, true);
+              }
+            ],
+            remotecis: [
+              "api",
+              "conf",
+              function(api) {
+                return api.remotecis.list(null, true);
+              }
+            ]
+          }
+        })
         .state("logs", {
           parent: "auth",
           url: "/logs?pattern",

@@ -11,6 +11,8 @@ $table-bg-hover                : $gray-lighter;
 
 @import "ui-select/dist/select";
 
+@import "utilities/_spacing.scss";
+
 .main__content{
   padding: 2em;
 }
