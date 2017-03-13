@@ -75,6 +75,11 @@ require('app')
           templateUrl: '/partials/jobs.html',
           controller: 'ListJobsCtrl'
         })
+        .state('dashboard', {
+          parent: 'auth',
+          url: '/dashboard',
+          template: '<dci-dashboard></dci-dashboard>'
+        })
         .state('logs', {
           parent: 'auth',
           url: '/logs?pattern',
