@@ -1,37 +1,39 @@
 @import "bootstrap/variables";
 
-$redhat-color                  : #cb2026;
-$table-bg-accent               : $gray-lighter;
+$redhat-color: #cb2026;
+$table-bg-accent: $gray-lighter;
 
-$arrow-size                    : 15px;
-$table-bg-hover                : $gray-lighter;
+$arrow-size: 15px;
+$table-bg-hover: $gray-lighter;
 
 @import "rcue/dist/css/rcue";
 @import "rcue/dist/css/rcue-additions";
 
 @import "ui-select/dist/select";
 
+@import "utilities/_spacing.scss";
+
 pre {
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 .tab-content {
   margin-top: 20px;
 }
 
-.app .app__ui-view{
+.app .app__ui-view {
   height: 100%;
 }
 
-.login-pf{
+.login-pf {
   height: 100vh;
 }
 
-.login--brand{
+.login--brand {
   font-size: 2.2em;
 }
 
@@ -65,7 +67,6 @@ a.panel-heading {
   }
 }
 
-
 .messages {
   position: fixed;
   z-index: 9999;
@@ -74,9 +75,8 @@ a.panel-heading {
   width: 400px;
 }
 
-@each $name, $color in
-(primary, $brand-primary), (success, $brand-success), (info, $brand-info),
-(warning, $brand-warning), (danger, $brand-danger) {
+@each $name, $color in (primary, $brand-primary), (success, $brand-success), (info, $brand-info),
+        (warning, $brand-warning), (danger, $brand-danger) {
   .bs-callout-#{$name} {
     border-left-color: $color;
 
@@ -107,10 +107,10 @@ a.panel-heading {
 }
 
 .glyphicon-plus-sign {
-    margin-top: 5px;
-    font-size: 18px;
-    border-radius: 50%;
-    padding: 2px 6px;
+  margin-top: 5px;
+  font-size: 18px;
+  border-radius: 50%;
+  padding: 2px 6px;
 }
 
 .user {
@@ -158,7 +158,6 @@ a.panel-heading {
 /*!
  * jsonformatter
  */
-
 
 .json-formatter-row {
   font-family: monospace;
