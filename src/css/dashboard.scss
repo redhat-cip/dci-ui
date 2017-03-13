@@ -3,9 +3,6 @@
 $redhat-color                  : #cb2026;
 $table-bg-accent               : $gray-lighter;
 
-$navbar-inverse-link-active-bg : $redhat-color;
-$navbar-side-size              : 200px;
-
 $arrow-size                    : 15px;
 $table-bg-hover                : $gray-lighter;
 
@@ -46,83 +43,6 @@ pre {
 
 a.panel-heading {
   display: block;
-}
-
-.navbar {
-  .navbar-brand {
-    float: none;
-    display: block;
-    height: initial;
-  }
-
-  #logo {
-    margin: 0 auto;
-  }
-}
-
-.navbar-fixed-left,
-.navbar-fixed-right {
-  @media (max-width: $screen-sm) {
-    .navbar-brand img {
-      margin: -12px 0;
-    }
-    .navbar-nav {
-      margin: 20px 0;
-    }
-  }
-
-  border-radius: 0;
-  .glyphicon {
-    margin: 0 15px 0 10px;
-  }
-
-  @media (min-width: $grid-float-breakpoint) {
-    .navbar-nav > .active > a:after {
-      width: 0;
-      height: 0;
-      content: " ";
-      border-top: $arrow-size solid transparent;
-      border-bottom: $arrow-size solid transparent;
-      position: absolute;
-      top: 10px;
-      border-right: $arrow-size solid $body-bg;
-    }
-    .navbar-header, .navbar-nav, .navbar-nav > li, .navbar-text {
-      float: none;
-    }
-
-  }
-
-  @media (min-width: $screen-sm) {
-    z-index: 9999; // just behind messages alerts
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    margin-bottom: 0;
-    border-width: 0;
-    width: $navbar-side-size;
-  }
-}
-
-.navbar-collapse {
-  padding: 0;
-}
-.navbar-text {
-  text-align: center;
-}
-
-.navbar-fixed-left {
-  left: 0;
-  .navbar-nav > .active > a:after {
-    right: 0;
-  }
-}
-
-.navbar-fixed-right {
-  right: 0;
-  .navbar-nav > .active > a:after {
-    left: 0;
-  }
 }
 
 .checkbox-inline {
