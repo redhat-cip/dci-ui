@@ -17,34 +17,42 @@
 require('angular-ui-bootstrap');
 
 angular.module('dci.messages', ['ui.bootstrap'])
-  .service('messages', [
-    '$timeout', '$log', 'messagesConfig',
-    function($timeout, $log, config) {
-      var log = {
-        'danger': $log.error,
-        'warning': $log.warn,
-        'info': $log.info,
-        'success': $log.log
-      };
-      this.alerts = [];
+  .factory('messages', ['$log', function($log) {
+    var messagesConfig = {
+      max: 5,
+      defaultType: 'info',
+      title: {
+        danger: 'Error',
+        warning: 'Warning',
+        info: 'Info',
+        success: 'Success',
+      },
+      log: {
+        danger: $log.error,
+        warning: $log.warn,
+        info: $log.info,
+        success: $log.log
+      }
+    };
 
-      this.alert = function(msg, type) {
-        type = type || config.defaultType;
+    var alerts = [];
+
+    return {
+      alerts: alerts,
+      alert: function(msg, type) {
+        type = type || messagesConfig.defaultType;
         var alert = {
           type: type,
-          msgTitle: config.title[type],
+          msgTitle: messagesConfig.title[type],
           msg: msg
         };
-        log[type](msg);
-        this.alerts.push(alert);
-        this.alerts.splice(config.max);
+        messagesConfig.log[type](msg);
+        alerts.push(alert);
+        alerts.splice(messagesConfig.max);
         return alert;
-      };
-
-      this.clearAllMessages = function() {
-        this.alerts.length = 0;
-      };
+      }
     }
+  }
   ])
   .directive({
     dciMessages: ['messages', function(messages) {
@@ -61,14 +69,4 @@ angular.module('dci.messages', ['ui.bootstrap'])
         }
       };
     }]
-  })
-  .constant('messagesConfig', {
-    max: 5,
-    defaultType: 'info',
-    title: {
-      danger: 'Error',
-      warning: 'Warning',
-      info: 'Info',
-      success: 'Success',
-    }
   });
