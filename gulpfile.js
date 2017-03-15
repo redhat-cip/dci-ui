@@ -51,8 +51,8 @@ function copy() {
 gulp.task('copy', ['rev'], copy);
 gulp.task('copy:pkg', ['rev:pkg'], copy);
 
-gulp.task('build', ['js', 'css', 'fonts', 'copy', 'rev']);
-gulp.task('build:pkg', ['js', 'css', 'fonts', 'copy:pkg', 'rev:pkg']);
+gulp.task('build', ['js', 'css', 'fonts', 'images', 'copy', 'rev']);
+gulp.task('build:pkg', ['js', 'css', 'fonts', 'images', 'copy:pkg', 'rev:pkg']);
 
 gulp.task('test', ['lint', 'test:e2e']);
 
@@ -107,9 +107,14 @@ gulp.task('css', function() {
     .pipe(gulp.dest(DIST + '/css/'));
 });
 
+gulp.task('images', [], function () {
+  return gulp.src(['node_modules/rcue/dist/img/bg-login.jpg'])
+    .pipe(gulp.dest(DIST + '/images/'));
+});
+
 gulp.task('fonts', function() {
   var entries = [
-    'node_modules/bootstrap-sass/assets/fonts/**'
+    'node_modules/rcue/dist/fonts/**'
   ];
 
   return gulp.src(entries)
