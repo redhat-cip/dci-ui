@@ -11,9 +11,9 @@ Getting started
 To run the app in development mode follow those steps:
 
 * clone this repository
-* ensure that control server is running (ex: on localhost:5000) see `dci-dev-env`
-* install node dependencies: `npm install`
-* run the development server : `npm run dev`
+* ensure that control server is running (ex: on localhost:5000) see ``dci-dev-env``
+* install node dependencies: ``npm install``
+* run the development server : ``npm run dev``
 
 Build tools
 -----------
@@ -26,7 +26,7 @@ Command list:
 
 * **npm run dev**: start web server with live reload
 
-* **npm run build**: build application in `static/` folder
+* **npm run build**: build application in ``static/`` folder
 
 * **npm run test:unit**: start unit test
 
