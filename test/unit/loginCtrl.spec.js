@@ -42,7 +42,7 @@ describe('login controller', function() {
     $httpBackend.when('GET', '/partials/login.html').respond();
     $httpBackend.flush();
     assert.equal(typeof $rootScope.err, 'undefined');
-    $httpBackend.whenGET('http://localhost:5000/api/v1/users/test?embed=team')
+    $httpBackend.whenGET('http://localhost:5000/api/v1/users?where=name:test&embed=team')
       .respond(401);
     $rootScope.authenticate({username: 'test', password: 'password'});
     $httpBackend.flush();
