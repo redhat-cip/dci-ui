@@ -139,8 +139,9 @@ require('app')
       api.users.embed = 'team';
       api.users.get = function(name, withoutTeam) {
         var conf = withoutTeam ? {} : {'params': {'embed': 'team'}};
-        return $http.get(urlize(this.url, name), conf)
-          .then(_.property('data.user'));
+        conf.params.where = 'name:' + name;
+        return $http.get(urlize(this.url), conf)
+          .then(_.property('data.users[0]'));
       };
       api.users.update.parse = function(user) {
         return _.assign(
