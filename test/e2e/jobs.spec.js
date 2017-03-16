@@ -14,41 +14,36 @@
 
 'use strict';
 
-var utils  = require('./utils');
-var api    = require('./api');
-var config = require('../config');
-var Q      = require('q');
-
-/*globals describe, it, expect, element, browser*/
-describe('DCI homepage', function() {
-
+describe('DCI jobs page', function() {
   beforeEach(function() {
-    var promise;
     var cookie = JSON.stringify({
       status: 2,
       team: {name: 'admin'},
       token: Buffer('admin:admin', 'binary').toString('base64')
     });
-    browser.get('/');
-    promise = browser.manage().addCookie('user', encodeURIComponent(cookie));
-    promise.then(utils.noop, utils.noop);
+    browser.manage().addCookie({
+      name: 'user',
+      value: encodeURIComponent(cookie),
+      path: '/',
+      domain: '127.0.0.1'
+    });
   });
 
   it('should be possible to recheck a job', function() {
     browser.get('/');
     element.all(by.css('.glyphicon-repeat')).first().click();
-    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
+    expect(browser.getCurrentUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
   });
 
   it('should be possible to view job details', function() {
     browser.get('/');
     element.all(by.css('a.title')).first().click();
-    expect(browser.getLocationAbsUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
+    expect(browser.getCurrentUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
   });
 
   it('should be able to search for a job', function() {
     browser.get('/');
     element(by.id('patternSearch')).sendKeys('Dell_1').submit();
-    expect(browser.getLocationAbsUrl()).toBe('/logs?pattern=Dell_1');
+    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8000/#/logs?pattern=Dell_1');
   });
 });
