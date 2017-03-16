@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ba6ef594",
+        "filename": "src/js/api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 56
+      },
+      "writtenOn": "2017-03-16T17:42:52Z",
+      "side": 1,
+      "message": "why not extend the current hash ?\n\n{\n  \u0027params\u0027: {\n    \u0027embed\u0027: \u0027team\u0027,\n    \u0027where\u0027: \u0027name: + name\u0027\n  }\n};",
+      "range": {
+        "startLine": 141,
+        "startChar": 8,
+        "endLine": 142,
+        "endChar": 43
+      },
+      "revId": "2c2bca6e00b06933d40ddc4da477d3d6430fc322",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
