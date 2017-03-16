@@ -107,7 +107,7 @@ gulp.task('css', function() {
     .pipe(gulp.dest(DIST + '/css/'));
 });
 
-gulp.task('images', [], function () {
+gulp.task('images', [], function() {
   return gulp.src(['node_modules/rcue/dist/img/bg-login.jpg'])
     .pipe(gulp.dest(DIST + '/images/'));
 });
@@ -130,48 +130,17 @@ gulp.task('serve:dev', ['build', 'watch'], function() {
 });
 
 gulp.task('test:e2e', ['build'], function(cb) {
-  var Q = require('q');
-  var phantom;
-  var server;
-  var error;
+  var webserver = gulp.src(DIST).pipe($.webserver());
 
-  Q.all([
-    utils.server(DIST, config.portTest, false),
-    utils.phantom()
-  ])
-    .then(function(results) {
-      phantom = results.pop();
-      server = results.pop();
-      return utils.protractor(server.address, 'protractor.conf.js');
+  gulp.src([])
+    .pipe($.protractor.protractor({
+      args: ['--baseUrl', 'http://127.0.0.1:8000']
+    }))
+    .on('error', function(e) {
+      throw e
     })
-    .fail(function(err) {
-      error = err;
-    })
-    .fin(function() {
-      return Q.all([
-        phantom.close(),
-        server.close()
-      ]);
-    })
-    .then(function() {
-      cb(error);
-    });
-});
-
-gulp.task('test:e2e:debug', ['build'], function(cb) {
-  var server;
-  var error;
-  utils.server(DIST, config.portTest, false)
-    .then(function(s) {
-      server = s;
-      return utils.protractor(server.address, 'protractor.conf.debug.js', true);
-    })
-    .fail(function(err) {
-      error = err;
-    })
-    .fin(function() {
-      server.close();
-      cb(error);
+    .on('end', function() {
+      webserver.emit('kill');
     });
 });
 
