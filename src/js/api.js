@@ -138,9 +138,11 @@ require('app')
       /*                                  USERS                                   */
       api.users.embed = 'team';
       api.users.get = function(name, withoutTeam) {
-        var conf = withoutTeam ? {} : {'params': {'embed': 'team'}};
-        conf.params.where = 'name:' + name;
-        return $http.get(urlize(this.url), conf)
+        var conf = _.assign(
+                      {'where': 'name:' + name},
+                      withoutTeam ? {} : {'embed': 'team'}
+                   );
+        return $http.get(urlize(this.url), {'params': conf})
           .then(_.property('data.users[0]'));
       };
       api.users.update.parse = function(user) {
