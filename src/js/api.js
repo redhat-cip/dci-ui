@@ -61,8 +61,8 @@ require('app')
           },
           list: function(page, extract) {
             var params = _.assign(
-              page ? {'limit': 20, 'offset': 20 * (page - 1)} : null,
-              this.embed ? {'embed': this.embed} : null
+              page ? {'limit': 20, 'offset': 20 * (page - 1)} : {},
+              this.embed ? {'embed': this.embed} : {}
             );
             extract = extract ? 'data.' + endpoint : 'data';
             return $http.get(this.url, {params: params}).then(_.property(extract));
