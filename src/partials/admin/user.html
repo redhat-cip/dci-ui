@@ -1,0 +1,52 @@
+<admin-menu active="users"></admin-menu>
+<div class="row">
+  <div class="col-xs-12 col-sm-8 col-md-6">
+    <h2>Edit User: {{ $ctrl.user.name }}</h2>
+    <form ng-submit="$ctrl.update()" novalidate>
+      <div class="form-group"
+           ng-class="{'has-error': showError(objForm, objForm.userName)}">
+        <label class="control-label" for="userName">Name</label>
+        <input id="userName"
+               type="text"
+               name="userName"
+               class="form-control"
+               ng-model="$ctrl.user.name"
+               required>
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': showError(objForm, objForm.userPassword) || showError(objForm, objForm.userPassword2)}">
+        <label class="control-label" for="userPassword">Password</label>
+        <input id="userPassword"
+               type="password"
+               class="form-control"
+               name="userPassword"
+               ng-model="$ctrl.user.password">
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': showError(objForm, objForm.userPassword) || showError(objForm, objForm.userPassword2)}">
+        <label class="control-label" for="userPassword2">
+          Repeat Password <span ng-if="showError(objForm, objForm.userPassword2)">(passwords are different)</span>
+        </label>
+        <input type="password" class="form-control" id="userPassword2"
+               name="userPassword2" ng-model="password" compare-to="$ctrl.user.password">
+      </div>
+      <div class="form-group">
+        <label for="user-team" class="control-label">Team</label>
+        <select class="form-control" id="user-team" name="userTeam"
+                ng-options="team.id as team.name for team in $ctrl.teams"
+                ng-model="$ctrl.user.team.id">
+        </select>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"
+                 ng-checked="$ctrl.user.role === 'admin'"
+                 ng-click="$ctrl.toggleRole()"> Admin
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+      <button type="submit" class="btn btn-default" ui-sref="adminUsers">Cancel</button>
+    </form>
+  </div>
+</div>
+

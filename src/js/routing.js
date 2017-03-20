@@ -271,6 +271,21 @@ require('app')
           controller: 'InformationCtrl',
           templateUrl: '/partials/information.html',
         })
+        .state('adminUsers', {
+          parent: 'authAdmin',
+          url: '/admin/users',
+          template: '<admin-users></admin-users>',
+        })
+        .state('adminUser', {
+          parent: 'authAdmin',
+          url: '/admin/users/:id',
+          template: '<admin-user></admin-user>',
+        })
+        .state('adminTeams', {
+          parent: 'authAdmin',
+          url: '/admin/teams',
+          template: '<admin-teams></admin-teams>',
+        })
         .state('login', {
           parent: 'config',
           url: '/login',
