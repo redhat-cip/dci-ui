@@ -1,0 +1,26 @@
+<admin-menu endpoint="audits"></admin-menu>
+<div class="row">
+  <div class="col-xs-12">
+    <div ng-if="$ctrl.audits.length === 0">
+      No audit
+    </div>
+    <div ng-if="$ctrl.audits.length > 0">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+          <th>Action</th>
+          <th>User ID</th>
+          <th>Team ID</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="audit in $ctrl.audits">
+          <td>{{ audit.action }}</td>
+          <td>{{ audit.user_id }}</td>
+          <td>{{ audit.team_id }}</td>
+          <td>{{ audit.created_at }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

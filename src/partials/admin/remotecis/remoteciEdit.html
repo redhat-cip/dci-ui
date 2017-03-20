@@ -1,0 +1,24 @@
+<admin-menu endpoint="remotecis"></admin-menu>
+<div class="row">
+  <div class="col-xs-12 col-sm-8 col-md-6">
+    <form ng-submit="$ctrl.update()" novalidate>
+      <div class="form-group">
+        <label class="control-label" for="remoteciName">Name</label>
+        <input id="remoteciName"
+               type="text"
+               name="remoteciName"
+               class="form-control"
+               ng-model="$ctrl.remoteci.name"
+               required>
+      </div>
+      <div class="form-group">
+        <label for="remoteciData" class="control-label">Data</label>
+        <textarea class="form-control" ng-model="$ctrl.remoteci.data" id="remoteciData" name="data" rows="5" valid-json>
+        </textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+      <button type="submit" class="btn btn-default" ui-sref="adminTeams">Cancel</button>
+    </form>
+  </div>
+</div>
+

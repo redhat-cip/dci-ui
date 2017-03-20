@@ -16,8 +16,8 @@
 
 require('app')
   .config([
-    '$stateProvider', '$urlRouterProvider', 'utils',
-    function($stateProvider, $urlRouterProvider, utils) {
+    '$stateProvider', '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider) {
       var scrollTop = ['$anchorScroll',
         function($anchorScroll) {
           $anchorScroll();
@@ -46,6 +46,12 @@ require('app')
           },
           controller: 'authCtrl',
           templateUrl: '/partials/auth.html'
+        })
+        .state('login', {
+          parent: 'config',
+          url: '/login',
+          controller: 'LoginCtrl',
+          templateUrl: '/partials/login.html'
         })
         .state('authAdmin', {
           'abstract': true,
@@ -158,124 +164,113 @@ require('app')
           controller: 'GpanelStatusCtrl',
           templateUrl: '/partials/gpanel/status.html'
         })
-        .state('administrate', {
-          parent: 'authAdmin',
-          url: '/administrate',
-          controller: 'AdminCtrl',
-          templateUrl: '/partials/admin.html'
-        })
-        .state('administrate.users', {url: '/users'})
-        .state('administrate.teams', {url: '/teams'})
-        .state('administrate.remotecis', {url: '/remotecis'})
-        .state('administrate.topics', {url: '/topics'})
-        .state('administrate.audits', {url: '/audits'})
-        .state('edit', {
-          'abstract': true,
-          parent: 'authAdmin',
-          template: '<ui-view></ui-view>'
-        })
-        .state('edit.user', (function() {
-          function EditUser() {
-            utils.Edit.call(this, 'User');
-          }
-
-          EditUser.prototype = Object.create(utils.Edit.prototype);
-          EditUser.prototype.constructor = EditUser;
-
-          EditUser.prototype.cb = function($stateParams, $injector) {
-            var api = $injector.get('api');
-            return $injector.get('$q').all([
-              api.users.get($stateParams.id, true), api.teams.list(null, true)
-            ]).then(
-              this.successCb($injector), this.errorCb($injector)
-            );
-          };
-          EditUser.prototype.successCb = function($injector) {
-            var that = this;
-            return function(res) {
-              return _.merge(
-                utils.Edit.prototype.successCb.call(that, $injector)(res[0]),
-                {role: res[0].role === 'admin'},
-                {meta: {teams: res[1]}}
-              );
-            };
-          };
-          EditUser.prototype.errorCb = function($injector) {
-            return function(errs) {
-              _.each(errs, _.partial(utils.Edit.prototype.errorCb($injector)));
-            };
-          };
-          return (new EditUser()).genState();
-        })())
-        .state('edit.team', (new utils.Edit('Team').genState()))
-        .state('edit.remoteci', (function() {
-          function EditRemoteCI() {
-            utils.Edit.call(this, 'RemoteCI');
-          }
-
-          EditRemoteCI.prototype = Object.create(utils.Edit.prototype);
-          EditRemoteCI.prototype.constructor = EditRemoteCI;
-
-          EditRemoteCI.prototype.cb = function($stateParams, $injector) {
-            var that = this;
-            return utils.Edit.prototype.cb.call(that, $stateParams, $injector)
-              .then(function(obj) {
-                var method = obj.meta.method;
-                obj.meta.method = function(obj) {
-                  obj.data = angular.fromJson(obj.data);
-                  return method(obj);
-                };
-                return _.assign(obj, {'data': angular.toJson(obj.data, true)});
-              });
-          };
-
-          return (new EditRemoteCI()).genState();
-        })())
-        .state('edit.topic', (function() {
-          function EditTopic() {
-            utils.Edit.call(this, 'Topic');
-          }
-
-          EditTopic.prototype = Object.create(utils.Edit.prototype);
-          EditTopic.prototype.constructor = EditTopic;
-
-          EditTopic.prototype.cb = function($stateParams, $injector) {
-            var api = $injector.get('api');
-            return $injector.get('$q').all([
-              api.topics.get($stateParams.id),
-              api.teams.list(null, true),
-              api.topics.teams($stateParams.id)
-            ])
-              .then(this.successCb($injector), this.errorCb($injector));
-          };
-          EditTopic.prototype.successCb = function($injector) {
-            var that = this;
-            return function(res) {
-              return _.merge(
-                utils.Edit.prototype.successCb.call(that, $injector)(res[0]),
-                {meta: {teams: res[1]}}, {teams: res[2]}
-              );
-            };
-          };
-          EditTopic.prototype.errorCb = function($injector) {
-            return function(errs) {
-              _.each(errs, _.partial(utils.Edit.prototype.errorCb($injector)));
-            };
-          };
-          return (new EditTopic()).genState();
-
-        })())
         .state('information', {
           parent: 'auth',
           url: '/information',
           controller: 'InformationCtrl',
-          templateUrl: '/partials/information.html',
+          templateUrl: '/partials/information.html'
         })
-        .state('login', {
-          parent: 'config',
-          url: '/login',
-          controller: 'LoginCtrl',
-          templateUrl: '/partials/login.html',
+        .state('adminUsers', {
+          parent: 'authAdmin',
+          url: '/admin/users',
+          template: '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
+          resolve: {
+            users: ['api', 'conf', function(api) {
+              return api.users.list(null, true);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminUser', {
+          parent: 'authAdmin',
+          url: '/admin/users/:id',
+          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          resolve: {
+            user: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.users.get($stateParams.id);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminTeams', {
+          parent: 'authAdmin',
+          url: '/admin/teams',
+          template: '<admin-teams teams="$resolve.teams"></admin-teams>',
+          resolve: {
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminTeam', {
+          parent: 'authAdmin',
+          url: '/admin/teams/:id',
+          template: '<admin-team-edit team="$resolve.team"></admin-team-edit>',
+          resolve: {
+            team: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.teams.get($stateParams.id);
+            }]
+          }
+        })
+        .state('adminRemotecis', {
+          parent: 'authAdmin',
+          url: '/admin/remotecis',
+          template: '<admin-remotecis remotecis="$resolve.remotecis"></admin-remotecis>',
+          resolve: {
+            remotecis: ['api', 'conf', function(api) {
+              return api.remotecis.list(null, true);
+            }]
+          }
+        })
+        .state('adminRemoteci', {
+          parent: 'authAdmin',
+          url: '/admin/remotecis/:id',
+          template: '<admin-remoteci-edit remoteci="$resolve.remoteci"></admin-remoteci-edit>',
+          resolve: {
+            remoteci: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.remotecis.get($stateParams.id);
+            }]
+          }
+        })
+        .state('adminTopics', {
+          parent: 'authAdmin',
+          url: '/admin/topics',
+          template: '<admin-topics topics="$resolve.topics"></admin-topics>',
+          resolve: {
+            topics: ['api', 'conf', function(api) {
+              return api.topics.list(null, true);
+            }]
+          }
+        })
+        .state('adminTopic', {
+          parent: 'authAdmin',
+          url: '/admin/topics/:id',
+          template: '<admin-topic-edit topic="$resolve.topic" teams="$resolve.teams" topic-teams="$resolve.topicTeams"></admin-topic-edit>',
+          resolve: {
+            topic: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.topics.get($stateParams.id);
+            }],
+            topicTeams: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.topics.teams($stateParams.id);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminAudits', {
+          parent: 'authAdmin',
+          url: '/admin/audits',
+          template: '<admin-audits audits="$resolve.audits"></admin-audits>',
+          resolve: {
+            audits: ['api', 'conf', function(api) {
+              return api.audits.list(null, true);
+            }]
+          }
         });
 
       $urlRouterProvider.otherwise('/');
