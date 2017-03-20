@@ -12,19 +12,11 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-var assert = chai.assert;
-
 describe('login controller', function() {
-  var $httpBackend;
   var $rootScope;
   var createController;
 
-  beforeEach(module('app'));
-
   beforeEach(inject(function($injector) {
-    $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('GET', '/config.json')
-      .respond({apiURL: 'http://localhost:5000', version: '7489734'});
     $rootScope = $injector.get('$rootScope');
     var $controller = $injector.get('$controller');
     createController = function() {
@@ -32,20 +24,14 @@ describe('login controller', function() {
     };
   }));
 
-  afterEach(function() {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
-
   it('should set err.status 401 when unauthorized', function() {
     createController();
-    $httpBackend.when('GET', '/partials/login.html').respond();
-    $httpBackend.flush();
-    assert.equal(typeof $rootScope.err, 'undefined');
-    $httpBackend.whenGET('http://localhost:5000/api/v1/users?where=name:test&embed=team')
+    expect($rootScope.err).toBe(undefined);
+    $httpBackend
+      .when('GET', 'https://api.example.org/api/v1/users?where=name:test&embed=team')
       .respond(401);
     $rootScope.authenticate({username: 'test', password: 'password'});
     $httpBackend.flush();
-    assert.equal($rootScope.err.status, 401);
+    expect($rootScope.err.status).toBe(401);
   });
 });

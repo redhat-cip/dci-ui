@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-8 col-md-6">
+    <h2>Create a topic:</h2>
+    <form ng-submit="$ctrl.create()" novalidate>
+      <div class="form-group">
+        <label class="control-label" for="topicName">Name</label>
+        <input id="topicName"
+               type="text"
+               name="topicName"
+               class="form-control"
+               ng-model="$ctrl.topic.name"
+               required>
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>
+

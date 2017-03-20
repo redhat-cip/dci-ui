@@ -1,0 +1,66 @@
+<admin-menu active="topics"></admin-menu>
+<div class="row">
+  <div class="col-xs-12 col-sm-8 col-md-6">
+    <form>
+      <div class="form-group">
+        <label class="control-label" for="topicName">Name</label>
+        <input id="topicName"
+               type="text"
+               name="topicName"
+               class="form-control"
+               ng-model="$ctrl.topic.name"
+               required>
+      </div>
+    </form>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-6 table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>Available teams</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tr ng-repeat="team in $ctrl.availableTeams | orderBy: 'name'">
+        <td>{{team.name}}</td>
+        <td class="text-center">
+          <button type="button" class="btn btn-primary btn-sm"
+                  ng-click="$ctrl.associateTeamToTopic(team, $ctrl.topic)">
+            <i class="glyphicon glyphicon-plus"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-sm-6 table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>Topic team</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tr ng-repeat="team in $ctrl.topicTeams | orderBy: 'name'">
+        <td>{{team.name}}</td>
+        <td class="text-center">
+          <button type="button" class="btn btn-primary btn-sm"
+                  ng-click="$ctrl.removeTeamFromTopic(team, $ctrl.topic)">
+            <i class="glyphicon glyphicon-minus"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-xs-12 col-sm-8 col-md-6">
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" ng-click="$ctrl.update()">Update</button>
+      <button type="submit" class="btn btn-default" ui-sref="adminTeams">Cancel</button>
+    </div>
+  </div>
+</div>
