@@ -143,6 +143,11 @@ require('app')
         return $http.get(urlize(this.url), conf)
           .then(_.property('data.users[0]'));
       };
+      api.users.get2 = function(user) {
+        var params = {'params': {'embed': 'team'}};
+        return $http.get(urlize(this.url, user.id), params)
+          .then(_.property('data'));
+      };
       api.users.update.parse = function(user) {
         return _.assign(
           {'role': user.role ? 'admin' : 'user'},
