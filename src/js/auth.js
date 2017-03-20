@@ -61,7 +61,7 @@ require('app')
         login: function(username, password) {
           user.token = $window.btoa(username.concat(':', password));
 
-          return api.users.get(username).then(function(userRes) {
+          return api.users.getByName(username).then(function(userRes) {
             angular.extend(user, userRes, {status: status.AUTHENTICATED});
             $cookies.put('user', user);
             return user;

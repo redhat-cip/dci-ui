@@ -164,8 +164,6 @@ require('app')
           controller: 'AdminCtrl',
           templateUrl: '/partials/admin.html'
         })
-        .state('administrate.users', {url: '/users'})
-        .state('administrate.teams', {url: '/teams'})
         .state('administrate.remotecis', {url: '/remotecis'})
         .state('administrate.topics', {url: '/topics'})
         .state('administrate.audits', {url: '/audits'})
@@ -174,40 +172,6 @@ require('app')
           parent: 'authAdmin',
           template: '<ui-view></ui-view>'
         })
-        .state('edit.user', (function() {
-          function EditUser() {
-            utils.Edit.call(this, 'User');
-          }
-
-          EditUser.prototype = Object.create(utils.Edit.prototype);
-          EditUser.prototype.constructor = EditUser;
-
-          EditUser.prototype.cb = function($stateParams, $injector) {
-            var api = $injector.get('api');
-            return $injector.get('$q').all([
-              api.users.get($stateParams.id, true), api.teams.list(null, true)
-            ]).then(
-              this.successCb($injector), this.errorCb($injector)
-            );
-          };
-          EditUser.prototype.successCb = function($injector) {
-            var that = this;
-            return function(res) {
-              return _.merge(
-                utils.Edit.prototype.successCb.call(that, $injector)(res[0]),
-                {role: res[0].role === 'admin'},
-                {meta: {teams: res[1]}}
-              );
-            };
-          };
-          EditUser.prototype.errorCb = function($injector) {
-            return function(errs) {
-              _.each(errs, _.partial(utils.Edit.prototype.errorCb($injector)));
-            };
-          };
-          return (new EditUser()).genState();
-        })())
-        .state('edit.team', (new utils.Edit('Team').genState()))
         .state('edit.remoteci', (function() {
           function EditRemoteCI() {
             utils.Edit.call(this, 'RemoteCI');
@@ -269,7 +233,53 @@ require('app')
           parent: 'auth',
           url: '/information',
           controller: 'InformationCtrl',
-          templateUrl: '/partials/information.html',
+          templateUrl: '/partials/information.html'
+        })
+        .state('adminUsers', {
+          parent: 'authAdmin',
+          url: '/admin/users',
+          template: '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
+          resolve: {
+            users: ['api', 'conf', function(api) {
+              return api.users.list(null, true);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminUser', {
+          parent: 'authAdmin',
+          url: '/admin/users/:id',
+          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          resolve: {
+            user: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.users.get($stateParams.id);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminTeams', {
+          parent: 'authAdmin',
+          url: '/admin/teams',
+          template: '<admin-teams teams="$resolve.teams"></admin-teams>',
+          resolve: {
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }]
+          }
+        })
+        .state('adminTeam', {
+          parent: 'authAdmin',
+          url: '/admin/teams/:id',
+          template: '<admin-team-edit team="$resolve.team"></admin-team-edit>',
+          resolve: {
+            team: ['$stateParams', 'api', 'conf', function($stateParams, api) {
+              return api.teams.get($stateParams.id);
+            }]
+          }
         })
         .state('login', {
           parent: 'config',
