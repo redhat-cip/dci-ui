@@ -269,7 +269,51 @@ require('app')
           parent: 'auth',
           url: '/information',
           controller: 'InformationCtrl',
-          templateUrl: '/partials/information.html',
+          templateUrl: '/partials/information.html'
+        })
+        .state('adminUsers', {
+          parent: 'authAdmin',
+          url: '/admin/users',
+          template: '<admin-users></admin-users>'
+        })
+        .state('adminUser', {
+          parent: 'authAdmin',
+          url: '/admin/users/:id',
+          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          resolve: {
+            user: [
+              '$stateParams', '$state', 'messages', 'api',
+              function($stateParams, $state, messages, api) {
+                var user = {id: $stateParams.id};
+                return api.users.get2(user)
+                  .then(function(data) {
+                    return data.user;
+                  })
+                  .catch(function() {
+                    $state.go('adminUsers');
+                    messages.alert('Can\'t get current user', 'danger');
+                  });
+              }
+            ],
+            teams: [
+              '$state', 'messages', 'api',
+              function($state, messages, api) {
+                return api.teams.list()
+                  .then(function(data) {
+                    return data.teams;
+                  })
+                  .catch(function() {
+                    $state.go('adminUsers');
+                    messages.alert('Can\'t get teams', 'danger');
+                  });
+              }
+            ]
+          }
+        })
+        .state('adminTeams', {
+          parent: 'authAdmin',
+          url: '/admin/teams',
+          template: '<admin-teams></admin-teams>',
         })
         .state('login', {
           parent: 'config',
