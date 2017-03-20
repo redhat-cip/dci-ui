@@ -1,0 +1,42 @@
+<admin-menu active="users"></admin-menu>
+<div class="row">
+  <div class="col-xs-12">
+    <div ng-if="!$ctrl.users">
+      <div uib-progressbar class="progress-striped active" max="1" value="1">
+        <i>Loading</i>
+      </div>
+    </div>
+    <div ng-if="$ctrl.users && $ctrl.users.length > 0">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+          <th>Username</th>
+          <th>User ID</th>
+          <th>Team ID</th>
+          <th>Role</th>
+          <th>Date</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="user in $ctrl.users | orderBy: 'name'">
+          <td>{{ user.name }}</td>
+          <td>{{ user.id }}</td>
+          <td>{{ user.team.id }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.created_at }}</td>
+          <td class="text-center">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editUser(user)">
+              <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    ng-click="$ctrl.deleteUser(user)"
+                    ng-disabled="$ctrl.currentUser.id === user.id">
+              <i class="glyphicon glyphicon-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
