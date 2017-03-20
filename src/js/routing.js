@@ -269,7 +269,22 @@ require('app')
           parent: 'auth',
           url: '/information',
           controller: 'InformationCtrl',
-          templateUrl: '/partials/information.html',
+          templateUrl: '/partials/information.html'
+        })
+        .state('adminUsers', {
+          parent: 'authAdmin',
+          url: '/admin/users',
+          template: '<admin-users></admin-users>'
+        })
+        .state('adminUser', {
+          parent: 'authAdmin',
+          url: '/admin/users/:id',
+          template: '<admin-user-edit></admin-user-edit>',
+        })
+        .state('adminTeams', {
+          parent: 'authAdmin',
+          url: '/admin/teams',
+          template: '<admin-teams></admin-teams>',
         })
         .state('login', {
           parent: 'config',
