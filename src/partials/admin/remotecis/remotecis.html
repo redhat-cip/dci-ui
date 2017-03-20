@@ -1,0 +1,44 @@
+<admin-menu endpoint="remotecis"></admin-menu>
+<div class="row">
+  <div class="col-xs-12">
+    <div ng-if="$ctrl.remotecis.length === 0">
+      No remoteci
+    </div>
+    <div ng-if="$ctrl.remotecis.length > 0">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>RemoteCI name</th>
+          <th>RemoteCI ID</th>
+          <th>Date</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="remoteci in $ctrl.remotecis | orderBy: 'name'">
+          <td>
+            <span ng-if="remoteci.state == 'inactive'" class="label label-danger">Locked</span>
+            <span ng-if="remoteci.state == 'active'" class="label label-success">Active</span>
+          </td>
+          <td>{{ remoteci.name }}</td>
+          <td>{{ remoteci.id }}</td>
+          <td>{{ remoteci.created_at }}</td>
+          <td class="text-center">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editRemoteci(remoteci)">
+              <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.toggleLockRemoteci(remoteci)">
+              <i class="glyphicon glyphicon-lock"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    ng-click="$ctrl.deleteRemoteci(remoteci)">
+              <i class="glyphicon glyphicon-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<admin-remoteci-create></admin-remoteci-create>

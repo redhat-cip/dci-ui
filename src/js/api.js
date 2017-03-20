@@ -47,6 +47,7 @@ require('app')
       // }
       api.endpoints.forEach(function(endpoint) {
         api[endpoint] = {
+          url: '/api/v1/' + endpoint + '/',
           get: function(id) {
             // remove the trailing "s"
             var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
@@ -124,7 +125,7 @@ require('app')
       };
 
       /*                                REMOTE CIS                                */
-      api.remotecis.update.parse = _.partialRight(_.pick, ['name', 'data']);
+      api.remotecis.update.parse = _.partialRight(_.pick, ['name', 'state', 'data']);
       api.remotecis.create = function(remoteci) {
         return $http.post(
           this.url, _.merge(remoteci, {'team_id': user.team.id})
@@ -143,7 +144,7 @@ require('app')
 
       /*                                  USERS                                   */
       api.users.embed = 'team';
-      api.users.get = function(name, withoutTeam) {
+      api.users.getByName = function(name, withoutTeam) {
         var conf = _.assign(
           {'where': 'name:' + name},
           withoutTeam ? {} : {'embed': 'team'}
