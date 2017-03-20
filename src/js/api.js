@@ -44,6 +44,7 @@ require('app')
         'components', 'jobdefinitions', 'audits', 'topics'
       ], function(endpoint) {
         api[endpoint] = {
+          url: '/api/v1/' + endpoint + '/',
           get: function(id) {
             // remove the trailing "s"
             var extract = 'data.' + endpoint.slice(0, endpoint.length - 1);
@@ -142,6 +143,11 @@ require('app')
         conf.params.where = 'name:' + name;
         return $http.get(urlize(this.url), conf)
           .then(_.property('data.users[0]'));
+      };
+      api.users.get2 = function(user) {
+        var params = {'params': {'embed': 'team'}};
+        return $http.get(urlize(this.url, user.id), params)
+          .then(_.property('data'));
       };
       api.users.update.parse = function(user) {
         return _.assign(

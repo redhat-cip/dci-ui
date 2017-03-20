@@ -15,14 +15,22 @@
 module.exports = function(config) {
   config.set({
     basePath: '../..',
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['jasmine'],
     files: [
       'static/js/app.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'src/partials/**/*.html',
       'test/unit/**/*.spec.js'
     ],
     exclude: [],
-    preprocessors: {},
+    preprocessors: {
+      'src/partials/**/*.html': ['ng-html2js']
+    },
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'src/',
+      prependPrefix: '/',
+      moduleName: 'templates'
+    },
     reporters: ['progress'],
     port: 9876,
     colors: true,
