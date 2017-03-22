@@ -30,7 +30,6 @@ module.exports = angular.module('app', [
   'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select',
   'jsonFormatter', 'dci.messages', 'ngSanitize'
 ])
-  .value('config', {})
   .filter('limit', function() {
     return function(input, size, term) {
       if (size && input.length > size) {
@@ -38,15 +37,4 @@ module.exports = angular.module('app', [
       }
       return input;
     };
-  })
-  .run(['$http', '$q', 'config', function($http, $q, config) {
-    var d = $q.defer();
-    config.promise = d.promise;
-
-    $http.get('/config.json').then(function(resp) {
-      angular.extend(config, resp.data);
-      d.resolve();
-    }, function(err) {
-      d.reject(err);
-    });
-  }]);
+  });
