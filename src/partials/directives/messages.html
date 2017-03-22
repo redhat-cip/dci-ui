@@ -1,3 +1,13 @@
-<div uib-alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)" class="alert-block">
-    <strong>{{ alert.msgTitle }}: </strong> {{ alert.msg }}
+<div class="toast-pf alert alert-dismissable"
+     ng-repeat="alert in alerts"
+     ng-class="'alert-' + alert.type">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true"
+          ng-click="closeAlert($index)">
+    <span class="pficon pficon-close"></span>
+  </button>
+  <span class="pficon pficon-info" ng-if="alert.type === 'info'"></span>
+  <span class="pficon pficon-ok" ng-if="alert.type === 'success'"></span>
+  <span class="pficon pficon-warning-triangle-o" ng-if="alert.type === 'warning'"></span>
+  <span class="pficon pficon-error-circle-o" ng-if="alert.type === 'danger'"></span>
+  {{ alert.msg }}
 </div>
