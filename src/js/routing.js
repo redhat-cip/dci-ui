@@ -28,8 +28,8 @@ require('app')
         .state('config', {
           'abstract': true,
           resolve: {
-            conf: ['config', function(config) {
-              return config.promise;
+            conf: ['api', function(api) {
+              return api.promise;
             }]
           },
           template: '<ui-view></ui-view>'
@@ -281,23 +281,6 @@ require('app')
       $urlRouterProvider.otherwise('/');
     }
   ])
-
-  .controller('authCtrl', [
-    '$scope', '$state', 'auth', 'config',
-    function($scope, $state, auth, config) {
-      // currently just create roles and user when admin
-      $scope.version = config.version;
-      $scope.admin = auth.isAdminInTeam();
-      $scope.global_admin = auth.isAdmin();
-      $scope.user = auth.user;
-      $scope.isCollapsed = true;
-      $scope.logout = function() {
-        auth.logout();
-        $state.go('login');
-      };
-    }
-  ])
-
   .run([
     '$rootScope', '$state', '$log', function($rootScope, $state, $log) {
       $rootScope.$on('$stateChangeError', function(e, tS, tPs, fS, fPs, err) {

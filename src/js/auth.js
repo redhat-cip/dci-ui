@@ -90,4 +90,19 @@ require('app')
       }
     }
   ])
+  .controller('authCtrl', [
+    '$scope', '$state', 'auth', 'api',
+    function($scope, $state, auth, api) {
+      // currently just create roles and user when admin
+      $scope.version = api.config.version;
+      $scope.admin = auth.isAdminInTeam();
+      $scope.global_admin = auth.isAdmin();
+      $scope.user = auth.user;
+      $scope.isCollapsed = true;
+      $scope.logout = function() {
+        auth.logout();
+        $state.go('login');
+      };
+    }
+  ])
   .run(['auth', angular.noop]);

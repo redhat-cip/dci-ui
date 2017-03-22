@@ -15,10 +15,16 @@
 'use strict';
 
 require('app')
-  .factory('api', ['' +
-  '$q', '$http', '$window', 'config', 'moment', 'user',
-    function($q, $http, $window, config, moment, user) {
-      var api = {urls: {}};
+  .factory('api', ['$q', '$http', '$window', 'moment', 'user',
+    function($q, $http, $window, moment, user) {
+      var api = {
+        promise: null,
+        config: null,
+        endpoints: ['jobs', 'remotecis', 'jobstates', 'files',
+          'users', 'teams', 'components', 'jobdefinitions',
+          'audits', 'topics']
+      };
+
       var urlize = _.rest(_.partialRight(_.join, '/'));
       var urlPttrn = new RegExp('(https?://)(.*)');
 
@@ -28,7 +34,7 @@ require('app')
       //
       // api = {
       //  jobs: {
-      //    url: "an/endpoint/url"
+      //    url: "https://api.distributed-ci.io/api/v1/jobs/"
       //    get: function... ,
       //    create: function... ,
       //    list: function... ,
@@ -39,10 +45,7 @@ require('app')
       //    ...
       //  }
       // }
-      _.each([
-        'jobs', 'remotecis', 'jobstates', 'files', 'users', 'teams',
-        'components', 'jobdefinitions', 'audits', 'topics'
-      ], function(endpoint) {
+      api.endpoints.forEach(function(endpoint) {
         api[endpoint] = {
           get: function(id) {
             // remove the trailing "s"
@@ -84,11 +87,14 @@ require('app')
       // add the issues endpoint
       api.issues = {};
 
-      config.promise.then(function() {
-        _.each(api, function(endpoint, name) {
-          endpoint.url = urlize(config.apiURL, 'api', 'v1', name);
-        });
+      // get config to build endpoint urls
+      api.promise = $http.get('/config.json').then(function(response) {
+        var config = response.data;
+        api.config = config;
         api.search.url = urlize(config.apiURL, 'api', 'v1', 'search');
+        api.endpoints.forEach(function(endpoint) {
+          api[endpoint].url = urlize(config.apiURL, 'api', 'v1', endpoint);
+        });
       });
 
       /*                                COMPONENTS                                */
@@ -139,9 +145,9 @@ require('app')
       api.users.embed = 'team';
       api.users.get = function(name, withoutTeam) {
         var conf = _.assign(
-                      {'where': 'name:' + name},
-                      withoutTeam ? {} : {'embed': 'team'}
-                   );
+          {'where': 'name:' + name},
+          withoutTeam ? {} : {'embed': 'team'}
+        );
         return $http.get(urlize(this.url), {'params': conf})
           .then(_.property('data.users[0]'));
       };
@@ -304,8 +310,7 @@ require('app')
                 );
               });
             });
-            var jobstates = _.last(results).data.jobstates;
-            job.jobstates = jobstates;
+            job.jobstates = _.last(results).data.jobstates;
             return job;
           });
       };
