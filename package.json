@@ -54,7 +54,7 @@
     "phantomjs": "^2.1.7",
     "protractor": "^5.1.1",
     "q": "^1.4.1",
-    "selenium-server-standalone-jar": "^3.2.0",
+    "selenium-server-standalone-jar": "3.3.1",
     "serve-static": "^1.10.0",
     "through2": "^2.0.3",
     "vinyl-buffer": "^1.0.0",
