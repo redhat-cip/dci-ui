@@ -50,7 +50,7 @@
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "lodash": "~4.13.1",
-    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.14",
     "protractor": "^5.1.1",
     "q": "^1.4.1",
     "selenium-server-standalone-jar": "3.3.1",
