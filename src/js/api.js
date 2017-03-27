@@ -152,12 +152,7 @@ require('app')
         return $http.get(urlize(this.url), {'params': conf})
           .then(_.property('data.users[0]'));
       };
-      api.users.update.parse = function(user) {
-        return _.assign(
-          {'role': user.role ? 'admin' : 'user'},
-          _.pick(user, ['name', 'team_id', 'password'])
-        );
-      };
+      api.users.update.parse = _.partialRight(_.pick, ['name', 'team_id', 'password', 'role']);
 
       /*                                  TOPICS                                  */
       api.topics.update.parse = _.partialRight(_.pick, ['name']);
