@@ -173,34 +173,10 @@ require('app')
         var url = urlize(api.topics.url, id, 'teams', team);
         return $http.delete(url);
       };
-      api.topics.components = function(topic) {
-        var url = urlize(api.topics.url, topic, 'components');
-
-        return $http.get(url)
-          .then(_.property('data.components'))
-          .then(function(results) {
-            _.each(results, function(component) {
-              api.components.files(component.id).then(function(components) {
-                component.files = components;
-                _.each(component.files, function(file) {
-                  file.dl_link = api.components.url.replace(
-                    urlPttrn, function(_, g1, g2) {
-                      var token = $window.atob(user.token);
-                      var tkn_index = token.indexOf(':');
-                      var tkn_username = token.substring(0, tkn_index);
-                      var tkn_password = encodeURIComponent(
-                        token.substring(tkn_index + 1)
-                      );
-                      return urlize(
-                        g1 + tkn_username + ':' + tkn_password + '@' + g2,
-                        component.id, 'files', file.id, 'content'
-                      );
-                    });
-                });
-              });
-            });
-            return results;
-          });
+      api.topics.components = function(topic_id) {
+        var url = urlize(api.topics.url, topic_id, 'components');
+        var conf = {'params': {'embed': 'files'}};
+        return $http.get(url, conf).then(_.property('data.components'));
       };
       api.topics.components.jobs = function(topic, component) {
         var url = urlize(api.topics.url, topic, 'components', component, 'jobs');
