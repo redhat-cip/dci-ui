@@ -6,7 +6,7 @@
 </ol>
 
 <uib-accordion close-others="true">
-  <uib-accordion-group ng-repeat="(type, components) in componentsByTopic" is-open="opened">
+  <div uib-accordion-group ng-repeat="(type, components) in componentsByTopic" is-open="opened">
     <uib-accordion-heading>{{ type }}
       <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': opened, 'glyphicon-chevron-right': !opened}"></i>
     </uib-accordion-heading>
@@ -96,7 +96,7 @@
         </tbody>
       </table>
     </div>
-  </uib-accordion-group>
+  </div>
 </uib-accordion>
 
 <h2 ng-show="global_admin">Create new Component
