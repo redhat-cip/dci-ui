@@ -15,21 +15,25 @@
 'use strict';
 
 require('app')
-  .directive('validJson', function() {
+  .directive('jsonText', function() {
     return {
+      restrict: 'A',
       require: 'ngModel',
-      link: function(scope, element, attributes, ngModel) {
-        ngModel.$validators.validJson = function(modelValue) {
-          if (!modelValue.length) {
-            return true;
-          }
+      link: function(scope, element, attr, ngModel) {
+        function into(input) {
           try {
-            angular.fromJson(modelValue);
+            return JSON.parse(input);
           } catch (e) {
-            return false;
+            return 'error';
           }
-          return true;
-        };
+        }
+
+        function out(data) {
+          return JSON.stringify(data, null, 2);
+        }
+
+        ngModel.$parsers.push(into);
+        ngModel.$formatters.push(out);
       }
     };
   });
