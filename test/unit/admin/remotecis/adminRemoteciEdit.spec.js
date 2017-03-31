@@ -28,4 +28,45 @@ describe('admin remoteci edit component', function() {
     expect(element.scope().remoteci.name).toBe('Admin Remote CI');
     expect(element.scope().remoteci.state).toBe('active');
   });
+
+  it('should update if data are valid', function() {
+    var controller = element.controller('adminRemoteciEdit');
+    controller.remoteci = {
+      id: '1',
+      name: 'rci',
+      state: 'active',
+      data: {
+        "hardware": "Dell",
+        "network": "Juniper",
+        "storage": "swift",
+        "virtualization": "Xen"
+      }
+    };
+
+    $httpBackend
+      .expectPUT('https://api.example.org/api/v1/remotecis/1', {
+        name: 'rci', state: 'active',
+        data: {
+          "hardware": "Dell",
+          "network": "Juniper",
+          "storage": "swift",
+          "virtualization": "Xen"
+        }
+      })
+      .respond();
+    $httpBackend.whenGET('https://api.example.org/api/v1/remotecis').respond();
+    controller.update();
+    $httpBackend.flush();
+  });
+
+  it('should not update if data are invalid', function() {
+    var controller = element.controller('adminRemoteciEdit');
+    controller.remoteci = {
+      id: '1',
+      name: 'rci',
+      state: 'active',
+      data: 'error'
+    };
+    controller.update();
+  });
 });

@@ -28,6 +28,12 @@ function adminRemoteciCtrl($state, api, messages) {
 
   $ctrl.update = function() {
     var remoteciName = $ctrl.remoteci.name;
+
+    if ($ctrl.remoteci.data === 'error') {
+      messages.alert('remoteci data should be a valid json', 'danger');
+      return;
+    }
+
     api.remotecis.update($ctrl.remoteci)
       .then(function() {
         messages.alert('remoteci ' + remoteciName + ' updated', 'success');
