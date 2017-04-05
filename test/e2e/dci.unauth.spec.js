@@ -14,24 +14,15 @@
 
 'use strict';
 
-exports.config = {
-  framework: 'jasmine2',
-  seleniumServerJar: './node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.3.1.jar',
-  specs: ['test/e2e/*.spec.js'],
-  allScriptsTimeout: 30000,
-  capabilities: {
-    browserName: 'phantomjs',
-    maxSessions: 1
-  },
+describe('DCI unauth', function() {
+  afterEach(function() {
+    browser.manage().logs().get('browser').then(function(browserLog) {
+      expect(browserLog.length).toEqual(0,
+        'there is an error in console.log:\n' + JSON.stringify(browserLog, null, 2));
+    });
+  });
 
-  onPrepare: function() {
-    var jasmineReporters = require('jasmine-reporters');
-    var reporter = new jasmineReporters.JUnitXmlReporter();
-    jasmine.getEnv().addReporter(reporter);
-  },
-
-  jasmineNodeOpts: {
-    showColors: true,
-    defaultTimeoutInterval: 30000
-  }
-};
+  it('should go to login without error', function() {
+    browser.get('/#/login');
+  });
+});
