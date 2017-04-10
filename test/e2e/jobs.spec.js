@@ -31,7 +31,7 @@ describe('DCI homepage', function() {
 
   it('should be possible to recheck a job', function() {
     browser.get('/');
-    element.all(by.css('.glyphicon-repeat')).first().click();
+    element.all(by.css('.btn-recheck:not([disabled])')).first().click();
     expect(browser.getCurrentUrl()).toMatch('/jobs/[a-z0-9-]+/results$');
   });
 

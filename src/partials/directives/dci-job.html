@@ -1,6 +1,6 @@
 <div class="bs-callout container-fluid job row" ng-class="job.statusClass">
   <div class="col-md-4">
-    <a ui-sref="job.results({id: job.id})"  class="title">
+    <a ui-sref="job.results({id: job.id})" class="title">
       {{job.remoteci.name}} / {{job.jobdefinition.name}}
     </a>
     <div class="text-muted hidden-xs hidden-sm" ng-if="job.comment && !job.detail">
@@ -15,7 +15,10 @@
       Tests
     </div>
     <div class="text-muted" ng-repeat="test in job.jobdefinition.tests">
-      {{test.name}} : <span ng-if="!test.result">No results</span><span ng-if="test.result"><span class="label label-success">{{test.result.success}}</span> <span class="label label-warning">{{test.result.skips}}</span> <span class="label label-default">{{test.result.errors}}</span> <span class="label label-danger">{{test.result.failures}}</span></span>
+      {{test.name}} : <span ng-if="!test.result">No results</span><span ng-if="test.result"><span
+      class="label label-success">{{test.result.success}}</span> <span
+      class="label label-warning">{{test.result.skips}}</span> <span
+      class="label label-default">{{test.result.errors}}</span> <span class="label label-danger">{{test.result.failures}}</span></span>
     </div>
   </div>
   <div class="col-md-4">
@@ -38,19 +41,23 @@
       </span>
     </div>
     <div>
-        <span class="glyphicon glyphicon-info-sign"></span> {{ job.user_agent }} ({{job.client_version}})
+      <span class="glyphicon glyphicon-info-sign"></span> {{ job.user_agent }} ({{job.client_version}})
     </div>
   </div>
   <div class="col-md-1">
-    <button type="button" class="close" ng-click="remove_job(jobs, $index)">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <a class="btn btn-default glyphicon glyphicon-minus-sign"
-      disabled="disabled" ng-if="job.recheck" title="Job currently rechecking">
-    </a>
-    <a class="btn btn-default glyphicon glyphicon-repeat" title="Recheck job"
-      ng-click="recheck()" ng-if="!job.recheck">
-    </a>
+    <div class="btn-toolbar" role="toolbar">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default btn-recheck" title="Recheck job"
+                ng-click="recheck()" ng-disabled="job.recheck">
+          <i class="fa fa-repeat" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger" title="Delete job"
+                ng-click="deleteJob()">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
