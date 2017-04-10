@@ -17,8 +17,8 @@
 
 require('app')
   .directive('dciJob', [
-    '$state', 'api', 'moment', 'status', 'messages',
-    function($state, api, moment, status, messages) {
+    '$state', '$uibModal', 'api', 'moment', 'status', 'messages',
+    function($state, $uibModal, api, moment, status, messages) {
       return {
         link: function(scope) {
           var job = scope.job;
@@ -41,16 +41,29 @@ require('app')
             });
           };
 
-          scope.remove_job = function(jobs, index) {
-            api.jobs.remove(job.id, job.etag).then(function() {
-              if (!jobs || !index) {
-                $state.go('index');
-              } else {
-                jobs.splice(index, 1);
+          scope.deleteJob = function() {
+            var deleteJobModal = $uibModal.open({
+              component: 'confirmDestructiveAction',
+              resolve: {
+                data: function() {
+                  return {
+                    title: 'Delete job',
+                    body: 'Are you you want to delete this job?',
+                    okButton: 'Yes delete it',
+                    cancelButton: 'oups no!'
+                  }
+                }
               }
-              messages.alert('Job "' + job.id + '" deleted !', 'success');
-            }, function(err) {
-              messages.alert('Something went bad: ' + err.data.message, 'danger');
+            });
+            deleteJobModal.result.then(function() {
+              api.jobs.remove(job.id, job.etag)
+                .then(function() {
+                  messages.alert('Job "' + job.id + '" deleted !', 'success');
+                  $state.go('index');
+                })
+                .catch(function(err) {
+                  messages.alert('Cannot delete this job, retry in few minutes (' + err.data.message + ')', 'danger');
+                });
             });
           };
         },
