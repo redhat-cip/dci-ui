@@ -14,9 +14,7 @@
 
 'use strict';
 
-require('angular-ui-bootstrap');
-
-angular.module('dci.messages', ['ui.bootstrap'])
+require('app')
   .factory('messages', ['$log', function($log) {
     var messagesConfig = {
       max: 5,
@@ -25,7 +23,7 @@ angular.module('dci.messages', ['ui.bootstrap'])
         danger: 'Error',
         warning: 'Warning',
         info: 'Info',
-        success: 'Success',
+        success: 'Success'
       },
       log: {
         danger: $log.error,
@@ -50,23 +48,28 @@ angular.module('dci.messages', ['ui.bootstrap'])
         alerts.push(alert);
         alerts.splice(messagesConfig.max);
         return alert;
+      },
+      generalError: function() {
+        return {
+          type: 'danger',
+          msgTitle: messagesConfig.title['danger'],
+          msg: 'An error occured, try again in a few minutes'
+        }
       }
     }
   }
   ])
-  .directive({
-    dciMessages: ['messages', function(messages) {
-      return {
-        restrict: 'A',
-        scope: {},
-        templateUrl: '/partials/directives/messages.html',
-        link: function(scope) {
-          scope.alerts = messages.alerts;
+  .directive('dciMessages', ['messages', function(messages) {
+    return {
+      restrict: 'A',
+      scope: {},
+      templateUrl: '/partials/directives/messages.html',
+      link: function(scope) {
+        scope.alerts = messages.alerts;
 
-          scope.closeAlert = function(index) {
-            scope.alerts.splice(index, 1);
-          };
-        }
-      };
-    }]
-  });
+        scope.closeAlert = function(index) {
+          scope.alerts.splice(index, 1);
+        };
+      }
+    };
+  }]);

@@ -26,10 +26,11 @@ require('angular-ui-bootstrap');
 
 require('directives/jsonformatter');
 
-module.exports = angular.module('app', [
-  'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select',
-  'jsonFormatter', 'dci.messages', 'ngSanitize'
-])
+module.exports = angular
+  .module('app', [
+    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize',
+    'jsonFormatter'
+  ])
   .filter('limit', function() {
     return function(input, size, term) {
       if (size && input.length > size) {
