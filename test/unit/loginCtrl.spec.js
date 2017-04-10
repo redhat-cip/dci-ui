@@ -26,12 +26,10 @@ describe('login controller', function() {
 
   it('should set err.status 401 when unauthorized', function() {
     createController();
-    expect($rootScope.err).toBe(undefined);
     $httpBackend
       .when('GET', 'https://api.example.org/api/v1/users?where=name:test&embed=team')
       .respond(401);
     $rootScope.authenticate({username: 'test', password: 'password'});
     $httpBackend.flush();
-    expect($rootScope.err.status).toBe(401);
   });
 });
