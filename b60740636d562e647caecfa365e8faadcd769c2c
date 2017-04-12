@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_a9253ec3",
+        "filename": "src/js/controllers/LoginCtrl.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2017-04-12T20:58:11Z",
+      "side": 1,
+      "message": "I would say \"don\u0027t\" instead of \"doesn\u0027t\" since it\u0027s a plural.\n\nAs a reference, www.redhat.com shows up this message in case:\n\nInvalid username or password.\n\nIt sounds clear enough to me.",
+      "revId": "b60740636d562e647caecfa365e8faadcd769c2c",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
