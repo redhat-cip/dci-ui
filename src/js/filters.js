@@ -14,20 +14,18 @@
 
 'use strict';
 
-var moment = require('moment');
-
 require('app')
-  .factory('moment', function() {
-    moment.locale('en', {invalidDate: 'N/A'});
-    moment.locale('fr', {invalidDate: 'N/A'});
-    moment.defaultFormat = 'LLLL';
-
-    var parser = _.partialRight(moment.utc, moment.ISO_8601, true);
-    return _.assign(parser, {
-      'moment': moment.utc
-    });
+  .filter('limit', function() {
+    return function(input, size, term) {
+      if (size && input.length > size) {
+        input = input.slice(0, size) + (term ? term : '');
+      }
+      return input;
+    };
   })
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }])
-;
+  .filter('dciDate', ['$filter', function($filter) {
+    var amDateFormat = $filter('amDateFormat');
+    return function(value) {
+      return amDateFormat(value, 'dddd DD, MMMM h:mm:ss A');
+    }
+  }]);

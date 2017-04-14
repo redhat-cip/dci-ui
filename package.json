@@ -14,14 +14,15 @@
     "angular": "~1.5.11",
     "angular-animate": "~1.5.11",
     "angular-cookies": "~1.5.11",
+    "angular-moment": "~1.0.1",
     "angular-sanitize": "~1.5.11",
-    "angular-ui-bootstrap": "^2.5.0",
+    "angular-ui-bootstrap": "~2.5.0",
     "angular-ui-router": "~0.4.2",
     "bootstrap-sass": "~3.3.6",
     "lodash": "~4.13.1",
-    "moment": "~2.10.6",
-    "rcue": "^3.22.1",
-    "ui-select": "~0.19.0"
+    "moment": "~2.18.1",
+    "rcue": "~3.22.1",
+    "ui-select": "0.19.6"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.11",
