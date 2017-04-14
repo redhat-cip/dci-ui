@@ -38,4 +38,7 @@ module.exports = angular
       }
       return input;
     };
-  });
+  })
+  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('dci-app-cache');
+  }]);

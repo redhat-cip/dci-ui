@@ -18,7 +18,7 @@
       <table class="table table-striped">
         <tr><th>id</th><td>{{ component.id }}</td></tr>
         <tr><th>type</th><td>{{ component.type }}</td></tr>
-        <tr><th>created at</th><td>{{ component.created_at_formatted }}</td></tr>
+        <tr><th>created at</th><td>{{ component.created_at }}</td></tr>
         <tr>
           <th>data</th>
           <td class="col-md-10"><div json-formatter json="component.data" open="1"></div></td>
@@ -45,8 +45,8 @@
   <h4>{{ job.remoteci.name }}</h4>
   <table class="table table-striped">
     <tr><th>id</th><td>{{ job.remoteci.id }}</td></tr>
-    <tr><th>created at</th><td>{{ job.remoteci.created_at_formatted }}</td></tr>
-    <tr><th>updated at</th><td>{{ job.remoteci.updated_at_formatted }}</td></tr>
+    <tr><th>created at</th><td>{{ job.remoteci.created_at }}</td></tr>
+    <tr><th>updated at</th><td>{{ job.remoteci.updated_at }}</td></tr>
     <tr>
       <th>data</th>
       <td><div json-formatter json="job.remoteci.data" open="1"></div></td>
@@ -74,7 +74,7 @@
     <table class="table table-striped">
       <tr><th>id</th><td>{{ job.jobdefinition.id }}</td></tr>
       <tr><th>priority</th><td>{{ job.jobdefinition.priority }}</td></tr>
-      <tr><th>created at</th><td>{{ job.jobdefinition.created_at_formatted }}</td></tr>
+      <tr><th>created at</th><td>{{ job.jobdefinition.created_at }}</td></tr>
     </table>
   </div>
 </div>

@@ -28,18 +28,6 @@
     <div title="Test last run">
       <span class="glyphicon glyphicon-calendar"></span> {{job.created_at}}
     </div>
-    <div title="Test running time">
-      <span ng-if="job.status == 'success' ||
-                   job.status == 'failure' ||
-                   job.status == 'killed'">
-        <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
-      </span>
-      <span ng-if="job.status != 'success' &&
-                   job.status != 'failure' &&
-                   job.status != 'killed'">
-        <span class="glyphicon glyphicon-time"></span> running since {{job.time_running}}
-      </span>
-    </div>
     <div>
       <span class="glyphicon glyphicon-info-sign"></span> {{ job.user_agent }} ({{job.client_version}})
     </div>

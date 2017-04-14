@@ -16,8 +16,8 @@
 
 require('app')
   .controller('GpanelStatusCtrl', [
-    '$scope', '$stateParams', 'api', 'moment', 'status',
-    function($scope, $stateParams, api, moment, status) {
+    '$scope', '$stateParams', 'api', 'status',
+    function($scope, $stateParams, api, status) {
       var topic = $stateParams.id;
       var componentType = $scope.componentType = $stateParams.componentType;
       $scope.jobs_ = [];
@@ -40,8 +40,6 @@ require('app')
           _.each(jobs, function(job) {
             var path = ['jobs', component.id, job.jobdefinition_id, job.status];
             _.update($scope, path, function(target) {
-              job.created_at_formatted = moment(job.created_at).local().format();
-              job.updated_at_formatted = moment(job.updated_at).local().format();
               return _.concat(target || [], job);
             });
           });

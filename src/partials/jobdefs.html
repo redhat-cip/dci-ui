@@ -1,4 +1,4 @@
-<h1 class="page-header">Job Definitions</h1>
+<h1>Job Definitions</h1>
 
 <div class="table-responsive">
   <table class="table table-striped">
@@ -7,7 +7,7 @@
       <th class="text-center">Status</th>
       <th>Name</th>
       <th>ID</th>
-      <th class="text-center">Created At</th>
+      <th>Created At</th>
       <th class="text-right">Priority</th>
     </tr>
     </thead>
@@ -21,13 +21,13 @@
         {{ jobdef.name }}
       </td>
       <td>{{ jobdef.id }}</td>
-      <td class="text-center">{{ jobdef.created_at_formatted }}</td>
+      <td>{{ jobdef.created_at }}</td>
       <td class="text-right">{{ jobdef.priority }}</td>
     </tr>
     <tr ng-repeat-end>
       <td colspan="12">
         <div ng-if="jobdef.comment"><label>Comment:</label> {{ jobdef.comment || "No comment" }}</div>
-        <div><label>Associated Test(s):</label><br/>
+        <div><label>Associated Test(s):</label></div><br/>
         <div ng-if="jobdef.tests.length == 0">No test associated with this job definition<br/></div>
         <table ng-if="jobdef.tests.length != 0" class="table table-condensed">
             <thead>
@@ -50,7 +50,7 @@
 
 <div class="pagination">
   <div uib-pagination total-items="pagination.total" max-size="5"
-    ng-model="pagination.page" class="pagination-sm" boundary-links="true"
-    rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+       ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+       rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
   </div>
 </div>
