@@ -31,9 +31,9 @@
       </tr>
       <tr>
         <th>Created</th>
-        <td>{{ issue.created_at }}</td>
+        <td>{{ issue.created_at | dciDate }}</td>
         <th>Last Updated</th>
-        <td>{{ issue.updated_at }}</td>
+        <td>{{ issue.updated_at | dciDate }}</td>
       </tr>
       <tr>
         <th>Reported</th>

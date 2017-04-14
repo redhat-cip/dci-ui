@@ -19,7 +19,7 @@
         <tr ng-repeat="team in $ctrl.teams | orderBy: 'name'">
           <td>{{ team.name }}</td>
           <td>{{ team.id }}</td>
-          <td>{{ team.created_at }}</td>
+          <td>{{ team.created_at | dciDate }}</td>
           <td>{{ team.email }}</td>
           <td>{{ team.notification }}</td>
           <td class="text-center">

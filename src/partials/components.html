@@ -19,7 +19,7 @@
         {{ component.name }}
       </td>
       <td>{{ component.id }}</td>
-      <td class="text-center">{{ component.created_at }}</td>
+      <td class="text-center">{{ component.created_at | dciDate }}</td>
     </tr>
     <tr ng-repeat-end ng-if="jobdef.comment && jobdef.opened">
       <td colspan="6">

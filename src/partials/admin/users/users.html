@@ -21,7 +21,7 @@
           <td>{{ user.id }}</td>
           <td>{{ user.team.id }}</td>
           <td>{{ user.role }}</td>
-          <td>{{ user.created_at }}</td>
+          <td>{{ user.created_at | dciDate }}</td>
           <td class="text-center">
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editUser(user)">
               <i class="glyphicon glyphicon-pencil"></i>

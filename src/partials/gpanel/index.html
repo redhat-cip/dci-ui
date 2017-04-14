@@ -11,7 +11,7 @@
       <td><a ui-sref="gpanel.topic({id: topic.id})">{{topic.name}}</a></td>
       <td>{{topic.id}}</td>
       <td>{{topic.label}}</td>
-      <td class="text-center">{{topic.created_at}}</td>
+      <td class="text-center">{{topic.created_at | dciDate}}</td>
     </tr>
     <tr ng-repeat-end>
       <td colspan="4">

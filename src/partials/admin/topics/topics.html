@@ -19,7 +19,7 @@
           <td>{{topic.name}}</td>
           <td>{{topic.id}}</td>
           <td>{{topic.label}}</td>
-          <td>{{topic.created_at}}</td>
+          <td>{{topic.created_at | dciDate}}</td>
           <td class="text-center">
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editTopic(topic)">
               <i class="glyphicon glyphicon-pencil"></i>
