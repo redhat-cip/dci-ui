@@ -22,7 +22,7 @@
           </td>
           <td>{{ remoteci.name }}</td>
           <td>{{ remoteci.id }}</td>
-          <td>{{ remoteci.created_at }}</td>
+          <td>{{ remoteci.created_at | dciDate }}</td>
           <td class="text-center">
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editRemoteci(remoteci)">
               <i class="glyphicon glyphicon-pencil"></i>

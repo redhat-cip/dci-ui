@@ -15,6 +15,20 @@
 'use strict';
 
 require('app')
+  .directive('dciMessages', ['messages', function(messages) {
+    return {
+      restrict: 'A',
+      scope: {},
+      templateUrl: '/partials/directives/messages.html',
+      link: function(scope) {
+        scope.alerts = messages.alerts;
+
+        scope.closeAlert = function(index) {
+          scope.alerts.splice(index, 1);
+        };
+      }
+    };
+  }])
   .factory('messages', ['$log', function($log) {
     var messagesConfig = {
       max: 5,
@@ -58,18 +72,4 @@ require('app')
       }
     }
   }
-  ])
-  .directive('dciMessages', ['messages', function(messages) {
-    return {
-      restrict: 'A',
-      scope: {},
-      templateUrl: '/partials/directives/messages.html',
-      link: function(scope) {
-        scope.alerts = messages.alerts;
-
-        scope.closeAlert = function(index) {
-          scope.alerts.splice(index, 1);
-        };
-      }
-    };
-  }]);
+  ]);

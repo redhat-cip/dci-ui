@@ -16,20 +16,12 @@
 
 require('app')
   .controller('ListTopicsCtrl', [
-    '$state', '$scope', 'api', 'moment', function($state, $scope, api, moment) {
+    '$state', '$scope', 'api', function($state, $scope, api) {
       var page = parseInt($state.params.page) || 1;
 
       api.topics.list(page)
         .then(function(data) {
           $scope.topics = data.topics;
-          _.each(data.topics, function(topic) {
-            topic.created_at_formatted = moment(topic.created_at)
-              .local()
-              .format();
-            topic.updated_at_formatted = moment(topic.updated_at)
-              .local()
-              .format();
-          });
           $scope.pagination = {
             total: data._meta.count,
             page: page,

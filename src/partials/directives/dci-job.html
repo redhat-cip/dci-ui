@@ -26,18 +26,18 @@
       <span class="glyphicon" ng-class="job.glyphicon"></span> {{job.status}}
     </div>
     <div title="Test last run">
-      <span class="glyphicon glyphicon-calendar"></span> {{job.created_at}}
+      <span class="glyphicon glyphicon-calendar"></span> {{job.created_at | dciDate}}
     </div>
     <div title="Test running time">
       <span ng-if="job.status == 'success' ||
                    job.status == 'failure' ||
                    job.status == 'killed'">
-        <span class="glyphicon glyphicon-time"></span> ran for {{job.time_running}}
+        <span class="glyphicon glyphicon-time"></span> ran for {{job.updated_at | amDifference : job.created_at : 'minute' | amDurationFormat : 'minute'}}
       </span>
       <span ng-if="job.status != 'success' &&
                    job.status != 'failure' &&
                    job.status != 'killed'">
-        <span class="glyphicon glyphicon-time"></span> running since {{job.time_running}}
+        <span class="glyphicon glyphicon-time"></span> running since {{job.created_at | amCalendar:referenceTime:formats}}
       </span>
     </div>
     <div>
