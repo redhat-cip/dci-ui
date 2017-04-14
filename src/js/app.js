@@ -23,12 +23,13 @@ require('angular-sanitize');
 require('angular-ui-router');
 require('ui-select');
 require('angular-ui-bootstrap');
+require('angular-moment');
 
 require('directives/jsonformatter');
 
 module.exports = angular
   .module('app', [
-    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize',
+    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize', 'angularMoment',
     'jsonFormatter'
   ])
   .filter('limit', function() {
@@ -38,4 +39,13 @@ module.exports = angular
       }
       return input;
     };
-  });
+  })
+  .filter('dciDate', ['$filter',function($filter) {
+    var amDateFormat = $filter('amDateFormat');
+    return function(value) {
+      return amDateFormat(value, 'dddd DD, MMMM h:mm:ss A');
+    }
+  }])
+  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('dci-app-cache');
+  }]);

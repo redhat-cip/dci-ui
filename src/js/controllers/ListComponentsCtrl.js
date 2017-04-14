@@ -16,7 +16,7 @@
 
 require('app')
   .controller('ListComponentsCtrl', [
-    '$scope', 'messages', 'api', 'moment', 'topic', function($scope, messages, api, moment, topic) {
+    '$scope', 'messages', 'api', 'topic', function($scope, messages, api, topic) {
       _.assign($scope, {objForm: {}});
 
       $scope.topic = topic;
@@ -53,12 +53,6 @@ require('app')
           $scope.componentsByTopic = {};
           _.each(data, function(component) {
             _.update($scope.componentsByTopic, component.type, function(target) {
-              component.created_at_formatted = moment(component.created_at)
-                .local()
-                .format();
-              component.updated_at_formatted = moment(component.updated_at)
-                .local()
-                .format();
               component.data = JSON.stringify(component.data);
               return _.concat(target || [], component);
             });
