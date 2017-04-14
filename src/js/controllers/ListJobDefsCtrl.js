@@ -16,7 +16,7 @@
 
 require('app')
   .controller('ListJobDefsCtrl', [
-    '$state', '$scope', 'api', 'moment', function($state, $scope, api, moment) {
+    '$state', '$scope', 'api', function($state, $scope, api) {
       var page = parseInt($state.params.page) || 1;
       api.jobdefinitions.list(page)
         .then(function(data) {
@@ -25,12 +25,6 @@ require('app')
             api.jobdefinitions.tests(jobdef.id).then(function(tests) {
               jobdef.tests = tests;
             });
-            jobdef.created_at_formatted = moment(jobdef.created_at)
-              .local()
-              .format();
-            jobdef.updated_at_formatted = moment(jobdef.updated_at)
-              .local()
-              .format();
           });
           $scope.pagination = {
             total: data._meta.count, page: page,
@@ -38,7 +32,6 @@ require('app')
               $state.go('jobdefs', $scope.pagination);
             }
           };
-
         });
     }
   ]);

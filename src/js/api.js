@@ -15,8 +15,8 @@
 'use strict';
 
 require('app')
-  .factory('api', ['$q', '$http', '$window', 'moment', 'user',
-    function($q, $http, $window, moment, user) {
+  .factory('api', ['$q', '$http', '$window', 'user',
+    function($q, $http, $window, user) {
       var api = {
         promise: null,
         config: null,
@@ -253,20 +253,11 @@ require('app')
           $http.get(urlize(this.url, job), confJ),
           $http.get(urlize(this.url, job, 'components')),
           $http.get(urlize(this.url, job, 'files')),
-          $http.get(urlize(this.url, job, 'jobstates'), confJS),
+          $http.get(urlize(this.url, job, 'jobstates'), confJS)
         ])
           .then(function(results) {
             var job = _.first(results).data.job;
-            var components = results[1].data.components;
-            job.components = components;
-            _.each(components, function(component) {
-              component.created_at_formatted = moment(component.created_at)
-                .local()
-                .format();
-              component.updated_at_formatted = moment(component.updated_at)
-                .local()
-                .format();
-            });
+            job.components = results[1].data.components;
             var files = results[2].data.files;
             job.files = files;
             _.each(files, function(file) {

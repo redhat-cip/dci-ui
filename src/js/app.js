@@ -23,19 +23,15 @@ require('angular-sanitize');
 require('angular-ui-router');
 require('ui-select');
 require('angular-ui-bootstrap');
+require('angular-moment');
 
 require('directives/jsonformatter');
 
 module.exports = angular
   .module('app', [
-    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize',
+    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize', 'angularMoment',
     'jsonFormatter'
   ])
-  .filter('limit', function() {
-    return function(input, size, term) {
-      if (size && input.length > size) {
-        input = input.slice(0, size) + (term ? term : '');
-      }
-      return input;
-    };
-  });
+  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('dci-app-cache');
+  }]);

@@ -17,15 +17,11 @@
 
 require('app')
   .directive('dciJob', [
-    '$state', '$uibModal', 'api', 'moment', 'status', 'messages',
-    function($state, $uibModal, api, moment, status, messages) {
+    '$state', '$uibModal', 'api', 'status', 'messages',
+    function($state, $uibModal, api, status, messages) {
       return {
         link: function(scope) {
           var job = scope.job;
-          var start = moment(job.created_at);
-
-          job.time_running = moment(job.updated_at).to(start, true);
-          job.updated_at_formatted = moment(job.updated_at).from(moment.moment());
 
           job.processStatus = function(s) {
             job.status = s;
