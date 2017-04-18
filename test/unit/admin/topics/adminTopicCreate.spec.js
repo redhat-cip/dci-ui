@@ -13,17 +13,13 @@
 // under the License.
 
 describe('admin topic create component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-topic-create></admin-topic-create>');
-    $compile(element)(parentScope);
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminTopicCreate');
   }));
 
   it('should init scope with empty topic', function() {
-    var controller = element.controller('adminTopicCreate');
-    expect(controller.topic.name).toBe('');
+    expect(component.topic.name).toBe('');
   });
 });

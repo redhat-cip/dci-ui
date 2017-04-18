@@ -13,23 +13,19 @@
 // under the License.
 
 describe('login controller', function() {
-  var $rootScope;
-  var createController;
+  var $controller;
 
-  beforeEach(inject(function($injector) {
-    $rootScope = $injector.get('$rootScope');
-    var $controller = $injector.get('$controller');
-    createController = function() {
-      return $controller('LoginCtrl', {'$scope': $rootScope});
-    };
+  beforeEach(inject(function(_$controller_){
+    $controller = _$controller_;
   }));
 
-  it('should set err.status 401 when unauthorized', function() {
-    createController();
+  it('should authenticate the user', function() {
+    var $scope = {};
+    $controller('LoginCtrl', { $scope: $scope });
     $httpBackend
-      .when('GET', 'https://api.example.org/api/v1/users?where=name:test&embed=team')
-      .respond(401);
-    $rootScope.authenticate({username: 'test', password: 'password'});
+      .expectGET('https://api.example.org/api/v1/users?where=name:test&embed=team')
+      .respond();
+    $scope.authenticate({username: 'test', password: 'password'});
     $httpBackend.flush();
   });
 });

@@ -13,19 +13,17 @@
 // under the License.
 
 describe('admin team edit component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-team-edit team="team"></admin-team-edit>');
-    $compile(element)(parentScope);
-    parentScope.team = adminTeam;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminTeamEdit', null, {
+      team: adminTeam
+    });
   }));
 
   it('should init scope with prop team', function() {
-    expect(element.scope().team.id).toBe('ac654db0-c6ff-40e8-82c7-9bc49989cb86');
-    expect(element.scope().team.name).toBe('admin');
-    expect(element.scope().team.notification).toBe(true);
+    expect(component.team.id).toBe('ac654db0-c6ff-40e8-82c7-9bc49989cb86');
+    expect(component.team.name).toBe('admin');
+    expect(component.team.notification).toBe(true);
   });
 });

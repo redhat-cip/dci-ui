@@ -13,53 +13,49 @@
 // under the License.
 
 describe('admin topic edit component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-topic-edit topic="topic" teams="teams" topic-teams="topicTeams"></admin-topic-edit>');
-    $compile(element)(parentScope);
-    parentScope.topic = osp10;
-    parentScope.teams = teams;
-    parentScope.topicTeams = osp10Teams;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminTopicEdit', null, {
+      topic: osp10,
+      teams: teams,
+      topicTeams: osp10Teams
+    });
+    component.$onInit();
   }));
 
   it('should init scope with prop topic', function() {
-    expect(element.scope().topic.id).toBe('d95c065a-fbc9-984c-8e9d-454d1a9171a7');
-    expect(element.scope().topic.name).toBe('OSP10');
-    expect(element.scope().topic.state).toBe('active');
+    expect(component.topic.id).toBe('d95c065a-fbc9-984c-8e9d-454d1a9171a7');
+    expect(component.topic.name).toBe('OSP10');
+    expect(component.topic.state).toBe('active');
   });
 
   it('should init availableTeams with difference between teams and topicTeams', function() {
-    var controller = element.controller('adminTopicEdit');
-    expect(controller.availableTeams.length).toBe(teams.length-osp10Teams.length);
-    expect(controller.availableTeams[0]).toBe(teams[1]);
+    expect(component.availableTeams.length).toBe(teams.length - osp10Teams.length);
+    expect(component.availableTeams[0]).toBe(teams[1]);
   });
 
   it('should associate team to topic teams', function() {
-    var controller = element.controller('adminTopicEdit');
-    controller.availableTeams = [{id:1}];
-    controller.topicTeams = [{id:2}];
+    component.availableTeams = [{id: 1}];
+    component.topicTeams = [{id: 2}];
     $httpBackend
       .expectPOST('https://api.example.org/api/v1/topics/d95c065a-fbc9-984c-8e9d-454d1a9171a7/teams', {team_id: 1})
       .respond();
-    controller.associateTeamToTopic({id:1});
+    component.associateTeamToTopic({id: 1});
     $httpBackend.flush();
-    expect(controller.availableTeams.length).toBe(0);
-    expect(controller.topicTeams.length).toBe(2);
+    expect(component.availableTeams.length).toBe(0);
+    expect(component.topicTeams.length).toBe(2);
   });
 
   it('should remove team from topic teams', function() {
-    var controller = element.controller('adminTopicEdit');
-    controller.availableTeams = [{id:1}];
-    controller.topicTeams = [{id:2}];
+    component.availableTeams = [{id: 1}];
+    component.topicTeams = [{id: 2}];
     $httpBackend
       .expectDELETE('https://api.example.org/api/v1/topics/d95c065a-fbc9-984c-8e9d-454d1a9171a7/teams/2')
       .respond();
-    controller.removeTeamFromTopic({id:2});
+    component.removeTeamFromTopic({id: 2});
     $httpBackend.flush();
-    expect(controller.topicTeams.length).toBe(0);
-    expect(controller.availableTeams.length).toBe(2);
+    expect(component.topicTeams.length).toBe(0);
+    expect(component.availableTeams.length).toBe(2);
   });
 });

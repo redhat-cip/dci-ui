@@ -13,17 +13,13 @@
 // under the License.
 
 describe('admin remoteci create component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-remoteci-create></admin-remoteci-create>');
-    $compile(element)(parentScope);
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminRemoteciCreate');
   }));
 
   it('should init scope with empty remoteci', function() {
-    var controller = element.controller('adminRemoteciCreate');
-    expect(controller.remoteci.name).toBe('');
+    expect(component.remoteci.name).toBe('');
   });
 });

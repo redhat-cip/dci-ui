@@ -13,18 +13,16 @@
 // under the License.
 
 describe('admin topics component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-topics topics="topics"></admin-topics>');
-    $compile(element)(parentScope);
-    parentScope.topics = topics;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminTopics', null, {
+      topics: topics
+    });
   }));
 
   it('should init scope with prop topics', function() {
-    expect(element.scope().topics.length).toBe(2);
-    expect(element.scope().topics[0].name).toBe('OSP10');
+    expect(component.topics.length).toBe(2);
+    expect(component.topics[0].name).toBe('OSP10');
   });
 });

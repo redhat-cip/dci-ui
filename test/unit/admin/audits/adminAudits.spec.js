@@ -13,20 +13,18 @@
 // under the License.
 
 describe('admin audits component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-audits audits="audits"></admin-audits>');
-    $compile(element)(parentScope);
-    parentScope.audits = audits;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminRemoteciEdit', null, {
+      audits: audits
+    });
   }));
 
   it('should get all audits', function() {
-    expect(element.scope().audits.length).toBe(2);
-    expect(element.scope().audits[0].action).toBe('create_teams');
-    expect(element.scope().audits[0].team_id).toBe('73de0e1f-6904-a849-82c7-e1b21ed257d3');
-    expect(element.scope().audits[0].user_id).toBe('5e3688e5-98ac-4590--9bc49989cb86');
+    expect(component.audits.length).toBe(2);
+    expect(component.audits[0].action).toBe('create_teams');
+    expect(component.audits[0].team_id).toBe('73de0e1f-6904-a849-82c7-e1b21ed257d3');
+    expect(component.audits[0].user_id).toBe('5e3688e5-98ac-4590--9bc49989cb86');
   });
 });

@@ -51,44 +51,44 @@ describe('DCI', function() {
   it('should be able to search for a job', function() {
     browser.get('/');
     element(by.id('patternSearch')).sendKeys('Dell_1').submit();
-    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8000/#/logs?pattern=Dell_1');
+    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8000/#!/logs?pattern=Dell_1');
   });
 
   it('visit /topics and /topics/:id:', function() {
-    browser.get('/#/topics');
+    browser.get('/#!/topics');
     element.all(by.css('a.title')).first().click();
     expect(browser.getCurrentUrl()).toMatch('/topics/[a-z0-9-]+$');
   });
 
   it('visit /job-definitions', function() {
-    browser.get('/#/job-definitions');
+    browser.get('/#!/job-definitions');
   });
 
   it('visit /logs', function() {
-    browser.get('/#/logs');
+    browser.get('/#!/logs');
   });
 
   it('visit /information', function() {
-    browser.get('/#/information');
+    browser.get('/#!/information');
   });
 
   it('visit /gpanel', function() {
-    browser.get('/#/gpanel');
+    browser.get('/#!/gpanel');
   });
 
   it('visit /admin/users', function() {
-    browser.get('/#/admin/users');
+    browser.get('/#!/admin/users');
   });
 
   it('visit /admin/teams', function() {
-    browser.get('/#/admin/teams');
+    browser.get('/#!/admin/teams');
   });
 
   it('visit /admin/topics', function() {
-    browser.get('/#/admin/topics');
+    browser.get('/#!/admin/topics');
   });
 
   it('visit /admin/remotecis', function() {
-    browser.get('/#/admin/remotecis');
+    browser.get('/#!/admin/remotecis');
   });
 });
