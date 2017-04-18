@@ -13,25 +13,22 @@
 // under the License.
 
 describe('admin user create component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-user-create teams="teams"></admin-user-create>');
-    $compile(element)(parentScope);
-    parentScope.teams = teams;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminUserCreate', null, {
+      teams: teams
+    });
   }));
 
   it('should init scope with prop teams', function() {
-    expect(element.scope().teams.length).toBe(2);
+    expect(component.teams.length).toBe(2);
   });
 
   it('should init scope with empty user', function() {
-    var controller = element.controller('adminUserCreate');
-    expect(controller.user.name).toBe('');
-    expect(controller.user.password).toBe('');
-    expect(controller.user.team_id).toBe(null);
-    expect(controller.user.role).toBe('user');
+    expect(component.user.name).toBe('');
+    expect(component.user.password).toBe('');
+    expect(component.user.team_id).toBe(null);
+    expect(component.user.role).toBe('user');
   });
 });

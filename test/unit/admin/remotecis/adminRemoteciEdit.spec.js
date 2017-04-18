@@ -13,25 +13,22 @@
 // under the License.
 
 describe('admin remoteci edit component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-remoteci-edit remoteci="remoteci"></admin-remoteci-edit>');
-    $compile(element)(parentScope);
-    parentScope.remoteci = remoteci;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminRemoteciEdit', null, {
+      remoteci: remoteci
+    });
   }));
 
   it('should init scope with prop remoteci', function() {
-    expect(element.scope().remoteci.id).toBe('c76c40a2-82c7-40e8-959b-0883d32edda8');
-    expect(element.scope().remoteci.name).toBe('Admin Remote CI');
-    expect(element.scope().remoteci.state).toBe('active');
+    expect(component.remoteci.id).toBe('c76c40a2-82c7-40e8-959b-0883d32edda8');
+    expect(component.remoteci.name).toBe('Admin Remote CI');
+    expect(component.remoteci.state).toBe('active');
   });
 
   it('should update if data are valid', function() {
-    var controller = element.controller('adminRemoteciEdit');
-    controller.remoteci = {
+    component.remoteci = {
       id: '1',
       name: 'rci',
       state: 'active',
@@ -55,18 +52,17 @@ describe('admin remoteci edit component', function() {
       })
       .respond();
     $httpBackend.whenGET('https://api.example.org/api/v1/remotecis').respond();
-    controller.update();
+    component.update();
     $httpBackend.flush();
   });
 
   it('should not update if data are invalid', function() {
-    var controller = element.controller('adminRemoteciEdit');
-    controller.remoteci = {
+    component.remoteci = {
       id: '1',
       name: 'rci',
       state: 'active',
       data: 'error'
     };
-    controller.update();
+    component.update();
   });
 });
