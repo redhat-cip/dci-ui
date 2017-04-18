@@ -16,12 +16,10 @@ describe('admin users component', function() {
   var element;
 
   beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-users users="users" teams="teams"></admin-users>');
-    $compile(element)(parentScope);
-    parentScope.users = users;
-    parentScope.teams = teams;
-    parentScope.$digest();
+    element = $compile('<admin-users users="users" teams="teams"></admin-users>')($rootScope);
+    $rootScope.users = users;
+    $rootScope.teams = teams;
+    $rootScope.$digest();
   }));
 
   it('should get all users', function() {

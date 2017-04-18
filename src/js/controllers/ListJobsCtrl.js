@@ -70,8 +70,15 @@ require('app')
       }
 
       if (statuses.length || remotes.length) {
+        console.log('....................')
+        console.log(statuses)
+        console.log(remotes)
+        console.log('....................')
         api.jobs.search(remotes, statuses)
           .then(function(data) {
+            console.log('-----------------')
+            console.log(data)
+            console.log('-----------------')
             $scope.jobs = data.jobs;
             _.each(data.jobs, function(job) {
               api.jobs.results(job.id).then(function(results) {

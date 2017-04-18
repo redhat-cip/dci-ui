@@ -13,44 +13,40 @@
 // under the License.
 
 describe('admin user edit component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-user-edit user="user" teams="teams"></admin-user-edit>');
-    $compile(element)(parentScope);
-    parentScope.user = admin;
-    parentScope.teams = teams;
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminUserEdit', null, {
+      user: admin,
+      teams: teams
+    });
   }));
 
   it('should init scope with prop user', function() {
-    expect(element.scope().user.id).toBe('4bdddeb3-ce9f-4590-b715-e1b21ed257d3');
-    expect(element.scope().user.name).toBe('admin');
+    expect(component.user.id).toBe('4bdddeb3-ce9f-4590-b715-e1b21ed257d3');
+    expect(component.user.name).toBe('admin');
   });
 
   it('should init scope with prop teams', function() {
-    expect(element.scope().teams.length).toBe(2);
+    expect(component.teams.length).toBe(2);
   });
 
   it('should toggle role', function() {
-    var controller = element.controller('adminUserEdit');
-    controller.user = {role: 'admin'};
-    controller.toggleRole();
-    expect(controller.user.role).toBe('user');
-    controller.toggleRole();
-    expect(controller.user.role).toBe('admin');
+    component.user = {role: 'admin'};
+    component.toggleRole();
+    expect(component.user.role).toBe('user');
+    component.toggleRole();
+    expect(component.user.role).toBe('admin');
   });
 
   it('should update user', function() {
-    var controller = element.controller('adminUserEdit');
-    controller.user = {id: 1, name: 'foo', team_id: 1, role: 'user', password: ''};
+    component.user = {id: 1, name: 'foo', team_id: 1, role: 'user', password: ''};
     $httpBackend
       .expectPUT('https://api.example.org/api/v1/users/1', {name: 'foo', team_id: 1, role: 'user', password: ''})
       .respond();
     $httpBackend.whenGET('https://api.example.org/api/v1/users?embed=team').respond();
     $httpBackend.whenGET('https://api.example.org/api/v1/teams').respond();
-    controller.update();
+    component.update();
     $httpBackend.flush();
   });
 });

@@ -16,11 +16,9 @@ describe('admin teams component', function() {
   var element;
 
   beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-teams teams="teams"></admin-teams>');
-    $compile(element)(parentScope);
-    parentScope.teams = teams;
-    parentScope.$digest();
+    element = $compile('<admin-teams teams="teams"></admin-teams>')($rootScope);
+    $rootScope.teams = teams;
+    $rootScope.$digest();
   }));
 
   it('should init scope with prop teams', function() {

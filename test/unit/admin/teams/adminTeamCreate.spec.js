@@ -13,19 +13,15 @@
 // under the License.
 
 describe('admin team create component', function() {
-  var element;
+  var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    var parentScope = $rootScope.$new();
-    element = angular.element('<admin-team-create></admin-team-create>');
-    $compile(element)(parentScope);
-    parentScope.$digest();
+  beforeEach(inject(function($componentController) {
+    component = $componentController('adminTeamCreate');
   }));
 
   it('should init scope with empty team', function() {
-    var controller = element.controller('adminTeamCreate');
-    expect(controller.team.name).toBe('');
-    expect(controller.team.email).toBe('');
-    expect(controller.team.notification).toBe(null);
+    expect(component.team.name).toBe('');
+    expect(component.team.email).toBe('');
+    expect(component.team.notification).toBe(null);
   });
 });
