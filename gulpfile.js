@@ -14,74 +14,69 @@
 
 'use strict';
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var del = require('del');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var globby = require('globby');
-var through = require('through2');
+const browserify = require('browserify');
+const childProcess = require('child_process');
+const del = require('del');
+const fs = require('fs');
+const globby = require('globby');
+const gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
+const through = require('through2');
+const sourceStream = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 
-var jsonfile = require('jsonfile');
-var config = require('./config');
-var utils = require('./utils');
+const config = require('./config');
 
-var DIST = 'static';
-var JS = ['src/js/**/*.js'];
-var configFile = 'src/config.json';
-var configFileTplt = 'src/config.json.tplt';
-
-gulp.task('lint', function() {
-  return gulp.src(['src/**/*.js'])
-    .pipe($.eslint())
-    .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError());
-});
-
-function copy() {
-  return gulp.src([
-    'src/**/*',
-    '!src/**/*.js',
-    '!src/**/*.scss',
-    configFile
-  ]).pipe(gulp.dest(DIST));
-}
-
-gulp.task('copy', ['rev'], copy);
-gulp.task('copy:pkg', ['rev:pkg'], copy);
-
-gulp.task('build', ['js', 'css', 'fonts', 'images', 'copy', 'rev']);
-gulp.task('build:pkg', ['js', 'css', 'fonts', 'images', 'copy:pkg', 'rev:pkg']);
-
-gulp.task('test', ['lint', 'test:e2e']);
+const destination = './static';
+const source = './src';
+const files = {
+  js: {
+    src: [source + '/js/**/*.js'],
+    dest: destination + '/js'
+  },
+  css: {
+    src: [source + '/css/**/*.scss'],
+    dest: destination + '/css',
+    includePaths: ['node_modules/bootstrap-sass/assets/stylesheets/', 'node_modules/']
+  },
+  fonts: {
+    src: ['node_modules/rcue/dist/fonts/**'],
+    dest: destination + '/fonts'
+  },
+  images: {
+    src: [source + '/images/**/*', 'node_modules/rcue/dist/img/bg-login.jpg'],
+    dest: destination + '/images'
+  },
+  html: {
+    src: [source + '/partials/**/*.html'],
+    dest: destination + '/partials'
+  },
+  rootFiles: {
+    src: ['./src/index.html', 'node_modules/rcue/dist/img/favicon.ico'],
+    dest: destination
+  },
+  e2e: ['./test/e2e/**/*.spec.js'],
+  configFile: destination + '/config.json'
+};
 
 gulp.task('clean', function() {
-  var entries = [DIST + '/**/*', '!' + DIST + '/.gitkeep'];
-  return del(entries);
-});
-
-gulp.task('reload', ['build'], function() {
-  return $.livereload.reload();
-});
-
-gulp.task('watch', function() {
-  gulp.watch('src/**', ['reload']);
+  del.sync(destination);
 });
 
 gulp.task('js', function() {
   // https://github.com/gulpjs/gulp/blob/master/docs/recipes/browserify-multiple-destination.md
-  var bundledStream = through();
+  const bundledStream = through();
   bundledStream
-    .pipe(source('app.js'))
+    .pipe(sourceStream('app.js'))
     .pipe(buffer())
     .pipe($.sourcemaps.init({loadMaps: true}))
     .pipe($.uglify())
     .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest(DIST + '/js/'));
+    .pipe(gulp.dest(files.js.dest))
+    .pipe($.connect.reload());
 
-  globby(JS).then(function(entries) {
-    var b = browserify({
+  globby(files.js.src).then(function(entries) {
+    const b = browserify({
       entries: entries,
       debug: true,
       paths: ['./node_modules', './src/js/']
@@ -95,76 +90,116 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-  var conf = {
-    includePaths: [
-      'node_modules/bootstrap-sass/assets/stylesheets/',
-      'node_modules/'
-    ]
-  };
-  return gulp.src(['src/css/**/*.scss'])
-    .pipe($.sass(conf).on('error', $.sass.logError))
-    .pipe($.concat('dashboard.css'))
-    .pipe(gulp.dest(DIST + '/css/'));
-});
-
-gulp.task('images', [], function() {
-  return gulp.src(['node_modules/rcue/dist/img/bg-login.jpg'])
-    .pipe(gulp.dest(DIST + '/images/'));
+  gulp.task('css', function() {
+    return gulp.src(files.css.src)
+      .pipe($.sass({includePaths: files.css.includePaths}).on('error', $.sass.logError))
+      .pipe($.concat('dashboard.min.css'))
+      .pipe($.sourcemaps.init())
+      .pipe($.cleanCss())
+      .pipe($.sourcemaps.write('./'))
+      .pipe(gulp.dest(files.css.dest));
+  });
 });
 
 gulp.task('fonts', function() {
-  var entries = [
-    'node_modules/rcue/dist/fonts/**'
-  ];
-
-  return gulp.src(entries)
-    .pipe(gulp.dest(DIST + '/fonts/'));
+  gulp.src(files.fonts.src)
+    .pipe(gulp.dest(files.fonts.dest));
 });
 
-gulp.task('serve', ['build'], function() {
-  return utils.server(DIST, config.port);
+gulp.task('images', function() {
+  gulp.src(files.images.src)
+    .pipe(gulp.dest(files.images.dest));
 });
 
-gulp.task('serve:dev', ['build', 'watch'], function() {
-  return utils.server(DIST, config.port, true);
+gulp.task('html', function() {
+  gulp.src(files.html.src)
+    .pipe(gulp.dest(files.html.dest));
 });
 
-gulp.task('test:e2e', ['build'], function(cb) {
-  var webserver = gulp.src(DIST).pipe($.webserver());
+gulp.task('files', function() {
+  gulp.src(files.rootFiles.src)
+    .pipe(gulp.dest(files.rootFiles.dest));
+});
 
-  gulp.src([])
+gulp.task('build', ['js', 'css', 'fonts', 'images', 'html', 'files']);
+
+function writeConfigFile(version) {
+  const apiURL = config.api || 'http://localhost:5000';
+  const template = `{"apiURL": "${apiURL}","version": "${version}"}`;
+  if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination);
+  }
+  fs.writeFileSync(files.configFile, template);
+}
+
+gulp.task('config:dev', function() {
+  childProcess.exec('git rev-parse --short HEAD', {cwd: __dirname}, function(err, stdout) {
+      const version = stdout.split('\n').join('');
+      writeConfigFile(version);
+    }
+  );
+});
+
+gulp.task('watch', function() {
+  gulp.watch(files.js.src, ['js']);
+  gulp.watch(files.css.src, ['css']);
+  gulp.watch(files.html.src, ['html']);
+});
+
+gulp.task('build:dev', ['build', 'config:dev']);
+
+gulp.task('serve:dev', ['clean', 'build:dev', 'watch'], function() {
+  $.connect.server({
+    root: 'static',
+    livereload: true,
+    port: config.port
+  });
+});
+
+gulp.task('config:prod', function() {
+  const version = __dirname.split('git')[1].slice(0, 8);
+  writeConfigFile(version);
+});
+
+gulp.task('build:pkg', ['build', 'config:prod']);
+
+gulp.task('serve', ['clean', 'build:pkg'], function() {
+  $.connect.server({
+    root: 'static',
+    livereload: false,
+    port: config.port
+  });
+});
+
+// Tests
+
+gulp.task('e2e:webdriver_manager_update', $.protractor.webdriver_update);
+
+gulp.task('test:e2e', ['build', 'e2e:webdriver_manager_update'], function() {
+  const webserver = gulp.src(destination).pipe($.webserver({
+    host: 'localhost',
+    port: 8000
+  }));
+
+  gulp.src(files.e2e)
     .pipe($.protractor.protractor({
+      configFile: 'test/e2e/protractor.conf.js',
       args: ['--baseUrl', 'http://127.0.0.1:8000']
     }))
-    .on('error', function(e) {
-      throw e
+    .on('error', function(err) {
+      throw err;
     })
     .on('end', function() {
       webserver.emit('kill');
     });
+
 });
 
-function setConf(revFn, cb) {
-  revFn(function(err, rev) {
-    if (err) {
-      return cb(err);
-    }
-
-    jsonfile.readFile(configFileTplt, function(err, obj) {
-      if (err) {
-        return cb(err);
-      }
-      obj.version = rev;
-      obj.apiURL = utils.apiURL() || obj.apiURL;
-      jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
-    });
-  });
-}
-
-gulp.task('rev', function(cb) {
-  setConf(utils.rev, cb);
+gulp.task('lint', function() {
+  return gulp.src(files.js.src)
+    .pipe($.eslint())
+    .pipe($.eslint.format())
+    .pipe($.eslint.failAfterError());
 });
 
-gulp.task('rev:pkg', function(cb) {
-  setConf(utils.revPKG, cb);
-});
+gulp.task('test', ['lint', 'test:e2e']);
