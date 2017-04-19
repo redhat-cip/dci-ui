@@ -15,27 +15,8 @@
 'use strict';
 
 exports.config = {
-  framework: 'jasmine2',
-  seleniumServerJar: './node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.3.1.jar',
-  specs: ['test/e2e/*.spec.js'],
-  allScriptsTimeout: 60000,
-  getPageTimeout: 30000,
+  seleniumServerJar: '../../node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-3.3.1.jar',
   capabilities: {
-    browserName: 'phantomjs',
-    newCommandTimeout: 60,
-    maxSessions: 1
-  },
-
-  onPrepare: function() {
-    var jasmineReporters = require('jasmine-reporters');
-    browser.manage().timeouts().implicitlyWait(5000);
-    jasmine.getEnv().addReporter(
-      new jasmineReporters.JUnitXmlReporter()
-    );
-  },
-
-  jasmineNodeOpts: {
-    showColors: true,
-    defaultTimeoutInterval: 60000
+    browserName: 'phantomjs'
   }
 };
