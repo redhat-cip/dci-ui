@@ -10,12 +10,12 @@
     </button>
   </form>
   <div class="col-md-12">
-  <hr>
+    <hr>
   </div>
   <h4 class="col-md-12">Log results</h4>
   <div class="col-md-4 col-md-offset-4" ng-if="!logs && search">
     <div uib-progressbar class="progress-striped active" max="1" value="1">
-    <i>Loading</i>
+      <i>Loading</i>
     </div>
   </div>
   <div class="col-md-12" ng-if="logs && !logs.length">
@@ -31,11 +31,7 @@
           <b>File: </b>{{ log._source.name }}
         </div>
       </div>
-      <!--   <h4>
-        <b>File: </b>{{ log._source.name }}
-        </h4>
-
-        </div> -->
+    </div>
   </div>
 </div>
 
