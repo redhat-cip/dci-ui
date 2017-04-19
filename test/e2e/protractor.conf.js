@@ -13,16 +13,18 @@
 // under the License.
 
 'use strict';
+const jasmineReporters = require('jasmine-reporters');
 
-describe('DCI unauth', function() {
-  afterEach(function() {
-    browser.manage().logs().get('browser').then(function(browserLog) {
-      expect(browserLog.length).toEqual(0,
-        'there is an error in console.log:\n' + JSON.stringify(browserLog, null, 2));
-    });
-  });
-
-  it('should go to login without error', function() {
-    browser.get('/#/login');
-  });
-});
+exports.config = {
+  framework: 'jasmine2',
+  seleniumServerJar: '../../node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-3.3.1.jar',
+  allScriptsTimeout: 60000,
+  capabilities: {
+    browserName: 'phantomjs'
+  },
+  onPrepare: function() {
+    jasmine.getEnv().addReporter(
+      new jasmineReporters.JUnitXmlReporter()
+    );
+  }
+};
