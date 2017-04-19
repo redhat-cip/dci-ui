@@ -51,7 +51,7 @@ describe('DCI', function() {
   it('should be able to search for a job', function() {
     browser.get('/');
     element(by.id('patternSearch')).sendKeys('Dell_1').submit();
-    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8000/#!/logs?pattern=Dell_1');
+    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8081/#!/logs?pattern=Dell_1');
   });
 
   it('visit /topics and /topics/:id:', function() {
