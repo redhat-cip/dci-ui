@@ -16,10 +16,10 @@
 
 exports.config = {
   framework: 'jasmine2',
-  seleniumServerJar: './node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.3.1.jar',
+  seleniumServerJar: '../../node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-3.3.1.jar',
   specs: ['test/e2e/*.spec.js'],
   allScriptsTimeout: 60000,
-  getPageTimeout: 30000,
+  getPageTimeout: 40000,
   capabilities: {
     browserName: 'phantomjs',
     newCommandTimeout: 60,
