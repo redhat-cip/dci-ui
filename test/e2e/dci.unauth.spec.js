@@ -14,15 +14,16 @@
 
 'use strict';
 
-describe('DCI unauth', function() {
-  afterEach(function() {
+describe('When user open DCI not authenticated', function() {
+  it('should redirect to login page', function() {
+    browser.get('http://localhost:8000');
+    expect(browser.getCurrentUrl()).toBe('http://localhost:8000/#!/login');
+  });
+  it('should not have console errors', function() {
+    browser.get('http://localhost:8000');
     browser.manage().logs().get('browser').then(function(browserLog) {
       expect(browserLog.length).toEqual(0,
         'there is an error in console.log:\n' + JSON.stringify(browserLog, null, 2));
     });
-  });
-
-  it('should go to login without error', function() {
-    browser.get('/#/login');
   });
 });
