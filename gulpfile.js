@@ -14,6 +14,7 @@
 
 'use strict';
 
+var fs = require('fs');
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
@@ -30,7 +31,6 @@ var utils = require('./utils');
 var DIST = 'static';
 var JS = ['src/js/**/*.js'];
 var configFile = 'src/config.json';
-var configFileTplt = 'src/config.json.tplt';
 
 gulp.task('lint', function() {
   return gulp.src(['src/**/*.js'])
@@ -51,8 +51,8 @@ function copy() {
 gulp.task('copy', ['rev'], copy);
 gulp.task('copy:pkg', ['rev:pkg'], copy);
 
-gulp.task('build', ['js', 'css', 'fonts', 'images', 'copy', 'rev']);
-gulp.task('build:pkg', ['js', 'css', 'fonts', 'images', 'copy:pkg', 'rev:pkg']);
+gulp.task('build', ['js', 'css', 'fonts', 'images', 'favicon', 'copy', 'rev']);
+gulp.task('build:pkg', ['js', 'css', 'fonts', 'images', 'favicon', 'copy:pkg', 'rev:pkg']);
 
 gulp.task('test', ['lint', 'test:e2e']);
 
@@ -112,6 +112,11 @@ gulp.task('images', [], function() {
     .pipe(gulp.dest(DIST + '/images/'));
 });
 
+gulp.task('favicon', [], function() {
+  return gulp.src(['node_modules/rcue/dist/img/favicon.ico'])
+    .pipe(gulp.dest(DIST));
+});
+
 gulp.task('fonts', function() {
   var entries = [
     'node_modules/rcue/dist/fonts/**'
@@ -129,19 +134,20 @@ gulp.task('serve:dev', ['build', 'watch'], function() {
   return utils.server(DIST, config.port, true);
 });
 
-gulp.task('test:e2e', ['build'], function(cb) {
-  var webserver = gulp.src(DIST).pipe($.webserver());
+gulp.task('webdriver_standalone', $.protractor.webdriver_standalone);
 
-  gulp.src([])
+gulp.task('e2e:webdriver_manager_update', $.protractor.webdriver_update);
+
+gulp.task('test:e2e', ['build', 'e2e:webdriver_manager_update'], function(cb) {
+  gulp.src(["./test/e2e/**/*.spec.js"])
     .pipe($.protractor.protractor({
+      configFile: "test/e2e/protractor.conf.js",
       args: ['--baseUrl', 'http://127.0.0.1:8000']
     }))
     .on('error', function(e) {
       throw e
     })
-    .on('end', function() {
-      webserver.emit('kill');
-    });
+    .on('end', cb);
 });
 
 function setConf(revFn, cb) {
@@ -150,14 +156,11 @@ function setConf(revFn, cb) {
       return cb(err);
     }
 
-    jsonfile.readFile(configFileTplt, function(err, obj) {
-      if (err) {
-        return cb(err);
-      }
-      obj.version = rev;
-      obj.apiURL = utils.apiURL() || obj.apiURL;
-      jsonfile.writeFile(configFile, obj, {spaces: 2}, cb);
-    });
+    var version = rev;
+    var apiURL = utils.apiURL() || 'http://localhost:5000';
+    var template = `{"apiURL": "${apiURL}","version": "${version}"}`;
+    fs.writeFileSync(configFile, template);
+    cb();
   });
 }
 
