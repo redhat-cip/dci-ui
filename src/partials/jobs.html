@@ -36,23 +36,6 @@
       </div>
     </div>
   </form>
-  <form ng-submit="retrieveLogs()">
-    <div class="row">
-      <div class="col-xs-12">
-        <h4>Log search</h4>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-8">
-        <input type="input" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
-      </div>
-      <div class="col-xs-4">
-        <button type="submit" class="btn btn-primary">
-          Search
-        </button>
-      </div>
-    </div>
-  </form>
 </div>
 
 <div ng-repeat="job in jobs" dci-job></div>

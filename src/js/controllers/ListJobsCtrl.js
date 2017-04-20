@@ -77,7 +77,7 @@ require('app')
               api.jobs.results(job.id).then(function(results) {
                 _.each(job.jobdefinition.tests, function(test_jobdef) {
                   _.each(results, function(result) {
-                    if (test_jobdef.name == result.filename) {
+                    if (test_jobdef.name === result.filename) {
                       test_jobdef.result = result;
                     }
                   });
@@ -93,7 +93,7 @@ require('app')
               api.jobs.results(job.id).then(function(results) {
                 _.each(job.jobdefinition.tests, function(test_jobdef) {
                   _.each(results, function(result) {
-                    if (test_jobdef.name == result.filename) {
+                    if (test_jobdef.name === result.filename) {
                       test_jobdef.result = result;
                     }
                   });
@@ -102,10 +102,6 @@ require('app')
             });
           });
       }
-
-      $scope.retrieveLogs = function() {
-        $state.go('logs', {'pattern': $scope.pattern});
-      };
 
       $scope.filters = function() {
         var statuses = _($scope.selected.status).map('name').join(',');
