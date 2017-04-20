@@ -84,6 +84,12 @@ describe('When a user opens DCI', function() {
     browser.get('/#!/admin/remotecis');
     browser.waitForAngular();
   });
+  it('search a job', function() {
+    browser.get('/');
+    browser.waitForAngular();
+    element(by.id('patternSearch')).sendKeys('Dell_1').submit();
+    expect(browser.getCurrentUrl()).toMatch('/logs?pattern=Dell_1');
+  });
   afterEach(function() {
     browser.manage().logs().get('browser').then(function(browserLog) {
       expect(browserLog.length).toEqual(0,
