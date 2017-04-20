@@ -108,12 +108,18 @@ describe('When a user opens DCI', function() {
     browser.waitForAngular();
   });
 
+  it('search a job', function() {
+    browser.get('/');
+    browser.waitForAngular();
+    element(by.id('patternSearch')).sendKeys('Dell_1').submit();
+    expect(browser.getCurrentUrl()).toBe('http://127.0.0.1:8000/#!/logs?pattern=Dell_1');
+  });
+
   afterEach(function() {
     browser.manage().logs().get('browser').then(function(browserLog) {
       expect(browserLog.length).toEqual(0,
         'there is an error in console.log:\n' + JSON.stringify(browserLog, null, 2));
     });
-
   });
 
   afterEach(function() {
