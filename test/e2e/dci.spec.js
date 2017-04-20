@@ -113,7 +113,6 @@ describe('When a user opens DCI', function() {
       expect(browserLog.length).toEqual(0,
         'there is an error in console.log:\n' + JSON.stringify(browserLog, null, 2));
     });
-
   });
 
   afterEach(function() {
