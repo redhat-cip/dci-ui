@@ -125,7 +125,10 @@ gulp.task('build', ['js', 'css', 'fonts', 'images', 'html', 'files']);
 
 function writeConfigFile(version) {
   const apiURL = config.api || 'http://localhost:5000';
-  const template = `{"apiURL": "${apiURL}","version": "${version}"}`;
+  const template = `{
+  "apiURL": "${apiURL}",
+  "version": "${version}"
+}`;
   if (!fs.existsSync(destination)) {
     fs.mkdirSync(destination);
   }
