@@ -19,7 +19,8 @@ require('app')
     templateUrl: '/partials/admin/users/userCreate.html',
     controller: ['$state', 'api', 'messages', adminUserCtrl],
     bindings: {
-      teams: '='
+      teams: '=',
+      roles: '=',
     }
   });
 
@@ -30,7 +31,7 @@ function adminUserCtrl($state, api, messages) {
     name: '',
     password: '',
     team_id: null,
-    role: 'user'
+    role_id: null
   };
 
   $ctrl.create = function() {
@@ -43,13 +44,5 @@ function adminUserCtrl($state, api, messages) {
       .catch(function(err) {
         messages.alert('cannot create user ' + userName + ' (' + err.data.message + ')', 'danger');
       });
-  };
-
-  $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === 'admin') {
-      $ctrl.user.role = 'user';
-    } else {
-      $ctrl.user.role = 'admin';
-    }
   };
 }
