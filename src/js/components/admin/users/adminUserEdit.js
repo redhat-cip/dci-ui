@@ -20,7 +20,8 @@ require('app')
     controller: ['$state', 'api', 'messages', adminUserCtrl],
     bindings: {
       user: '=',
-      teams: '='
+      teams: '=',
+      roles: '='
     }
   });
 
@@ -37,13 +38,5 @@ function adminUserCtrl($state, api, messages) {
       .catch(function(err) {
         messages.alert('cannot update user ' + userName + ' (' + err.data.message + ')', 'danger');
       });
-  };
-
-  $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === 'admin') {
-      $ctrl.user.role = 'user';
-    } else {
-      $ctrl.user.role = 'admin';
-    }
   };
 }

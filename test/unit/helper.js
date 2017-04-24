@@ -25,7 +25,7 @@ var users = [{
   "etag": "59b891ba3e97763da40b797c1638ee7f",
   "id": "4bdddeb3-ce9f-4590-b715-e1b21ed257d3",
   "name": "admin",
-  "role": "admin",
+  "role_id": "63eb47d5-0395-4cbb-ab19-738a2f7633d9",
   "state": "active",
   "team": {
     "country": null,
@@ -44,7 +44,7 @@ var users = [{
   "etag": "7f59b891ba3e97763da40b797c1638ee",
   "id": "ac654db0-ce9f-4c3c-b715-c4bdddeb7e61",
   "name": "user",
-  "role": "user",
+  "role_id": "5695bf02-771d-4720-b0e9-82b4e4cb2479",
   "state": "active",
   "team": {
     "country": null,
@@ -83,6 +83,41 @@ var teams = [{
 
 var admin = users[0];
 var adminTeam = teams[0];
+
+var roles = [{
+  "created_at": "2017-04-25T08:33:18.394231",
+  "description": "Admin of the platform",
+  "etag": "169b20cd33997a518edb55b53c70ee79",
+  "id": "63eb47d5-0395-4cbb-ab19-738a2f7633d9",
+  "label": "SUPER_ADMIN",
+  "name": "Super Admin",
+  "state": "active",
+  "team_id": "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+  "updated_at": "2017-04-25T08:33:18.394237",
+  "user_id": null
+}, {
+  "created_at": "2017-04-25T08:33:18.393274",
+  "description": "Regular User",
+  "etag": "37e8b8e705d807639fe05da1fbfc2276",
+  "id": "5695bf02-771d-4720-b0e9-82b4e4cb2479",
+  "label": "USER",
+  "name": "User",
+  "state": "active",
+  "team_id": "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+  "updated_at": "2017-04-25T08:33:18.393283",
+  "user_id": null
+}, {
+  "created_at": "2017-04-25T08:33:18.391924",
+  "description": "Admin of a team",
+  "etag": "b2b910bdbe51c649f299067e55131b94",
+  "id": "f02bc912-86fe-4e98-99ee-18ecc32222cc",
+  "label": "ADMIN",
+  "name": "Admin",
+  "state": "active",
+  "team_id": "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+  "updated_at": "2017-04-25T08:33:18.391935",
+  "user_id": null
+}];
 
 var topics = [{
   "created_at": "2016-11-24T08:56:04.539457",
