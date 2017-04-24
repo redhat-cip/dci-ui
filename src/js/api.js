@@ -34,7 +34,8 @@ require("app").factory("api", [
         "jobdefinitions",
         "audits",
         "topics",
-        "metrics"
+        "metrics",
+        "roles"
       ]
     };
 
@@ -184,7 +185,7 @@ require("app").factory("api", [
       "name",
       "team_id",
       "password",
-      "role"
+      "role_id"
     ]);
 
     /*                                  TOPICS                                  */

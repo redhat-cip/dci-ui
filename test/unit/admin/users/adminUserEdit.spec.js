@@ -31,18 +31,10 @@ describe('admin user edit component', function() {
     expect(component.teams.length).toBe(2);
   });
 
-  it('should toggle role', function() {
-    component.user = {role: 'admin'};
-    component.toggleRole();
-    expect(component.user.role).toBe('user');
-    component.toggleRole();
-    expect(component.user.role).toBe('admin');
-  });
-
   it('should update user', function() {
-    component.user = {id: 1, name: 'foo', team_id: 1, role: 'user', password: ''};
+    component.user = {id: 1, name: 'foo', team_id: 1, role_id: 1, password: ''};
     $httpBackend
-      .expectPUT('https://api.example.org/api/v1/users/1', {name: 'foo', team_id: 1, role: 'user', password: ''})
+      .expectPUT('https://api.example.org/api/v1/users/1', {name: 'foo', team_id: 1, role_id: 1, password: ''})
       .respond();
     $httpBackend.whenGET('https://api.example.org/api/v1/users?embed=team').respond();
     $httpBackend.whenGET('https://api.example.org/api/v1/teams').respond();
