@@ -44,7 +44,8 @@
           Search Logs
         </a>
       </li>
-      <li ui-sref-active="active">
+      <li ui-sref-active="active"
+          ng-if="admin || global_admin">
         <a ui-sref="adminUsers">
           Administration
         </a>

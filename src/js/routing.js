@@ -149,7 +149,7 @@ require('app')
           }
         })
         .state('gpanel', {
-          parent: 'authAdmin',
+          parent: 'auth',
           url: '/gpanel',
           controller: 'GpanelIndexCtrl',
           templateUrl: '/partials/gpanel/index.html'

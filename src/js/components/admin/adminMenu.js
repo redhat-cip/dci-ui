@@ -17,44 +17,52 @@
 require('app')
   .component('adminMenu', {
     templateUrl: '/partials/admin/menu.html',
-    controller: ['$state', adminMenuCtrl],
+    controller: ['$state', 'auth', adminMenuCtrl],
     bindings: {
       endpoint: '@'
     }
   });
 
-function adminMenuCtrl($state) {
+function adminMenuCtrl($state, auth) {
   var $ctrl = this;
 
   $ctrl.tabs = [
     {
       title: "Users",
       endpoint: "users",
-      state: "adminUsers"
+      state: "adminUsers",
+      superAdminRequired: false
     },
     {
       title: "Teams",
       endpoint: "teams",
-      state: "adminTeams"
+      state: "adminTeams",
+      superAdminRequired: true
     },
     {
       title: "Topics",
       endpoint: "topics",
-      state: "adminTopics"
+      state: "adminTopics",
+      superAdminRequired: true
     },
     {
       title: "RemoteCIs",
       endpoint: "remotecis",
-      state: "adminRemotecis"
+      state: "adminRemotecis",
+      superAdminRequired: false
     },
     {
       title: "Audits",
       endpoint: "audits",
-      state: "adminAudits"
+      state: "adminAudits",
+      superAdminRequired: false
     }
   ];
 
-  $ctrl.activeTabIndex = 0;
+  this.$onInit = function() {
+    $ctrl.activeTabIndex = 0;
+    $ctrl.isNotSuperAdmin = !auth.isAdmin();
+  };
 
   $ctrl.tabs.forEach(function(tab, index) {
     if (tab.endpoint === $ctrl.endpoint) {
