@@ -17,18 +17,23 @@ describe('admin user create component', function() {
 
   beforeEach(inject(function($componentController) {
     component = $componentController('adminUserCreate', null, {
-      teams: teams
+      teams: teams,
+      roles: roles
     });
+    component.$onInit();
   }));
 
-  it('should init scope with prop teams', function() {
+  it('should init scope with props', function() {
     expect(component.teams.length).toBe(2);
+    expect(component.roles.length).toBe(3);
   });
 
   it('should init scope with empty user', function() {
     expect(component.user.name).toBe('');
     expect(component.user.password).toBe('');
     expect(component.user.team_id).toBe(null);
-    expect(component.user.role).toBe('user');
+  });
+  it('should init with role user', function() {
+    expect(component.user.role_id).toBe('417f5b5d-7cab-44aa-8118-d903973fb106');
   });
 });

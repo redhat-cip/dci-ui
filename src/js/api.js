@@ -22,7 +22,7 @@ require('app')
         config: null,
         endpoints: ['jobs', 'remotecis', 'jobstates', 'files',
           'users', 'teams', 'components', 'jobdefinitions',
-          'audits', 'topics']
+          'audits', 'topics', 'roles']
       };
 
       var urlize = _.rest(_.partialRight(_.join, '/'));
@@ -152,7 +152,7 @@ require('app')
         return $http.get(urlize(this.url), {'params': conf})
           .then(_.property('data.users[0]'));
       };
-      api.users.update.parse = _.partialRight(_.pick, ['name', 'team_id', 'password', 'role']);
+      api.users.update.parse = _.partialRight(_.pick, ['name', 'team_id', 'password', 'role_id']);
 
       /*                                  TOPICS                                  */
       api.topics.update.parse = _.partialRight(_.pick, ['name']);
