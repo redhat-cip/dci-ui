@@ -33,7 +33,8 @@ require("app").factory("api", [
         "components",
         "jobdefinitions",
         "audits",
-        "topics"
+        "topics",
+        "roles"
       ]
     };
 
@@ -183,7 +184,7 @@ require("app").factory("api", [
       "name",
       "team_id",
       "password",
-      "role"
+      "role_id"
     ]);
 
     /*                                  TOPICS                                  */

@@ -200,7 +200,7 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
+          template: '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
           resolve: {
             users: [
               "api",
@@ -215,13 +215,20 @@ require("app")
               function(api) {
                 return api.teams.list(null, true);
               }
+            ],
+            roles: [
+              "api",
+              "conf",
+              function(api) {
+                return api.roles.list(null, true);
+              }
             ]
           }
         })
         .state("adminUser", {
           parent: "authAdmin",
           url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -236,6 +243,13 @@ require("app")
               "conf",
               function(api) {
                 return api.teams.list(null, true);
+              }
+            ],
+            roles: [
+              "api",
+              "conf",
+              function(api) {
+                return api.roles.list(null, true);
               }
             ]
           }

@@ -12,24 +12,46 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin users component', function() {
-  var element;
+describe('admin users', function() {
+  describe('component', function() {
+    var component;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    element = $compile('<admin-users users="users" teams="teams"></admin-users>')($rootScope);
-    $rootScope.users = users;
-    $rootScope.teams = teams;
-    $rootScope.$digest();
-  }));
+    beforeEach(inject(function($componentController) {
+      component = $componentController('adminUsers', null, {
+        users: users,
+        teams: teams,
+        roles: roles
+      });
+    }));
 
-  it('should get all users', function() {
-    expect(element.scope().users.length).toBe(2);
-    expect(element.scope().users[0].name).toBe('admin');
+    it('should get all users', function() {
+      expect(component.users[0].name).toBe('admin');
+      expect(component.users.length).toBe(2);
+      expect(component.teams.length).toBe(2);
+      expect(component.roles.length).toBe(3);
+    });
+
+    it('should get role name', function() {
+      expect(component.getRoleName(users[0].role_id)).toBe('Super Admin');
+      expect(component.getRoleName(users[1].role_id)).toBe('User');
+    });
   });
 
-  it('should disable deletion for current user', function() {
-    var deleteButtons = element[0].querySelectorAll('.btn-danger');
-    expect(angular.element(deleteButtons[0]).prop('disabled')).toBe(true);
-    expect(angular.element(deleteButtons[1]).prop('disabled')).toBe(false);
+  describe('template', function() {
+    var template;
+
+    beforeEach(inject(function($rootScope, $compile) {
+      template = $compile('<admin-users users="users" teams="teams" roles="roles"></admin-users>')($rootScope);
+      $rootScope.users = users;
+      $rootScope.teams = teams;
+      $rootScope.roles = roles;
+      $rootScope.$digest();
+    }));
+
+    it('should disable deletion for current user', function() {
+      var deleteButtons = template[0].querySelectorAll('.btn-danger');
+      expect(angular.element(deleteButtons[0]).prop('disabled')).toBe(true);
+      expect(angular.element(deleteButtons[1]).prop('disabled')).toBe(false);
+    });
   });
 });

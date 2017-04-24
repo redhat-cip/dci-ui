@@ -19,7 +19,8 @@ require("app").component("adminUserEdit", {
   controller: ["$state", "api", "messages", adminUserCtrl],
   bindings: {
     user: "=",
-    teams: "="
+    teams: "=",
+    roles: "="
   }
 });
 
@@ -40,13 +41,5 @@ function adminUserCtrl($state, api, messages) {
           "danger"
         );
       });
-  };
-
-  $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === "admin") {
-      $ctrl.user.role = "user";
-    } else {
-      $ctrl.user.role = "admin";
-    }
   };
 }
