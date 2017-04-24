@@ -3,6 +3,7 @@
   <div class="col-xs-12">
     <uib-tabset active="$ctrl.activeTabIndex">
       <uib-tab heading="{{tab.title}}"
+               ng-hide="tab.superAdminRequired && $ctrl.isNotSuperAdmin"
                ng-repeat="tab in $ctrl.tabs"
                ng-click="$ctrl.open(tab)"></uib-tab>
     </uib-tabset>

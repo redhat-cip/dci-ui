@@ -71,10 +71,6 @@ require('app')
           return user.status === status.AUTHENTICATED;
         },
 
-        isUnauthorized: function() {
-          return user.status === status.UNAUTHORIZED;
-        },
-
         isAdminInTeam: function() {
           return user.role === 'admin';
         },
