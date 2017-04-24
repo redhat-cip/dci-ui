@@ -17,7 +17,7 @@ const jasmineReporters = require('jasmine-reporters');
 
 exports.config = {
   framework: 'jasmine2',
-  seleniumServerJar: '../../node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-3.3.1.jar',
+  seleniumServerJar: '../../node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.4.0.jar',
   allScriptsTimeout: 60000,
   capabilities: {
     browserName: 'phantomjs'
