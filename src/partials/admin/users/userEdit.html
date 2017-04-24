@@ -30,20 +30,18 @@
                compare-to="$ctrl.user.password">
       </div>
       <div class="form-group">
-        <label for="user-team" class="control-label">Team</label>
-        <select id="user-team"
-                class="form-control"
-                name="userTeam"
-                ng-options="team.id as team.name for team in $ctrl.teams"
-                ng-model="$ctrl.user.team.id">
+        <label for="selectTeam" class="control-label">Team</label>
+        <select id="selectTeam"  name="selectTeam" class="form-control"
+                ng-model="$ctrl.user.team_id">
+          <option ng-repeat="team in $ctrl.teams" value="{{team.id}}">{{team.name}}</option>
         </select>
       </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"
-                 ng-checked="$ctrl.user.role === 'admin'"
-                 ng-click="$ctrl.toggleRole()"> Admin
-        </label>
+      <div class="form-group">
+        <label for="selectRole" class="control-label">Role</label>
+        <select id="selectRole" name="selectRole" class="form-control"
+                ng-model="$ctrl.user.role_id">
+          <option ng-repeat="role in $ctrl.roles" value="{{role.id}}">{{role.name}}</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-primary">Update</button>
       <button type="submit" class="btn btn-default" ui-sref="adminUsers">Cancel</button>
