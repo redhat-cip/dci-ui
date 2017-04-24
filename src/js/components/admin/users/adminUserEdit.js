@@ -14,14 +14,18 @@
 
 "use strict";
 
-require("app").component("adminUserEdit", {
-  templateUrl: "/partials/admin/users/userEdit.html",
-  controller: ["$state", "api", "messages", adminUserCtrl],
-  bindings: {
-    user: "=",
-    teams: "="
-  }
-});
+
+require('app')
+  .component('adminUserEdit', {
+    templateUrl: '/partials/admin/users/userEdit.html',
+    controller: ['$state', 'api', 'messages', adminUserCtrl],
+    bindings: {
+      user: '=',
+      teams: '=',
+      roles: '='
+    }
+  });
+
 
 function adminUserCtrl($state, api, messages) {
   var $ctrl = this;
@@ -40,13 +44,5 @@ function adminUserCtrl($state, api, messages) {
           "danger"
         );
       });
-  };
-
-  $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === "admin") {
-      $ctrl.user.role = "user";
-    } else {
-      $ctrl.user.role = "admin";
-    }
   };
 }

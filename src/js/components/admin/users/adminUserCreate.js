@@ -14,22 +14,36 @@
 
 "use strict";
 
-require("app").component("adminUserCreate", {
-  templateUrl: "/partials/admin/users/userCreate.html",
-  controller: ["$state", "api", "messages", adminUserCtrl],
-  bindings: {
-    teams: "="
-  }
-});
+
+require('app')
+  .component('adminUserCreate', {
+    templateUrl: '/partials/admin/users/userCreate.html',
+    controller: ['$state', 'api', 'messages', adminUserCtrl],
+    bindings: {
+      teams: '=',
+      roles: '='
+    }
+  });
+
 
 function adminUserCtrl($state, api, messages) {
   var $ctrl = this;
 
-  $ctrl.user = {
-    name: "",
-    password: "",
-    team_id: null,
-    role: "user"
+
+  this.$onInit = function() {
+    var user_role_id = null;
+    for (var i = 0; i < $ctrl.roles.length; i++) {
+      var role = $ctrl.roles[i];
+      if (role.label === 'USER') {
+        user_role_id = role.id
+      }
+    }
+    $ctrl.user = {
+      name: '',
+      password: '',
+      team_id: null,
+      role_id: user_role_id
+    };
   };
 
   $ctrl.create = function() {
@@ -46,13 +60,5 @@ function adminUserCtrl($state, api, messages) {
           "danger"
         );
       });
-  };
-
-  $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === "admin") {
-      $ctrl.user.role = "user";
-    } else {
-      $ctrl.user.role = "admin";
-    }
   };
 }

@@ -19,7 +19,7 @@
           <td>{{ user.name }}</td>
           <td>{{ user.id }}</td>
           <td>{{ user.team.id }}</td>
-          <td>{{ user.role }}</td>
+          <td>{{ $ctrl.getRoleName(user.role_id) }}</td>
           <td>{{ user.created_at | dciDate }}</td>
           <td class="text-center">
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.editUser(user)">
@@ -37,4 +37,4 @@
     </div>
   </div>
 </div>
-<admin-user-create teams="$ctrl.teams"></admin-user-create>
+<admin-user-create teams="$ctrl.teams" roles="$ctrl.roles"></admin-user-create>

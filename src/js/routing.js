@@ -48,7 +48,7 @@ require("app")
               "$q",
               function(auth, $q) {
                 if (!auth.isAuthenticated()) {
-                  return $q.reject({ status: 401 });
+                  return $q.reject({status: 401});
                 }
               }
             ]
@@ -72,7 +72,7 @@ require("app")
               "$q",
               function(auth, $q) {
                 if (!auth.isAdminInTeam()) {
-                  return $q.reject({ status: 401 });
+                  return $q.reject({status: 401});
                 }
               }
             ]
@@ -85,7 +85,7 @@ require("app")
             _: [
               "$q",
               function($q) {
-                return $q.reject({ status: 301 });
+                return $q.reject({status: 301});
               }
             ]
           }
@@ -127,14 +127,14 @@ require("app")
             ]
           }
         })
-        .state("job.results", { url: "/results" })
-        .state("job.logs", { url: "/logs" })
-        .state("job.details", { url: "/details" })
-        .state("job.edit", { url: "/edit" })
-        .state("job.context", { url: "/context" })
-        .state("job.stackdetails", { url: "/stackdetails" })
-        .state("job.issues", { url: "/issues" })
-        .state("job.files", { url: "/files" })
+        .state("job.results", {url: "/results"})
+        .state("job.logs", {url: "/logs"})
+        .state("job.details", {url: "/details"})
+        .state("job.edit", {url: "/edit"})
+        .state("job.context", {url: "/context"})
+        .state("job.stackdetails", {url: "/stackdetails"})
+        .state("job.issues", {url: "/issues"})
+        .state("job.files", {url: "/files"})
         .state("jobdefs", {
           parent: "auth",
           url: "/job-definitions?page",
@@ -197,28 +197,23 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
+          template: '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
           resolve: {
-            users: [
-              "api",
-              "conf",
-              function(api) {
-                return api.users.list(null, true);
-              }
-            ],
-            teams: [
-              "api",
-              "conf",
-              function(api) {
-                return api.teams.list(null, true);
-              }
-            ]
+            users: ['api', 'conf', function(api) {
+              return api.users.list(null, true);
+            }],
+            teams: ['api', 'conf', function(api) {
+              return api.teams.list(null, true);
+            }],
+            roles: ['api', 'conf', function(api) {
+              return api.roles.list(null, true);
+            }]
           }
         })
         .state("adminUser", {
           parent: "authAdmin",
           url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -234,7 +229,10 @@ require("app")
               function(api) {
                 return api.teams.list(null, true);
               }
-            ]
+            ],
+          roles: ['api', 'conf', function(api) {
+            return api.roles.list(null, true);
+          }]
           }
         })
         .state("adminTeams", {
@@ -364,9 +362,9 @@ require("app")
     function($rootScope, $state, $log) {
       $rootScope.$on("$stateChangeError", function(e, tS, tPs, fS, fPs, err) {
         if (err.status === 401) {
-          $state.go("login", {}, { reload: true });
+          $state.go("login", {}, {reload: true});
         } else if (err.status === 301) {
-          $state.go("jobs", {}, { reload: true, inherit: false });
+          $state.go("jobs", {}, {reload: true, inherit: false});
         } else {
           $log.error(err);
         }
