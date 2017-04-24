@@ -1,0 +1,11 @@
+<h1 class="page-header">Administration</h1>
+<div class="row">
+  <div class="col-xs-12">
+    <uib-tabset active="$ctrl.activeTabIndex">
+      <uib-tab heading="{{tab.title}}"
+               ng-hide="tab.superAdminRequired && $ctrl.isNotSuperAdmin"
+               ng-repeat="tab in $ctrl.tabs"
+               ng-click="$ctrl.open(tab)"></uib-tab>
+    </uib-tabset>
+  </div>
+</div>

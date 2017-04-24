@@ -45,7 +45,8 @@
           Search Logs
         </a>
       </li>
-      <li ng-class="{active: isAdminPage()}">
+      <li ng-class="{active: isAdminPage()}"
+          ng-if="admin || global_admin">
         <a ui-sref="adminUsers">
           Administration
         </a>
@@ -53,10 +54,12 @@
           <li ui-sref-active="active">
             <a ui-sref="adminUsers">Users</a>
           </li>
-          <li ui-sref-active="active">
+          <li ui-sref-active="active"
+              ng-if="global_admin">
             <a ui-sref="adminTeams">Teams</a>
           </li>
-          <li ui-sref-active="active">
+          <li ui-sref-active="active"
+              ng-if="global_admin">
             <a ui-sref="adminTopics">Topics</a>
           </li>
           <li ui-sref-active="active">
