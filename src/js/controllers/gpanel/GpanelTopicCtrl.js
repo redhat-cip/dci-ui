@@ -25,7 +25,7 @@ require('app')
         // Create a uniq list of component type
         _.each(components, function(component) {
           var type = {'name': component.type};
-          if (_.findIndex($scope.componentTypes, type) == -1) {
+          if (_.findIndex($scope.componentTypes, type) === -1) {
             $scope.componentTypes.push(type);
           }
         });
