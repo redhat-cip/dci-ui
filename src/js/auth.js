@@ -86,7 +86,7 @@ require('app')
         logout: function() {
           $cookies.put('user', {});
           user.status = status.DISCONNECTED;
-        },
+        }
       }
     }
   ])
@@ -99,6 +99,11 @@ require('app')
       $scope.global_admin = auth.isAdmin();
       $scope.user = auth.user;
       $scope.isCollapsed = true;
+
+      $scope.isAdminPage = function() {
+        return $state.includes('adminUsers') || $state.includes('adminTeams') || $state.includes('adminTopics') || $state.includes('adminRemotecis') || $state.includes('adminAudits');
+      };
+
       $scope.logout = function() {
         auth.logout();
         $state.go('login');
