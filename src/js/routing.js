@@ -281,7 +281,7 @@ require('app')
       $rootScope.$on('$stateChangeError', function(e, tS, tPs, fS, fPs, err) {
         if (err.status === 401) {
           $state.go('login', {}, {reload: true});
-        } else if (err.status == 301) {
+        } else if (err.status === 301) {
           $state.go('jobs', {}, {reload: true, inherit: false});
         } else {
           $log.error(err);
