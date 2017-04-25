@@ -23,7 +23,8 @@
         </a>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-primary">
+    <ul class="nav navbar-nav navbar-primary"
+        ng-class="{'persistent-secondary': isAdminPage()}">
       <li ui-sref-active="active">
         <a ui-sref="jobs">
           <i class="glyphicon glyphicon-home" aria-hidden="true"></i> Dashboard
@@ -44,10 +45,27 @@
           Search Logs
         </a>
       </li>
-      <li ui-sref-active="active">
+      <li ng-class="{active: isAdminPage()}">
         <a ui-sref="adminUsers">
           Administration
         </a>
+        <ul class="nav navbar-nav navbar-persistent">
+          <li ui-sref-active="active">
+            <a ui-sref="adminUsers">Users</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="adminTeams">Teams</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="adminTopics">Topics</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="adminRemotecis">RemoteCIs</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="adminAudits">Audits</a>
+          </li>
+        </ul>
       </li>
       <li ui-sref-active="active">
         <a ui-sref="information">
@@ -62,4 +80,4 @@
     </ul>
   </div>
 </nav>
-<div ui-view class="container"></div>
+<div ui-view class="container-fluid main__content"></div>
