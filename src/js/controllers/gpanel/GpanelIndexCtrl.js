@@ -32,9 +32,9 @@ require('app')
                 } else if (['failure', 'product-failure', 'deployment-failure']
                     .indexOf(job.job_status) !== -1) {
                   job.state = 'text-danger';
-                } else if (job.job_status == 'success') {
+                } else if (job.job_status === 'success') {
                   job.state = 'text-success';
-                } else if (job.job_status == 'killed') {
+                } else if (job.job_status === 'killed') {
                   job.state = 'text-warning';
                 }
               });
