@@ -12,29 +12,32 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminTeamEdit', {
-    templateUrl: '/partials/admin/teams/teamEdit.html',
-    controller: ['$state', 'api', 'messages', adminTeamCtrl],
-    bindings: {
-      team: '='
-    }
-  });
+require("app").component("adminTeamEdit", {
+  templateUrl: "/partials/admin/teams/teamEdit.html",
+  controller: ["$state", "api", "messages", adminTeamCtrl],
+  bindings: {
+    team: "="
+  }
+});
 
 function adminTeamCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.update = function() {
     var teamName = $ctrl.team.name;
-    api.teams.update($ctrl.team)
+    api.teams
+      .update($ctrl.team)
       .then(function() {
-        messages.alert('team ' + teamName + ' updated', 'success');
-        $state.go('adminTeams');
+        messages.alert("team " + teamName + " updated", "success");
+        $state.go("adminTeams");
       })
       .catch(function(err) {
-        messages.alert('cannot update team ' + teamName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot update team " + teamName + " (" + err.data.message + ")",
+          "danger"
+        );
       });
   };
 }

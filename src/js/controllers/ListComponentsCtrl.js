@@ -12,51 +12,53 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('ListComponentsCtrl', [
-    '$scope', 'messages', 'api', 'topic', function($scope, messages, api, topic) {
-      _.assign($scope, {objForm: {}});
+require("app").controller("ListComponentsCtrl", [
+  "$scope",
+  "messages",
+  "api",
+  "topic",
+  function($scope, messages, api, topic) {
+    _.assign($scope, { objForm: {} });
 
-      $scope.topic = topic;
-      $scope.create = function() {
-        if ($scope.objForm.$invalid) {
-          return;
+    $scope.topic = topic;
+    $scope.create = function() {
+      if ($scope.objForm.$invalid) {
+        return;
+      }
+      api.components.create(JSON.stringify(this.c)).then(
+        function() {
+          messages.alert("Create component successfully", "success");
+        },
+        function(err) {
+          messages.alert(err.data.message, "danger");
         }
-        api.components.create(JSON.stringify(this.c))
-          .then(
-            function() {
-              messages.alert('Create component successfully', 'success');
-            },
-            function(err) {
-              messages.alert(err.data.message, 'danger');
-            });
-      };
+      );
+    };
 
-      $scope.update = function() {
-        if ($scope.objForm.$invalid) {
-          return;
+    $scope.update = function() {
+      if ($scope.objForm.$invalid) {
+        return;
+      }
+      api.components.update(this.c).then(
+        function() {
+          messages.alert("Component successfully updated", "success");
+        },
+        function(err) {
+          messages.alert(err.data.message, "danger");
         }
-        api.components.update(this.c)
-          .then(
-            function() {
-              messages.alert('Component successfully updated', 'success');
-            },
-            function(err) {
-              messages.alert(err.data.message, 'danger');
-            });
-      };
+      );
+    };
 
-      api.topics.components(topic.id)
-        .then(function(data) {
-          $scope.componentsByTopic = {};
-          _.each(data, function(component) {
-            _.update($scope.componentsByTopic, component.type, function(target) {
-              component.data = JSON.stringify(component.data);
-              return _.concat(target || [], component);
-            });
-          });
+    api.topics.components(topic.id).then(function(data) {
+      $scope.componentsByTopic = {};
+      _.each(data, function(component) {
+        _.update($scope.componentsByTopic, component.type, function(target) {
+          component.data = JSON.stringify(component.data);
+          return _.concat(target || [], component);
         });
-    }
-  ]);
+      });
+    });
+  }
+]);

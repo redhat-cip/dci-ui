@@ -12,23 +12,24 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('ListTopicsCtrl', [
-    '$state', '$scope', 'api', function($state, $scope, api) {
-      var page = parseInt($state.params.page) || 1;
+require("app").controller("ListTopicsCtrl", [
+  "$state",
+  "$scope",
+  "api",
+  function($state, $scope, api) {
+    var page = parseInt($state.params.page) || 1;
 
-      api.topics.list(page)
-        .then(function(data) {
-          $scope.topics = data.topics;
-          $scope.pagination = {
-            total: data._meta.count,
-            page: page,
-            pageChanged: function() {
-              $state.go('topics', $scope.pagination);
-            }
-          };
-        });
-    }
-  ]);
+    api.topics.list(page).then(function(data) {
+      $scope.topics = data.topics;
+      $scope.pagination = {
+        total: data._meta.count,
+        page: page,
+        pageChanged: function() {
+          $state.go("topics", $scope.pagination);
+        }
+      };
+    });
+  }
+]);

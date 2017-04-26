@@ -12,16 +12,15 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminRemoteciEdit', {
-    templateUrl: '/partials/admin/remotecis/remoteciEdit.html',
-    controller: ['$state', 'api', 'messages', adminRemoteciCtrl],
-    bindings: {
-      remoteci: '='
-    }
-  });
+require("app").component("adminRemoteciEdit", {
+  templateUrl: "/partials/admin/remotecis/remoteciEdit.html",
+  controller: ["$state", "api", "messages", adminRemoteciCtrl],
+  bindings: {
+    remoteci: "="
+  }
+});
 
 function adminRemoteciCtrl($state, api, messages) {
   var $ctrl = this;
@@ -29,18 +28,26 @@ function adminRemoteciCtrl($state, api, messages) {
   $ctrl.update = function() {
     var remoteciName = $ctrl.remoteci.name;
 
-    if ($ctrl.remoteci.data === 'error') {
-      messages.alert('remoteci data should be a valid json', 'danger');
+    if ($ctrl.remoteci.data === "error") {
+      messages.alert("remoteci data should be a valid json", "danger");
       return;
     }
 
-    api.remotecis.update($ctrl.remoteci)
+    api.remotecis
+      .update($ctrl.remoteci)
       .then(function() {
-        messages.alert('remoteci ' + remoteciName + ' updated', 'success');
-        $state.go('adminRemotecis');
+        messages.alert("remoteci " + remoteciName + " updated", "success");
+        $state.go("adminRemotecis");
       })
       .catch(function(err) {
-        messages.alert('cannot update remoteci ' + remoteciName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot update remoteci " +
+            remoteciName +
+            " (" +
+            err.data.message +
+            ")",
+          "danger"
+        );
       });
   };
 }

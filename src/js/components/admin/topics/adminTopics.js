@@ -12,47 +12,48 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminTopics', {
-    templateUrl: '/partials/admin/topics/topics.html',
-    controller: ['$state', '$uibModal', 'api', 'messages', AdminTopicsCtrl],
-    bindings: {
-      topics: '='
-    }
-  });
+require("app").component("adminTopics", {
+  templateUrl: "/partials/admin/topics/topics.html",
+  controller: ["$state", "$uibModal", "api", "messages", AdminTopicsCtrl],
+  bindings: {
+    topics: "="
+  }
+});
 
 function AdminTopicsCtrl($state, $uibModal, api, messages) {
   var $ctrl = this;
 
   $ctrl.editTopic = function(topic) {
-    $state.go('adminTopic', {id: topic.id});
+    $state.go("adminTopic", { id: topic.id });
   };
 
   $ctrl.deleteTopic = function(topic) {
     var topicName = topic.name;
     var deleteTopicModal = $uibModal.open({
-      component: 'confirmDestructiveAction',
+      component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: 'Delete topic ' + topicName,
-            body: 'Are you you want to delete topic ' + topicName + '?',
-            okButton: 'Yes delete ' + topicName,
-            cancelButton: 'oups no!'
-          }
+            title: "Delete topic " + topicName,
+            body: "Are you you want to delete topic " + topicName + "?",
+            okButton: "Yes delete " + topicName,
+            cancelButton: "oups no!"
+          };
         }
       }
     });
     deleteTopicModal.result.then(function() {
-      api.topics.remove(topic.id, topic.etag).then(function() {
-          messages.alert('topic ' + topicName + ' has been removed', 'success');
+      api.topics.remove(topic.id, topic.etag).then(
+        function() {
+          messages.alert("topic " + topicName + " has been removed", "success");
           $state.reload();
         },
         function() {
-          messages.alert('topic ' + topicName + ' can\'t be removed', 'danger');
-        });
+          messages.alert("topic " + topicName + " can't be removed", "danger");
+        }
+      );
     });
-  }
+  };
 }

@@ -12,47 +12,54 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminTopicEdit', {
-    templateUrl: '/partials/admin/topics/topicEdit.html',
-    controller: ['$state', 'api', 'messages', adminTopicCtrl],
-    bindings: {
-      topic: '=',
-      topicTeams: '=',
-      teams: '='
-    }
-  });
+require("app").component("adminTopicEdit", {
+  templateUrl: "/partials/admin/topics/topicEdit.html",
+  controller: ["$state", "api", "messages", adminTopicCtrl],
+  bindings: {
+    topic: "=",
+    topicTeams: "=",
+    teams: "="
+  }
+});
 
 function adminTopicCtrl($state, api, messages) {
   var $ctrl = this;
 
   this.$onInit = function() {
-    $ctrl.availableTeams = _.differenceWith($ctrl.teams, $ctrl.topicTeams, _.isEqual);
+    $ctrl.availableTeams = _.differenceWith(
+      $ctrl.teams,
+      $ctrl.topicTeams,
+      _.isEqual
+    );
   };
 
   $ctrl.associateTeamToTopic = function(team) {
-    _.remove($ctrl.availableTeams, {id: team.id});
+    _.remove($ctrl.availableTeams, { id: team.id });
     $ctrl.topicTeams.push(team);
     api.topics.teams.post($ctrl.topic.id, team.id);
   };
 
   $ctrl.removeTeamFromTopic = function(team) {
-    _.remove($ctrl.topicTeams, {id: team.id});
+    _.remove($ctrl.topicTeams, { id: team.id });
     $ctrl.availableTeams.push(team);
     api.topics.teams.remove($ctrl.topic.id, team.id);
   };
 
   $ctrl.update = function() {
     var topicName = $ctrl.topic.name;
-    api.topics.update($ctrl.topic)
+    api.topics
+      .update($ctrl.topic)
       .then(function() {
-        messages.alert('topic ' + topicName + ' updated', 'success');
-        $state.go('adminTopics');
+        messages.alert("topic " + topicName + " updated", "success");
+        $state.go("adminTopics");
       })
       .catch(function(err) {
-        messages.alert('cannot update topic ' + topicName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot update topic " + topicName + " (" + err.data.message + ")",
+          "danger"
+        );
       });
   };
 }

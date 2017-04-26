@@ -12,58 +12,74 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .constant('userStatus', {
-    'DISCONNECTED': 0,
-    'UNAUTHORIZED': 1,
-    'AUTHENTICATED': 2
+require("app")
+  .constant("userStatus", {
+    DISCONNECTED: 0,
+    UNAUTHORIZED: 1,
+    AUTHENTICATED: 2
   })
-  .value('user', {})
-  .config(['$httpProvider', function($httpProvider) {
-    // Set header to help detect XHR request
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+  .value("user", {})
+  .config([
+    "$httpProvider",
+    function($httpProvider) {
+      // Set header to help detect XHR request
+      $httpProvider.defaults.headers.common["X-Requested-With"] =
+        "XMLHttpRequest";
 
-    var interceptor = ['$q', 'user', 'userStatus', function($q, user, status) {
-      var apiURL = new RegExp('api\/');
+      var interceptor = [
+        "$q",
+        "user",
+        "userStatus",
+        function($q, user, status) {
+          var apiURL = new RegExp("api\/");
 
-      return {
-        request: function(conf) {
-          if (!conf.url.match(apiURL)) {
-            return conf;
-          }
-          if (!user.token) {
-            return angular.extend(conf, {status: 401});
-          }
+          return {
+            request: function(conf) {
+              if (!conf.url.match(apiURL)) {
+                return conf;
+              }
+              if (!user.token) {
+                return angular.extend(conf, { status: 401 });
+              }
 
-          conf.headers.Authorization = 'Basic ' + user.token;
-          return conf;
-        },
-        responseError: function(error) {
-          if (user.status !== status.DISCONNECTED && error.status === 401) {
-            user.status = status.UNAUTHORIZED;
-          }
-          return $q.reject(error);
+              conf.headers.Authorization = "Basic " + user.token;
+              return conf;
+            },
+            responseError: function(error) {
+              if (user.status !== status.DISCONNECTED && error.status === 401) {
+                user.status = status.UNAUTHORIZED;
+              }
+              return $q.reject(error);
+            }
+          };
         }
-      };
-    }];
-    $httpProvider.interceptors.push(interceptor);
-
-  }])
-  .factory('auth', [
-    '$window', '$cookieStore', 'api', 'user', 'userStatus',
+      ];
+      $httpProvider.interceptors.push(interceptor);
+    }
+  ])
+  .factory("auth", [
+    "$window",
+    "$cookieStore",
+    "api",
+    "user",
+    "userStatus",
     function($window, $cookies, api, user, status) {
-      angular.extend(user, {status: status.DISCONNECTED}, $cookies.get('user'));
+      angular.extend(
+        user,
+        { status: status.DISCONNECTED },
+        $cookies.get("user")
+      );
 
       return {
         user: user,
         login: function(username, password) {
-          user.token = $window.btoa(username.concat(':', password));
+          user.token = $window.btoa(username.concat(":", password));
 
           return api.users.getByName(username).then(function(userRes) {
-            angular.extend(user, userRes, {status: status.AUTHENTICATED});
-            $cookies.put('user', user);
+            angular.extend(user, userRes, { status: status.AUTHENTICATED });
+            $cookies.put("user", user);
             return user;
           });
         },
@@ -72,22 +88,25 @@ require('app')
         },
 
         isAdminInTeam: function() {
-          return user.role === 'admin';
+          return user.role === "admin";
         },
 
         isAdmin: function() {
-          return user.team.name === 'admin';
+          return user.team.name === "admin";
         },
 
         logout: function() {
-          $cookies.put('user', {});
+          $cookies.put("user", {});
           user.status = status.DISCONNECTED;
         }
-      }
+      };
     }
   ])
-  .controller('authCtrl', [
-    '$scope', '$state', 'auth', 'api',
+  .controller("authCtrl", [
+    "$scope",
+    "$state",
+    "auth",
+    "api",
     function($scope, $state, auth, api) {
       // currently just create roles and user when admin
       $scope.version = api.config.version;
@@ -108,8 +127,8 @@ require('app')
 
       $scope.logout = function() {
         auth.logout();
-        $state.go('login');
+        $state.go("login");
       };
     }
   ])
-  .run(['auth', angular.noop]);
+  .run(["auth", angular.noop]);

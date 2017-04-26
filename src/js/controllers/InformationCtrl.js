@@ -12,11 +12,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('InformationCtrl', ['$scope', 'api', function($scope, api) {
-    _.each(['teams', 'topics', 'remotecis'], function(id) {
+require("app").controller("InformationCtrl", [
+  "$scope",
+  "api",
+  function($scope, api) {
+    _.each(["teams", "topics", "remotecis"], function(id) {
       api[id].list(null, true).then(_.partial(_.set, $scope, id));
     });
-  }]);
+  }
+]);

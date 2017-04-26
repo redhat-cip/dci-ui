@@ -12,16 +12,22 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminTeams', {
-    templateUrl: '/partials/admin/teams/teams.html',
-    controller: ['$state', '$uibModal', 'api', 'user', 'messages', AdminTeamsCtrl],
-    bindings: {
-      teams: '='
-    }
-  });
+require("app").component("adminTeams", {
+  templateUrl: "/partials/admin/teams/teams.html",
+  controller: [
+    "$state",
+    "$uibModal",
+    "api",
+    "user",
+    "messages",
+    AdminTeamsCtrl
+  ],
+  bindings: {
+    teams: "="
+  }
+});
 
 function AdminTeamsCtrl($state, $uibModal, api, user, messages) {
   var $ctrl = this;
@@ -29,32 +35,34 @@ function AdminTeamsCtrl($state, $uibModal, api, user, messages) {
   $ctrl.currentTeam = user.team;
 
   $ctrl.editTeam = function(team) {
-    $state.go('adminTeam', {id: team.id});
+    $state.go("adminTeam", { id: team.id });
   };
 
   $ctrl.deleteTeam = function(team) {
     var teamName = team.name;
     var deleteTeamModal = $uibModal.open({
-      component: 'confirmDestructiveAction',
+      component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: 'Delete team ' + teamName,
-            body: 'Are you you want to delete team ' + teamName + '?',
-            okButton: 'Yes delete ' + teamName,
-            cancelButton: 'oups no!'
-          }
+            title: "Delete team " + teamName,
+            body: "Are you you want to delete team " + teamName + "?",
+            okButton: "Yes delete " + teamName,
+            cancelButton: "oups no!"
+          };
         }
       }
     });
     deleteTeamModal.result.then(function() {
-      api.teams.remove(team.id, team.etag).then(function() {
-          messages.alert('team ' + teamName + ' has been removed', 'success');
+      api.teams.remove(team.id, team.etag).then(
+        function() {
+          messages.alert("team " + teamName + " has been removed", "success");
           $state.reload();
         },
         function() {
-          messages.alert('team ' + teamName + ' can\'t be removed', 'danger');
-        });
+          messages.alert("team " + teamName + " can't be removed", "danger");
+        }
+      );
     });
-  }
+  };
 }
