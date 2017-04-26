@@ -12,20 +12,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .filter('limit', function() {
+require("app")
+  .filter("limit", function() {
     return function(input, size, term) {
       if (size && input.length > size) {
-        input = input.slice(0, size) + (term ? term : '');
+        input = input.slice(0, size) + (term ? term : "");
       }
       return input;
     };
   })
-  .filter('dciDate', ['$filter', function($filter) {
-    var amDateFormat = $filter('amDateFormat');
-    return function(value) {
-      return amDateFormat(value, 'dddd DD, MMMM h:mm:ss A');
+  .filter("dciDate", [
+    "$filter",
+    function($filter) {
+      var amDateFormat = $filter("amDateFormat");
+      return function(value) {
+        return amDateFormat(value, "dddd DD, MMMM h:mm:ss A");
+      };
     }
-  }]);
+  ]);

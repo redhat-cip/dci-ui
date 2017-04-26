@@ -12,38 +12,41 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminUserEdit', {
-    templateUrl: '/partials/admin/users/userEdit.html',
-    controller: ['$state', 'api', 'messages', adminUserCtrl],
-    bindings: {
-      user: '=',
-      teams: '='
-    }
-  });
+require("app").component("adminUserEdit", {
+  templateUrl: "/partials/admin/users/userEdit.html",
+  controller: ["$state", "api", "messages", adminUserCtrl],
+  bindings: {
+    user: "=",
+    teams: "="
+  }
+});
 
 function adminUserCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.update = function() {
     var userName = $ctrl.user.name;
-    api.users.update($ctrl.user)
+    api.users
+      .update($ctrl.user)
       .then(function() {
-        messages.alert('user ' + userName + ' updated', 'success');
-        $state.go('adminUsers');
+        messages.alert("user " + userName + " updated", "success");
+        $state.go("adminUsers");
       })
       .catch(function(err) {
-        messages.alert('cannot update user ' + userName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot update user " + userName + " (" + err.data.message + ")",
+          "danger"
+        );
       });
   };
 
   $ctrl.toggleRole = function() {
-    if ($ctrl.user.role === 'admin') {
-      $ctrl.user.role = 'user';
+    if ($ctrl.user.role === "admin") {
+      $ctrl.user.role = "user";
     } else {
-      $ctrl.user.role = 'admin';
+      $ctrl.user.role = "admin";
     }
   };
 }

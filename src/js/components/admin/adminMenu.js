@@ -12,16 +12,15 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminMenu', {
-    templateUrl: '/partials/admin/menu.html',
-    controller: ['$state', 'auth', adminMenuCtrl],
-    bindings: {
-      endpoint: '@'
-    }
-  });
+require("app").component("adminMenu", {
+  templateUrl: "/partials/admin/menu.html",
+  controller: ["$state", "auth", adminMenuCtrl],
+  bindings: {
+    endpoint: "@"
+  }
+});
 
 function adminMenuCtrl($state, auth) {
   var $ctrl = this;

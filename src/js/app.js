@@ -12,26 +12,35 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-var angular = require('angular');
+var angular = require("angular");
 
-require('lodash');
-require('angular-animate');
-require('angular-cookies');
-require('angular-sanitize');
-require('angular-ui-router');
-require('ui-select');
-require('angular-ui-bootstrap');
-require('angular-moment');
+require("lodash");
+require("angular-animate");
+require("angular-cookies");
+require("angular-sanitize");
+require("angular-ui-router");
+require("ui-select");
+require("angular-ui-bootstrap");
+require("angular-moment");
 
-require('directives/jsonformatter');
+require("directives/jsonformatter");
 
 module.exports = angular
-  .module('app', [
-    'ngCookies', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.select', 'ngSanitize', 'angularMoment',
-    'jsonFormatter'
+  .module("app", [
+    "ngCookies",
+    "ngAnimate",
+    "ui.router",
+    "ui.bootstrap",
+    "ui.select",
+    "ngSanitize",
+    "angularMoment",
+    "jsonFormatter"
   ])
-  .factory('appCache', ['$cacheFactory', function($cacheFactory) {
-    return $cacheFactory('dci-app-cache');
-  }]);
+  .factory("appCache", [
+    "$cacheFactory",
+    function($cacheFactory) {
+      return $cacheFactory("dci-app-cache");
+    }
+  ]);

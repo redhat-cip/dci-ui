@@ -12,46 +12,55 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('LogsCtrl', [
-    '$state', '$scope', '$q', 'api', 'status',
-    function($state, $scope, $q, api, status) {
-      $scope.pattern = $state.params.pattern;
+require("app").controller("LogsCtrl", [
+  "$state",
+  "$scope",
+  "$q",
+  "api",
+  "status",
+  function($state, $scope, $q, api, status) {
+    $scope.pattern = $state.params.pattern;
 
-      $scope.retrieveLogs = function() {
-        $state.go('logs', {'pattern': $scope.pattern});
-      };
+    $scope.retrieveLogs = function() {
+      $state.go("logs", { pattern: $scope.pattern });
+    };
 
-      $scope.status = function(log) {
-        if (!log.job) {
-          return 'panel-default';
-        }
-        return 'panel-' + status[log.job.status].color;
-      };
-
-      if (!$scope.pattern) {
-        return;
+    $scope.status = function(log) {
+      if (!log.job) {
+        return "panel-default";
       }
+      return "panel-" + status[log.job.status].color;
+    };
 
-      $scope.search = api.search.create($state.params.pattern)
-        .then(function(res) {
-          $scope.logs = res.logs.hits;
+    if (!$scope.pattern) {
+      return;
+    }
 
-          return $q.all(_.map($scope.logs, function(log) {
+    $scope.search = api.search
+      .create($state.params.pattern)
+      .then(function(res) {
+        $scope.logs = res.logs.hits;
+
+        return $q.all(
+          _.map($scope.logs, function(log) {
             log = log._source;
             if (log.job_id) {
               return api.jobs.get(log.job_id, true);
             } else {
-              return api.jobstates.get(log.jobstate_id).then(_.property('job'));
+              return api.jobstates.get(log.jobstate_id).then(_.property("job"));
             }
-          }));
-        })
-        .then(function(res) {
-          _.each(_.zip($scope.logs, res), _.spread(function(log, job) {
+          })
+        );
+      })
+      .then(function(res) {
+        _.each(
+          _.zip($scope.logs, res),
+          _.spread(function(log, job) {
             log.job = job;
-          }));
-        });
-    }
-  ]);
+          })
+        );
+      });
+  }
+]);

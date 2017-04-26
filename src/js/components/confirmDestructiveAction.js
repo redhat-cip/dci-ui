@@ -12,34 +12,33 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('confirmDestructiveAction', {
-    templateUrl: '/partials/components/confirmDestructiveAction.html',
-    controller: confirmDestructiveActionCtrl,
-    bindings: {
-      resolve: '<',
-      close: '&',
-      dismiss: '&'
-    }
-  });
+require("app").component("confirmDestructiveAction", {
+  templateUrl: "/partials/components/confirmDestructiveAction.html",
+  controller: confirmDestructiveActionCtrl,
+  bindings: {
+    resolve: "<",
+    close: "&",
+    dismiss: "&"
+  }
+});
 
 function confirmDestructiveActionCtrl() {
   var $ctrl = this;
 
-  $ctrl.$onInit = function () {
+  $ctrl.$onInit = function() {
     $ctrl.title = $ctrl.resolve.data.title;
-    $ctrl.body = $ctrl.resolve.data.body || '';
-    $ctrl.okButton = $ctrl.resolve.data.okButton || 'ok';
-    $ctrl.cancelButton = $ctrl.resolve.data.cancelButton || 'cancel';
+    $ctrl.body = $ctrl.resolve.data.body || "";
+    $ctrl.okButton = $ctrl.resolve.data.okButton || "ok";
+    $ctrl.cancelButton = $ctrl.resolve.data.cancelButton || "cancel";
   };
 
-  $ctrl.ok = function () {
-    $ctrl.close({$value: 'ok'});
+  $ctrl.ok = function() {
+    $ctrl.close({ $value: "ok" });
   };
 
-  $ctrl.cancel = function () {
-    $ctrl.dismiss({$value: 'cancel'});
+  $ctrl.cancel = function() {
+    $ctrl.dismiss({ $value: "cancel" });
   };
 }

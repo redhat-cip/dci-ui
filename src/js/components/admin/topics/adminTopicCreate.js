@@ -12,30 +12,33 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminTopicCreate', {
-    templateUrl: '/partials/admin/topics/topicCreate.html',
-    controller: ['$state', 'api', 'messages', adminTopicCtrl]
-  });
+require("app").component("adminTopicCreate", {
+  templateUrl: "/partials/admin/topics/topicCreate.html",
+  controller: ["$state", "api", "messages", adminTopicCtrl]
+});
 
 function adminTopicCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.topic = {
-    name: ''
+    name: ""
   };
 
   $ctrl.create = function() {
     var topicName = $ctrl.topic.name;
-    api.topics.create($ctrl.topic)
+    api.topics
+      .create($ctrl.topic)
       .then(function() {
-        messages.alert('topic ' + topicName + ' created', 'success');
+        messages.alert("topic " + topicName + " created", "success");
         $state.reload();
       })
       .catch(function(err) {
-        messages.alert('cannot create topic ' + topicName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot create topic " + topicName + " (" + err.data.message + ")",
+          "danger"
+        );
       });
   };
 }

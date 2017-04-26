@@ -12,17 +12,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminUsers', {
-    templateUrl: '/partials/admin/users/users.html',
-    controller: ['$state', '$uibModal', 'api', 'user', 'messages', AdminUsersCtrl],
-    bindings: {
-      users: '=',
-      teams: '='
-    }
-  });
+require("app").component("adminUsers", {
+  templateUrl: "/partials/admin/users/users.html",
+  controller: [
+    "$state",
+    "$uibModal",
+    "api",
+    "user",
+    "messages",
+    AdminUsersCtrl
+  ],
+  bindings: {
+    users: "=",
+    teams: "="
+  }
+});
 
 function AdminUsersCtrl($state, $uibModal, api, user, messages) {
   var $ctrl = this;
@@ -30,33 +36,34 @@ function AdminUsersCtrl($state, $uibModal, api, user, messages) {
   $ctrl.currentUser = user;
 
   $ctrl.editUser = function(user) {
-    $state.go('adminUser', {id: user.id});
+    $state.go("adminUser", { id: user.id });
   };
 
   $ctrl.deleteUser = function(user) {
     var userName = user.name;
     var deleteUserModal = $uibModal.open({
-      component: 'confirmDestructiveAction',
+      component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: 'Delete user ' + userName,
-            body: 'Are you you want to delete user ' + userName + '?',
-            okButton: 'Yes delete ' + userName,
-            cancelButton: 'oups no!'
-          }
+            title: "Delete user " + userName,
+            body: "Are you you want to delete user " + userName + "?",
+            okButton: "Yes delete " + userName,
+            cancelButton: "oups no!"
+          };
         }
       }
     });
     deleteUserModal.result.then(function() {
-      api.users.remove(user.id, user.etag)
+      api.users
+        .remove(user.id, user.etag)
         .then(function() {
-          messages.alert('user ' + userName + ' has been removed', 'success');
+          messages.alert("user " + userName + " has been removed", "success");
           $state.reload();
         })
         .catch(function() {
-          messages.alert('user ' + userName + ' can\'t be removed', 'danger');
+          messages.alert("user " + userName + " can't be removed", "danger");
         });
     });
-  }
+  };
 }

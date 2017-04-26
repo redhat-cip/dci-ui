@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/redhat-cip/dci-ui",
   "scripts": {
+    "precommit": "lint-staged",
     "build": "gulp build:dev",
     "dev": "gulp serve:dev",
     "start": "gulp serve",
@@ -49,10 +50,17 @@
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "phantomjs-prebuilt": "^2.1.14",
+    "prettier": "^1.2.2",
     "protractor": "^5.1.1",
     "selenium-server-standalone-jar": "3.4.0",
     "through2": "^2.0.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write \"src/**/*.js\"",
+      "git add"
+    ]
   }
 }

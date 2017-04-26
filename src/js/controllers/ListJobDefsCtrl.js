@@ -12,26 +12,28 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('ListJobDefsCtrl', [
-    '$state', '$scope', 'api', function($state, $scope, api) {
-      var page = parseInt($state.params.page) || 1;
-      api.jobdefinitions.list(page)
-        .then(function(data) {
-          $scope.jobdefs = data.jobdefinitions;
-          _.each(data.jobdefinitions, function(jobdef) {
-            api.jobdefinitions.tests(jobdef.id).then(function(tests) {
-              jobdef.tests = tests;
-            });
-          });
-          $scope.pagination = {
-            total: data._meta.count, page: page,
-            pageChanged: function() {
-              $state.go('jobdefs', $scope.pagination);
-            }
-          };
+require("app").controller("ListJobDefsCtrl", [
+  "$state",
+  "$scope",
+  "api",
+  function($state, $scope, api) {
+    var page = parseInt($state.params.page) || 1;
+    api.jobdefinitions.list(page).then(function(data) {
+      $scope.jobdefs = data.jobdefinitions;
+      _.each(data.jobdefinitions, function(jobdef) {
+        api.jobdefinitions.tests(jobdef.id).then(function(tests) {
+          jobdef.tests = tests;
         });
-    }
-  ]);
+      });
+      $scope.pagination = {
+        total: data._meta.count,
+        page: page,
+        pageChanged: function() {
+          $state.go("jobdefs", $scope.pagination);
+        }
+      };
+    });
+  }
+]);

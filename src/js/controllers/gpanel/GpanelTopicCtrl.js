@@ -12,26 +12,25 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('GpanelTopicCtrl', [
-    '$scope', '$stateParams', 'api', function($scope, $stateParams, api) {
-      $scope.componentTypes = [];
-      $scope.topic = $stateParams.id;
+require("app").controller("GpanelTopicCtrl", [
+  "$scope",
+  "$stateParams",
+  "api",
+  function($scope, $stateParams, api) {
+    $scope.componentTypes = [];
+    $scope.topic = $stateParams.id;
 
-      $scope.q = api.topics.components($scope.topic).then(function(components) {
-        $scope.components = components;
-        // Create a uniq list of component type
-        _.each(components, function(component) {
-          var type = {'name': component.type};
-          if (_.findIndex($scope.componentTypes, type) === -1) {
-            $scope.componentTypes.push(type);
-          }
-        });
+    $scope.q = api.topics.components($scope.topic).then(function(components) {
+      $scope.components = components;
+      // Create a uniq list of component type
+      _.each(components, function(component) {
+        var type = { name: component.type };
+        if (_.findIndex($scope.componentTypes, type) === -1) {
+          $scope.componentTypes.push(type);
+        }
       });
-    }
-  ]);
-
-
-
+    });
+  }
+]);
