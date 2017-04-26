@@ -12,28 +12,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .directive('jsonText', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function(scope, element, attr, ngModel) {
-        function into(input) {
-          try {
-            return JSON.parse(input);
-          } catch (e) {
-            return 'error';
-          }
+require("app").directive("jsonText", function() {
+  return {
+    restrict: "A",
+    require: "ngModel",
+    link: function(scope, element, attr, ngModel) {
+      function into(input) {
+        try {
+          return JSON.parse(input);
+        } catch (e) {
+          return "error";
         }
-
-        function out(data) {
-          return JSON.stringify(data, null, 2);
-        }
-
-        ngModel.$parsers.push(into);
-        ngModel.$formatters.push(out);
       }
-    };
-  });
+
+      function out(data) {
+        return JSON.stringify(data, null, 2);
+      }
+
+      ngModel.$parsers.push(into);
+      ngModel.$formatters.push(out);
+    }
+  };
+});

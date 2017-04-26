@@ -12,24 +12,29 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('fileJunitStatusController', ['$scope', function($scope) {
+require("app").controller("fileJunitStatusController", [
+  "$scope",
+  function($scope) {
     $scope.bucket = $scope.file.content.testscases;
     $scope.input = {
-      passed: false, skipped: false, failure: false, error: false
+      passed: false,
+      skipped: false,
+      failure: false,
+      error: false
     };
 
     $scope.filterjunit = function() {
       if (!_.some(_.values($scope.input))) {
         $scope.bucket = $scope.file.content.testscases;
       } else {
-        $scope.bucket = _.filter(
-          $scope.file.content.testscases, function(testcase) {
-            return $scope.input[testcase.result.action];
-          }
-        );
+        $scope.bucket = _.filter($scope.file.content.testscases, function(
+          testcase
+        ) {
+          return $scope.input[testcase.result.action];
+        });
       }
     };
-  }]);
+  }
+]);

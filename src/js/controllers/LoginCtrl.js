@@ -12,23 +12,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('LoginCtrl', [
-    '$scope', '$state', 'auth', 'messages', function($scope, $state, auth, messages) {
-      $scope.authenticate = function(credentials) {
-        auth.login(credentials.username, credentials.password)
-          .then(function() {
-            $state.go('index');
-          })
-          .catch(function(err) {
-            if (err.status === 401) {
-              messages.alert('Invalid username or password.', 'danger');
-            } else {
-              messages.generalError();
-            }
-          });
-      };
-    }
-  ]);
+require("app").controller("LoginCtrl", [
+  "$scope",
+  "$state",
+  "auth",
+  "messages",
+  function($scope, $state, auth, messages) {
+    $scope.authenticate = function(credentials) {
+      auth
+        .login(credentials.username, credentials.password)
+        .then(function() {
+          $state.go("index");
+        })
+        .catch(function(err) {
+          if (err.status === 401) {
+            messages.alert("Invalid username or password.", "danger");
+          } else {
+            messages.generalError();
+          }
+        });
+    };
+  }
+]);

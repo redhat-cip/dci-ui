@@ -12,31 +12,34 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('IssueCtrl', ['$scope', 'api', function($scope, api) {
-    $scope.submit = function() {
-      api.issues.create($scope.job.id, $scope.issue).then(function(issues) {
-        $scope.job.issues.push(_.last(issues));
-        $scope.issue = null;
-      });
-    };
-
-    $scope.remove = function(job, issue) {
-      return api.issues.remove(job.id, issue.id, issue.etag)
-        .then(function() {
-          _.pullAt(job.issues, _.findIndex(job.issues, ['id', issue.id]));
+require("app")
+  .controller("IssueCtrl", [
+    "$scope",
+    "api",
+    function($scope, api) {
+      $scope.submit = function() {
+        api.issues.create($scope.job.id, $scope.issue).then(function(issues) {
+          $scope.job.issues.push(_.last(issues));
+          $scope.issue = null;
         });
-    };
-  }])
-  .filter('titlecase', function() {
+      };
+
+      $scope.remove = function(job, issue) {
+        return api.issues.remove(job.id, issue.id, issue.etag).then(function() {
+          _.pullAt(job.issues, _.findIndex(job.issues, ["id", issue.id]));
+        });
+      };
+    }
+  ])
+  .filter("titlecase", function() {
     return function(input) {
       return input.charAt(0).toUpperCase() + input.slice(1);
     };
   })
-  .filter('point', function() {
+  .filter("point", function() {
     return function(input) {
-      return input + (input.charAt(input.length - 1) === '.' ? '' : '.');
+      return input + (input.charAt(input.length - 1) === "." ? "" : ".");
     };
   });

@@ -12,23 +12,22 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .directive('compareTo', function() {
-    return {
-      require: 'ngModel',
-      scope: {
-        compareTo: '='
-      },
-      link: function(scope, element, attributes, ngModel) {
-        ngModel.$validators.compareTo = function(modelValue) {
-          return modelValue === scope.compareTo;
-        };
+require("app").directive("compareTo", function() {
+  return {
+    require: "ngModel",
+    scope: {
+      compareTo: "="
+    },
+    link: function(scope, element, attributes, ngModel) {
+      ngModel.$validators.compareTo = function(modelValue) {
+        return modelValue === scope.compareTo;
+      };
 
-        scope.$watch('compareTo', function() {
-          ngModel.$validate();
-        });
-      }
-    };
-  });
+      scope.$watch("compareTo", function() {
+        ngModel.$validate();
+      });
+    }
+  };
+});

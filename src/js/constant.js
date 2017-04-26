@@ -12,44 +12,43 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .constant('status', {
-    'failure': {
-      'color': 'danger',
-      'glyphicon': 'glyphicon-remove'
-    },
-    'product-failure': {
-      'color': 'danger',
-      'glyphicon': 'glyphicon-remove'
-    },
-    'deployment-failure': {
-      'color': 'danger',
-      'glyphicon': 'glyphicon-remove'
-    },
-    'killed': {
-      'color': 'warning',
-      'glyphicon': 'glyphicon-ban-circle'
-    },
-    'success': {
-      'color': 'success',
-      'glyphicon': 'glyphicon-ok'
-    },
-    'running': {
-      'color': 'info',
-      'glyphicon': 'glyphicon-play'
-    },
-    'new': {
-      'color': 'primary',
-      'glyphicon': 'glyphicon-record'
-    },
-    'pre-run': {
-      'color': 'info',
-      'glyphicon': 'glyphicon-record'
-    },
-    'post-run': {
-      'color': 'info',
-      'glyphicon': 'glyphicon-record'
-    }
-  });
+require("app").constant("status", {
+  failure: {
+    color: "danger",
+    glyphicon: "glyphicon-remove"
+  },
+  "product-failure": {
+    color: "danger",
+    glyphicon: "glyphicon-remove"
+  },
+  "deployment-failure": {
+    color: "danger",
+    glyphicon: "glyphicon-remove"
+  },
+  killed: {
+    color: "warning",
+    glyphicon: "glyphicon-ban-circle"
+  },
+  success: {
+    color: "success",
+    glyphicon: "glyphicon-ok"
+  },
+  running: {
+    color: "info",
+    glyphicon: "glyphicon-play"
+  },
+  new: {
+    color: "primary",
+    glyphicon: "glyphicon-record"
+  },
+  "pre-run": {
+    color: "info",
+    glyphicon: "glyphicon-record"
+  },
+  "post-run": {
+    color: "info",
+    glyphicon: "glyphicon-record"
+  }
+});

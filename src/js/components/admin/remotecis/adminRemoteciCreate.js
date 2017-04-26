@@ -12,30 +12,37 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .component('adminRemoteciCreate', {
-    templateUrl: '/partials/admin/remotecis/remoteciCreate.html',
-    controller: ['$state', 'api', 'messages', adminRemoteciCtrl]
-  });
+require("app").component("adminRemoteciCreate", {
+  templateUrl: "/partials/admin/remotecis/remoteciCreate.html",
+  controller: ["$state", "api", "messages", adminRemoteciCtrl]
+});
 
 function adminRemoteciCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.remoteci = {
-    name: ''
+    name: ""
   };
 
   $ctrl.create = function() {
     var remoteciName = $ctrl.remoteci.name;
-    api.remotecis.create($ctrl.remoteci)
+    api.remotecis
+      .create($ctrl.remoteci)
       .then(function() {
-        messages.alert('remoteci ' + remoteciName + ' created', 'success');
+        messages.alert("remoteci " + remoteciName + " created", "success");
         $state.reload();
       })
       .catch(function(err) {
-        messages.alert('cannot create remoteci ' + remoteciName + ' (' + err.data.message + ')', 'danger');
+        messages.alert(
+          "cannot create remoteci " +
+            remoteciName +
+            " (" +
+            err.data.message +
+            ")",
+          "danger"
+        );
       });
   };
 }

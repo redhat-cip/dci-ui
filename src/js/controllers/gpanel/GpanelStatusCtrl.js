@@ -12,50 +12,49 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
+"use strict";
 
-require('app')
-  .controller('GpanelStatusCtrl', [
-    '$scope', '$stateParams', 'api', 'status',
-    function($scope, $stateParams, api, status) {
-      var topic = $stateParams.id;
-      var componentType = $scope.componentType = $stateParams.componentType;
-      $scope.jobs_ = [];
-      $scope.display = 0;
+require("app").controller("GpanelStatusCtrl", [
+  "$scope",
+  "$stateParams",
+  "api",
+  "status",
+  function($scope, $stateParams, api, status) {
+    var topic = $stateParams.id;
+    var componentType = ($scope.componentType = $stateParams.componentType);
+    $scope.jobs_ = [];
+    $scope.display = 0;
 
-      $scope.status = function(s) {
-        return ['label', 'label-' + _.get(status, [s, 'color'])];
-      };
+    $scope.status = function(s) {
+      return ["label", "label-" + _.get(status, [s, "color"])];
+    };
 
-      $scope.collapse = function(component, jobs) {
-        $scope.display = component;
-        $scope.jobs_ = jobs;
-      };
+    $scope.collapse = function(component, jobs) {
+      $scope.display = component;
+      $scope.jobs_ = jobs;
+    };
 
-      api.topics.get(topic).then(_.partial(_.set, $scope, 'topic'));
-      api.topics.jobdefinitions(topic).then(_.partial(_.set, $scope, 'jobdefs'));
+    api.topics.get(topic).then(_.partial(_.set, $scope, "topic"));
+    api.topics.jobdefinitions(topic).then(_.partial(_.set, $scope, "jobdefs"));
 
-      function setupJobsStatus(component) {
-        api.topics.components.jobs(topic, component.id).then(function(jobs) {
-          _.each(jobs, function(job) {
-            var path = ['jobs', component.id, job.jobdefinition_id, job.status];
-            _.update($scope, path, function(target) {
-              return _.concat(target || [], job);
-            });
+    function setupJobsStatus(component) {
+      api.topics.components.jobs(topic, component.id).then(function(jobs) {
+        _.each(jobs, function(job) {
+          var path = ["jobs", component.id, job.jobdefinition_id, job.status];
+          _.update($scope, path, function(target) {
+            return _.concat(target || [], job);
           });
         });
-        return component;
-      }
-
-      // $scope is inherited, we can access "q" from GpanelTopicCtrl
-      $scope.q.then(function() {
-        $scope.components = _($scope.components)
-          .filter(['type', componentType])
-          .map(setupJobsStatus)
-          .value();
       });
+      return component;
     }
-  ]);
 
-
-
+    // $scope is inherited, we can access "q" from GpanelTopicCtrl
+    $scope.q.then(function() {
+      $scope.components = _($scope.components)
+        .filter(["type", componentType])
+        .map(setupJobsStatus)
+        .value();
+    });
+  }
+]);
