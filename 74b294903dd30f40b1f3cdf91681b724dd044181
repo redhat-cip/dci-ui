@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_80748bcf",
+        "filename": "src/partials/admin/users/userCreate.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 30
+      },
+      "writtenOn": "2017-04-26T18:49:36Z",
+      "side": 1,
+      "message": "I think you should also list the roles associated to the team selected below.\n\ne.g:\n\nThis is my roles:\nname       |  team\n------------------\nadmin      |    NA\ndell_tech  |  dell\nhp_user    |    HP\n\nIf I select team\u003ddell, roles should only show up admin, dell_tech.",
+      "revId": "74b294903dd30f40b1f3cdf91681b724dd044181",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
