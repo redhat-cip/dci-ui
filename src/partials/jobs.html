@@ -1,48 +1,54 @@
-<h1>Jobs</h1>
-<div class="filtering">
-  <form ng-submit="filters()">
-    <div class="row">
-      <div class="col-xs-12">
-        <h4>Filters</h4>
+<div class="row" style="height:100%">
+  <div class="col-sm-8 col-md-9" style="min-height:90vh">
+    <div class="page-header">
+      <div class="actions pull-right">
+        <a href="#" ng-click="reloadPage()"><span class="pficon pficon-refresh"></span> Refresh Results</a>
+      </div>
+      <h1>Dashboard</h1>
+    </div>
+
+    <div ng-repeat="job in jobs" dci-job></div>
+
+    <div ng-if="jobs.length <= 0 && selected.status.length > 0">
+      No results
+    </div>
+
+    <div class="pagination" ng-if="pagination" ng-if="jobs.length > 0">
+      <div uib-pagination total-items="pagination.total" max-size="5"
+           ng-model="pagination.page" class="pagination-sm" boundary-links="true"
+           rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
       </div>
     </div>
-    <div class="row">
-      <div class="col-xs-4">
-        <div class="form-group">
-          <ui-select ng-model="selected.status" theme="bootstrap" multiple sortable="true">
-            <ui-select-match placeholder="Filter by Status">
-              <span class="glyphicon" ng-class="[$item.glyphicon, 'text-' + $item.color]">{{$item.name}}</span>
-            </ui-select-match>
-            <ui-select-choices repeat="s in status">
-              <span class="glyphicon" ng-class="[s.glyphicon, 'text=' + s.color]"></span>{{s.name}}
-            </ui-select-choices>
-          </ui-select>
-        </div>
+  </div>
+  <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height:90vh; height:100%">
+    <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
+      <div class="actions pull-right">
+        <a href="#" ng-click="clearFilters()">Clear filters</a>
       </div>
-      <div class="col-xs-4">
-        <div class="form-group">
-          <ui-select ng-model="selected.remotecis" theme="bootstrap" multiple sortable="true">
-            <ui-select-match placeholder="Filter by Remote CI">{{$item.name}}</ui-select-match>
-            <ui-select-choices repeat="remote in remotecis">
-              <div ng-bind-html="remote.name | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-        </div>
-      </div>
-      <div class="col-xs-4">
-        <button type="submit" class="btn btn-primary">
-          Apply
-        </button>
-      </div>
+      <h2 class="h5">Filters</h2>
     </div>
-  </form>
-</div>
-
-<div ng-repeat="job in jobs" dci-job></div>
-
-<div class="pagination" ng-if="pagination">
-  <div uib-pagination total-items="pagination.total" max-size="5"
-       ng-model="pagination.page" class="pagination-sm" boundary-links="true"
-       rotate="false" items-per-page="20" ng-change="pagination.pageChanged()">
+    <form ng-submit="filters()">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <ui-select ng-model="selected.status" theme="bootstrap" multiple sortable="true">
+              <ui-select-match placeholder="Filter by Status">
+                <span class="glyphicon" ng-class="[$item.glyphicon, 'text-' + $item.color]">{{$item.name}}</span>
+              </ui-select-match>
+              <ui-select-choices repeat="s in status">
+                <span class="glyphicon" ng-class="[s.glyphicon, 'text=' + s.color]"></span>{{s.name}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary">
+            Filter status
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

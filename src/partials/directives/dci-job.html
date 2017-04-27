@@ -14,11 +14,15 @@
     <div class="title">
       Tests
     </div>
-    <div class="text-muted" ng-repeat="test in job.jobdefinition.tests">
-      {{test.name}} : <span ng-if="!test.result">No results</span><span ng-if="test.result"><span
-      class="label label-success">{{test.result.success}}</span> <span
-      class="label label-warning">{{test.result.skips}}</span> <span
-      class="label label-default">{{test.result.errors}}</span> <span class="label label-danger">{{test.result.failures}}</span></span>
+    <div class="text-muted" ng-repeat="test in job.results">
+      {{test.name}} :
+      <span class="label label-success">{{test.success}}</span>
+      <span class="label label-warning">{{test.skips}}</span>
+      <span class="label label-default">{{test.errors}}</span>
+      <span class="label label-danger">{{test.failures}}</span>
+    </div>
+    <div ng-if="job.results.length === 0">
+      No results
     </div>
   </div>
   <div class="col-md-4">

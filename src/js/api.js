@@ -225,7 +225,7 @@ require("app").factory("api", [
     };
 
     /*                                   JOBS                                   */
-    api.jobs.embed = "remoteci,jobdefinition,jobdefinition.tests";
+    api.jobs.embed = "remoteci,jobdefinition,jobdefinition.tests,results";
     api.jobs.update.parse = _.partialRight(_.pick, ["status", "comment"]);
 
     api.jobs.recheck = function(id) {
@@ -274,7 +274,7 @@ require("app").factory("api", [
         return $http.get(urlize(this.url, job)).then(_.property("data.job"));
       }
 
-      var confJ = { params: { embed: "remoteci,jobdefinition" } };
+      var confJ = { params: { embed: "remoteci,jobdefinition,results" } };
       var confJS = {
         params: {
           sort: "created_at,files.created_at",
@@ -313,76 +313,33 @@ require("app").factory("api", [
           return job;
         });
     };
-    api.jobs.search = function(remotecis, statuses, params) {
-      function retrieveRCIs(remoteci) {
-        var conf = {
-          params: {
-            where: "name:" + remoteci,
-            limit: params.limit,
-            offset: params.offset
+    api.jobs.list = function(page, statuses) {
+      var params = {
+        embed: this.embed,
+        limit: 20,
+        offset: 20 * (page - 1)
+      };
+
+      if (statuses.length > 0) {
+        var statusPromises = [];
+        for (var i = 0; i < statuses.length; i++) {
+          params.where = "status:" + statuses[i];
+          statusPromises.push(
+            $http.get(this.url, { params: _.assign({}, params) })
+          );
+        }
+        return $q.all(statusPromises).then(function(values) {
+          var jobs = [];
+          var count = 0;
+          for (var j = 0; j < values.length; j++) {
+            jobs = jobs.concat(values[j].data.jobs);
+            count += values[j].data._meta.count;
           }
-        };
-        return $http.get(api.remotecis.url, conf);
-      }
-
-      function retrieveJobs(status) {
-        var conf = {
-          params: {
-            where: "status:" + status,
-            embed: "remoteci,jobdefinition,jobdefinition.tests",
-            limit: params.limit,
-            offset: params.offset
-          }
-        };
-        return $http.get(api.jobs.url, conf);
-      }
-
-      function retrieveJsRCI(remoteciResps) {
-        return _(remoteciResps)
-          .map(_.property("data.remotecis"))
-          .flatten()
-          .map(_.property("id"))
-          .map(function(remoteci) {
-            var conf = {
-              params: {
-                embed: "remoteci,jobdefinition,jobdefinition.tests",
-                where: "remoteci_id:" + remoteci,
-                limit: params.limit,
-                offset: params.offset
-              }
-            };
-            return $http.get(api.jobs.url, conf);
-          })
-          .thru($q.all)
-          .value();
-      }
-
-      return $q
-        .all([
-          _(remotecis)
-            .map(retrieveRCIs)
-            .thru($q.all)
-            .value()
-            .then(retrieveJsRCI),
-          _(statuses).map(retrieveJobs).thru($q.all).value()
-        ])
-        .then(function(data) {
-          var getJobs = _().map(_.property("data.jobs")).flatten();
-          var RCISJobs = getJobs.plant(_.first(data)).value();
-          var SSJobs = getJobs.plant(_.last(data)).value();
-
-          if (SSJobs.length && RCISJobs.length) {
-            var RCISJobsIds = _.map(RCISJobs, "id");
-            return _.filter(SSJobs, function(job) {
-              return _.includes(RCISJobsIds, job.id);
-            });
-          } else {
-            return SSJobs.concat(RCISJobs);
-          }
-        })
-        .then(function(jobs) {
-          return { jobs: jobs };
+          return { _meta: { count: count }, jobs: jobs };
         });
+      }
+
+      return $http.get(this.url, { params: params }).then(_.property("data"));
     };
 
     /*                                JOBSTATES                                */
