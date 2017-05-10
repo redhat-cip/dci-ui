@@ -87,6 +87,10 @@ a.panel-heading {
       color: darken($color, 15%)
     }
   }
+
+  .card-pf-#{$name} {
+    border-top: 5px solid $color;
+  }
 }
 
 .job {
