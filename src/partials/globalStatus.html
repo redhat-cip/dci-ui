@@ -1,0 +1,67 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h1>Global Status</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4 col-md-3 col-lg-1" ng-repeat="topic in $ctrl.topics">
+      <div class="card-pf card-pf-aggregate-status"
+           ng-if="topic.jobs.length > 0"
+           ng-class="{
+           'card-pf-danger':topic.percentageErrors > 50,
+           'card-pf-warning': topic.percentageErrors <= 50 && topic.failures > 0,
+           'card-pf-success':   topic.percentageErrors <= 50 && topic.failures === 0
+           }">
+        <h2 class="card-pf-title">
+          <i class="fa fa-warning text-danger" ng-if="topic.percentageErrors > 75"></i> {{topic.name}}
+        </h2>
+        <div class="card-pf-body">
+          <p class="card-pf-aggregate-status-notifications">
+            <span class="card-pf-aggregate-status-notification"
+                  ng-if="topic.failures > 0">
+                <span class="pficon pficon-error-circle-o"></span>{{topic.failures}}
+            </span>
+            <span class="card-pf-aggregate-status-notification"
+                  ng-if="topic.success > 0">
+                <span class="pficon pficon-ok"></span>{{topic.success}}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div ng-repeat="topic in $ctrl.topics | orderBy: 'order'" ng-if="topic.jobs.length > 0">
+        <h2><a ui-sref="topic({id: topic.id})">{{topic.name}}</a></h2>
+        <br>
+        <table class="table">
+          <thead>
+          <th>Team</th>
+          <th>Remote CI</th>
+          <th>Component Name</th>
+          <th>Status</th>
+          <th>Job Id</th>
+          <th>Last Run</th>
+          </thead>
+          <tbody>
+          <tr ng-repeat="job in topic.jobs" ng-class="$ctrl.getJobStatusClass(job.job_status)">
+            <td>{{ job.team_name }}</td>
+            <td>{{ job.remoteci_name }}</td>
+            <td>{{ job.component_name }}</td>
+            <td>{{ job.job_status || "Not run yet" }}</td>
+            <td ng-if="!job.job_id">N/A</td>
+            <td ng-if="job.job_id">
+              <a ui-sref="job.results({id: job.job_id})" class="title">
+                {{job.job_id}}
+              </a>
+            </td>
+            <td>{{ job.job_created_at || "N/A" }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

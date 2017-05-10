@@ -38,6 +38,7 @@ describe("When a user opens DCI", function() {
   it("should be possible to recheck a job", function() {
     element.all(by.css(".job__link")).first().click();
     expect(browser.getCurrentUrl()).toMatch("/jobs/[a-z0-9-]+/results$");
+    browser.waitForAngular();
   });
 
   it("should test job Results page", function() {
@@ -92,8 +93,8 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("visit /gpanel", function() {
-    browser.get("/#!/gpanel");
+  it("visit /globalStatus", function() {
+    browser.get("/#!/globalStatus");
     browser.waitForAngular();
   });
 
