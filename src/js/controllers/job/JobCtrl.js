@@ -21,29 +21,11 @@ require("app").controller("JobCtrl", [
   "api",
   "status",
   function($scope, $state, job, api, status) {
-    var tabs = [
-      "results",
-      "logs",
-      "details",
-      "edit",
-      "context",
-      "stackdetails",
-      "issues",
-      "files"
-    ];
-
-    _.assign($scope, {
-      job: job,
-      active: {},
-      go: $state.go,
-      collapses: { remoteci: false, jobdefinition: false }
-    });
-
-    _.each(tabs, function(tab) {
-      $scope.active[tab] = $state.is("job." + tab);
-    });
+    $scope.$state = $state;
+    $scope.collapses = { remoteci: false, jobdefinition: false };
 
     job.configuration = angular.fromJson(job.configuration);
+    $scope.job = job;
 
     _.each(job.jobstates, function(jobstate) {
       jobstate.statusClass = "bs-callout-" + status[jobstate.status].color;
