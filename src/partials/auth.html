@@ -24,11 +24,43 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-primary"
-        ng-class="{'persistent-secondary': isAdminPage()}">
-      <li ui-sref-active="active">
+        ng-class="{'persistent-secondary': isAdminPage() || isJobPage()}">
+      <li ui-sref-active="active" ng-if="!isJobPage()">
         <a ui-sref="jobs">
-          <i class="glyphicon glyphicon-home" aria-hidden="true"></i> Dashboard
+          Jobs
         </a>
+      </li>
+      <li ng-class="{active: isJobPage()}"
+          ng-if="isJobPage()">
+        <a ui-sref="job.results">
+          Jobs
+        </a>
+        <ul class="nav navbar-nav navbar-persistent">
+          <li ui-sref-active="active">
+            <a ui-sref="job.results">Results</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.logs">Logs</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.details">Details</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.edit">Edit</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.context">Context</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.stackdetails">Stackdetails</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.issues">Issues</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="job.files">Files</a>
+          </li>
+        </ul>
       </li>
       <li ui-sref-active="active">
         <a ui-sref="jobdefs">

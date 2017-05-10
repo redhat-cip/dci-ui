@@ -125,6 +125,19 @@ require("app")
         );
       };
 
+      $scope.isJobPage = function() {
+        return (
+          $state.includes("job.results") ||
+          $state.includes("job.logs") ||
+          $state.includes("job.details") ||
+          $state.includes("job.edit") ||
+          $state.includes("job.context") ||
+          $state.includes("job.stackdetails") ||
+          $state.includes("job.issues") ||
+          $state.includes("job.files")
+        );
+      };
+
       $scope.logout = function() {
         auth.logout();
         $state.go("login");
