@@ -188,12 +188,6 @@ require("app")
           controller: "GpanelStatusCtrl",
           templateUrl: "/partials/gpanel/status.html"
         })
-        .state("information", {
-          parent: "auth",
-          url: "/information",
-          controller: "InformationCtrl",
-          templateUrl: "/partials/information.html"
-        })
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",

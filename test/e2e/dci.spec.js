@@ -92,11 +92,6 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("visit /information", function() {
-    browser.get("/#!/information");
-    browser.waitForAngular();
-  });
-
   it("visit /gpanel", function() {
     browser.get("/#!/gpanel");
     browser.waitForAngular();
