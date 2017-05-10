@@ -97,8 +97,8 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("visit /gpanel", function() {
-    browser.get("/#!/gpanel");
+  it("visit /globalStatus", function() {
+    browser.get("/#!/globalStatus");
     browser.waitForAngular();
   });
 

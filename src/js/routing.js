@@ -172,21 +172,31 @@ require("app")
             ]
           }
         })
-        .state("gpanel", {
+        .state("globalStatus", {
           parent: "auth",
-          url: "/gpanel",
-          controller: "GpanelIndexCtrl",
-          templateUrl: "/partials/gpanel/index.html"
-        })
-        .state("gpanel.topic", {
-          url: "/:id",
-          controller: "GpanelTopicCtrl",
-          templateUrl: "/partials/gpanel/topic.html"
-        })
-        .state("gpanel.topic.status", {
-          url: "/type/:componentType",
-          controller: "GpanelStatusCtrl",
-          templateUrl: "/partials/gpanel/status.html"
+          url: "/globalStatus",
+          template: '<global-status topics="$resolve.topics"></global-status>',
+          resolve: {
+            topics: [
+              "$q",
+              "api",
+              "conf",
+              function($q, api) {
+                return api.topics.list(null, true).then(function(topics) {
+                  var promises = [];
+                  _.each(topics, function(topic) {
+                    promises.push(api.topics.jobs(topic.id));
+                  });
+                  return $q.all(promises).then(function(values) {
+                    for (var i = 0; i < values.length; i++) {
+                      topics[i].jobs = values[i];
+                    }
+                    return topics;
+                  });
+                });
+              }
+            ]
+          }
         })
         .state("information", {
           parent: "auth",
