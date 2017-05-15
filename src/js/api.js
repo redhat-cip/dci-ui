@@ -205,21 +205,21 @@ require("app").factory("api", [
       var conf = { params: { embed: "files" } };
       return $http.get(url, conf).then(_.property("data.components"));
     };
-    api.topics.components.jobs = function(topic, component) {
-      var url = urlize(api.topics.url, topic, "components", component, "jobs");
-      return $http.get(url).then(_.property("data.jobs"));
-    };
     api.topics.jobdefinitions = function(topic) {
       var url = urlize(api.topics.url, topic, "jobdefinitions");
       return $http.get(url).then(_.property("data.jobdefinitions"));
     };
-    api.topics.status = function(topic) {
-      var url = urlize(
-        api.topics.url,
-        topic.id,
-        "type/" + topic.jobdefinition_type + "/status"
-      );
-      return $http.get(url).then(_.property("data.jobs"));
+    api.topics.jobs = function(topic_id) {
+      return api.topics.jobdefinitions(topic_id).then(function(jobDefinition) {
+        var jobdefinition_type =
+          encodeURI(jobDefinition[0]["component_types"][0]) || "puddle_osp";
+        var url = urlize(
+          api.topics.url,
+          topic_id,
+          "type/" + jobdefinition_type + "/status"
+        );
+        return $http.get(url).then(_.property("data.jobs"));
+      });
     };
 
     /*                                JOBSTATES                                 */
