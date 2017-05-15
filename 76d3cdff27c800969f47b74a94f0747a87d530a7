@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_046d2204",
+        "filename": "src/js/components/globalStatus.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2017-05-15T09:00:35Z",
+      "side": 1,
+      "message": "Not a big fan of that, but I understand the need here. On the long run I think we should move that logic to the server and the /topics endpoint",
+      "revId": "76d3cdff27c800969f47b74a94f0747a87d530a7",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
