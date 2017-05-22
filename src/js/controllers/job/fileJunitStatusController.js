@@ -26,14 +26,19 @@ require("app").controller("fileJunitStatusController", [
     };
 
     $scope.filterjunit = function() {
-      if (!_.some(_.values($scope.input))) {
-        $scope.bucket = $scope.file.content.testscases;
-      } else {
+      if (
+        $scope.input.passed ||
+        $scope.input.skipped ||
+        $scope.input.failure ||
+        $scope.input.error
+      ) {
         $scope.bucket = _.filter($scope.file.content.testscases, function(
           testcase
         ) {
-          return $scope.input[testcase.result.action];
+          return $scope.input[testcase.action];
         });
+      } else {
+        $scope.bucket = $scope.file.content.testscases;
       }
     };
   }

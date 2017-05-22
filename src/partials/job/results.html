@@ -1,97 +1,91 @@
 <div ng-if="junit_files.length == 0">
-No JUnit result uploaded.
+  No JUnit result uploaded.
 </div>
-<div ng-repeat="file in junit_files" class="row">
-<h3 class="col-md-12 page-header">{{ file.name }}
-  <button type="button" class="btn btn-default btn-xs pull-right"
-                        ng-click="file.collapse = !file.collapse">
-    <span ng-if="file.collapse">
-      <span class="glyphicon glyphicon-menu-down"></span>
-      see details
-    </span>
-    <span ng-if="!file.collapse">
-      <span class="glyphicon glyphicon-menu-up"></span>
-      close details
-    </span>
-  </button>
-</h3>
-<div ng-controller="fileJunitStatusController"
-  class="form col-md-12"
-  ng-if="file.content"
-  uib-collapse="file.collapse">
-  <div class="form-group">
-    <label class="checkbox-inline">
-      <input type="checkbox" ng-change="filterjunit()" ng-model="input.passed" />
-      <span class="label label-success">Passed</span>
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" ng-change="filterjunit()" ng-model="input.failure" />
-      <span class="label label-danger">Failure</span>
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" ng-change="filterjunit()" ng-model="input.error" />
-      <span class="label label-default">Error</span>
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" ng-change="filterjunit()" ng-model="input.skipped" />
-      <span class="label label-warning">Skipped</span>
-    </label>
+<div ng-repeat="file in junit_files" ng-if="file.content">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        {{ file.name || 'Test'}}
+        <small>
+          (Duration: {{ file.content.time | msToSec }} sec)
+          <span class="label label-primary">{{file.content.total}} tests</span>
+          <span class="label label-success" ng-if="file.content.success">{{file.content.success}} success</span>
+          <span class="label label-warning" ng-if="file.content.skips">{{file.content.skips}} skipped</span>
+          <span class="label label-default" ng-if="file.content.errors">{{file.content.errors}} errors</span>
+          <span class="label label-danger" ng-if="file.content.failures">{{file.content.failures}} failures</span>
+        </small>
+        <button type="button" class="btn btn-default btn-xs pull-right" ng-click="file.collapse = !file.collapse">
+        <span ng-if="file.collapse">
+          <i class="glyphicon glyphicon-menu-down"></i>
+          see details
+        </span>
+          <span ng-if="!file.collapse">
+          <i class="glyphicon glyphicon-menu-up"></i>
+          close details
+        </span>
+        </button>
+      </h2>
+    </div>
   </div>
-
-  <table class="table table-striped">
-    <tr>
-      <th>Totals</th>
-      <th>Passes</th>
-      <th>Failures</th>
-      <th>Errors</th>
-      <th>Skips</th>
-      <th>Time</th>
-    </tr>
-    <tr>
-      <td><span class="label label-primary">{{file.content.total}}</span></td>
-      <td><span class="label label-success">{{file.content.total - file.content.failures - file.content.errors - file.content.skips}}</span></td>
-      <td><span class="label label-danger">{{file.content.failures || 0}}</span></td>
-      <td><span class="label label-default">{{file.content.errors || 0}}</span></td>
-      <td><span class="label label-warning">{{file.content.skips || 0}}</span></td>
-      <td>{{file.content.time}} sec</td>
-    </tr>
-  </table>
-
-  <table class="table table-striped table-hover table-results">
-    <thead>
-    <tr>
-      <th>Status</th>
-      <th>Classname</th>
-      <th>Name</th>
-      <th>Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat-start="testcase in bucket" ng-click="testcase.opened = !testcase.opened">
-      <td>
-        <span ng-if="testcase.result.action == 'skipped'" class="label label-warning">Skip</span>
-        <span ng-if="testcase.result.action == 'failure'" class="label label-danger">Failure</span>
-        <span ng-if="testcase.result.action == 'error'" class="label label-default">Error</span>
-        <span ng-if="testcase.result.action == 'passed'" class="label label-success">Pass</span>
-      </td>
-      <td>{{testcase.classname || testcase.name}}</td>
-      <td>{{testcase.name}}</td>
-      <td>{{testcase.time}} sec</td>
-    </tr>
-    <tr ng-repeat-end ng-show="testcase.opened" class="result-details"
-      ng-if="testcase.result.type || testcase.result.message || testcase.result.value">
-      <td colspan=3>
-        <p ng-if="testcase.result.type">
-          <b>Type:</b> {{ testcase.result.type}}
-        </p>
-        <p ng-if="testcase.result.message">
-          <b>Message:</b> {{ testcase.result.message}}
-        </p>
-        <p ng-if="testcase.result.value">
-          <b>Value:</b><pre>{{ testcase.result.value}}</pre>
-        </p>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div ng-controller="fileJunitStatusController" uib-collapse="file.collapse">
+    <div class="row" ng-hide="file.content.total === file.content.success">
+      <div class="col-xs-12 mb-3">
+        Filter:
+        <label class="checkbox-inline" ng-if="file.content.success">
+          <input type="checkbox" ng-change="filterjunit()" ng-model="input.passed"/>
+          <span class="label label-success">Passed</span>
+        </label>
+        <label class="checkbox-inline" ng-if="file.content.skips">
+          <input type="checkbox" ng-change="filterjunit()" ng-model="input.skipped"/>
+          <span class="label label-warning">Skipped</span>
+        </label>
+        <label class="checkbox-inline" ng-if="file.content.errors">
+          <input type="checkbox" ng-change="filterjunit()" ng-model="input.error"/>
+          <span class="label label-default">Error</span>
+        </label>
+        <label class="checkbox-inline" ng-if="file.content.failures">
+          <input type="checkbox" ng-change="filterjunit()" ng-model="input.failure"/>
+          <span class="label label-danger">Failure</span>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-condensed table-bordered">
+          <thead>
+          <tr>
+            <th>Status</th>
+            <th>Classname</th>
+            <th>Name</th>
+            <th class="text-right">Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat-start="testcase in bucket"
+              ng-class="{'warning':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error' }">
+            <td>
+              <span ng-if="testcase.action == 'skipped'" class="label label-warning">Skip</span>
+              <span ng-if="testcase.action == 'failure'" class="label label-danger">Failure</span>
+              <span ng-if="testcase.action == 'error'" class="label label-default">Error</span>
+              <span ng-if="testcase.action == 'passed'" class="label label-success">Pass</span>
+            </td>
+            <td>{{testcase.classname || testcase.name}}</td>
+            <td>{{testcase.name}}</td>
+            <td class="text-right">{{testcase.time}} ms</td>
+          </tr>
+          <tr ng-repeat-end
+              ng-if="testcase.type || testcase.message || testcase.value"
+              ng-class="{'warning':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error' }">
+            <td colspan=4>
+              <b>Type:</b> {{ testcase.type}} <br>
+              <b>Message:</b> {{ testcase.message}} <br>
+              <b>Value:</b>
+              <pre>{{ testcase.value}}</pre>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

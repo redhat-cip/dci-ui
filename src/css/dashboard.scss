@@ -10,6 +10,7 @@ $table-bg-hover                : $gray-lighter;
 @import "rcue/dist/css/rcue-additions";
 
 @import "ui-select/dist/select";
+@import "spacing";
 
 .glyphicon--button {
   cursor: pointer;
@@ -141,24 +142,6 @@ a.panel-heading {
     padding: 8px;
     button {
       margin: -7px;
-    }
-  }
-}
-
-.table-results {
-  tr.result-details {
-    cursor: auto;
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-
-  tr {
-    cursor: pointer;
-
-    & td[colspan="3"] {
-      border-top: none;
     }
   }
 }
