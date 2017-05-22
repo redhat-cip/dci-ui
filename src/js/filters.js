@@ -31,4 +31,12 @@ require("app")
         return amDateFormat(value, "dddd DD, MMMM h:mm:ss A");
       };
     }
+  ])
+  .filter("msToSec", [
+    "$filter",
+    function() {
+      return function(value) {
+        return Math.round(value / 1000);
+      };
+    }
   ]);
