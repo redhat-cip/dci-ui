@@ -1,14 +1,35 @@
-<div class="col-md-12" ng-if="job.files && !job.files.length">
-  <h3 class="bs-callout bs-callout-danger text-center">No file attached to this job.</h3>
+<div class="row">
+  <div class="col-xs-12" ng-if="job.files && !job.files.length">
+    <h3 class="bs-callout bs-callout-danger text-center">No file attached to this job.</h3>
+  </div>
 </div>
-<div class="col-md-12" ng-if="job.files.length">
-  <h2>Files list</h2>
-  <div class="downloads-list">
+<div class="row">
+  <div class="col-xs-12">
+    <div class="page-header">
+      <h2>Files list</h2>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <input type="search"
+           class="form-control"
+           ng-model="search.name"
+           placeholder="Filter By Name..."
+           style="border-bottom: 0">
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12" ng-if="job.files.length">
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-striped table-bordered table-hover">
         <tr>
-          <th>Filename</th><th>Size</th><th>mime-type</th><th>Download</th></tr>
-        <tr ng-repeat="download in job.files">
+          <th>Filename</th>
+          <th>Size</th>
+          <th>mime-type</th>
+          <th>Download</th>
+        </tr>
+        <tr ng-repeat="download in job.files | filter:search:strict">
           <td>{{ download.name }}</td>
           <td>{{ download.size }} Bytes</td>
           <td>{{ download.mime }}</td>
