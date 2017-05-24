@@ -19,7 +19,9 @@ No file uploaded.
     <table class="table table-striped" ng-if="file.mime == 'application/json'">
       <tr>
         <th>data</th>
-        <td class="col-md-10"><div json-formatter json="file.content" open="1"></div></td>
+        <td class="col-md-10">
+          <json-formatter open="1" json="file.content"></json-formatter>
+        </td>
       </tr>
     </table>
     <pre ng-if="file.mime != 'application/json'">{{file.content}}</pre>

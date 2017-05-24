@@ -24,8 +24,7 @@ require("angular-ui-router");
 require("ui-select");
 require("angular-ui-bootstrap");
 require("angular-moment");
-
-require("directives/jsonformatter");
+require("jsonformatter");
 
 module.exports = angular
   .module("app", [
