@@ -39,7 +39,9 @@
             <tbody>
               <tr ng-repeat="test in jobdef.tests | orderBy: '-name'">
                   <td>{{test.name}}</td>
-                  <td><div json-formatter json="test.data" open="1"></div></td>
+                  <td>
+                    <json-formatter open="1" json="test.data"></json-formatter>
+                  </td>
               </tr>
         </table>
       </td>

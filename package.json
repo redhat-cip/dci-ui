@@ -20,6 +20,7 @@
     "angular-ui-bootstrap": "2.5.0",
     "angular-ui-router": "0.4.2",
     "bootstrap-sass": "3.3.7",
+    "jsonformatter": "^0.6.0",
     "lodash": "4.13.1",
     "moment": "2.18.1",
     "rcue": "4.0.0-rc.1",

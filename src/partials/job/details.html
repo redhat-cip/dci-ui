@@ -21,7 +21,9 @@
         <tr><th>created at</th><td>{{ component.created_at | dciDate }}</td></tr>
         <tr>
           <th>data</th>
-          <td class="col-md-10"><div json-formatter json="component.data" open="1"></div></td>
+          <td class="col-md-10">
+            <json-formatter open="1" json="component.data"></json-formatter>
+          </td>
         </tr>
       </table>
     </div>
@@ -49,7 +51,9 @@
     <tr><th>updated at</th><td>{{ job.remoteci.updated_at | dciDate }}</td></tr>
     <tr>
       <th>data</th>
-      <td><div json-formatter json="job.remoteci.data" open="1"></div></td>
+      <td>
+        <json-formatter open="1" json="job.remoteci.data"></json-formatter>
+      </td>
     </tr>
   </table>
 </div>
@@ -106,7 +110,9 @@
       <tbody>
         <tr ng-repeat="test in jtests | orderBy: '-name'">
             <td>{{test.name}}</td>
-            <td><div json-formatter json="test.data" open="1"></div></td>
+            <td>
+              <json-formatter open="1" json="test.data"></json-formatter>
+            </td>
         </tr>
       </tbody>
     </table>
@@ -124,7 +130,9 @@
       <tbody>
         <tr ng-repeat="test in rtests | orderBy: '-name'">
             <td>{{test.name}}</td>
-            <td><div json-formatter json="test.data" open="1"></div></td>
+            <td>
+              <json-formatter open="1" json="test.data"></json-formatter>
+            </td>
         </tr>
       </tbody>
     </table>
