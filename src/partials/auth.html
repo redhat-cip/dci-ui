@@ -83,18 +83,18 @@
           Administration
         </a>
         <ul class="nav navbar-nav navbar-persistent">
-          <li ui-sref-active="active">
+          <li ng-class="{active: isUserPage()}">
             <a ui-sref="adminUsers">Users</a>
           </li>
-          <li ui-sref-active="active"
+          <li ng-class="{active: isTeamPage()}"
               ng-if="global_admin">
             <a ui-sref="adminTeams">Teams</a>
           </li>
-          <li ui-sref-active="active"
+          <li ng-class="{active: isTopicPage()}"
               ng-if="global_admin">
             <a ui-sref="adminTopics">Topics</a>
           </li>
-          <li ui-sref-active="active">
+          <li ng-class="{active: isRemoteCIPage()}">
             <a ui-sref="adminRemotecis">RemoteCIs</a>
           </li>
           <li ui-sref-active="active">

@@ -115,12 +115,30 @@ require("app")
       $scope.user = auth.user;
       $scope.isCollapsed = true;
 
+      $scope.isUserPage = function() {
+        return $state.includes("adminUsers") || $state.includes("adminUser");
+      };
+
+      $scope.isTeamPage = function() {
+        return $state.includes("adminTeams") || $state.includes("adminTeam");
+      };
+
+      $scope.isTopicPage = function() {
+        return $state.includes("adminTopics") || $state.includes("adminTopic");
+      };
+
+      $scope.isRemoteCIPage = function() {
+        return (
+          $state.includes("adminRemotecis") || $state.includes("adminRemoteci")
+        );
+      };
+
       $scope.isAdminPage = function() {
         return (
-          $state.includes("adminUsers") ||
-          $state.includes("adminTeams") ||
-          $state.includes("adminTopics") ||
-          $state.includes("adminRemotecis") ||
+          $scope.isUserPage() ||
+          $scope.isTeamPage() ||
+          $scope.isTopicPage() ||
+          $scope.isRemoteCIPage() ||
           $state.includes("adminAudits")
         );
       };
