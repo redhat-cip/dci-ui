@@ -65,12 +65,6 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("should test job Context page", function() {
-    var jobContextLink = element(by.css("#jobContextLink"));
-    browser.actions().mouseMove(jobContextLink).click().perform();
-    browser.waitForAngular();
-  });
-
   it("should test job Stack Details page", function() {
     var jobStackdetailsLink = element(by.css("#jobStackdetailsLink"));
     browser.actions().mouseMove(jobStackdetailsLink).click().perform();

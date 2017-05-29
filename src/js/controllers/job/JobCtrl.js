@@ -54,35 +54,10 @@ require("app").controller("JobCtrl", [
 
     api.jobs.files(job.id).then(function(files) {
       $scope.files = files;
+    });
 
-      $scope.text_files = _.remove(files, function(file) {
-        if (file.mime === "text/plain") {
-          api.files.content(file.id).then(function(res) {
-            file.content = res.data;
-          });
-        }
-        return file.mime === "text/plain";
-      });
-
-      $scope.junit_files = _.remove(files, function(file) {
-        file.collapse = false;
-        if (file.mime === "application/junit") {
-          api.files.content(file.id).then(function(res) {
-            file.content = res.data;
-            if (!file.content.testscases) {
-              return;
-            }
-            file.content.skips = _.reduce(
-              file.content.testscases,
-              function(sum, testcase) {
-                return sum + (testcase.result.action === "skipped" ? 1 : 0);
-              },
-              0
-            );
-          });
-        }
-        return file.mime === "application/junit";
-      });
+    api.jobs.results(job.id).then(function(data) {
+      $scope.junit_files = data;
     });
   }
 ]);

@@ -1,18 +1,18 @@
 <div ng-if="junit_files.length == 0">
   No JUnit result uploaded.
 </div>
-<div ng-repeat="file in junit_files" ng-if="file.content">
+<div ng-repeat="file in junit_files">
   <div class="row">
     <div class="col-xs-12">
       <h2 class="page-header">
         {{ file.name || 'Test'}}
         <small>
-          (Duration: {{ file.content.time | msToSec }} sec)
-          <span class="label label-primary">{{file.content.total}} tests</span>
-          <span class="label label-success" ng-if="file.content.success">{{file.content.success}} success</span>
-          <span class="label label-warning" ng-if="file.content.skips">{{file.content.skips}} skipped</span>
-          <span class="label label-default" ng-if="file.content.errors">{{file.content.errors}} errors</span>
-          <span class="label label-danger" ng-if="file.content.failures">{{file.content.failures}} failures</span>
+          (Duration: {{ file.time | msToSec }} sec)
+          <span class="label label-primary">{{file.total}} tests</span>
+          <span class="label label-success" ng-if="file.success">{{file.success}} success</span>
+          <span class="label label-warning" ng-if="file.skips">{{file.skips}} skipped</span>
+          <span class="label label-default" ng-if="file.errors">{{file.errors}} errors</span>
+          <span class="label label-danger" ng-if="file.failures">{{file.failures}} failures</span>
         </small>
         <button type="button" class="btn btn-default btn-xs pull-right" ng-click="file.collapse = !file.collapse">
         <span ng-if="file.collapse">
@@ -28,22 +28,22 @@
     </div>
   </div>
   <div ng-controller="fileJunitStatusController" uib-collapse="file.collapse">
-    <div class="row" ng-hide="file.content.total === file.content.success">
+    <div class="row" ng-hide="file.total === file.success">
       <div class="col-xs-12 mb-3">
         Filter:
-        <label class="checkbox-inline" ng-if="file.content.success">
+        <label class="checkbox-inline" ng-if="file.success">
           <input type="checkbox" ng-change="filterjunit()" ng-model="input.passed"/>
           <span class="label label-success">Passed</span>
         </label>
-        <label class="checkbox-inline" ng-if="file.content.skips">
+        <label class="checkbox-inline" ng-if="file.skips">
           <input type="checkbox" ng-change="filterjunit()" ng-model="input.skipped"/>
           <span class="label label-warning">Skipped</span>
         </label>
-        <label class="checkbox-inline" ng-if="file.content.errors">
+        <label class="checkbox-inline" ng-if="file.errors">
           <input type="checkbox" ng-change="filterjunit()" ng-model="input.error"/>
           <span class="label label-default">Error</span>
         </label>
-        <label class="checkbox-inline" ng-if="file.content.failures">
+        <label class="checkbox-inline" ng-if="file.failures">
           <input type="checkbox" ng-change="filterjunit()" ng-model="input.failure"/>
           <span class="label label-danger">Failure</span>
         </label>

@@ -149,7 +149,6 @@ require("app")
           $state.includes("job.logs") ||
           $state.includes("job.details") ||
           $state.includes("job.edit") ||
-          $state.includes("job.context") ||
           $state.includes("job.stackdetails") ||
           $state.includes("job.issues") ||
           $state.includes("job.files")
