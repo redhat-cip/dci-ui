@@ -27,14 +27,14 @@ function GlobalStatusCtrl() {
 
   this.$onInit = function() {
     var topicsOrder = {
-      OSP8: 1,
-      OSP9: 2,
+      OSP12: 1,
+      OSP11: 2,
       OSP10: 3,
-      OSP11: 4,
-      OSP12: 5,
-      "RDO-Newton": 6,
+      OSP9: 4,
+      OSP8: 5,
+      "RDO-Pike": 6,
       "RDO-Ocata": 7,
-      "RDO-Pike": 8
+      "RDO-Newton": 8
     };
     _.each($ctrl.topics, function(topic) {
       topic.success = 0;

@@ -136,13 +136,13 @@ describe("global status component", function() {
   );
 
   it("should order topic", function() {
-    expect(component.topics[0].name).toBe("OSP8");
-    expect(component.topics[1].name).toBe("OSP9");
+    expect(component.topics[0].name).toBe("OSP9");
+    expect(component.topics[1].name).toBe("OSP8");
   });
 
   it("should computes job percentage errors per topic", function() {
-    expect(component.topics[0].percentageErrors).toBe(50);
-    expect(component.topics[1].percentageErrors).toBe(25);
+    expect(component.topics[0].percentageErrors).toBe(25);
+    expect(component.topics[1].percentageErrors).toBe(50);
   });
 
   it("getJobStatusClass", function() {
