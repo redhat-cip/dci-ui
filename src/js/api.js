@@ -33,7 +33,8 @@ require("app").factory("api", [
         "components",
         "jobdefinitions",
         "audits",
-        "topics"
+        "topics",
+        "metrics"
       ]
     };
 
@@ -356,6 +357,12 @@ require("app").factory("api", [
       return $http
         .post(this.url, { pattern: pattern })
         .then(_.property("data"));
+    };
+
+    /*                                  METRICS                                */
+    api.metrics.topics = function() {
+      var url = urlize(this.url, "topics/");
+      return $http.get(url).then(_.property("data.topics"));
     };
 
     return api;

@@ -33,7 +33,7 @@ require("app")
         "user",
         "userStatus",
         function($q, user, status) {
-          var apiURL = new RegExp("api\/");
+          var apiURL = new RegExp("api/");
 
           return {
             request: function(conf) {
