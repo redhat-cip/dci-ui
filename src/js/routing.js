@@ -200,7 +200,8 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
+          template:
+            '<admin-users users="$resolve.users" teams="$resolve.teams"></admin-users>',
           resolve: {
             users: [
               "api",
@@ -221,7 +222,8 @@ require("app")
         .state("adminUser", {
           parent: "authAdmin",
           url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
+          template:
+            '<admin-user-edit user="$resolve.user" teams="$resolve.teams"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -272,7 +274,8 @@ require("app")
         .state("adminRemotecis", {
           parent: "authAdmin",
           url: "/admin/remotecis",
-          template: '<admin-remotecis remotecis="$resolve.remotecis"></admin-remotecis>',
+          template:
+            '<admin-remotecis remotecis="$resolve.remotecis"></admin-remotecis>',
           resolve: {
             remotecis: [
               "api",
@@ -286,7 +289,8 @@ require("app")
         .state("adminRemoteci", {
           parent: "authAdmin",
           url: "/admin/remotecis/:id",
-          template: '<admin-remoteci-edit remoteci="$resolve.remoteci"></admin-remoteci-edit>',
+          template:
+            '<admin-remoteci-edit remoteci="$resolve.remoteci"></admin-remoteci-edit>',
           resolve: {
             remoteci: [
               "$stateParams",
@@ -315,7 +319,8 @@ require("app")
         .state("adminTopic", {
           parent: "authAdmin",
           url: "/admin/topics/:id",
-          template: '<admin-topic-edit topic="$resolve.topic" teams="$resolve.teams" topic-teams="$resolve.topicTeams"></admin-topic-edit>',
+          template:
+            '<admin-topic-edit topic="$resolve.topic" teams="$resolve.teams" topic-teams="$resolve.topicTeams"></admin-topic-edit>',
           resolve: {
             topic: [
               "$stateParams",
@@ -352,6 +357,20 @@ require("app")
               "conf",
               function(api) {
                 return api.audits.list(null, true);
+              }
+            ]
+          }
+        })
+        .state("okr", {
+          parent: "authAdmin",
+          url: "/okr",
+          template: '<dci-okr topics="$resolve.topics"></dci-okr>',
+          resolve: {
+            topics: [
+              "api",
+              "conf",
+              function(api) {
+                return api.metrics.topics();
               }
             ]
           }
