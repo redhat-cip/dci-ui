@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+  .axis--x path {
+    display: none;
+  }
+
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+
+</style>
+<svg width="960" height="500"></svg>
+<script src="//d3js.org/d3.v4.min.js"></script>
+<script>
+
+  var svg = d3.select("svg"),
+    margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = svg.attr("width") - margin.left - margin.right,
+    height = svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+  var x = d3.scaleTime().range([0, width]),
+    y = d3.scaleLinear().range([height, 0]),
+    z = d3.scaleOrdinal(d3.schemeCategory10);
+
+  var line = d3.line()
+    .curve(d3.curveMonotoneX)
+    .x(function(d) {
+      return x(d.date);
+    })
+    .y(function(d) {
+      return y(d.time);
+    });
+
+  function cleanData(data) {
+    var parseTime = d3.timeParse("%Y-%m-%d");
+
+    data.forEach(function(d) {
+      d.date = parseTime(d.date);
+      d.time = parseFloat(d.time || 0) / 24
+    });
+
+    return data
+      .sort(function(a, b) {
+        return a.date - b.date;
+      })
+      .filter(function(e) {
+        return e.time !== 0;
+      });
+  }
+
+  d3.json("3.json", function(error, data) {
+    data = cleanData(data);
+    var topicsDict = {};
+    data.map(function(d) {
+      topicsDict[d.topic] = (topicsDict[d.topic] || []);
+      topicsDict[d.topic].push(d);
+    });
+    var topics = [];
+    Object.keys(topicsDict).map(function(t) {
+      topics.push({
+        id: t,
+        values: topicsDict[t]
+      })
+    });
+
+    x.domain(d3.extent(data, function(d) {
+      return d.date;
+    }));
+    var max = d3.max(data, function(d) {
+      return d.time;
+    });
+    y.domain([0, max]);
+
+    z.domain(topics.map(function(c) {
+      return c.id;
+    }));
+
+    g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+
+    g.append("g")
+      .call(d3.axisLeft(y))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", "-3em")
+      .attr("fill", "#000")
+      .text("number of days before first run");
+
+    var topic = g.selectAll(".topic")
+      .data(topics)
+      .enter()
+      .append("g")
+      .attr("class", function(d) {
+        return "topic topic-" + d.id
+      });
+
+    g.selectAll(".circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", function(d) {
+        return "circle-" + d.topic
+      })
+      .attr("r", 3)
+      .attr("cx", function(d) {
+        return x(d.date);
+      })
+      .attr("cy", function(d) {
+        return y(d.time);
+      })
+      .style("fill", function(d) {
+        return z(d.topic);
+      });
+
+    topic.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) {
+        return line(d.values);
+      })
+      .style("stroke", function(d) {
+        return z(d.id);
+      });
+
+    var legend = svg.append("g")
+      .attr("class", "legend")
+      .attr("height", 100)
+      .attr("width", 100)
+      .attr('transform', 'translate(-20,50)');
+
+
+    legend.selectAll('rect')
+      .data(topics)
+      .enter()
+      .append("rect")
+      .attr("x", width - 65)
+      .attr("y", function(d, i) {
+        return i * 20;
+      })
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", function(d) {
+        return z(d.id);
+      });
+
+    legend.selectAll('text')
+      .data(topics)
+      .enter()
+      .append("text")
+      .attr("x", width - 52)
+      .attr("y", function(d, i) {
+        return i * 20 + 9;
+      })
+      .attr("font-size", "0.7em")
+      .text(function(d) {
+        meanBefore1Day(d.values)
+        return d.id + ' ' + meanBefore1Day(d.values) + '% before one day';
+      })
+      .on("click", function(d) {
+        var selectedTopic = d3.select('.topic-' + d.id);
+        var opacity = d3.selectAll('.topic-' + d.id).style('opacity') === "1" ? "0" : "1";
+        selectedTopic.style('opacity', opacity);
+        d3.selectAll('.circle-' + d.id).style('opacity', opacity);
+      });
+
+    function meanBefore1Day(data) {
+      var count = 0;
+      var numberBefore1Day = 0;
+      data.forEach(function(d) {
+        count += 1;
+        var oneDay = 1;
+        if (d.time < oneDay) {
+                numberBefore1Day +=1
+        }
+      });
+      return Math.round(numberBefore1Day*100/count)
+    }
+
+  });
+</script>

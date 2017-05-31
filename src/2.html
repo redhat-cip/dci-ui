@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+
+  circle {
+    fill: steelblue;
+  }
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var parseTime = d3.timeParse("%Y-%m-%d");
+
+  var x = d3.scaleTime().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+
+  var valueline = d3.line()
+    .curve(d3.curveMonotoneX)
+    .x(function(d) {
+      return x(d.x);
+    })
+    .y(function(d) {
+      return y(d.y);
+    });
+
+  var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.json("2.json", function(error, data) {
+    data.forEach(function(d) {
+      d.x = parseTime(d.x);
+      d.y = parseFloat(d.y || 0) / 24
+    });
+
+    data = data
+      .sort(function(a, b) {
+        return a.x - b.x;
+      })
+      .filter(function(e) {
+        return e.y !== 0;
+      });
+
+    x.domain(d3.extent(data, function(d) {
+      return d.x;
+    }));
+
+
+
+    y.domain([0, d3.max(data, function(d) {
+      return d.y;
+    })]);
+
+    svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+
+    svg.selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("r", 5)
+      .attr("cx", function(d) {
+        return x(d.x);
+      })
+      .attr("cy", function(d) {
+        return y(d.y);
+      });
+
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    svg.append("g")
+      .call(d3.axisLeft(y))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", "-3em")
+      .attr("fill", "#000")
+      .text("number of days before first run");
+
+  });
+
+</script>
+</body>
