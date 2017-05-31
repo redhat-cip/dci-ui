@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h1>Okr</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 col-md-3 col-lg-1"
+         ng-repeat="metric in $ctrl.metrics"
+         ng-click="$ctrl.drawTopic(metric.topic)">
+      <div class="card-pf card-pf-aggregate-status"
+           ng-class="{
+             'card-pf-success':   metric.percentageTested >= 66,
+             'card-pf-warning': metric.percentageTested >= 33 && metric.percentageTested < 66,
+             'card-pf-danger': metric.percentageTested < 33
+           }">
+        <h2 class="card-pf-title">
+          {{metric.topic}}
+        </h2>
+        <div class="card-pf-body">
+          <p>
+            {{metric.percentageTested}}% of the puddles tested ({{metric.percentageBefore2days}}% before two days)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div id="topicsOkr"></div>
+    </div>
+  </div>
+</div>
