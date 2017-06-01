@@ -17,7 +17,7 @@
 require("app").controller("fileJunitStatusController", [
   "$scope",
   function($scope) {
-    $scope.bucket = $scope.file.content.testscases;
+    $scope.bucket = $scope.file.testscases;
     $scope.input = {
       passed: false,
       skipped: false,
@@ -32,13 +32,11 @@ require("app").controller("fileJunitStatusController", [
         $scope.input.failure ||
         $scope.input.error
       ) {
-        $scope.bucket = _.filter($scope.file.content.testscases, function(
-          testcase
-        ) {
+        $scope.bucket = _.filter($scope.file.testscases, function(testcase) {
           return $scope.input[testcase.action];
         });
       } else {
-        $scope.bucket = $scope.file.content.testscases;
+        $scope.bucket = $scope.file.testscases;
       }
     };
   }
