@@ -1,7 +1,7 @@
 <div ng-if="junit_files.length == 0">
   No JUnit result uploaded.
 </div>
-<div ng-repeat="file in junit_files">
+<div ng-repeat="file in junit_files | orderBy:'name'">
   <div class="row">
     <div class="col-xs-12">
       <h2 class="page-header">

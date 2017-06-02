@@ -14,7 +14,7 @@
     <div class="title">
       Tests
     </div>
-    <div class="text-muted" ng-repeat="test in job.results">
+    <div class="text-muted" ng-repeat="test in job.results | orderBy:'name'">
       {{test.name}} :
       <span class="label label-success">{{test.success}}</span>
       <span class="label label-warning">{{test.skips}}</span>
