@@ -25,17 +25,11 @@
     </ul>
     <ul class="nav navbar-nav navbar-primary"
         ng-class="{'persistent-secondary': isAdminPage() || isJobPage()}">
-      <li ui-sref-active="active" ng-if="!isJobPage()">
+      <li ng-class="{active: isJobsPage()}">
         <a ui-sref="jobs">
           Jobs
         </a>
-      </li>
-      <li ng-class="{active: isJobPage()}"
-          ng-if="isJobPage()">
-        <a ui-sref="job.results">
-          Jobs
-        </a>
-        <ul class="nav navbar-nav navbar-persistent">
+        <ul class="nav navbar-nav navbar-persistent" ng-if="isJobPage()">
           <li ui-sref-active="active">
             <a id="jobResultsLink" ui-sref="job.results">Results</a>
           </li>
