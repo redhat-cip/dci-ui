@@ -33,12 +33,6 @@ require("app").directive("dciJob", [
 
         job.processStatus(job.status);
 
-        scope.recheck = function() {
-          api.jobs.recheck(job.id).then(function(job) {
-            $state.go("job.results", { id: job.id });
-          });
-        };
-
         scope.deleteJob = function() {
           var deleteJobModal = $uibModal.open({
             component: "confirmDestructiveAction",

@@ -156,9 +156,9 @@ require("app").factory("api", [
       return $http.get(url).then(_.property("data.tests"));
     };
     api.remotecis.refreshApiSecret = function(remoteci) {
-      var url = urlize(api.remotecis.url, remoteci.id, 'api_secret');
-      var headers = {'headers': {'If-Match': remoteci.etag}};
-      return $http.put(url, {}, headers).then(_.property('data'));
+      var url = urlize(api.remotecis.url, remoteci.id, "api_secret");
+      var headers = { headers: { "If-Match": remoteci.etag } };
+      return $http.put(url, {}, headers).then(_.property("data"));
     };
 
     /*                                  TEAMS                                   */
@@ -233,10 +233,6 @@ require("app").factory("api", [
     api.jobs.embed = "remoteci,jobdefinition,jobdefinition.tests,results";
     api.jobs.update.parse = _.partialRight(_.pick, ["status", "comment"]);
 
-    api.jobs.recheck = function(id) {
-      var url = urlize(this.url, id, "recheck");
-      return $http.post(url).then(_.property("data.job"));
-    };
     api.jobs.results = function(job) {
       var url = urlize(this.url, job, "results");
       return $http.get(url).then(_.property("data.results"));
