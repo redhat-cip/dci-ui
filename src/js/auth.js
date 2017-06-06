@@ -143,6 +143,10 @@ require("app")
         );
       };
 
+      $scope.isJobsPage = function() {
+        return $state.includes("jobs") || $scope.isJobPage();
+      };
+
       $scope.isJobPage = function() {
         return (
           $state.includes("job.results") ||
