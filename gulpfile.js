@@ -25,8 +25,8 @@ const through = require("through2");
 const sourceStream = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 
-const config = require("./config");
-
+const host = '127.0.0.1';
+const port = 8000;
 const destination = "./static";
 const source = "./src";
 const files = {
@@ -131,9 +131,8 @@ gulp.task("files", function() {
 gulp.task("build", ["js", "css", "fonts", "images", "html", "files"]);
 
 function writeConfigFile(version) {
-  const apiURL = config.api || "http://localhost:5000";
   const template = `{
-  "apiURL": "${apiURL}",
+  "apiURL": "http://${host}:5000",
   "version": "${version}"
 }`;
   if (!fs.existsSync(destination)) {
@@ -164,7 +163,7 @@ gulp.task("serve:dev", ["clean", "build:dev", "watch"], function() {
   $.connect.server({
     root: "static",
     livereload: true,
-    port: config.port
+    port
   });
 });
 
@@ -179,7 +178,7 @@ gulp.task("serve", ["clean", "build:pkg"], function() {
   $.connect.server({
     root: "static",
     livereload: false,
-    port: config.port
+    port
   });
 });
 
@@ -190,8 +189,8 @@ gulp.task("e2e:webdriver_manager_update", $.protractor.webdriver_update);
 gulp.task("test:e2e", ["build", "e2e:webdriver_manager_update"], function() {
   const webserver = gulp.src(destination).pipe(
     $.webserver({
-      host: "localhost",
-      port: 8000
+      host,
+      port
     })
   );
 
@@ -200,7 +199,7 @@ gulp.task("test:e2e", ["build", "e2e:webdriver_manager_update"], function() {
     .pipe(
       $.protractor.protractor({
         configFile: "test/e2e/protractor.conf.js",
-        args: ["--baseUrl", "http://127.0.0.1:8000"]
+        args: ["--baseUrl", `http://${host}:${port}`]
       })
     )
     .on("error", function(err) {
