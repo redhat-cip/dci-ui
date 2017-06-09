@@ -12,20 +12,24 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('login controller', function() {
+describe("login controller", function() {
   var $controller;
 
-  beforeEach(inject(function(_$controller_){
-    $controller = _$controller_;
-  }));
+  beforeEach(
+    inject(function(_$controller_) {
+      $controller = _$controller_;
+    })
+  );
 
-  it('should authenticate the user', function() {
+  it("should authenticate the user", function() {
     var $scope = {};
-    $controller('LoginCtrl', { $scope: $scope });
+    $controller("LoginCtrl", { $scope: $scope });
     $httpBackend
-      .expectGET('https://api.example.org/api/v1/users?where=name:test&embed=team')
+      .expectGET(
+        "https://api.example.org/api/v1/users?where=name:test&embed=team,role"
+      )
       .respond();
-    $scope.authenticate({username: 'test', password: 'password'});
+    $scope.authenticate({ username: "test", password: "password" });
     $httpBackend.flush();
   });
 });

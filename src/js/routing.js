@@ -71,7 +71,7 @@ require("app")
               "auth",
               "$q",
               function(auth, $q) {
-                if (!auth.isAdminInTeam()) {
+                if (!auth.isAdmin() && !auth.isSuperAdmin()) {
                   return $q.reject({ status: 401 });
                 }
               }

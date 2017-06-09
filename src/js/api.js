@@ -175,7 +175,7 @@ require("app").factory("api", [
     api.users.getByName = function(name, withoutTeam) {
       var conf = _.assign(
         { where: "name:" + name },
-        withoutTeam ? {} : { embed: "team" }
+        withoutTeam ? {} : { embed: "team,role" }
       );
       return $http
         .get(urlize(this.url), { params: conf })

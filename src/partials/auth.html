@@ -69,7 +69,7 @@
         </a>
       </li>
       <li ng-class="{active: isAdminPage()}"
-          ng-if="admin || global_admin">
+          ng-if="admin || super_admin">
         <a ui-sref="adminUsers">
           Administration
         </a>
@@ -78,11 +78,11 @@
             <a ui-sref="adminUsers">Users</a>
           </li>
           <li ng-class="{active: isTeamPage()}"
-              ng-if="global_admin">
+              ng-if="super_admin">
             <a ui-sref="adminTeams">Teams</a>
           </li>
           <li ng-class="{active: isTopicPage()}"
-              ng-if="global_admin">
+              ng-if="super_admin">
             <a ui-sref="adminTopics">Topics</a>
           </li>
           <li ng-class="{active: isRemoteCIPage()}">

@@ -87,12 +87,12 @@ require("app")
           return user.status === status.AUTHENTICATED;
         },
 
-        isAdminInTeam: function() {
-          return user.role === "admin";
+        isAdmin: function() {
+          return user.role.label === "ADMIN";
         },
 
-        isAdmin: function() {
-          return user.team.name === "admin";
+        isSuperAdmin: function() {
+          return user.role.label === "SUPER_ADMIN";
         },
 
         logout: function() {
@@ -106,14 +106,10 @@ require("app")
     "$scope",
     "$state",
     "auth",
-    "api",
-    function($scope, $state, auth, api) {
-      // currently just create roles and user when admin
-      $scope.version = api.config.version;
-      $scope.admin = auth.isAdminInTeam();
-      $scope.global_admin = auth.isAdmin();
+    function($scope, $state, auth) {
+      $scope.admin = auth.isAdmin();
+      $scope.super_admin = auth.isSuperAdmin();
       $scope.user = auth.user;
-      $scope.isCollapsed = true;
 
       $scope.isUserPage = function() {
         return $state.includes("adminUsers") || $state.includes("adminUser");
