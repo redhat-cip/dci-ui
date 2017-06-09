@@ -200,21 +200,13 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template:
-            '<admin-users users="$resolve.users" roles="$resolve.roles"></admin-users>',
+          template: '<admin-users users="$resolve.users"></admin-users>',
           resolve: {
             users: [
               "api",
               "conf",
               function(api) {
                 return api.users.list(null, true);
-              }
-            ],
-            roles: [
-              "api",
-              "conf",
-              function(api) {
-                return api.roles.list(null, true);
               }
             ]
           }
