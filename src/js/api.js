@@ -185,6 +185,8 @@ require("app").factory("api", [
     };
     api.users.update.parse = _.partialRight(_.pick, [
       "name",
+      "fullname",
+      "email",
       "team_id",
       "password",
       "role_id"

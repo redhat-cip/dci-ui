@@ -18,9 +18,7 @@ require("app").component("adminUserEdit", {
   templateUrl: "/partials/admin/users/userEdit.html",
   controller: ["$state", "api", "messages", adminUserCtrl],
   bindings: {
-    user: "=",
-    teams: "=",
-    roles: "="
+    user: "="
   }
 });
 
