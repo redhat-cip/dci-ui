@@ -25,6 +25,8 @@ var users = [
     etag: "59b891ba3e97763da40b797c1638ee7f",
     id: "4bdddeb3-ce9f-4590-b715-e1b21ed257d3",
     name: "admin",
+    fullname: "Super Admin",
+    email: "admin@example.org",
     role: {
       created_at: "2017-04-25T08:33:18.394231",
       description: "Admin of the platform",
@@ -57,6 +59,8 @@ var users = [
     etag: "7f59b891ba3e97763da40b797c1638ee",
     id: "ac654db0-ce9f-4c3c-b715-c4bdddeb7e61",
     name: "user",
+    fullname: "Simple User",
+    email: "user@example.org",
     role: {
       created_at: "2017-04-25T08:33:18.393274",
       description: "Regular User",
@@ -127,18 +131,6 @@ var roles = [
     user_id: null
   },
   {
-    created_at: "2017-04-25T08:33:18.393274",
-    description: "Regular User",
-    etag: "37e8b8e705d807639fe05da1fbfc2276",
-    id: "5695bf02-771d-4720-b0e9-82b4e4cb2479",
-    label: "USER",
-    name: "User",
-    state: "active",
-    team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
-    updated_at: "2017-04-25T08:33:18.393283",
-    user_id: null
-  },
-  {
     created_at: "2017-04-25T08:33:18.391924",
     description: "Admin of a team",
     etag: "b2b910bdbe51c649f299067e55131b94",
@@ -149,8 +141,26 @@ var roles = [
     team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
     updated_at: "2017-04-25T08:33:18.391935",
     user_id: null
+  },
+  {
+    created_at: "2017-04-25T08:33:18.393274",
+    description: "Regular User",
+    etag: "37e8b8e705d807639fe05da1fbfc2276",
+    id: "5695bf02-771d-4720-b0e9-82b4e4cb2479",
+    label: "USER",
+    name: "User",
+    state: "active",
+    team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+    updated_at: "2017-04-25T08:33:18.393283",
+    user_id: null
   }
 ];
+
+var rolesByName = {
+  SUPER_ADMIN: roles[0],
+  ADMIN: roles[1],
+  USER: roles[2]
+};
 
 var topics = [
   {

@@ -14,7 +14,7 @@
     <ul class="nav navbar-nav navbar-utility">
       <li>
         <a href="#">
-          <i class="pficon pficon-user"></i> {{ user.name }} - {{ user.team.name }}
+          <i class="pficon pficon-user"></i> {{ user.fullname || user.name }} - {{ user.team.name }}
         </a>
       </li>
       <li>
