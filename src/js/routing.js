@@ -142,45 +142,17 @@ require("app")
         })
         .state("adminUserCreate", {
           url: "/admin/users/create",
-          template:
-            '<admin-user-create teams="$resolve.teams" roles="$resolve.roles"></admin-user-create>',
-          resolve: {
-            teams: [
-              "api",
-              function(api) {
-                return api.teams.list(null, true);
-              }
-            ],
-            roles: [
-              "api",
-              function(api) {
-                return api.roles.list(null, true);
-              }
-            ]
-          }
+          template: "<admin-user-create></admin-user-create>"
         })
         .state("adminUserEdit", {
           url: "/admin/users/:id",
-          template:
-            '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
+          template: '<admin-user-edit user="$resolve.user"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
               "api",
               function($stateParams, api) {
                 return api.users.get($stateParams.id);
-              }
-            ],
-            teams: [
-              "api",
-              function(api) {
-                return api.teams.list(null, true);
-              }
-            ],
-            roles: [
-              "api",
-              function(api) {
-                return api.roles.list(null, true);
               }
             ]
           }
