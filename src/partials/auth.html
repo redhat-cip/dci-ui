@@ -13,9 +13,7 @@
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-utility">
       <li>
-        <a href="#">
-          <i class="pficon pficon-user"></i> {{ user.name }} - {{ user.team.name }}
-        </a>
+        <i class="pficon pficon-user"></i> {{ user.fullname }} ({{ user.name }}) - {{ user.team.name }}
       </li>
       <li>
         <a href="#" ng-click="logout()">

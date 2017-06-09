@@ -12,28 +12,21 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin user create component', function() {
+describe("admin user create component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminUserCreate', null, {
-      teams: teams,
-      roles: roles
-    });
-    component.$onInit();
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminUserCreate", null, null);
+      component.$onInit();
+    })
+  );
 
-  it('should init scope with props', function() {
-    expect(component.teams.length).toBe(2);
-    expect(component.roles.length).toBe(3);
-  });
-
-  it('should init scope with empty user', function() {
-    expect(component.user.name).toBe('');
-    expect(component.user.password).toBe('');
+  it("should init scope with empty user", function() {
+    expect(component.user.name).toBe("");
+    expect(component.user.fullname).toBe("");
+    expect(component.user.email).toBe("");
+    expect(component.user.password).toBe("");
     expect(component.user.team_id).toBe(null);
-  });
-  it('should init with role user', function() {
-    expect(component.user.role_id).toBe('5695bf02-771d-4720-b0e9-82b4e4cb2479');
   });
 });
