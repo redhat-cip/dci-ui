@@ -27,6 +27,18 @@ var users = [
     name: "admin",
     fullname: "Super Admin",
     email: "admin@example.org",
+    role: {
+      created_at: "2017-04-25T08:33:18.394231",
+      description: "Admin of the platform",
+      etag: "169b20cd33997a518edb55b53c70ee79",
+      id: "63eb47d5-0395-4cbb-ab19-738a2f7633d9",
+      label: "SUPER_ADMIN",
+      name: "Super Admin",
+      state: "active",
+      team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+      updated_at: "2017-04-25T08:33:18.394237",
+      user_id: null
+    },
     role_id: "63eb47d5-0395-4cbb-ab19-738a2f7633d9",
     state: "active",
     team: {
@@ -49,6 +61,18 @@ var users = [
     name: "user",
     fullname: "Simple User",
     email: "user@example.org",
+    role: {
+      created_at: "2017-04-25T08:33:18.393274",
+      description: "Regular User",
+      etag: "37e8b8e705d807639fe05da1fbfc2276",
+      id: "5695bf02-771d-4720-b0e9-82b4e4cb2479",
+      label: "USER",
+      name: "User",
+      state: "active",
+      team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
+      updated_at: "2017-04-25T08:33:18.393283",
+      user_id: null
+    },
     role_id: "5695bf02-771d-4720-b0e9-82b4e4cb2479",
     state: "active",
     team: {
