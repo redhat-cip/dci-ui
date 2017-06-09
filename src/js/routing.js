@@ -200,7 +200,7 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
+          template: '<admin-users users="$resolve.users"></admin-users>',
           resolve: {
             users: [
               "api",
@@ -208,27 +208,18 @@ require("app")
               function(api) {
                 return api.users.list(null, true);
               }
-            ],
-            teams: [
-              "api",
-              "conf",
-              function(api) {
-                return api.teams.list(null, true);
-              }
-            ],
-            roles: [
-              "api",
-              "conf",
-              function(api) {
-                return api.roles.list(null, true);
-              }
             ]
           }
         })
-        .state("adminUser", {
+        .state("adminUserCreate", {
           parent: "authAdmin",
-          url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
+          url: "/admin/users/create",
+          template: "<admin-user-create></admin-user-create>"
+        })
+        .state("adminUserEdit", {
+          parent: "authAdmin",
+          url: "/admin/users/edit/:id",
+          template: '<admin-user-edit user="$resolve.user"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -236,20 +227,6 @@ require("app")
               "conf",
               function($stateParams, api) {
                 return api.users.get($stateParams.id);
-              }
-            ],
-            teams: [
-              "api",
-              "conf",
-              function(api) {
-                return api.teams.list(null, true);
-              }
-            ],
-            roles: [
-              "api",
-              "conf",
-              function(api) {
-                return api.roles.list(null, true);
               }
             ]
           }

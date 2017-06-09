@@ -12,32 +12,44 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin user edit component', function() {
+describe("admin user edit component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminUserEdit', null, {
-      user: admin,
-      teams: teams
-    });
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminUserEdit", null, {
+        user: admin
+      });
+    })
+  );
 
-  it('should init scope with prop user', function() {
-    expect(component.user.id).toBe('4bdddeb3-ce9f-4590-b715-e1b21ed257d3');
-    expect(component.user.name).toBe('admin');
+  it("should init scope with prop user", function() {
+    expect(component.user.id).toBe("4bdddeb3-ce9f-4590-b715-e1b21ed257d3");
+    expect(component.user.name).toBe("admin");
+    expect(component.user.fullname).toBe("Super Admin");
+    expect(component.user.email).toBe("admin@example.org");
   });
 
-  it('should init scope with prop teams', function() {
-    expect(component.teams.length).toBe(2);
-  });
-
-  it('should update user', function() {
-    component.user = {id: 1, name: 'foo', team_id: 1, role_id: 1, password: ''};
+  it("should update user", function() {
+    component.user = {
+      id: 1,
+      name: "foo",
+      fullname: "Foo",
+      email: "foo@example.org",
+      team_id: 1,
+      role_id: 1,
+      password: "password"
+    };
     $httpBackend
-      .expectPUT('https://api.example.org/api/v1/users/1', {name: 'foo', team_id: 1, role_id: 1, password: ''})
+      .expectPUT("https://api.example.org/api/v1/users/1", {
+        name: "foo",
+        fullname: "Foo",
+        email: "foo@example.org",
+        team_id: 1,
+        role_id: 1,
+        password: "password"
+      })
       .respond();
-    $httpBackend.whenGET('https://api.example.org/api/v1/users?embed=team').respond();
-    $httpBackend.whenGET('https://api.example.org/api/v1/teams').respond();
     component.update();
     $httpBackend.flush();
   });

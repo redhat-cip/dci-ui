@@ -25,9 +25,7 @@ require("app").component("adminUsers", {
     AdminUsersCtrl
   ],
   bindings: {
-    users: "=",
-    teams: "=",
-    roles: "="
+    users: "="
   }
 });
 
@@ -37,7 +35,11 @@ function AdminUsersCtrl($state, $uibModal, api, user, messages) {
   $ctrl.currentUser = user;
 
   $ctrl.editUser = function(user) {
-    $state.go("adminUser", { id: user.id });
+    $state.go("adminUserEdit", { id: user.id });
+  };
+
+  $ctrl.createUser = function() {
+    $state.go("adminUserCreate");
   };
 
   $ctrl.deleteUser = function(user) {
