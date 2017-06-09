@@ -171,7 +171,7 @@ require("app").factory("api", [
     ]);
 
     /*                                  USERS                                   */
-    api.users.embed = "team";
+    api.users.embed = "team,role";
     api.users.getByName = function(name, withoutTeam) {
       var conf = _.assign(
         { where: "name:" + name },

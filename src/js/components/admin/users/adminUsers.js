@@ -40,15 +40,6 @@ function AdminUsersCtrl($state, $uibModal, api, user, messages) {
     $state.go("adminUser", { id: user.id });
   };
 
-  $ctrl.getRoleName = function(role_id) {
-    for (var i = 0; i < $ctrl.roles.length; i++) {
-      var role = $ctrl.roles[i];
-      if (role.id === role_id) {
-        return role.name;
-      }
-    }
-  };
-
   $ctrl.deleteUser = function(user) {
     var userName = user.name;
     var deleteUserModal = $uibModal.open({
