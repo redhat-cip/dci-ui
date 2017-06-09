@@ -16,29 +16,19 @@
 
 require("app").component("adminUserCreate", {
   templateUrl: "/partials/admin/users/userCreate.html",
-  controller: ["$state", "api", "messages", adminUserCtrl],
-  bindings: {
-    teams: "=",
-    roles: "="
-  }
+  controller: ["$state", "api", "messages", adminUserCreateCtrl]
 });
 
-function adminUserCtrl($state, api, messages) {
+function adminUserCreateCtrl($state, api, messages) {
   var $ctrl = this;
 
   this.$onInit = function() {
-    var user_role_id = null;
-    for (var i = 0; i < $ctrl.roles.length; i++) {
-      var role = $ctrl.roles[i];
-      if (role.label === "USER") {
-        user_role_id = role.id;
-      }
-    }
     $ctrl.user = {
       name: "",
+      fullname: "",
+      email: "",
       password: "",
-      team_id: null,
-      role_id: user_role_id
+      team_id: null
     };
   };
 

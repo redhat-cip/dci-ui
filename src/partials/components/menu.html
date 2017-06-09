@@ -14,7 +14,7 @@
     <ul class="nav navbar-nav navbar-utility">
       <li>
         <a id="settingsLink" ui-sref="settings">
-          <i class="pficon pficon-user"></i> {{ $ctrl.user.name }} - {{ $ctrl.user.team.name }}
+          <i class="pficon pficon-user"></i> {{ $ctrl.user.fullname || $ctrl.user.name }} - {{ $ctrl.user.team.name }}
         </a>
       </li>
       <li>

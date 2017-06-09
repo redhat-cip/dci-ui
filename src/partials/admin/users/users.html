@@ -16,7 +16,9 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
           <tr>
-            <th>Username</th>
+            <th>Login</th>
+            <th>Full name</th>
+            <th>Email</th>
             <th>User ID</th>
             <th>Team ID</th>
             <th>Role</th>
@@ -36,6 +38,8 @@
                 {{user.name}}
               </a>
             </td>
+            <td>{{ user.fullname }}</td>
+            <td>{{ user.email }}</td>
             <td>{{ user.id }}</td>
             <td>{{ user.team.id }}</td>
             <td>{{ user.role.name }}</td>
