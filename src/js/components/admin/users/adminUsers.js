@@ -25,9 +25,7 @@ require("app").component("adminUsers", {
     AdminUsersCtrl
   ],
   bindings: {
-    users: "=",
-    teams: "=",
-    roles: "="
+    users: "="
   }
 });
 
