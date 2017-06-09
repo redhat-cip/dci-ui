@@ -37,7 +37,11 @@ function AdminUsersCtrl($state, $uibModal, api, user, messages) {
   $ctrl.currentUser = user;
 
   $ctrl.editUser = function(user) {
-    $state.go("adminUser", { id: user.id });
+    $state.go("adminUserEdit", { id: user.id });
+  };
+
+  $ctrl.createUser = function() {
+    $state.go("adminUserCreate");
   };
 
   $ctrl.getRoleName = function(role_id) {

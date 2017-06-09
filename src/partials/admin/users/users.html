@@ -1,9 +1,17 @@
 <div class="row">
   <div class="col-xs-12">
-    <div class="page-header">
-      <h1>Users</h1>
-    </div>
-
+    <h1 class="page-header">
+      Users
+      <button type="button"
+              class="pull-right btn btn-primary"
+              ng-click="$ctrl.createUser()">
+        create new user
+      </button>
+    </h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
     <div ng-if="$ctrl.users.length === 0">
       No user
     </div>
@@ -41,4 +49,3 @@
     </div>
   </div>
 </div>
-<admin-user-create teams="$ctrl.teams" roles="$ctrl.roles"></admin-user-create>

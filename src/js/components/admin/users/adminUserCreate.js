@@ -27,18 +27,12 @@ function adminUserCtrl($state, api, messages) {
   var $ctrl = this;
 
   this.$onInit = function() {
-    var user_role_id = null;
-    for (var i = 0; i < $ctrl.roles.length; i++) {
-      var role = $ctrl.roles[i];
-      if (role.label === "USER") {
-        user_role_id = role.id;
-      }
-    }
     $ctrl.user = {
       name: "",
+      fullname: "",
+      email: "",
       password: "",
-      team_id: null,
-      role_id: user_role_id
+      team_id: null
     };
   };
 
@@ -48,7 +42,7 @@ function adminUserCtrl($state, api, messages) {
       .create($ctrl.user)
       .then(function() {
         messages.alert("user " + userName + " created", "success");
-        $state.reload();
+        $state.go("adminUsers");
       })
       .catch(function(err) {
         messages.alert(
