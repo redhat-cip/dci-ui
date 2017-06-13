@@ -19,9 +19,11 @@ require("app").controller("ListComponentsCtrl", [
   "messages",
   "api",
   "topic",
-  function($scope, messages, api, topic) {
+  "auth",
+  function($scope, messages, api, topic, auth) {
     _.assign($scope, { objForm: {} });
 
+    $scope.auth = auth;
     $scope.topic = topic;
     $scope.create = function() {
       if ($scope.objForm.$invalid) {
