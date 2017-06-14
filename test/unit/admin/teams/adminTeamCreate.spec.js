@@ -12,16 +12,18 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin team create component', function() {
+describe("admin team create component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminTeamCreate');
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminTeamCreate");
+    })
+  );
 
-  it('should init scope with empty team', function() {
-    expect(component.team.name).toBe('');
-    expect(component.team.email).toBe('');
-    expect(component.team.notification).toBe(null);
+  it("should init scope with empty team", function() {
+    expect(component.team.name).toBe("");
+    expect(component.team.email).toBe("");
+    expect(component.team.notification).toBe(false);
   });
 });

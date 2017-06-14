@@ -25,7 +25,7 @@ function adminTeamCtrl($state, api, messages) {
   $ctrl.team = {
     name: "",
     email: "",
-    notification: null
+    notification: false
   };
 
   $ctrl.create = function() {
