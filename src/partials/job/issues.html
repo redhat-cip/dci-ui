@@ -8,14 +8,14 @@
     <h3 class="bs-callout bs-callout-danger text-center">No issue attached to this job.</h3>
   </div>
   <div ng-repeat="issue in job.issues" class=" col-md-12">
-      <h3>
-        <button class="btn btn-danger pull-right" ng-click="remove(job, issue)">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-        <a ng-href="{{issue.url}}">
+    <h3>
+      <button class="btn btn-danger pull-right" ng-click="remove(job, issue)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+      <a ng-href="{{issue.url}}">
         {{ issue.title|titlecase|point }}
-        </a>
-      </h3>
+      </a>
+    </h3>
     <table class="table">
       <tr>
         <th>Product</th>
@@ -46,9 +46,13 @@
   <h2 class="page-header col-md-12">Add an issue</h2>
   <form name="issueForm" ng-submit="submit()" class="col-md-12" novalidate>
     <div class="form-group">
-      <label for="issue-name" class="control-label">Issue URL</label>
-      <input type="url" class="form-control" id="issue-url" name="issue"
-                                                            ng-model="issue" required>
+      <label for="issue-url" class="control-label">Issue URL</label>
+      <input type="url"
+             class="form-control"
+             id="issue-url"
+             name="issue"
+             ng-model="issue"
+             required>
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>

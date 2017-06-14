@@ -19,6 +19,10 @@ require("app")
     "$scope",
     "api",
     function($scope, api) {
+      api.issues.list($scope.job.id).then(function(issues) {
+        $scope.job.issues = issues;
+      });
+
       $scope.submit = function() {
         api.issues.create($scope.job.id, $scope.issue).then(function(issues) {
           $scope.job.issues.push(_.last(issues));
