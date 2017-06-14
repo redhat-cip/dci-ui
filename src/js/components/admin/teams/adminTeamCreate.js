@@ -34,7 +34,7 @@ function adminTeamCtrl($state, api, messages) {
       .create($ctrl.team)
       .then(function() {
         messages.alert("team " + teamName + " created", "success");
-        $state.reload();
+        $state.go("adminTeams");
       })
       .catch(function(err) {
         messages.alert(

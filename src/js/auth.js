@@ -112,20 +112,34 @@ require("app")
       $scope.user = auth.user;
 
       $scope.isUserPage = function() {
-        return $state.includes("adminUsers") || $state.includes("adminUser");
+        return (
+          $state.includes("adminUsers") ||
+          $state.includes("adminUserCreate") ||
+          $state.includes("adminUserEdit")
+        );
       };
 
       $scope.isTeamPage = function() {
-        return $state.includes("adminTeams") || $state.includes("adminTeam");
+        return (
+          $state.includes("adminTeams") ||
+          $state.includes("adminTeamCreate") ||
+          $state.includes("adminTeamEdit")
+        );
       };
 
       $scope.isTopicPage = function() {
-        return $state.includes("adminTopics") || $state.includes("adminTopic");
+        return (
+          $state.includes("adminTopics") ||
+          $state.includes("adminTopicCreate") ||
+          $state.includes("adminTopicEdit")
+        );
       };
 
       $scope.isRemoteCIPage = function() {
         return (
-          $state.includes("adminRemotecis") || $state.includes("adminRemoteci")
+          $state.includes("adminRemotecis") ||
+          $state.includes("adminRemoteciCreate") ||
+          $state.includes("adminRemoteciEdit")
         );
       };
 

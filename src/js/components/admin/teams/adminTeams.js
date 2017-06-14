@@ -34,10 +34,6 @@ function AdminTeamsCtrl($state, $uibModal, api, user, messages) {
 
   $ctrl.currentTeam = user.team;
 
-  $ctrl.editTeam = function(team) {
-    $state.go("adminTeam", { id: team.id });
-  };
-
   $ctrl.deleteTeam = function(team) {
     var teamName = team.name;
     var deleteTeamModal = $uibModal.open({

@@ -25,10 +25,6 @@ require("app").component("adminRemotecis", {
 function AdminRemotecisCtrl($state, $uibModal, api, messages) {
   var $ctrl = this;
 
-  $ctrl.editRemoteci = function(remoteci) {
-    $state.go("adminRemoteci", { id: remoteci.id });
-  };
-
   $ctrl.toggleLockRemoteci = function(remoteci) {
     if (remoteci.state === "active") {
       remoteci.state = "inactive";

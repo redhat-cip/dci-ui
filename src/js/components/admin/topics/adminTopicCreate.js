@@ -32,7 +32,7 @@ function adminTopicCtrl($state, api, messages) {
       .create($ctrl.topic)
       .then(function() {
         messages.alert("topic " + topicName + " created", "success");
-        $state.reload();
+        $state.go("adminTopics");
       })
       .catch(function(err) {
         messages.alert(

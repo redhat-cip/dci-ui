@@ -32,7 +32,7 @@ function adminRemoteciCtrl($state, api, messages) {
       .create($ctrl.remoteci)
       .then(function() {
         messages.alert("remoteci " + remoteciName + " created", "success");
-        $state.reload();
+        $state.go("adminRemotecis");
       })
       .catch(function(err) {
         messages.alert(
