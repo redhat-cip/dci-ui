@@ -36,10 +36,6 @@ function AdminUsersCtrl($state, $uibModal, api, user, messages) {
 
   $ctrl.currentUser = user;
 
-  $ctrl.editUser = function(user) {
-    $state.go("adminUser", { id: user.id });
-  };
-
   $ctrl.deleteUser = function(user) {
     var userName = user.name;
     var deleteUserModal = $uibModal.open({
