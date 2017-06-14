@@ -200,7 +200,8 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
+          template:
+            '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
           resolve: {
             users: [
               "api",
@@ -225,10 +226,16 @@ require("app")
             ]
           }
         })
-        .state("adminUser", {
+        .state("adminUserCreate", {
+          parent: "authAdmin",
+          url: "/admin/users/create",
+          template: "<admin-user-create></admin-user-create>"
+        })
+        .state("adminUserEdit", {
           parent: "authAdmin",
           url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
+          template:
+            '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -268,7 +275,12 @@ require("app")
             ]
           }
         })
-        .state("adminTeam", {
+        .state("adminTeamCreate", {
+          parent: "authAdmin",
+          url: "/admin/teams/create",
+          template: "<admin-team-create></admin-team-create>"
+        })
+        .state("adminTeamEdit", {
           parent: "authAdmin",
           url: "/admin/teams/:id",
           template: '<admin-team-edit team="$resolve.team"></admin-team-edit>',
@@ -298,7 +310,12 @@ require("app")
             ]
           }
         })
-        .state("adminRemoteci", {
+        .state("adminRemoteciCreate", {
+          parent: "authAdmin",
+          url: "/admin/remotecis/create",
+          template: "<admin-remoteci-create></admin-remoteci-create>"
+        })
+        .state("adminRemoteciEdit", {
           parent: "authAdmin",
           url: "/admin/remotecis/:id",
           template:
@@ -328,7 +345,12 @@ require("app")
             ]
           }
         })
-        .state("adminTopic", {
+        .state("adminTopicCreate", {
+          parent: "authAdmin",
+          url: "/admin/topics/create",
+          template: "<admin-topic-create></admin-topic-create>"
+        })
+        .state("adminTopicEdit", {
           parent: "authAdmin",
           url: "/admin/topics/:id",
           template:
