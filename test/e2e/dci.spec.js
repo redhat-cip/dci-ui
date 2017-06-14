@@ -97,8 +97,18 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
+  it("visit /admin/users/create", function() {
+    browser.get("/#!/admin/users/create");
+    browser.waitForAngular();
+  });
+
   it("visit /admin/teams", function() {
     browser.get("/#!/admin/teams");
+    browser.waitForAngular();
+  });
+
+  it("visit /admin/teams/create", function() {
+    browser.get("/#!/admin/teams/create");
     browser.waitForAngular();
   });
 
@@ -107,8 +117,18 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
+  it("visit /admin/topics/create", function() {
+    browser.get("/#!/admin/topics/create");
+    browser.waitForAngular();
+  });
+
   it("visit /admin/remotecis", function() {
     browser.get("/#!/admin/remotecis");
+    browser.waitForAngular();
+  });
+
+  it("visit /admin/remotecis/create", function() {
+    browser.get("/#!/admin/remotecis/create");
     browser.waitForAngular();
   });
 

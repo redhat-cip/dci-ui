@@ -19,9 +19,7 @@ describe("admin users", function() {
     beforeEach(
       inject(function($componentController) {
         component = $componentController("adminUsers", null, {
-          users: users,
-          teams: teams,
-          roles: roles
+          users: users
         });
       })
     );
@@ -30,8 +28,6 @@ describe("admin users", function() {
       expect(component.users[0].name).toBe("admin");
       expect(component.users[0].role.name).toBe("Super Admin");
       expect(component.users.length).toBe(2);
-      expect(component.teams.length).toBe(2);
-      expect(component.roles.length).toBe(3);
     });
   });
 
@@ -40,12 +36,10 @@ describe("admin users", function() {
 
     beforeEach(
       inject(function($rootScope, $compile) {
-        template = $compile(
-          '<admin-users users="users" teams="teams" roles="roles"></admin-users>'
-        )($rootScope);
+        template = $compile('<admin-users users="users"></admin-users>')(
+          $rootScope
+        );
         $rootScope.users = users;
-        $rootScope.teams = teams;
-        $rootScope.roles = roles;
         $rootScope.$digest();
       })
     );
