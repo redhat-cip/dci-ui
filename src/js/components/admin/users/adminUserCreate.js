@@ -48,7 +48,7 @@ function adminUserCtrl($state, api, messages) {
       .create($ctrl.user)
       .then(function() {
         messages.alert("user " + userName + " created", "success");
-        $state.reload();
+        $state.go("adminUsers");
       })
       .catch(function(err) {
         messages.alert(

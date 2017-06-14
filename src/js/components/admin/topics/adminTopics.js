@@ -25,10 +25,6 @@ require("app").component("adminTopics", {
 function AdminTopicsCtrl($state, $uibModal, api, messages) {
   var $ctrl = this;
 
-  $ctrl.editTopic = function(topic) {
-    $state.go("adminTopic", { id: topic.id });
-  };
-
   $ctrl.deleteTopic = function(topic) {
     var topicName = topic.name;
     var deleteTopicModal = $uibModal.open({
