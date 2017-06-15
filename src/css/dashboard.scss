@@ -79,6 +79,7 @@ a.panel-heading {
   top: 20px;
   right: 20px;
   width: 400px;
+  word-break: break-all;
 }
 
 @each $name, $color in
