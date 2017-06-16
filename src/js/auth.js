@@ -21,54 +21,16 @@ require("app")
     AUTHENTICATED: 2
   })
   .value("user", {})
-  .config([
-    "$httpProvider",
-    function($httpProvider) {
-      // Set header to help detect XHR request
-      $httpProvider.defaults.headers.common["X-Requested-With"] =
-        "XMLHttpRequest";
-
-      var interceptor = [
-        "$q",
-        "user",
-        "userStatus",
-        function($q, user, status) {
-          var apiURL = new RegExp("api/");
-
-          return {
-            request: function(conf) {
-              if (!conf.url.match(apiURL)) {
-                return conf;
-              }
-              if (!user.token) {
-                return angular.extend(conf, { status: 401 });
-              }
-
-              conf.headers.Authorization = "Basic " + user.token;
-              return conf;
-            },
-            responseError: function(error) {
-              if (user.status !== status.DISCONNECTED && error.status === 401) {
-                user.status = status.UNAUTHORIZED;
-              }
-              return $q.reject(error);
-            }
-          };
-        }
-      ];
-      $httpProvider.interceptors.push(interceptor);
-    }
-  ])
   .factory("auth", [
     "$window",
     "$cookieStore",
     "api",
     "user",
     "userStatus",
-    function($window, $cookies, api, user, status) {
+    function($window, $cookies, api, user, userStatus) {
       angular.extend(
         user,
-        { status: status.DISCONNECTED },
+        { status: userStatus.DISCONNECTED },
         $cookies.get("user")
       );
 
@@ -77,27 +39,31 @@ require("app")
         login: function(username, password) {
           user.token = $window.btoa(username.concat(":", password));
 
-          return api.users.getByName(username).then(function(userRes) {
-            angular.extend(user, userRes, { status: status.AUTHENTICATED });
-            $cookies.put("user", user);
-            return user;
-          });
+          return api.users
+            .getByName(username)
+            .then(function(userRes) {
+              angular.extend(user, userRes, {
+                status: userStatus.AUTHENTICATED
+              });
+              $cookies.put("user", user);
+              return user;
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
         },
         isAuthenticated: function() {
-          return user.status === status.AUTHENTICATED;
+          return user.status === userStatus.AUTHENTICATED;
         },
-
         isAdmin: function() {
           return user.role.label === "ADMIN";
         },
-
         isSuperAdmin: function() {
           return user.role.label === "SUPER_ADMIN";
         },
-
         logout: function() {
-          $cookies.put("user", {});
-          user.status = status.DISCONNECTED;
+          $cookies.remove("user");
+          user.status = userStatus.DISCONNECTED;
         }
       };
     }
@@ -161,4 +127,20 @@ require("app")
       };
     }
   ])
-  .run(["auth", angular.noop]);
+  .factory("basicAuthInterceptor", [
+    "user",
+    function(user) {
+      return {
+        request: function(config) {
+          config.headers["Authorization"] = "Basic " + user.token;
+          return config;
+        }
+      };
+    }
+  ])
+  .config([
+    "$httpProvider",
+    function($httpProvider) {
+      $httpProvider.interceptors.push("basicAuthInterceptor");
+    }
+  ]);
