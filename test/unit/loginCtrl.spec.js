@@ -24,12 +24,14 @@ describe("login controller", function() {
   it("should authenticate the user", function() {
     var $scope = {};
     $controller("LoginCtrl", { $scope: $scope });
+    $scope.username = "test";
+    $scope.password = "password";
     $httpBackend
       .expectGET(
         "https://api.example.org/api/v1/users?where=name:test&embed=team,role"
       )
       .respond();
-    $scope.authenticate({ username: "test", password: "password" });
+    $scope.authenticate();
     $httpBackend.flush();
   });
 });
