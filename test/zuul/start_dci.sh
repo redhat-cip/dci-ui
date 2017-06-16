@@ -19,3 +19,7 @@ python scripts/db_provisioning.py -y
 python scripts/runtestserver.py &
 python bin/dci-esindex
 cd -
+npm install
+sudo yum install -y Xvfb libXfont Xorg
+/usr/bin/Xvfb :99 -ac -screen 0 1920x1080x24 &
+export DISPLAY=:99

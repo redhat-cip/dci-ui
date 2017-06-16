@@ -58,7 +58,6 @@ const files = {
     src: ["./src/index.html", "node_modules/rcue/dist/img/favicon.ico"],
     dest: destination
   },
-  e2e: ["./test/e2e/**/*.spec.js"],
   configFile: destination + "/config.json"
 };
 
@@ -184,32 +183,6 @@ gulp.task("serve", ["clean", "build:pkg"], function() {
 
 // Tests
 
-gulp.task("e2e:webdriver_manager_update", $.protractor.webdriver_update);
-
-gulp.task("test:e2e", ["build", "e2e:webdriver_manager_update"], function() {
-  const webserver = gulp.src(destination).pipe(
-    $.webserver({
-      host,
-      port
-    })
-  );
-
-  gulp
-    .src(files.e2e)
-    .pipe(
-      $.protractor.protractor({
-        configFile: "test/e2e/protractor.conf.js",
-        args: ["--baseUrl", `http://${host}:${port}`]
-      })
-    )
-    .on("error", function(err) {
-      throw err;
-    })
-    .on("end", function() {
-      webserver.emit("kill");
-    });
-});
-
 gulp.task("lint", function() {
   return gulp
     .src(files.js.src)
@@ -218,4 +191,4 @@ gulp.task("lint", function() {
     .pipe($.eslint.failAfterError());
 });
 
-gulp.task("test", ["lint", "test:e2e"]);
+gulp.task("test", ["lint"]);

@@ -12,26 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe("login controller", function() {
-  var $controller;
+var chromedriver = require("chromedriver");
+var connect = require("connect");
+var serveStatic = require("serve-static");
 
-  beforeEach(
-    inject(function(_$controller_) {
-      $controller = _$controller_;
-    })
-  );
+var server = connect().use(serveStatic("static")).listen(8000);
 
-  it("should authenticate the user", function() {
-    var $scope = {};
-    $controller("LoginCtrl", { $scope: $scope });
-    $scope.username = "test";
-    $scope.password = "password";
-    $httpBackend
-      .expectGET(
-        "https://api.example.org/api/v1/users?where=name:test&embed=team,role"
-      )
-      .respond();
-    $scope.authenticate();
-    $httpBackend.flush();
-  });
-});
+module.exports = {
+  before: function(done) {
+    chromedriver.start();
+    done();
+  },
+
+  after: function(done) {
+    chromedriver.stop();
+    server.close(done);
+  }
+};
