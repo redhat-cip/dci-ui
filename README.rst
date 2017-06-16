@@ -14,6 +14,7 @@ To run the app in development mode follow those steps:
 * ensure that control server is running (ex: on localhost:5000) see ``dci-dev-env``
 * install node dependencies: ``npm install``
 * run the development server : ``npm run dev``
+* install google-chrome-stable if you want to run end to end tests
 
 Build tools
 -----------
@@ -22,12 +23,10 @@ To manage the workflow the project use npm scripts
 
 Command list:
 
-* **npm start**: start web server without live reload
-
 * **npm run dev**: start web server with live reload
 
 * **npm run build**: build application in ``static/`` folder
 
 * **npm run test:unit**: start unit test
 
-* **npm run test**: run end to end tests on the application
+* **npm test**: run end to end tests (required google-chrome-stable)

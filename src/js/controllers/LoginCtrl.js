@@ -20,9 +20,12 @@ require("app").controller("LoginCtrl", [
   "auth",
   "messages",
   function($scope, $state, auth, messages) {
-    $scope.authenticate = function(credentials) {
+    $scope.username = "";
+    $scope.password = "";
+
+    $scope.authenticate = function() {
       auth
-        .login(credentials.username, credentials.password)
+        .login($scope.username, $scope.password)
         .then(function() {
           $state.go("index");
         })
