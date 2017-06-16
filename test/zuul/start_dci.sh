@@ -19,3 +19,10 @@ python scripts/db_provisioning.py -y
 python scripts/runtestserver.py &
 python bin/dci-esindex
 cd -
+
+# e2e test
+sudo yum install -y Xvfb libXfont Xorg
+export DISPLAY=:99
+Xvfb :99 -ac -screen 0 1920x1080x24 &
+sleep 3
+npm install
