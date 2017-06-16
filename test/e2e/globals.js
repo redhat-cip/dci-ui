@@ -12,19 +12,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
-const jasmineReporters = require('jasmine-reporters');
+var chromedriver = require("chromedriver");
 
-exports.config = {
-  framework: 'jasmine2',
-  seleniumServerJar: '../../node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.4.0.jar',
-  allScriptsTimeout: 60000,
-  capabilities: {
-    browserName: 'phantomjs'
+module.exports = {
+  before: function(done) {
+    chromedriver.start();
+    done();
   },
-  onPrepare: function() {
-    jasmine.getEnv().addReporter(
-      new jasmineReporters.JUnitXmlReporter()
-    );
+  after: function() {
+    chromedriver.stop();
   }
 };

@@ -15,7 +15,7 @@ sudo "PATH=$PATH" pip install -r requirements.txt
 sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 sh scripts/start_es.sh
-python scripts/db_provisioning.py -y
-python scripts/runtestserver.py &
+sh scripts/start_api.sh
 python bin/dci-esindex
 cd -
+npm start &
