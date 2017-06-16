@@ -19,3 +19,5 @@ python scripts/db_provisioning.py -y
 python scripts/runtestserver.py &
 python bin/dci-esindex
 cd -
+npm install
+sudo yum install -y xorg-x11-server-Xvfb

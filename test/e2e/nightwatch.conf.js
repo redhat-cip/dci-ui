@@ -12,19 +12,28 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-'use strict';
-const jasmineReporters = require('jasmine-reporters');
-
-exports.config = {
-  framework: 'jasmine2',
-  seleniumServerJar: '../../node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.4.0.jar',
-  allScriptsTimeout: 60000,
-  capabilities: {
-    browserName: 'phantomjs'
+module.exports = {
+  src_folders: ["test/e2e/specs"],
+  output_folder: "test/e2e/reports",
+  globals_path: "test/e2e/globals.js",
+  selenium: {
+    start_process: false
   },
-  onPrepare: function() {
-    jasmine.getEnv().addReporter(
-      new jasmineReporters.JUnitXmlReporter()
-    );
+  test_settings: {
+    default: {
+      launch_url: "http://localhost:8000",
+      selenium_port: 9515,
+      selenium_host: "localhost",
+      default_path_prefix: "",
+      globals: {
+        waitForConditionTimeout: 5000
+      },
+      desiredCapabilities: {
+        browserName: "chrome",
+        chromeOptions: {
+          args: ['--headless','--no-sandbox','--disable-gpu','--window-size=1920x1080']
+        }
+      }
+    }
   }
 };
