@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
+<<<<<<< 987d5619b0d0d63dbce04a925671d21395a42a0b
     <h1 class="page-header">
       Audits
     </h1>
@@ -28,5 +29,32 @@
         <td>{{ audit.created_at | dciDate }}</td>
       </tr>
     </table>
+=======
+    <div class="page-header">
+      <h1>Audits</h1>
+    </div>
+
+    <div ng-if="$ctrl.audits.length === 0">
+      No audit
+    </div>
+    <div ng-if="$ctrl.audits.length > 0">
+      <table class="table table-striped table-bordered table-hover table-audits">
+        <thead>
+        <tr>
+          <th>Action</th>
+          <th>User ID</th>
+          <th>Team ID</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="audit in $ctrl.audits">
+          <td>{{ audit.action }}</td>
+          <td>{{ audit.user_id }}</td>
+          <td>{{ audit.team_id }}</td>
+          <td>{{ audit.created_at | dciDate }}</td>
+        </tr>
+      </table>
+    </div>
+>>>>>>> Replace protractor by nightwatch for faster end to end tests
   </div>
 </div>
