@@ -16,7 +16,6 @@
 
 const browserify = require("browserify");
 const childProcess = require("child_process");
-const del = require("del");
 const fs = require("fs");
 const globby = require("globby");
 const gulp = require("gulp");
@@ -25,8 +24,6 @@ const through = require("through2");
 const sourceStream = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 
-const host = '127.0.0.1';
-const port = 8000;
 const destination = "./static";
 const source = "./src";
 const files = {
@@ -58,13 +55,8 @@ const files = {
     src: ["./src/index.html", "node_modules/rcue/dist/img/favicon.ico"],
     dest: destination
   },
-  e2e: ["./test/e2e/**/*.spec.js"],
   configFile: destination + "/config.json"
 };
-
-gulp.task("clean", function() {
-  del.sync(destination);
-});
 
 gulp.task("js", function() {
   // https://github.com/gulpjs/gulp/blob/master/docs/recipes/browserify-multiple-destination.md
@@ -132,7 +124,7 @@ gulp.task("build", ["js", "css", "fonts", "images", "html", "files"]);
 
 function writeConfigFile(version) {
   const template = `{
-  "apiURL": "http://${host}:5000",
+  "apiURL": "http://localhost:5000",
   "version": "${version}"
 }`;
   if (!fs.existsSync(destination)) {
@@ -159,11 +151,11 @@ gulp.task("watch", function() {
 
 gulp.task("build:dev", ["build", "config:dev"]);
 
-gulp.task("serve:dev", ["clean", "build:dev", "watch"], function() {
+gulp.task("serve:dev", ["build:dev", "watch"], function() {
   $.connect.server({
     root: "static",
     livereload: true,
-    port
+    port: 8000
   });
 });
 
@@ -174,41 +166,7 @@ gulp.task("config:prod", function() {
 
 gulp.task("build:pkg", ["build", "config:prod"]);
 
-gulp.task("serve", ["clean", "build:pkg"], function() {
-  $.connect.server({
-    root: "static",
-    livereload: false,
-    port
-  });
-});
-
 // Tests
-
-gulp.task("e2e:webdriver_manager_update", $.protractor.webdriver_update);
-
-gulp.task("test:e2e", ["build", "e2e:webdriver_manager_update"], function() {
-  const webserver = gulp.src(destination).pipe(
-    $.webserver({
-      host,
-      port
-    })
-  );
-
-  gulp
-    .src(files.e2e)
-    .pipe(
-      $.protractor.protractor({
-        configFile: "test/e2e/protractor.conf.js",
-        args: ["--baseUrl", `http://${host}:${port}`]
-      })
-    )
-    .on("error", function(err) {
-      throw err;
-    })
-    .on("end", function() {
-      webserver.emit("kill");
-    });
-});
 
 gulp.task("lint", function() {
   return gulp
@@ -217,5 +175,3 @@ gulp.task("lint", function() {
     .pipe($.eslint.format())
     .pipe($.eslint.failAfterError());
 });
-
-gulp.task("test", ["lint", "test:e2e"]);

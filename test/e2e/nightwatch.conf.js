@@ -12,26 +12,26 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe("login controller", function() {
-  var $controller;
-
-  beforeEach(
-    inject(function(_$controller_) {
-      $controller = _$controller_;
-    })
-  );
-
-  it("should authenticate the user", function() {
-    var $scope = {};
-    $controller("LoginCtrl", { $scope: $scope });
-    $scope.username = "test";
-    $scope.password = "password";
-    $httpBackend
-      .expectGET(
-        "https://api.example.org/api/v1/users?where=name:test&embed=team,role"
-      )
-      .respond();
-    $scope.authenticate();
-    $httpBackend.flush();
-  });
-});
+module.exports = {
+  src_folders: ["test/e2e/specs"],
+  output_folder: "test/e2e/reports",
+  globals_path: "test/e2e/globals.js",
+  selenium: {
+    start_process: false
+  },
+  test_settings: {
+    default: {
+      launch_url: "http://localhost:8000",
+      selenium_port: 9515,
+      selenium_host: "localhost",
+      default_path_prefix: "",
+      desiredCapabilities: {
+        browserName: "chrome",
+        chromeOptions: {
+          args: ["--headless", "--no-sandbox", "--disable-gpu"]
+        },
+        acceptSslCerts: true
+      }
+    }
+  }
+};
