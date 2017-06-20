@@ -410,6 +410,11 @@ require("app")
               }
             ]
           }
+        })
+        .state("settings", {
+          parent: "auth",
+          url: "/settings",
+          template: "<settings-page></settings-page>"
         });
 
       $urlRouterProvider.otherwise("/");

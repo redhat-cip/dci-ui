@@ -33,12 +33,12 @@ var users = [
       label: "SUPER_ADMIN",
       name: "Super Admin",
       state: "active",
-      team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
       updated_at: "2017-04-25T08:33:18.394237",
       user_id: null
     },
     role_id: "63eb47d5-0395-4cbb-ab19-738a2f7633d9",
     state: "active",
+    team_id: "ac654db0-c6ff-40e8-82c7-9bc49989cb86",
     team: {
       country: null,
       created_at: "2017-02-20T17:32:48.200667",
@@ -65,12 +65,12 @@ var users = [
       label: "USER",
       name: "User",
       state: "active",
-      team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
       updated_at: "2017-04-25T08:33:18.393283",
       user_id: null
     },
     role_id: "5695bf02-771d-4720-b0e9-82b4e4cb2479",
     state: "active",
+    team_id: "4db0ac65-3c4c-4d09-a8fa-257d3e1b21ed",
     team: {
       country: null,
       created_at: "2017-02-22T12:32:48.744939",
@@ -122,9 +122,7 @@ var roles = [
     label: "SUPER_ADMIN",
     name: "Super Admin",
     state: "active",
-    team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
-    updated_at: "2017-04-25T08:33:18.394237",
-    user_id: null
+    updated_at: "2017-04-25T08:33:18.394237"
   },
   {
     created_at: "2017-04-25T08:33:18.393274",
@@ -134,9 +132,7 @@ var roles = [
     label: "USER",
     name: "User",
     state: "active",
-    team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
-    updated_at: "2017-04-25T08:33:18.393283",
-    user_id: null
+    updated_at: "2017-04-25T08:33:18.393283"
   },
   {
     created_at: "2017-04-25T08:33:18.391924",
@@ -146,9 +142,7 @@ var roles = [
     label: "ADMIN",
     name: "Admin",
     state: "active",
-    team_id: "c66f4ef6-88a8-4a97-bc78-74d7c03d69b9",
-    updated_at: "2017-04-25T08:33:18.391935",
-    user_id: null
+    updated_at: "2017-04-25T08:33:18.391935"
   }
 ];
 
