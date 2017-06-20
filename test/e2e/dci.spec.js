@@ -132,6 +132,11 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
+  it("visit /settings", function() {
+    browser.get("/#!/settings");
+    browser.waitForAngular();
+  });
+
   afterEach(function() {
     browser.manage().logs().get("browser").then(function(browserLog) {
       expect(browserLog.length).toEqual(

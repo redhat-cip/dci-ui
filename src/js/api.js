@@ -186,6 +186,20 @@ require("app").factory("api", [
       "role_id"
     ]);
 
+    /*                               CURRENT USER                               */
+
+    api.current_user = {
+      update: function(data) {
+        var url = config.apiURL + "/api/v1/users/me";
+        var headers = { headers: { "If-Match": user.etag } };
+        var parse = _.partialRight(_.pick, [
+          "current_password",
+          "new_password"
+        ]);
+        return $http.put(url, parse(data), headers);
+      }
+    };
+
     /*                                  TOPICS                                  */
     api.topics.update.parse = _.partialRight(_.pick, ["name", "next_topic"]);
     api.topics.teams = function(id) {
