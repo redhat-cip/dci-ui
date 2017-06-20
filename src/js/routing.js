@@ -304,6 +304,10 @@ require("app")
         .state("statsMetrics", {
           url: "/metrics/topics?selected&range",
           template: "<topics-metrics></topics-metrics>"
+        })
+        .state("settings", {
+          url: "/settings",
+          template: "<settings-page></settings-page>"
         });
 
       $urlRouterProvider.otherwise("/");
