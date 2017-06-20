@@ -1,9 +1,11 @@
-#topicsOkr .line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 2px;
+#topicMetrics .bar {
+  fill: steelblue;
 }
 
-#topicsOkr circle {
-  fill: steelblue;
+#topicMetrics .bar--success {
+  fill: forestgreen;
+}
+
+#topicMetrics .bar--tolong {
+  fill:indianred;
 }

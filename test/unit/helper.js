@@ -227,6 +227,33 @@ var audits = [
   }
 ];
 
+var topicsMetrics = {
+  OSP10: [
+    {
+      component: "RH7-RHOS-10.0 2016-11-23.3",
+      date: "2016-11-24T09:16:36.997981",
+      values: [48249, 50688]
+    },
+    {
+      component: "RH7-RHOS-10.0 2016-11-29.1",
+      date: "2016-11-29T08:16:18.835989",
+      values: [215754]
+    }
+  ],
+  OSP11: [
+    {
+      component: "RH7-RHOS-11.0 2016-12-09.2",
+      date: "2016-12-12T02:10:46.320266",
+      values: []
+    },
+    {
+      component: "RH7-RHOS-11.0 2017-02-10.2",
+      date: "2017-02-11T03:07:08.330633",
+      values: [21394]
+    }
+  ]
+};
+
 beforeEach(
   module(function($provide) {
     $provide.value("user", admin);

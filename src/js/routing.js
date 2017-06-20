@@ -200,7 +200,8 @@ require("app")
         .state("adminUsers", {
           parent: "authAdmin",
           url: "/admin/users",
-          template: '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
+          template:
+            '<admin-users users="$resolve.users" teams="$resolve.teams" roles="$resolve.roles"></admin-users>',
           resolve: {
             users: [
               "api",
@@ -228,7 +229,8 @@ require("app")
         .state("adminUser", {
           parent: "authAdmin",
           url: "/admin/users/:id",
-          template: '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
+          template:
+            '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
           resolve: {
             user: [
               "$stateParams",
@@ -373,19 +375,10 @@ require("app")
             ]
           }
         })
-        .state("okr", {
+        .state("statsMetrics", {
           parent: "authAdmin",
-          url: "/okr",
-          template: '<dci-okr topics="$resolve.topics"></dci-okr>',
-          resolve: {
-            topics: [
-              "api",
-              "conf",
-              function(api) {
-                return api.metrics.topics();
-              }
-            ]
-          }
+          url: "/metrics/topics?selected&range",
+          template: "<topics-metrics></topics-metrics>"
         });
 
       $urlRouterProvider.otherwise("/");
