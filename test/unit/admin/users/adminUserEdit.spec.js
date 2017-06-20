@@ -14,6 +14,7 @@
 
 describe('admin user edit component', function() {
   var component;
+  BREAK THE UNIT-TEST ON PURPOSE!!!!
 
   beforeEach(inject(function($componentController) {
     component = $componentController('adminUserEdit', null, {
