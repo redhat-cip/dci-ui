@@ -397,19 +397,10 @@ require("app")
             ]
           }
         })
-        .state("okr", {
+        .state("statsMetrics", {
           parent: "authAdmin",
-          url: "/okr",
-          template: '<dci-okr topics="$resolve.topics"></dci-okr>',
-          resolve: {
-            topics: [
-              "api",
-              "conf",
-              function(api) {
-                return api.metrics.topics();
-              }
-            ]
-          }
+          url: "/metrics/topics?selected&range",
+          template: "<topics-metrics></topics-metrics>"
         });
 
       $urlRouterProvider.otherwise("/");

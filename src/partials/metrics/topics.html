@@ -1,0 +1,49 @@
+<div class="cards-pf" style="margin: -20px; min-height:90vh">
+  <div class="container-fluid container-cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-sm-4 col-md-3 col-lg-1"
+           ng-repeat="topic in $ctrl.filteredTopics"
+           ng-click="$ctrl.updatePage(topic, $ctrl.selectedRange)">
+        <topic-metrics-summary topic="topic"></topic-metrics-summary>
+      </div>
+    </div>
+    <div class="row row-cards-pf">
+      <div class="col-md-6">
+        <div class="card-pf card-pf-utilization">
+          <div class="card-pf-heading">
+            <p class="card-pf-heading-details">
+              <a class="btn"
+                 ng-class="{'btn-primary': $ctrl.selectedRange === 3, 'btn-default': $ctrl.selectedRange !== 3  }"
+                 ng-click="$ctrl.updatePage($ctrl.selectedTopic, 3)">
+                3 Months
+              </a>
+              <a class="btn"
+                 ng-class="{'btn-primary': $ctrl.selectedRange === 6, 'btn-default': $ctrl.selectedRange !== 6  }"
+                 ng-click="$ctrl.updatePage($ctrl.selectedTopic, 6)">
+                6 Months
+              </a>
+              <a class="btn"
+                 ng-class="{'btn-primary': $ctrl.selectedRange === -1, 'btn-default': $ctrl.selectedRange !== -1 }"
+                 ng-click="$ctrl.updatePage($ctrl.selectedTopic, -1)">
+                All
+              </a>
+            </p>
+            <h2 class="card-pf-title" style="height: 18px;">
+              Number of days before first run for each components of topic {{$ctrl.selectedTopic.name}}
+            </h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <tested-components-graph
+                  topic="$ctrl.selectedTopic"
+                  ng-if="$ctrl.selectedTopic">
+                </tested-components-graph>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
