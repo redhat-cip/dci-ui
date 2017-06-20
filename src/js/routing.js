@@ -401,6 +401,11 @@ require("app")
           parent: "authAdmin",
           url: "/metrics/topics?selected&range",
           template: "<topics-metrics></topics-metrics>"
+        })
+        .state("settings", {
+          parent: "auth",
+          url: "/settings",
+          template: "<settings-page></settings-page>"
         });
 
       $urlRouterProvider.otherwise("/");
