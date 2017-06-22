@@ -12,14 +12,32 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin remoteci create component', function() {
-  var component;
+describe("admin remoteci create component", function() {
+  var component, user;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminRemoteciCreate');
-  }));
+  beforeEach(
+    inject(function($componentController, _user_) {
+      user = _user_;
+      component = $componentController("adminRemoteciCreate");
+    })
+  );
 
-  it('should init scope with empty remoteci', function() {
-    expect(component.remoteci.name).toBe('');
+  it("should init scope with empty remoteci", function() {
+    expect(component.remoteci.name).toBe("");
+    expect(component.remoteci.allow_upgrade_job).toBe(false);
+  });
+
+  it("should create a remoteci", function() {
+    component.remoteci.name = "Best Remote Ci";
+    component.remoteci.allow_upgrade_job = true;
+    $httpBackend
+      .expectPOST("https://api.example.org/api/v1/remotecis", {
+        name: "Best Remote Ci",
+        allow_upgrade_job: true,
+        team_id: user.team.id
+      })
+      .respond();
+    component.create();
+    $httpBackend.flush();
   });
 });
