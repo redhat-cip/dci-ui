@@ -14,6 +14,8 @@
 
 "use strict";
 
+var _ = require("lodash");
+
 require("app").component("adminTopicCreate", {
   templateUrl: "/partials/admin/topics/topicCreate.html",
   controller: ["$state", "api", "messages", adminTopicCtrl]
@@ -23,13 +25,14 @@ function adminTopicCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.topic = {
-    name: ""
+    name: "",
+    next_topic: null
   };
 
   $ctrl.create = function() {
     var topicName = $ctrl.topic.name;
     api.topics
-      .create($ctrl.topic)
+      .create(_.omitBy($ctrl.topic, _.isNull))
       .then(function() {
         messages.alert("topic " + topicName + " created", "success");
         $state.go("adminTopics");
