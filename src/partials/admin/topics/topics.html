@@ -16,6 +16,7 @@
       <tr>
         <th>Topic name</th>
         <th>ID</th>
+        <th>Next Topic</th>
         <th>Created At</th>
         <th class="text-center">Actions</th>
       </tr>
@@ -33,6 +34,11 @@
           </a>
         </td>
         <td>{{topic.id}}</td>
+        <td>
+          <a ui-sref="adminTopicEdit({id: topic.next_topic})">
+            {{topic.next_topic}}
+          </a>
+        </td>
         <td>{{topic.created_at | dciDate}}</td>
         <td class="text-center">
           <a class="btn btn-primary btn-sm"
