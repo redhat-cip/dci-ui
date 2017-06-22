@@ -14,6 +14,8 @@
 
 "use strict";
 
+var _ = require("lodash");
+
 require("app").component("adminTopicEdit", {
   templateUrl: "/partials/admin/topics/topicEdit.html",
   controller: ["$state", "api", "messages", adminTopicCtrl],
