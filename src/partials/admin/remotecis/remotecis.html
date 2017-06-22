@@ -18,6 +18,7 @@
           <th>Status</th>
           <th>RemoteCI name</th>
           <th>RemoteCI ID</th>
+          <th class="text-center">Upgrade allowed</th>
           <th>Date</th>
           <th class="text-center">Actions</th>
         </tr>
@@ -39,6 +40,14 @@
             </a>
           </td>
           <td>{{ remoteci.id }}</td>
+          <td class="text-center">
+            <span ng-if="remoteci.allow_upgrade_job">
+              <i class="fa fa-thumbs-up text-success" aria-hidden="true"></i>
+            </span>
+            <span ng-hide="remoteci.allow_upgrade_job">
+              <i class="fa fa-thumbs-down text-default" aria-hidden="true"></i>
+            </span>
+          </td>
           <td>{{ remoteci.created_at | dciDate }}</td>
           <td class="text-center">
             <a class="btn btn-primary btn-sm"

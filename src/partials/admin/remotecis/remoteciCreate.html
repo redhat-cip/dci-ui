@@ -11,6 +11,11 @@
                ng-model="$ctrl.remoteci.name"
                required>
       </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="$ctrl.remoteci.allow_upgrade_job"> Allow upgrade
+        </label>
+      </div>
       <button type="submit" class="btn btn-primary">Create</button>
     </form>
   </div>

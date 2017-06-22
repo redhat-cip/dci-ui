@@ -196,7 +196,7 @@ var remotecis = [
   },
   {
     active: true,
-    allow_upgrade_job: null,
+    allow_upgrade_job: true,
     created_at: "2017-01-13T16:26:34.956399",
     data: {},
     etag: "0fdd7a8713f336c15dbe213dcc92b4b5",
