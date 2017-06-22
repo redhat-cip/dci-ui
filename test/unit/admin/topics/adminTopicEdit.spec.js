@@ -29,6 +29,7 @@ describe("admin topic edit component", function() {
   it("should init scope with prop topic", function() {
     expect(component.topic.id).toBe("d95c065a-fbc9-984c-8e9d-454d1a9171a7");
     expect(component.topic.name).toBe("OSP10");
+    expect(component.topic.next_topic).toBe(null);
     expect(component.topic.state).toBe("active");
   });
 
@@ -66,5 +67,29 @@ describe("admin topic edit component", function() {
     $httpBackend.flush();
     expect(component.topicTeams.length).toBe(0);
     expect(component.availableTeams.length).toBe(2);
+  });
+
+  it("should edit a topic", function() {
+    component.topic.next_topic = "";
+    $httpBackend
+      .expectPUT(
+        "https://api.example.org/api/v1/topics/d95c065a-fbc9-984c-8e9d-454d1a9171a7",
+        { name: "OSP10", next_topic: "" }
+      )
+      .respond();
+    component.update();
+    $httpBackend.flush();
+  });
+
+  it("should edit a topic with next_topic", function() {
+    component.topic.next_topic = "4b1e3cae-41e0-409c-8a35-0af056c69525";
+    $httpBackend
+      .expectPUT(
+        "https://api.example.org/api/v1/topics/d95c065a-fbc9-984c-8e9d-454d1a9171a7",
+        { name: "OSP10", next_topic: "4b1e3cae-41e0-409c-8a35-0af056c69525" }
+      )
+      .respond();
+    component.update();
+    $httpBackend.flush();
   });
 });

@@ -191,7 +191,7 @@ require("app").factory("api", [
     ]);
 
     /*                                  TOPICS                                  */
-    api.topics.update.parse = _.partialRight(_.pick, ["name"]);
+    api.topics.update.parse = _.partialRight(_.pick, ["name", "next_topic"]);
     api.topics.teams = function(id) {
       var url = urlize(api.topics.url, id, "teams");
       return $http.get(url).then(_.property("data.teams"));
