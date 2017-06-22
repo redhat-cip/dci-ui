@@ -23,11 +23,8 @@ describe("admin remoteci edit component", function() {
     })
   );
 
-  it("should init scope with prop remoteci", function() {
-    expect(component.remoteci.id).toBe("c76c40a2-82c7-40e8-959b-0883d32edda8");
-    expect(component.remoteci.name).toBe("Admin Remote CI");
-    expect(component.remoteci.state).toBe("active");
-    expect(component.remoteci.etag).toBe("48db63266779736d3c54d96946954a29");
+  it("should init scope with remoteci prop", function() {
+    expect(component.remoteci).toEqual(remoteci);
   });
 
   it("should update if data are valid", function() {
@@ -35,6 +32,7 @@ describe("admin remoteci edit component", function() {
       id: "1",
       name: "rci",
       state: "active",
+      allow_upgrade_job: true,
       data: {
         hardware: "Dell",
         network: "Juniper",
@@ -47,6 +45,7 @@ describe("admin remoteci edit component", function() {
       .expectPUT("https://api.example.org/api/v1/remotecis/1", {
         name: "rci",
         state: "active",
+        allow_upgrade_job: true,
         data: {
           hardware: "Dell",
           network: "Juniper",
