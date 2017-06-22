@@ -14,6 +14,8 @@
 
 "use strict";
 
+var _ = require("lodash");
+
 require("app").component("globalStatus", {
   templateUrl: "/partials/globalStatus.html",
   controller: GlobalStatusCtrl,
