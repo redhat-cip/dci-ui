@@ -23,7 +23,8 @@ function adminRemoteciCtrl($state, api, messages) {
   var $ctrl = this;
 
   $ctrl.remoteci = {
-    name: ""
+    name: "",
+    allow_upgrade_job: false
   };
 
   $ctrl.create = function() {

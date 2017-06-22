@@ -34,6 +34,11 @@
         <textarea class="form-control" ng-model="$ctrl.remoteci.data" id="remoteciData" name="data" rows="5" json-text>
         </textarea>
       </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="$ctrl.remoteci.allow_upgrade_job"> Allow upgrade
+        </label>
+      </div>
       <button type="submit" class="btn btn-primary">Update</button>
       <button type="submit" class="btn btn-default" ui-sref="adminRemotecis">Cancel</button>
     </form>

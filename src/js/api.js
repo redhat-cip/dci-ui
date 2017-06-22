@@ -143,6 +143,7 @@ require("app").factory("api", [
     api.remotecis.update.parse = _.partialRight(_.pick, [
       "name",
       "state",
+      "allow_upgrade_job",
       "data"
     ]);
     api.remotecis.create = function(remoteci) {
