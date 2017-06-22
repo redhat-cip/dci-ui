@@ -14,6 +14,8 @@
 
 "use strict";
 
+var _ = require("lodash");
+
 require("app").controller("ListComponentsCtrl", [
   "$scope",
   "messages",

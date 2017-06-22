@@ -16,7 +16,6 @@
 
 var angular = require("angular");
 
-require("lodash");
 require("angular-animate");
 require("angular-cookies");
 require("angular-sanitize");
