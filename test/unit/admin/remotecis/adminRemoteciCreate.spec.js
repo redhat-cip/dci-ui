@@ -12,14 +12,16 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin remoteci create component', function() {
+describe("admin remoteci create component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminRemoteciCreate');
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminRemoteciCreate");
+    })
+  );
 
-  it('should init scope with empty remoteci', function() {
-    expect(component.remoteci.name).toBe('');
+  it("should init scope with empty remoteci", function() {
+    expect(component.remoteci.name).toBe("");
   });
 });

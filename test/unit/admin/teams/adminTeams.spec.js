@@ -12,23 +12,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin teams component', function() {
+describe("admin teams component", function() {
   var element;
 
-  beforeEach(inject(function($rootScope, $compile) {
-    element = $compile('<admin-teams teams="teams"></admin-teams>')($rootScope);
-    $rootScope.teams = teams;
-    $rootScope.$digest();
-  }));
+  beforeEach(
+    inject(function($rootScope, $compile) {
+      element = $compile('<admin-teams teams="teams"></admin-teams>')(
+        $rootScope
+      );
+      $rootScope.teams = teams;
+      $rootScope.$digest();
+    })
+  );
 
-  it('should init scope with prop teams', function() {
+  it("should init scope with prop teams", function() {
     expect(element.scope().teams.length).toBe(2);
-    expect(element.scope().teams[0].name).toBe('admin');
+    expect(element.scope().teams[0].name).toBe("admin");
   });
 
-  it('should disable deletion for current team', function() {
-    var deleteButtons = element[0].querySelectorAll('.btn-danger');
-    expect(angular.element(deleteButtons[0]).prop('disabled')).toBe(true);
-    expect(angular.element(deleteButtons[1]).prop('disabled')).toBe(false);
+  it("should disable deletion for current team", function() {
+    var deleteButtons = element[0].querySelectorAll(".btn-danger");
+    expect(angular.element(deleteButtons[0]).prop("disabled")).toBe(true);
+    expect(angular.element(deleteButtons[1]).prop("disabled")).toBe(false);
   });
 });
