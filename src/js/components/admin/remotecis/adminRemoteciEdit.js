@@ -14,14 +14,15 @@
 
 "use strict";
 
-require('app')
-  .component('adminRemoteciEdit', {
-    templateUrl: '/partials/admin/remotecis/remoteciEdit.html',
-    controller: ['$state', '$uibModal', 'api', 'messages', adminRemoteciCtrl],
-    bindings: {
-      remoteci: '='
-    }
-  });
+var _ = require("lodash");
+
+require("app").component("adminRemoteciEdit", {
+  templateUrl: "/partials/admin/remotecis/remoteciEdit.html",
+  controller: ["$state", "$uibModal", "api", "messages", adminRemoteciCtrl],
+  bindings: {
+    remoteci: "="
+  }
+});
 
 function adminRemoteciCtrl($state, $uibModal, api, messages) {
   var $ctrl = this;
@@ -53,26 +54,28 @@ function adminRemoteciCtrl($state, $uibModal, api, messages) {
   };
 
   $ctrl.refreshApiSecretConfirmed = function() {
-    api.remotecis.refreshApiSecret($ctrl.remoteci).then(function(remoteci) {
-        messages.alert('remoteci api secret has been refreshed', 'success');
+    api.remotecis.refreshApiSecret($ctrl.remoteci).then(
+      function(remoteci) {
+        messages.alert("remoteci api secret has been refreshed", "success");
         $ctrl.remoteci = _.assign({}, $ctrl.remoteci, remoteci);
       },
       function() {
-        messages.alert('can\'t refresh api secret', 'danger');
-      });
+        messages.alert("can't refresh api secret", "danger");
+      }
+    );
   };
 
   $ctrl.refreshApiSecret = function() {
     var refreshApiSecretModal = $uibModal.open({
-      component: 'confirmDestructiveAction',
+      component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: 'Refresh remoteci api secret',
-            body: 'Are you you want to refresh remoteci api secret?',
-            okButton: 'Yes refresh it',
-            cancelButton: 'oups no!'
-          }
+            title: "Refresh remoteci api secret",
+            body: "Are you you want to refresh remoteci api secret?",
+            okButton: "Yes refresh it",
+            cancelButton: "oups no!"
+          };
         }
       }
     });
