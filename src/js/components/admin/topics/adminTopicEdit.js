@@ -50,7 +50,7 @@ function adminTopicCtrl($state, api, messages) {
   $ctrl.update = function() {
     var topicName = $ctrl.topic.name;
     api.topics
-      .update($ctrl.topic)
+      .update(_.omitBy($ctrl.topic, _.isNull))
       .then(function() {
         messages.alert("topic " + topicName + " updated", "success");
         $state.go("adminTopics");
