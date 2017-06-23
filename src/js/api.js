@@ -21,7 +21,8 @@ require("app").factory("api", [
   "$http",
   "$window",
   "user",
-  function($q, $http, $window, user) {
+  "config",
+  function($q, $http, $window, user, config) {
     var api = {
       promise: null,
       config: null,
@@ -63,7 +64,7 @@ require("app").factory("api", [
     // }
     api.endpoints.forEach(function(endpoint) {
       api[endpoint] = {
-        url: "/api/v1/" + endpoint + "/",
+        url: config.apiURL + "/api/v1/" + endpoint,
         get: function(id) {
           // remove the trailing "s"
           var extract = "data." + endpoint.slice(0, endpoint.length - 1);
@@ -103,20 +104,14 @@ require("app").factory("api", [
         }
       };
     });
+
     // add the search endpoint
-    api.search = {};
+    api.search = {
+      url: config.apiURL + "/api/v1/search"
+    };
+
     // add the issues endpoint
     api.issues = {};
-
-    // get config to build endpoint urls
-    api.promise = $http.get("/config.json").then(function(response) {
-      var config = response.data;
-      api.config = config;
-      api.search.url = urlize(config.apiURL, "api", "v1", "search");
-      api.endpoints.forEach(function(endpoint) {
-        api[endpoint].url = urlize(config.apiURL, "api", "v1", endpoint);
-      });
-    });
 
     /*                                COMPONENTS                                */
     api.components.update.parse = _.partialRight(_.pick, ["export_control"]);
