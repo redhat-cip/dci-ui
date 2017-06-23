@@ -12,17 +12,19 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin topics component', function() {
+describe("admin topics component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminTopics', null, {
-      topics: topics
-    });
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminTopics", null, {
+        topics: topics
+      });
+    })
+  );
 
-  it('should init scope with prop topics', function() {
+  it("should init scope with prop topics", function() {
     expect(component.topics.length).toBe(2);
-    expect(component.topics[0].name).toBe('OSP10');
+    expect(component.topics[0].name).toBe("OSP10");
   });
 });

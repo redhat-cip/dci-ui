@@ -14,30 +14,30 @@
 
 module.exports = function(config) {
   config.set({
-    basePath: '../..',
-    frameworks: ['jasmine'],
+    basePath: "../..",
+    frameworks: ["jasmine"],
     files: [
-      'static/js/app.js',
-      'node_modules/angular-mocks/angular-mocks.js',
-      'src/partials/**/*.html',
-      'test/unit/helper.js',
-      'test/unit/**/*.spec.js'
+      "static/js/app.js",
+      "node_modules/angular-mocks/angular-mocks.js",
+      "src/partials/**/*.html",
+      "test/unit/helper.js",
+      "test/unit/**/*.spec.js"
     ],
     exclude: [],
     preprocessors: {
-      'src/partials/**/*.html': ['ng-html2js']
+      "src/partials/**/*.html": ["ng-html2js"]
     },
     ngHtml2JsPreprocessor: {
-      stripPrefix: 'src/',
-      prependPrefix: '/',
-      moduleName: 'templates'
+      stripPrefix: "src/",
+      prependPrefix: "/",
+      moduleName: "templates"
     },
-    reporters: ['progress'],
+    reporters: ["progress"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_DEBUG,
     autoWatch: false,
-    browsers: ['PhantomJS'],
+    browsers: ["PhantomJS"],
     singleRun: true,
     concurrency: Infinity
   });

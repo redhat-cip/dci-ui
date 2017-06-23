@@ -12,18 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin team edit component', function() {
+describe("admin team edit component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminTeamEdit', null, {
-      team: adminTeam
-    });
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminTeamEdit", null, {
+        team: adminTeam
+      });
+    })
+  );
 
-  it('should init scope with prop team', function() {
-    expect(component.team.id).toBe('ac654db0-c6ff-40e8-82c7-9bc49989cb86');
-    expect(component.team.name).toBe('admin');
+  it("should init scope with prop team", function() {
+    expect(component.team.id).toBe("ac654db0-c6ff-40e8-82c7-9bc49989cb86");
+    expect(component.team.name).toBe("admin");
     expect(component.team.notification).toBe(true);
   });
 });

@@ -12,14 +12,16 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe('admin topic create component', function() {
+describe("admin topic create component", function() {
   var component;
 
-  beforeEach(inject(function($componentController) {
-    component = $componentController('adminTopicCreate');
-  }));
+  beforeEach(
+    inject(function($componentController) {
+      component = $componentController("adminTopicCreate");
+    })
+  );
 
-  it('should init scope with empty topic', function() {
-    expect(component.topic.name).toBe('');
+  it("should init scope with empty topic", function() {
+    expect(component.topic.name).toBe("");
   });
 });
