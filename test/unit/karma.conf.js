@@ -17,10 +17,11 @@ module.exports = function(config) {
     basePath: "../..",
     frameworks: ["jasmine"],
     files: [
+      "test/unit/globals.js",
       "static/js/app.js",
       "node_modules/angular-mocks/angular-mocks.js",
       "src/partials/**/*.html",
-      "test/unit/helper.js",
+      "test/unit/fixture.js",
       "test/unit/**/*.spec.js"
     ],
     exclude: [],

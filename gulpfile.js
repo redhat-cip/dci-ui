@@ -15,7 +15,6 @@
 "use strict";
 
 const browserify = require("browserify");
-const childProcess = require("child_process");
 const del = require("del");
 const fs = require("fs");
 const globby = require("globby");
@@ -55,11 +54,10 @@ const files = {
     dest: destination + "/partials"
   },
   rootFiles: {
-    src: ["./src/index.html", "node_modules/rcue/dist/img/favicon.ico"],
+    src: ["./src/index.html", "./src/js/config.js", "node_modules/rcue/dist/img/favicon.ico"],
     dest: destination
   },
-  e2e: ["./test/e2e/**/*.spec.js"],
-  configFile: destination + "/config.json"
+  e2e: ["./test/e2e/**/*.spec.js"]
 };
 
 gulp.task("clean", function() {
@@ -104,7 +102,7 @@ gulp.task("css", function() {
           $.sass.logError
         )
       )
-      .pipe($.concat("dashboard.min.css"))
+      .pipe($.concat("app.min.css"))
       .pipe($.sourcemaps.init())
       .pipe($.cleanCss())
       .pipe($.sourcemaps.write("./"))
@@ -130,36 +128,13 @@ gulp.task("files", function() {
 
 gulp.task("build", ["js", "css", "fonts", "images", "html", "files"]);
 
-function writeConfigFile(version) {
-  const template = `{
-  "apiURL": "http://${host}:5000",
-  "version": "${version}"
-}`;
-  if (!fs.existsSync(destination)) {
-    fs.mkdirSync(destination);
-  }
-  fs.writeFileSync(files.configFile, template);
-}
-
-gulp.task("config:dev", function() {
-  childProcess.exec("git rev-parse --short HEAD", { cwd: __dirname }, function(
-    err,
-    stdout
-  ) {
-    const version = stdout.split("\n").join("");
-    writeConfigFile(version);
-  });
-});
-
 gulp.task("watch", function() {
   gulp.watch(files.js.src, ["js"]);
   gulp.watch(files.css.src, ["css"]);
   gulp.watch(files.html.src, ["html"]);
 });
 
-gulp.task("build:dev", ["build", "config:dev"]);
-
-gulp.task("serve:dev", ["clean", "build:dev", "watch"], function() {
+gulp.task("serve:dev", ["clean", "build", "watch"], function() {
   $.connect.server({
     root: "static",
     livereload: true,
@@ -167,14 +142,7 @@ gulp.task("serve:dev", ["clean", "build:dev", "watch"], function() {
   });
 });
 
-gulp.task("config:prod", function() {
-  const version = __dirname.split("git")[1].slice(0, 8);
-  writeConfigFile(version);
-});
-
-gulp.task("build:pkg", ["build", "config:prod"]);
-
-gulp.task("serve", ["clean", "build:pkg"], function() {
+gulp.task("serve", ["clean", "build"], function() {
   $.connect.server({
     root: "static",
     livereload: false,

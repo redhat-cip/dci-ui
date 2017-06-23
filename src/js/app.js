@@ -15,6 +15,7 @@
 "use strict";
 
 var angular = require("angular");
+var _ = require("lodash");
 
 require("angular-animate");
 require("angular-cookies");
@@ -24,6 +25,11 @@ require("ui-select");
 require("angular-ui-bootstrap");
 require("angular-moment");
 require("jsonformatter");
+
+var config = {};
+if (window) {
+  _.assign(config, window.__DCI_CONFIG);
+}
 
 module.exports = angular
   .module("app", [
@@ -36,6 +42,7 @@ module.exports = angular
     "angularMoment",
     "jsonFormatter"
   ])
+  .constant("config", config)
   .factory("appCache", [
     "$cacheFactory",
     function($cacheFactory) {
