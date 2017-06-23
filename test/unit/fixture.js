@@ -263,10 +263,6 @@ beforeEach(
 beforeEach(
   inject(function($injector) {
     $httpBackend = $injector.get("$httpBackend");
-    $httpBackend
-      .when("GET", "/config.json")
-      .respond({ apiURL: "https://api.example.org", version: "7489734" });
-    $httpBackend.flush();
   })
 );
 

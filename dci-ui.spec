@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           dci-ui
-Version:        0.0.VERS
+Version:        0.VERS.0
 Release:        1%{?dist}
 
 Summary:        DCI UI static files
@@ -26,21 +26,22 @@ DCI UI static files
 %setup -qc
 
 %build
-npm config set prefix '/tmp/npm-global'
-npm install -g gulp
 npm install
-/tmp/npm-global/bin/gulp build:pkg
+npm run build
 
 %install
 install -d -m0755 %{buildroot}/srv/www/dci-ui
 install -d -m0755 %{buildroot}/etc/dci-ui
 cp -r static/* %{buildroot}/srv/www/dci-ui
-ln -sf /srv/www/dci-ui/config.json %{buildroot}/etc/dci-ui/config.json
+ln -sf /srv/www/dci-ui/config.js %{buildroot}/etc/dci-ui/config.js
 
 %files
 /srv/www/dci-ui/*
-%config(noreplace) /etc/dci-ui/config.json
+%config(noreplace) /etc/dci-ui/config.js
 
 %changelog
+* Fri Jun 23 2017 Guillaume Vincent <gvincent@redhat.com> 0.1.0
+- Use npm script instead of gulp to build the application
+
 * Mon Jan 11 2016 Yanis Guenane <yguenane@redhat.com> 0.0-1
 - Initial commit

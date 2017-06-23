@@ -5,7 +5,7 @@
   "repository": "https://github.com/redhat-cip/dci-ui",
   "scripts": {
     "precommit": "lint-staged",
-    "build": "gulp build:dev",
+    "build": "gulp build",
     "dev": "gulp serve:dev",
     "start": "gulp serve",
     "test": "npm run build && npm run test:unit && gulp test",
