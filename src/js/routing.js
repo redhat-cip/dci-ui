@@ -21,29 +21,9 @@ require("app")
     "$stateProvider",
     "$urlRouterProvider",
     function($stateProvider, $urlRouterProvider) {
-      var scrollTop = [
-        "$anchorScroll",
-        function($anchorScroll) {
-          $anchorScroll();
-        }
-      ];
-
       $stateProvider
-        .state("config", {
-          abstract: true,
-          resolve: {
-            conf: [
-              "api",
-              function(api) {
-                return api.promise;
-              }
-            ]
-          },
-          template: "<ui-view></ui-view>"
-        })
         .state("auth", {
           abstract: true,
-          parent: "config",
           resolve: {
             _: [
               "auth",
@@ -59,7 +39,6 @@ require("app")
           templateUrl: "/partials/auth.html"
         })
         .state("login", {
-          parent: "config",
           url: "/login",
           controller: "LoginCtrl",
           templateUrl: "/partials/login.html"
@@ -95,7 +74,6 @@ require("app")
         .state("jobs", {
           parent: "auth",
           url: "/jobs?status&remoteci&page",
-          onEnter: scrollTop,
           templateUrl: "/partials/jobs.html",
           controller: "ListJobsCtrl"
         })
@@ -116,7 +94,6 @@ require("app")
               "$state",
               "messages",
               "api",
-              "conf",
               function($stateParams, $state, messages, api) {
                 return api.jobs.get($stateParams.id).catch(function(err) {
                   $state.go("index");
@@ -139,14 +116,12 @@ require("app")
         .state("jobdefs", {
           parent: "auth",
           url: "/job-definitions?page",
-          onEnter: scrollTop,
           controller: "ListJobDefsCtrl",
           templateUrl: "/partials/jobdefs.html"
         })
         .state("topics", {
           parent: "auth",
           url: "/topics?page",
-          onEnter: scrollTop,
           controller: "ListTopicsCtrl",
           templateUrl: "/partials/topics.html"
         })
@@ -181,7 +156,6 @@ require("app")
             topics: [
               "$q",
               "api",
-              "conf",
               function($q, api) {
                 return api.topics.list(null, true).then(function(topics) {
                   var promises = [];
@@ -206,7 +180,6 @@ require("app")
           resolve: {
             users: [
               "api",
-              "conf",
               function(api) {
                 return api.users.list(null, true);
               }
@@ -221,14 +194,12 @@ require("app")
           resolve: {
             teams: [
               "api",
-              "conf",
               function(api) {
                 return api.teams.list(null, true);
               }
             ],
             roles: [
               "api",
-              "conf",
               function(api) {
                 return api.roles.list(null, true);
               }
@@ -244,21 +215,18 @@ require("app")
             user: [
               "$stateParams",
               "api",
-              "conf",
               function($stateParams, api) {
                 return api.users.get($stateParams.id);
               }
             ],
             teams: [
               "api",
-              "conf",
               function(api) {
                 return api.teams.list(null, true);
               }
             ],
             roles: [
               "api",
-              "conf",
               function(api) {
                 return api.roles.list(null, true);
               }
@@ -272,7 +240,6 @@ require("app")
           resolve: {
             teams: [
               "api",
-              "conf",
               function(api) {
                 return api.teams.list(null, true);
               }
@@ -292,7 +259,6 @@ require("app")
             team: [
               "$stateParams",
               "api",
-              "conf",
               function($stateParams, api) {
                 return api.teams.get($stateParams.id);
               }
@@ -307,7 +273,6 @@ require("app")
           resolve: {
             remotecis: [
               "api",
-              "conf",
               function(api) {
                 return api.remotecis.list(null, true);
               }
@@ -328,7 +293,6 @@ require("app")
             remoteci: [
               "$stateParams",
               "api",
-              "conf",
               function($stateParams, api) {
                 return api.remotecis.get($stateParams.id);
               }
@@ -342,7 +306,6 @@ require("app")
           resolve: {
             topics: [
               "api",
-              "conf",
               function(api) {
                 return api.topics.list(null, true);
               }
@@ -363,7 +326,6 @@ require("app")
             topic: [
               "$stateParams",
               "api",
-              "conf",
               function($stateParams, api) {
                 return api.topics.get($stateParams.id);
               }
@@ -371,14 +333,12 @@ require("app")
             topicTeams: [
               "$stateParams",
               "api",
-              "conf",
               function($stateParams, api) {
                 return api.topics.teams($stateParams.id);
               }
             ],
             teams: [
               "api",
-              "conf",
               function(api) {
                 return api.teams.list(null, true);
               }
@@ -392,7 +352,6 @@ require("app")
           resolve: {
             audits: [
               "api",
-              "conf",
               function(api) {
                 return api.audits.list(null, true);
               }
