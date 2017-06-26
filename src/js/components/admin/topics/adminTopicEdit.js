@@ -51,8 +51,11 @@ function adminTopicCtrl($state, api, messages) {
 
   $ctrl.update = function() {
     var topicName = $ctrl.topic.name;
+    if (!$ctrl.topic.next_topic) {
+      $ctrl.topic.next_topic = null;
+    }
     api.topics
-      .update(_.omitBy($ctrl.topic, _.isNull))
+      .update($ctrl.topic)
       .then(function() {
         messages.alert("topic " + topicName + " updated", "success");
         $state.go("adminTopics");

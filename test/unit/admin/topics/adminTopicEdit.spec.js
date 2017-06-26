@@ -74,7 +74,7 @@ describe("admin topic edit component", function() {
     $httpBackend
       .expectPUT(
         "https://api.example.org/api/v1/topics/d95c065a-fbc9-984c-8e9d-454d1a9171a7",
-        { name: "OSP10", next_topic: "" }
+        { name: "OSP10", next_topic: null }
       )
       .respond();
     component.update();
