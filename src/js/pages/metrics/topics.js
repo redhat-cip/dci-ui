@@ -36,7 +36,7 @@ function topicsMetricsCtrl($state, $stateParams, api) {
       var firstTopicName = Object.keys(topics)[0];
       return {
         name: firstTopicName,
-        components: topics[firstTopicName]
+        components: topics[firstTopicName].components
       };
     } else {
       for (var topicName in topics) {

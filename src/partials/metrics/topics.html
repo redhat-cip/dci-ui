@@ -1,10 +1,13 @@
-<div class="cards-pf" style="min-height:90vh">
-  <div class="container-fluid container-cards-pf" ng-if="$ctrl.topics">
+<div class="cards-pf mt-0" style="min-height:90vh">
+  <div class="container-fluid container-cards-pf mt-0" ng-if="$ctrl.topics" style="margin-top:0px">
     <div class="row row-cards-pf">
       <div class="col-sm-4 col-md-3 col-lg-1"
            ng-repeat="topic in $ctrl.filteredTopics"
            ng-click="$ctrl.updatePage(topic.name, $ctrl.selectedRange)">
-        <topic-metrics-summary topic="topic"></topic-metrics-summary>
+        <topic-metrics-summary
+          topic="topic"
+          topic-selected="topic.name === $ctrl.selectedTopic.name">
+        </topic-metrics-summary>
       </div>
     </div>
     <div class="row row-cards-pf">
@@ -29,7 +32,7 @@
               </a>
             </p>
             <h2 class="card-pf-title" style="height: 18px;">
-              Number of days before first run for each components of topic {{$ctrl.selectedTopic.name}}
+              Number of days before first run for each components of topic <b>{{$ctrl.selectedTopic.name}}</b>
             </h2>
           </div>
           <div class="card-pf-body">
@@ -52,15 +55,18 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" fill="black">
           <circle transform="translate(8 0)" cx="0" cy="16" r="0">
             <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0"
-                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8"
+                     calcMode="spline"/>
           </circle>
           <circle transform="translate(16 0)" cx="0" cy="16" r="0">
             <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3"
-                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8"
+                     calcMode="spline"/>
           </circle>
           <circle transform="translate(24 0)" cx="0" cy="16" r="0">
             <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
-                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8"
+                     calcMode="spline"/>
           </circle>
         </svg>
       </div>
