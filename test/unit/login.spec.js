@@ -13,25 +13,29 @@
 // under the License.
 
 describe("login controller", function() {
-  var $controller;
+  var component;
 
   beforeEach(
-    inject(function(_$controller_) {
-      $controller = _$controller_;
+    inject(function($componentController) {
+      component = $componentController("dciLogin", null, null);
+      component.$onInit();
     })
   );
 
+  it("should init component", function() {
+    expect(component.username).toBe("");
+    expect(component.password).toBe("");
+  });
+
   it("should authenticate the user", function() {
-    var $scope = {};
-    $controller("LoginCtrl", { $scope: $scope });
-    $scope.username = "test";
-    $scope.password = "password";
+    component.username = "test";
+    component.password = "password";
     $httpBackend
       .expectGET(
         "https://api.example.org/api/v1/users?where=name:test&embed=team,role"
       )
       .respond();
-    $scope.authenticate();
+    component.authenticate();
     $httpBackend.flush();
   });
 });

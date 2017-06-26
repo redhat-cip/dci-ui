@@ -24,8 +24,7 @@ require("app")
       $stateProvider
         .state("login", {
           url: "/login",
-          controller: "LoginCtrl",
-          templateUrl: "/partials/login.html",
+          template: "<dci-login></dci-login>",
           data: {
             loginRequired: false
           }
