@@ -30,6 +30,7 @@ describe("topics metrics component", function() {
     it("should init component with first topic and default range", function() {
       expect(component.topics).toEqual(topicsMetrics);
       expect(component.selectedTopic.name).toEqual("OSP10");
+      expect(component.selectedTopic.components.length).toEqual(0);
       expect(component.selectedRange).toEqual(3);
     });
   });

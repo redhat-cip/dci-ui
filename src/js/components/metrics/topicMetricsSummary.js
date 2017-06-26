@@ -17,7 +17,8 @@ require("app").component("topicMetricsSummary", {
   templateUrl: "/partials/metrics/topicSummary.html",
   controller: topicMetricsSummaryCtrl,
   bindings: {
-    topic: "<"
+    topic: "<",
+    topicSelected: "<"
   }
 });
 
