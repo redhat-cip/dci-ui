@@ -1,31 +1,33 @@
-<h1>Search Logs</h1>
+<div class="container-fluid">
+  <h1>Search Logs</h1>
 
-<div class="row">
-  <div class="col-xs-12">
-    <form class="form-inline" ng-submit="retrieveLogs()">
-      <div class="form-group">
-        <input type="search" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
-      </div>
-      <button type="submit" class="btn btn-primary">
-        Search
-      </button>
-    </form>
+  <div class="row">
+    <div class="col-xs-12">
+      <form class="form-inline" ng-submit="retrieveLogs()">
+        <div class="form-group">
+          <input type="search" class="form-control" id="patternSearch" ng-model="pattern" placeholder="search pattern">
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Search
+        </button>
+      </form>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
-    <h2 class="page-header">Results</h2>
-    <div uib-progressbar class="progress-striped active" max="1" value="1" ng-if="!logs && search">
-      <i>Loading</i>
-    </div>
-    <div ng-if="logs && !logs.length">
-      No logs corresponding to pattern: {{ ::pattern }}
-    </div>
-    <div ng-repeat="log in logs">
-      <div class="panel" ng-class="status(log)">
-        <a class="panel-heading" ui-sref="job.results({id: log.job.id})"><b>Job: </b>{{ log.job.id }}</a>
-        <div class="panel-body">
-          <b>File: </b>{{ log._source.name }}
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">Results</h2>
+      <div uib-progressbar class="progress-striped active" max="1" value="1" ng-if="!logs && search">
+        <i>Loading</i>
+      </div>
+      <div ng-if="logs && !logs.length">
+        No logs corresponding to pattern: {{ ::pattern }}
+      </div>
+      <div ng-repeat="log in logs">
+        <div class="panel" ng-class="status(log)">
+          <a class="panel-heading" ui-sref="job.results({id: log.job.id})"><b>Job: </b>{{ log.job.id }}</a>
+          <div class="panel-body">
+            <b>File: </b>{{ log._source.name }}
+          </div>
         </div>
       </div>
     </div>
