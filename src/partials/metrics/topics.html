@@ -1,5 +1,5 @@
-<div class="cards-pf" style="margin: -20px; min-height:90vh">
-  <div class="container-fluid container-cards-pf" ng-if="$ctrl.topics">
+<div class="cards-pf" style="min-height:90vh">
+  <div class="container-fluid" ng-if="$ctrl.topics">
     <div class="row row-cards-pf">
       <div class="col-sm-4 col-md-3 col-lg-1"
            ng-repeat="topic in $ctrl.filteredTopics"
@@ -46,7 +46,7 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid container-cards-pf" ng-if="!$ctrl.topics">
+  <div class="container-fluid" ng-if="!$ctrl.topics">
     <div class="row row-cards-pf">
       <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-lg-2 col-lg-offset-5 pt-3">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" fill="black">
