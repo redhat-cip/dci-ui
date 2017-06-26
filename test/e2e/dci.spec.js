@@ -77,11 +77,6 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("visit /job-definitions", function() {
-    browser.get("/#!/job-definitions");
-    browser.waitForAngular();
-  });
-
   it("visit /logs", function() {
     browser.get("/#!/logs");
     browser.waitForAngular();
