@@ -73,11 +73,6 @@ require("app")
         .state("job.stackdetails", { url: "/stackdetails" })
         .state("job.issues", { url: "/issues" })
         .state("job.files", { url: "/files" })
-        .state("jobdefs", {
-          url: "/job-definitions?page",
-          controller: "ListJobDefsCtrl",
-          templateUrl: "/partials/jobdefs.html"
-        })
         .state("topics", {
           url: "/topics?page",
           controller: "ListTopicsCtrl",
