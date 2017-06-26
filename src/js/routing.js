@@ -22,69 +22,29 @@ require("app")
     "$urlRouterProvider",
     function($stateProvider, $urlRouterProvider) {
       $stateProvider
-        .state("auth", {
-          abstract: true,
-          resolve: {
-            _: [
-              "auth",
-              "$q",
-              function(auth, $q) {
-                if (!auth.isAuthenticated()) {
-                  return $q.reject({ status: 401 });
-                }
-              }
-            ]
-          },
-          controller: "authCtrl",
-          templateUrl: "/partials/auth.html"
-        })
         .state("login", {
           url: "/login",
           controller: "LoginCtrl",
-          templateUrl: "/partials/login.html"
-        })
-        .state("authAdmin", {
-          abstract: true,
-          parent: "auth",
-          template: "<ui-view></ui-view>",
-          resolve: {
-            _: [
-              "auth",
-              "$q",
-              function(auth, $q) {
-                if (!auth.isAdmin() && !auth.isSuperAdmin()) {
-                  return $q.reject({ status: 401 });
-                }
-              }
-            ]
+          templateUrl: "/partials/login.html",
+          data: {
+            loginRequired: false
           }
         })
         .state("index", {
           url: "/",
-          parent: "auth",
-          resolve: {
-            _: [
-              "$q",
-              function($q) {
-                return $q.reject({ status: 301 });
-              }
-            ]
-          }
+          redirectTo: "jobs"
         })
         .state("jobs", {
-          parent: "auth",
           url: "/jobs?status&remoteci&page",
           templateUrl: "/partials/jobs.html",
           controller: "ListJobsCtrl"
         })
         .state("logs", {
-          parent: "auth",
           url: "/logs?pattern",
           templateUrl: "/partials/logs.html",
           controller: "LogsCtrl"
         })
         .state("job", {
-          parent: "auth",
           url: "/jobs/:id",
           controller: "JobCtrl",
           templateUrl: "/partials/job.html",
@@ -114,19 +74,16 @@ require("app")
         .state("job.issues", { url: "/issues" })
         .state("job.files", { url: "/files" })
         .state("jobdefs", {
-          parent: "auth",
           url: "/job-definitions?page",
           controller: "ListJobDefsCtrl",
           templateUrl: "/partials/jobdefs.html"
         })
         .state("topics", {
-          parent: "auth",
           url: "/topics?page",
           controller: "ListTopicsCtrl",
           templateUrl: "/partials/topics.html"
         })
         .state("topic", {
-          parent: "auth",
           url: "/topics/:id",
           templateUrl: "/partials/topic.html",
           controller: "ListComponentsCtrl",
@@ -149,7 +106,6 @@ require("app")
           }
         })
         .state("globalStatus", {
-          parent: "auth",
           url: "/globalStatus",
           template: '<global-status topics="$resolve.topics"></global-status>',
           resolve: {
@@ -174,7 +130,6 @@ require("app")
           }
         })
         .state("adminUsers", {
-          parent: "authAdmin",
           url: "/admin/users",
           template: '<admin-users users="$resolve.users"></admin-users>',
           resolve: {
@@ -187,7 +142,6 @@ require("app")
           }
         })
         .state("adminUserCreate", {
-          parent: "authAdmin",
           url: "/admin/users/create",
           template:
             '<admin-user-create teams="$resolve.teams" roles="$resolve.roles"></admin-user-create>',
@@ -207,7 +161,6 @@ require("app")
           }
         })
         .state("adminUserEdit", {
-          parent: "authAdmin",
           url: "/admin/users/:id",
           template:
             '<admin-user-edit user="$resolve.user" teams="$resolve.teams" roles="$resolve.roles"></admin-user-edit>',
@@ -234,7 +187,6 @@ require("app")
           }
         })
         .state("adminTeams", {
-          parent: "authAdmin",
           url: "/admin/teams",
           template: '<admin-teams teams="$resolve.teams"></admin-teams>',
           resolve: {
@@ -247,12 +199,10 @@ require("app")
           }
         })
         .state("adminTeamCreate", {
-          parent: "authAdmin",
           url: "/admin/teams/create",
           template: "<admin-team-create></admin-team-create>"
         })
         .state("adminTeamEdit", {
-          parent: "authAdmin",
           url: "/admin/teams/:id",
           template: '<admin-team-edit team="$resolve.team"></admin-team-edit>',
           resolve: {
@@ -266,7 +216,6 @@ require("app")
           }
         })
         .state("adminRemotecis", {
-          parent: "authAdmin",
           url: "/admin/remotecis",
           template:
             '<admin-remotecis remotecis="$resolve.remotecis"></admin-remotecis>',
@@ -280,12 +229,10 @@ require("app")
           }
         })
         .state("adminRemoteciCreate", {
-          parent: "authAdmin",
           url: "/admin/remotecis/create",
           template: "<admin-remoteci-create></admin-remoteci-create>"
         })
         .state("adminRemoteciEdit", {
-          parent: "authAdmin",
           url: "/admin/remotecis/:id",
           template:
             '<admin-remoteci-edit remoteci="$resolve.remoteci"></admin-remoteci-edit>',
@@ -300,7 +247,6 @@ require("app")
           }
         })
         .state("adminTopics", {
-          parent: "authAdmin",
           url: "/admin/topics",
           template: '<admin-topics topics="$resolve.topics"></admin-topics>',
           resolve: {
@@ -313,12 +259,10 @@ require("app")
           }
         })
         .state("adminTopicCreate", {
-          parent: "authAdmin",
           url: "/admin/topics/create",
           template: "<admin-topic-create></admin-topic-create>"
         })
         .state("adminTopicEdit", {
-          parent: "authAdmin",
           url: "/admin/topics/:id",
           template:
             '<admin-topic-edit topic="$resolve.topic" teams="$resolve.teams" topic-teams="$resolve.topicTeams"></admin-topic-edit>',
@@ -346,7 +290,6 @@ require("app")
           }
         })
         .state("adminAudits", {
-          parent: "authAdmin",
           url: "/admin/audits",
           template: '<admin-audits audits="$resolve.audits"></admin-audits>',
           resolve: {
@@ -359,7 +302,6 @@ require("app")
           }
         })
         .state("statsMetrics", {
-          parent: "authAdmin",
           url: "/metrics/topics?selected&range",
           template: "<topics-metrics></topics-metrics>"
         });
@@ -368,17 +310,16 @@ require("app")
     }
   ])
   .run([
-    "$rootScope",
-    "$state",
-    "$log",
-    function($rootScope, $state, $log) {
-      $rootScope.$on("$stateChangeError", function(e, tS, tPs, fS, fPs, err) {
-        if (err.status === 401) {
-          $state.go("login", {}, { reload: true });
-        } else if (err.status === 301) {
-          $state.go("jobs", {}, { reload: true, inherit: false });
-        } else {
-          $log.error(err);
+    "$transitions",
+    "auth",
+    function($transitions, auth) {
+      $transitions.onStart({}, function(transition) {
+        var data = transition.$to().data || {};
+        var loginRequired = typeof data.loginRequired === "undefined"
+          ? true
+          : data.loginRequired;
+        if (loginRequired && !auth.isAuthenticated()) {
+          return transition.router.stateService.target("login");
         }
       });
     }
