@@ -20,7 +20,7 @@ var _ = require("lodash");
 require("angular-animate");
 require("angular-cookies");
 require("angular-sanitize");
-require("angular-ui-router");
+require("@uirouter/angularjs");
 require("ui-select");
 require("angular-ui-bootstrap");
 require("angular-moment");
