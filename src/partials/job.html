@@ -1,4 +1,24 @@
 <div class="container-fluid">
   <div dci-job></div>
-  <ui-view></ui-view>
+  <div ng-if="$state.includes('job.results')">
+    <div ng-include="'/partials/job/results.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.logs')">
+    <div ng-include="'/partials/job/logs.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.details')">
+    <div ng-include="'/partials/job/details.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.edit')">
+    <div ng-include="'/partials/job/edit.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.stackdetails')">
+    <div ng-include="'/partials/job/stackdetails.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.issues')">
+    <div ng-include="'/partials/job/issues.html'"></div>
+  </div>
+  <div ng-if="$state.includes('job.files')">
+    <div ng-include="'/partials/job/files.html'"></div>
+  </div>
 </div>
