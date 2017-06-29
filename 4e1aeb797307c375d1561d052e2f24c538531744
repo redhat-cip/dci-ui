@@ -1,0 +1,12 @@
+Code-Review+2: Dimitri Savineau <dsavinea@redhat.com>
+Code-Review+2: François Charlier <francois.charlier@redhat.com>
+Code-Review+2: Yanis Guenane <yguenane@gmail.com>
+Code-Review+2: Guillaume Vincent <gvincent@redhat.com>
+Code-Review+2: Yassine Lamgarchal <yassine.lamgarchal@redhat.com>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-by: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-at: Thu, 29 Jun 2017 11:13:03 +0000
+Reviewed-on: https://softwarefactory-project.io/r/8720
+Project: dci-ui
+Branch: refs/heads/master
