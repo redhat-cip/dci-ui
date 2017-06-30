@@ -5,7 +5,8 @@
              'card-pf-danger': $ctrl.percentageTested < 33
            }">
   <h2 class="card-pf-title">
-    {{$ctrl.topic.name}}
+    <b ng-if="$ctrl.topicSelected">{{$ctrl.topic.name}}</b>
+    <span ng-hide="$ctrl.topicSelected">{{$ctrl.topic.name}}</span>
   </h2>
   <div class="card-pf-body">
     <p>
