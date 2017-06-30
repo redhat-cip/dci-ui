@@ -13,7 +13,7 @@
            ng-class="{'glyphicon-chevron-down': opened, 'glyphicon-chevron-right': !opened}"></i>
       </uib-accordion-heading>
       <div class="table-responsive">
-        <table class="table table-condensed">
+        <table class="table table-condensed table-bordered">
           <thead>
           <tr>
             <th class="text-center" ng-if="auth.isSuperAdmin()">Export Control</th>
@@ -36,7 +36,7 @@
           <tr ng-repeat-end ng-if="c.opened">
             <td colspan="4">
               <div><label>Files</label><br/>
-                <table ng-if="c.files.length != 0" class="table table-condensed">
+                <table ng-if="c.files.length != 0" class="table table-condensed table-bordered">
                   <thead>
                   <tr>
                     <th>Name</th>

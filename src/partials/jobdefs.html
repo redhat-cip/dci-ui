@@ -2,7 +2,7 @@
   <h1>Job Definitions</h1>
 
   <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <thead>
       <tr>
         <th class="text-center">Status</th>
@@ -30,7 +30,7 @@
           <div><label>Associated Test(s):</label></div>
           <br/>
           <div ng-if="jobdef.tests.length == 0">No test associated with this job definition<br/></div>
-          <table ng-if="jobdef.tests.length != 0" class="table table-condensed">
+          <table ng-if="jobdef.tests.length != 0" class="table table-condensed table-bordered">
             <thead>
             <tr>
               <th>Name</th>

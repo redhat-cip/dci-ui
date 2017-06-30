@@ -40,7 +40,7 @@
       <div ng-repeat="topic in $ctrl.topics | orderBy: 'order'" ng-if="topic.jobs.length > 0">
         <h2><a ui-sref="topic({id: topic.id})">{{topic.name}}</a></h2>
         <br>
-        <table class="table">
+        <table class="table table-bordered">
           <thead>
           <th>Team</th>
           <th>Remote CI</th>

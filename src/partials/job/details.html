@@ -15,7 +15,7 @@
   <div uib-collapse="collapses.components">
     <div class="col-md-6" ng-repeat="component in job.components">
       <h4>{{ component.name }}</h4>
-      <table class="table table-striped">
+      <table class="table table-striped table-bordered">
         <tr><th>id</th><td>{{ component.id }}</td></tr>
         <tr><th>type</th><td>{{ component.type }}</td></tr>
         <tr><th>created at</th><td>{{ component.created_at | dciDate }}</td></tr>
@@ -45,7 +45,7 @@
 </h3>
 <div class="col-md-12" uib-collapse="collapses.remoteci">
   <h4>{{ job.remoteci.name }}</h4>
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered">
     <tr><th>id</th><td>{{ job.remoteci.id }}</td></tr>
     <tr><th>created at</th><td>{{ job.remoteci.created_at | dciDate }}</td></tr>
     <tr><th>updated at</th><td>{{ job.remoteci.updated_at | dciDate }}</td></tr>
@@ -75,7 +75,7 @@
   </h3>
   <div class="col-md-12" uib-collapse="collapses.jobdefinition">
     <h4>{{ job.jobdefinition.name }}</h4>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <tr><th>id</th><td>{{ job.jobdefinition.id }}</td></tr>
       <tr><th>created at</th><td>{{ job.jobdefinition.created_at | dciDate }}</td></tr>
     </table>
@@ -99,7 +99,7 @@
   <div class="col-md-12" uib-collapse="collapses.tests">
     <div ng-if="jtests.length">
     <h4>Jobdefinitions Tests</h4>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>Name</th>
@@ -119,7 +119,7 @@
     <br>
     <div ng-if="rtests.length">
     <h4>RemoteCI Tests</h4>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>Name</th>
