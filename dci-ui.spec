@@ -37,7 +37,8 @@ ln -sf /srv/www/dci-ui/config.js %{buildroot}/etc/dci-ui/config.js
 
 %files
 /srv/www/dci-ui/*
-%config(noreplace) /etc/dci-ui/config.js
+%config /etc/dci-ui/config.js
+%config(noreplace) /srv/www/dci-ui/config.js
 
 %changelog
 * Fri Jun 23 2017 Guillaume Vincent <gvincent@redhat.com> 0.0-2
