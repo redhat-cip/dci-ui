@@ -24,7 +24,7 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-primary"
-        ng-class="{'persistent-secondary': $ctrl.isAdminPage() || $ctrl.isJobPage()}">
+        ng-class="{'persistent-secondary': $ctrl.shouldDisplaySubMenu()}">
       <li ng-class="{active: $ctrl.isJobsPage()}">
         <a ui-sref="jobs">
           Jobs
@@ -97,6 +97,20 @@
         <a ui-sref="globalStatus">
           Global Status
         </a>
+      </li>
+      <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"
+          ng-if="$ctrl.isSettingsOrPasswordPage()">
+        <a ui-sref="settings">
+          Settings
+        </a>
+        <ul class="nav navbar-nav navbar-persistent">
+          <li ng-class="{active: $ctrl.isSettingsPage()}">
+            <a ui-sref="settings">User settings</a>
+          </li>
+          <li ng-class="{active: $ctrl.isPasswordPage()}">
+            <a ui-sref="password">Change password</a>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>

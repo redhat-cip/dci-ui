@@ -69,8 +69,24 @@ function AppMenuCtrl($state, auth) {
     );
   };
 
-  $ctrl.isJobsPage = function() {
-    return $state.includes("jobs") || $ctrl.isJobPage();
+  $ctrl.isPasswordPage = function() {
+    return $state.includes("password");
+  };
+
+  $ctrl.isSettingsPage = function() {
+    return $state.includes("settings");
+  };
+
+  $ctrl.isSettingsOrPasswordPage = function() {
+    return $ctrl.isSettingsPage() || $ctrl.isPasswordPage();
+  };
+
+  $ctrl.shouldDisplaySubMenu = function() {
+    return (
+      $ctrl.isAdminPage() ||
+      $ctrl.isJobPage() ||
+      $ctrl.isSettingsOrPasswordPage()
+    );
   };
 
   $ctrl.isJobPage = function() {

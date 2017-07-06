@@ -14,12 +14,12 @@
 
 "use strict";
 
-require("app").component("settingsPage", {
-  templateUrl: "/partials/pages/settings.html",
-  controller: ["$state", "auth", "messages", "user", settingsPageCtrl]
+require("app").component("passwordPage", {
+  templateUrl: "/partials/pages/password.html",
+  controller: ["$state", "auth", "messages", "user", passwordPageCtrl]
 });
 
-function settingsPageCtrl($state, auth, messages, user) {
+function passwordPageCtrl($state, auth, messages, user) {
   var $ctrl = this;
 
   this.$onInit = function() {
@@ -28,7 +28,8 @@ function settingsPageCtrl($state, auth, messages, user) {
 
   $ctrl.onSuccess = function(message) {
     messages.alert(message, "success");
-    $state.reload();
+    auth.logout();
+    $state.go("login");
   };
 
   $ctrl.onError = function(message) {

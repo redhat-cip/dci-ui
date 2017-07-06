@@ -279,6 +279,10 @@ require("app")
         .state("settings", {
           url: "/settings",
           template: "<settings-page></settings-page>"
+        })
+        .state("password", {
+          url: "/password",
+          template: "<password-page></password-page>"
         });
 
       $urlRouterProvider.otherwise("/");
