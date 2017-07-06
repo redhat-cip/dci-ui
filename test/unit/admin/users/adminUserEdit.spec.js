@@ -18,8 +18,7 @@ describe("admin user edit component", function() {
   beforeEach(
     inject(function($componentController) {
       component = $componentController("adminUserEdit", null, {
-        user: admin,
-        teams: teams
+        user: admin
       });
     })
   );
@@ -27,32 +26,30 @@ describe("admin user edit component", function() {
   it("should init scope with prop user", function() {
     expect(component.user.id).toBe("4bdddeb3-ce9f-4590-b715-e1b21ed257d3");
     expect(component.user.name).toBe("admin");
-  });
-
-  it("should init scope with prop teams", function() {
-    expect(component.teams.length).toBe(2);
+    expect(component.user.fullname).toBe("Super Admin");
+    expect(component.user.email).toBe("admin@example.org");
   });
 
   it("should update user", function() {
     component.user = {
       id: 1,
       name: "foo",
+      fullname: "Foo",
+      email: "foo@example.org",
       team_id: 1,
       role_id: 1,
-      password: ""
+      password: "password"
     };
     $httpBackend
       .expectPUT("https://api.example.org/api/v1/users/1", {
         name: "foo",
+        fullname: "Foo",
+        email: "foo@example.org",
         team_id: 1,
         role_id: 1,
-        password: ""
+        password: "password"
       })
       .respond();
-    $httpBackend
-      .whenGET("https://api.example.org/api/v1/users?embed=team")
-      .respond();
-    $httpBackend.whenGET("https://api.example.org/api/v1/teams").respond();
     component.update();
     $httpBackend.flush();
   });
