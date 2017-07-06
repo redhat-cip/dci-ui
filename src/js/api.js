@@ -195,6 +195,8 @@ require("app").factory("api", [
         var url = config.apiURL + "/api/v1/users/me";
         var headers = { headers: { "If-Match": user.etag } };
         var parse = _.partialRight(_.pick, [
+          "fullname",
+          "email",
           "current_password",
           "new_password"
         ]);

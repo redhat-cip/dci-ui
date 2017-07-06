@@ -26,7 +26,12 @@ function settingsPageCtrl($state, auth, messages, user) {
     $ctrl.user = user;
   };
 
-  $ctrl.onSuccess = function(message) {
+  $ctrl.settingsChangedSuccessfully = function(message) {
+    messages.alert(message, "success");
+    $state.reload();
+  };
+
+  $ctrl.passwordChangedSuccessfully = function(message) {
     messages.alert(message, "success");
     auth.logout();
     $state.go("login");

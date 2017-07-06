@@ -14,9 +14,9 @@
 
 "use strict";
 
-require("app").component("passwordChangeForm", {
-  templateUrl: "/partials/components/passwordChangeForm.html",
-  controller: ["api", passwordChangeFormCtrl],
+require("app").component("settingsChangeForm", {
+  templateUrl: "/partials/components/settingsChangeForm.html",
+  controller: ["api", settingsChangeFormCtrl],
   bindings: {
     user: "=",
     onSuccess: "&",
@@ -24,30 +24,24 @@ require("app").component("passwordChangeForm", {
   }
 });
 
-function passwordChangeFormCtrl(api) {
+function settingsChangeFormCtrl(api) {
   var $ctrl = this;
 
   this.$onInit = function() {
     $ctrl.current_password = "";
-    $ctrl.new_password = "";
-    $ctrl.new_password2 = "";
   };
 
-  $ctrl.changePassword = function() {
-    if ($ctrl.new_password !== $ctrl.new_password2) {
-      $ctrl.onError({ message: "Passwords do not match." });
-      return;
-    }
-
+  $ctrl.changeSettings = function() {
     api.current_user
       .update({
         etag: $ctrl.user.etag,
         current_password: $ctrl.current_password,
-        new_password: $ctrl.new_password
+        fullname: $ctrl.user.fullname,
+        email: $ctrl.user.email
       })
       .then(function() {
         $ctrl.onSuccess({
-          message: "Your password has been reset successfully!"
+          message: "Your settings has been change successfully!"
         });
       })
       .catch(function(err) {
