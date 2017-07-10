@@ -89,6 +89,10 @@ function AppMenuCtrl($state, auth) {
     );
   };
 
+  $ctrl.isJobsPage = function() {
+    return $state.includes("jobs");
+  };
+
   $ctrl.isJobPage = function() {
     return (
       $state.includes("job.results") ||
