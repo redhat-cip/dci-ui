@@ -24,6 +24,7 @@
     "jsonformatter": "^0.6.0",
     "lodash": "^4.17.4",
     "moment": "2.18.1",
+    "moment-timezone": "^0.5.13",
     "rcue": "4.0.0-rc.1",
     "ui-select": "0.19.8"
   },

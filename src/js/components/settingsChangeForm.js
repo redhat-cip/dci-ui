@@ -19,6 +19,7 @@ require("app").component("settingsChangeForm", {
   controller: ["api", settingsChangeFormCtrl],
   bindings: {
     user: "=",
+    timezones: "<",
     onSuccess: "&",
     onError: "&"
   }
@@ -37,7 +38,8 @@ function settingsChangeFormCtrl(api) {
         etag: $ctrl.user.etag,
         current_password: $ctrl.current_password,
         fullname: $ctrl.user.fullname,
-        email: $ctrl.user.email
+        email: $ctrl.user.email,
+        timezone: $ctrl.user.timezone
       })
       .then(function() {
         $ctrl.onSuccess({

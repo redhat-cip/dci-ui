@@ -16,14 +16,15 @@
 
 require("app").component("settingsPage", {
   templateUrl: "/partials/pages/settings.html",
-  controller: ["$state", "auth", "messages", "user", settingsPageCtrl]
+  controller: ["$state", "messages", "user", "moment", settingsPageCtrl]
 });
 
-function settingsPageCtrl($state, auth, messages, user) {
+function settingsPageCtrl($state, messages, user, moment) {
   var $ctrl = this;
 
   this.$onInit = function() {
     $ctrl.user = user;
+    $ctrl.timezones = moment.tz.names();
   };
 
   $ctrl.onSuccess = function(message) {
