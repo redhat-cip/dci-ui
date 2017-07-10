@@ -36,12 +36,12 @@
       <span ng-if="job.status == 'success' ||
                    job.status == 'failure' ||
                    job.status == 'killed'">
-        <span class="glyphicon glyphicon-time"></span> ran for {{job.updated_at | amDifference : job.created_at : 'minute' | amDurationFormat : 'minute'}}
+        <span class="glyphicon glyphicon-time"></span> ran for {{job.updated_at | dciDateDiffInMin: job.created_at }} minutes
       </span>
       <span ng-if="job.status != 'success' &&
                    job.status != 'failure' &&
                    job.status != 'killed'">
-        <span class="glyphicon glyphicon-time"></span> running since {{job.created_at | amCalendar:referenceTime:formats}}
+        <span class="glyphicon glyphicon-time"></span> started {{job.created_at | dciFromNow}}
       </span>
     </div>
     <div>

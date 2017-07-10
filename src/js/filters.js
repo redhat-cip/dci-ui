@@ -24,11 +24,28 @@ require("app")
     };
   })
   .filter("dciDate", [
-    "$filter",
-    function($filter) {
-      var amDateFormat = $filter("amDateFormat");
+    "moment",
+    "user",
+    function(moment, user) {
       return function(value) {
-        return amDateFormat(value, "dddd DD, MMMM h:mm:ss A");
+        return moment.utc(value).tz(user.timezone).format("LLL");
+      };
+    }
+  ])
+  .filter("dciFromNow", [
+    "moment",
+    "user",
+    function(moment, user) {
+      return function(value) {
+        return moment.utc(value).tz(user.timezone).fromNow();
+      };
+    }
+  ])
+  .filter("dciDateDiffInMin", [
+    "moment",
+    function(moment) {
+      return function(value1, value2) {
+        return moment.utc(value1).diff(moment.utc(value2), "minutes");
       };
     }
   ])

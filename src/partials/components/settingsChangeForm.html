@@ -22,6 +22,17 @@
                required>
       </div>
       <div class="form-group">
+        <label class="control-label" for="timezone">
+          Time zone
+        </label>
+        <ui-select id="timezone" ng-model="$ctrl.user.timezone" theme="bootstrap">
+          <ui-select-match placeholder="Select timezone...">{{$select.selected}}</ui-select-match>
+          <ui-select-choices repeat="timezone in $ctrl.timezones | filter: $select.search">
+            <div ng-bind-html="timezone | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group">
         <label class="control-label" for="email">
           Email
         </label>

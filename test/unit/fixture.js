@@ -50,7 +50,8 @@ var users = [
       notification: true,
       state: "active",
       updated_at: "2017-02-20T17:32:48.081616"
-    }
+    },
+    timezone: "UTC"
   },
   {
     created_at: "2017-02-22T12:32:48.469453",
@@ -83,7 +84,8 @@ var users = [
       notification: null,
       state: "active",
       updated_at: "2017-02-22T12:32:48.744946"
-    }
+    },
+    timezone: "America/New_York"
   }
 ];
 
