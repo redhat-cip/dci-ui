@@ -31,7 +31,7 @@ if (window) {
   _.assign(config, window.__DCI_CONFIG);
 }
 
-module.exports = angular
+var app = angular
   .module("app", [
     "ngCookies",
     "ngAnimate",
@@ -49,3 +49,7 @@ module.exports = angular
       return $cacheFactory("dci-app-cache");
     }
   ]);
+
+app.constant("moment", require("moment-timezone"));
+
+module.exports = app;

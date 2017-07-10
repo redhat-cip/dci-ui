@@ -25,10 +25,13 @@ require("app")
   })
   .filter("dciDate", [
     "$filter",
-    function($filter) {
+    "user",
+    function($filter, user) {
+      var amTimezone = $filter("amTimezone");
       var amDateFormat = $filter("amDateFormat");
       return function(value) {
-        return amDateFormat(value, "dddd DD, MMMM h:mm:ss A");
+        var userLocaleDate = amTimezone(value, user.timezone);
+        return amDateFormat(userLocaleDate, "dddd DD, MMMM h:mm:ss A");
       };
     }
   ])

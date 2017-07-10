@@ -197,6 +197,7 @@ require("app").factory("api", [
         var parse = _.partialRight(_.pick, [
           "fullname",
           "email",
+          "timezone",
           "current_password",
           "new_password"
         ]);

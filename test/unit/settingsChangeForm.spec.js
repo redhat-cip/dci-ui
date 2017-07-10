@@ -32,6 +32,7 @@ describe("passwordChangeForm component", function() {
     var updatedUser = {
       current_password: "current_password",
       fullname: "User Test",
+      timezone: "Europe/Paris",
       email: "test@example.org"
     };
     $httpBackend
@@ -40,6 +41,7 @@ describe("passwordChangeForm component", function() {
     component.current_password = "current_password";
     component.user.fullname = "User Test";
     component.user.email = "test@example.org";
+    component.user.timezone = "Europe/Paris";
     component.onSuccess = function() {
       done();
     };
