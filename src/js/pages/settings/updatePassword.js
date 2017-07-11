@@ -14,20 +14,16 @@
 
 "use strict";
 
-require("app").component("passwordChangeForm", {
-  templateUrl: "/partials/components/passwordChangeForm.html",
-  controller: ["api", passwordChangeFormCtrl],
-  bindings: {
-    user: "=",
-    onSuccess: "&",
-    onError: "&"
-  }
+require("app").component("updatePassword", {
+  templateUrl: "/partials/pages/settings/updatePassword.html",
+  controller: ["$state", "auth", "api", "messages", "user", passwordPageCtrl]
 });
 
-function passwordChangeFormCtrl(api) {
+function passwordPageCtrl($state, auth, api, messages, user) {
   var $ctrl = this;
 
   this.$onInit = function() {
+    $ctrl.user = user;
     $ctrl.current_password = "";
     $ctrl.new_password = "";
     $ctrl.new_password2 = "";
@@ -35,7 +31,7 @@ function passwordChangeFormCtrl(api) {
 
   $ctrl.changePassword = function() {
     if ($ctrl.new_password !== $ctrl.new_password2) {
-      $ctrl.onError({ message: "Passwords do not match." });
+      messages.alert("Passwords do not match.", "danger");
       return;
     }
 
@@ -46,12 +42,12 @@ function passwordChangeFormCtrl(api) {
         new_password: $ctrl.new_password
       })
       .then(function() {
-        $ctrl.onSuccess({
-          message: "Your password has been reset successfully!"
-        });
+        messages.alert("Your password has been reset successfully!", "success");
+        auth.logout();
+        $state.go("login");
       })
       .catch(function(err) {
-        $ctrl.onError({ message: err.data.message });
+        messages.alert(err.data.message, "danger");
       });
   };
 }

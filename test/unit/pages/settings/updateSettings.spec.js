@@ -12,14 +12,12 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-describe("passwordChangeForm component", function() {
+describe("updateSettings component", function() {
   var component;
 
   beforeEach(
     inject(function($componentController) {
-      component = $componentController("settingsChangeForm", null, {
-        user: admin
-      });
+      component = $componentController("updateSettings");
       component.$onInit();
     })
   );
@@ -28,7 +26,7 @@ describe("passwordChangeForm component", function() {
     expect(component.current_password).toBe("");
   });
 
-  it("should be able to update settings", function(done) {
+  it("should be able to update settings", function() {
     var updatedUser = {
       current_password: "current_password",
       fullname: "User Test",
@@ -42,9 +40,6 @@ describe("passwordChangeForm component", function() {
     component.user.fullname = "User Test";
     component.user.email = "test@example.org";
     component.user.timezone = "Europe/Paris";
-    component.onSuccess = function() {
-      done();
-    };
     component.changeSettings();
     $httpBackend.flush();
   });

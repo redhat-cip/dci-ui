@@ -278,11 +278,11 @@ require("app")
         })
         .state("settings", {
           url: "/settings",
-          template: "<settings-page></settings-page>"
+          template: "<update-settings></update-settings>"
         })
         .state("password", {
           url: "/password",
-          template: "<password-page></password-page>"
+          template: "<update-password></update-password>"
         });
 
       $urlRouterProvider.otherwise("/");
@@ -294,9 +294,8 @@ require("app")
     function($transitions, auth) {
       $transitions.onStart({}, function(transition) {
         var data = transition.$to().data || {};
-        var loginRequired = typeof data.loginRequired === "undefined"
-          ? true
-          : data.loginRequired;
+        var loginRequired =
+          typeof data.loginRequired === "undefined" ? true : data.loginRequired;
         if (loginRequired && !auth.isAuthenticated()) {
           return transition.router.stateService.target("login");
         }

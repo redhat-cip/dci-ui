@@ -8,8 +8,9 @@
     "build": "gulp build",
     "dev": "gulp serve:dev",
     "start": "gulp serve",
-    "test": "npm run build && npm run test:unit && gulp test",
-    "test:unit": "karma start test/unit/karma.conf.js"
+    "test": "npm run build && npm run test:unit && npm run test:e2e",
+    "test:unit": "karma start test/unit/karma.conf.js",
+    "test:e2e": "gulp test"
   },
   "dependencies": {
     "@uirouter/angularjs": "^1.0.5",
