@@ -61,15 +61,17 @@ require("app")
     function($window, $cookies, api, user) {
       angular.extend(user, { isAuthenticated: false }, $cookies.get("user"));
 
+      var saveUserInCookie = function(user) {
+        $cookies.put("user", user);
+      };
+
       return {
-        user: user,
         login: function(username, password) {
           user.token = $window.btoa(username.concat(":", password));
 
           return api.users.getByName(username).then(function(userRes) {
             angular.extend(user, userRes, { isAuthenticated: true });
-            $cookies.put("user", user);
-            return user;
+            saveUserInCookie(user);
           });
         },
 
@@ -83,6 +85,10 @@ require("app")
 
         isSuperAdmin: function() {
           return user.isAuthenticated && user.role.label === "SUPER_ADMIN";
+        },
+
+        saveUser: function(user) {
+          saveUserInCookie(user);
         },
 
         logout: function() {

@@ -16,16 +16,16 @@
 
 require("app").component("appMenu", {
   templateUrl: "/partials/components/menu.html",
-  controller: ["$state", "auth", AppMenuCtrl]
+  controller: ["$state", "auth", "user", AppMenuCtrl]
 });
 
-function AppMenuCtrl($state, auth) {
+function AppMenuCtrl($state, auth, user) {
   var $ctrl = this;
 
   $ctrl.isAdmin = auth.isAdmin;
   $ctrl.isSuperAdmin = auth.isSuperAdmin;
   $ctrl.auth = auth;
-  $ctrl.user = auth.user;
+  $ctrl.user = user;
 
   $ctrl.isUserPage = function() {
     return (

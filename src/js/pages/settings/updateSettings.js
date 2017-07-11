@@ -18,6 +18,7 @@ require("app").component("updateSettings", {
   templateUrl: "/partials/pages/settings/updateSettings.html",
   controller: [
     "$state",
+    "auth",
     "api",
     "messages",
     "user",
@@ -26,7 +27,7 @@ require("app").component("updateSettings", {
   ]
 });
 
-function updateSettingsCtrl($state, api, messages, user, moment) {
+function updateSettingsCtrl($state, auth, api, messages, user, moment) {
   var $ctrl = this;
 
   this.$onInit = function() {
@@ -49,6 +50,7 @@ function updateSettingsCtrl($state, api, messages, user, moment) {
           "Your settings has been change successfully!",
           "success"
         );
+        auth.saveUser($ctrl.user);
         $state.reload();
       })
       .catch(function(err) {
