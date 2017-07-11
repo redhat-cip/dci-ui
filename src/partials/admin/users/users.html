@@ -20,7 +20,7 @@
             <th>Full name</th>
             <th>Email</th>
             <th>User ID</th>
-            <th>Team ID</th>
+            <th>Team</th>
             <th>Role</th>
             <th>Date</th>
             <th class="text-center">Actions</th>
@@ -41,7 +41,7 @@
             <td>{{ user.fullname }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.id }}</td>
-            <td>{{ user.team.id }}</td>
+            <td>{{ user.team.name }}</td>
             <td>{{ user.role.name }}</td>
             <td>{{ user.created_at | dciDate }}</td>
             <td class="text-center">
