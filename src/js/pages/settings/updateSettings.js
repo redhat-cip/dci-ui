@@ -14,22 +14,25 @@
 
 "use strict";
 
-require("app").component("settingsChangeForm", {
-  templateUrl: "/partials/components/settingsChangeForm.html",
-  controller: ["api", settingsChangeFormCtrl],
-  bindings: {
-    user: "=",
-    timezones: "<",
-    onSuccess: "&",
-    onError: "&"
-  }
+require("app").component("updateSettings", {
+  templateUrl: "/partials/pages/settings/updateSettings.html",
+  controller: [
+    "$state",
+    "api",
+    "messages",
+    "user",
+    "moment",
+    updateSettingsCtrl
+  ]
 });
 
-function settingsChangeFormCtrl(api) {
+function updateSettingsCtrl($state, api, messages, user, moment) {
   var $ctrl = this;
 
   this.$onInit = function() {
+    $ctrl.user = user;
     $ctrl.current_password = "";
+    $ctrl.timezones = moment.tz.names();
   };
 
   $ctrl.changeSettings = function() {
@@ -42,12 +45,14 @@ function settingsChangeFormCtrl(api) {
         timezone: $ctrl.user.timezone
       })
       .then(function() {
-        $ctrl.onSuccess({
-          message: "Your settings has been change successfully!"
-        });
+        messages.alert(
+          "Your settings has been change successfully!",
+          "success"
+        );
+        $state.reload();
       })
       .catch(function(err) {
-        $ctrl.onError({ message: err.data.message });
+        messages.alert(err.data.message, "danger");
       });
   };
 }
