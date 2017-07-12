@@ -82,8 +82,8 @@ describe("When a user opens DCI", function() {
     browser.waitForAngular();
   });
 
-  it("visit /logs", function() {
-    browser.get("/#!/logs");
+  it("visit /metrics/topics", function() {
+    browser.get("/#!/metrics/topics");
     browser.waitForAngular();
   });
 

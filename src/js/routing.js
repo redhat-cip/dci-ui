@@ -38,11 +38,6 @@ require("app")
           templateUrl: "/partials/jobs.html",
           controller: "ListJobsCtrl"
         })
-        .state("logs", {
-          url: "/logs?pattern",
-          templateUrl: "/partials/logs.html",
-          controller: "LogsCtrl"
-        })
         .state("job", {
           url: "/jobs/:id",
           controller: "JobCtrl",

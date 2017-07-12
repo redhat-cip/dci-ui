@@ -63,9 +63,9 @@
           Topics
         </a>
       </li>
-      <li ui-sref-active="active">
-        <a ui-sref="logs">
-          Search Logs
+      <li ui-sref-active="active" ng-if="$ctrl.isSuperAdmin()">
+        <a ui-sref="statsMetrics">
+          Metrics
         </a>
       </li>
       <li ng-class="{active: $ctrl.isAdminPage()}"
