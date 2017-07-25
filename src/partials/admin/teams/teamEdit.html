@@ -18,19 +18,6 @@
                  ng-model="$ctrl.team.name"
                  required>
         </div>
-        <div class="form-group">
-          <label class="control-label" for="teamEmail">Email</label>
-          <input id="teamEmail"
-                 type="email"
-                 class="form-control"
-                 name="teamEmail"
-                 ng-model="$ctrl.team.email">
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" ng-model="$ctrl.team.notification"> Notification
-          </label>
-        </div>
         <button type="submit" class="btn btn-primary">Update</button>
         <button type="submit" class="btn btn-default" ui-sref="adminTeams">Cancel</button>
       </form>

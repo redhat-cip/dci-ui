@@ -163,9 +163,7 @@ require("app").factory("api", [
 
     /*                                  TEAMS                                   */
     api.teams.update.parse = _.partialRight(_.pick, [
-      "name",
-      "email",
-      "notification"
+      "name"
     ]);
 
     /*                                  USERS                                   */
