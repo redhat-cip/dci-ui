@@ -1,0 +1,69 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-header">
+        Users
+        <a class="pull-right btn btn-primary"
+           ui-sref="auth.adminUserCreate">
+          <i class="fa fa-plus-circle"></i> create new user
+        </a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <dci-loading ng-if="$ctrl.users.isFetching"></dci-loading>
+      <div ng-hide="$ctrl.users.isFetching">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Login</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>User ID</th>
+                <th>Team</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tr ng-if="$ctrl.users.items.length == 0">
+                <td colspan="4">
+                  There is no user.
+                  <a ui-sref="auth.adminUserCreate">Do you want to create one?</a>
+                </td>
+              </tr>
+              <tr ng-repeat="user in $ctrl.users.items | orderBy: 'name'">
+                <td>
+                  <a ui-sref="auth.adminUserEdit({id: user.id})">
+                    {{user.name}}
+                  </a>
+                </td>
+                <td>{{ user.fullname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.team.name }}</td>
+                <td>{{ user.role.name }}</td>
+                <td>{{ user.created_at | dciDate }}</td>
+                <td class="text-center">
+                  <a class="btn btn-primary btn-sm"
+                     ui-sref="auth.adminUserEdit({id: user.id})">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-danger btn-sm"
+                          ng-click="$ctrl.deleteUser(user)"
+                          ng-disabled="$ctrl.currentUser.id === user.id">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

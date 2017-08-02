@@ -1,0 +1,96 @@
+<div class="container-fluid">
+  <div class="row" ng-if="$ctrl.topics.isFetching">
+    <div class="col-xs-12">
+      <dci-loading></dci-loading>
+    </div>
+  </div>
+  <div class="row" ng-hide="$ctrl.topics.isFetching">
+    <div class="col-xs-12">
+      <div class="list-group list-view-pf list-view-pf-view">
+        <div class="list-group-item mb-1" ng-repeat="topic in $ctrl.topics.items | orderBy: 'order'"
+             ng-init="topic.seeDetails=false">
+          <div class="list-group-item-header"
+               ng-click="topic.seeDetails = $ctrl.toggleSeeDetails(topic)"
+               ng-class="{'list-group-item-header--blue': topic.seeDetails}">
+            <div class="list-view-pf-main-info">
+              <div class="list-view-pf-body">
+                <div class="list-view-pf-description">
+                  <div class="list-group-item-heading">
+                    <span class="fa fa-chevron-down" ng-if="topic.seeDetails"></span>
+                    <span class="fa fa-chevron-right" ng-hide="topic.seeDetails"></span>
+                    {{topic.name}}
+                  </div>
+                  <div class="list-group-item-text">
+                    <span ng-hide="topic.components.length > 0">
+                      <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                    </span>
+                    <span ng-if="topic.components.length > 0">
+                      <span
+                        ng-if="!topic.selectedComponent || topic.selectedComponent.id === topic.components[0].id">
+                        Latest component:
+                        <strong>{{topic.components[0].name}}</strong>
+                      </span>
+                      <span
+                        ng-if="topic.selectedComponent && topic.selectedComponent.id !== topic.components[0].id">
+                        Selected component:
+                        <strong>{{topic.selectedComponent.name}}</strong>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="list-view-pf-additional-info">
+                  <div class="list-view-pf-additional-info-item" ng-if="topic.components.length > 0">
+                    <i class="fa fa-archive"></i>
+                    {{topic.nbComponents}} Components
+                  </div>
+                  <div class="list-view-pf-additional-info-item" ng-if="topic.components.length > 0">
+                    <i class="fa fa-calendar"></i>
+                    <span ng-if="!topic.selectedComponent || topic.selectedComponent.id === topic.components[0].id">
+                     {{topic.components[0].created_at | dciFromNow}}
+                    </span>
+                    <span ng-if="topic.selectedComponent && topic.selectedComponent.id !== topic.components[0].id">
+                      {{topic.selectedComponent.created_at | dciFromNow}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item-container container-fluid"
+               ng-class="{'hidden': !topic.seeDetails}">
+            <div class="row">
+              <div class="col-md-6">
+                <table class="table table-striped table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th class="text-center">Link</th>
+                  </tr>
+                  </thead>
+                  <tr ng-repeat="component in topic.components">
+                    <td>{{component.name}}</td>
+                    <td>{{component.type}}</td>
+                    <td class="text-center">
+                      <a ng-href="{{component.url}}" target="_blank" class="btn btn-default btn-sm">
+                        <i class="fa fa-link"></i>
+                      </a>
+                      <button class="btn btn-default btn-sm mb-1 mr-1" type="button"
+                              ng-click="topic.selectedComponent = component"
+                              ng-class="{'btn-primary':topic.selectedComponent.id === component.id}">
+                        <i class="fa fa-eye"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <pre>{{topic.selectedComponent | json}}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

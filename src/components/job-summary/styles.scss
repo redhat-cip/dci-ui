@@ -1,0 +1,98 @@
+// Copyright 2017 Red Hat, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the 'License'); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+@import "~scss/variables";
+
+.job-summary {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+.job-summary__header {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(237, 237, 237);
+}
+
+.job-summary__status, .job-summary__icon, .job-summary__title, .job-summary__tests, .job-summary__description, .job-summary__additional-info-item {
+  margin-right: 1em;
+}
+
+.job-summary__body--hidden{
+  display:none;
+}
+
+.job-summary__status {
+  width: 5px;
+  height: 64px;
+}
+
+.job-summary__header--success {
+  .job-summary__status {
+    background-color: $color-pf-green-400;
+  }
+
+  .job-summary__icon {
+    color: $color-pf-green-400;
+  }
+}
+
+.job-summary__header--failure {
+  .job-summary__status {
+    background-color: $color-pf-red-100;
+  }
+
+  .job-summary__icon {
+    color: $color-pf-red-100;
+  }
+}
+
+.job-summary__header--killed {
+  .job-summary__status {
+    background-color: $color-pf-orange-400;
+  }
+
+  .job-summary__icon {
+    color: $color-pf-orange-400;
+  }
+}
+
+.job-summary__header--running {
+  .job-summary__status {
+    background-color: $color-pf-blue-400;
+  }
+
+  .job-summary__icon {
+    color: $color-pf-blue-400;
+  }
+}
+
+.job-summary__tests {
+  display: flex;
+}
+
+.job-summary__additional-info {
+  display: flex;
+}
+
+.job-summary__tests {
+  flex-grow: 2;
+  justify-content: space-evenly;
+}
+
+.job-summary__body {
+  border: 1px solid rgb(237, 237, 237);
+  border-top: none;
+  padding: 1em;
+}

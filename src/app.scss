@@ -1,0 +1,101 @@
+// Copyright 2017 Red Hat, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the 'License'); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+
+@import "~rcue/dist/css/rcue.css";
+@import "~rcue/dist/css/rcue-additions.css";
+
+@import "~scss/variables";
+
+.app__main-content {
+  display: block;
+}
+
+body{
+  background-color: #ffffff;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+// Margin and Padding
+
+$spacer: 1rem !default;
+$spacers: (
+        0: 0,
+        1: ($spacer * .25),
+        2: ($spacer * .5),
+        3: $spacer,
+        4: ($spacer * 1.5),
+        5: ($spacer * 3)
+) !default;
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in $spacers {
+
+    .#{$abbrev}-#{$size} {
+      #{$prop}: $length !important;
+    }
+    .#{$abbrev}t-#{$size} {
+      #{$prop}-top: $length !important;
+    }
+    .#{$abbrev}r-#{$size} {
+      #{$prop}-right: $length !important;
+    }
+    .#{$abbrev}b-#{$size} {
+      #{$prop}-bottom: $length !important;
+    }
+    .#{$abbrev}l-#{$size} {
+      #{$prop}-left: $length !important;
+    }
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-right: $length !important;
+      #{$prop}-left: $length !important;
+    }
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+      #{$prop}-bottom: $length !important;
+    }
+  }
+}
+
+// Some special margin utils
+.m-auto {
+  margin: auto !important;
+}
+
+.mt-auto {
+  margin-top: auto !important;
+}
+
+.mr-auto {
+  margin-right: auto !important;
+}
+
+.mb-auto {
+  margin-bottom: auto !important;
+}
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.mx-auto {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.my-auto {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}

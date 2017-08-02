@@ -1,0 +1,100 @@
+<nav id="menu" class="navbar navbar-default navbar-pf">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" ui-sref="auth.jobs">
+      <img id="menu__logo" src="gecko.png" alt="Distributed CI"/>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav navbar-utility">
+      <li ng-if="$ctrl.currentUser.name">
+        <a id="menu__settings-link" ui-sref="auth.settings">
+          <i class="pficon pficon-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} - {{ $ctrl.currentUser.team.name }}
+        </a>
+      </li>
+      <li>
+        <a href="#" id="menu__logout-link" ng-click="$ctrl.logout()">
+          Logout
+        </a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-primary"
+        ng-class="{'persistent-secondary': $ctrl.shouldDisplaySubMenu()}">
+      <li ng-class="{active: $ctrl.isJobsPage() || $ctrl.isJobPage()}">
+        <a ui-sref="auth.jobs">
+          Jobs
+        </a>
+        <ul class="nav navbar-nav navbar-persistent" ng-if="$ctrl.isJobPage()">
+          <li ui-sref-active="active">
+            <a id="jobJobStatesLink" ui-sref="auth.job.jobStates">Job States</a>
+          </li>
+          <li ui-sref-active="active">
+            <a id="jobTestsLink" ui-sref="auth.job.tests">Tests</a>
+          </li>
+          <li ui-sref-active="active">
+            <a id="jobIssuesLink" ui-sref="auth.job.issues">Issues</a>
+          </li>
+          <li ui-sref-active="active">
+            <a id="jobFilesLink" ui-sref="auth.job.files">Files</a>
+          </li>
+        </ul>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="auth.components">
+          Components
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="auth.globalStatus">
+          Global Status
+        </a>
+      </li>
+      <li ui-sref-active="active" ng-if="$ctrl.isSuperAdmin()">
+        <a ui-sref="auth.metrics">
+          Metrics
+        </a>
+      </li>
+      <li ng-class="{active: $ctrl.isAdminPage()}"
+          ng-if="$ctrl.isAdmin() || $ctrl.isSuperAdmin()">
+        <a ui-sref="auth.adminUsers">
+          Administration
+        </a>
+        <ul class="nav navbar-nav navbar-persistent">
+          <li ng-class="{active: $ctrl.isUserPage()}">
+            <a ui-sref="auth.adminUsers">Users</a>
+          </li>
+          <li ng-class="{active: $ctrl.isTeamPage()}"
+              ng-if="$ctrl.isSuperAdmin()">
+            <a ui-sref="auth.adminTeams">Teams</a>
+          </li>
+          <li ng-class="{active: $ctrl.isTopicPage()}"
+              ng-if="$ctrl.isSuperAdmin()">
+            <a ui-sref="auth.adminTopics">Topics</a>
+          </li>
+          <li ng-class="{active: $ctrl.isRemoteCIPage()}">
+            <a ui-sref="auth.adminRemotecis">RemoteCIs</a>
+          </li>
+        </ul>
+      </li>
+      <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"
+          ng-if="$ctrl.isSettingsOrPasswordPage()">
+        <a ui-sref="auth.settings">
+          Settings
+        </a>
+        <ul class="nav navbar-nav navbar-persistent">
+          <li ng-class="{active: $ctrl.isSettingsPage()}">
+            <a ui-sref="auth.settings">User settings</a>
+          </li>
+          <li ng-class="{active: $ctrl.isPasswordPage()}">
+            <a ui-sref="auth.password">Change password</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
