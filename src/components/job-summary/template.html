@@ -1,0 +1,146 @@
+<div class="list-group-item mb-1">
+  <div class="list-group-item-header"
+       ng-click="$ctrl.job.seeDetails=!$ctrl.job.seeDetails"
+       ng-class="{
+            'list-group-item-header--success': $ctrl.job.status === 'success',
+            'list-group-item-header--danger': $ctrl.job.status.endsWith('failure') || $ctrl.job.status === 'killed',
+            'list-group-item-header--blue':$ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
+          }">
+    <div class="list-view-pf-main-info">
+      <div class="list-view-pf-left">
+                <span class="fa fa-check-circle"
+                      ng-if="$ctrl.job.status === 'success'"></span>
+        <span class="fa fa-exclamation-circle"
+              ng-if="$ctrl.job.status === 'failure' || $ctrl.job.status === 'killed'"></span>
+        <span class="fa fa-pause-circle"
+              ng-if="$ctrl.job.status !== 'failure' && $ctrl.job.status !== 'success' && $ctrl.job.status !== 'killed'"></span>
+      </div>
+      <div class="list-view-pf-body">
+        <div class="list-view-pf-description">
+          <div class="list-group-item-heading">
+            {{$ctrl.job.remoteci.name}} / {{$ctrl.job.jobdefinition.name}}
+          </div>
+          <div class="list-group-item-text">
+            <span ng-repeat="component in $ctrl.job.components">{{component.name}}</span>
+          </div>
+        </div>
+        <div class="list-view-pf-additional-info">
+          <div class="list-view-pf-additional-info-item">
+            <i class="fa fa-calendar"></i>
+            {{$ctrl.job.created_at | dciFromNow}}
+          </div>
+          <div class="list-view-pf-additional-info-item"
+               ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
+            <i class="fa fa-clock-o"></i>
+            ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="list-group-item-container container-fluid"
+       ng-class="{'hidden': !$ctrl.job.seeDetails}">
+    <div class="row">
+      <div class="col-md-4">
+        <dl class="dl-horizontal">
+          <dt>Id</dt>
+          <dd>{{$ctrl.job.id}}</dd>
+          <dt>Status</dt>
+          <dd>{{$ctrl.job.status}}</dd>
+          <dt>User agent</dt>
+          <dd>{{$ctrl.job.user_agent}}</dd>
+          <dt>
+            Client version
+          </dt>
+          <dd>{{$ctrl.job.client_version}}</dd>
+          <dt>
+            <i class="fa fa-calendar"></i>
+            Created
+          </dt>
+          <dd>
+            {{$ctrl.job.created_at | dciFromNow}}
+          </dd>
+          <dt ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
+            <i class="fa fa-clock-o"></i>
+            Duration
+          </dt>
+          <dd ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
+            {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
+          </dd>
+          <dt ng-if="$ctrl.job.files.length > 0">
+            <i class="fa fa-file-o"></i>
+            Files
+          </dt>
+          <dd ng-if="$ctrl.job.files.length > 0">
+            {{$ctrl.job.files.length}} files
+          </dd>
+          <dt>Metas</dt>
+          <dd class="mb-1">
+            <div class="input-group" ng-repeat="meta in $ctrl.job.metas">
+              <input class="form-control input-sm" ng-value="meta.name" disabled>
+              <span class="input-group-btn" style="width:0px;"></span>
+              <input class="form-control input-sm" ng-value="meta.value" disabled>
+              <span class="input-group-addon pointer" ng-click="$ctrl.deleteMeta($ctrl.job, meta)">
+                <i class="fa fa-fw fa-trash text-danger"></i>
+              </span>
+            </div>
+            <div class="input-group">
+              <input class="form-control input-sm" ng-model="$ctrl.meta.name">
+              <span class="input-group-btn" style="width:0px;"></span>
+              <input class="form-control input-sm" ng-model="$ctrl.meta.value">
+              <span class="input-group-addon pointer" ng-click="$ctrl.addMeta($ctrl.job, $ctrl.meta)">
+                <i class="fa fa-fw fa-plus"></i>
+              </span>
+            </div>
+          </dd>
+          <dt>Comment</dt>
+          <dd>
+            <textarea name="jobComment" id="jobComment" style="width: 100%" rows="2"
+                      ng-model="$ctrl.job.comment"></textarea>
+          </dd>
+          <dd>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.save($ctrl.job)">save</button>
+          </dd>
+        </dl>
+      </div>
+      <div class="col-md-8">
+        <div class="row" ng-if="$ctrl.job.jobstates.length !== 0">
+          <div class="col-xs-12">
+            <b>
+              Job States (
+              <button type="button" class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.jobStates')">See
+                details
+              </button>
+              )
+            </b>
+            <ul class="list-inline">
+              <li ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
+                <span ng-if="$first"><i class="fa fa-bolt fa-fw"></i></span>
+                <span ng-if="!$first && !$last"><i class="fa fa-fw fa-circle"></i></span>
+                <span ng-if="$last"><i class="fa fa-flag-checkered fa-fw"></i></span>
+                {{ jobstate.status }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row" ng-if="$ctrl.job.results.length !== 0">
+          <div class="col-xs-12">
+            <b>
+              Tests (
+              <button type="button" class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">See details
+              </button>
+              )
+            </b>
+            <div class="text-muted" ng-repeat="test in $ctrl.job.results | orderBy:'name'">
+              {{test.name}} :
+              <span class="label label-success">{{test.success}}</span>
+              <span class="label label-warning">{{test.skips}}</span>
+              <span class="label label-default">{{test.errors}}</span>
+              <span class="label label-danger">{{test.failures}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

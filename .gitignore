@@ -1,4 +1,5 @@
 static
 node_modules
 junitresults.xml
-src/config.json
+test/_build
+test/e2e/reports

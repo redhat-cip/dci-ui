@@ -1,0 +1,39 @@
+<div class="container-fluid pt-3">
+  <div class="row">
+    <div class="col-xs-12">
+      <job-summary job="$ctrl.jobs.item"></job-summary>
+    </div>
+  </div>
+  <div ng-repeat="jobstate in $ctrl.jobs.item.jobstates | orderBy: 'created_at'" ng-init="jobstate.seeDetails=false">
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>
+          <button type="button" class="btn btn-default btn-xs pull-right"
+                  ng-click="$ctrl.retrieveFiles(jobstate)"
+                  ng-if="jobstate.files.length">
+            <span ng-if="!jobstate.seeDetails"><i class="fa fa-chevron-down"></i>see details</span>
+            <span ng-if="jobstate.seeDetails"><i class="fa fa-chevron-up"></i>close details</span>
+          </button>
+
+          {{ jobstate.status }}:
+          <small>{{ jobstate.comment }}</small>
+        </h4>
+
+        <small>
+          {{ jobstate.created_at | dciDate }}
+        </small>
+
+        <div class="job_state__detail"
+             ng-repeat="file in jobstate.files"
+             ng-if="jobstate.seeDetails"
+             ng-init="file.showDetails=true">
+          <h5 ng-click="file.showDetails=!file.showDetails">
+            {{file.name}}
+          </h5>
+          <pre ng-if="file.showDetails">{{file.content}}</pre>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

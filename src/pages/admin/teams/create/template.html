@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h1>Create a new team</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <form ng-submit="$ctrl.create()">
+        <admin-team-form team="$ctrl.team"></admin-team-form>
+        <button class="btn btn-primary">Create</button>
+        <button class="btn btn-default" ui-sref="adminTeams">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

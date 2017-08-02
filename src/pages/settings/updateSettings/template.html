@@ -1,0 +1,55 @@
+<dci-title title="Update your settings"></dci-title>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <form id="changeSettingsForm" ng-submit="$ctrl.changeSettings()">
+        <fieldset>
+          <div class="form-group">
+            <label class="control-label" for="current_password">
+              Current password
+            </label>
+            <input id="current_password"
+                   class="form-control"
+                   ng-model="$ctrl.current_password"
+                   type="password"
+                   required>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="fullname">
+              Full name
+            </label>
+            <input id="fullname"
+                   class="form-control"
+                   ng-model="$ctrl.currentUser.fullname"
+                   type="text"
+                   required>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="timezone">
+              Time zone
+            </label>
+            <select id="timezone" class="form-control" ng-model="$ctrl.currentUser.timezone">
+              <option ng-repeat="timezone in $ctrl.timezones">{{::timezone}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="email">
+              Email
+            </label>
+            <input id="email"
+                   class="form-control"
+                   ng-model="$ctrl.currentUser.email"
+                   type="email"
+                   required>
+          </div>
+        </fieldset>
+        <button id="changeSettingsButton"
+                class="btn btn-primary"
+                type="submit">
+          Update your settings
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

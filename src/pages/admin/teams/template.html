@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-header">
+        Teams
+        <a class="pull-right btn btn-primary"
+           ui-sref="auth.adminTeamCreate">
+          <i class="fa fa-plus-circle"></i> create new team
+        </a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <dci-loading ng-if="$ctrl.teams.isFetching"></dci-loading>
+      <div ng-hide="$ctrl.teams.isFetching">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Team name</th>
+                <th>Team ID</th>
+                <th>Created</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tr ng-if="$ctrl.teams.items.length === 0">
+                <td colspan="4">
+                  There is no team.
+                  <a ui-sref="auth.adminTeamCreate">Do you want to create one?</a>
+                </td>
+              </tr>
+              <tr ng-repeat="team in $ctrl.teams.items | orderBy: 'name'">
+                <td>
+                  <a ui-sref="auth.adminTeamEdit({id: team.id})">
+                    {{team.name}}
+                  </a>
+                </td>
+                <td>{{ team.id }}</td>
+                <td>{{ team.created_at | dciDate }}</td>
+                <td class="text-center">
+                  <a class="btn btn-primary btn-sm"
+                     ui-sref="auth.adminTeamEdit({id: team.id})">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-danger btn-sm"
+                          ng-click="$ctrl.deleteTeam(team)"
+                          ng-disabled="$ctrl.currentUser.team.id === team.id">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

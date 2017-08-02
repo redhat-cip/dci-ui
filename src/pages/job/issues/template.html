@@ -1,0 +1,69 @@
+<div class="container-fluid pt-3">
+  <div class="row">
+    <div class="col-xs-12">
+      <job-summary job="$ctrl.jobs.item"></job-summary>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <form name="issueForm" ng-submit="$ctrl.addIssue($ctrl.jobs.item, $ctrl.issue)">
+        <div class="form-group">
+          <label for="issueUrl" class="control-label">Issue URL</label>
+          <input type="url"
+                 class="form-control"
+                 id="issueUrl"
+                 name="issue"
+                 placeholder="url"
+                 ng-model="$ctrl.issue.url"
+                 required>
+        </div>
+        <button class="btn btn-default">Add an issue</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div ng-repeat="issue in $ctrl.jobs.item.issues">
+        <h3>
+          <button class="btn btn-danger pull-right" ng-click="$ctrl.deleteIssue($ctrl.jobs.item, issue)">
+            <span class="fa fa-trash"></span>
+          </button>
+          <a ng-href="{{issue.url}}">
+            {{ issue.title }}
+          </a>
+        </h3>
+        <table class="table">
+          <tr>
+            <th>Product</th>
+            <td>{{ issue.product }}</td>
+            <th>Component</th>
+            <td>{{ issue.component }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>{{ issue.status }}</td>
+            <th>Bug ID</th>
+            <td>{{ issue.issue_id }}</td>
+          </tr>
+          <tr>
+            <th>Created</th>
+            <td>{{ issue.created_at | dciDate }}</td>
+            <th>Last Updated</th>
+            <td>{{ issue.updated_at | dciDate }}</td>
+          </tr>
+          <tr>
+            <th>Reported</th>
+            <td>{{ issue.reporter }}</td>
+            <th>Assignee</th>
+            <td>{{ issue.assignee }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-if="$ctrl.jobs.item.issues.length === 0">
+    <div class="col-xs-12">
+      There is no issue attached to this job.
+    </div>
+  </div>
+</div>
