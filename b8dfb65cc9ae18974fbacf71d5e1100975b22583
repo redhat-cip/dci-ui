@@ -1,0 +1,8 @@
+Code-Review+2: Guillaume Vincent <gvincent@redhat.com>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-by: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-at: Thu, 03 Aug 2017 09:22:17 +0000
+Reviewed-on: https://softwarefactory-project.io/r/9142
+Project: dci-ui
+Branch: refs/heads/master
