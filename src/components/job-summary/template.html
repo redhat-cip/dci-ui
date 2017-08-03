@@ -7,25 +7,31 @@
             'job-summary__header--killed': $ctrl.job.status === 'killed',
             'job-summary__header--running': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
           }">
-    <div class="job-summary__status">
-    </div>
-    <div class="job-summary__icon">
-      <i class="fa fa-fw fa-2x"
-         ng-class="{
+    <div class="job-summary__info">
+      <div class="mr-3 job-summary__status">
+      </div>
+      <div class="mr-3 job-summary__icon">
+        <i class="fa fa-fw fa-2x"
+           ng-class="{
             'fa-check-circle': $ctrl.job.status === 'success',
             'fa-exclamation-circle': $ctrl.job.status.endsWith('failure'),
             'fa-stop-circle': $ctrl.job.status === 'killed',
             'fa-pause-circle': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
           }"></i>
-    </div>
-    <div class="job-summary__title">
-      <b>{{$ctrl.job.remoteci.name}} / {{$ctrl.job.jobdefinition.name}}</b>
-    </div>
-    <div class="job-summary__description">
-      <span ng-repeat="component in $ctrl.job.components">{{component.name}}</span>
+      </div>
+      <div class="mr-3 job-summary__title">
+        <b>
+          {{$ctrl.job.remoteci.name}}
+          <br>
+          {{$ctrl.job.jobdefinition.name}}
+        </b>
+      </div>
+      <div class="mr-3 job-summary__description">
+        <span ng-repeat="component in $ctrl.job.components">{{component.name}}</span>
+      </div>
     </div>
     <div class="job-summary__tests">
-      <div class="job-summary__test"
+      <div class="mr-3 job-summary__test"
            ng-repeat="test in $ctrl.job.results | orderBy:'name'">
         <button class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">{{test.name}}</button>
         <span class="label label-success">{{test.success}}</span>
@@ -35,11 +41,11 @@
       </div>
     </div>
     <div class="job-summary__additional-info">
-      <div class="job-summary__additional-info-item">
+      <div class="mr-3 job-summary__additional-info-item">
         <i class="fa fa-calendar"></i>
         {{$ctrl.job.created_at | dciFromNow}}
       </div>
-      <div class="job-summary__additional-info-item"
+      <div class="mr-3 job-summary__additional-info-item"
            ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
         <i class="fa fa-clock-o"></i>
         ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
