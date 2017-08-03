@@ -8,7 +8,7 @@
     "precommit": "npm run test:unit && lint-staged",
     "build": "npm run rcue && webpack --config webpack.prod.config.js",
     "start": "node server.js",
-    "dev": "npm run rcue && webpack-dev-server",
+    "dev": "npm run rcue && webpack-dev-server --host 0.0.0.0 --port 8000",
     "rcue": "cp node_modules/patternfly/dist/img/* node_modules/rcue/dist/img/",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "rm -rf test/_build && webpack --config webpack.test.config.js &&NODE_ENV=test ava test/_build --concurrency 3",

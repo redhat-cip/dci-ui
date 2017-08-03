@@ -25,7 +25,7 @@
   border: 1px solid rgb(237, 237, 237);
 }
 
-.job-summary__status, .job-summary__icon, .job-summary__title, .job-summary__tests, .job-summary__description, .job-summary__additional-info-item {
+.job-summary__status, .job-summary__icon, .job-summary__title, .job-summary__test, .job-summary__description, .job-summary__additional-info-item {
   margin-right: 1em;
 }
 
@@ -78,8 +78,12 @@
   }
 }
 
-.job-summary__tests {
-  display: flex;
+.job-summary__title{
+  width: 8%;
+}
+
+.job-summary__description{
+  width: 25%;
 }
 
 .job-summary__additional-info {
@@ -87,8 +91,8 @@
 }
 
 .job-summary__tests {
-  flex-grow: 2;
-  justify-content: space-evenly;
+  display: flex;
+  width: 40%;
 }
 
 .job-summary__body {
