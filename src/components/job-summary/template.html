@@ -19,7 +19,11 @@
           }"></i>
     </div>
     <div class="job-summary__title">
-      <b>{{$ctrl.job.remoteci.name}} / {{$ctrl.job.jobdefinition.name}}</b>
+      <b>
+        {{$ctrl.job.remoteci.name}}
+        <br>
+        {{$ctrl.job.jobdefinition.name}}
+      </b>
     </div>
     <div class="job-summary__description">
       <span ng-repeat="component in $ctrl.job.components">{{component.name}}</span>
