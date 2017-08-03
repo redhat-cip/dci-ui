@@ -21,12 +21,12 @@ class Ctrl {
       svg.remove();
     }
     this.graph = document.getElementById("topicMetrics");
-    this.graphSize = { width: Math.round(500 * 1.618), height: 500 };
+    this.graphSize = {width: Math.round(500 * 1.618), height: 500};
     this.draw(this.graph, this.topic.components, this.graphSize);
   }
 
   draw(element, data, options) {
-    const margin = { top: 50, right: 50, bottom: 50, left: 50 },
+    const margin = {top: 50, right: 50, bottom: 50, left: 50},
       width = options.width - margin.left - margin.right,
       height = options.height - margin.top - margin.bottom;
 
@@ -41,6 +41,10 @@ class Ctrl {
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    if (data.length === 0) {
+      return;
+    }
 
     data.forEach(function(d) {
       d.x = d3.isoParse(d.date);

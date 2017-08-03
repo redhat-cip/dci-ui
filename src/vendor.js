@@ -17,6 +17,7 @@ import "angular";
 import "d3";
 import "axios";
 import "lodash/find";
+import "lodash/uniqBy";
 import "lodash/pick";
 import "lodash/omitBy";
 import "lodash/isNil";

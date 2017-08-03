@@ -23,7 +23,7 @@
         <b>
           {{$ctrl.job.remoteci.name}}
           <br>
-          {{$ctrl.job.jobdefinition.name}}
+          {{$ctrl.job.topic.name}}
         </b>
       </div>
       <div class="mr-3 job-summary__description">
@@ -46,7 +46,7 @@
         {{$ctrl.job.created_at | dciFromNow}}
       </div>
       <div class="mr-3 job-summary__additional-info-item"
-           ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
+           ng-if="$ctrl.job.status === 'success' || $ctrl.job.status === 'failure' || $ctrl.job.status === 'killed'">
         <i class="fa fa-clock-o"></i>
         ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
       </div>
@@ -131,7 +131,7 @@
               <li ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
                 <span ng-if="$first"><i class="fa fa-bolt fa-fw"></i></span>
                 <span ng-if="!$first && !$last"><i class="fa fa-fw fa-circle"></i></span>
-                <span ng-if="$last"><i class="fa fa-flag-checkered fa-fw"></i></span>
+                <span ng-if="$last && !$first"><i class="fa fa-flag-checkered fa-fw"></i></span>
                 {{ jobstate.status }}
               </li>
             </ul>

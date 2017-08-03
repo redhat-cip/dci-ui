@@ -75,6 +75,7 @@ angular
   .filter("dciFromNow", filters.dciFromNow)
   .filter("dciDateDiffInMin", filters.dciDateDiffInMin)
   .filter("msToSec", filters.msToSec)
+  .filter("unique", filters.unique)
   .directive("jsonText", directives.jsonText)
   .component("dciMenu", Menu)
   .component("dciLoading", Loading)

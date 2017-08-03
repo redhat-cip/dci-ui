@@ -13,6 +13,7 @@
 // under the License.
 
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
+import uniqBy from "lodash/uniqBy";
 
 export function dciDate($ngRedux) {
   const currentUser = $ngRedux.getState().currentUser;
@@ -45,5 +46,11 @@ export function dciDateDiffInMin() {
 export function msToSec() {
   return function(value) {
     return Math.round(value / 1000);
+  };
+}
+
+export function unique() {
+  return function(elements, field) {
+    return uniqBy(elements, field);
   };
 }

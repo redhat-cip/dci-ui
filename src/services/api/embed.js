@@ -13,7 +13,7 @@
 // under the License.
 
 export default {
-  jobs: "results,remoteci,jobdefinition,components,jobstates,metas",
+  jobs: "results,remoteci,components,jobstates,metas,topic",
   jobstates: "files",
   users: "team,role",
   user: "team,role"

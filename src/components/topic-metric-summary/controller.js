@@ -35,6 +35,9 @@ class Ctrl {
           numberBefore2Day += 1;
         }
       });
+    if(count === 0){
+      return 0
+    }
     return Math.round(numberBefore2Day * 100 / count);
   }
 
@@ -47,6 +50,9 @@ class Ctrl {
         tested += 1;
       }
     });
+    if(count === 0){
+      return 0
+    }
     return Math.round(tested * 100 / count);
   }
 }
