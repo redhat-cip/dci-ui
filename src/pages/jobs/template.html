@@ -28,27 +28,40 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <div class="form-group">
-            <input type="search"
-                   class="form-control"
-                   placeholder="Search job name or remoteci"
-                   ng-model="$ctrl.search">
-          </div>
+          <form class="search-pf has-button">
+            <div class="form-group has-clear">
+              <div class="search-pf-input-group">
+                <label for="searchJobs" class="sr-only">Search</label>
+                <input id="searchJobs" type="search" class="form-control"
+                       placeholder="Search"
+                       ng-model="$ctrl.search">
+                <button type="button"
+                        class="clear"
+                        ng-if="$ctrl.search"
+                        ng-click="$ctrl.search=''">
+                  <span class="pficon pficon-close"></span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-default" type="button"><span class="fa fa-search"></span></button>
+            </div>
+          </form>
         </div>
       </div>
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5">
           Status
           <div class="actions pull-right" ng-if="$ctrl.filter.status">
-              <button type="button" class="btn"
-                      ng-repeat="status in $ctrl.statuses"
-                      ng-if="status.value === $ctrl.filter.status"
-                      ng-class="status.btn"
-                      ng-click="$ctrl.filter.status = ''">
-                <i class="fa" ng-class="status.icon"></i>
-                {{status.name}}
-                <i class="fa fa-times-circle"></i>
-              </button>
+            <button type="button" class="btn"
+                    ng-repeat="status in $ctrl.statuses"
+                    ng-if="status.value === $ctrl.filter.status"
+                    ng-class="status.btn"
+                    ng-click="$ctrl.filter.status = ''">
+              <i class="fa" ng-class="status.icon"></i>
+              {{status.name}}
+              <i class="fa fa-times-circle"></i>
+            </button>
           </div>
         </h2>
       </div>
