@@ -24,7 +24,7 @@
         </small>
 
         <div class="job_state__detail"
-             ng-repeat="file in jobstate.files"
+             ng-repeat="file in jobstate.files | orderBy: 'created_at'"
              ng-if="jobstate.seeDetails"
              ng-init="file.showDetails=true">
           <h5 ng-click="file.showDetails=!file.showDetails">

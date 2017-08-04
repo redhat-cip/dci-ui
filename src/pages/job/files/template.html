@@ -29,7 +29,7 @@
             <th>mime-type</th>
             <th class="text-center">Download</th>
           </tr>
-          <tr ng-repeat="file in $ctrl.jobs.item.files | filter:$ctrl.search:strict">
+          <tr ng-repeat="file in $ctrl.jobs.item.files | orderBy: 'created_at' | filter:$ctrl.search:strict">
             <td>{{ file.name }}</td>
             <td>{{ file.size }} Bytes</td>
             <td>{{ file.mime }}</td>
