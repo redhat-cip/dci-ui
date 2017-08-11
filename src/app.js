@@ -43,6 +43,7 @@ import componentsPage from "./pages/components";
 import loginPage from "./pages/login";
 import updatePasswordPage from "./pages/settings/updatePassword";
 import updateSettingsPage from "./pages/settings/updateSettings";
+import notificationPage from "./pages/settings/notification";
 import metricsPage from "./pages/metrics";
 import globalStatusPage from "./pages/globalStatus";
 import Menu from "./components/menu";
@@ -109,4 +110,5 @@ angular
   .component("metricsPage", metricsPage)
   .component("topicMetricsGraph", topicMetricsGraph)
   .component("updatePasswordPage", updatePasswordPage)
-  .component("updateSettingsPage", updateSettingsPage);
+  .component("updateSettingsPage", updateSettingsPage)
+  .component("notificationPage", notificationPage);
