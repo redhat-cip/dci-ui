@@ -3,3 +3,4 @@ node_modules
 junitresults.xml
 test/_build
 test/e2e/reports
+npm-debug.log
