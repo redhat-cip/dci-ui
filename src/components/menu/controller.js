@@ -75,8 +75,16 @@ class MenuCtrl {
     return this.router.currentState.name === "auth.settings";
   }
 
+  isNotificationPage() {
+    return this.router.currentState.name === "auth.notification";
+  }
+
   isSettingsOrPasswordPage() {
-    return this.isSettingsPage() || this.isPasswordPage();
+    return (
+        this.isSettingsPage() ||
+        this.isPasswordPage() ||
+        this.isNotificationPage()
+    );
   }
 
   shouldDisplaySubMenu() {
