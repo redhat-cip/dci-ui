@@ -1,0 +1,50 @@
+<dci-title title="Subscribe to notifications"></dci-title>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <form ng-submit="$ctrl.update()">
+          <div class="row mb-3">
+            <div class="col-sm-6 table-responsive">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Available RemoteCI</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tr ng-repeat="remoteci in $ctrl.availableRemotecis | orderBy: 'name'">
+                  <td>{{remoteci.name}}</td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            ng-click="$ctrl.associateUserToRemoteci(remoteci)">
+                      <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-sm-6 table-responsive">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Already Subscribed RemoteCI</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tr ng-repeat="remoteci in $ctrl.currentUser.remotecis | orderBy: 'name'">
+                  <td>{{remoteci.name}}</td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            ng-click="$ctrl.detachUserToRemoteci(remoteci)">
+                      <i class="glyphicon glyphicon-minus"></i>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
