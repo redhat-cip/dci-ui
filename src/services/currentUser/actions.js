@@ -52,4 +52,19 @@ export function getCurrentUser() {
       dispatch(setUser(response.data.user));
     });
   };
+
+  export function getUserSubscribtion() {
+    return (dispatch, getState) => {
+      const state = getState();
+      const request = {
+        method: "get",
+        url: `${state.config.apiURL}/api/v1/users/me`,
+        params: {
+          embed: embed.remoteci
+        }
+      };
+      return http(request).then(response => {
+        dispatch(response.data.user);
+      });
+    };
 }
