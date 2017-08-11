@@ -33,3 +33,26 @@ export function refreshApiSecret(remoteci, params = {}) {
     });
   };
 }
+
+export function associateUser(remoteci, user) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const request = {
+      method: "post",
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users`,
+      data: { user_id: `${user.id}` }
+    };
+    return http(request)
+  };
+}
+
+export function detachUser(remoteci, user) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const request = {
+      method: "delete",
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${user.id}`
+    };
+    return http(request)
+  };
+}
