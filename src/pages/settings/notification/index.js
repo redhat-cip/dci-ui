@@ -12,9 +12,10 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+import template from "./template.html";
+import controller from "./controller";
+
 export default {
-  jobs: "results,remoteci,components,jobstates,metas,topic",
-  jobstates: "files",
-  users: "team,role",
-  user: "team,role,remoteci"
+  template,
+  controller
 };
