@@ -28,6 +28,10 @@ import adminTeamsPage from "./pages/admin/teams";
 import adminTeamEditPage from "./pages/admin/teams/edit";
 import adminTeamCreatePage from "./pages/admin/teams/create";
 import adminTeamForm from "./pages/admin/teams/form";
+import adminFingerprintsPage from "./pages/admin/fingerprints";
+import adminFingerprintEditPage from "./pages/admin/fingerprints/edit";
+import adminFingerprintCreatePage from "./pages/admin/fingerprints/create";
+import adminFingerprintForm from "./pages/admin/fingerprints/form";
 import adminTopicsPage from "./pages/admin/topics";
 import adminTopicEditPage from "./pages/admin/topics/edit";
 import adminTopicCreatePage from "./pages/admin/topics/create";
@@ -98,6 +102,9 @@ angular
   .component("adminTeamsPage", adminTeamsPage)
   .component("adminTeamEditPage", adminTeamEditPage)
   .component("adminTeamCreatePage", adminTeamCreatePage)
+  .component("adminFingerprintsPage", adminFingerprintsPage)
+  .component("adminFingerprintEditPage", adminFingerprintEditPage)
+  .component("adminFingerprintCreatePage", adminFingerprintCreatePage)
   .component("adminTeamForm", adminTeamForm)
   .component("adminTopicsPage", adminTopicsPage)
   .component("adminTopicEditPage", adminTopicEditPage)
