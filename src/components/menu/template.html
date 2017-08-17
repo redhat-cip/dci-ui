@@ -79,6 +79,9 @@
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
             <a ui-sref="auth.adminRemotecis">RemoteCIs</a>
           </li>
+          <li ng-class="{active: $ctrl.isFingerprintPage()}">
+            <a ui-sref="auth.adminFingerprints">Fingerprints</a>
+          </li>
         </ul>
       </li>
       <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"
