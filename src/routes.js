@@ -109,6 +109,21 @@ const routes = function($stateProvider, $urlRouterProvider) {
       component: "adminTeamCreatePage"
     })
     .state({
+      name: "auth.adminFingerprints",
+      url: "admin/fingerprints",
+      component: "adminFingerprintsPage"
+    })
+    .state({
+      name: "auth.adminFingerprintEdit",
+      url: "admin/fingerprints/:id",
+      component: "adminFingerprintEditPage"
+    })
+    .state({
+      name: "auth.adminFingerprintCreate",
+      url: "admin/fingerprints/create",
+      component: "adminFingerprintCreatePage"
+    })
+    .state({
       name: "auth.adminTopics",
       url: "admin/topics",
       component: "adminTopicsPage"
