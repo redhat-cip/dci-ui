@@ -57,12 +57,21 @@ class MenuCtrl {
     );
   }
 
+  isFingerprintPage() {
+    return (
+      this.router.currentState.name === "auth.adminFingerprints" ||
+      this.router.currentState.name === "auth.adminFingerprintCreate" ||
+      this.router.currentState.name === "auth.adminFingerprintEdit"
+    );
+  }
+
   isAdminPage() {
     return (
       this.isUserPage() ||
       this.isTeamPage() ||
       this.isTopicPage() ||
       this.isRemoteCIPage() ||
+      this.isFingerprintPage() ||
       this.router.currentState.name === "auth.adminAudits"
     );
   }

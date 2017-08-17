@@ -12,18 +12,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export default {
-  currentUser: [
-    "fullname",
-    "email",
-    "timezone",
-    "current_password",
-    "new_password"
-  ],
-  user: ["name", "fullname", "email", "team_id", "password", "role_id"],
-  team: ["name", "email", "notification"],
-  topic: ["name", "next_topic"],
-  job: ["comment"],
-  remoteci: ["name", "state", "allow_upgrade_job", "data", "team_id"],
-  fingerprint: ["name"]
-};
+class Ctrl {
+  constructor($scope, $ngRedux) {
+    let unsubscribe = $ngRedux.connect(state => state)(this);
+    $scope.$on("$destroy", unsubscribe);
+  }
+}
+
+Ctrl.$inject = ["$scope", "$ngRedux"];
+
+export default Ctrl;

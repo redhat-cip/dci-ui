@@ -1,0 +1,41 @@
+<div>
+  <div class="form-group">
+    <label class="control-label" for="fingerprintName">Name</label>
+    <input id="fingerprintName"
+           name="fingerprintName"
+           class="form-control"
+           ng-model="$ctrl.fingerprint.name"
+           required>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="fingerprintActions">Actions</label>
+    <input id="fingerprintActions"
+           name="fingerprintActions"
+           class="form-control"
+           ng-model="$ctrl.fingerprint.actions"
+           required>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="fingerprintFingerprint">Fingerprint</label>
+    <input id="fingerprintFingerprint"
+           name="fingerprintFingerprint"
+           class="form-control"
+           ng-model="$ctrl.fingerprint.fingerprint"
+           required>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="fingerprintDescription">Description</label>
+    <input id="fingerprintDescription"
+           name="fingerprintDescription"
+           class="form-control"
+           ng-model="$ctrl.fingerprint.description"
+           required>
+  </div>
+  <div class="form-group">
+    <label for="selectTopic" class="control-label">Topic</label>
+    <select id="selectTopic" name="selectTopic" class="form-control"
+            ng-model="$ctrl.fingerprint.topic_id">
+      <option ng-repeat="topic in $ctrl.topics.items" value="{{topic.id}}">{{topic.name}}</option>
+    </select>
+  </div>
+</div>

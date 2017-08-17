@@ -32,6 +32,7 @@ const store = function($ngReduxProvider) {
     teams: api("team").reducer,
     roles: api("role").reducer,
     topics: api("topic").reducer,
+    fingerprints: api("fingerprint").reducer,
     remotecis: api("remoteci").reducer,
     alerts: alertsReducer,
     router
