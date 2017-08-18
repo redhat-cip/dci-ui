@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ab451fb_2b7ec5ae",
+        "filename": "src/components/menu/template.html",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 405
+      },
+      "writtenOn": "2017-08-18T08:46:57Z",
+      "side": 1,
+      "message": "title of the page is \"Subscribe to notifications\"\n\nmaybe menu can be \"Notifications\" with a \"s\"",
+      "range": {
+        "startLine": 97,
+        "startChar": 43,
+        "endLine": 97,
+        "endChar": 55
+      },
+      "revId": "a00215594ae50578dcea916102684fdbf9bf7a32",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_0b4ae983",
+        "filename": "src/pages/settings/notification/controller.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 405
+      },
+      "writtenOn": "2017-08-18T08:46:57Z",
+      "side": 1,
+      "message": "those two lines can be deleted",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 60
+      },
+      "revId": "a00215594ae50578dcea916102684fdbf9bf7a32",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_eb4e9d95",
+        "filename": "src/pages/settings/notification/controller.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 405
+      },
+      "writtenOn": "2017-08-18T08:46:57Z",
+      "side": 1,
+      "message": "In term of UX, you should catch any error here and display a message. You also want to change the interface in case of success\n\n  associateUserToRemoteci(remoteci) {\n      this.$ngRedux\n        .dispatch(remotecisActions.associateUser(remoteci, this.currentUser))\n        .then(() \u003d\u003e {\n          remove(this.availableRemotecis, remoteci);\n          this.currentUser.remotecis.push(remoteci);\n          this.$scope.$apply();\n        })\n        .catch(err \u003d\u003e {\n          this.$ngRedux.dispatch(alertsActions.errorApi(err.response));\n        });\n  }\n\n  detachUserToRemoteci(remoteci) {\n      this.$ngRedux\n        .dispatch(remotecisActions.detachUser(remoteci, this.currentUser))\n        .then(() \u003d\u003e {\n          remove(this.currentUser.remotecis, remoteci);\n          this.availableRemotecis.push(remoteci);\n          this.$scope.$apply();\n        })\n        .catch(err \u003d\u003e {\n          this.$ngRedux.dispatch(alertsActions.errorApi(err.response));\n        });\n  }",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 3
+      },
+      "revId": "a00215594ae50578dcea916102684fdbf9bf7a32",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_4b81118f",
+        "filename": "src/services/remotecis/actions.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 405
+      },
+      "writtenOn": "2017-08-18T08:46:57Z",
+      "side": 1,
+      "message": "missing etag here to avoid 409 error code",
+      "revId": "a00215594ae50578dcea916102684fdbf9bf7a32",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
