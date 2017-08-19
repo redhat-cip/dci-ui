@@ -11,7 +11,7 @@
     "dev": "npm run rcue && webpack-dev-server --host 0.0.0.0 --port 8000",
     "rcue": "cp node_modules/patternfly/dist/img/* node_modules/rcue/dist/img/",
     "test": "npm run test:unit && npm run build && npm run test:e2e",
-    "test:unit": "rm -rf test/_build && webpack --config webpack.test.config.js &&NODE_ENV=test ava test/_build --concurrency 3",
+    "test:unit": "ava src/**/*.test.js",
     "test:e2e": "node test/e2e/runner.js"
   },
   "babel": {
@@ -75,8 +75,7 @@
   "ava": {
     "babel": "inherit",
     "require": [
-      "babel-register",
-      "./test/_setup-browser-env.js"
+      "babel-register"
     ]
   },
   "lint-staged": {
