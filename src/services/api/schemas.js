@@ -22,7 +22,8 @@ export default {
   ],
   user: ["name", "fullname", "email", "team_id", "password", "role_id"],
   team: ["name", "email", "notification"],
-  topic: ["name", "next_topic"],
+  topic: ["name", "next_topic", "product_id"],
   job: ["comment"],
-  remoteci: ["name", "state", "allow_upgrade_job", "data", "team_id"]
+  remoteci: ["name", "state", "allow_upgrade_job", "data", "team_id"],
+  product: ["name", "team_id", "description"]
 };
