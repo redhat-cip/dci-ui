@@ -16,5 +16,7 @@ export default {
   jobs: "results,remoteci,components,jobstates,metas,topic",
   jobstates: "files",
   users: "team,role",
-  user: "team,role,remotecis"
+  user: "team,role",
+  topics: "product",
+  products: "team"
 };

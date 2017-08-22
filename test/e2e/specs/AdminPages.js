@@ -42,6 +42,7 @@ module.exports = {
     editPageTestCancel(browser, 'a[ui-sref="auth.adminTeams"]', "Teams");
     editPageTestCancel(browser, 'a[ui-sref="auth.adminTopics"]', "Topics");
     editPageTestCancel(browser, 'a[ui-sref="auth.adminRemotecis"]', "Remotecis");
+    editPageTestCancel(browser, 'a[ui-sref="auth.adminProducts"]', "Products");
 
 
     browser.end();
@@ -79,6 +80,8 @@ module.exports = {
       'a[ui-sref="auth.adminTopicCreate"]', "Topics");
     createPageTestCancel(browser, 'a[ui-sref="auth.adminRemotecis"]',
       'a[ui-sref="auth.adminRemoteciCreate"]', "Remotecis");
+    createPageTestCancel(browser, 'a[ui-sref="auth.adminProducts"]',
+      'a[ui-sref="auth.adminProductCreate"]', "Products");
 
     browser.end();
   }
