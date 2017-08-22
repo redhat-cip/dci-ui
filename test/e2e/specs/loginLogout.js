@@ -12,8 +12,6 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-const assert = require("assert");
-
 module.exports = {
   "Login logout test": function(browser) {
     browser
