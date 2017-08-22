@@ -13,48 +13,43 @@
 // under the License.
 
 import api from "services/api";
+import { stateGo } from "redux-ui-router";
+import differenceWith from "lodash/differenceWith";
+import isEqual from "lodash/isEqual";
+import remove from "lodash/remove";
 import * as alertsActions from "services/alerts/actions";
-import embed from "services/api/embed";
+import * as topicsActions from "services/topics/actions";
 
 class Ctrl {
-  constructor($scope, $ngRedux, $uibModal) {
+  constructor($scope, $ngRedux) {
+    this.$scope = $scope;
     this.$ngRedux = $ngRedux;
-    this.$uibModal = $uibModal;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("topic").allIfNeeded(
-        {embed: embed.topics}
-    ));
+    this.product = {};
+    const id = this.$ngRedux.getState().router.currentParams.id;
+    this.$ngRedux.dispatch(api("team").allIfNeeded());
+    this.$ngRedux.dispatch(api("product").get({ id })).then(response => {
+      this.product = response.data.product;
+    });
   }
 
-  deleteTopic(topic) {
-    const topicName = topic.name;
-    const deleteTopicModal = this.$uibModal.open({
-      component: "confirmDestructiveAction",
-      resolve: {
-        data: function() {
-          return {
-            title: "Delete topic " + topicName,
-            body: "Are you you want to delete topic " + topicName + "?",
-            okButton: "Yes delete " + topicName,
-            cancelButton: "oups no!"
-          };
-        }
-      }
-    });
-    deleteTopicModal.result.then(() => {
-      this.$ngRedux.dispatch(api("topic").delete(topic)).then(() => {
+  update() {
+    const cleanNullValue = false;
+    this.$ngRedux
+      .dispatch(api("product").put(this.product, cleanNullValue))
+      .then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`topic deleted successfully`)
+          alertsActions.success(`product ${this.product.name} updated successfully`)
         );
+        this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
       });
-    });
   }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux", "$uibModal"];
+Ctrl.$inject = ["$scope", "$ngRedux"];
 
 export default Ctrl;
