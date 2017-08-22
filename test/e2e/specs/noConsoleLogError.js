@@ -51,6 +51,9 @@ module.exports = {
       .click('a[ui-sref="auth.password"]')
       .waitForElementVisible("h1")
       .assert.containsText("h1", "Change your password")
+      .click('a[ui-sref="auth.notification"]')
+      .waitForElementVisible("h1")
+      .assert.containsText("h1", "Subscribe to notifications")
       .click('a[ui-sref="auth.jobs"]')
       .waitForElementVisible("h1")
       .assert.containsText("h1", "Dashboard");

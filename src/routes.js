@@ -69,6 +69,11 @@ const routes = function($stateProvider, $urlRouterProvider) {
       component: "updateSettingsPage"
     })
     .state({
+      name: "auth.notification",
+      url: "notification",
+      component: "notificationPage"
+    })
+    .state({
       name: "auth.password",
       url: "password",
       component: "updatePasswordPage"
