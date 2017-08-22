@@ -79,6 +79,9 @@
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
             <a ui-sref="auth.adminRemotecis">RemoteCIs</a>
           </li>
+          <li ng-class="{active: $ctrl.isProductPage()}">
+            <a ui-sref="auth.adminProducts">Products</a>
+          </li>
         </ul>
       </li>
       <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"
