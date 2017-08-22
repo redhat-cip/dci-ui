@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h1>Edit product {{$ctrl.product.label}}</h1>
+      </div>
+    </div>
+  </div>
+  <form ng-submit="$ctrl.update()">
+    <div class="row mb-3">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="form-group">
+          <label class="control-label" for="productName">Name</label>
+          <input id="productName"
+                 name="productName"
+                 class="form-control"
+                 ng-model="$ctrl.product.name"
+                 required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="productDescription">Description</label>
+          <input id="productDescription"
+                 name="productDescription"
+                 class="form-control"
+                 ng-model="$ctrl.product.description"
+                 required>
+        </div>
+        <div class="form-group">
+            <label for="selectTeam" class="control-label">Team</label>
+            <select id="selectTeam" name="selectTeam" class="form-control"
+                   ng-model="$ctrl.product.team_id">
+               <option ng-repeat="team in $ctrl.teams.items" value="{{team.id}}">{{team.name}}</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6">
+        <div class="form-group">
+          <button class="btn btn-primary">Update</button>
+          <button class="btn btn-default" ui-sref="adminTopics">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
