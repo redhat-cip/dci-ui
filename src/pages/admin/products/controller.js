@@ -25,30 +25,30 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("topic").allIfNeeded(
-        {embed: embed.topics}
+    this.$ngRedux.dispatch(api("product").allIfNeeded(
+        {embed: embed.products}
     ));
   }
 
-  deleteTopic(topic) {
-    const topicName = topic.name;
-    const deleteTopicModal = this.$uibModal.open({
+  deleteProduct(product) {
+    const productName = product.name;
+    const deleteProductModal = this.$uibModal.open({
       component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: "Delete topic " + topicName,
-            body: "Are you you want to delete topic " + topicName + "?",
-            okButton: "Yes delete " + topicName,
+            title: "Delete product " + productName,
+            body: "Are you you want to delete product " + productName + "?",
+            okButton: "Yes delete " + productName,
             cancelButton: "oups no!"
           };
         }
       }
     });
-    deleteTopicModal.result.then(() => {
-      this.$ngRedux.dispatch(api("topic").delete(topic)).then(() => {
+    deleteProductModal.result.then(() => {
+      this.$ngRedux.dispatch(api("product").delete(product)).then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`topic deleted successfully`)
+          alertsActions.success(`product deleted successfully`)
         );
       });
     });

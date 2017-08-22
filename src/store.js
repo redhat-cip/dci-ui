@@ -33,6 +33,7 @@ const store = function($ngReduxProvider) {
     roles: api("role").reducer,
     topics: api("topic").reducer,
     remotecis: api("remoteci").reducer,
+    products: api("product").reducer,
     alerts: alertsReducer,
     router
   };
