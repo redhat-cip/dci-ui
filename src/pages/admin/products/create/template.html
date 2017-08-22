@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h1>Create a new product</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <form ng-submit="$ctrl.create()">
+        <div class="form-group">
+          <label class="control-label" for="productName">Name</label>
+          <input id="productName"
+                 name="productName"
+                 class="form-control"
+                 ng-model="$ctrl.product.name"
+                 required>
+        </div>
+        <div class="form-group">
+        <label for="selectTeam" class="control-label">Team</label>
+        <select id="selectTeam" name="selectTeam" class="form-control"
+               ng-model="$ctrl.product.team_id">
+           <option ng-repeat="team in $ctrl.teams.items" value="{{team.id}}">{{team.name}}</option>
+        </select>
+        </div>
+        <button class="btn btn-primary">Create</button>
+        <button class="btn btn-default" ui-sref="adminProducts">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
