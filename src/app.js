@@ -31,6 +31,9 @@ import adminTeamForm from "./pages/admin/teams/form";
 import adminTopicsPage from "./pages/admin/topics";
 import adminTopicEditPage from "./pages/admin/topics/edit";
 import adminTopicCreatePage from "./pages/admin/topics/create";
+import adminProductsPage from "./pages/admin/products";
+import adminProductEditPage from "./pages/admin/products/edit";
+import adminProductCreatePage from "./pages/admin/products/create";
 import adminRemotecisPage from "./pages/admin/remotecis";
 import adminRemoteciEditPage from "./pages/admin/remotecis/edit";
 import adminRemoteciCreatePage from "./pages/admin/remotecis/create";
@@ -102,6 +105,9 @@ angular
   .component("adminTopicsPage", adminTopicsPage)
   .component("adminTopicEditPage", adminTopicEditPage)
   .component("adminTopicCreatePage", adminTopicCreatePage)
+  .component("adminProductsPage", adminProductsPage)
+  .component("adminProductEditPage", adminProductEditPage)
+  .component("adminProductCreatePage", adminProductCreatePage)
   .component("adminRemotecisPage", adminRemotecisPage)
   .component("adminRemoteciEditPage", adminRemoteciEditPage)
   .component("adminRemoteciCreatePage", adminRemoteciCreatePage)
