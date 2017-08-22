@@ -16,6 +16,6 @@ sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 sh scripts/start_es.sh
 python scripts/db_provisioning.py -y
-python scripts/runtestserver.py &
+python bin/dci-runtestserver &
 python bin/dci-esindex
 cd -
