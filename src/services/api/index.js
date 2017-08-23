@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import http from "services/http";
+import http from "../http";
 import pick from "lodash/pick";
 import omitBy from "lodash/omitBy";
 import isNil from "lodash/isNil";
@@ -20,36 +20,6 @@ import Constants from "./constants";
 import Reducer from "./reducers";
 import Actions from "./actions";
 import schemas from "./schemas";
-
-export function errorApi(response, persist = false) {
-  try {
-    if (response.status === 401) {
-      return dispatch => {
-        dispatch(authActions.logout());
-      };
-    }
-
-    let errorDetails = "";
-    const errors = response.data.payload.errors;
-    const errorsKeys = Object.keys(errors);
-    errorsKeys.forEach(errorsKey => {
-      errorDetails += `${errorsKey}: ${errors[errorsKey]}\n`;
-    });
-    return dispatch => {
-      dispatch(error(`${response.data.message}\n${errorDetails}`, persist));
-    };
-  } catch (e) {
-    console.error(e);
-    return dispatch => {
-      dispatch(
-        error(
-          "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
-          persist
-        )
-      );
-    };
-  }
-}
 
 export default function(resourceString) {
   const constants = Constants(resourceString);
@@ -73,8 +43,7 @@ export default function(resourceString) {
           return response;
         })
         .catch(err => {
-          dispatch(actions.fetchKo(err));
-          dispatch(errorApi(err.response));
+          dispatch(actions.fetchKo(err.response.data));
           throw err;
         });
     };
@@ -105,10 +74,6 @@ export default function(resourceString) {
         .then(response => {
           dispatch(actions.set(response.data[`${resourceString}`]));
           return response;
-        })
-        .catch(err => {
-          dispatch(errorApi(err.response));
-          throw err;
         });
     };
   }
@@ -135,9 +100,9 @@ export default function(resourceString) {
         url: `${state.config.apiURL}/api/v1/${resourceString}s`,
         data: cleanWithSchema(resource, schema, cleanNullValue)
       };
-      return http(request).catch(err => {
-        dispatch(errorApi(err.response));
-        throw err;
+      return http(request).then(response => {
+        dispatch(actions.create(response.data[`${resourceString}`]));
+        return response;
       });
     };
   }
@@ -157,10 +122,6 @@ export default function(resourceString) {
           const etag = response.headers.etag;
           dispatch(actions.update(Object.assign({}, resource, { etag })));
           return response;
-        })
-        .catch(err => {
-          dispatch(errorApi(err.response));
-          throw err;
         });
     };
   }
@@ -183,10 +144,6 @@ export default function(resourceString) {
         .then(response => {
           dispatch(actions.remove(resource));
           return response;
-        })
-        .catch(err => {
-          dispatch(errorApi(err.response));
-          throw err;
         });
     };
   }

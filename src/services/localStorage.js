@@ -12,22 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const keyPrefix = "dci";
-
 export default {
+  keyPrefix: "dci",
   get() {
-    const localStorage = window.localStorage.getItem(keyPrefix);
-    if (!localStorage) {
-      return { auth: { token: "" } };
+    if (typeof localStorage === "undefined" || !localStorage.getItem(this.keyPrefix)) {
+      return {auth: {token: ""}};
     }
-    return JSON.parse(localStorage);
+    return JSON.parse(localStorage.getItem(this.keyPrefix));
   },
   setToken(token) {
     const newLocalStorage = this.get();
     newLocalStorage.auth.token = token;
-    window.localStorage.setItem(keyPrefix, JSON.stringify(newLocalStorage));
+    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
   },
   remove() {
-    window.localStorage.removeItem(keyPrefix);
+    localStorage.removeItem(this.keyPrefix);
   }
 };

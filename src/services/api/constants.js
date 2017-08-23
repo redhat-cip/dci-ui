@@ -18,6 +18,7 @@ export default function(resourceString) {
   const fetchFailure = `FETCH_${uppercaseString}S_FAILURE`;
   const fetchSuccess = `FETCH_${uppercaseString}S_SUCCESS`;
   const set = `SET_${uppercaseString}`;
+  const created = `CREATE_${uppercaseString}`;
   const updated = `UPDATE_${uppercaseString}`;
   const deleted = `DELETE_${uppercaseString}`;
 
@@ -26,6 +27,7 @@ export default function(resourceString) {
     FETCH_SUCCESS: fetchSuccess,
     FETCH_FAILURE: fetchFailure,
     SET: set,
+    CREATED: created,
     UPDATED: updated,
     DELETED: deleted
   };

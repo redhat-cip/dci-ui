@@ -60,6 +60,10 @@ export default function(resourceString) {
             return action.payload;
           })
         });
+      case constants.CREATED:
+        return Object.assign({}, state, {
+          items: state.items.concat([action.payload])
+        });
       case constants.DELETED:
         return Object.assign({}, state, {
           items: state.items.filter(item => action.payload.id !== item.id)

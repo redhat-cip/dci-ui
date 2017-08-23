@@ -33,10 +33,15 @@ export default function(resourceString) {
   function fetchKo(error) {
     return {
       type: constants.FETCH_FAILURE,
-      payload: {
-        error
-      },
+      payload:error,
       error: true
+    };
+  }
+
+  function create(resource) {
+    return {
+      type: constants.CREATED,
+      payload: resource
     };
   }
 
@@ -66,6 +71,7 @@ export default function(resourceString) {
     fetchOk,
     fetchKo,
     set,
+    create,
     update,
     remove
   };
