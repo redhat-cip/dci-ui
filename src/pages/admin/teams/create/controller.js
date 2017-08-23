@@ -25,9 +25,7 @@ class Ctrl {
 
   $onInit() {
     this.team = {
-      name: "",
-      email: "",
-      notification: false
+      name: ""
     };
   }
 
