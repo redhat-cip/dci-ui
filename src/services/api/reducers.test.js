@@ -13,11 +13,11 @@
 // under the License.
 
 import test from "ava";
-import api from "services/api";
+import reducer from "./reducers";
+import constants from "./constants";
 
 test("return the initial state", t => {
-  const reducer = api("foo").reducer;
-  const newState = reducer(undefined, {});
+  const newState = reducer("foo")(undefined, {});
   t.deepEqual(newState, {
     isFetching: false,
     didInvalidate: false,
@@ -27,67 +27,62 @@ test("return the initial state", t => {
 });
 
 test("request foos set isFetching", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       isFetching: false
     },
     {
-      type: foo.constants.FETCH_REQUEST
+      type: constants("foo").FETCH_REQUEST
     }
   );
   t.true(newState.isFetching);
 });
 
 test("request foos unset didInvalidate", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       didInvalidate: true
     },
     {
-      type: foo.constants.FETCH_REQUEST
+      type: constants("foo").FETCH_REQUEST
     }
   );
   t.false(newState.didInvalidate);
 });
 
 test("invalidate foos", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       didInvalidate: false
     },
     {
-      type: foo.constants.FETCH_FAILURE
+      type: constants("foo").FETCH_FAILURE
     }
   );
   t.true(newState.didInvalidate);
 });
 
 test("invalidate foos reset loading", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       isFetching: true
     },
     {
-      type: foo.constants.FETCH_FAILURE
+      type: constants("foo").FETCH_FAILURE
     }
   );
   t.false(newState.isFetching);
 });
 
 test("set foos", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       isFetching: true,
       didInvalidate: false,
       items: []
     },
     {
-      type: foo.constants.FETCH_SUCCESS,
+      type: constants("foo").FETCH_SUCCESS,
       payload: [{ id: "1" }, { id: "2" }]
     }
   );
@@ -97,15 +92,14 @@ test("set foos", t => {
 });
 
 test("delete foo", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       isFetching: false,
       didInvalidate: false,
       items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     },
     {
-      type: foo.constants.DELETED,
+      type: constants("foo").DELETED,
       payload: { id: 1 }
     }
   );
@@ -116,15 +110,14 @@ test("delete foo", t => {
 });
 
 test("update foo", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       isFetching: false,
       didInvalidate: false,
       items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     },
     {
-      type: foo.constants.UPDATED,
+      type: constants("foo").UPDATED,
       payload: { id: 1, name: "id 1" }
     }
   );
@@ -132,13 +125,12 @@ test("update foo", t => {
 });
 
 test("set foo", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       item: null
     },
     {
-      type: foo.constants.SET,
+      type: constants("foo").SET,
       payload: { id: 1, name: "id 1" }
     }
   );
@@ -146,13 +138,12 @@ test("set foo", t => {
 });
 
 test("set foo enhance if id same", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       item: { id: 1, name: "id 1", files: [{}, {}] }
     },
     {
-      type: foo.constants.SET,
+      type: constants("foo").SET,
       payload: { id: 1, files: [{}] }
     }
   );
@@ -161,13 +152,12 @@ test("set foo enhance if id same", t => {
 });
 
 test("set foo replace if id different", t => {
-  const foo = api("foo");
-  const newState = foo.reducer(
+  const newState = reducer("foo")(
     {
       item: { id: 1, name: "id 1" }
     },
     {
-      type: foo.constants.SET,
+      type: constants("foo").SET,
       payload: { id: 2, files: [{}, {}] }
     }
   );
