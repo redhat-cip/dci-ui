@@ -35,6 +35,18 @@ test("creates FETCH_USERS_REQUEST FETCH_USERS_SUCCESS when fetching users has be
   });
 });
 
+test("creates FETCH_USERS_SUCCESS when sync", t => {
+  nock('https://api.example.org/api/v1').get('/users')
+    .reply(200, {users: [{id: 'u1'}]});
+  const expectedActions = [
+    {type: constants('user').FETCH_SUCCESS, payload: [{id: 'u1'}]}
+  ];
+  const store = mockStore({config: {apiURL: "https://api.example.org"}});
+  return store.dispatch(api('user').sync()).then(() => {
+    t.deepEqual(store.getActions(), expectedActions);
+  });
+});
+
 test("creates FETCH_USERS_FAILURE when fetching returns 401", t => {
   const error = {"_status": "Unauthorized", "message": "Please login with proper credentials."};
   nock('https://api.example.org/api/v1').get('/users')

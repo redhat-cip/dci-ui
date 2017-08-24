@@ -103,7 +103,7 @@ export function fetchComponents(topics, params = {}) {
 export function fetchTeams(topic) {
   return (dispatch, getState) => {
     const state = getState();
-    const teamsPromise = dispatch(api("team").allIfNeeded());
+    const teamsPromise = dispatch(api("team").sync());
     const request = {
       method: "get",
       url: `${state.config.apiURL}/api/v1/topics/${topic.id}/teams`

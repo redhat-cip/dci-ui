@@ -25,7 +25,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("user").allIfNeeded({ embed: embed.users }));
+    this.$ngRedux.dispatch(api("user").sync({ embed: embed.users }));
   }
 
   deleteUser(user) {

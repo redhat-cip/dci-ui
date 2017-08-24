@@ -38,7 +38,7 @@ class Ctrl {
       limit: 40,
       offset: 0
     };
-    this.$ngRedux.dispatch(api("job").allIfNeeded(this.params));
+    this.$ngRedux.dispatch(api("job").sync(this.params));
   }
 
   reloadPage() {

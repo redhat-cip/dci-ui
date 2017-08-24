@@ -27,21 +27,12 @@ export default function(resourceString) {
   const actions = Actions(resourceString);
   const schema = schemas[resourceString];
 
-  // FETCH ALL
-  function fetch(params) {
+  // GET /resources
+  function all(params) {
     return (dispatch, getState) => {
       dispatch(actions.fetchStart());
       const state = getState();
-      const request = {
-        method: "get",
-        url: `${state.config.apiURL}/api/v1/${resourceString}s`,
-        params
-      };
-      return http(request)
-        .then(response => {
-          dispatch(actions.fetchOk(response.data[`${resourceString}s`]));
-          return response;
-        })
+      return getList(state, params, dispatch)
         .catch(err => {
           dispatch(actions.fetchKo(err.response.data));
           throw err;
@@ -49,19 +40,27 @@ export default function(resourceString) {
     };
   }
 
-  function shouldFetch(state) {
-    return state[`${resourceString}s`].items.length === 0;
-  }
-
-  function fetchIfNeeded(params = {}) {
+  function sync(params) {
     return (dispatch, getState) => {
-      if (shouldFetch(getState())) {
-        return dispatch(fetch(params));
-      }
+      const state = getState();
+      return getList(state, params, dispatch);
     };
   }
 
-  // GET
+  function getList(state, params, dispatch) {
+    const request = {
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/${resourceString}s`,
+      params
+    };
+    return http(request)
+      .then(response => {
+        dispatch(actions.fetchOk(response.data[`${resourceString}s`]));
+        return response;
+      });
+  }
+
+  // GET /resources/:id:
   function get(resource, params = {}) {
     return (dispatch, getState) => {
       const state = getState();
@@ -91,7 +90,7 @@ export default function(resourceString) {
     };
   }
 
-  // POST
+  // POST /resources
   function create(resource, cleanNullValue = true) {
     return (dispatch, getState) => {
       const state = getState();
@@ -107,7 +106,7 @@ export default function(resourceString) {
     };
   }
 
-  // PUT
+  // PUT /resources/:id:
   function update(resource, cleanNullValue = true) {
     return (dispatch, getState) => {
       const state = getState();
@@ -131,7 +130,7 @@ export default function(resourceString) {
     return pick(newResource, schema);
   }
 
-  // DELETE
+  // DELETE /resources/:id:
   function remove(resource) {
     return (dispatch, getState) => {
       const state = getState();
@@ -149,8 +148,8 @@ export default function(resourceString) {
   }
 
   return {
-    all: fetch,
-    allIfNeeded: fetchIfNeeded,
+    all: all,
+    sync: sync,
     get: get,
     getIfNeeded: getIfNeeded,
     put: update,

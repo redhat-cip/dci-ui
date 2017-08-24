@@ -31,7 +31,7 @@ class Ctrl {
     this.$ngRedux.dispatch(api("remoteci").get({ id })).then(response => {
       this.remoteci = response.data.remoteci;
     });
-    this.$ngRedux.dispatch(api("team").allIfNeeded());
+    this.$ngRedux.dispatch(api("team").sync());
   }
 
   update() {

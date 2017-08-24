@@ -24,7 +24,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("topic").allIfNeeded());
+    this.$ngRedux.dispatch(api("topic").sync());
   }
 
   deleteTopic(topic) {
