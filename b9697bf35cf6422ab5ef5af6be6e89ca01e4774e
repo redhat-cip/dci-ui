@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "fabf19d9_5d3c2f2f",
+        "filename": "src/pages/admin/products/edit/controller.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 107
+      },
+      "writtenOn": "2017-08-24T12:52:23Z",
+      "side": 1,
+      "message": "To not be pushed by the put because label can\u0027t be updated",
+      "parentUuid": "fabf19d9_bd346b4a",
+      "range": {
+        "startLine": 38,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "b9697bf35cf6422ab5ef5af6be6e89ca01e4774e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fabf19d9_9d39a744",
         "filename": "src/pages/admin/products/edit/controller.js",
         "patchSetId": 8
@@ -82,6 +106,30 @@
       "writtenOn": "2017-08-24T12:45:25Z",
       "side": 1,
       "message": "Because form is duplicated between create and edit, you need to create a form component\n\nsee admin/teams",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "b9697bf35cf6422ab5ef5af6be6e89ca01e4774e",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fabf19d9_3d497bd1",
+        "filename": "src/pages/admin/products/edit/template.html",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 107
+      },
+      "writtenOn": "2017-08-24T12:52:23Z",
+      "side": 1,
+      "message": "It\u0027s not the same, label is not present",
+      "parentUuid": "fabf19d9_fd2ae3e6",
       "range": {
         "startLine": 9,
         "startChar": 2,
