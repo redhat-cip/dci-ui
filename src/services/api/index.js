@@ -43,8 +43,15 @@ export default function(resourceString) {
   function sync(params) {
     return (dispatch, getState) => {
       const state = getState();
+      if(itemsEmpty(state)){
+        return all(params)(dispatch, getState);
+      }
       return getList(state, params, dispatch);
     };
+  }
+
+  function itemsEmpty(state) {
+    return state[`${resourceString}s`].items.length === 0;
   }
 
   function getList(state, params, dispatch) {
