@@ -22,7 +22,7 @@ import constants from "./constants";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-test("creates FETCH_USERS_REQUEST FETCH_USERS_SUCCESS when fetching users has been done", t => {
+test("creates FETCH_USERS_REQUEST and FETCH_USERS_SUCCESS when fetching users has been done", t => {
   nock('https://api.example.org/api/v1').get('/users')
     .reply(200, {users: [{id: 'u1'}]});
   const expectedActions = [
@@ -35,13 +35,26 @@ test("creates FETCH_USERS_REQUEST FETCH_USERS_SUCCESS when fetching users has be
   });
 });
 
-test("creates FETCH_USERS_SUCCESS when sync", t => {
+test("creates FETCH_USERS_REQUEST and FETCH_USERS_SUCCESS when sync and users empty", t => {
+  nock('https://api.example.org/api/v1').get('/users')
+    .reply(200, {users: [{id: 'u1'}]});
+  const expectedActions = [
+    {type: constants('user').FETCH_REQUEST},
+    {type: constants('user').FETCH_SUCCESS, payload: [{id: 'u1'}]}
+  ];
+  const store = mockStore({users: {items: []}, config: {apiURL: "https://api.example.org"}});
+  return store.dispatch(api('user').sync()).then(() => {
+    t.deepEqual(store.getActions(), expectedActions);
+  });
+});
+
+test("creates only FETCH_USERS_SUCCESS when sync and users not empty", t => {
   nock('https://api.example.org/api/v1').get('/users')
     .reply(200, {users: [{id: 'u1'}]});
   const expectedActions = [
     {type: constants('user').FETCH_SUCCESS, payload: [{id: 'u1'}]}
   ];
-  const store = mockStore({config: {apiURL: "https://api.example.org"}});
+  const store = mockStore({users: {items: [{id: 1}]}, config: {apiURL: "https://api.example.org"}});
   return store.dispatch(api('user').sync()).then(() => {
     t.deepEqual(store.getActions(), expectedActions);
   });

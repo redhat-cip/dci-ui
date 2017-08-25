@@ -24,7 +24,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("remoteci").all({ embed: "team" }));
+    this.$ngRedux.dispatch(api("remoteci").sync({ embed: "team" }));
   }
 
   toggleLockRemoteci(remoteci) {
