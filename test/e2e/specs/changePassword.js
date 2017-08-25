@@ -29,6 +29,7 @@ module.exports = {
       .setValue("#current_password", "password")
       .setValue("#new_password", "new_password")
       .setValue("#new_password2", "new_password")
+      .waitForElementVisible("#changePasswordButton")
       .click("#changePasswordButton")
       .waitForElementVisible("#inputUsername")
       .setValue("#inputUsername", "user_dell")
