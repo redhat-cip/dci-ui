@@ -13,7 +13,7 @@
 // under the License.
 
 import api from "services/api";
-import { stateGo } from "redux-ui-router";
+import {stateGo} from "redux-ui-router";
 import differenceWith from "lodash/differenceWith";
 import isEqual from "lodash/isEqual";
 import remove from "lodash/remove";
@@ -31,21 +31,21 @@ class Ctrl {
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
     this.$ngRedux.dispatch(api("product").sync());
-    this.$ngRedux
-      .dispatch(api("topic").get({ id }))
-      .then(response => {
-        this.topic = response.data.topic;
-        return this.$ngRedux.dispatch(topicsActions.fetchTeams(this.topic));
-      })
-      .then(response => {
-        this.topicTeams = response.topicTeams;
-        this.availableTeams = differenceWith(
-          response.teams,
-          this.topicTeams,
-          isEqual
-        );
-        this.$scope.$apply();
-      });
+    this.$ngRedux.dispatch(api("team").sync()).then(response => {
+      const teams = response.data.teams;
+      this.$ngRedux
+        .dispatch(api("topic").get({id}, {embed: 'teams'}))
+        .then(response => {
+          this.topic = response.data.topic;
+          this.topicTeams = this.topic.teams;
+          this.availableTeams = differenceWith(
+            teams,
+            this.topicTeams,
+            isEqual
+          );
+          this.$scope.$apply();
+        });
+    });
   }
 
   associateTeamToTopic(team) {

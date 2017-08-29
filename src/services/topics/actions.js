@@ -100,27 +100,6 @@ export function fetchComponents(topics, params = {}) {
   };
 }
 
-export function fetchTeams(topic) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const teamsPromise = dispatch(api("team").sync());
-    const request = {
-      method: "get",
-      url: `${state.config.apiURL}/api/v1/topics/${topic.id}/teams`
-    };
-    const topicTeamsPromise = http(request);
-    return Promise.all([teamsPromise, topicTeamsPromise]).then(results => {
-      return Object.assign(
-        {},
-        {
-          teams: results[0].data.teams,
-          topicTeams: results[1].data.teams
-        }
-      );
-    });
-  };
-}
-
 export function associateTeamToTopic(topic, team) {
   return (dispatch, getState) => {
     const state = getState();
