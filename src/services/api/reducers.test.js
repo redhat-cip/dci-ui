@@ -20,7 +20,6 @@ test("return the initial state", t => {
   const newState = reducer("foo")(undefined, {});
   t.deepEqual(newState, {
     isFetching: false,
-    didInvalidate: false,
     item: null,
     items: []
   });
@@ -38,31 +37,8 @@ test("request foos set isFetching", t => {
   t.true(newState.isFetching);
 });
 
-test("request foos unset didInvalidate", t => {
-  const newState = reducer("foo")(
-    {
-      didInvalidate: true
-    },
-    {
-      type: constants("foo").FETCH_REQUEST
-    }
-  );
-  t.false(newState.didInvalidate);
-});
 
-test("invalidate foos", t => {
-  const newState = reducer("foo")(
-    {
-      didInvalidate: false
-    },
-    {
-      type: constants("foo").FETCH_FAILURE
-    }
-  );
-  t.true(newState.didInvalidate);
-});
-
-test("invalidate foos reset loading", t => {
+test("fetch failure reset isFetching", t => {
   const newState = reducer("foo")(
     {
       isFetching: true
@@ -78,7 +54,6 @@ test("set foos", t => {
   const newState = reducer("foo")(
     {
       isFetching: true,
-      didInvalidate: false,
       items: []
     },
     {
@@ -87,7 +62,6 @@ test("set foos", t => {
     }
   );
   t.false(newState.isFetching);
-  t.false(newState.didInvalidate);
   t.is(newState.items.length, 2);
 });
 
@@ -95,7 +69,6 @@ test("delete foo", t => {
   const newState = reducer("foo")(
     {
       isFetching: false,
-      didInvalidate: false,
       items: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]
     },
     {
@@ -104,7 +77,6 @@ test("delete foo", t => {
     }
   );
   t.false(newState.isFetching);
-  t.false(newState.didInvalidate);
   t.is(newState.items.length, 3);
   t.is(newState.items[0].id, 2);
 });
@@ -113,7 +85,6 @@ test("update foo", t => {
   const newState = reducer("foo")(
     {
       isFetching: false,
-      didInvalidate: false,
       items: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]
     },
     {
