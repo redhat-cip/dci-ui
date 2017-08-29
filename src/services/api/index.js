@@ -20,6 +20,7 @@ import Constants from "./constants";
 import Reducer from "./reducers";
 import Actions from "./actions";
 import schemas from "./schemas";
+import * as alertsActions from "../alerts/actions";
 
 export default function(resourceString) {
   const constants = Constants(resourceString);
@@ -33,9 +34,10 @@ export default function(resourceString) {
       dispatch(actions.fetchStart());
       const state = getState();
       return getList(state, params, dispatch)
-        .catch(err => {
-          dispatch(actions.fetchKo(err.response.data));
-          throw err;
+        .catch(error => {
+          dispatch(actions.fetchKo(error.response.data));
+          dispatch(alertsActions.errorApi(error.response));
+          throw error;
         });
     };
   }
@@ -80,7 +82,8 @@ export default function(resourceString) {
         .then(response => {
           dispatch(actions.set(response.data[`${resourceString}`]));
           return response;
-        });
+        })
+        .catch(errorApi);
     };
   }
 
@@ -106,10 +109,12 @@ export default function(resourceString) {
         url: `${state.config.apiURL}/api/v1/${resourceString}s`,
         data: cleanWithSchema(resource, schema, cleanNullValue)
       };
-      return http(request).then(response => {
-        dispatch(actions.create(response.data[`${resourceString}`]));
-        return response;
-      });
+      return http(request)
+        .then(response => {
+          dispatch(actions.create(response.data[`${resourceString}`]));
+          return response;
+        })
+        .catch(errorApi);
     };
   }
 
@@ -128,7 +133,8 @@ export default function(resourceString) {
           const etag = response.headers.etag;
           dispatch(actions.update(Object.assign({}, resource, { etag })));
           return response;
-        });
+        })
+        .catch(errorApi);
     };
   }
 
@@ -150,8 +156,14 @@ export default function(resourceString) {
         .then(response => {
           dispatch(actions.remove(resource));
           return response;
-        });
+        })
+        .catch(errorApi);
     };
+  }
+
+  function errorApi(error) {
+    dispatch(alertsActions.errorApi(error.response));
+    throw error;
   }
 
   return {

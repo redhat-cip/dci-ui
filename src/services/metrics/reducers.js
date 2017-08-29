@@ -17,7 +17,6 @@ import find from "lodash/find";
 
 const initialState = {
   isFetching: false,
-  didInvalidate: false,
   items: [],
   item: null
 };
@@ -27,7 +26,6 @@ export default function auth(state = initialState, action) {
     case constants.FETCH_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
-        didInvalidate: false
       });
     case constants.FETCH_SUCCESS:
       const filteredMetrics = [];
@@ -39,13 +37,11 @@ export default function auth(state = initialState, action) {
       }
       return Object.assign({}, state, {
         isFetching: false,
-        didInvalidate: false,
         items: filteredMetrics
       });
     case constants.FETCH_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
-        didInvalidate: true
       });
     case constants.SELECT_FIRST_METRIC:
       return Object.assign({}, state, {

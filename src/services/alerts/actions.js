@@ -13,7 +13,7 @@
 // under the License.
 
 import * as constants from "./constants";
-import localStorage from "services/localStorage";
+import localStorage from "../localStorage";
 
 export function sendAlert(alert) {
   return {
@@ -59,35 +59,32 @@ export function close({id}) {
   };
 }
 
-export function errorApi(response, persist = false) {
-  try {
-    if (response.status === 401) {
-      return dispatch => {
-        localStorage.remove();
-        dispatch(
-          error("Access denied, please log in.", persist)
-        );
-      };
-    }
-
-    let errorDetails = "";
-    const errors = response.data.payload.errors;
-    const errorsKeys = Object.keys(errors);
-    errorsKeys.forEach(errorsKey => {
-      errorDetails += `${errorsKey}: ${errors[errorsKey]}\n`;
-    });
-    return dispatch => {
-      dispatch(error(`${response.data.message}\n${errorDetails}`, persist));
-    };
-  } catch (e) {
-    console.error(e);
-    return dispatch => {
-      dispatch(
-        error(
-          "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
-          persist
-        )
-      );
-    };
+export function createAlert(response) {
+  let alert = 'We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?';
+  if (response.data && response.data.message) {
+    alert = response.data.message;
   }
+  if (response.data && response.data.payload) {
+    let errorDetails = "";
+    const payload = response.data.payload;
+    const error = payload.error || payload.errors || {};
+    const errorKeys = Object.keys(error);
+    errorKeys.forEach(errorKey => {
+      errorDetails += `${errorKey}: ${error[errorKey]}\n`;
+    });
+    if(errorDetails){
+      alert += `\n${errorDetails}`;
+    }
+  }
+  return alert
+}
+
+export function errorApi(response, persist = false) {
+  if (response.status === 401) {
+    localStorage.remove();
+  }
+  const alert = createAlert(response);
+  return dispatch => {
+    dispatch(error(alert, persist));
+  };
 }

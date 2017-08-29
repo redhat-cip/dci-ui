@@ -20,7 +20,6 @@ test("FETCH_SUCCESS", t => {
   const newState = reducer(
     {
       isFetching: false,
-      didInvalidate: false,
       items: []
     },
     {
@@ -82,7 +81,6 @@ test("SELECT_FIRST_METRIC", t => {
   const newState = reducer(
     {
       isFetching: false,
-      didInvalidate: false,
       items: [{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }]
     },
     {
@@ -96,7 +94,6 @@ test("GET_METRIC", t => {
   const newState = reducer(
     {
       isFetching: false,
-      didInvalidate: false,
       items: [{ name: "a" }, { name: "b" }, { name: "c" }, { name: "d" }]
     },
     {
