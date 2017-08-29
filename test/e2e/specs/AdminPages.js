@@ -19,14 +19,13 @@ module.exports = {
     function editPageTestCancel(browser, menuSelector, h1Text) {
       browser
         .click(menuSelector)
-        .waitForElementVisible("table")
+        .waitForElementVisible("table a:last-child")
         .click('table a:last-child')
         .useXpath()
         .waitForElementVisible("//*[contains(text(), 'Cancel')]")
         .click("//*[contains(text(), 'Cancel')]")
-        .useCss()
-        .waitForElementVisible("h1")
-        .assert.containsText("h1", h1Text)
+        .waitForElementVisible("//h1[starts-with(normalize-space(.),'" + h1Text + "')]")
+        .useCss();
     }
 
     browser
@@ -58,9 +57,8 @@ module.exports = {
         .useXpath()
         .waitForElementVisible("//*[contains(text(), 'Cancel')]")
         .click("//*[contains(text(), 'Cancel')]")
-        .useCss()
-        .waitForElementVisible("h1")
-        .assert.containsText("h1", h1Text)
+        .waitForElementVisible("//h1[starts-with(normalize-space(.),'" + h1Text + "')]")
+        .useCss();
     }
 
     browser
@@ -84,5 +82,27 @@ module.exports = {
       'a[ui-sref="auth.adminProductCreate"]', "Products");
 
     browser.end();
+  },
+  "Can create a topic": function(browser) {
+    const topicName = "_Test Topic " + Date.now();
+    browser
+      .url(browser.launch_url)
+      .waitForElementVisible("#inputUsername")
+      .setValue("#inputUsername", "admin")
+      .setValue("#inputPassword", "admin")
+      .waitForElementVisible("#logInButton")
+      .click("#logInButton")
+      .waitForElementVisible('a[ui-sref="auth.adminUsers"]')
+      .click('a[ui-sref="auth.adminUsers"]')
+      .waitForElementVisible('a[ui-sref="auth.adminTopics"]')
+      .click('a[ui-sref="auth.adminTopics"]')
+      .waitForElementVisible('a[ui-sref="auth.adminTopicCreate"]')
+      .click('a[ui-sref="auth.adminTopicCreate"]')
+      .waitForElementVisible("#topicName")
+      .setValue("#topicName", topicName)
+      .waitForElementVisible("#createButton")
+      .click("#createButton")
+      .waitForElementVisible('a[ui-sref="auth.adminTopicEdit({id: topic.id})"]')
+      .assert.containsText('a[ui-sref="auth.adminTopicEdit({id: topic.id})"]', topicName);
   }
 };

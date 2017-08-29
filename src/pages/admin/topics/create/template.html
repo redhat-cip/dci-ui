@@ -24,7 +24,14 @@
                  class="form-control"
                  ng-model="$ctrl.topic.next_topic">
         </div>
-        <button class="btn btn-primary">Create</button>
+        <div class="form-group">
+          <label class="control-label" for="productID">Product</label>
+          <select id="productID" name="productID" class="form-control"
+                 ng-model="$ctrl.topic.product_id">
+             <option ng-repeat="product in $ctrl.products.items" value="{{product.id}}">{{product.name}}</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="createButton">Create</button>
         <button class="btn btn-default" ui-sref="auth.adminTopics">Cancel</button>
       </form>
     </div>

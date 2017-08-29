@@ -30,6 +30,7 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
+    this.$ngRedux.dispatch(api("product").sync());
     this.$ngRedux
       .dispatch(api("topic").get({ id }))
       .then(response => {
