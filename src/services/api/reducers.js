@@ -16,7 +16,6 @@ import Constants from "./constants";
 
 const initialState = {
   isFetching: false,
-  didInvalidate: false,
   items: [],
   item: null
 };
@@ -29,18 +28,15 @@ export default function(resourceString) {
       case constants.FETCH_REQUEST:
         return Object.assign({}, state, {
           isFetching: true,
-          didInvalidate: false
         });
       case constants.FETCH_SUCCESS:
         return Object.assign({}, state, {
           isFetching: false,
-          didInvalidate: false,
           items: action.payload
         });
       case constants.FETCH_FAILURE:
         return Object.assign({}, state, {
           isFetching: false,
-          didInvalidate: true
         });
       case constants.SET:
         let newItem = null;

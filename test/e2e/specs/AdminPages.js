@@ -18,6 +18,7 @@ module.exports = {
 
     function editPageTestCancel(browser, menuSelector, h1Text) {
       browser
+        .waitForElementVisible(menuSelector)
         .click(menuSelector)
         .waitForElementVisible("table a:last-child")
         .click('table a:last-child')
