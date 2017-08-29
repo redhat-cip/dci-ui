@@ -24,9 +24,11 @@ class Ctrl {
   }
 
   $onInit() {
+    this.$ngRedux.dispatch(api("product").sync());
     this.topic = {
       name: "",
-      next_topic: null
+      next_topic: null,
+      product_id: null,
     };
   }
 

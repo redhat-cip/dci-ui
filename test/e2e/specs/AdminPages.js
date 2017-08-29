@@ -84,5 +84,22 @@ module.exports = {
       'a[ui-sref="auth.adminProductCreate"]', "Products");
 
     browser.end();
+  },
+  "Can create a topic": function(browser) {
+    browser
+      .url(browser.launch_url)
+      .waitForElementVisible("#inputUsername")
+      .setValue("#inputUsername", "admin")
+      .setValue("#inputPassword", "admin")
+      .waitForElementVisible("#logInButton")
+      .click("#logInButton")
+      .waitForElementVisible('a[ui-sref="auth.adminTopics"]')
+      .click('a[ui-sref="auth.adminTopics"]')
+      .waitForElementVisible('a[ui-sref="auth.adminTopicCreate"]')
+      .click('a[ui-sref="auth.adminTopicCreate"]')
+      .waitForElementVisible("#topicName")
+      .setValue("#topicName", "test4242")
+      .click("#createButton")
+      .assert.containsText("table", "test4242");
   }
 };
