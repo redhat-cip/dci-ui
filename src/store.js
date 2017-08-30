@@ -34,6 +34,7 @@ const store = function($ngReduxProvider) {
     topics: api("topic").reducer,
     remotecis: api("remoteci").reducer,
     products: api("product").reducer,
+    component: api("component").reducer,
     alerts: alertsReducer,
     router
   };

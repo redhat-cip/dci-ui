@@ -124,6 +124,11 @@ const routes = function($stateProvider, $urlRouterProvider) {
       component: "adminTopicCreatePage"
     })
     .state({
+      name: "auth.adminComponentCreate",
+      url: "admin/components/create",
+      component: "adminComponentCreatePage"
+    })
+    .state({
       name: "auth.adminProducts",
       url: "admin/products",
       component: "adminProductsPage"

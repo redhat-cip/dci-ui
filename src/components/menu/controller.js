@@ -49,6 +49,10 @@ class MenuCtrl {
     );
   }
 
+  isComponentPage() {
+    return this.router.currentState.name === "auth.adminComponentCreate";
+  }
+
   isRemoteCIPage() {
     return (
       this.router.currentState.name === "auth.adminRemotecis" ||
@@ -70,9 +74,9 @@ class MenuCtrl {
       this.isUserPage() ||
       this.isTeamPage() ||
       this.isTopicPage() ||
+      this.isComponentPage() ||
       this.isRemoteCIPage() ||
-      this.isProductPage() ||
-      this.router.currentState.name === "auth.adminAudits"
+      this.isProductPage()
     );
   }
 
@@ -90,9 +94,9 @@ class MenuCtrl {
 
   isSettingsOrPasswordPage() {
     return (
-        this.isSettingsPage() ||
-        this.isPasswordPage() ||
-        this.isNotificationPage()
+      this.isSettingsPage() ||
+      this.isPasswordPage() ||
+      this.isNotificationPage()
     );
   }
 

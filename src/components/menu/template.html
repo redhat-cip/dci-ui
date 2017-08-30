@@ -76,6 +76,10 @@
               ng-if="$ctrl.isSuperAdmin()">
             <a ui-sref="auth.adminTopics">Topics</a>
           </li>
+          <li ng-class="{active: $ctrl.isComponentPage()}"
+              ng-if="$ctrl.isSuperAdmin()">
+            <a ui-sref="auth.adminComponentCreate">Components</a>
+          </li>
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
             <a ui-sref="auth.adminRemotecis">RemoteCIs</a>
           </li>
