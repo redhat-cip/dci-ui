@@ -13,32 +13,15 @@
 // under the License.
 
 import api from "services/api";
-import { stateGo } from "redux-ui-router";
-import * as alertsActions from "services/alerts/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
-    this.$ngRedux = $ngRedux;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
-    this.topic = {
-      name: "",
-      component_types: [],
-      next_topic: null,
-      product_id: null,
-    };
-  }
-
-  create() {
-    this.$ngRedux.dispatch(api("topic").post(this.topic)).then(() => {
-      this.$ngRedux.dispatch(
-        alertsActions.success(`topic ${this.topic.name} created successfully`)
-      );
-      this.$ngRedux.dispatch(stateGo("auth.adminTopics"));
-    });
+    this.$ngRedux.dispatch(api("product").sync());
   }
 }
 
