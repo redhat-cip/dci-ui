@@ -9,28 +9,7 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4">
       <form ng-submit="$ctrl.create()">
-        <div class="form-group">
-          <label class="control-label" for="topicName">Name</label>
-          <input id="topicName"
-                 name="topicName"
-                 class="form-control"
-                 ng-model="$ctrl.topic.name"
-                 required>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="nextTopic">Next topic</label>
-          <input id="nextTopic"
-                 name="nextTopic"
-                 class="form-control"
-                 ng-model="$ctrl.topic.next_topic">
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="productID">Product</label>
-          <select id="productID" name="productID" class="form-control"
-                 ng-model="$ctrl.topic.product_id">
-             <option ng-repeat="product in $ctrl.products.items" value="{{product.id}}">{{product.name}}</option>
-          </select>
-        </div>
+        <admin-topic-form topic="$ctrl.topic"></admin-topic-form>
         <button class="btn btn-primary" id="createButton">Create</button>
         <a class="btn btn-default" ui-sref="auth.adminTopics">Cancel</a>
       </form>
