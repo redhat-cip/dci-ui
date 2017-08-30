@@ -31,6 +31,7 @@ import adminTeamForm from "./pages/admin/teams/form";
 import adminTopicsPage from "./pages/admin/topics";
 import adminTopicEditPage from "./pages/admin/topics/edit";
 import adminTopicCreatePage from "./pages/admin/topics/create";
+import adminTopicForm from "./pages/admin/topics/form";
 import adminProductsPage from "./pages/admin/products";
 import adminProductEditPage from "./pages/admin/products/edit";
 import adminProductCreatePage from "./pages/admin/products/create";
@@ -106,6 +107,7 @@ angular
   .component("adminTopicsPage", adminTopicsPage)
   .component("adminTopicEditPage", adminTopicEditPage)
   .component("adminTopicCreatePage", adminTopicCreatePage)
+  .component("adminTopicForm", adminTopicForm)
   .component("adminProductsPage", adminProductsPage)
   .component("adminProductEditPage", adminProductEditPage)
   .component("adminProductCreatePage", adminProductCreatePage)
