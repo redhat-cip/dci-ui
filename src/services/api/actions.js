@@ -33,7 +33,7 @@ export default function(resourceString) {
   function fetchKo(error) {
     return {
       type: constants.FETCH_FAILURE,
-      payload:error,
+      payload: error,
       error: true
     };
   }

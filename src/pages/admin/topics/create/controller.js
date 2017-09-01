@@ -28,7 +28,7 @@ class Ctrl {
       name: "",
       component_types: [],
       next_topic: null,
-      product_id: null,
+      product_id: null
     };
   }
 

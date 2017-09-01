@@ -90,9 +90,9 @@ class MenuCtrl {
 
   isSettingsOrPasswordPage() {
     return (
-        this.isSettingsPage() ||
-        this.isPasswordPage() ||
-        this.isNotificationPage()
+      this.isSettingsPage() ||
+      this.isPasswordPage() ||
+      this.isNotificationPage()
     );
   }
 

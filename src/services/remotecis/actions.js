@@ -51,8 +51,9 @@ export function detachUser(remoteci, user) {
     const state = getState();
     const request = {
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${user.id}`,
-      headers: {"If-Match": user.etag}
+      url: `${state.config
+        .apiURL}/api/v1/remotecis/${remoteci.id}/users/${user.id}`,
+      headers: { "If-Match": user.etag }
     };
     return http(request);
   };

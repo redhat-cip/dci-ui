@@ -24,13 +24,48 @@ class Ctrl {
 
   $onInit() {
     this.statuses = [
-      {value: 'new', name:'new', icon: 'fa-pause-circle', btn: 'btn-primary'},
-      {value: 'pre-run', name:'Pre Run', icon: 'fa-pause-circle', btn: 'btn-primary'},
-      {value: 'running', name:'Running', icon: 'fa-pause-circle', btn: 'btn-primary'},
-      {value: 'post-run', name:'Post Run', icon: 'fa-pause-circle', btn: 'btn-primary'},
-      {value: 'killed', name:'Killed', icon: 'fa-stop-circle', btn: 'btn-warning'},
-      {value: 'success', name:'Success', icon: 'fa-check-circle', btn: 'btn-success'},
-      {value: 'failure', name:'Failure', icon: 'fa-exclamation-circle', btn: 'btn-danger'},
+      {
+        value: "new",
+        name: "new",
+        icon: "fa-pause-circle",
+        btn: "btn-primary"
+      },
+      {
+        value: "pre-run",
+        name: "Pre Run",
+        icon: "fa-pause-circle",
+        btn: "btn-primary"
+      },
+      {
+        value: "running",
+        name: "Running",
+        icon: "fa-pause-circle",
+        btn: "btn-primary"
+      },
+      {
+        value: "post-run",
+        name: "Post Run",
+        icon: "fa-pause-circle",
+        btn: "btn-primary"
+      },
+      {
+        value: "killed",
+        name: "Killed",
+        icon: "fa-stop-circle",
+        btn: "btn-warning"
+      },
+      {
+        value: "success",
+        name: "Success",
+        icon: "fa-check-circle",
+        btn: "btn-success"
+      },
+      {
+        value: "failure",
+        name: "Failure",
+        icon: "fa-exclamation-circle",
+        btn: "btn-danger"
+      }
     ];
     this.filter = {};
     this.params = {
@@ -46,7 +81,7 @@ class Ctrl {
   }
 
   clearFilters() {
-    this.search = '';
+    this.search = "";
     this.filter = {};
   }
 }

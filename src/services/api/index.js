@@ -33,19 +33,18 @@ export default function(resourceString) {
     return (dispatch, getState) => {
       dispatch(actions.fetchStart());
       const state = getState();
-      return getList(state, params, dispatch)
-        .catch(error => {
-          dispatch(actions.fetchKo(error.response.data));
-          dispatch(alertsActions.errorApi(error.response));
-          throw error;
-        });
+      return getList(state, params, dispatch).catch(error => {
+        dispatch(actions.fetchKo(error.response.data));
+        dispatch(alertsActions.errorApi(error.response));
+        throw error;
+      });
     };
   }
 
   function sync(params) {
     return (dispatch, getState) => {
       const state = getState();
-      if(itemsEmpty(state)){
+      if (itemsEmpty(state)) {
         return all(params)(dispatch, getState);
       }
       return getList(state, params, dispatch);
@@ -62,11 +61,10 @@ export default function(resourceString) {
       url: `${state.config.apiURL}/api/v1/${resourceString}s`,
       params
     };
-    return http(request)
-      .then(response => {
-        dispatch(actions.fetchOk(response.data[`${resourceString}s`]));
-        return response;
-      });
+    return http(request).then(response => {
+      dispatch(actions.fetchOk(response.data[`${resourceString}s`]));
+      return response;
+    });
   }
 
   // GET /resources/:id:

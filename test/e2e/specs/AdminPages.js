@@ -12,20 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-
 module.exports = {
   "Can cancel edit pages": function(browser) {
-
     function editPageTestCancel(browser, menuSelector, h1Text) {
       browser
         .waitForElementVisible(menuSelector)
         .click(menuSelector)
         .waitForElementVisible("table a:last-child")
-        .click('table a:last-child')
+        .click("table a:last-child")
         .useXpath()
         .waitForElementVisible("//*[contains(text(), 'Cancel')]")
         .click("//*[contains(text(), 'Cancel')]")
-        .waitForElementVisible("//h1[starts-with(normalize-space(.),'" + h1Text + "')]")
+        .waitForElementVisible(
+          "//h1[starts-with(normalize-space(.),'" + h1Text + "')]"
+        )
         .useCss();
     }
 
@@ -41,15 +41,22 @@ module.exports = {
     editPageTestCancel(browser, 'a[ui-sref="auth.adminUsers"]', "Users");
     editPageTestCancel(browser, 'a[ui-sref="auth.adminTeams"]', "Teams");
     editPageTestCancel(browser, 'a[ui-sref="auth.adminTopics"]', "Topics");
-    editPageTestCancel(browser, 'a[ui-sref="auth.adminRemotecis"]', "Remotecis");
+    editPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminRemotecis"]',
+      "Remotecis"
+    );
     editPageTestCancel(browser, 'a[ui-sref="auth.adminProducts"]', "Products");
-
 
     browser.end();
   },
   "Can cancel creation pages": function(browser) {
-
-    function createPageTestCancel(browser, menuSelector, buttonSelector, h1Text) {
+    function createPageTestCancel(
+      browser,
+      menuSelector,
+      buttonSelector,
+      h1Text
+    ) {
       browser
         .waitForElementVisible(menuSelector)
         .click(menuSelector)
@@ -58,7 +65,9 @@ module.exports = {
         .useXpath()
         .waitForElementVisible("//*[contains(text(), 'Cancel')]")
         .click("//*[contains(text(), 'Cancel')]")
-        .waitForElementVisible("//h1[starts-with(normalize-space(.),'" + h1Text + "')]")
+        .waitForElementVisible(
+          "//h1[starts-with(normalize-space(.),'" + h1Text + "')]"
+        )
         .useCss();
     }
 
@@ -71,16 +80,36 @@ module.exports = {
       .click("#logInButton")
       .waitForElementVisible("h1");
 
-    createPageTestCancel(browser, 'a[ui-sref="auth.adminUsers"]',
-      'a[ui-sref="auth.adminUserCreate"]', "Users");
-    createPageTestCancel(browser, 'a[ui-sref="auth.adminTeams"]',
-      'a[ui-sref="auth.adminTeamCreate"]', "Teams");
-    createPageTestCancel(browser, 'a[ui-sref="auth.adminTopics"]',
-      'a[ui-sref="auth.adminTopicCreate"]', "Topics");
-    createPageTestCancel(browser, 'a[ui-sref="auth.adminRemotecis"]',
-      'a[ui-sref="auth.adminRemoteciCreate"]', "Remotecis");
-    createPageTestCancel(browser, 'a[ui-sref="auth.adminProducts"]',
-      'a[ui-sref="auth.adminProductCreate"]', "Products");
+    createPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminUsers"]',
+      'a[ui-sref="auth.adminUserCreate"]',
+      "Users"
+    );
+    createPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminTeams"]',
+      'a[ui-sref="auth.adminTeamCreate"]',
+      "Teams"
+    );
+    createPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminTopics"]',
+      'a[ui-sref="auth.adminTopicCreate"]',
+      "Topics"
+    );
+    createPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminRemotecis"]',
+      'a[ui-sref="auth.adminRemoteciCreate"]',
+      "Remotecis"
+    );
+    createPageTestCancel(
+      browser,
+      'a[ui-sref="auth.adminProducts"]',
+      'a[ui-sref="auth.adminProductCreate"]',
+      "Products"
+    );
 
     browser.end();
   },
@@ -104,6 +133,9 @@ module.exports = {
       .waitForElementVisible("#createButton")
       .click("#createButton")
       .waitForElementVisible('a[ui-sref="auth.adminTopicEdit({id: topic.id})"]')
-      .assert.containsText('a[ui-sref="auth.adminTopicEdit({id: topic.id})"]', topicName);
+      .assert.containsText(
+        'a[ui-sref="auth.adminTopicEdit({id: topic.id})"]',
+        topicName
+      );
   }
 };
