@@ -13,14 +13,16 @@
 // under the License.
 
 const chromedriver = require("chromedriver");
-
+let server;
 module.exports = {
   before: function(done) {
     chromedriver.start();
-    done();
+    server = require("./server")(done);
   },
 
-  after: function() {
+  after: function(done) {
+    server.close();
     chromedriver.stop();
+    done();
   }
 };
