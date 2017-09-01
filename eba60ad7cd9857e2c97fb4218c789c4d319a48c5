@@ -1,0 +1,8 @@
+Code-Review+2: Yanis Guenane <yguenane@gmail.com>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-by: Jenkins CI <jenkins@softwarefactory-project.io>
+Submitted-at: Fri, 01 Sep 2017 12:08:33 +0000
+Reviewed-on: https://softwarefactory-project.io/r/9521
+Project: dci-ui
+Branch: refs/heads/master
