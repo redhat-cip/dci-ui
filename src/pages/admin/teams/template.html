@@ -4,6 +4,7 @@
       <h1 class="page-header">
         Teams
         <a class="pull-right btn btn-primary"
+           id="admin__create-team-btn"
            ui-sref="auth.adminTeamCreate">
           <i class="fa fa-plus-circle"></i> create new team
         </a>
@@ -40,7 +41,7 @@
                 <td>{{ team.id }}</td>
                 <td>{{ team.created_at | dciDate }}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm"
+                  <a class="btn btn-primary btn-sm btn-edit"
                      ui-sref="auth.adminTeamEdit({id: team.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
