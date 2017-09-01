@@ -14,7 +14,7 @@
     <ul class="nav navbar-nav navbar-utility">
       <li ng-if="$ctrl.currentUser.name">
         <a id="menu__settings-link" ui-sref="auth.settings">
-          <i class="pficon pficon-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} - {{ $ctrl.currentUser.team.name }}
+          <i class="fa fa-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} - {{ $ctrl.currentUser.team.name }}
         </a>
       </li>
       <li>
