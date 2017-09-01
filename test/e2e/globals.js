@@ -20,7 +20,8 @@ module.exports = {
     done();
   },
 
-  after: function() {
+  after: function(done) {
     chromedriver.stop();
+    done();
   }
 };
