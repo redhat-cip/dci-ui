@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h1>Edit fingerprint {{$ctrl.fingerprints.item.name}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <form ng-submit="$ctrl.update()">
+        <admin-fingerprint-form fingerprint="$ctrl.fingerprints.item"></admin-fingerprint-form>
+        <button class="btn btn-primary">Update</button>
+        <a class="btn btn-default" ui-sref="auth.adminFingerprints">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
