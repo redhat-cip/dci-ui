@@ -4,6 +4,7 @@
       <h1 class="page-header">
         Products
         <a class="pull-right btn btn-primary"
+           id="admin__create-product-btn"
            ui-sref="auth.adminProductCreate">
           <i class="fa fa-plus-circle"></i> create new product
         </a>
@@ -46,7 +47,7 @@
                 <td>{{product.description}}</td>
                 <td>{{product.created_at | dciDate}}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm"
+                  <a class="btn btn-primary btn-sm btn-edit"
                      ui-sref="auth.adminProductEdit({id: product.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
