@@ -20,7 +20,20 @@ module.exports = {
     done();
   },
 
-  after: function() {
+  after: function(done) {
     chromedriver.stop();
+    done();
+  },
+
+  beforeEach: function(browser, done) {
+    browser.status(function(result) {
+      console.log(result.value);
+      done();
+    });
+  },
+
+  afterEach: function(browser, done) {
+    console.log(browser.currentTest);
+    done();
   }
 };

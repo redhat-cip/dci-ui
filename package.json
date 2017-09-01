@@ -12,7 +12,7 @@
     "rcue": "cp node_modules/patternfly/dist/img/* node_modules/rcue/dist/img/",
     "test": "npm run test:unit && npm run build && npm run test:e2e",
     "test:unit": "ava src/**/*.test.js",
-    "test:e2e": "node test/e2e/runner.js"
+    "test:e2e": "nightwatch --verbose --config ./test/e2e/nightwatch.conf.js"
   },
   "babel": {
     "presets": [
@@ -47,7 +47,7 @@
     "babel-register": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "browser-env": "^3.1.0",
-    "chromedriver": "^2.31.0",
+    "chromedriver": "^2.32.0",
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.4",
