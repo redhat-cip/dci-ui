@@ -12,19 +12,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+import template from "./template.html";
+import controller from "./controller";
+
 export default {
-  currentUser: [
-    "fullname",
-    "email",
-    "timezone",
-    "current_password",
-    "new_password"
-  ],
-  user: ["name", "fullname", "email", "team_id", "password", "role_id"],
-  team: ["name", "email", "notification"],
-  topic: ["name", "next_topic", "product_id", "component_types"],
-  job: ["comment"],
-  remoteci: ["name", "state", "allow_upgrade_job", "data", "team_id"],
-  product: ["name", "team_id", "description", "label"],
-  fingerprint: ["name", "actions", "description", "topic_id", "fingerprint"]
+  template,
+  controller,
+  bindings: {
+    fingerprint: "="
+  }
 };

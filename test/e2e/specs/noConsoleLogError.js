@@ -59,6 +59,11 @@ module.exports = {
       .goAndWaitH1(".btn-cancel", "Products")
       .go(".btn-edit")
       .goAndWaitH1(".btn-cancel", "Products")
+      .goAndWaitH1("#navbar-secondary__admin-fingerprints-link", "Fingerprints")
+      .goAndWaitH1("#admin__create-fingerprint-btn", "Create a new fingerprint")
+      .goAndWaitH1(".btn-cancel", "Fingerprints")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Fingerprints")
       .goAndWaitH1("#navbar-secondary__admin-users-link", "Users");
 
     browser.getLog(function(logs) {

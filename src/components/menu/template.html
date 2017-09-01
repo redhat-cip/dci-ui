@@ -83,6 +83,10 @@
               ng-if="$ctrl.isSuperAdmin()">
             <a id="navbar-secondary__admin-products-link" ui-sref="auth.adminProducts">Products</a>
           </li>
+          <li ng-class="{active: $ctrl.isFingerprintPage()}"
+              ng-if="$ctrl.isSuperAdmin()">
+            <a id="navbar-secondary__admin-fingerprints-link" ui-sref="auth.adminFingerprints">Fingerprints</a>
+          </li>
         </ul>
       </li>
       <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"

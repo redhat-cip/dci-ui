@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-header">
+        Fingerprints
+        <a class="pull-right btn btn-primary"
+           id="admin__create-fingerprint-btn"
+           ui-sref="auth.adminFingerprintCreate">
+          <i class="fa fa-plus-circle"></i> Create a new fingerprint
+        </a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <dci-loading ng-if="$ctrl.fingerprints.isFetching"></dci-loading>
+      <div ng-hide="$ctrl.fingerprints.isFetching">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Fingerprint name</th>
+                <th>Fingerprint ID</th>
+                <th>Created</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tr ng-if="$ctrl.fingerprints.items.length === 0">
+                <td colspan="4">
+                  There is no fingerprint.
+                  <a ui-sref="auth.adminFingerprintCreate">Do you want to create one?</a>
+                </td>
+              </tr>
+              <tr ng-repeat="fingerprint in $ctrl.fingerprints.items | orderBy: 'name'">
+                <td>
+                  <a ui-sref="auth.adminFingerprintEdit({id: fingerprint.id})">
+                    {{fingerprint.name}}
+                  </a>
+                </td>
+                <td>{{ fingerprint.id }}</td>
+                <td>{{ fingerprint.created_at | dciDate }}</td>
+                <td class="text-center">
+                  <a class="btn btn-primary btn-sm"
+                     ui-sref="auth.adminFingerprintEdit({id: fingerprint.id})">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-danger btn-sm"
+                          ng-click="$ctrl.deleteFingerprint(fingerprint)">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
