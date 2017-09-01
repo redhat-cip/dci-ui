@@ -4,6 +4,7 @@
       <h1 class="page-header">
         Remotecis
         <a class="pull-right btn btn-primary"
+           id="admin__create-remoteci-btn"
            ui-sref="auth.adminRemoteciCreate">
           <i class="fa fa-plus-circle"></i> create new remoteci
         </a>
@@ -67,7 +68,7 @@
                 </td>
                 <td>{{ remoteci.created_at | dciDate }}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm"
+                  <a class="btn btn-primary btn-sm btn-edit"
                      ui-sref="auth.adminRemoteciEdit({id: remoteci.id})">
                     <i class="fa fa-pencil"></i>
                   </a>

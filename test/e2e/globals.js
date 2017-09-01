@@ -13,14 +13,27 @@
 // under the License.
 
 const chromedriver = require("chromedriver");
+const axios = require("axios");
+
+function retry(times, interval, promise) {
+  return promise.catch(function(err) {
+    if (times <= 0) {
+      throw err;
+    }
+    setTimeout(() => {
+      return retry(times - 1, interval, promise);
+    }, interval);
+  });
+}
 
 module.exports = {
   before: function(done) {
     chromedriver.start();
-    done();
+    retry(10, 1000, axios.get('http://127.0.0.1:9515/status').then(done));
   },
 
-  after: function() {
+  after: function(done) {
     chromedriver.stop();
+    done();
   }
 };
