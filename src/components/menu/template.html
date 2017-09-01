@@ -13,12 +13,12 @@
   <div class="collapse navbar-collapse">
     <ul class="nav navbar-nav navbar-utility">
       <li ng-if="$ctrl.currentUser.name">
-        <a id="menu__settings-link" ui-sref="auth.settings">
+        <a id="navbar-utility__settings-link" ui-sref="auth.settings">
           <i class="fa fa-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} - {{ $ctrl.currentUser.team.name }}
         </a>
       </li>
       <li>
-        <a href="#" id="menu__logout-link" ng-click="$ctrl.logout()">
+        <a href="#" id="navbar-utility__logout-link" ng-click="$ctrl.logout()">
           Logout
         </a>
       </li>
@@ -26,79 +26,79 @@
     <ul class="nav navbar-nav navbar-primary"
         ng-class="{'persistent-secondary': $ctrl.shouldDisplaySubMenu()}">
       <li ng-class="{active: $ctrl.isJobsPage() || $ctrl.isJobPage()}">
-        <a ui-sref="auth.jobs">
+        <a id="navbar-primary__jobs-link" ui-sref="auth.jobs">
           Jobs
         </a>
         <ul class="nav navbar-nav navbar-persistent" ng-if="$ctrl.isJobPage()">
           <li ui-sref-active="active">
-            <a id="jobJobStatesLink" ui-sref="auth.job.jobStates">Job States</a>
+            <a id="navbar-secondary__job-states-link" ui-sref="auth.job.jobStates">Job States</a>
           </li>
           <li ui-sref-active="active">
-            <a id="jobTestsLink" ui-sref="auth.job.tests">Tests</a>
+            <a id="navbar-secondary__job-tests-link" ui-sref="auth.job.tests">Tests</a>
           </li>
           <li ui-sref-active="active">
-            <a id="jobIssuesLink" ui-sref="auth.job.issues">Issues</a>
+            <a id="navbar-secondary__job-issues-link" ui-sref="auth.job.issues">Issues</a>
           </li>
           <li ui-sref-active="active">
-            <a id="jobFilesLink" ui-sref="auth.job.files">Files</a>
+            <a id="navbar-secondary__job-files-link" ui-sref="auth.job.files">Files</a>
           </li>
         </ul>
       </li>
       <li ui-sref-active="active">
-        <a ui-sref="auth.components">
+        <a id="navbar-primary__components-link" ui-sref="auth.components">
           Components
         </a>
       </li>
       <li ui-sref-active="active">
-        <a ui-sref="auth.globalStatus">
+        <a id="navbar-primary__global-status-link" ui-sref="auth.globalStatus">
           Global Status
         </a>
       </li>
       <li ui-sref-active="active" ng-if="$ctrl.isSuperAdmin()">
-        <a ui-sref="auth.metrics">
+        <a id="navbar-primary__metrics-link" ui-sref="auth.metrics">
           Metrics
         </a>
       </li>
       <li ng-class="{active: $ctrl.isAdminPage()}"
           ng-if="$ctrl.isAdmin() || $ctrl.isSuperAdmin()">
-        <a ui-sref="auth.adminUsers">
+        <a id="navbar-primary__admin-users-link" ui-sref="auth.adminUsers">
           Administration
         </a>
         <ul class="nav navbar-nav navbar-persistent">
           <li ng-class="{active: $ctrl.isUserPage()}">
-            <a ui-sref="auth.adminUsers">Users</a>
+            <a id="navbar-secondary__admin-users-link" ui-sref="auth.adminUsers">Users</a>
           </li>
           <li ng-class="{active: $ctrl.isTeamPage()}"
               ng-if="$ctrl.isSuperAdmin()">
-            <a ui-sref="auth.adminTeams">Teams</a>
+            <a id="navbar-secondary__admin-teams-link" ui-sref="auth.adminTeams">Teams</a>
           </li>
           <li ng-class="{active: $ctrl.isTopicPage()}"
               ng-if="$ctrl.isSuperAdmin()">
-            <a ui-sref="auth.adminTopics">Topics</a>
+            <a id="navbar-secondary__admin-topics-link" ui-sref="auth.adminTopics">Topics</a>
           </li>
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
-            <a ui-sref="auth.adminRemotecis">RemoteCIs</a>
+            <a id="navbar-secondary__admin-remotecis-link" ui-sref="auth.adminRemotecis">RemoteCIs</a>
           </li>
           <li ng-class="{active: $ctrl.isProductPage()}"
               ng-if="$ctrl.isSuperAdmin()">
-            <a ui-sref="auth.adminProducts">Products</a>
+            <a id="navbar-secondary__admin-products-link" ui-sref="auth.adminProducts">Products</a>
           </li>
         </ul>
       </li>
       <li ng-class="{active: $ctrl.isSettingsOrPasswordPage()}"
           ng-if="$ctrl.isSettingsOrPasswordPage()">
-        <a ui-sref="auth.settings">
+        <a id="navbar-primary__settings-link" ui-sref="auth.settings">
           Settings
         </a>
         <ul class="nav navbar-nav navbar-persistent">
           <li ng-class="{active: $ctrl.isSettingsPage()}">
-            <a ui-sref="auth.settings">User settings</a>
+            <a id="navbar-secondary__user-settings-link" ui-sref="auth.settings">User settings</a>
           </li>
           <li ng-class="{active: $ctrl.isPasswordPage()}">
-            <a ui-sref="auth.password">Change password</a>
+            <a id="navbar-secondary__change-password-link" ui-sref="auth.password">Change password</a>
           </li>
           <li ng-class="{active: $ctrl.isNotificationPage()}">
-            <a ui-sref="auth.notification">Notification</a>
+            <a id="navbar-secondary__notification-link" ui-sref="auth.notification">Notification</a>
           </li>
         </ul>
       </li>

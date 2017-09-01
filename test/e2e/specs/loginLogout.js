@@ -12,28 +12,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+const shortcuts = require("./shortcuts");
+
 module.exports = {
   "Login logout test": function(browser) {
-    browser
-      .url(browser.launch_url)
-      .waitForElementVisible("#inputUsername")
-      .setValue("#inputUsername", "user_dell")
-      .setValue("#inputPassword", "password")
-      .waitForElementVisible("#logInButton")
-      .click("#logInButton")
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard")
-      .assert.elementNotPresent('a[ui-sref="auth.adminUsers"]')
-      .click("#menu__logout-link")
-      .waitForElementVisible("#inputUsername")
-      .setValue("#inputUsername", "admin_dell")
-      .setValue("#inputPassword", "password")
-      .waitForElementVisible("#logInButton")
-      .click("#logInButton")
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard")
-      .assert.elementPresent('a[ui-sref="auth.adminUsers"]');
-
-    browser.end();
+    shortcuts(browser).login("user_dell", "password");
+    browser.assert.elementNotPresent("#navbar-primary__admin-users-link");
+    shortcuts(browser).logout().login("admin_dell", "password");
+    browser.assert.elementPresent("#navbar-primary__admin-users-link");
+    shortcuts(browser).logout().end();
   }
 };

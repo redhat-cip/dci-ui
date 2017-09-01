@@ -12,42 +12,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+const shortcuts = require("./shortcuts");
+
 module.exports = {
   "Change password test": function(browser) {
-    browser
-      .url(browser.launch_url)
-      .waitForElementVisible("#inputUsername")
-      .setValue("#inputUsername", "user_dell")
-      .setValue("#inputPassword", "password")
-      .waitForElementVisible("#logInButton")
-      .click("#logInButton")
-      .waitForElementVisible("h1")
-      .click("#menu__settings-link")
-      .waitForElementVisible("h1")
-      .click('a[ui-sref="auth.password"]')
-      .waitForElementVisible("#current_password")
-      .setValue("#current_password", "password")
-      .setValue("#new_password", "new_password")
-      .setValue("#new_password2", "new_password")
-      .waitForElementVisible("#changePasswordButton")
-      .click("#changePasswordButton")
-      .waitForElementVisible("#inputUsername")
-      .setValue("#inputUsername", "user_dell")
-      .setValue("#inputPassword", "new_password")
-      .waitForElementVisible("#logInButton")
-      .click("#logInButton")
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard")
-      .click("#menu__settings-link")
-      .waitForElementVisible("h1")
-      .click('a[ui-sref="auth.password"]')
-      .waitForElementVisible("#current_password")
-      .setValue("#current_password", "new_password")
-      .setValue("#new_password", "password")
-      .setValue("#new_password2", "password")
-      .click("#changePasswordButton")
-      .waitForElementVisible("#inputUsername");
-
-    browser.end();
+    shortcuts(browser)
+      .login("user_hp", "password")
+      .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
+      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
+      .changePassword("password", "new_password")
+      .logout()
+      .login("user_hp", "new_password")
+      .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
+      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
+      .changePassword("new_password", "password")
+      .logout()
+      .login("user_hp", "password")
+      .logout()
+      .end();
   }
 };
