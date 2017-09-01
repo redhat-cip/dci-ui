@@ -8,14 +8,14 @@ export DCI_LOGIN=admin
 export DCI_PASSWORD=admin
 export DCI_CS_URL=http://localhost:5000
 export DCI_SETTINGS_FILE="$(pwd)/test/zuul/settings.py"
-DCI_SERVER_DIR="../dci-control-server"
 
-cd "$DCI_SERVER_DIR"
-sudo "PATH=$PATH" pip install -r requirements.txt
-sudo "PATH=$PATH" python setup.py install
+pushd "../dci-control-server"
+sudo python -m pip install -r requirements.txt
 sh scripts/start_db.sh
-sh scripts/start_es.sh
+sh scripts/start_api.sh
 python scripts/db_provisioning.py -y
-python bin/dci-runtestserver &
-python bin/dci-esindex
-cd -
+popd
+npm start &
+google-chrome --version
+pwd
+ls -alh
