@@ -21,10 +21,11 @@ module.exports = {
   },
   test_settings: {
     default: {
-      launch_url: "http://localhost:8000/",
+      launch_url: "http://127.0.0.1:8888/",
       selenium_port: 9515,
-      selenium_host: "localhost",
+      selenium_host: "127.0.0.1",
       default_path_prefix: "",
+      skip_testcases_on_fail:false,
       globals: {
         waitForConditionTimeout: 5000
       },
@@ -34,10 +35,7 @@ module.exports = {
           args: [
             "--headless",
             "--no-sandbox",
-            "--disable-gpu",
-            "--allow-running-insecure-content",
-            "--ignore-certificate-errors",
-            "--window-size=1920x1080"
+            "--disable-gpu"
           ]
         }
       }
