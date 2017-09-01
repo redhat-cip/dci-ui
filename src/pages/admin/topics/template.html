@@ -4,6 +4,7 @@
       <h1 class="page-header">
         Topics
         <a class="pull-right btn btn-primary"
+           id="admin__create-topic-btn"
            ui-sref="auth.adminTopicCreate">
           <i class="fa fa-plus-circle"></i> create new topic
         </a>
@@ -48,7 +49,7 @@
                 <td>{{topic.product.name}}</td>
                 <td>{{topic.created_at | dciDate}}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm"
+                  <a class="btn btn-primary btn-sm btn-edit"
                      ui-sref="auth.adminTopicEdit({id: topic.id})">
                     <i class="fa fa-pencil"></i>
                   </a>

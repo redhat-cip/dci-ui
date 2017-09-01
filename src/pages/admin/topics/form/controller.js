@@ -16,6 +16,7 @@ import api from "services/api";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
+    this.$ngRedux = $ngRedux;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }

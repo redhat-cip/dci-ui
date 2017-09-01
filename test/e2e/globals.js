@@ -17,10 +17,14 @@ const chromedriver = require("chromedriver");
 module.exports = {
   before: function(done) {
     chromedriver.start();
-    done();
+    setTimeout(() => {
+      console.log('wait for chromedriver to start');
+      done();
+    }, 10000)
   },
 
-  after: function() {
+  after: function(done) {
     chromedriver.stop();
+    done();
   }
 };
