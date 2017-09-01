@@ -13,53 +13,44 @@
 // under the License.
 
 const assert = require("assert");
+const shortcuts = require("./shortcuts");
 
 module.exports = {
   "No console error test": function(browser) {
-    browser
-      .url(browser.launch_url)
-      .waitForElementVisible("#inputUsername")
-      .setValue("#inputUsername", "admin")
-      .setValue("#inputPassword", "admin")
-      .waitForElementVisible("#logInButton")
-      .click("#logInButton")
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard")
-      .click('a[ui-sref="auth.components"]')
-      .waitForElementVisible(".list-group-item-header")
-      .click('a[ui-sref="auth.metrics"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Metrics")
-      .click('a[ui-sref="auth.adminUsers"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Users")
-      .click('a[ui-sref="auth.adminTeams"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Teams")
-      .click('a[ui-sref="auth.adminTopics"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Topics")
-      .click('a[ui-sref="auth.adminRemotecis"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Remotecis")
-      .click('a[ui-sref="auth.adminProducts"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Products")
-      .click('a[ui-sref="auth.globalStatus"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Global Status")
-      .click("#menu__settings-link")
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Update your settings")
-      .click('a[ui-sref="auth.password"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Change your password")
-      .click('a[ui-sref="auth.notification"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Subscribe to notifications")
-      .click('a[ui-sref="auth.jobs"]')
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard");
+    shortcuts(browser)
+      .login()
+      .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
+      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
+      .goAndWaitH1("#navbar-secondary__notification-link", "Subscribe to notifications")
+      .goAndWaitH1("#navbar-secondary__user-settings-link", "Update your settings")
+      .goAndWaitH1("#navbar-primary__global-status-link", "Global Status")
+      .goAndWaitH1("#navbar-primary__metrics-link", "Metrics")
+      .goAndWaitH1("#navbar-primary__admin-users-link", "Users")
+      .goAndWaitH1("#admin__create-user-btn", "Create a new user")
+      .goAndWaitH1(".btn-cancel", "Users")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Users")
+      .goAndWaitH1("#navbar-secondary__admin-teams-link", "Teams")
+      .goAndWaitH1("#admin__create-team-btn", "Create a new team")
+      .goAndWaitH1(".btn-cancel", "Teams")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Teams")
+      .goAndWaitH1("#navbar-secondary__admin-topics-link", "Topics")
+      .goAndWaitH1("#admin__create-topic-btn", "Create a new topic")
+      .goAndWaitH1(".btn-cancel", "Topics")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Topics")
+      .goAndWaitH1("#navbar-secondary__admin-remotecis-link", "Remotecis")
+      .goAndWaitH1("#admin__create-remoteci-btn", "Create a new remoteci")
+      .goAndWaitH1(".btn-cancel", "Remotecis")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Remotecis")
+      .goAndWaitH1("#navbar-secondary__admin-products-link", "Products")
+      .goAndWaitH1("#admin__create-product-btn", "Create a new product")
+      .goAndWaitH1(".btn-cancel", "Products")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Products")
+      .goAndWaitH1("#navbar-secondary__admin-users-link", "Users");
 
     browser.getLog(function(logs) {
       logs = logs.filter(function(log) {
@@ -74,6 +65,6 @@ module.exports = {
       );
     });
 
-    browser.end();
+    shortcuts(browser).logout().end();
   }
 };
