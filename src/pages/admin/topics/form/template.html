@@ -26,8 +26,9 @@
   <div class="form-group">
     <label class="control-label" for="productID">Product</label>
     <select id="productID" name="productID" class="form-control"
-            ng-model="$ctrl.topic.product_id">
-      <option ng-repeat="product in $ctrl.products.items" value="{{product.id}}">{{product.name}}</option>
+            ng-model="$ctrl.topic.product_id" required>
+      <option value="">Please select a product</option>
+      <option ng-repeat="product in $ctrl.products.items" value="{{product.id}}" name="{{product.name}}">{{product.name}}</option>
     </select>
   </div>
 </div>

@@ -26,17 +26,32 @@ module.exports = {
     browser
       .waitForElementVisible("#topicName")
       .setValue("#topicName", topicName)
+      .click('select[id="productID"]')
+      .waitForElementVisible("option[name='OpenStack']")
+      .click("option[name='OpenStack']")
       .waitForElementVisible("#createButton")
       .click("#createButton")
       .useXpath()
-      .waitForElementNotPresent("//a[starts-with(normalize-space(.),'" + topicName + "')]")
+      .waitForElementNotPresent(
+        "//a[starts-with(normalize-space(.),'" + topicName + "')]"
+      )
       .useCss()
       .waitForElementVisible(".btn-danger")
       .click(".btn-danger")
       .useXpath()
-      .waitForElementVisible("//button[starts-with(normalize-space(.),'Yes delete " + topicName + "')]")
-      .click("//button[starts-with(normalize-space(.),'Yes delete " + topicName + "')]")
-      .waitForElementNotPresent("//a[starts-with(normalize-space(.),'" + topicName + "')]")
+      .waitForElementVisible(
+        "//button[starts-with(normalize-space(.),'Yes delete " +
+          topicName +
+          "')]"
+      )
+      .click(
+        "//button[starts-with(normalize-space(.),'Yes delete " +
+          topicName +
+          "')]"
+      )
+      .waitForElementNotPresent(
+        "//a[starts-with(normalize-space(.),'" + topicName + "')]"
+      )
       .useCss();
 
     shortcuts(browser).logout().end();
