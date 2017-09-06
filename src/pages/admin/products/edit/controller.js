@@ -45,7 +45,9 @@ class Ctrl {
       .dispatch(api("product").put(this.product, cleanNullValue))
       .then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`product ${this.product.name} updated successfully`)
+          alertsActions.success(
+            `product ${this.product.name} updated successfully`
+          )
         );
         this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
       });

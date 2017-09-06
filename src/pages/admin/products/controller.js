@@ -25,9 +25,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("product").sync(
-        {embed: embed.products}
-    ));
+    this.$ngRedux.dispatch(api("product").sync({ embed: embed.products }));
   }
 
   deleteProduct(product) {

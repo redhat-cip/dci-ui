@@ -19,12 +19,18 @@ module.exports = {
     shortcuts(browser)
       .login("user_dell", "password")
       .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
-      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
+      .goAndWaitH1(
+        "#navbar-secondary__change-password-link",
+        "Change your password"
+      )
       .changePassword("password", "new_password")
       .logout()
       .login("user_dell", "new_password")
       .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
-      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
+      .goAndWaitH1(
+        "#navbar-secondary__change-password-link",
+        "Change your password"
+      )
       .changePassword("new_password", "password")
       .logout()
       .login("user_dell", "password")

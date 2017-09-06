@@ -25,14 +25,14 @@ module.exports = function(browser) {
         .waitForElementVisible(id)
         .click(id)
         .useXpath()
-        .waitForElementVisible("//h1[starts-with(normalize-space(.),'" + h1 + "')]")
+        .waitForElementVisible(
+          "//h1[starts-with(normalize-space(.),'" + h1 + "')]"
+        )
         .useCss();
       return this;
     },
     go(id) {
-      browser
-        .waitForElementVisible(id)
-        .click(id);
+      browser.waitForElementVisible(id).click(id);
       return this;
     },
     changePassword(currentPassword, newPassword) {
@@ -45,7 +45,7 @@ module.exports = function(browser) {
         .click("#changePasswordButton");
       return this;
     },
-    login(user = 'admin', password = 'admin') {
+    login(user = "admin", password = "admin") {
       browser
         .url(browser.launch_url)
         .waitForElementVisible("#inputUsername")
@@ -69,7 +69,7 @@ module.exports = function(browser) {
       return this;
     },
     end() {
-      browser.end()
+      browser.end();
     }
-  }
+  };
 };

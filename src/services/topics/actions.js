@@ -66,7 +66,7 @@ export function fetchJobs(topics, params = {}) {
           const jobs = response.data.jobs;
           dispatch(
             api("topic").actions.update(
-              enhanceTopic(Object.assign({}, topic, {jobs}))
+              enhanceTopic(Object.assign({}, topic, { jobs }))
             )
           );
         });
@@ -106,7 +106,7 @@ export function associateTeamToTopic(topic, team) {
     const request = {
       method: "post",
       url: `${state.config.apiURL}/api/v1/topics/${topic.id}/teams`,
-      data: {team_id: team.id}
+      data: { team_id: team.id }
     };
     return http(request);
   };
@@ -118,7 +118,7 @@ export function removeTeamFromTopic(topic, team) {
     const request = {
       method: "delete",
       url: `${state.config.apiURL}/api/v1/topics/${topic.id}/teams/${team.id}`,
-      headers: {"If-Match": team.etag}
+      headers: { "If-Match": team.etag }
     };
     return http(request);
   };

@@ -25,7 +25,7 @@ export default function auth(state = initialState, action) {
   switch (action.type) {
     case constants.FETCH_REQUEST:
       return Object.assign({}, state, {
-        isFetching: true,
+        isFetching: true
       });
     case constants.FETCH_SUCCESS:
       const filteredMetrics = [];
@@ -41,7 +41,7 @@ export default function auth(state = initialState, action) {
       });
     case constants.FETCH_FAILURE:
       return Object.assign({}, state, {
-        isFetching: false,
+        isFetching: false
       });
     case constants.SELECT_FIRST_METRIC:
       return Object.assign({}, state, {

@@ -13,7 +13,7 @@
 // under the License.
 
 import api from "services/api";
-import {stateGo} from "redux-ui-router";
+import { stateGo } from "redux-ui-router";
 import differenceWith from "lodash/differenceWith";
 import isEqual from "lodash/isEqual";
 import remove from "lodash/remove";
@@ -34,15 +34,11 @@ class Ctrl {
     this.$ngRedux.dispatch(api("team").sync()).then(response => {
       const teams = response.data.teams;
       this.$ngRedux
-        .dispatch(api("topic").get({id}, {embed: 'teams'}))
+        .dispatch(api("topic").get({ id }, { embed: "teams" }))
         .then(response => {
           this.topic = response.data.topic;
           this.topicTeams = this.topic.teams;
-          this.availableTeams = differenceWith(
-            teams,
-            this.topicTeams,
-            isEqual
-          );
+          this.availableTeams = differenceWith(teams, this.topicTeams, isEqual);
           this.$scope.$apply();
         });
     });

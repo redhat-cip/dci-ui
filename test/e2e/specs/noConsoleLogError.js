@@ -20,9 +20,18 @@ module.exports = {
     shortcuts(browser)
       .login()
       .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
-      .goAndWaitH1("#navbar-secondary__change-password-link", "Change your password")
-      .goAndWaitH1("#navbar-secondary__notification-link", "Subscribe to notifications")
-      .goAndWaitH1("#navbar-secondary__user-settings-link", "Update your settings")
+      .goAndWaitH1(
+        "#navbar-secondary__change-password-link",
+        "Change your password"
+      )
+      .goAndWaitH1(
+        "#navbar-secondary__notification-link",
+        "Subscribe to notifications"
+      )
+      .goAndWaitH1(
+        "#navbar-secondary__user-settings-link",
+        "Update your settings"
+      )
       .goAndWaitH1("#navbar-primary__global-status-link", "Global Status")
       .goAndWaitH1("#navbar-primary__metrics-link", "Metrics")
       .goAndWaitH1("#navbar-primary__admin-users-link", "Users")

@@ -37,7 +37,6 @@ test("request foos set isFetching", t => {
   t.true(newState.isFetching);
 });
 
-
 test("fetch failure reset isFetching", t => {
   const newState = reducer("foo")(
     {
@@ -58,7 +57,7 @@ test("set foos", t => {
     },
     {
       type: constants("foo").FETCH_SUCCESS,
-      payload: [{id: "1"}, {id: "2"}]
+      payload: [{ id: "1" }, { id: "2" }]
     }
   );
   t.false(newState.isFetching);
@@ -69,11 +68,11 @@ test("delete foo", t => {
   const newState = reducer("foo")(
     {
       isFetching: false,
-      items: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]
+      items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     },
     {
       type: constants("foo").DELETED,
-      payload: {id: 1}
+      payload: { id: 1 }
     }
   );
   t.false(newState.isFetching);
@@ -85,11 +84,11 @@ test("update foo", t => {
   const newState = reducer("foo")(
     {
       isFetching: false,
-      items: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]
+      items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     },
     {
       type: constants("foo").UPDATED,
-      payload: {id: 1, name: "id 1"}
+      payload: { id: 1, name: "id 1" }
     }
   );
   t.is(newState.items[0].name, "id 1");
@@ -102,7 +101,7 @@ test("set foo", t => {
     },
     {
       type: constants("foo").SET,
-      payload: {id: 1, name: "id 1"}
+      payload: { id: 1, name: "id 1" }
     }
   );
   t.is(newState.item.name, "id 1");
@@ -111,11 +110,11 @@ test("set foo", t => {
 test("set foo enhance if id same", t => {
   const newState = reducer("foo")(
     {
-      item: {id: 1, name: "id 1", files: [{}, {}]}
+      item: { id: 1, name: "id 1", files: [{}, {}] }
     },
     {
       type: constants("foo").SET,
-      payload: {id: 1, files: [{}]}
+      payload: { id: 1, files: [{}] }
     }
   );
   t.is(newState.item.name, "id 1");
@@ -125,11 +124,11 @@ test("set foo enhance if id same", t => {
 test("set foo replace if id different", t => {
   const newState = reducer("foo")(
     {
-      item: {id: 1, name: "id 1"}
+      item: { id: 1, name: "id 1" }
     },
     {
       type: constants("foo").SET,
-      payload: {id: 2, files: [{}, {}]}
+      payload: { id: 2, files: [{}, {}] }
     }
   );
   t.is(newState.item.name, undefined);
@@ -143,7 +142,7 @@ test("create foo add in foos", t => {
     },
     {
       type: constants("foo").CREATED,
-      payload: {id: 1}
+      payload: { id: 1 }
     }
   );
   t.is(newState.items[0].id, 1);

@@ -34,7 +34,7 @@ export function closeAlert(id) {
 export function sendAndDeleteAlert(message, persist, type) {
   return dispatch => {
     const id = Date.now();
-    dispatch(sendAlert({id, message, type: type}));
+    dispatch(sendAlert({ id, message, type: type }));
     if (!persist) {
       setTimeout(() => dispatch(closeAlert(id)), 10000);
     }
@@ -53,14 +53,15 @@ export function error(message, persist = false) {
   };
 }
 
-export function close({id}) {
+export function close({ id }) {
   return dispatch => {
     dispatch(closeAlert(id));
   };
 }
 
 export function createAlert(response) {
-  let alert = 'We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?';
+  let alert =
+    "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?";
   if (response.data && response.data.message) {
     alert = response.data.message;
   }
@@ -72,11 +73,11 @@ export function createAlert(response) {
     errorKeys.forEach(errorKey => {
       errorDetails += `${errorKey}: ${error[errorKey]}\n`;
     });
-    if(errorDetails){
+    if (errorDetails) {
       alert += `\n${errorDetails}`;
     }
   }
-  return alert
+  return alert;
 }
 
 export function errorApi(response, persist = false) {

@@ -25,18 +25,14 @@ module.exports = {
       selenium_port: 9515,
       selenium_host: "127.0.0.1",
       default_path_prefix: "",
-      skip_testcases_on_fail:false,
+      skip_testcases_on_fail: false,
       globals: {
         waitForConditionTimeout: 10000
       },
       desiredCapabilities: {
         browserName: "chrome",
         chromeOptions: {
-          args: [
-            "--headless",
-            "--no-sandbox",
-            "--disable-gpu"
-          ]
+          args: ["--headless", "--no-sandbox", "--disable-gpu"]
         }
       }
     }

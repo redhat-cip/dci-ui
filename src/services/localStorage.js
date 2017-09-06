@@ -15,8 +15,11 @@
 export default {
   keyPrefix: "dci",
   get() {
-    if (typeof localStorage === "undefined" || !localStorage.getItem(this.keyPrefix)) {
-      return {auth: {token: ""}};
+    if (
+      typeof localStorage === "undefined" ||
+      !localStorage.getItem(this.keyPrefix)
+    ) {
+      return { auth: { token: "" } };
     }
     return JSON.parse(localStorage.getItem(this.keyPrefix));
   },

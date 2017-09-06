@@ -28,14 +28,16 @@ class Ctrl {
     this.product = {
       name: "",
       team_id: "",
-      label: null,
+      label: null
     };
   }
 
   create() {
     this.$ngRedux.dispatch(api("product").post(this.product)).then(() => {
       this.$ngRedux.dispatch(
-        alertsActions.success(`product ${this.product.name} created successfully`)
+        alertsActions.success(
+          `product ${this.product.name} created successfully`
+        )
       );
       this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
     });

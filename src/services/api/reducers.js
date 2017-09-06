@@ -27,7 +27,7 @@ export default function(resourceString) {
     switch (action.type) {
       case constants.FETCH_REQUEST:
         return Object.assign({}, state, {
-          isFetching: true,
+          isFetching: true
         });
       case constants.FETCH_SUCCESS:
         return Object.assign({}, state, {
@@ -36,7 +36,7 @@ export default function(resourceString) {
         });
       case constants.FETCH_FAILURE:
         return Object.assign({}, state, {
-          isFetching: false,
+          isFetching: false
         });
       case constants.SET:
         let newItem = null;

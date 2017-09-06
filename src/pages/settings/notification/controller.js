@@ -27,41 +27,39 @@ class Ctrl {
   }
 
   $onInit() {
-      this.$ngRedux
-        .dispatch(api('remoteci').all())
-        .then(response => {
-          this.availableRemotecis = differenceBy(
-              response.data.remotecis,
-              this.currentUser.remotecis,
-              'id'
-          )
-      });
+    this.$ngRedux.dispatch(api("remoteci").all()).then(response => {
+      this.availableRemotecis = differenceBy(
+        response.data.remotecis,
+        this.currentUser.remotecis,
+        "id"
+      );
+    });
   }
 
   associateUserToRemoteci(remoteci) {
-      this.$ngRedux
-        .dispatch(remotecisActions.associateUser(remoteci, this.currentUser))
-        .then(() => {
-          remove(this.availableRemotecis, remoteci);
-          this.currentUser.remotecis.push(remoteci);
-          this.$scope.$apply();
-        })
-        .catch(err => {
-          this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
-        });
+    this.$ngRedux
+      .dispatch(remotecisActions.associateUser(remoteci, this.currentUser))
+      .then(() => {
+        remove(this.availableRemotecis, remoteci);
+        this.currentUser.remotecis.push(remoteci);
+        this.$scope.$apply();
+      })
+      .catch(err => {
+        this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
+      });
   }
 
   detachUserToRemoteci(remoteci) {
-      this.$ngRedux
-        .dispatch(remotecisActions.detachUser(remoteci, this.currentUser))
-        .then(() => {
-          remove(this.currentUser.remotecis, remoteci);
-          this.availableRemotecis.push(remoteci);
-          this.$scope.$apply();
-        })
-        .catch(err => {
-          this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
-        });
+    this.$ngRedux
+      .dispatch(remotecisActions.detachUser(remoteci, this.currentUser))
+      .then(() => {
+        remove(this.currentUser.remotecis, remoteci);
+        this.availableRemotecis.push(remoteci);
+        this.$scope.$apply();
+      })
+      .catch(err => {
+        this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
+      });
   }
 }
 

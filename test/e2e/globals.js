@@ -18,9 +18,9 @@ module.exports = {
   before: function(done) {
     chromedriver.start();
     setTimeout(() => {
-      console.log('wait for chromedriver to start');
+      console.log("wait for chromedriver to start");
       done();
-    }, 10000)
+    }, 10000);
   },
 
   after: function(done) {
