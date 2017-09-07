@@ -45,6 +45,11 @@
         </ul>
       </li>
       <li ui-sref-active="active">
+        <a id="navbar-primary__topics-link" ui-sref="auth.topics">
+          Topics
+        </a>
+      </li>
+      <li ui-sref-active="active">
         <a id="navbar-primary__components-link" ui-sref="auth.components">
           Components
         </a>
@@ -71,10 +76,6 @@
           <li ng-class="{active: $ctrl.isTeamPage()}"
               ng-if="$ctrl.currentUser.isSuperAdmin">
             <a id="navbar-secondary__admin-teams-link" ui-sref="auth.adminTeams">Teams</a>
-          </li>
-          <li ng-class="{active: $ctrl.isTopicPage()}"
-              ng-if="$ctrl.currentUser.isSuperAdmin">
-            <a id="navbar-secondary__admin-topics-link" ui-sref="auth.adminTopics">Topics</a>
           </li>
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
             <a id="navbar-secondary__admin-remotecis-link" ui-sref="auth.adminRemotecis">RemoteCIs</a>

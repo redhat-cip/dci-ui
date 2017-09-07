@@ -28,10 +28,6 @@ import adminTeamsPage from "./pages/admin/teams";
 import adminTeamEditPage from "./pages/admin/teams/edit";
 import adminTeamCreatePage from "./pages/admin/teams/create";
 import adminTeamForm from "./pages/admin/teams/form";
-import adminTopicsPage from "./pages/admin/topics";
-import adminTopicEditPage from "./pages/admin/topics/edit";
-import adminTopicCreatePage from "./pages/admin/topics/create";
-import adminTopicForm from "./pages/admin/topics/form";
 import adminProductsPage from "./pages/admin/products";
 import adminProductEditPage from "./pages/admin/products/edit";
 import adminProductCreatePage from "./pages/admin/products/create";
@@ -43,6 +39,10 @@ import jobStatesPage from "./pages/job/jobstates";
 import jobTestsPage from "./pages/job/tests";
 import jobIssuesPage from "./pages/job/issues";
 import jobFilesPage from "./pages/job/files";
+import topicsPage from "./pages/topics";
+import topicCreatePage from "./pages/topics/create";
+import topicEditPage from "./pages/topics/edit";
+import topicForm from "./pages/topics/form";
 import componentsPage from "./pages/components";
 import loginPage from "./pages/login";
 import updatePasswordPage from "./pages/settings/updatePassword";
@@ -95,6 +95,10 @@ angular
   .component("jobFilesPage", jobFilesPage)
   .component("jobTestsPage", jobTestsPage)
   .component("jobIssuesPage", jobIssuesPage)
+  .component("topicsPage", topicsPage)
+  .component("topicCreatePage", topicCreatePage)
+  .component("topicEditPage", topicEditPage)
+  .component("topicForm", topicForm)
   .component("componentsPage", componentsPage)
   .component("adminUsersPage", adminUsersPage)
   .component("adminUserEditPage", adminUserEditPage)
@@ -104,10 +108,6 @@ angular
   .component("adminTeamEditPage", adminTeamEditPage)
   .component("adminTeamCreatePage", adminTeamCreatePage)
   .component("adminTeamForm", adminTeamForm)
-  .component("adminTopicsPage", adminTopicsPage)
-  .component("adminTopicEditPage", adminTopicEditPage)
-  .component("adminTopicCreatePage", adminTopicCreatePage)
-  .component("adminTopicForm", adminTopicForm)
   .component("adminProductsPage", adminProductsPage)
   .component("adminProductEditPage", adminProductEditPage)
   .component("adminProductCreatePage", adminProductCreatePage)

@@ -37,7 +37,7 @@ class Ctrl {
       this.$ngRedux.dispatch(
         alertsActions.success(`topic ${this.topic.name} created successfully`)
       );
-      this.$ngRedux.dispatch(stateGo("auth.adminTopics"));
+      this.$ngRedux.dispatch(stateGo("auth.topics"));
     });
   }
 }
