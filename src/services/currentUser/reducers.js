@@ -17,7 +17,17 @@ import * as constants from "./constants";
 export default function(state = {}, action) {
   switch (action.type) {
     case constants.SET_CURRENT_USER:
-      return Object.assign({}, state, action.payload);
+      const role = action.payload.role;
+      const shortcuts = {
+        isSuperAdmin: role.label === "SUPER_ADMIN",
+        isSuperAdminOrProductOwner:
+          role.label === "SUPER_ADMIN" || role.label === "PRODUCT_OWNER",
+        isAdmin:
+          role.label === "SUPER_ADMIN" ||
+          role.label === "PRODUCT_OWNER" ||
+          role.label === "ADMIN"
+      };
+      return Object.assign({}, state, action.payload, shortcuts);
     default:
       return state;
   }

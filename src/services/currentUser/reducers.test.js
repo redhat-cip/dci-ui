@@ -20,8 +20,60 @@ test("set currentUser", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
-      email: "currentUser@example.org"
+      email: "currentUser@example.org",
+      role: {
+        label: "USER"
+      }
     }
   });
   t.is(newState.email, "currentUser@example.org");
+});
+
+test("set currentUser set role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "SUPER_ADMIN"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.true(newState.isSuperAdmin);
+  t.true(newState.isSuperAdminOrProductOwner);
+});
+
+test("set currentUser unset role shortcut", t => {
+  const newState = reducer(
+    { isSuperAdmin: true, isSuperAdminOrProductOwner: true },
+    {
+      type: constants.SET_CURRENT_USER,
+      payload: {
+        email: "currentUser@example.org",
+        role: {
+          label: "PRODUCT_OWNER"
+        }
+      }
+    }
+  );
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.true(newState.isSuperAdminOrProductOwner);
+});
+
+test("set currentUser set isAdmin role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "ADMIN"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.false(newState.isSuperAdminOrProductOwner);
+  t.true(newState.isAdmin);
 });
