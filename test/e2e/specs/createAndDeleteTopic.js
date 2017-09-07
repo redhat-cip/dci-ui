@@ -19,9 +19,8 @@ module.exports = {
     const topicName = "_Test Topic " + Date.now();
     shortcuts(browser)
       .login()
-      .goAndWaitH1("#navbar-primary__admin-users-link", "Users")
-      .goAndWaitH1("#navbar-secondary__admin-topics-link", "Topics")
-      .goAndWaitH1("#admin__create-topic-btn", "Create a new topic");
+      .goAndWaitH1("#navbar-primary__topics-link", "Topics")
+      .goAndWaitH1("#topics__create-topic-btn", "Create a new topic");
 
     browser
       .waitForElementVisible("#topicName")
@@ -54,6 +53,8 @@ module.exports = {
       )
       .useCss();
 
-    shortcuts(browser).logout().end();
+    shortcuts(browser)
+      .logout()
+      .end();
   }
 };

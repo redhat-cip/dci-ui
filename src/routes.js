@@ -64,6 +64,21 @@ const routes = function($stateProvider, $urlRouterProvider) {
       component: "componentsPage"
     })
     .state({
+      name: "auth.topics",
+      url: "topics",
+      component: "topicsPage"
+    })
+    .state({
+      name: "auth.topicCreate",
+      url: "topics/create",
+      component: "topicCreatePage"
+    })
+    .state({
+      name: "auth.topicEdit",
+      url: "topics/:id",
+      component: "topicEditPage"
+    })
+    .state({
       name: "auth.settings",
       url: "settings",
       component: "updateSettingsPage"
@@ -107,21 +122,6 @@ const routes = function($stateProvider, $urlRouterProvider) {
       name: "auth.adminTeamCreate",
       url: "admin/teams/create",
       component: "adminTeamCreatePage"
-    })
-    .state({
-      name: "auth.adminTopics",
-      url: "admin/topics",
-      component: "adminTopicsPage"
-    })
-    .state({
-      name: "auth.adminTopicEdit",
-      url: "admin/topics/:id",
-      component: "adminTopicEditPage"
-    })
-    .state({
-      name: "auth.adminTopicCreate",
-      url: "admin/topics/create",
-      component: "adminTopicCreatePage"
     })
     .state({
       name: "auth.adminProducts",

@@ -32,6 +32,11 @@ module.exports = {
         "#navbar-secondary__user-settings-link",
         "Update your settings"
       )
+      .goAndWaitH1("#navbar-primary__topics-link", "Topics")
+      .goAndWaitH1("#topics__create-topic-btn", "Create a new topic")
+      .goAndWaitH1(".btn-cancel", "Topics")
+      .go(".btn-edit")
+      .goAndWaitH1(".btn-cancel", "Topics")
       .goAndWaitH1("#navbar-primary__global-status-link", "Global Status")
       .goAndWaitH1("#navbar-primary__metrics-link", "Metrics")
       .goAndWaitH1("#navbar-primary__admin-users-link", "Users")
@@ -44,11 +49,6 @@ module.exports = {
       .goAndWaitH1(".btn-cancel", "Teams")
       .go(".btn-edit")
       .goAndWaitH1(".btn-cancel", "Teams")
-      .goAndWaitH1("#navbar-secondary__admin-topics-link", "Topics")
-      .goAndWaitH1("#admin__create-topic-btn", "Create a new topic")
-      .goAndWaitH1(".btn-cancel", "Topics")
-      .go(".btn-edit")
-      .goAndWaitH1(".btn-cancel", "Topics")
       .goAndWaitH1("#navbar-secondary__admin-remotecis-link", "Remotecis")
       .goAndWaitH1("#admin__create-remoteci-btn", "Create a new remoteci")
       .goAndWaitH1(".btn-cancel", "Remotecis")
@@ -74,6 +74,8 @@ module.exports = {
       );
     });
 
-    shortcuts(browser).logout().end();
+    shortcuts(browser)
+      .logout()
+      .end();
   }
 };
