@@ -17,7 +17,7 @@ import * as authActions from "services/auth/actions";
 class MenuCtrl {
   constructor($scope, $ngRedux) {
     this.$ngRedux = $ngRedux;
-    let unsubscribe = $ngRedux.connect(state => state, authActions)(this);
+    let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
@@ -71,8 +71,7 @@ class MenuCtrl {
       this.isTeamPage() ||
       this.isTopicPage() ||
       this.isRemoteCIPage() ||
-      this.isProductPage() ||
-      this.router.currentState.name === "auth.adminAudits"
+      this.isProductPage()
     );
   }
 
@@ -113,22 +112,6 @@ class MenuCtrl {
       this.router.currentState.name === "auth.job.issues" ||
       this.router.currentState.name === "auth.job.files"
     );
-  }
-
-  isAdmin() {
-    const currentUser = this.$ngRedux.getState().currentUser;
-    if (!currentUser.role) {
-      return false;
-    }
-    return currentUser.role.label === "ADMIN";
-  }
-
-  isSuperAdmin() {
-    const currentUser = this.$ngRedux.getState().currentUser;
-    if (!currentUser.role) {
-      return false;
-    }
-    return currentUser.role.label === "SUPER_ADMIN";
   }
 }
 
