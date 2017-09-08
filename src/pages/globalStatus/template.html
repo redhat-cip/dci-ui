@@ -56,7 +56,7 @@
                   <td>{{ job.job_status || "Not run yet" }}</td>
                   <td ng-if="!job.job_id">N/A</td>
                   <td ng-if="job.job_id">
-                    <a ui-sref="job.results({id: job.job_id})" class="title">
+                    <a ui-sref="auth.job.jobStates({id: job.job_id})" class="title">
                       {{job.job_id}}
                     </a>
                   </td>
