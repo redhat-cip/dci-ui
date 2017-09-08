@@ -17,6 +17,7 @@ import * as topicsActions from "services/topics/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
+    this.$scope = $scope;
     this.$ngRedux = $ngRedux;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
@@ -24,23 +25,18 @@ class Ctrl {
 
   $onInit() {
     this.$ngRedux.dispatch(api("topic").all()).then(response => {
-      this.$ngRedux.dispatch(
-        topicsActions.fetchComponents(response.data.topics, {
-          limit: 12,
-          offset: 0
-        })
-      );
+      this.$ngRedux
+        .dispatch(
+          topicsActions.fetchComponents(response.data.topics, {
+            limit: 5,
+            offset: 0
+          })
+        )
+        .then(components => {
+          this.components = components;
+          this.$scope.$apply();
+        });
     });
-  }
-
-  toggleSeeDetails(topic) {
-    if (topic.components && topic.components.length > 0) {
-      if (!topic.seeDetails && topic.selectedComponent === undefined) {
-        topic.selectedComponent = topic.components[0];
-      }
-      return !topic.seeDetails;
-    }
-    return topic.seeDetails;
   }
 }
 

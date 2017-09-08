@@ -37,6 +37,7 @@ module.exports = {
       .goAndWaitH1(".btn-cancel", "Topics")
       .go(".btn-edit")
       .goAndWaitH1(".btn-cancel", "Topics")
+      .goAndWaitH1("#navbar-primary__components-link", "Components")
       .goAndWaitH1("#navbar-primary__global-status-link", "Global Status")
       .goAndWaitH1("#navbar-primary__metrics-link", "Metrics")
       .goAndWaitH1("#navbar-primary__admin-users-link", "Users")

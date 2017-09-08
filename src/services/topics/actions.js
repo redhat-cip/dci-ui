@@ -75,27 +75,36 @@ export function fetchJobs(topics, params = {}) {
   };
 }
 
+function getComponentsFromReponse(response, topic) {
+  return response.data.components.map(function(component) {
+    component.topic = topic;
+    return component;
+  });
+}
+
 export function fetchComponents(topics, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
     order(topics, dispatch);
+
+    const componentsPromises = [];
     topics.forEach(topic => {
       const request = {
         method: "get",
         url: `${state.config.apiURL}/api/v1/topics/${topic.id}/components`,
         params
       };
-      return http(request).then(response => {
-        const components = response.data.components;
-        dispatch(
-          api("topic").actions.update(
-            Object.assign({}, topic, {
-              nbComponents: response.data._meta.count,
-              components
-            })
-          )
-        );
+      componentsPromises.push(http(request));
+    });
+
+    return Promise.all(componentsPromises).then(values => {
+      const components = [];
+      values.map((response, index) => {
+        getComponentsFromReponse(response, topics[index]).forEach(component => {
+          components.push(component);
+        });
       });
+      return components;
     });
   };
 }
