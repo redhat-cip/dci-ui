@@ -14,36 +14,60 @@
 
 import api from "services/api";
 import * as topicsActions from "services/topics/actions";
+import * as alertsActions from "services/alerts/actions";
+import { stateReload } from "redux-ui-router";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, $uibModal) {
+    this.$scope = $scope;
     this.$ngRedux = $ngRedux;
+    this.$uibModal = $uibModal;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
     this.$ngRedux.dispatch(api("topic").all()).then(response => {
-      this.$ngRedux.dispatch(
-        topicsActions.fetchComponents(response.data.topics, {
-          limit: 12,
-          offset: 0
-        })
-      );
+      this.$ngRedux
+        .dispatch(
+          topicsActions.fetchComponents(response.data.topics, {
+            limit: 5,
+            offset: 0
+          })
+        )
+        .then(components => {
+          this.components = components;
+          this.$scope.$apply();
+        });
     });
   }
 
-  toggleSeeDetails(topic) {
-    if (topic.components && topic.components.length > 0) {
-      if (!topic.seeDetails && topic.selectedComponent === undefined) {
-        topic.selectedComponent = topic.components[0];
+  deleteComponent(component) {
+    const componentName = component.name;
+    const deleteComponentModal = this.$uibModal.open({
+      component: "confirmDestructiveAction",
+      resolve: {
+        data: function() {
+          return {
+            title: "Delete component " + componentName,
+            body: "Are you you want to delete component " + componentName + "?",
+            okButton: "Yes delete " + componentName,
+            cancelButton: "oups no!"
+          };
+        }
       }
-      return !topic.seeDetails;
-    }
-    return topic.seeDetails;
+    });
+    deleteComponentModal.result.then(() => {
+      this.$ngRedux.dispatch(api("component").delete(component)).then(() => {
+        this.$ngRedux.dispatch(
+          alertsActions.success(`component deleted successfully`)
+        );
+        this.$ngRedux.dispatch(stateReload("auth.components"));
+      });
+    });
   }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "$uibModal"];
 
 export default Ctrl;
