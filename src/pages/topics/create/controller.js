@@ -33,6 +33,9 @@ class Ctrl {
   }
 
   create() {
+    if (!this.topic.next_topic) {
+      this.topic.next_topic = null;
+    }
     this.$ngRedux.dispatch(api("topic").post(this.topic)).then(() => {
       this.$ngRedux.dispatch(
         alertsActions.success(`topic ${this.topic.name} created successfully`)

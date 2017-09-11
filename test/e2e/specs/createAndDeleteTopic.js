@@ -25,6 +25,8 @@ module.exports = {
     browser
       .waitForElementVisible("#topicName")
       .setValue("#topicName", topicName)
+      .clearValue("#componentTypes")
+      .setValue("#componentTypes", '["puddle"]')
       .click('select[id="productID"]')
       .waitForElementVisible("option[name='OpenStack']")
       .click("option[name='OpenStack']")
