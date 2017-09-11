@@ -74,7 +74,7 @@
             <a id="navbar-secondary__admin-users-link" ui-sref="auth.adminUsers">Users</a>
           </li>
           <li ng-class="{active: $ctrl.isTeamPage()}"
-              ng-if="$ctrl.currentUser.isSuperAdmin">
+              ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
             <a id="navbar-secondary__admin-teams-link" ui-sref="auth.adminTeams">Teams</a>
           </li>
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
