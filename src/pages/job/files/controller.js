@@ -13,6 +13,8 @@
 // under the License.
 
 import api from "services/api";
+import * as filesActions from "services/files/actions";
+import FileSaver from "file-saver";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -27,10 +29,14 @@ class Ctrl {
     this.$ngRedux.dispatch(api("job").get({ id }, { embed: "files" }));
   }
 
-  getUrl(file) {
-    // todo download instead https://github.com/eligrey/FileSaver.js/
-    const state = this.$ngRedux.getState();
-    return `${state.config.apiURL}/api/v1/files/${file.id}/content`;
+  downloadFile(file) {
+    file.downloading = true;
+    this.$ngRedux.dispatch(filesActions.getContent(file)).then(response => {
+      file.downloading = false;
+      this.$scope.$apply();
+      const blob = new Blob([response.data], { type: file.mime });
+      FileSaver.saveAs(blob, `${file.name}`);
+    });
   }
 }
 

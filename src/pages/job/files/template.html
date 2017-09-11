@@ -27,16 +27,21 @@
             <th>Filename</th>
             <th>Size</th>
             <th>mime-type</th>
-            <th class="text-center">Download</th>
+            <th class="text-center">Actions</th>
           </tr>
-          <tr ng-repeat="file in $ctrl.jobs.item.files | orderBy: 'created_at' | filter:$ctrl.search:strict">
+          <tr ng-repeat="file in $ctrl.jobs.item.files | orderBy: 'created_at' | filter:$ctrl.search:strict"
+              ng-init="file.downloading = false">
             <td>{{ file.name }}</td>
             <td>{{ file.size }} Bytes</td>
             <td>{{ file.mime }}</td>
             <td class="text-center">
-              <a ng-href="{{$ctrl.getUrl(file)}}">
-                <span class="fa fa-file-o"></span> download
-              </a>
+              <button class="btn btn-primary"
+                      ng-disabled="file.downloading"
+                      ng-click="$ctrl.downloadFile(file)">
+                <i class="fa fa-file-o fa-fw" ng-hide="file.downloading"></i>
+                <i class="fa fa-spinner fa-pulse fa-fw" ng-if="file.downloading"></i>
+                download
+              </button>
             </td>
           </tr>
         </table>
