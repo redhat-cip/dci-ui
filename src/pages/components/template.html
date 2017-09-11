@@ -8,20 +8,32 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
           <tr>
+            <th>Topic</th>
             <th>Name</th>
             <th>Created At</th>
             <th>Url</th>
             <th>Type</th>
             <th class="text-center">Export control</th>
-            <th>Topic</th>
             <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
               Actions
             </th>
           </tr>
           </thead>
-          <tr ng-repeat="component in $ctrl.components | orderBy: 'topic.name' | filter: $ctrl.componentsSearch">
+          <tr ng-repeat="component in $ctrl.components | orderBy: '-created_at' | filter: $ctrl.componentsSearch">
             <td>
-              {{component.name}}
+              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
+                 ui-sref="auth.topicEdit({id: component.topic_id})">
+                {{component.topic.name}}
+              </a>
+              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
+                {{component.topic.name}}
+              </span>
+            </td>
+            <td>
+              <span title="{{ component.name }}">
+                {{component.name | limitTo:42}}
+              </span>
+              <span ng-if="component.name.length > 42">...</span>
             </td>
             <td>
               {{component.created_at | dciDate}}
@@ -35,15 +47,6 @@
             <td class="text-center">
               <span ng-if="component.export_control">
                 <i class="fa fa-check-circle fa-lg text-success"></i>
-              </span>
-            </td>
-            <td>
-              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
-                 ui-sref="auth.topicEdit({id: component.topic_id})">
-                {{component.topic.name}}
-              </a>
-              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
-                {{component.topic.name}}
               </span>
             </td>
             <td class="text-center"
