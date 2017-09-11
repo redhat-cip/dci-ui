@@ -29,7 +29,7 @@
     "file-saver": "^1.3.3",
     "husky": "^0.14.3",
     "lodash": "^4.17.4",
-    "moment": "^2.18.1",
+    "moment": "~2.18.1",
     "moment-timezone": "^0.5.13",
     "ng-redux": "^3.5.1",
     "patternfly": "^3.27.1",
