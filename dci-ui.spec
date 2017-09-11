@@ -26,6 +26,7 @@ DCI UI static files
 %setup -qc
 
 %build
+npm install -g npm
 npm install
 npm run build
 

@@ -13,6 +13,7 @@ python bin/dci-dbinit
 python bin/dci-runtestserver &
 python bin/dci-dbprovisioning
 popd
+npm install -g npm
 npm install
 npm run build
 npm start &
