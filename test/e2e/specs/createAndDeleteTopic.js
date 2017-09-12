@@ -16,7 +16,7 @@ const shortcuts = require("./shortcuts");
 
 module.exports = {
   "Can create and delete a topic": function(browser) {
-    const topicName = "_Test Topic " + Date.now();
+    const topicName = Date.now();
     shortcuts(browser)
       .login()
       .goAndWaitH1("#navbar-primary__topics-link", "Topics")
@@ -33,26 +33,14 @@ module.exports = {
       .waitForElementVisible("#createButton")
       .click("#createButton")
       .useXpath()
-      .waitForElementNotPresent(
-        "//a[starts-with(normalize-space(.),'" + topicName + "')]"
-      )
+      .waitForElementPresent(`//a[normalize-space(text())="${topicName}"]`)
       .useCss()
       .waitForElementVisible(".btn-danger")
       .click(".btn-danger")
       .useXpath()
-      .waitForElementVisible(
-        "//button[starts-with(normalize-space(.),'Yes delete " +
-          topicName +
-          "')]"
-      )
-      .click(
-        "//button[starts-with(normalize-space(.),'Yes delete " +
-          topicName +
-          "')]"
-      )
-      .waitForElementNotPresent(
-        "//a[starts-with(normalize-space(.),'" + topicName + "')]"
-      )
+      .waitForElementVisible(`//button[text()="Yes delete ${topicName}"]`)
+      .click(`//button[text()="Yes delete ${topicName}"]`)
+      .waitForElementNotPresent(`//a[normalize-space(text())="${topicName}"]`)
       .useCss();
 
     shortcuts(browser)
