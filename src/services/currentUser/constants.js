@@ -12,4 +12,4 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const SET_CURRENT_USER = "SET_USER";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";

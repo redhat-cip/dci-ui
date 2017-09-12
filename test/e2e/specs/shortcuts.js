@@ -1,33 +1,11 @@
 module.exports = function(browser) {
   return {
     goAndWaitH1(id, h1) {
-      // "navbar-utility__settings-link"
-      // "navbar-utility__logout-link"
-      // "navbar-primary__jobs-link"
-      // "navbar-secondary__job-states-link"
-      // "navbar-secondary__job-tests-link"
-      // "navbar-secondary__job-issues-link"
-      // "navbar-secondary__job-files-link"
-      // "navbar-primary__components-link"
-      // "navbar-primary__global-status-link"
-      // "navbar-primary__metrics-link"
-      // "navbar-primary__admin-users-link"
-      // "navbar-secondary__admin-users-link"
-      // "navbar-secondary__admin-teams-link"
-      // "navbar-secondary__admin-topics-link"
-      // "navbar-secondary__admin-remotecis-link"
-      // "navbar-secondary__admin-products-link"
-      // "navbar-primary__settings-link"
-      // "navbar-secondary__user-settings-link"
-      // "navbar-secondary__change-password-link"
-      // "navbar-secondary__notification-link"
       browser
         .waitForElementVisible(id)
         .click(id)
         .useXpath()
-        .waitForElementVisible(
-          "//h1[starts-with(normalize-space(.),'" + h1 + "')]"
-        )
+        .waitForElementVisible(`//h1[normalize-space(text())="${h1}"]`)
         .useCss();
       return this;
     },
