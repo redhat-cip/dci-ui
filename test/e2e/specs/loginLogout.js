@@ -16,10 +16,14 @@ const shortcuts = require("./shortcuts");
 
 module.exports = {
   "Login logout test": function(browser) {
-    shortcuts(browser).login("user_dell", "password");
+    shortcuts(browser).login("user_dell", "user_dell");
     browser.assert.elementNotPresent("#navbar-primary__admin-users-link");
-    shortcuts(browser).logout().login("admin_dell", "password");
+    shortcuts(browser)
+      .logout()
+      .login("admin_dell", "admin_dell");
     browser.assert.elementPresent("#navbar-primary__admin-users-link");
-    shortcuts(browser).logout().end();
+    shortcuts(browser)
+      .logout()
+      .end();
   }
 };
