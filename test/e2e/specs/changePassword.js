@@ -17,13 +17,13 @@ const shortcuts = require("./shortcuts");
 module.exports = {
   "Change password test": function(browser) {
     shortcuts(browser)
-      .login("user_dell", "password")
+      .login("user_dell", "user_dell")
       .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
       .goAndWaitH1(
         "#navbar-secondary__change-password-link",
         "Change your password"
       )
-      .changePassword("password", "new_password")
+      .changePassword("user_dell", "new_password")
       .logout()
       .login("user_dell", "new_password")
       .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
@@ -31,9 +31,9 @@ module.exports = {
         "#navbar-secondary__change-password-link",
         "Change your password"
       )
-      .changePassword("new_password", "password")
+      .changePassword("new_password", "user_dell")
       .logout()
-      .login("user_dell", "password")
+      .login("user_dell", "user_dell")
       .logout()
       .end();
   }
