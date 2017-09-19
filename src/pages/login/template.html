@@ -4,12 +4,25 @@
   </span>
   <div class="container">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <div id="brand" class="login--brand">
           <img src="gecko.png" alt="Distributed CI"/>
         </div>
       </div>
-      <div class="col-sm-7 col-md-6 col-lg-5 login">
+    </div>
+    <div class="row mb-3">
+      <div class="col-xs-6">
+        <p>
+          <strong>Welcome to DCI project!</strong>
+          <br>
+          DCI or Distributed CI is a continuous integration project that aims to bring partners inside our CI framework
+          by running CI on dedicated lab environments that are running in their data centers with their configurations
+          and their applications.
+        </p>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-sm-6 col-md-4 login">
         <form class="form-horizontal" role="form" ng-submit="$ctrl.authenticate()">
           <div class="form-group">
             <label for="inputUsername" class="col-sm-2 control-label">Username</label>
@@ -32,7 +45,7 @@
             </div>
           </div>
           <div class="form-group">
-            <div class="col-xs-4 col-xs-offset-8 submit">
+            <div class="col-sm-2 col-sm-offset-2 submit">
               <button id="logInButton"
                       type="submit"
                       class="btn btn-primary btn-lg">
@@ -42,14 +55,10 @@
           </div>
         </form>
       </div>
-      <div class="col-sm-5 col-md-6 col-lg-7 details">
-        <p>
-          <strong>Welcome to DCI project!</strong>
-          <br>
-          DCI or Distributed CI is a continuous integration project that aims to bring partners inside our CI framework
-          by running CI on dedicated lab environments that are running in their data centers with their configurations
-          and their applications.
-        </p>
+      <div class="col-sm-6 col-md-3 login__sso details">
+        <button type="button" class="btn btn-danger btn-lg"
+                ng-click="$ctrl.sso()">Log in with your Red Hat Account
+        </button>
       </div>
     </div>
   </div>
