@@ -47,6 +47,16 @@ export function login(credentials) {
   };
 }
 
+export function setJWT(token) {
+  return dispatch => {
+    localStorage.setJWT(token);
+    dispatch(currentUserActions.getCurrentUser()).then(() => {
+      dispatch(logIn());
+      dispatch(stateGo("auth.jobs"));
+    });
+  };
+}
+
 export function logout() {
   return dispatch => {
     localStorage.remove();

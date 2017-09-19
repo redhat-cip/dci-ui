@@ -71,7 +71,7 @@ angular
     "$ngRedux",
     $ngRedux => {
       $ngRedux.dispatch(configActions.setConfig(window.__DCI_CONFIG));
-      $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
+      // $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
     }
   ])
   .config(routes)
