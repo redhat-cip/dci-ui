@@ -12,14 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-.login-pf{
+.login-pf {
   height: 100vh;
 }
+
 .login-pf #brand img {
   height: 30px;
 }
+
 .login--background-dark {
   color: white;
   background: url('./bg-login.jpg') no-repeat center center fixed;
   background-size: cover;
+}
+
+.login__sso {
+  min-height: 70px;
 }
