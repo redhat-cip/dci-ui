@@ -13,6 +13,8 @@
 // under the License.
 
 import * as authActions from "services/auth/actions";
+import Keycloak from "keycloak-js";
+import { stateGo } from "redux-ui-router";
 
 class Ctrl {
   constructor($ngRedux) {
@@ -22,12 +24,30 @@ class Ctrl {
   $onInit() {
     this.username = "";
     this.password = "";
+
+    const ssoConfig = this.$ngRedux.getState().config.sso;
+    this.keycloak = Keycloak({
+      url: `${ssoConfig.url}/auth`,
+      realm: `${ssoConfig.realm}`,
+      clientId: `${ssoConfig.clientId}`
+    });
+
+    this.keycloak.init({ flow: "implicit" }).success(authenticated => {
+      if (authenticated) {
+        this.$ngRedux.dispatch(authActions.setJWT(this.keycloak.token));
+        this.$ngRedux.dispatch(stateGo("auth.jobs"));
+      }
+    });
   }
 
   authenticate() {
     this.$ngRedux.dispatch(
       authActions.login({ username: this.username, password: this.password })
     );
+  }
+
+  sso() {
+    this.keycloak.login();
   }
 }
 
