@@ -14,7 +14,8 @@
     <ul class="nav navbar-nav navbar-utility">
       <li ng-if="$ctrl.currentUser.name">
         <a id="navbar-utility__settings-link" ui-sref="auth.settings">
-          <i class="fa fa-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }} - {{ $ctrl.currentUser.team.name }}
+          <i class="fa fa-user"></i> {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }}
+          <span ng-if="$ctrl.currentUser.team.name">- {{ $ctrl.currentUser.team.name }}</span>
         </a>
       </li>
       <li>
@@ -54,7 +55,7 @@
           Components
         </a>
       </li>
-      <li ui-sref-active="active">
+      <li ui-sref-active="active" ng-if="$ctrl.currentUser.isAdmin">
         <a id="navbar-primary__global-status-link" ui-sref="auth.globalStatus">
           Global Status
         </a>

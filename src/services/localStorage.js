@@ -19,13 +19,18 @@ export default {
       typeof localStorage === "undefined" ||
       !localStorage.getItem(this.keyPrefix)
     ) {
-      return { auth: { token: "" } };
+      return { auth: { token: "", jwt: "" } };
     }
     return JSON.parse(localStorage.getItem(this.keyPrefix));
   },
   setToken(token) {
     const newLocalStorage = this.get();
     newLocalStorage.auth.token = token;
+    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
+  },
+  setJWT(token) {
+    const newLocalStorage = this.get();
+    newLocalStorage.auth.jwt = token;
     localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
   },
   remove() {
