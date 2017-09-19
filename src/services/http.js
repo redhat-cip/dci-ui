@@ -16,7 +16,12 @@ import axios from "axios";
 import localStorage from "./localStorage";
 
 axios.interceptors.request.use(config => {
-  config.headers["Authorization"] = "Basic " + localStorage.get().auth.token;
+  const auth = localStorage.get().auth;
+  if (auth.jwt) {
+    config.headers["Authorization"] = `Bearer ${auth.jwt}`;
+  } else {
+    config.headers["Authorization"] = `Basic ${auth.token}`;
+  }
   return config;
 });
 

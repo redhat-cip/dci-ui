@@ -14,7 +14,7 @@
 
 import localStorage from "services/localStorage";
 
-const routes = function($stateProvider, $urlRouterProvider) {
+const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
   $stateProvider
     .state({
       name: "auth",
@@ -163,11 +163,11 @@ const routes = function($stateProvider, $urlRouterProvider) {
       url: "metrics",
       component: "metricsPage"
     });
-
+  $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise("/jobs");
 };
 
-routes.$inject = ["$stateProvider", "$urlRouterProvider"];
+routes.$inject = ["$stateProvider", "$urlRouterProvider", "$locationProvider"];
 
 export default routes;
 
@@ -175,7 +175,13 @@ const transition = function($transitions) {
   $transitions.onStart({ to: "auth.**" }, function(transition) {
     const $ngRedux = transition.injector().get("$ngRedux");
     const state = $ngRedux.getState();
-    if (!(state.auth.isAuthenticated || localStorage.get().auth.token !== "")) {
+    if (
+      !(
+        state.auth.isAuthenticated ||
+        localStorage.get().auth.token !== "" ||
+        localStorage.get().auth.jwt !== ""
+      )
+    ) {
       return transition.router.stateService.target("login");
     }
   });
