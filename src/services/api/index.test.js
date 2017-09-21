@@ -22,13 +22,12 @@ import constants from "./constants";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-test("creates FETCH_USERS_REQUEST and FETCH_USERS_SUCCESS when fetching users has been done", t => {
+test("GET_USERS > 200 > SET_USERS > GET_USERS_SUCCESS", t => {
   nock("https://api.example.org/api/v1")
     .get("/users")
     .reply(200, { users: [{ id: "u1" }] });
   const expectedActions = [
-    { type: constants("user").FETCH_REQUEST },
-    { type: constants("user").FETCH_SUCCESS, payload: [{ id: "u1" }] }
+    { type: constants("users").SET, payload: [{ id: "u1" }] }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(api("user").all()).then(() => {
@@ -36,61 +35,12 @@ test("creates FETCH_USERS_REQUEST and FETCH_USERS_SUCCESS when fetching users ha
   });
 });
 
-test("creates FETCH_USERS_REQUEST and FETCH_USERS_SUCCESS when sync and users empty", t => {
-  nock("https://api.example.org/api/v1")
-    .get("/users")
-    .reply(200, { users: [{ id: "u1" }] });
-  const expectedActions = [
-    { type: constants("user").FETCH_REQUEST },
-    { type: constants("user").FETCH_SUCCESS, payload: [{ id: "u1" }] }
-  ];
-  const store = mockStore({
-    users: { items: [] },
-    config: { apiURL: "https://api.example.org" }
-  });
-  return store.dispatch(api("user").sync()).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
-  });
-});
-
-test("creates only FETCH_USERS_SUCCESS when sync and users not empty", t => {
-  nock("https://api.example.org/api/v1")
-    .get("/users")
-    .reply(200, { users: [{ id: "u1" }] });
-  const expectedActions = [
-    { type: constants("user").FETCH_SUCCESS, payload: [{ id: "u1" }] }
-  ];
-  const store = mockStore({
-    users: { items: [{ id: 1 }] },
-    config: { apiURL: "https://api.example.org" }
-  });
-  return store.dispatch(api("user").sync()).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
-  });
-});
-
-test("creates FETCH_USERS_FAILURE when fetching returns 401", t => {
-  const error = {
-    _status: "Unauthorized",
-    message: "Please login with proper credentials."
-  };
-  nock("https://api.example.org/api/v1").get("/users").reply(401, error);
-  const expectedActions = [
-    { type: constants("user").FETCH_REQUEST },
-    { type: constants("user").FETCH_FAILURE, payload: error, error: true }
-  ];
-  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(api("user").all()).catch(() => {
-    t.deepEqual(store.getActions(), expectedActions);
-  });
-});
-
-test("creates SET_USER when fetching a user has been done", t => {
+test("GET_USER > 200 > UPDATE_USER > GET_USER_SUCCESS", t => {
   nock("https://api.example.org/api/v1")
     .get("/users/u1")
-    .reply(200, { user: { id: "u1" } });
+    .reply(200, { user: { id: "u1", name: "u1" } });
   const expectedActions = [
-    { type: constants("user").SET, payload: { id: "u1" } }
+    { type: constants("user").UPDATE, payload: { id: "u1", name: "u1" } }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(api("user").get({ id: "u1" })).then(() => {
@@ -100,42 +50,112 @@ test("creates SET_USER when fetching a user has been done", t => {
 
 test("creates CREATE_USER when user is created", t => {
   nock("https://api.example.org/api/v1")
-    .post("/users", { name: "Name" })
-    .reply(201, { user: { id: "u2", name: "Name" } });
+    .post("/users", { name: "user 2" })
+    .reply(201, { user: { id: "u2", name: "user 2" } });
   const expectedActions = [
-    { type: constants("user").CREATED, payload: { id: "u2", name: "Name" } }
+    { type: constants("user").CREATE, payload: { id: "u2", name: "user 2" } }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(api("user").post({ name: "Name" })).then(() => {
+  return store.dispatch(api("user").post({ name: "user 2" })).then(() => {
     t.deepEqual(store.getActions(), expectedActions);
   });
+});
+
+test("creates user clean api payload", t => {
+  nock("https://api.example.org/api/v1")
+    .filteringRequestBody(data => {
+      t.is(data, '{"name":"user 2"}');
+      return data;
+    })
+    .post("/users", { name: "user 2" })
+    .reply(201, { user: { id: "u2", name: "user 2" } });
+  const expectedActions = [
+    { type: constants("user").CREATE, payload: { id: "u2", name: "user 2" } }
+  ];
+  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
+  return store
+    .dispatch(api("user").post({ name: "user 2", team: "", test: null }))
+    .then(() => {
+      t.deepEqual(store.getActions(), expectedActions);
+    });
 });
 
 test("creates UPDATE_USER when user is updated", t => {
   nock("https://api.example.org/api/v1")
     .put("/users/u1", { name: "New name" })
-    .reply(200, { id: "u1", name: "New name" }, { etag: "2" });
+    .reply(200, { id: "u1", name: "New name" }, { etag: "e2" });
   const expectedActions = [
     {
-      type: constants("user").UPDATED,
-      payload: { id: "u1", name: "New name", etag: "2" }
+      type: constants("user").UPDATE,
+      payload: { id: "u1", name: "New name", etag: "e2" }
     }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store
-    .dispatch(api("user").put({ id: "u1", name: "New name", etag: "1" }))
+    .dispatch(api("user").put({ id: "u1", name: "New name", etag: "e1" }))
+    .then(() => {
+      t.deepEqual(store.getActions(), expectedActions);
+    });
+});
+
+test("update user don't clean null value if in schema", t => {
+  // empty answer see https://github.com/redhat-cip/dci-control-server/issues/48
+  nock("https://api.example.org/api/v1")
+    .filteringRequestBody(data => {
+      t.is(data, '{"name":"new topic","next_topic":null}');
+      return data;
+    })
+    .put("/topics/t1", { name: "new topic", next_topic: null })
+    .reply(201, {}, { etag: "e2" });
+
+  const expectedActions = [
+    {
+      type: constants("topic").UPDATE,
+      payload: {
+        id: "t1",
+        name: "new topic",
+        next_topic: null,
+        unknown_field: null,
+        etag: "e2"
+      }
+    }
+  ];
+  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
+  return store
+    .dispatch(
+      api("topic").put({
+        id: "t1",
+        next_topic: null,
+        unknown_field: null,
+        name: "new topic",
+        etag: "e1"
+      })
+    )
     .then(() => {
       t.deepEqual(store.getActions(), expectedActions);
     });
 });
 
 test("creates DELETE_USER when a user is deleted", t => {
-  nock("https://api.example.org/api/v1").delete("/users/u1").reply(204);
+  nock("https://api.example.org/api/v1")
+    .delete("/users/u1")
+    .reply(204);
   const expectedActions = [
-    { type: constants("user").DELETED, payload: { id: "u1", etag: "" } }
+    { type: constants("user").REMOVE, payload: { id: "u1", etag: "e1" } }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(api("user").delete({ id: "u1", etag: "" })).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
-  });
+  return store
+    .dispatch(api("user").delete({ id: "u1", etag: "e1" }))
+    .then(() => {
+      t.deepEqual(store.getActions(), expectedActions);
+    });
+});
+
+test("create SET_USERS when users are saved", t => {
+  const expectedActions = [
+    { type: constants("users").SET, payload: [{ id: "u1" }] }
+  ];
+  const store = mockStore({});
+  store.dispatch(api("user").save([{ id: "u1" }]));
+  t.deepEqual(store.getActions(), expectedActions);
 });

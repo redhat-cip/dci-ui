@@ -17,68 +17,25 @@ import pick from "lodash/pick";
 import omitBy from "lodash/omitBy";
 import isNil from "lodash/isNil";
 import Constants from "./constants";
-import Reducer from "./reducers";
-import Actions from "./actions";
 import schemas from "./schemas";
 import * as alertsActions from "../alerts/actions";
 
-export default function(resourceString) {
-  const constants = Constants(resourceString);
-  const reducer = Reducer(resourceString);
-  const actions = Actions(resourceString);
-  const schema = schemas[resourceString];
+export default function(resource) {
+  const resources = `${resource}s`;
+  const constant = Constants(resource);
+  const constants = Constants(resources);
 
-  // GET /resources
   function all(params) {
-    return (dispatch, getState) => {
-      dispatch(actions.fetchStart());
-      const state = getState();
-      return getList(state, params, dispatch).catch(error => {
-        dispatch(actions.fetchKo(error.response.data));
-        dispatch(alertsActions.errorApi(error.response));
-        throw error;
-      });
-    };
-  }
-
-  function sync(params) {
-    return (dispatch, getState) => {
-      const state = getState();
-      if (itemsEmpty(state)) {
-        return all(params)(dispatch, getState);
-      }
-      return getList(state, params, dispatch);
-    };
-  }
-
-  function itemsEmpty(state) {
-    return state[`${resourceString}s`].items.length === 0;
-  }
-
-  function getList(state, params, dispatch) {
-    const request = {
-      method: "get",
-      url: `${state.config.apiURL}/api/v1/${resourceString}s`,
-      params
-    };
-    return http(request).then(response => {
-      dispatch(actions.fetchOk(response.data[`${resourceString}s`]));
-      return response;
-    });
-  }
-
-  // GET /resources/:id:
-  function get(resource, params = {}) {
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "get",
-        url: `${state.config.apiURL}/api/v1/${resourceString}s/${resource.id}`,
+        url: `${state.config.apiURL}/api/v1/${resources}`,
         params
       };
       return http(request)
         .then(response => {
-          dispatch(actions.set(response.data[`${resourceString}`]));
+          dispatch(action(constants.SET, response.data[resources]));
           return response;
         })
         .catch(error => {
@@ -88,31 +45,42 @@ export default function(resourceString) {
     };
   }
 
-  function shouldGet(state, resource) {
-    const item = state[`${resourceString}s`].item;
-    return !(item && item.id === resource.id);
-  }
-
-  function getIfNeeded(resource, params = {}) {
+  function get(data, params = {}) {
     return (dispatch, getState) => {
-      if (shouldGet(getState(), resource)) {
-        return dispatch(get(resource, params));
-      }
+      const state = getState();
+      const request = {
+        method: "get",
+        url: `${state.config.apiURL}/api/v1/${resources}/${data.id}`,
+        params
+      };
+      return http(request)
+        .then(response => {
+          dispatch(action(constant.UPDATE, response.data[resource]));
+          return response;
+        })
+        .catch(error => {
+          dispatch(alertsActions.errorApi(error.response));
+          throw error;
+        });
     };
   }
 
-  // POST /resources
-  function create(resource, cleanNullValue = true) {
+  function clean(resource, resourceString, options = { omitNil: true }) {
+    const newResource = options.omitNil ? omitBy(resource, isNil) : resource;
+    return pick(newResource, schemas[resourceString]);
+  }
+
+  function post(data) {
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "post",
-        url: `${state.config.apiURL}/api/v1/${resourceString}s`,
-        data: cleanWithSchema(resource, schema, cleanNullValue)
+        url: `${state.config.apiURL}/api/v1/${resources}`,
+        data: clean(data, resources)
       };
       return http(request)
         .then(response => {
-          dispatch(actions.create(response.data[`${resourceString}`]));
+          dispatch(action(constant.CREATE, response.data[`${resource}`]));
           return response;
         })
         .catch(error => {
@@ -122,20 +90,19 @@ export default function(resourceString) {
     };
   }
 
-  // PUT /resources/:id:
-  function update(resource, cleanNullValue = true) {
+  function update(data) {
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "put",
-        url: `${state.config.apiURL}/api/v1/${resourceString}s/${resource.id}`,
-        data: cleanWithSchema(resource, schema, cleanNullValue),
-        headers: { "If-Match": resource.etag }
+        url: `${state.config.apiURL}/api/v1/${resources}/${data.id}`,
+        data: clean(data, resource, { omitNil: false }),
+        headers: { "If-Match": data.etag }
       };
       return http(request)
         .then(response => {
           const etag = response.headers.etag;
-          dispatch(actions.update(Object.assign({}, resource, { etag })));
+          dispatch(action(constant.UPDATE, Object.assign({}, data, { etag })));
           return response;
         })
         .catch(error => {
@@ -145,42 +112,50 @@ export default function(resourceString) {
     };
   }
 
-  function cleanWithSchema(resource, schema, cleanNullValue) {
-    const newResource = cleanNullValue ? omitBy(resource, isNil) : resource;
-    return pick(newResource, schema);
-  }
-
-  // DELETE /resources/:id:
-  function remove(resource) {
+  function remove(data) {
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "delete",
-        url: `${state.config.apiURL}/api/v1/${resourceString}s/${resource.id}`,
-        headers: { "If-Match": resource.etag }
+        url: `${state.config.apiURL}/api/v1/${resources}/${data.id}`,
+        headers: { "If-Match": data.etag }
       };
       return http(request)
         .then(response => {
-          dispatch(actions.remove(resource));
+          dispatch(action(constant.REMOVE, data));
           return response;
         })
         .catch(error => {
           dispatch(alertsActions.errorApi(error.response));
           throw error;
         });
+    };
+  }
+
+  function save(data) {
+    return dispatch => {
+      return dispatch(action(constants.SET, data));
+    };
+  }
+
+  function action(type, payload) {
+    if (payload) {
+      return {
+        type,
+        payload
+      };
+    }
+    return {
+      type
     };
   }
 
   return {
     all: all,
-    sync: sync,
+    save: save,
     get: get,
-    getIfNeeded: getIfNeeded,
+    post: post,
     put: update,
-    post: create,
-    delete: remove,
-    actions,
-    reducer,
-    constants
+    delete: remove
   };
 }

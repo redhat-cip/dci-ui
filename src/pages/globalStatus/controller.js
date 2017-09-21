@@ -23,8 +23,14 @@ class Ctrl {
   }
 
   $onInit() {
+    this.loading = true;
     this.$ngRedux.dispatch(api("topic").all()).then(response => {
-      this.$ngRedux.dispatch(topicsActions.fetchJobs(response.data.topics));
+      this.$ngRedux
+        .dispatch(topicsActions.fetchJobs(response.data.topics))
+        .then(topics => {
+          this.$ngRedux.dispatch(api("topic").save(topics));
+          this.loading = false;
+        });
     });
   }
 

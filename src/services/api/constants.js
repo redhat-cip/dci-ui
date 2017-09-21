@@ -14,21 +14,22 @@
 
 export default function(resourceString) {
   const uppercaseString = resourceString.toUpperCase();
-  const fetchRequest = `FETCH_${uppercaseString}S_REQUEST`;
-  const fetchFailure = `FETCH_${uppercaseString}S_FAILURE`;
-  const fetchSuccess = `FETCH_${uppercaseString}S_SUCCESS`;
-  const set = `SET_${uppercaseString}`;
-  const created = `CREATE_${uppercaseString}`;
-  const updated = `UPDATE_${uppercaseString}`;
-  const deleted = `DELETE_${uppercaseString}`;
-
   return {
-    FETCH_REQUEST: fetchRequest,
-    FETCH_SUCCESS: fetchSuccess,
-    FETCH_FAILURE: fetchFailure,
-    SET: set,
-    CREATED: created,
-    UPDATED: updated,
-    DELETED: deleted
+    GET: `GET_${uppercaseString}`,
+    GET_SUCCESS: `GET_${uppercaseString}_SUCCESS`,
+    GET_FAILURE: `GET_${uppercaseString}_FAILURE`,
+    POST: `POST_${uppercaseString}`,
+    POST_SUCCESS: `POST_${uppercaseString}_SUCCESS`,
+    POST_FAILURE: `POST_${uppercaseString}_FAILURE`,
+    PUT: `PUT_${uppercaseString}`,
+    PUT_SUCCESS: `PUT_${uppercaseString}_SUCCESS`,
+    PUT_FAILURE: `PUT_${uppercaseString}_FAILURE`,
+    DELETE: `DELETE_${uppercaseString}`,
+    DELETE_SUCCESS: `DELETE_${uppercaseString}_SUCCESS`,
+    DELETE_FAILURE: `DELETE_${uppercaseString}_FAILURE`,
+    SET: `SET_${uppercaseString}`,
+    CREATE: `CREATE_${uppercaseString}`,
+    UPDATE: `UPDATE_${uppercaseString}`,
+    REMOVE: `REMOVE_${uppercaseString}`
   };
 }

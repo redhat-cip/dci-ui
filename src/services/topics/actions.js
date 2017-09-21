@@ -12,24 +12,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import api from "services/api";
 import http from "services/http";
 
-const topicsOrder = {
-  OSP12: 1,
-  OSP11: 2,
-  OSP10: 3,
-  OSP9: 4,
-  OSP8: 5,
-  "RDO-Pike": 6,
-  "RDO-Ocata": 7,
-  "RDO-Newton": 8
-};
-
-export function order(topics, dispatch) {
-  topics.forEach(topic => {
-    topic.order = topicsOrder[topic.name] || 9;
-    dispatch(api("topic").actions.update(Object.assign({}, topic)));
+export function order(topics) {
+  const topicsOrder = {
+    OSP12: 1,
+    OSP11: 2,
+    OSP10: 3,
+    OSP9: 4,
+    OSP8: 5,
+    "RDO-Pike": 6,
+    "RDO-Ocata": 7,
+    "RDO-Newton": 8
+  };
+  topics.sort((t1, t2) => {
+    const t1Order = topicsOrder[t1.name] || 9;
+    const t2Order = topicsOrder[t2.name] || 9;
+    return t1Order > t2Order;
   });
 }
 
@@ -43,34 +42,44 @@ function enhanceTopic(topic) {
       topic.failures += 1;
     }
   });
-  topic.percentageErrors = Math.round(
-    100 * topic.failures / (topic.success + topic.failures)
-  );
+  if (topic.success + topic.failures === 0) {
+    topic.percentageErrors = 0;
+  } else {
+    topic.percentageErrors = Math.round(
+      100 * topic.failures / (topic.success + topic.failures)
+    );
+  }
   return topic;
 }
 
 export function fetchJobs(topics, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    order(topics, dispatch);
+    order(topics);
+    const jobsPromises = [];
     topics.forEach(topic => {
       if (topic.component_types.length > 0) {
         const componentTypes = topic.component_types[0];
-        const statusRequest = {
+        const request = {
           method: "get",
           url: `${state.config
             .apiURL}/api/v1/topics/${topic.id}/type/${componentTypes}/status`,
           params
         };
-        return http(statusRequest).then(response => {
-          const jobs = response.data.jobs;
-          dispatch(
-            api("topic").actions.update(
-              enhanceTopic(Object.assign({}, topic, { jobs }))
-            )
-          );
-        });
+        jobsPromises.push(http(request));
       }
+    });
+
+    return Promise.all(jobsPromises).then(values => {
+      const newTopics = [];
+      values.map((response, index) => {
+        newTopics.push(
+          enhanceTopic(
+            Object.assign({}, topics[index], { jobs: response.data.jobs })
+          )
+        );
+      });
+      return newTopics;
     });
   };
 }
@@ -85,8 +94,6 @@ function getComponentsFromReponse(response, topic) {
 export function fetchComponents(topics, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    order(topics, dispatch);
-
     const componentsPromises = [];
     topics.forEach(topic => {
       const request = {

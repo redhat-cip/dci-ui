@@ -3,11 +3,11 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12">
-      <dci-loading ng-if="$ctrl.topics.isFetching"></dci-loading>
-      <div ng-hide="$ctrl.topics.isFetching">
+      <dci-loading ng-if="$ctrl.loading"></dci-loading>
+      <div ng-hide="$ctrl.loading">
         <div class="row">
           <div class="col-sm-4 col-md-3 col-lg-1"
-               ng-repeat="topic in $ctrl.topics.items | orderBy: 'order'"
+               ng-repeat="topic in $ctrl.topics | orderBy: 'order'"
                ng-if="topic.success">
             <div class="card-pf card-pf-aggregate-status"
                  ng-if="topic.jobs.length > 0"
@@ -36,7 +36,7 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <div ng-repeat="topic in $ctrl.topics.items | orderBy: 'order'" ng-if="topic.jobs.length > 0">
+            <div ng-repeat="topic in $ctrl.topics | orderBy: 'order'" ng-if="topic.jobs.length > 0">
               <h2><a ui-sref="topic({id: topic.id})">{{topic.name}}</a></h2>
               <br>
               <table class="table table-bordered">

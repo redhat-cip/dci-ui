@@ -16,7 +16,6 @@ import http from "services/http";
 import pick from "lodash/pick";
 import * as constants from "./constants";
 import schemas from "services/api/schemas";
-import embed from "services/api/embed";
 
 export function setUser(user) {
   return {
@@ -45,7 +44,7 @@ export function getCurrentUser() {
       method: "get",
       url: `${state.config.apiURL}/api/v1/users/me`,
       params: {
-        embed: embed.user
+        embed: "team,role"
       }
     };
     return http(request).then(response => {

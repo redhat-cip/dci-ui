@@ -24,7 +24,10 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("team").sync());
+    this.loading = true;
+    this.$ngRedux.dispatch(api("team").all()).then(() => {
+      this.loading = false;
+    });
   }
 
   deleteTeam(team) {

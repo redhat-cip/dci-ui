@@ -13,7 +13,6 @@
 // under the License.
 
 import api from "services/api";
-import embed from "services/api/embed";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -69,14 +68,10 @@ class Ctrl {
     ];
     this.filter = {};
     this.params = {
-      embed: embed.jobs,
+      embed: "results,remoteci,components,jobstates,metas,topic",
       limit: 40,
       offset: 0
     };
-    this.$ngRedux.dispatch(api("job").sync(this.params));
-  }
-
-  reloadPage() {
     this.$ngRedux.dispatch(api("job").all(this.params));
   }
 

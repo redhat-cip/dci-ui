@@ -14,12 +14,7 @@
 
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
-import differenceWith from "lodash/differenceWith";
-import isEqual from "lodash/isEqual";
-import remove from "lodash/remove";
-import embed from "services/api/embed";
 import * as alertsActions from "services/alerts/actions";
-import * as topicsActions from "services/topics/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -30,27 +25,22 @@ class Ctrl {
   }
 
   $onInit() {
-    this.product = {};
+    this.$ngRedux.dispatch(api("team").all());
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("team").sync());
     this.$ngRedux.dispatch(api("product").get({ id })).then(response => {
       this.product = response.data.product;
-      this.product.label = null;
     });
   }
 
   update() {
-    const cleanNullValue = true;
-    this.$ngRedux
-      .dispatch(api("product").put(this.product, cleanNullValue))
-      .then(() => {
-        this.$ngRedux.dispatch(
-          alertsActions.success(
-            `product ${this.product.name} updated successfully`
-          )
-        );
-        this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
-      });
+    this.$ngRedux.dispatch(api("product").put(this.product)).then(() => {
+      this.$ngRedux.dispatch(
+        alertsActions.success(
+          `product ${this.product.name} updated successfully`
+        )
+      );
+      this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
+    });
   }
 }
 

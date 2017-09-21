@@ -12,7 +12,39 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+const userSchema = {
+  post: ["name", "fullname", "email", "team_id", "password", "role_id"],
+  put: ["name", "fullname", "email", "team_id", "password", "role_id"]
+};
+
+const teamSchema = {
+  post: ["name", "email", "notification"],
+  put: ["name", "email", "notification"]
+};
+
+const topicSchema = {
+  post: ["name", "next_topic", "product_id", "component_types"],
+  put: ["name", "next_topic", "product_id", "component_types"]
+};
+
+const jobSchema = {
+  post: ["comment"],
+  put: ["comment"]
+};
+
+const remoteciSchema = {
+  post: ["name", "state", "allow_upgrade_job", "data", "team_id"],
+  put: ["name", "state", "allow_upgrade_job", "data", "team_id"]
+};
+
+const productSchema = {
+  post: ["name", "team_id", "description", "label"],
+  put: ["name", "team_id", "description"]
+};
+
 export default {
+  users: userSchema.post,
+  user: userSchema.put,
   currentUser: [
     "fullname",
     "email",
@@ -20,10 +52,14 @@ export default {
     "current_password",
     "new_password"
   ],
-  user: ["name", "fullname", "email", "team_id", "password", "role_id"],
-  team: ["name", "email", "notification"],
-  topic: ["name", "next_topic", "product_id", "component_types"],
-  job: ["comment"],
-  remoteci: ["name", "state", "allow_upgrade_job", "data", "team_id"],
-  product: ["name", "team_id", "description", "label"]
+  teams: teamSchema.post,
+  team: teamSchema.put,
+  topics: topicSchema.post,
+  topic: topicSchema.put,
+  jobs: jobSchema.post,
+  job: jobSchema.put,
+  remotecis: remoteciSchema.post,
+  remoteci: remoteciSchema.put,
+  products: productSchema.post,
+  product: productSchema.put
 };

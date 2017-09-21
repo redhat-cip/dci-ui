@@ -24,9 +24,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.team = {
-      name: ""
-    };
+    this.team = { name: "" };
   }
 
   create() {

@@ -14,56 +14,23 @@
 
 import Constants from "./constants";
 
-const initialState = {
-  isFetching: false,
-  items: [],
-  item: null
-};
-
-export default function(resourceString) {
-  const constants = Constants(resourceString);
-
-  return function(state = initialState, action) {
+export default function(resource) {
+  const constant = Constants(resource);
+  return (state = [], action) => {
     switch (action.type) {
-      case constants.FETCH_REQUEST:
-        return Object.assign({}, state, {
-          isFetching: true
-        });
-      case constants.FETCH_SUCCESS:
-        return Object.assign({}, state, {
-          isFetching: false,
-          items: action.payload
-        });
-      case constants.FETCH_FAILURE:
-        return Object.assign({}, state, {
-          isFetching: false
-        });
-      case constants.SET:
-        let newItem = null;
-        const payload = action.payload;
-        if (state.item && state.item.id === payload.id) {
-          newItem = Object.assign({}, state.item, payload);
-        }
-        return Object.assign({}, state, {
-          item: newItem || payload
-        });
-      case constants.UPDATED:
-        return Object.assign({}, state, {
-          items: state.items.map(item => {
-            if (action.payload.id !== item.id) {
-              return item;
-            }
+      case Constants(`${resource}s`).SET:
+        return action.payload.slice();
+      case constant.CREATE:
+        return state.concat([action.payload]);
+      case constant.UPDATE:
+        return state.map(item => {
+          if (action.payload.id === item.id) {
             return action.payload;
-          })
+          }
+          return item;
         });
-      case constants.CREATED:
-        return Object.assign({}, state, {
-          items: state.items.concat([action.payload])
-        });
-      case constants.DELETED:
-        return Object.assign({}, state, {
-          items: state.items.filter(item => action.payload.id !== item.id)
-        });
+      case constant.REMOVE:
+        return state.filter(item => action.payload.id !== item.id);
       default:
         return state;
     }

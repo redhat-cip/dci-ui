@@ -4,8 +4,8 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <dci-loading ng-if="$ctrl.metrics.isFetching"></dci-loading>
-        <div ng-hide="$ctrl.metrics.isFetching">
+        <dci-loading ng-if="$ctrl.loading"></dci-loading>
+        <div ng-hide="$ctrl.loading">
           <div class="row row-cards-pf">
             <div class="col-sm-4 col-md-3 col-lg-1"
                  ng-repeat="topic in $ctrl.metrics.items"

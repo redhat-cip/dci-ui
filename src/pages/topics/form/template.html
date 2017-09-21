@@ -12,7 +12,7 @@
     <select id="nextTopic" name="nextTopic" class="form-control"
             ng-model="$ctrl.topic.next_topic">
       <option value=''></option>
-      <option ng-repeat="topic in $ctrl.topics.items"
+      <option ng-repeat="topic in $ctrl.topics"
               ng-if="topic.id !== $ctrl.topic.id"
               value="{{topic.id}}"
               name="{{topic.name}}">
@@ -35,7 +35,7 @@
     <select id="productID" name="productID" class="form-control"
             ng-model="$ctrl.topic.product_id" required>
       <option value="">Please select a product</option>
-      <option ng-repeat="product in $ctrl.products.items" value="{{product.id}}" name="{{product.name}}">
+      <option ng-repeat="product in $ctrl.products" value="{{product.id}}" name="{{product.name}}">
         {{product.name}}
       </option>
     </select>

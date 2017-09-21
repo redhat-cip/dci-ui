@@ -1,22 +1,12 @@
 <div class="container-fluid">
-  <div class="row" ng-if="$ctrl.jobs.isFetching">
-    <div class="col-xs-12">
-      <dci-loading></dci-loading>
-    </div>
-  </div>
-  <div class="row" ng-hide="$ctrl.jobs.isFetching">
+  <div class="row">
     <div class="col-sm-8 col-md-9" style="min-height:90vh">
       <div class="page-header">
-        <div class="actions pull-right">
-          <a href="#" ng-click="$ctrl.reloadPage()">
-            <span class="fa fa-refresh"></span> Refresh Results
-          </a>
-        </div>
         <h1>Dashboard</h1>
       </div>
       <div class="list-group list-view-pf list-view-pf-view">
         <job-summary job="job"
-                     ng-repeat="job in $ctrl.jobs.items | filter:$ctrl.search | filter:$ctrl.filter"></job-summary>
+                     ng-repeat="job in $ctrl.jobs | filter:$ctrl.search | filter:$ctrl.filter"></job-summary>
       </div>
     </div>
     <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height:90vh; height:100%">
@@ -100,7 +90,7 @@
           <div class="form-group">
             <div class="btn-toolbar" role="toolbar">
               <div class="btn-group" role="group"
-                   ng-repeat="job in $ctrl.jobs.items | unique:'remoteci_id'"
+                   ng-repeat="job in $ctrl.jobs | unique:'remoteci_id'"
                    ng-click="$ctrl.filter.remoteci.name=job.remoteci.name">
                 <button type="button" class="btn btn-default mb-2">
                   {{job.remoteci.name}}

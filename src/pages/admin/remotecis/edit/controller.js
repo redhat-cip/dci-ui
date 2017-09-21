@@ -26,12 +26,11 @@ class Ctrl {
   }
 
   $onInit() {
-    this.remoteci = {};
     const id = this.$ngRedux.getState().router.currentParams.id;
     this.$ngRedux.dispatch(api("remoteci").get({ id })).then(response => {
       this.remoteci = response.data.remoteci;
     });
-    this.$ngRedux.dispatch(api("team").sync());
+    this.$ngRedux.dispatch(api("team").all());
   }
 
   update() {

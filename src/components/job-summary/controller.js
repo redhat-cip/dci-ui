@@ -25,6 +25,10 @@ class Ctrl {
     $scope.$on("$destroy", unsubscribe);
   }
 
+  $onInit() {
+    this.seeDetails = false;
+  }
+
   open(job, page) {
     this.$ngRedux.dispatch(api("job").actions.set(job));
     this.$ngRedux.dispatch(stateGo(page, job));

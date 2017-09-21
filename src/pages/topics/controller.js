@@ -14,7 +14,6 @@
 
 import api from "services/api";
 import * as alertsActions from "services/alerts/actions";
-import embed from "services/api/embed";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -25,7 +24,10 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("topic").sync({ embed: "product" }));
+    this.loading = true;
+    this.$ngRedux.dispatch(api("topic").all({ embed: "product" })).then(() => {
+      this.loading = false;
+    });
   }
 
   deleteTopic(topic) {

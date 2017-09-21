@@ -21,7 +21,7 @@
           <label for="selectTeam" class="control-label">Team</label>
           <select id="selectTeam" name="selectTeam" class="form-control"
                   ng-model="$ctrl.remoteci.team_id">
-            <option ng-repeat="team in $ctrl.teams.items" value="{{team.id}}">{{team.name}}</option>
+            <option ng-repeat="team in $ctrl.teams" value="{{team.id}}">{{team.name}}</option>
           </select>
         </div>
         <div class="checkbox">

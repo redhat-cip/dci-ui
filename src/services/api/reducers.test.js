@@ -13,137 +13,46 @@
 // under the License.
 
 import test from "ava";
-import reducer from "./reducers";
+import Reducers from "./reducers";
 import constants from "./constants";
 
 test("return the initial state", t => {
-  const newState = reducer("foo")(undefined, {});
-  t.deepEqual(newState, {
-    isFetching: false,
-    item: null,
-    items: []
-  });
-});
-
-test("request foos set isFetching", t => {
-  const newState = reducer("foo")(
-    {
-      isFetching: false
-    },
-    {
-      type: constants("foo").FETCH_REQUEST
-    }
-  );
-  t.true(newState.isFetching);
-});
-
-test("fetch failure reset isFetching", t => {
-  const newState = reducer("foo")(
-    {
-      isFetching: true
-    },
-    {
-      type: constants("foo").FETCH_FAILURE
-    }
-  );
-  t.false(newState.isFetching);
+  const newState = Reducers("foo")(undefined, {});
+  t.deepEqual(newState, []);
 });
 
 test("set foos", t => {
-  const newState = reducer("foo")(
-    {
-      isFetching: true,
-      items: []
-    },
-    {
-      type: constants("foo").FETCH_SUCCESS,
-      payload: [{ id: "1" }, { id: "2" }]
-    }
-  );
-  t.false(newState.isFetching);
-  t.is(newState.items.length, 2);
+  const newState = Reducers("foo")([], {
+    type: constants("foos").SET,
+    payload: [{ id: "f1" }, { id: "f2" }]
+  });
+  t.is(newState.length, 2);
 });
 
-test("delete foo", t => {
-  const newState = reducer("foo")(
-    {
-      isFetching: false,
-      items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
-    },
-    {
-      type: constants("foo").DELETED,
-      payload: { id: 1 }
-    }
-  );
-  t.false(newState.isFetching);
-  t.is(newState.items.length, 3);
-  t.is(newState.items[0].id, 2);
+test("create foo append in foos", t => {
+  const newState = Reducers("foo")([{ id: "f1" }], {
+    type: constants("foo").CREATE,
+    payload: { id: "f2" }
+  });
+  t.is(newState[0].id, "f1");
+  t.is(newState[1].id, "f2");
 });
 
 test("update foo", t => {
-  const newState = reducer("foo")(
-    {
-      isFetching: false,
-      items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
-    },
-    {
-      type: constants("foo").UPDATED,
-      payload: { id: 1, name: "id 1" }
-    }
-  );
-  t.is(newState.items[0].name, "id 1");
+  const newState = Reducers("foo")([{ id: "f1" }, { id: "f2" }, { id: "f3" }], {
+    type: constants("foo").UPDATE,
+    payload: { id: "f2", name: "foo 2" }
+  });
+  t.is(newState.length, 3);
+  t.is(newState[1].name, "foo 2");
 });
 
-test("set foo", t => {
-  const newState = reducer("foo")(
-    {
-      item: null
-    },
-    {
-      type: constants("foo").SET,
-      payload: { id: 1, name: "id 1" }
-    }
-  );
-  t.is(newState.item.name, "id 1");
-});
-
-test("set foo enhance if id same", t => {
-  const newState = reducer("foo")(
-    {
-      item: { id: 1, name: "id 1", files: [{}, {}] }
-    },
-    {
-      type: constants("foo").SET,
-      payload: { id: 1, files: [{}] }
-    }
-  );
-  t.is(newState.item.name, "id 1");
-  t.is(newState.item.files.length, 1);
-});
-
-test("set foo replace if id different", t => {
-  const newState = reducer("foo")(
-    {
-      item: { id: 1, name: "id 1" }
-    },
-    {
-      type: constants("foo").SET,
-      payload: { id: 2, files: [{}, {}] }
-    }
-  );
-  t.is(newState.item.name, undefined);
-  t.is(newState.item.files.length, 2);
-});
-
-test("create foo add in foos", t => {
-  const newState = reducer("foo")(
-    {
-      items: []
-    },
-    {
-      type: constants("foo").CREATED,
-      payload: { id: 1 }
-    }
-  );
-  t.is(newState.items[0].id, 1);
+test("delete foo", t => {
+  const newState = Reducers("foo")([{ id: "f1" }, { id: "f2" }, { id: "f3" }], {
+    type: constants("foo").REMOVE,
+    payload: { id: "f2" }
+  });
+  t.is(newState.length, 2);
+  t.is(newState[0].id, "f1");
+  t.is(newState[1].id, "f3");
 });

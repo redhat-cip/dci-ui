@@ -30,8 +30,8 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("product").sync());
-    this.$ngRedux.dispatch(api("team").sync()).then(response => {
+    this.$ngRedux.dispatch(api("product").all());
+    this.$ngRedux.dispatch(api("team").all()).then(response => {
       const teams = response.data.teams;
       this.$ngRedux
         .dispatch(api("topic").get({ id }, { embed: "teams" }))
@@ -59,18 +59,15 @@ class Ctrl {
   }
 
   update() {
-    const cleanNullValue = false;
     if (!this.topic.next_topic) {
       this.topic.next_topic = null;
     }
-    this.$ngRedux
-      .dispatch(api("topic").put(this.topic, cleanNullValue))
-      .then(() => {
-        this.$ngRedux.dispatch(
-          alertsActions.success(`topic ${this.topic.name} updated successfully`)
-        );
-        this.$ngRedux.dispatch(stateGo("auth.topics"));
-      });
+    this.$ngRedux.dispatch(api("topic").put(this.topic)).then(() => {
+      this.$ngRedux.dispatch(
+        alertsActions.success(`topic ${this.topic.name} updated successfully`)
+      );
+      this.$ngRedux.dispatch(stateGo("auth.topics"));
+    });
   }
 }
 
