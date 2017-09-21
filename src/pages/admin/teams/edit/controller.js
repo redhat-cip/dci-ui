@@ -24,7 +24,6 @@ class Ctrl {
   }
 
   $onInit() {
-    this.team = {};
     const id = this.$ngRedux.getState().router.currentParams.id;
     this.$ngRedux.dispatch(api("team").get({ id })).then(response => {
       this.team = response.data.team;

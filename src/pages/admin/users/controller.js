@@ -14,7 +14,6 @@
 
 import api from "services/api";
 import * as alertsActions from "services/alerts/actions";
-import embed from "services/api/embed";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -25,7 +24,10 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("user").sync({ embed: embed.users }));
+    this.loading = true;
+    this.$ngRedux.dispatch(api("user").all({ embed: "team,role" })).then(() => {
+      this.loading = false;
+    });
   }
 
   deleteUser(user) {

@@ -1,6 +1,6 @@
 <div class="job-summary">
   <div class="job-summary__header"
-       ng-click="$ctrl.job.seeDetails=!$ctrl.job.seeDetails"
+       ng-click="$ctrl.seeDetails=!$ctrl.seeDetails"
        ng-class="{
             'job-summary__header--success': $ctrl.job.status === 'success',
             'job-summary__header--failure': $ctrl.job.status.endsWith('failure'),
@@ -53,7 +53,7 @@
     </div>
   </div>
   <div class="job-summary__body"
-       ng-class="{'job-summary__body--hidden': !$ctrl.job.seeDetails}">
+       ng-class="{'job-summary__body--hidden': !$ctrl.seeDetails}">
     <div class="row">
       <div class="col-md-4">
         <dl class="dl-horizontal">

@@ -25,13 +25,12 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(currentUserActions.getCurrentUser());
     this.remoteci = {
       name: "",
       team_id: null,
       allow_upgrade_job: false
     };
-    this.$ngRedux.dispatch(api("team").sync());
+    this.$ngRedux.dispatch(api("team").all());
   }
 
   create() {

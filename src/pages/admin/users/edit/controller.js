@@ -25,15 +25,17 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("user").get({ id }, { embed: "role" }));
+    this.$ngRedux
+      .dispatch(api("user").get({ id }, { embed: "role" }))
+      .then(response => {
+        this.user = response.data.user;
+      });
   }
 
   update() {
-    this.$ngRedux.dispatch(api("user").put(this.users.item)).then(() => {
+    this.$ngRedux.dispatch(api("user").put(this.user)).then(() => {
       this.$ngRedux.dispatch(
-        alertsActions.success(
-          `user ${this.users.item.name} updated successfully`
-        )
+        alertsActions.success(`user ${this.user.name} updated successfully`)
       );
       this.$ngRedux.dispatch(stateGo("auth.adminUsers"));
     });

@@ -24,7 +24,7 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("team").sync());
+    this.$ngRedux.dispatch(api("team").all());
     this.product = {
       name: "",
       team_id: "",

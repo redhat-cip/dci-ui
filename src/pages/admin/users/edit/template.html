@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="page-header">
-        <h1>Edit user {{$ctrl.users.item.name}}</h1>
+        <h1>Edit user {{$ctrl.user.name}}</h1>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4">
       <form ng-submit="$ctrl.update()">
-        <admin-user-form user="$ctrl.users.item"></admin-user-form>
+        <admin-user-form user="$ctrl.user"></admin-user-form>
         <button class="btn btn-primary">Update</button>
         <a class="btn btn-default btn-cancel" ui-sref="auth.adminUsers">Cancel</a>
       </form>

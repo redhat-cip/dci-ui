@@ -22,8 +22,8 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("product").sync());
-    this.$ngRedux.dispatch(api("topic").sync());
+    this.$ngRedux.dispatch(api("product").all());
+    this.$ngRedux.dispatch(api("topic").all());
   }
 }
 

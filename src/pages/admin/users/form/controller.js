@@ -22,21 +22,8 @@ class Ctrl {
   }
 
   $onInit() {
-    this.$ngRedux.dispatch(api("team").sync());
-    this.$ngRedux.dispatch(api("role").sync()).then(response => {
-      this.user.role_id = this.getIdOfRoleUSER(response.data.roles);
-    });
-  }
-
-  getIdOfRoleUSER(roles) {
-    let user_role_id = null;
-    for (let i = 0; i < roles.length; i++) {
-      const role = roles[i];
-      if (role.label === "USER") {
-        user_role_id = role.id;
-      }
-    }
-    return user_role_id;
+    this.$ngRedux.dispatch(api("team").all());
+    this.$ngRedux.dispatch(api("role").all());
   }
 }
 

@@ -15,7 +15,6 @@
 import api from "services/api";
 import * as topicsActions from "services/topics/actions";
 import * as alertsActions from "services/alerts/actions";
-import { stateReload } from "redux-ui-router";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -27,6 +26,7 @@ class Ctrl {
   }
 
   $onInit() {
+    this.loading = true;
     this.$ngRedux.dispatch(api("topic").all()).then(response => {
       this.$ngRedux
         .dispatch(
@@ -36,8 +36,8 @@ class Ctrl {
           })
         )
         .then(components => {
-          this.components = components;
-          this.$scope.$apply();
+          this.$ngRedux.dispatch(api("component").save(components));
+          this.loading = false;
         });
     });
   }
@@ -62,7 +62,6 @@ class Ctrl {
         this.$ngRedux.dispatch(
           alertsActions.success(`component deleted successfully`)
         );
-        this.$ngRedux.dispatch(stateReload("auth.components"));
       });
     });
   }

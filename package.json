@@ -34,6 +34,7 @@
     "ng-redux": "^3.5.1",
     "patternfly": "^3.27.1",
     "rcue": "^3.25.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "redux-ui-router": "^0.7.2"
   },

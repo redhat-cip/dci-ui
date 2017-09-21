@@ -19,25 +19,27 @@ import metricsReducer from "./services/metrics/reducers";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
-import api from "./services/api";
+import Reducers from "./services/api/reducers";
+import logger from "redux-logger";
 
 const store = function($ngReduxProvider) {
   const reducers = {
+    alerts: alertsReducer,
     currentUser: currentUserReducer,
     auth: authReducer,
     config: configReducer,
     metrics: metricsReducer,
-    jobs: api("job").reducer,
-    users: api("user").reducer,
-    teams: api("team").reducer,
-    roles: api("role").reducer,
-    topics: api("topic").reducer,
-    remotecis: api("remoteci").reducer,
-    products: api("product").reducer,
-    alerts: alertsReducer,
+    jobs: Reducers("job"),
+    users: Reducers("user"),
+    teams: Reducers("team"),
+    roles: Reducers("role"),
+    topics: Reducers("topic"),
+    remotecis: Reducers("remoteci"),
+    products: Reducers("product"),
+    components: Reducers("component"),
     router
   };
-  const middleware = ["ngUiRouterMiddleware", thunk];
+  const middleware = ["ngUiRouterMiddleware", thunk, logger];
   return $ngReduxProvider.createStoreWith(reducers, middleware);
 };
 

@@ -13,8 +13,8 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <dci-loading ng-if="$ctrl.users.isFetching"></dci-loading>
-      <div ng-hide="$ctrl.users.isFetching">
+      <dci-loading ng-if="$ctrl.loading"></dci-loading>
+      <div ng-hide="$ctrl.loading">
         <div class="row">
           <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
@@ -30,13 +30,13 @@
                 <th class="text-center">Actions</th>
               </tr>
               </thead>
-              <tr ng-if="$ctrl.users.items.length == 0">
+              <tr ng-if="$ctrl.users.length == 0">
                 <td colspan="8">
                   There is no user.
                   <a ui-sref="auth.adminUserCreate">Do you want to create one?</a>
                 </td>
               </tr>
-              <tr ng-repeat="user in $ctrl.users.items | orderBy: 'name'">
+              <tr ng-repeat="user in $ctrl.users | orderBy: 'name'">
                 <td>
                   <a ui-sref="auth.adminUserEdit({id: user.id})">
                     {{user.name}}

@@ -15,7 +15,6 @@
 import api from "services/api";
 import * as jobsActions from "services/jobs/actions";
 import * as filesActions from "services/files/actions";
-import embed from "services/api/embed";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -30,7 +29,7 @@ class Ctrl {
     this.$ngRedux.dispatch(api("job").get({ id })).then(response => {
       this.$ngRedux.dispatch(
         jobsActions.fetchJobStates(response.data.job, {
-          embed: embed.jobstates
+          embed: "files"
         })
       );
     });
