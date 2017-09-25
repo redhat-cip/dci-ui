@@ -19,10 +19,7 @@ module.exports = {
     const userName = Date.now();
     shortcuts(browser)
       .login()
-      .goAndWaitH1("#navbar-primary__admin-users-link", "Users")
-      .goAndWaitH1("#admin__create-user-btn", "Create a new user");
-
-    browser
+      .go("createUser")
       .waitForElementVisible("#userName")
       .clearValue("#userName")
       .setValue("#userName", userName)
@@ -49,10 +46,7 @@ module.exports = {
       .waitForElementVisible(`//button[text()="Yes delete ${userName}"]`)
       .click(`//button[text()="Yes delete ${userName}"]`)
       .waitForElementNotPresent(`//a[text()="${userName}"]`)
-      .useCss();
-
-    shortcuts(browser)
-      .logout()
+      .useCss()
       .end();
   }
 };

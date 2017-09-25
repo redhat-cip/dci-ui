@@ -19,10 +19,7 @@ module.exports = {
     const topicName = Date.now();
     shortcuts(browser)
       .login()
-      .goAndWaitH1("#navbar-primary__topics-link", "Topics")
-      .goAndWaitH1("#topics__create-topic-btn", "Create a new topic");
-
-    browser
+      .go("createTopic")
       .waitForElementVisible("#topicName")
       .setValue("#topicName", topicName)
       .clearValue("#componentTypes")
@@ -41,10 +38,7 @@ module.exports = {
       .waitForElementVisible(`//button[text()="Yes delete ${topicName}"]`)
       .click(`//button[text()="Yes delete ${topicName}"]`)
       .waitForElementNotPresent(`//a[normalize-space(text())="${topicName}"]`)
-      .useCss();
-
-    shortcuts(browser)
-      .logout()
+      .useCss()
       .end();
   }
 };

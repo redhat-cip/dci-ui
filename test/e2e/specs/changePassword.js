@@ -15,26 +15,26 @@
 const shortcuts = require("./shortcuts");
 
 module.exports = {
-  "Change password test": function(browser) {
+  "Change password for user_dell": function(browser) {
     shortcuts(browser)
       .login("user_dell", "user_dell")
-      .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
-      .goAndWaitH1(
-        "#navbar-secondary__change-password-link",
-        "Change your password"
-      )
+      .go("changePassword")
       .changePassword("user_dell", "new_password")
-      .logout()
+      .pause(3000)
+      .end();
+  },
+  "Reset user_dell password": function(browser) {
+    shortcuts(browser)
       .login("user_dell", "new_password")
-      .goAndWaitH1("#navbar-utility__settings-link", "Update your settings")
-      .goAndWaitH1(
-        "#navbar-secondary__change-password-link",
-        "Change your password"
-      )
+      .go("changePassword")
       .changePassword("new_password", "user_dell")
-      .logout()
+      .pause(3000)
+      .end();
+  },
+  "Test user_dell old password": function(browser) {
+    shortcuts(browser)
       .login("user_dell", "user_dell")
-      .logout()
+      .go("jobs")
       .end();
   }
 };

@@ -15,15 +15,16 @@
 const shortcuts = require("./shortcuts");
 
 module.exports = {
-  "Login logout test": function(browser) {
-    shortcuts(browser).login("user_dell", "user_dell");
-    browser.assert.elementNotPresent("#navbar-primary__admin-users-link");
+  "user_dell don't see Admin link": function(browser) {
     shortcuts(browser)
-      .logout()
-      .login("admin_dell", "admin_dell");
-    browser.assert.elementPresent("#navbar-primary__admin-users-link");
+      .login("user_dell", "user_dell")
+      .assert.elementNotPresent("#navbar-primary__admin-users-link")
+      .end();
+  },
+  "admin_dell see Admin link": function(browser) {
     shortcuts(browser)
-      .logout()
+      .login("admin_dell", "admin_dell")
+      .assert.elementPresent("#navbar-primary__admin-users-link")
       .end();
   }
 };
