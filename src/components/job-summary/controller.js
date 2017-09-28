@@ -30,7 +30,6 @@ class Ctrl {
   }
 
   open(job, page) {
-    this.$ngRedux.dispatch(api("job").actions.set(job));
     this.$ngRedux.dispatch(stateGo(page, job));
   }
 

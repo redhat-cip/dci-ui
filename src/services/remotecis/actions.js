@@ -25,11 +25,7 @@ export function refreshApiSecret(remoteci, params = {}) {
       params
     };
     return http(request).then(response => {
-      dispatch(
-        api("remotecis").actions.update(
-          Object.assign({}, remoteci, response.data)
-        )
-      );
+      return Object.assign({}, remoteci, response.data);
     });
   };
 }

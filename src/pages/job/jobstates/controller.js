@@ -26,13 +26,27 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("job").get({ id })).then(response => {
-      this.$ngRedux.dispatch(
-        jobsActions.fetchJobStates(response.data.job, {
-          embed: "files"
-        })
-      );
-    });
+    this.$ngRedux
+      .dispatch(
+        api("job").get(
+          { id },
+          {
+            embed: "results,remoteci,components,jobstates,metas,topic"
+          }
+        )
+      )
+      .then(response => {
+        this.$ngRedux
+          .dispatch(
+            jobsActions.fetchJobStates(response.data.job, {
+              embed: "files"
+            })
+          )
+          .then(job => {
+            this.job = Object.assign({}, response.data.job, job);
+            this.$scope.$apply();
+          });
+      });
   }
 
   retrieveFiles(jobstate) {

@@ -12,7 +12,6 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import api from "services/api";
 import http from "services/http";
 
 export function fetchJobStates(job, params = {}) {
@@ -24,10 +23,9 @@ export function fetchJobStates(job, params = {}) {
       params
     };
     return http(request).then(response => {
-      const newJob = Object.assign({}, job, {
+      return Object.assign({}, job, {
         jobstates: response.data.jobstates
       });
-      dispatch(api("job").actions.set(newJob));
     });
   };
 }
@@ -41,8 +39,7 @@ export function retrieveTests(job, params = {}) {
       params
     };
     return http(request).then(response => {
-      const newJob = Object.assign({}, job, { results: response.data.results });
-      dispatch(api("job").actions.set(newJob));
+      return Object.assign({}, job, { results: response.data.results });
     });
   };
 }
@@ -58,7 +55,7 @@ export function createMeta(job, meta, params = {}) {
     };
     return http(request).then(response => {
       job.metas.push(response.data.meta);
-      dispatch(api("job").actions.set(Object.assign({}, job)));
+      return Object.assign({}, job);
     });
   };
 }
@@ -76,7 +73,7 @@ export function deleteMeta(job, meta, params = {}) {
       job.metas = job.metas.filter(m => {
         return m.id !== meta.id;
       });
-      dispatch(api("job").actions.set(job));
+      return Object.assign({}, job);
     });
   };
 }
@@ -90,8 +87,7 @@ export function getIssues(job, params = {}) {
       params
     };
     return http(request).then(response => {
-      const newJob = Object.assign({}, job, { issues: response.data.issues });
-      dispatch(api("job").actions.set(newJob));
+      return Object.assign({}, job, { issues: response.data.issues });
     });
   };
 }
@@ -107,7 +103,7 @@ export function createIssue(job, issue, params = {}) {
     };
     return http(request).then(response => {
       job.issues.push(response.data.issues);
-      dispatch(api("job").actions.set(Object.assign({}, job)));
+      return Object.assign({}, job);
     });
   };
 }
@@ -125,7 +121,7 @@ export function deleteIssue(job, issue, params = {}) {
       job.issues = job.issues.filter(i => {
         return i.id !== issue.id;
       });
-      dispatch(api("job").actions.set(job));
+      return Object.assign({}, job);
     });
   };
 }

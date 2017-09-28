@@ -26,17 +26,28 @@ class Ctrl {
   $onInit() {
     this.issue = { url: "" };
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("job").getIfNeeded({ id }));
-
     this.$ngRedux
-      .dispatch(jobsActions.getIssues({ id }))
-      .then(() => this.$scope.$apply());
+      .dispatch(
+        api("job").get(
+          { id },
+          {
+            embed: "results,remoteci,components,jobstates,metas,topic"
+          }
+        )
+      )
+      .then(response => {
+        this.$ngRedux
+          .dispatch(jobsActions.getIssues(response.data.job))
+          .then(job => {
+            this.job = job;
+            this.$scope.$apply();
+          });
+      });
   }
 
   addIssue(job, issue) {
     this.$ngRedux.dispatch(jobsActions.createIssue(job, issue)).then(() => {
       this.$scope.$apply();
-      this.issue = { url: "" };
     });
   }
 

@@ -47,11 +47,11 @@ class Ctrl {
   refreshApiSecretConfirmed() {
     this.$ngRedux
       .dispatch(remotecisActions.refreshApiSecret(this.remoteci))
-      .then(() => {
+      .then(remoteci => {
         this.$ngRedux.dispatch(
           alertsActions.success("remoteci api secret has been refreshed")
         );
-        this.$onInit();
+        this.remoteci = remoteci;
       });
   }
 

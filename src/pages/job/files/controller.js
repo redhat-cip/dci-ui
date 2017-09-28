@@ -26,7 +26,19 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("job").get({ id }, { embed: "files" }));
+    this.$ngRedux
+      .dispatch(
+        api("job").get(
+          { id },
+          {
+            embed: "results,remoteci,components,jobstates,metas,topic,files"
+          }
+        )
+      )
+      .then(response => {
+        this.job = response.data.job;
+        this.$scope.$apply();
+      });
   }
 
   downloadFile(file) {

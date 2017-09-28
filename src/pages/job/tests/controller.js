@@ -31,11 +31,23 @@ class Ctrl {
       failure: false
     };
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("job").getIfNeeded({ id }));
-
     this.$ngRedux
-      .dispatch(jobsActions.retrieveTests({ id }))
-      .then(() => this.$scope.$apply());
+      .dispatch(
+        api("job").get(
+          { id },
+          {
+            embed: "results,remoteci,components,jobstates,metas,topic"
+          }
+        )
+      )
+      .then(response => {
+        this.$ngRedux
+          .dispatch(jobsActions.retrieveTests(response.data.job))
+          .then(job => {
+            this.job = job;
+            this.$scope.$apply();
+          });
+      });
   }
 
   filterTestsCases(filters) {
