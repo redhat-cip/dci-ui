@@ -6,7 +6,7 @@
         <a class="pull-right btn btn-primary"
            id="topics__create-topic-btn"
            ui-sref="auth.topicCreate"
-           ng-if="$ctrl.currentUser.isSuperAdmin">
+           ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
           <i class="fa fa-plus-circle"></i> create new topic
         </a>
       </h1>
@@ -27,7 +27,7 @@
                 <th>
                   ID
                 </th>
-                <th ng-if="$ctrl.currentUser.isSuperAdmin">
+                <th ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
                   Next Topic
                 </th>
                 <th>
@@ -36,25 +36,31 @@
                 <th>
                   Created At
                 </th>
-                <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
+                <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
                   Actions
                 </th>
               </tr>
               </thead>
+              <tr ng-if="$ctrl.topics.length === 0">
+                <td colspan="4">
+                  There is no topic.
+                  <a ui-sref="auth.topicCreate">Do you want to create one?</a>
+                </td>
+              </tr>
               <tr ng-repeat="topic in $ctrl.topics | orderBy: 'name'">
                 <td>
-                  <a ng-if="$ctrl.currentUser.isSuperAdmin"
+                  <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
                      ui-sref="auth.topicEdit({id: topic.id})">
                     {{topic.name}}
                   </a>
-                  <span ng-hide="$ctrl.currentUser.isSuperAdmin">
+                  <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
                     {{topic.name}}
                   </span>
                 </td>
                 <td>
                   {{topic.id}}
                 </td>
-                <td ng-if="$ctrl.currentUser.isSuperAdmin">
+                <td ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
                   <a ui-sref="auth.topicEdit({id: topic.next_topic})">
                     {{topic.next_topic}}
                   </a>
@@ -66,7 +72,7 @@
                   {{topic.created_at | dciDate}}
                 </td>
                 <td class="text-center"
-                    ng-if="$ctrl.currentUser.isSuperAdmin">
+                    ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
                   <a class="btn btn-primary btn-sm btn-edit"
                      ui-sref="auth.topicEdit({id: topic.id})">
                     <i class="fa fa-pencil"></i>
