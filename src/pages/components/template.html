@@ -19,6 +19,11 @@
             </th>
           </tr>
           </thead>
+          <tr ng-if="$ctrl.components.length === 0">
+            <td colspan="8">
+              There is no component.
+            </td>
+          </tr>
           <tr ng-repeat="component in $ctrl.components | orderBy: '-created_at' | filter: $ctrl.componentsSearch">
             <td>
               <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
