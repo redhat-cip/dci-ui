@@ -41,6 +41,12 @@
                 </th>
               </tr>
               </thead>
+              <tr ng-if="$ctrl.topics.length === 0">
+                <td colspan="4">
+                  There is no topic.
+                  <a ui-sref="auth.topicCreate">Do you want to create one?</a>
+                </td>
+              </tr>
               <tr ng-repeat="topic in $ctrl.topics | orderBy: 'name'">
                 <td>
                   <a ng-if="$ctrl.currentUser.isSuperAdmin"
