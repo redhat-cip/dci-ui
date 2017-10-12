@@ -14,6 +14,7 @@
 
 import api from "services/api";
 import * as alertsActions from "services/alerts/actions";
+import FileSaver from "file-saver";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -62,6 +63,20 @@ class Ctrl {
         );
       });
     });
+  }
+
+  downloadDCIRCFile(remoteci) {
+    const date = new Date().toISOString();
+    const content = `#!/usr/bin/env bash
+# dcirc.sh file generated on https://www.distributed-ci.io/ ${date}
+DCI_CLIENT_ID='${remoteci.id}'
+DCI_API_SECRET='${remoteci.api_secret}'
+DCI_CS_URL='https://api.distributed-ci.io/'
+export DCI_CLIENT_ID
+export DCI_API_SECRET
+export DCI_CS_URL`;
+    const blob = new Blob([content], { type: "application/x-shellscript" });
+    FileSaver.saveAs(blob, `dcirc.sh`);
   }
 }
 

@@ -23,6 +23,7 @@
                 <th>Status</th>
                 <th>RemoteCI name</th>
                 <th>RemoteCI ID</th>
+                <th class="text-center">dcirc.sh file</th>
                 <th class="text-center">Team</th>
                 <th class="text-center">Upgrade allowed</th>
                 <th>Date</th>
@@ -30,7 +31,7 @@
               </tr>
               </thead>
               <tr ng-if="$ctrl.remotecis.length === 0">
-                <td colspan="7">
+                <td colspan="8">
                   There is no remoteci.
                   <a ui-sref="auth.adminRemoteciCreate">Do you want to create one?</a>
                 </td>
@@ -56,6 +57,13 @@
                   </a>
                 </td>
                 <td>{{ remoteci.id }}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-default"
+                          type="button"
+                          ng-click="$ctrl.downloadDCIRCFile(remoteci)">
+                    <fa class="fa fa-download"></fa> download dcirc.sh file
+                  </button>
+                </td>
                 <td class="text-center">
                   <a ui-sref="auth.adminTeamEdit({id: remoteci.team.id})">
                     {{remoteci.team.name}}
