@@ -26,47 +26,47 @@ class Ctrl {
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(api("remoteci").all({ embed: "team" })).then(() => {
+    this.$ngRedux.dispatch(api("feeder").all({ embed: "team" })).then(() => {
       this.loading = false;
     });
   }
 
-  toggleLockRemoteci(remoteci) {
-    const newRemoteci = Object.assign({}, remoteci);
-    if (newRemoteci.state === "active") {
-      newRemoteci.state = "inactive";
+  toggleLockFeeder(feeder) {
+    const newFeeder = Object.assign({}, feeder);
+    if (newFeeder.state === "active") {
+      newFeeder.state = "inactive";
     } else {
-      newRemoteci.state = "active";
+      newFeeder.state = "active";
     }
-    this.$ngRedux.dispatch(api("remoteci").put(newRemoteci));
+    this.$ngRedux.dispatch(api("feeder").put(newFeeder));
   }
 
-  deleteRemoteci(remoteci) {
-    const remoteciName = remoteci.name;
-    const deleteRemoteciModal = this.$uibModal.open({
+  deleteFeeder(feeder) {
+    const feederName = feeder.name;
+    const deleteFeederModal = this.$uibModal.open({
       component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: "Delete remoteci " + remoteciName,
-            body: "Are you you want to delete remoteci " + remoteciName + "?",
-            okButton: "Yes delete " + remoteciName,
+            title: "Delete feeder " + feederName,
+            body: "Are you you want to delete feeder " + feederName + "?",
+            okButton: "Yes delete " + feederName,
             cancelButton: "oups no!"
           };
         }
       }
     });
-    deleteRemoteciModal.result.then(() => {
-      this.$ngRedux.dispatch(api("remoteci").delete(remoteci)).then(() => {
+    deleteFeederModal.result.then(() => {
+      this.$ngRedux.dispatch(api("feeder").delete(feeder)).then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`remoteci deleted successfully`)
+          alertsActions.success(`feeder deleted successfully`)
         );
       });
     });
   }
 
-  downloadDCIRCFile(remoteci) {
-    DCIRCFile.download(remoteci);
+  downloadDCIRCFile(feeder) {
+    DCIRCFile.download(feeder);
   }
 }
 

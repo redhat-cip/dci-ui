@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h1>Edit feeder {{$ctrl.feeder.name}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-3">
+      <form ng-submit="$ctrl.update()">
+        <div class="form-group">
+          <label class="control-label" for="feederName">Name</label>
+          <input id="feederName"
+                 name="feederName"
+                 class="form-control"
+                 ng-model="$ctrl.feeder.name"
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="feederApiSecret" class="control-label">
+            Api secret
+            <i class="fa fa-refresh pointer" ng-click="$ctrl.refreshApiSecret()"></i>
+          </label>
+          <input id="feederApiSecret"
+                 class="form-control"
+                 name="token"
+                 ng-model="$ctrl.feeder.api_secret"
+                 readonly>
+        </div>
+        <div class="form-group">
+          <label for="selectTeam" class="control-label">Team</label>
+          <select id="selectTeam" name="selectTeam" class="form-control"
+                  ng-model="$ctrl.feeder.team_id">
+            <option ng-repeat="team in $ctrl.teams" value="{{team.id}}">{{team.name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="feederData" class="control-label">Data</label>
+          <textarea class="form-control" ng-model="$ctrl.feeder.data" id="feederData" name="data" rows="5"
+                    json-text></textarea>
+        </div>
+        <button class="btn btn-primary">Update</button>
+        <a class="btn btn-default btn-cancel" ui-sref="auth.adminFeeders">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>

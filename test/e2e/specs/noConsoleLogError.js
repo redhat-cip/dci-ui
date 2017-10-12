@@ -39,6 +39,8 @@ module.exports = {
       .checkLogs("Admin Teams")
       .go("adminRemotecis")
       .checkLogs("Admin Remotecis")
+      .go("adminFeeders")
+      .checkLogs("Admin Feeders")
       .go("adminProducts")
       .checkLogs("Admin Products")
       .logout()

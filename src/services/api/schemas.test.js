@@ -76,6 +76,21 @@ test("remoteci schema", t => {
   ]);
 });
 
+test("feeder schema", t => {
+  t.deepEqual(schemas.feeder, [
+    "name",
+    "state",
+    "data",
+    "team_id"
+  ]);
+  t.deepEqual(schemas.feeders, [
+    "name",
+    "state",
+    "data",
+    "team_id"
+  ]);
+});
+
 test("product schema", t => {
   t.deepEqual(schemas.product, ["name", "team_id", "description"]);
   t.deepEqual(schemas.products, ["name", "team_id", "description", "label"]);

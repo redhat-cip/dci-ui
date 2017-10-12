@@ -154,6 +154,21 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       component: "adminRemoteciCreatePage"
     })
     .state({
+      name: "auth.adminFeeders",
+      url: "admin/feeders",
+      component: "adminFeedersPage"
+    })
+    .state({
+      name: "auth.adminFeederEdit",
+      url: "admin/feeders/:id",
+      component: "adminFeederEditPage"
+    })
+    .state({
+      name: "auth.adminFeederCreate",
+      url: "admin/feeders/create",
+      component: "adminFeederCreatePage"
+    })
+    .state({
       name: "auth.globalStatus",
       url: "globalStatus",
       component: "globalStatusPage"
