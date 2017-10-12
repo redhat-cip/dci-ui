@@ -37,6 +37,11 @@ const remoteciSchema = {
   put: ["name", "state", "allow_upgrade_job", "data", "team_id"]
 };
 
+const feederSchema = {
+  post: ["name", "state", "data", "team_id"],
+  put: ["name", "state", "data", "team_id"]
+};
+
 const productSchema = {
   post: ["name", "team_id", "description", "label"],
   put: ["name", "team_id", "description"]
@@ -60,6 +65,8 @@ export default {
   job: jobSchema.put,
   remotecis: remoteciSchema.post,
   remoteci: remoteciSchema.put,
+  feeders: feederSchema.post,
+  feeder: feederSchema.put,
   products: productSchema.post,
   product: productSchema.put
 };

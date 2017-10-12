@@ -34,6 +34,9 @@ import adminProductCreatePage from "./pages/admin/products/create";
 import adminRemotecisPage from "./pages/admin/remotecis";
 import adminRemoteciEditPage from "./pages/admin/remotecis/edit";
 import adminRemoteciCreatePage from "./pages/admin/remotecis/create";
+import adminFeedersPage from "./pages/admin/feeders";
+import adminFeederEditPage from "./pages/admin/feeders/edit";
+import adminFeederCreatePage from "./pages/admin/feeders/create";
 import jobsPage from "./pages/jobs";
 import jobStatesPage from "./pages/job/jobstates";
 import jobTestsPage from "./pages/job/tests";
@@ -114,6 +117,9 @@ angular
   .component("adminRemotecisPage", adminRemotecisPage)
   .component("adminRemoteciEditPage", adminRemoteciEditPage)
   .component("adminRemoteciCreatePage", adminRemoteciCreatePage)
+  .component("adminFeedersPage", adminFeedersPage)
+  .component("adminFeederEditPage", adminFeederEditPage)
+  .component("adminFeederCreatePage", adminFeederCreatePage)
   .component("globalStatusPage", globalStatusPage)
   .component("metricsPage", metricsPage)
   .component("topicMetricsGraph", topicMetricsGraph)
