@@ -81,6 +81,9 @@
           <li ng-class="{active: $ctrl.isRemoteCIPage()}">
             <a id="navbar-secondary__admin-remotecis-link" ui-sref="auth.adminRemotecis">RemoteCIs</a>
           </li>
+          <li ng-class="{active: $ctrl.isFeederPage()}">
+            <a id="navbar-secondary__admin-feeders-link" ui-sref="auth.adminFeeders">Feeders</a>
+          </li>
           <li ng-class="{active: $ctrl.isProductPage()}"
               ng-if="$ctrl.currentUser.isSuperAdmin">
             <a id="navbar-secondary__admin-products-link" ui-sref="auth.adminProducts">Products</a>

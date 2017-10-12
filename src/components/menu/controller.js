@@ -57,6 +57,14 @@ class MenuCtrl {
     );
   }
 
+  isFeederPage() {
+    return (
+      this.router.currentState.name === "auth.adminFeeders" ||
+      this.router.currentState.name === "auth.adminFeederCreate" ||
+      this.router.currentState.name === "auth.adminFeederEdit"
+    );
+  }
+
   isProductPage() {
     return (
       this.router.currentState.name === "auth.adminProducts" ||
@@ -71,6 +79,7 @@ class MenuCtrl {
       this.isTeamPage() ||
       this.isTopicPage() ||
       this.isRemoteCIPage() ||
+      this.isFeederPage() ||
       this.isProductPage()
     );
   }
