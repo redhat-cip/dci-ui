@@ -1,0 +1,82 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1 class="page-header">
+        Feeders
+        <a class="pull-right btn btn-primary"
+           id="admin__create-feeder-btn"
+           ui-sref="auth.adminFeederCreate">
+          <i class="fa fa-plus-circle"></i> create new feeder
+        </a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <dci-loading ng-if="$ctrl.loading"></dci-loading>
+      <div ng-hide="$ctrl.loading">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Status</th>
+                <th>Feeder name</th>
+                <th>Feeder ID</th>
+                <th class="text-center">Team</th>
+                <th>Date</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tr ng-if="$ctrl.feeders.length === 0">
+                <td colspan="8">
+                  There is no feeder.
+                  <a ui-sref="auth.adminFeederCreate">Do you want to create one?</a>
+                </td>
+              </tr>
+              <tr ng-repeat="feeder in $ctrl.feeders | orderBy: 'name'">
+                <td>
+                  <span ng-if="feeder.state == 'inactive'">
+                    <span class="label label-danger">Locked</span>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.toggleLockFeeder(feeder)">
+                      <i class="fa fa-toggle-off"></i>
+                    </button>
+                  </span>
+                  <span ng-if="feeder.state == 'active'">
+                    <span class="label label-success">Active</span>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.toggleLockFeeder(feeder)">
+                       <i class="fa fa-toggle-on"></i>
+                    </button>
+                  </span>
+                </td>
+                <td>
+                  <a ui-sref="auth.adminFeederEdit({id: feeder.id})">
+                    {{feeder.name}}
+                  </a>
+                </td>
+                <td>{{ feeder.id }}</td>
+                <td class="text-center">
+                  <a ui-sref="auth.adminTeamEdit({id: feeder.team.id})">
+                    {{feeder.team.name}}
+                  </a>
+                </td>
+                <td>{{ feeder.created_at | dciDate }}</td>
+                <td class="text-center">
+                  <a class="btn btn-primary btn-sm btn-edit"
+                     ui-sref="auth.adminFeederEdit({id: feeder.id})">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-danger btn-sm"
+                          ng-click="$ctrl.deleteFeeder(feeder)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
