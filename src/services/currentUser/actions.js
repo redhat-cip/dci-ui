@@ -44,7 +44,7 @@ export function getCurrentUser() {
       method: "get",
       url: `${state.config.apiURL}/api/v1/users/me`,
       params: {
-        embed: "team,role"
+        embed: "team,role,remotecis"
       }
     };
     return http(request).then(response => {
