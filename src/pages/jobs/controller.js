@@ -72,7 +72,10 @@ class Ctrl {
       limit: 40,
       offset: 0
     };
-    this.$ngRedux.dispatch(api("job").all(this.params));
+    this.loading = true;
+    this.$ngRedux.dispatch(api("job").all(this.params)).then(() => {
+      this.loading = false;
+    });
   }
 
   clearFilters() {

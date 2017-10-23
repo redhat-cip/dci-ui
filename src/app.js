@@ -58,6 +58,7 @@ import JobSummary from "./components/job-summary";
 import Alerts from "./components/alerts";
 import Title from "./components/title";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
+import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
 import * as configActions from "./services/config/actions";
 import * as authActions from "./services/auth/actions";
@@ -89,6 +90,7 @@ angular
   .component("dciTitle", Title)
   .component("topicMetricsSummary", topicMetricsSummary)
   .component("confirmDestructiveAction", ConfirmDestructiveAction)
+  .component("noTeamWarning", noTeamWarning)
   .component("loginPage", loginPage)
   .component("jobsPage", jobsPage)
   .component("jobStatesPage", jobStatesPage)
