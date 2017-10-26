@@ -69,6 +69,7 @@ module.exports = {
     new webpack.HashedModuleIdsPlugin(),
     new ExtractTextPlugin("[name].[contenthash].css"),
     new CopyWebpackPlugin([{context: "./src", from: "config.js", to: ""}]),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.WatchIgnorePlugin(['./src/config.js'])
   ]
 };
