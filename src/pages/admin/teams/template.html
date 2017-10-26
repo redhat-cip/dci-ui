@@ -22,6 +22,7 @@
               <tr>
                 <th>Team name</th>
                 <th>Team ID</th>
+                <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
                 <th>Created</th>
                 <th class="text-center">Actions</th>
               </tr>
@@ -39,6 +40,11 @@
                   </a>
                 </td>
                 <td>{{ team.id }}</td>
+                <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
+                  <span ng-if="team.external">
+                    <i class="fa fa-check-circle fa-lg text-success"></i>
+                  </span>
+                </td>
                 <td>{{ team.created_at | dciDate }}</td>
                 <td class="text-center">
                   <a class="btn btn-primary btn-sm btn-edit"

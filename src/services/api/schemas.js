@@ -18,8 +18,8 @@ const userSchema = {
 };
 
 const teamSchema = {
-  post: ["name", "email", "notification"],
-  put: ["name", "email", "notification"]
+  post: ["name", "external"],
+  put: ["name", "external"]
 };
 
 const topicSchema = {
