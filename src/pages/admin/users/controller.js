@@ -37,8 +37,8 @@ class Ctrl {
       resolve: {
         data: function() {
           return {
-            title: "Delete currentUser " + userName,
-            body: "Are you you want to delete currentUser " + userName + "?",
+            title: "Delete user " + userName,
+            body: "Are you you want to delete user " + userName + "?",
             okButton: "Yes delete " + userName,
             cancelButton: "oups no!"
           };
@@ -48,7 +48,7 @@ class Ctrl {
     deleteUserModal.result.then(() => {
       this.$ngRedux.dispatch(api("user").delete(user)).then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`user deleted successfully`)
+          alertsActions.success("user deleted successfully")
         );
       });
     });
