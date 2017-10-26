@@ -18,8 +18,9 @@ import * as alertsActions from "services/alerts/actions";
 import * as jobsActions from "services/jobs/actions";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, $uibModal) {
     this.$ngRedux = $ngRedux;
+    this.$uibModal = $uibModal;
     this.$scope = $scope;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
@@ -38,6 +39,27 @@ class Ctrl {
       this.$ngRedux.dispatch(
         alertsActions.success("comment updated successfully")
       );
+    });
+  }
+
+  delete(job) {
+    const deleteUserModal = this.$uibModal.open({
+      component: "confirmDestructiveAction",
+      resolve: {
+        data: function() {
+          return {
+            title: "Delete job",
+            body: `Are you you want to delete job with id: ${job.id}?`,
+            okButton: "Yes delete it",
+            cancelButton: "oups no!"
+          };
+        }
+      }
+    });
+    deleteUserModal.result.then(() => {
+      this.$ngRedux.dispatch(api("job").delete(job)).then(() => {
+        this.$ngRedux.dispatch(alertsActions.success("job deleted"));
+      });
     });
   }
 
@@ -64,6 +86,6 @@ class Ctrl {
   }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "$uibModal"];
 
 export default Ctrl;
