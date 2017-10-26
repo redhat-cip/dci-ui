@@ -7,4 +7,9 @@
            ng-model="$ctrl.team.name"
            required>
   </div>
+  <div class="checkbox" ng-if="$ctrl.currentUser.isSuperAdmin">
+    <label>
+      <input type="checkbox" ng-model="$ctrl.team.external"> External
+    </label>
+  </div>
 </div>
