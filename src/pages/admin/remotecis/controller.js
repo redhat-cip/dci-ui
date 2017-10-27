@@ -66,7 +66,7 @@ class Ctrl {
   }
 
   downloadDCIRCFile(remoteci) {
-    DCIRCFile.download(remoteci);
+    DCIRCFile.download(remoteci, "remoteci");
   }
 }
 

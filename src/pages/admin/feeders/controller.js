@@ -66,7 +66,7 @@ class Ctrl {
   }
 
   downloadDCIRCFile(feeder) {
-    DCIRCFile.download(feeder);
+    DCIRCFile.download(feeder, "feeder");
   }
 }
 
