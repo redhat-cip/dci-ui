@@ -29,7 +29,7 @@ const topicSchema = {
 
 const jobSchema = {
   post: ["comment"],
-  put: ["comment"]
+  put: ["comment", "status"]
 };
 
 const remoteciSchema = {

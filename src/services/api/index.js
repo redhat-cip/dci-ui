@@ -90,13 +90,13 @@ export default function(resource) {
     };
   }
 
-  function update(data) {
+  function update(data, options = { omitNil: false }) {
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "put",
         url: `${state.config.apiURL}/api/v1/${resources}/${data.id}`,
-        data: clean(data, resource, { omitNil: false }),
+        data: clean(data, resource, options),
         headers: { "If-Match": data.etag }
       };
       return http(request)

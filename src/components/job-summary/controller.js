@@ -28,18 +28,21 @@ class Ctrl {
 
   $onInit() {
     this.seeDetails = false;
+    this.statuses = ["success", "failure"];
   }
 
   open(job, page) {
     this.$ngRedux.dispatch(stateGo(page, job));
   }
 
-  save(job) {
-    this.$ngRedux.dispatch(api("job").put(job)).then(() => {
-      this.$ngRedux.dispatch(
-        alertsActions.success("comment updated successfully")
-      );
-    });
+  updateJob() {
+    this.$ngRedux
+      .dispatch(api("job").put(this.job, { omitNil: true }))
+      .then(() => {
+        this.$ngRedux.dispatch(
+          alertsActions.success("job updated successfully")
+        );
+      });
   }
 
   delete(job) {

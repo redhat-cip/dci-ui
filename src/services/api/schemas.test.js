@@ -55,7 +55,7 @@ test("topic schema", t => {
 });
 
 test("job schema", t => {
-  t.deepEqual(schemas.job, ["comment"]);
+  t.deepEqual(schemas.job, ["comment", "status"]);
   t.deepEqual(schemas.jobs, ["comment"]);
 });
 
@@ -77,18 +77,8 @@ test("remoteci schema", t => {
 });
 
 test("feeder schema", t => {
-  t.deepEqual(schemas.feeder, [
-    "name",
-    "state",
-    "data",
-    "team_id"
-  ]);
-  t.deepEqual(schemas.feeders, [
-    "name",
-    "state",
-    "data",
-    "team_id"
-  ]);
+  t.deepEqual(schemas.feeder, ["name", "state", "data", "team_id"]);
+  t.deepEqual(schemas.feeders, ["name", "state", "data", "team_id"]);
 });
 
 test("product schema", t => {
