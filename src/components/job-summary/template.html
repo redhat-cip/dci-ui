@@ -59,8 +59,6 @@
         <dl class="dl-horizontal">
           <dt>Id</dt>
           <dd>{{$ctrl.job.id}}</dd>
-          <dt>Status</dt>
-          <dd>{{$ctrl.job.status}}</dd>
           <dt>User agent</dt>
           <dd>{{$ctrl.job.user_agent}}</dd>
           <dt>
@@ -88,6 +86,14 @@
           <dd ng-if="$ctrl.job.files.length > 0">
             {{$ctrl.job.files.length}} files
           </dd>
+          <dt>Status</dt>
+          <dd>
+              <select name="status" class="form-control input-sm mb-1"
+                      ng-change="$ctrl.updateJob()"
+                      ng-model="$ctrl.job.status">
+                <option ng-repeat="status in $ctrl.statuses">{{status}}</option>
+              </select>
+          </dd>
           <dt>Metas</dt>
           <dd class="mb-1">
             <div class="input-group" ng-repeat="meta in $ctrl.job.metas">
@@ -113,7 +119,7 @@
                       ng-model="$ctrl.job.comment"></textarea>
           </dd>
           <dd>
-            <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.save($ctrl.job)">save</button>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.updateJob()">save</button>
           </dd>
         </dl>
       </div>
