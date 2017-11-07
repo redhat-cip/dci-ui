@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_96baac6d",
+        "filename": "src/config.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2017-11-07T11:57:17Z",
+      "side": 1,
+      "message": "sso?",
+      "revId": "0d10832f956aee4b11d9462201cae57440c01ab9",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
