@@ -13,6 +13,7 @@
 // under the License.
 
 import angular from "angular";
+import axios from "axios";
 import uiRouter from "@uirouter/angularjs";
 import uiBootstrap from "angular-ui-bootstrap";
 import ngRedux from "ng-redux";
@@ -71,13 +72,6 @@ import * as directives from "./directives";
 angular
   .module("app", [uiRouter, ngRedux, ngReduxRouter, uiBootstrap])
   .config(store)
-  .run([
-    "$ngRedux",
-    $ngRedux => {
-      $ngRedux.dispatch(configActions.setConfig(window.__DCI_CONFIG));
-      $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
-    }
-  ])
   .config(routes)
   .run(routesAuthTransition)
   .filter("dciDate", filters.dciDate)
@@ -85,46 +79,63 @@ angular
   .filter("dciDateDiffInMin", filters.dciDateDiffInMin)
   .filter("msToSec", filters.msToSec)
   .filter("unique", filters.unique)
-  .directive("jsonText", directives.jsonText)
-  .component("dciMenu", Menu)
-  .component("dciLoading", Loading)
-  .component("dciAlerts", Alerts)
-  .component("jobSummary", JobSummary)
-  .component("dciTitle", Title)
-  .component("topicMetricsSummary", topicMetricsSummary)
-  .component("confirmDestructiveAction", ConfirmDestructiveAction)
-  .component("noTeamWarning", noTeamWarning)
-  .component("loginPage", loginPage)
-  .component("jobsPage", jobsPage)
-  .component("jobStatesPage", jobStatesPage)
-  .component("jobFilesPage", jobFilesPage)
-  .component("jobTestsPage", jobTestsPage)
-  .component("jobIssuesPage", jobIssuesPage)
-  .component("topicsPage", topicsPage)
-  .component("topicCreatePage", topicCreatePage)
-  .component("topicEditPage", topicEditPage)
-  .component("topicForm", topicForm)
-  .component("componentsPage", componentsPage)
-  .component("adminUsersPage", adminUsersPage)
-  .component("adminUserEditPage", adminUserEditPage)
-  .component("adminUserCreatePage", adminUserCreatePage)
-  .component("adminUserForm", adminUserForm)
-  .component("adminTeamsPage", adminTeamsPage)
-  .component("adminTeamEditPage", adminTeamEditPage)
-  .component("adminTeamCreatePage", adminTeamCreatePage)
-  .component("adminTeamForm", adminTeamForm)
-  .component("adminProductsPage", adminProductsPage)
-  .component("adminProductEditPage", adminProductEditPage)
-  .component("adminProductCreatePage", adminProductCreatePage)
-  .component("adminRemotecisPage", adminRemotecisPage)
-  .component("adminRemoteciEditPage", adminRemoteciEditPage)
-  .component("adminRemoteciCreatePage", adminRemoteciCreatePage)
-  .component("adminFeedersPage", adminFeedersPage)
-  .component("adminFeederEditPage", adminFeederEditPage)
-  .component("adminFeederCreatePage", adminFeederCreatePage)
-  .component("globalStatusPage", globalStatusPage)
-  .component("metricsPage", metricsPage)
-  .component("topicMetricsGraph", topicMetricsGraph)
-  .component("updatePasswordPage", updatePasswordPage)
-  .component("updateSettingsPage", updateSettingsPage)
-  .component("notificationPage", notificationPage);
+  .directive("jsonText", directives.jsonText);
+
+angular.element(document).ready(function() {
+  axios.get("config.json").then(response => {
+    const config = response.data;
+    angular
+      .module("app")
+      .run([
+        "$ngRedux",
+        $ngRedux => {
+          $ngRedux.dispatch(configActions.setConfig(config));
+          $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
+        }
+      ])
+      .component("dciMenu", Menu)
+      .component("dciLoading", Loading)
+      .component("dciAlerts", Alerts)
+      .component("jobSummary", JobSummary)
+      .component("dciTitle", Title)
+      .component("topicMetricsSummary", topicMetricsSummary)
+      .component("confirmDestructiveAction", ConfirmDestructiveAction)
+      .component("noTeamWarning", noTeamWarning)
+      .component("loginPage", loginPage)
+      .component("jobsPage", jobsPage)
+      .component("jobStatesPage", jobStatesPage)
+      .component("jobFilesPage", jobFilesPage)
+      .component("jobTestsPage", jobTestsPage)
+      .component("jobIssuesPage", jobIssuesPage)
+      .component("topicsPage", topicsPage)
+      .component("topicCreatePage", topicCreatePage)
+      .component("topicEditPage", topicEditPage)
+      .component("topicForm", topicForm)
+      .component("componentsPage", componentsPage)
+      .component("adminUsersPage", adminUsersPage)
+      .component("adminUserEditPage", adminUserEditPage)
+      .component("adminUserCreatePage", adminUserCreatePage)
+      .component("adminUserForm", adminUserForm)
+      .component("adminTeamsPage", adminTeamsPage)
+      .component("adminTeamEditPage", adminTeamEditPage)
+      .component("adminTeamCreatePage", adminTeamCreatePage)
+      .component("adminTeamForm", adminTeamForm)
+      .component("adminProductsPage", adminProductsPage)
+      .component("adminProductEditPage", adminProductEditPage)
+      .component("adminProductCreatePage", adminProductCreatePage)
+      .component("adminRemotecisPage", adminRemotecisPage)
+      .component("adminRemoteciEditPage", adminRemoteciEditPage)
+      .component("adminRemoteciCreatePage", adminRemoteciCreatePage)
+      .component("adminFeedersPage", adminFeedersPage)
+      .component("adminFeederEditPage", adminFeederEditPage)
+      .component("adminFeederCreatePage", adminFeederCreatePage)
+      .component("globalStatusPage", globalStatusPage)
+      .component("metricsPage", metricsPage)
+      .component("topicMetricsGraph", topicMetricsGraph)
+      .component("updatePasswordPage", updatePasswordPage)
+      .component("updateSettingsPage", updateSettingsPage)
+      .component("notificationPage", notificationPage);
+
+    angular.bootstrap(document, ["app"]);
+  });
+});
