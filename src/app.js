@@ -135,7 +135,6 @@ angular.element(document).ready(function() {
       .component("updatePasswordPage", updatePasswordPage)
       .component("updateSettingsPage", updateSettingsPage)
       .component("notificationPage", notificationPage);
-
     angular.bootstrap(document, ["app"]);
   });
 });
