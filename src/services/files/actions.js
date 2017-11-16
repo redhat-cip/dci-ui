@@ -20,6 +20,7 @@ export function getContent(file, params = {}) {
     const request = {
       method: "get",
       url: `${state.config.apiURL}/api/v1/files/${file.id}/content`,
+      responseType: "blob",
       params
     };
     return http(request);
