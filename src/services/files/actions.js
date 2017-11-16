@@ -17,11 +17,9 @@ import http from "services/http";
 export function getContent(file, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
-      method: "get",
-      url: `${state.config.apiURL}/api/v1/files/${file.id}/content`,
-      params
-    };
+    const request = params;
+    request["method"] = "get";
+    request["url"] = `${state.config.apiURL}/api/v1/files/${file.id}/content`;
     return http(request);
   };
 }
