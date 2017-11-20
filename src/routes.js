@@ -30,7 +30,7 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     })
     .state({
       name: "auth.jobs",
-      url: "jobs",
+      url: "jobs?remoteci_id",
       component: "jobsPage"
     })
     .state({

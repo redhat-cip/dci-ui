@@ -13,10 +13,13 @@
 // under the License.
 
 import api from "services/api";
+import { stateGo } from "redux-ui-router";
+import find from "lodash/find";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, $stateParams) {
     this.$ngRedux = $ngRedux;
+    this.$stateParams = $stateParams;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
@@ -66,24 +69,40 @@ class Ctrl {
         btn: "btn-danger"
       }
     ];
-    this.filter = {};
+    this.status = "";
     this.params = {
       embed: "results,remoteci,components,jobstates,metas,topic",
       limit: 40,
       offset: 0
     };
+    const remoteci_id = this.$stateParams.remoteci_id;
+    if (remoteci_id) {
+      this.params.where = `remoteci_id:${remoteci_id}`;
+    }
     this.loading = true;
     this.$ngRedux.dispatch(api("job").all(this.params)).then(() => {
-      this.loading = false;
+      this.$ngRedux.dispatch(api("remoteci").all()).then(response => {
+        const remotecis = response["data"]["remotecis"];
+        this.remoteci = find(
+          remotecis,
+          remoteci => remoteci.id === remoteci_id
+        );
+        this.loading = false;
+      });
     });
   }
 
+  getJobsFromRemoteci(remoteci) {
+    this.$ngRedux.dispatch(stateGo("auth.jobs", { remoteci_id: remoteci.id }));
+  }
+
   clearFilters() {
-    this.search = "";
-    this.filter = {};
+    this.$ngRedux.dispatch(
+      stateGo("auth.jobs", { remoteci_id: null }, { reload: true })
+    );
   }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "$stateParams"];
 
 export default Ctrl;
