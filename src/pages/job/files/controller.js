@@ -43,12 +43,14 @@ class Ctrl {
 
   downloadFile(file) {
     file.downloading = true;
-    this.$ngRedux.dispatch(filesActions.getContent(file)).then(response => {
-      file.downloading = false;
-      this.$scope.$apply();
-      const blob = new Blob([response.data], { type: file.mime });
-      FileSaver.saveAs(blob, `${file.name}`);
-    });
+    this.$ngRedux
+      .dispatch(filesActions.getContent(file, { responseType: "blob" }))
+      .then(response => {
+        file.downloading = false;
+        this.$scope.$apply();
+        const blob = new Blob([response.data], { type: file.mime });
+        FileSaver.saveAs(blob, `${file.name}`);
+      });
   }
 }
 

@@ -17,12 +17,14 @@ import http from "services/http";
 export function getContent(file, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
-      method: "get",
-      url: `${state.config.apiURL}/api/v1/files/${file.id}/content`,
-      responseType: "blob",
+    const request = Object.assign(
+      {},
+      {
+        method: "get",
+        url: `${state.config.apiURL}/api/v1/files/${file.id}/content`
+      },
       params
-    };
+    );
     return http(request);
   };
 }
