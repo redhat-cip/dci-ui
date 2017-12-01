@@ -7,8 +7,7 @@
       <div ng-hide="$ctrl.loading">
         <div class="row">
           <div class="col-sm-4 col-md-3 col-lg-1"
-               ng-repeat="topic in $ctrl.topics | orderBy: 'order'"
-               ng-if="topic.success">
+               ng-repeat="topic in $ctrl.topics | orderBy: 'order'">
             <div class="card-pf card-pf-aggregate-status"
                  ng-if="topic.jobs.length > 0"
                  ng-class="{
