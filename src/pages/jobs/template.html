@@ -88,7 +88,7 @@
       </div>
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5">
-          Remote ci
+          Remotecis
           <div class="actions pull-right" ng-if="$ctrl.remoteci">
             <button type="button" class="btn btn-default"
                     ng-click="$ctrl.clearFilters()">
@@ -101,15 +101,19 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
-            <div class="btn-toolbar" role="toolbar">
-              <div class="btn-group" role="group"
-                   ng-repeat="remoteci in $ctrl.remotecis"
-                   ng-click="$ctrl.getJobsFromRemoteci(remoteci)">
-                <button type="button" class="btn btn-default mb-2">
-                  {{remoteci.name}}
+            <ul class="list-unstyled">
+              <li ng-repeat="team in $ctrl.teams">
+                  <i class="fa fa-angle-down fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length > 0"></i>
+                  <i class="fa fa-angle-right fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length === 0"></i>
+                  {{team.name}}
+                <br>
+                <button class="btn btn-link" type="button"
+                        ng-repeat="remoteci in team.remotecis | filter:$ctrl.search"
+                        ng-click="$ctrl.getJobsFromRemoteci(remoteci)">
+                  <i class="fa fa-server fa-fw"></i> {{remoteci.name}}
                 </button>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
