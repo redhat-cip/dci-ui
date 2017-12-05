@@ -13,6 +13,7 @@
 // under the License.
 
 import api from "services/api";
+import { get_teams_from_remotecis, order } from "services/teams";
 import { stateGo } from "redux-ui-router";
 import find from "lodash/find";
 
@@ -81,14 +82,17 @@ class Ctrl {
     }
     this.loading = true;
     this.$ngRedux.dispatch(api("job").all(this.params)).then(() => {
-      this.$ngRedux.dispatch(api("remoteci").all()).then(response => {
-        const remotecis = response["data"]["remotecis"];
-        this.remoteci = find(
-          remotecis,
-          remoteci => remoteci.id === remoteci_id
-        );
-        this.loading = false;
-      });
+      this.$ngRedux
+        .dispatch(api("remoteci").all({ embed: "team" }))
+        .then(response => {
+          const remotecis = order(response["data"]["remotecis"]);
+          this.teams = order(get_teams_from_remotecis(remotecis));
+          this.remoteci = find(
+            remotecis,
+            remoteci => remoteci.id === remoteci_id
+          );
+          this.loading = false;
+        });
     });
   }
 
