@@ -31,7 +31,7 @@ class Ctrl {
         api("job").get(
           { id },
           {
-            embed: "results,remoteci,components,jobstates,metas,topic,files"
+            embed: "results,remoteci,components,jobstates,tags,topic,files"
           }
         )
       )

@@ -66,24 +66,21 @@ class Ctrl {
     });
   }
 
-  addMeta(job, meta) {
-    if (!meta.value) {
-      meta.value = "1";
-    }
-    this.$ngRedux.dispatch(jobsActions.createMeta(job, meta)).then(() => {
+  addMeta(job, tag) {
+    this.$ngRedux.dispatch(jobsActions.createMeta(job, tag)).then(() => {
       this.$scope.$apply();
-      this.meta = { value: "", name: "" };
+      this.tag = { value: "", name: "" };
       this.$ngRedux.dispatch(
-        alertsActions.success("meta created successfully")
+        alertsActions.success("tag created successfully")
       );
     });
   }
 
-  deleteMeta(job, meta) {
-    this.$ngRedux.dispatch(jobsActions.deleteMeta(job, meta)).then(() => {
+  deleteMeta(job, tag) {
+    this.$ngRedux.dispatch(jobsActions.deleteMeta(job, tag)).then(() => {
       this.$scope.$apply();
       this.$ngRedux.dispatch(
-        alertsActions.success("meta deleted successfully")
+        alertsActions.success("tag deleted successfully")
       );
     });
   }

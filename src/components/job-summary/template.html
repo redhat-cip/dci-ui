@@ -96,19 +96,19 @@
           </dd>
           <dt>Metas</dt>
           <dd class="mb-1">
-            <div class="input-group" ng-repeat="meta in $ctrl.job.metas">
-              <input class="form-control input-sm" ng-value="meta.name" disabled>
+            <div class="input-group" ng-repeat="tag in $ctrl.job.tags">
+              <input class="form-control input-sm" ng-value="tag.name" disabled>
               <span class="input-group-btn" style="width:0px;"></span>
-              <input class="form-control input-sm" ng-value="meta.value" disabled>
-              <span class="input-group-addon pointer" ng-click="$ctrl.deleteMeta($ctrl.job, meta)">
+              <input class="form-control input-sm" ng-value="tag.value" disabled>
+              <span class="input-group-addon pointer" ng-click="$ctrl.deleteMeta($ctrl.job, tag)">
                 <i class="fa fa-fw fa-trash text-danger"></i>
               </span>
             </div>
             <div class="input-group">
-              <input class="form-control input-sm" ng-model="$ctrl.meta.name">
+              <input class="form-control input-sm" ng-model="$ctrl.tag.name">
               <span class="input-group-btn" style="width:0px;"></span>
-              <input class="form-control input-sm" ng-model="$ctrl.meta.value">
-              <span class="input-group-addon pointer" ng-click="$ctrl.addMeta($ctrl.job, $ctrl.meta)">
+              <input class="form-control input-sm" ng-model="$ctrl.tag.value">
+              <span class="input-group-addon pointer" ng-click="$ctrl.addMeta($ctrl.job, $ctrl.tag)">
                 <i class="fa fa-fw fa-plus"></i>
               </span>
             </div>

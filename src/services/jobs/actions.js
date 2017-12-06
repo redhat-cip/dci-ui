@@ -44,34 +44,34 @@ export function retrieveTests(job, params = {}) {
   };
 }
 
-export function createMeta(job, meta, params = {}) {
+export function createMeta(job, tag, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
     const request = {
       method: "post",
-      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/metas`,
-      data: meta,
+      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/tags`,
+      data: tag,
       params
     };
     return http(request).then(response => {
-      job.metas.push(response.data.meta);
+      job.tags.push(response.data.tag);
       return Object.assign({}, job);
     });
   };
 }
 
-export function deleteMeta(job, meta, params = {}) {
+export function deleteMeta(job, tag, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
     const request = {
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/metas/${meta.id}`,
+      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/tags/${tag.id}`,
       params
     };
 
     return http(request).then(() => {
-      job.metas = job.metas.filter(m => {
-        return m.id !== meta.id;
+      job.tags = job.tags.filter(m => {
+        return m.id !== tag.id;
       });
       return Object.assign({}, job);
     });
