@@ -24,6 +24,7 @@
           {{$ctrl.job.remoteci.name}}
           <br>
           {{$ctrl.job.topic.name}}
+          <span ng-if="$ctrl.job.rconfiguration.name">/ {{$ctrl.job.rconfiguration.name}}</span>
         </b>
       </div>
       <div class="mr-3 job-summary__description">

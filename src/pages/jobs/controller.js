@@ -72,7 +72,7 @@ class Ctrl {
     ];
     this.status = "";
     this.params = {
-      embed: "results,remoteci,components,jobstates,metas,topic",
+      embed: "results,remoteci,components,jobstates,metas,topic,rconfiguration",
       limit: 40,
       offset: 0
     };
