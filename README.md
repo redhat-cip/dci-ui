@@ -22,3 +22,4 @@ Command list:
  * `npm run dev`: start web server with live reload
  * `npm run build`: build application in `static/` folder
  * `npm run test:unit`: start unit test
+
