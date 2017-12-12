@@ -11,19 +11,9 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
 @import "~scss/variables";
 
-@each $name, $color in (primary, $color-pf-blue-400),
-        (success, $color-pf-light-green-500),
-        (info, $color-pf-light-blue-300),
-        (warning, $color-pf-orange-400),
-        (danger, $color-pf-red-100) {
-  .card-pf-#{$name} {
-    border-top: 5px solid $color;
-  }
-}
-
-.card-pointer:hover {
-  cursor: pointer;
+.title{
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $color-pf-black-200;
 }

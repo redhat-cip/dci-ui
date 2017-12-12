@@ -19,8 +19,11 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth",
       url: "/",
-      template:
-        '<div><dci-menu></dci-menu><ui-view class="app__main-content"></ui-view></div>',
+      template: `<div>
+          <dci-masthead></dci-masthead>
+          <dci-menu></dci-menu>
+          <ui-view class="pf-main-content"></ui-view>
+      </div>`,
       abstract: true
     })
     .state({
@@ -172,11 +175,6 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       name: "auth.globalStatus",
       url: "globalStatus",
       component: "globalStatusPage"
-    })
-    .state({
-      name: "auth.metrics",
-      url: "metrics",
-      component: "metricsPage"
     });
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise("/jobs");
