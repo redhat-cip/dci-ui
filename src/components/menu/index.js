@@ -12,10 +12,9 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import "./styles.scss";
 import template from "./template.html";
 import controller from "./controller";
-import "images/gecko.png";
+import "images/dci-logo.svg";
 
 export default {
   controller,

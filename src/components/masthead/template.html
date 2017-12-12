@@ -1,0 +1,18 @@
+<div class="pf-masthead vertical-navigation">
+  <ul class="pf-masthead__menu">
+    <li class="pf-masthead__item" ng-if="$ctrl.currentUser.fullname">
+      <a id="navbar-utility__settings-link" ui-sref="auth.settings" class="pf-masthead__link">
+        <i class="fa fa-fw fa-user pf-masthead__icon"></i>
+        <span class="pf-masthead__link-text">
+          {{ $ctrl.currentUser.fullname || $ctrl.currentUser.name }}
+        </span>
+      </a>
+    </li>
+    <li class="pf-masthead__item">
+      <a id="navbar-utility__logout-link" href="#" ng-click="$ctrl.logout()" class="pf-masthead__link">
+        <i class="fa fa-fw fa-sign-out pf-masthead__icon"></i>
+        <span class="pf-masthead__link-text">Sign out</span>
+      </a>
+    </li>
+  </ul>
+</div>
