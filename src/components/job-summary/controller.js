@@ -67,9 +67,6 @@ class Ctrl {
   }
 
   addMeta(job, meta) {
-    if (!meta.value) {
-      meta.value = "1";
-    }
     this.$ngRedux.dispatch(jobsActions.createMeta(job, meta)).then(() => {
       this.$scope.$apply();
       this.meta = { value: "", name: "" };
