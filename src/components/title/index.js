@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+import "./styles.scss";
 import template from "./template.html";
 
 export default {
