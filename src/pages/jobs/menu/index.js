@@ -12,9 +12,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const FETCH_REQUEST = "FETCH_REQUEST";
-export const FETCH_SUCCESS = "FETCH_SUCCESS";
-export const FETCH_FAILURE = "FETCH_FAILURE";
-export const SELECT_FIRST_METRIC = "SELECT_FIRST_METRIC";
-export const GET_METRIC = "GET_METRIC";
-export const FILTER_METRIC = "FILTER_METRIC";
+import template from "./template.html";
+
+export default {
+  template
+};

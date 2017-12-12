@@ -39,24 +39,24 @@ import adminFeedersPage from "./pages/admin/feeders";
 import adminFeederEditPage from "./pages/admin/feeders/edit";
 import adminFeederCreatePage from "./pages/admin/feeders/create";
 import jobsPage from "./pages/jobs";
-import jobStatesPage from "./pages/job/jobstates";
-import jobTestsPage from "./pages/job/tests";
-import jobIssuesPage from "./pages/job/issues";
-import jobFilesPage from "./pages/job/files";
+import jobMenu from "./pages/jobs/menu";
+import jobStatesPage from "./pages/jobs/jobstates";
+import jobTestsPage from "./pages/jobs/tests";
+import jobIssuesPage from "./pages/jobs/issues";
+import jobFilesPage from "./pages/jobs/files";
 import topicsPage from "./pages/topics";
 import topicCreatePage from "./pages/topics/create";
 import topicEditPage from "./pages/topics/edit";
 import topicForm from "./pages/topics/form";
 import componentsPage from "./pages/components";
 import loginPage from "./pages/login";
+import settingsMenu from "./pages/settings/menu";
 import updatePasswordPage from "./pages/settings/updatePassword";
 import updateSettingsPage from "./pages/settings/updateSettings";
 import notificationPage from "./pages/settings/notification";
-import metricsPage from "./pages/metrics";
 import globalStatusPage from "./pages/globalStatus";
 import Menu from "./components/menu";
-import topicMetricsSummary from "./components/topic-metric-summary";
-import topicMetricsGraph from "./components/topic-metric-graph";
+import Masthead from "./components/masthead";
 import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
 import Alerts from "./components/alerts";
@@ -94,15 +94,16 @@ angular.element(document).ready(function() {
         }
       ])
       .component("dciMenu", Menu)
+      .component("dciMasthead", Masthead)
       .component("dciLoading", Loading)
       .component("dciAlerts", Alerts)
       .component("jobSummary", JobSummary)
       .component("dciTitle", Title)
-      .component("topicMetricsSummary", topicMetricsSummary)
       .component("confirmDestructiveAction", ConfirmDestructiveAction)
       .component("noTeamWarning", noTeamWarning)
       .component("loginPage", loginPage)
       .component("jobsPage", jobsPage)
+      .component("jobMenu", jobMenu)
       .component("jobStatesPage", jobStatesPage)
       .component("jobFilesPage", jobFilesPage)
       .component("jobTestsPage", jobTestsPage)
@@ -130,8 +131,7 @@ angular.element(document).ready(function() {
       .component("adminFeederEditPage", adminFeederEditPage)
       .component("adminFeederCreatePage", adminFeederCreatePage)
       .component("globalStatusPage", globalStatusPage)
-      .component("metricsPage", metricsPage)
-      .component("topicMetricsGraph", topicMetricsGraph)
+      .component("settingsMenu", settingsMenu)
       .component("updatePasswordPage", updatePasswordPage)
       .component("updateSettingsPage", updateSettingsPage)
       .component("notificationPage", notificationPage);

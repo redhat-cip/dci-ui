@@ -11,23 +11,25 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
 @import "~rcue/dist/css/rcue.css";
 @import "~rcue/dist/css/rcue-additions.css";
-
+@import "~pfdemo/dist/css/pf-vertical-navigation.css";
+@import "~pfdemo/dist/css/pf-masthead.css";
 @import "~scss/variables";
 
-.app__main-content {
-  display: block;
-}
-
-body{
+body {
   background-color: #ffffff;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
+
+.title{
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $color-pf-black-200;
+}
+
 
 // Margin and Padding
 

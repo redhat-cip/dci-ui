@@ -84,6 +84,10 @@ module.exports = function(browser) {
         ).waitForXpathElementVisible(
           "//span[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.2']"
         );
+      case "globalStatus":
+        return this.click(
+          "#navbar-primary__global-status-link"
+        ).waitForXpathElementVisible("//a[normalize-space(text())='OSP11']");
       case "topics":
         return this.click(
           "#navbar-primary__topics-link"
@@ -99,14 +103,22 @@ module.exports = function(browser) {
         ).waitForXpathElementVisible(
           "//span[normalize-space(text())='RH7-RHOS-10.0 2016-10-28.1']"
         );
-      case "globalStatus":
+      case "Remotecis":
         return this.click(
-          "#navbar-primary__global-status-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='OSP11']");
-      case "metrics":
+          "#navbar-primary__remotecis-link"
+        ).waitForXpathElementVisible(
+          "//a[normalize-space(text())='Remoteci OpenStack']"
+        );
+      case "Feeders":
         return this.click(
-          "#navbar-primary__metrics-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='3 Months']");
+          "#navbar-primary__remotecis-link"
+        ).waitForXpathElementVisible(
+          "//a[normalize-space(text())='Remoteci OpenStack']"
+        );
+      case "Products":
+        return this.click(
+          "#navbar-primary__products-link"
+        ).waitForXpathElementVisible("//a[normalize-space(text())='Ansible']");
       case "adminUsers":
         return this.click(
           "#navbar-primary__admin-users-link"
@@ -118,31 +130,21 @@ module.exports = function(browser) {
           .waitForElementVisible("button#createButton");
       case "adminTeams":
         return this.click(
-          "#navbar-secondary__admin-teams-link"
+          "#navbar-primary__admin-teams-link"
         ).waitForXpathElementVisible(
           "//a[normalize-space(text())='OpenStack']"
         );
-      case "adminRemotecis":
-        return this.click(
-          "#navbar-secondary__admin-remotecis-link"
-        ).waitForXpathElementVisible(
-          "//a[normalize-space(text())='Remoteci OpenStack']"
-        );
-      case "adminProducts":
-        return this.click(
-          "#navbar-secondary__admin-products-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='Ansible']");
       case "settings":
         return this.click(
-          "#navbar-utility__settings-link"
+          "#navbar-primary__settings-link"
         ).waitForElementVisible("button#changeSettingsButton");
       case "changePassword":
-        return this.click("#navbar-utility__settings-link")
-          .click("#navbar-secondary__change-password-link")
-          .waitForElementVisible("button#changePasswordButton");
+        return this.click(
+          "#navbar-primary__password-link"
+        ).waitForElementVisible("button#changePasswordButton");
       case "notification":
         return this.click(
-          "#navbar-secondary__notification-link"
+          "#navbar-primary__notification-link"
         ).waitForElementVisible("i.fa-plus");
     }
     return this;
