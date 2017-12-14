@@ -12,10 +12,20 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-#menu {
-  z-index: 99;
+import * as authActions from "services/auth/actions";
 
-  #menu__logo {
-    height: 10px;
+class Ctrl {
+  constructor($scope, $ngRedux) {
+    this.$ngRedux = $ngRedux;
+    let unsubscribe = $ngRedux.connect(state => state)(this);
+    $scope.$on("$destroy", unsubscribe);
+  }
+
+  logout() {
+    this.$ngRedux.dispatch(authActions.logout());
   }
 }
+
+Ctrl.$inject = ["$scope", "$ngRedux"];
+
+export default Ctrl;

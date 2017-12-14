@@ -15,8 +15,8 @@
 import "./styles.scss";
 import template from "./template.html";
 import controller from "./controller";
-import "images/gecko.png";
-import "images/logo.svg";
+import "images/dci-logo.svg";
+import "images/redhat-logo.svg";
 
 export default {
   template,

@@ -14,7 +14,6 @@
 
 import "moment-timezone/builds/moment-timezone-with-data-2012-2022";
 import "angular";
-import "d3";
 import "axios";
 import "lodash/find";
 import "lodash/uniqBy";

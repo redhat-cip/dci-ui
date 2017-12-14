@@ -42,6 +42,7 @@ test("set currentUser set role shortcut", t => {
   t.is(newState.email, "currentUser@example.org");
   t.true(newState.isSuperAdmin);
   t.true(newState.isSuperAdminOrProductOwner);
+  t.true(newState.isAdmin);
 });
 
 test("set currentUser unset role shortcut", t => {
