@@ -1,14 +1,20 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-12">
-      <h1 class="page-header">
-        Teams
-        <a class="pull-right btn btn-primary"
+  <div class="row mb-4 py-3" style="border-bottom:1px solid #f1f1f1;">
+    <div class="col-xs-12 col-sm-6">
+      <h1>Teams & Users</h1>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <form class="form-inline pull-right" style="margin-top:20px">
+        <div class="form-group">
+          <input type="text" class="form-control" id="teams__searchInput" placeholder="Search ..."
+                 ng-model="$ctrl.search">
+        </div>
+        <a class="btn btn-primary ml-3"
            id="admin__create-team-btn"
            ui-sref="auth.adminTeamCreate">
           <i class="fa fa-plus-circle"></i> create new team
         </a>
-      </h1>
+      </form>
     </div>
   </div>
   <div class="row">
@@ -17,7 +23,50 @@
       <div ng-hide="$ctrl.loading">
         <div class="row">
           <div class="col-xs-12">
-            <table class="table table-striped table-bordered table-hover">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Id</th>
+                  <th>Role</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="team in $ctrl.teams | orderBy: 'name' | filter: $ctrl.search" style="border:none;">
+                <tr>
+                  <td>
+                    <i class="fa fa-fw fa-users" style="font-size:1.2em;"></i>
+                    <a ui-sref="auth.adminTeamEdit({id: team.id})" style="font-size:1.2em; text-transform:uppercase;">
+                      {{team.name}}
+                      <span ng-if="team.external">
+                        <i class="fa fa-handshake-o"></i>
+                      </span>
+                    </a>
+                  </td>
+                  <td>{{ team.id }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="teams__nested-row"
+                    ng-repeat="user in team.users | orderBy: 'name'">
+                  <td>
+                    <i class="fa fa-fw fa-user-o"></i>
+                    <a ui-sref="auth.adminUserEdit({id: user.id})">
+                      {{user.name}}
+                    </a>
+                  </td>
+                  <td>{{ user.id }}</td>
+                  <td>{{ user.role.name }}</td>
+                  <td>{{ user.fullname }}</td>
+                  <td>{{ user.email }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!--<table class="table table-striped table-bordered table-hover">
               <thead>
               <tr>
                 <th>Team name</th>
@@ -59,7 +108,7 @@
                   </button>
                 </td>
               </tr>
-            </table>
+            </table>-->
           </div>
         </div>
       </div>

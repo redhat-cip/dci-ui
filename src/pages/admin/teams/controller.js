@@ -26,7 +26,13 @@ class Ctrl {
   $onInit() {
     this.loading = true;
     this.$ngRedux.dispatch(api("team").all()).then(() => {
-      this.loading = false;
+      this.$ngRedux.dispatch(api("user").all({ embed: "role" })).then(() => {
+        this.teams = this.teams.map(team => {
+          team.users = this.users.filter(user => user.team_id === team.id);
+          return team;
+        });
+        this.loading = false;
+      });
     });
   }
 
