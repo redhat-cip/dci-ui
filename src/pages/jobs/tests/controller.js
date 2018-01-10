@@ -28,7 +28,8 @@ class Ctrl {
       passed: false,
       skipped: false,
       error: false,
-      failure: false
+      failure: false,
+      regression: false
     };
     const id = this.$ngRedux.getState().router.currentParams.id;
     this.$ngRedux
@@ -56,7 +57,8 @@ class Ctrl {
         !filters.passed &&
         !filters.skipped &&
         !filters.error &&
-        !filters.failure
+        !filters.failure &&
+        !filters.regression
       ) {
         return true;
       }

@@ -14,9 +14,10 @@
             (Duration: {{ test.time | msToSec }} sec)
             <span class="label label-primary">{{test.total}} tests</span>
             <span class="label label-success" ng-if="test.success">{{test.success}} success</span>
-            <span class="label label-warning" ng-if="test.skips">{{test.skips}} skipped</span>
+            <span class="label label-info" ng-if="test.skips">{{test.skips}} skipped</span>
             <span class="label label-default" ng-if="test.errors">{{test.errors}} errors</span>
             <span class="label label-danger" ng-if="test.failures">{{test.failures}} failures</span>
+            <span class="label label-warning" ng-if="test.regressions">{{test.regressions}} regressions</span>
           </small>
           <button type="button" class="btn btn-default btn-xs pull-right"
                   ng-click="test.seeDetails=!test.seeDetails"
@@ -37,7 +38,7 @@
           </label>
           <label class="checkbox-inline" ng-if="test.skips">
             <input type="checkbox" ng-model="$ctrl.filters.skipped"/>
-            <span class="label label-warning">Skipped</span>
+            <span class="label label-info">Skipped</span>
           </label>
           <label class="checkbox-inline" ng-if="test.errors">
             <input type="checkbox" ng-model="$ctrl.filters.error"/>
@@ -46,6 +47,10 @@
           <label class="checkbox-inline" ng-if="test.failures">
             <input type="checkbox" ng-model="$ctrl.filters.failure"/>
             <span class="label label-danger">Failure</span>
+          </label>
+          <label class="checkbox-inline" ng-if="test.regressions">
+            <input type="checkbox" ng-model="$ctrl.filters.regression"/>
+            <span class="label label-warning">Regressions</span>
           </label>
         </div>
       </div>
@@ -64,12 +69,13 @@
             <tr ng-repeat-start="testcase in test.testscases | filter: $ctrl.filterTestsCases($ctrl.filters)"
                 ng-click="testcase.showDetails = !testcase.showDetails"
                 ng-init="testcase.showDetails = false"
-                ng-class="{'warning':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error' }">
+                ng-class="{'info':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error', 'warning':testcase.action == 'regression'}">
               <td>
-                <span ng-if="testcase.action == 'skipped'" class="label label-warning">Skip</span>
+                <span ng-if="testcase.action == 'skipped'" class="label label-info">Skip</span>
                 <span ng-if="testcase.action == 'failure'" class="label label-danger">Failure</span>
                 <span ng-if="testcase.action == 'error'" class="label label-default">Error</span>
                 <span ng-if="testcase.action == 'passed'" class="label label-success">Pass</span>
+                <span ng-if="testcase.action == 'regression'" class="label label-warning">Regression</span>
               </td>
               <td>{{testcase.classname || testcase.name}}</td>
               <td>{{testcase.name}}</td>
@@ -77,7 +83,7 @@
             </tr>
             <tr ng-repeat-end
                 ng-if="testcase.showDetails"
-                ng-class="{'warning':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error' }">
+                ng-class="{'info':testcase.action == 'skipped', 'danger':testcase.action == 'failure' || testcase.action == 'error', 'warning':testcase.action == 'regression'}">
               <td colspan=4>
                 <b>Type:</b> {{ testcase.type}} <br>
                 <b>Message:</b> {{ testcase.message}} <br>

@@ -36,9 +36,10 @@
            ng-repeat="test in $ctrl.job.results | orderBy:'name'">
         <button class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">{{test.name}}</button>
         <span class="label label-success">{{test.success}}</span>
-        <span class="label label-warning">{{test.skips}}</span>
+        <span class="label label-info">{{test.skips}}</span>
         <span class="label label-default">{{test.errors}}</span>
         <span class="label label-danger">{{test.failures}}</span>
+        <span class="label label-warning">{{test.regressions}}</span>
       </div>
     </div>
     <div class="job-summary__additional-info">
