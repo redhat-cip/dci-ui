@@ -3,6 +3,6 @@
   "sso": {
     "url": "http://localhost:8180",
     "realm": "dci-test",
-    "clientId": "dci-cs"
+    "clientId": "dci"
   }
 }
