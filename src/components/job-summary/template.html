@@ -1,63 +1,68 @@
-<div class="job-summary">
-  <div class="job-summary__header"
-       ng-click="$ctrl.seeDetails=!$ctrl.seeDetails"
-       ng-class="{
-            'job-summary__header--success': $ctrl.job.status === 'success',
-            'job-summary__header--failure': $ctrl.job.status.endsWith('failure'),
-            'job-summary__header--killed': $ctrl.job.status === 'killed',
-            'job-summary__header--running': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
+<div class="job"
+     ng-class="{
+            'job--success': $ctrl.job.status === 'success',
+            'job--failure': $ctrl.job.status.endsWith('failure'),
+            'job--killed': $ctrl.job.status === 'killed',
+            'job--running': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
           }">
-    <div class="job-summary__info">
-      <div class="mr-3 job-summary__status">
-      </div>
-      <div class="mr-3 job-summary__icon">
-        <i class="fa fa-fw fa-2x"
+  <div class="job-summary" ng-click="$ctrl.seeDetails=!$ctrl.seeDetails">
+    <div class="job-summary__header">
+      <div class="fa fa-fw fa-2x job-summary__icon"
            ng-class="{
             'fa-check-circle': $ctrl.job.status === 'success',
             'fa-exclamation-circle': $ctrl.job.status.endsWith('failure'),
             'fa-stop-circle': $ctrl.job.status === 'killed',
             'fa-pause-circle': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
-          }"></i>
-      </div>
-      <div class="mr-3 job-summary__title">
-        <b>
+          }"></div>
+      <div class="job-summary__info">
+        <div class="job-summary__name">
           {{$ctrl.job.remoteci.name}}
-          <br>
+        </div>
+        <div class="job-summary__topic">
           {{$ctrl.job.topic.name}}
           <span ng-if="$ctrl.job.rconfiguration.name">/ {{$ctrl.job.rconfiguration.name}}</span>
-        </b>
-      </div>
-      <div class="mr-3 job-summary__description">
-        <span ng-repeat="component in $ctrl.job.components">{{component.name}}</span>
+        </div>
+        <div class="job-summary__component" ng-repeat="component in $ctrl.job.components">
+          {{component.name}}
+        </div>
       </div>
     </div>
     <div class="job-summary__tests">
-      <div class="mr-3 job-summary__test"
+      <div class="job-summary__test"
            ng-repeat="test in $ctrl.job.results | orderBy:'name'">
-        <button class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">{{test.name}}</button>
         <span class="label label-success">{{test.success}}</span>
         <span class="label label-warning">{{test.skips}}</span>
         <span class="label label-default">{{test.errors}}</span>
         <span class="label label-danger">{{test.failures}}</span>
+        <button class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">{{test.name}}</button>
       </div>
     </div>
-    <div class="job-summary__additional-info">
-      <div class="mr-3 job-summary__additional-info-item">
-        <i class="fa fa-calendar"></i>
-        {{$ctrl.job.created_at | dciFromNow}}
+    <div class="job-summary__extra-info">
+      <div class="job-summary__extra">
+        <i class="fa fa-fw fa-calendar"></i> {{$ctrl.job.created_at | dciFromNow}}
       </div>
-      <div class="mr-3 job-summary__additional-info-item"
-           ng-if="$ctrl.job.status === 'success' || $ctrl.job.status === 'failure' || $ctrl.job.status === 'killed'">
-        <i class="fa fa-clock-o"></i>
-        ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
+      <div class="job-summary__extra">
+        <span ng-if="$ctrl.job.status === 'success' || $ctrl.job.status === 'failure' || $ctrl.job.status === 'killed'">
+          <i class="fa fa-fw fa-clock-o"></i>
+          Ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
+        </span>
+      </div>
+      <div class="job-summary__extra">
+        <i class="fa fa-fw fa-list-alt"></i>
+        <button type="button" class="btn btn-link px-0" ng-click="$ctrl.open($ctrl.job,'auth.job.jobStates')">
+          See details
+        </button>
       </div>
     </div>
   </div>
-  <div class="job-summary__body"
-       ng-class="{'job-summary__body--hidden': !$ctrl.seeDetails}">
+  <div class="job-details"
+       ng-class="{'job-details--hidden': !$ctrl.seeDetails}">
     <div class="row">
-      <div class="col-md-4">
-        <dl class="dl-horizontal">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-danger btn-sm pull-right" ng-click="$ctrl.delete($ctrl.job)">
+          <i class="fa fa-fw fa-trash"></i>
+        </button>
+        <dl class="dl-horizontal mb-1">
           <dt>Id</dt>
           <dd>{{$ctrl.job.id}}</dd>
           <dt>User agent</dt>
@@ -66,20 +71,6 @@
             Client version
           </dt>
           <dd>{{$ctrl.job.client_version}}</dd>
-          <dt>
-            <i class="fa fa-calendar"></i>
-            Created
-          </dt>
-          <dd>
-            {{$ctrl.job.created_at | dciFromNow}}
-          </dd>
-          <dt ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
-            <i class="fa fa-clock-o"></i>
-            Duration
-          </dt>
-          <dd ng-if="$ctrl.job.status == 'success' || $ctrl.job.status == 'failure' || $ctrl.job.status == 'killed'">
-            {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
-          </dd>
           <dt ng-if="$ctrl.job.files.length > 0">
             <i class="fa fa-file-o"></i>
             Files
@@ -87,13 +78,28 @@
           <dd ng-if="$ctrl.job.files.length > 0">
             {{$ctrl.job.files.length}} files
           </dd>
+          <dt>
+            Job states
+          </dt>
+          <dd>
+             <span ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
+               {{ jobstate.status }}
+               <span ng-if="!$last"><i class="fa fa-fw fa-angle-right"></i></span>
+             </span>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-8 col-lg-6">
+        <dl class="dl-horizontal">
           <dt>Status</dt>
           <dd>
-              <select name="status" class="form-control input-sm mb-1"
-                      ng-change="$ctrl.updateJob()"
-                      ng-model="$ctrl.job.status">
-                <option ng-repeat="status in $ctrl.statuses">{{status}}</option>
-              </select>
+            <select name="status" class="form-control input-sm mb-1"
+                    ng-change="$ctrl.updateJob()"
+                    ng-model="$ctrl.job.status">
+              <option ng-repeat="status in $ctrl.statuses">{{status}}</option>
+            </select>
           </dd>
           <dt>Metas</dt>
           <dd class="mb-1">
@@ -123,32 +129,6 @@
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.updateJob()">save</button>
           </dd>
         </dl>
-      </div>
-      <div class="col-md-7">
-        <div class="row" ng-if="$ctrl.job.jobstates.length !== 0">
-          <div class="col-xs-12">
-            <b>
-              Job States (
-              <button type="button" class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.jobStates')">See
-                details
-              </button>
-              )
-            </b>
-            <ul class="list-inline">
-              <li ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
-                <span ng-if="$first"><i class="fa fa-bolt fa-fw"></i></span>
-                <span ng-if="!$first && !$last"><i class="fa fa-fw fa-circle"></i></span>
-                <span ng-if="$last && !$first"><i class="fa fa-flag-checkered fa-fw"></i></span>
-                {{ jobstate.status }}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-1" ng-if="$ctrl.currentUser.isAdmin">
-        <button type="button" class="btn btn-danger btn-sm pull-right" ng-click="$ctrl.delete($ctrl.job)">
-          <i class="fa fa-trash"></i>
-        </button>
       </div>
     </div>
   </div>

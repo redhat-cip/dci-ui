@@ -13,97 +13,94 @@
 // under the License.
 @import "~scss/variables";
 
-.job-summary {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1em;
-}
-
-.job-summary__header {
-  display: flex;
-  align-items: center;
-  border: 1px solid rgb(237, 237, 237);
-}
-
-.job-summary__info {
-  display: flex;
-  align-items: center;
-  flex-basis:40%;
-
-  .job-summary__status {
-    width: 5px;
-    height: 64px;
-  }
-
-  .job-summary__icon{
-  }
-
-  .job-summary__title {
-    width: 45%;
-  }
-  .job-summary__description {
-    width: 55%;
-    word-break: break-all;
-  }
-}
-
-.job-summary__tests {
-  display: flex;
-  flex-basis:40%;
-}
-
-.job-summary__additional-info {
-  display: flex;
-  justify-content: flex-end;
-  flex-basis:20%;
-}
-
-.job-summary__header--success {
-  .job-summary__status {
-    background-color: $color-pf-green-400;
-  }
+.job--success {
+  border-left: 3px solid $color-pf-green-400;
 
   .job-summary__icon {
     color: $color-pf-green-400;
   }
 }
-
-.job-summary__header--failure {
-  .job-summary__status {
-    background-color: $color-pf-red-100;
-  }
+.job--failure {
+  border-left: 3px solid $color-pf-red-100;
 
   .job-summary__icon {
     color: $color-pf-red-100;
   }
 }
-
-.job-summary__header--killed {
-  .job-summary__status {
-    background-color: $color-pf-orange-400;
-  }
+.job--killed {
+  border-left: 3px solid $color-pf-orange-400;
 
   .job-summary__icon {
     color: $color-pf-orange-400;
   }
 }
-
-.job-summary__header--running {
-  .job-summary__status {
-    background-color: $color-pf-blue-400;
-  }
+.job--running {
+  border-left: 3px solid $color-pf-blue-400;
 
   .job-summary__icon {
     color: $color-pf-blue-400;
   }
 }
 
-.job-summary__body {
-  border: 1px solid rgb(237, 237, 237);
+.job{
+  margin-bottom:1em;
+}
+
+.job-summary {
+  border: 1px solid $color-pf-black-200;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+
+  .job-summary__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    min-width: 200px;
+
+    .job-summary__name {
+      font-weight: bold;
+    }
+    .job-summary__icon {
+      margin-right: 0.5em;
+    }
+  }
+
+  .job-summary__tests {
+    margin-bottom: 1em;
+    overflow: hidden;
+    a {
+      margin-left: 0.5em;
+    }
+    .label-regression {
+      background-color: $color-pf-purple-300;
+    }
+  }
+  .job-summary__extra-info{
+    min-width: 170px;
+  }
+}
+
+@media (min-width: 780px) {
+  .job-summary {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .job-summary__header {
+      margin-bottom: 0;
+    }
+    .job-summary__tests {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.job-details {
+  border: 1px solid $color-pf-black-200;
   border-top: none;
   padding: 1em;
 }
 
-.job-summary__body--hidden {
-  display: none;
+.job-details--hidden{
+    display:none;
 }

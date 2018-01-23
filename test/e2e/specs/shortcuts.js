@@ -82,7 +82,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__jobs-link"
         ).waitForXpathElementVisible(
-          "//span[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.2']"
+          "//div[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.2']"
         );
       case "globalStatus":
         return this.click(
