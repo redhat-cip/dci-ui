@@ -1,7 +1,13 @@
-<div class="container-fluid mb-3">
+<div class="container-fluid pt-3">
   <div class="row">
     <div class="col-xs-12">
-      <h1>Job details</h1>
+      <job-summary job="$ctrl.job"></job-summary>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-xs-12">
       <ul class="nav nav-tabs">
         <li ui-sref-active="active">
           <a id="navbar-secondary__job-states-link" ui-sref="auth.job.jobStates">Job States</a>
@@ -19,3 +25,4 @@
     </div>
   </div>
 </div>
+<dci-loading ng-hide="$ctrl.job"></dci-loading>

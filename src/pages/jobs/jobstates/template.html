@@ -1,4 +1,4 @@
-<job-menu></job-menu>
+<job-menu job="$ctrl.job"></job-menu>
 <div class="container-fluid pt-3">
   <div ng-repeat="jobstate in $ctrl.job.jobstates | orderBy: 'created_at'" ng-init="jobstate.seeDetails=false">
     <div class="row">
