@@ -11,12 +11,33 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+@import "~scss/variables";
 
-import "./styles.scss";
-import template from "./template.html";
-import controller from "./controller";
+.global-status__summary{
+  display: flex;
+  flex-wrap: wrap;
+}
 
-export default {
-  template,
-  controller
-};
+.global-status__item{
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
+  min-width: 190px;
+  margin-right: 1em;
+  margin-top: 1em;
+}
+
+.global-status__item--danger{
+  border-top: 2px solid $color-pf-red-100;
+  background-color: $color-pf-red-100;
+  color: $color-pf-white;
+}
+
+.global-status__item--success{
+  border-top: 2px solid $color-pf-green-400;
+  background-color: $color-pf-green-400;
+  color: $color-pf-white;
+}
+
+.global-status__body{
+  font-size: 1.3em;
+}
