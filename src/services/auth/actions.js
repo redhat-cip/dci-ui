@@ -16,19 +16,6 @@ import { stateGo } from "redux-ui-router";
 import localStorage from "services/localStorage";
 import * as currentUserActions from "services/currentUser/actions";
 import * as alertsActions from "services/alerts/actions";
-import * as constants from "./constants";
-
-export function logIn() {
-  return {
-    type: constants.LOG_IN
-  };
-}
-
-export function signOut() {
-  return {
-    type: constants.SIGN_OUT
-  };
-}
 
 export function login(credentials) {
   return dispatch => {
@@ -38,7 +25,6 @@ export function login(credentials) {
     localStorage.setToken(token);
     dispatch(currentUserActions.getCurrentUser())
       .then(() => {
-        dispatch(logIn());
         dispatch(stateGo("auth.jobs"));
       })
       .catch(() => {
@@ -51,7 +37,6 @@ export function setJWT(token) {
   return dispatch => {
     localStorage.setJWT(token);
     dispatch(currentUserActions.getCurrentUser()).then(() => {
-      dispatch(logIn());
       dispatch(stateGo("auth.jobs"));
     });
   };
@@ -60,18 +45,6 @@ export function setJWT(token) {
 export function logout() {
   return dispatch => {
     localStorage.remove();
-    dispatch(signOut());
     dispatch(stateGo("login"));
-  };
-}
-
-export function checkUserIsAuthenticated() {
-  return dispatch => {
-    dispatch(currentUserActions.getCurrentUser())
-      .then(() => dispatch(logIn()))
-      .catch(() => {
-        localStorage.remove();
-        dispatch(stateGo("login"));
-      });
   };
 }

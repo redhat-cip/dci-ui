@@ -65,7 +65,7 @@ import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
 import * as configActions from "./services/config/actions";
-import * as authActions from "./services/auth/actions";
+import * as currentUserActions from "./services/currentUser/actions";
 import * as filters from "./filters";
 import * as directives from "./directives";
 
@@ -90,7 +90,7 @@ angular.element(document).ready(function() {
         "$ngRedux",
         $ngRedux => {
           $ngRedux.dispatch(configActions.setConfig(config));
-          $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
+          $ngRedux.dispatch(currentUserActions.getCurrentUser());
         }
       ])
       .component("dciMenu", Menu)

@@ -186,11 +186,8 @@ export default routes;
 
 const transition = function($transitions) {
   $transitions.onStart({ to: "auth.**" }, function(transition) {
-    const $ngRedux = transition.injector().get("$ngRedux");
-    const state = $ngRedux.getState();
     if (
       !(
-        state.auth.isAuthenticated ||
         localStorage.get().auth.token !== "" ||
         localStorage.get().auth.jwt !== ""
       )
