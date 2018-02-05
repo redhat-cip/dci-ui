@@ -36,7 +36,6 @@ export function associateUser(remoteci, user) {
     const request = {
       method: "post",
       url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users`,
-      data: { user_id: `${user.id}` }
     };
     return http(request);
   };
