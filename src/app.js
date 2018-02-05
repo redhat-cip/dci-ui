@@ -89,6 +89,7 @@ angular.element(document).ready(function() {
       .run([
         "$ngRedux",
         $ngRedux => {
+          console.log("app.js: authActions.checkUserIsAuthenticated");
           $ngRedux.dispatch(configActions.setConfig(config));
           $ngRedux.dispatch(authActions.checkUserIsAuthenticated());
         }

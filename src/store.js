@@ -14,7 +14,6 @@
 
 import { router } from "redux-ui-router";
 import thunk from "redux-thunk";
-import authReducer from "./services/auth/reducers";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
@@ -24,7 +23,6 @@ const store = function($ngReduxProvider) {
   const reducers = {
     alerts: alertsReducer,
     currentUser: currentUserReducer,
-    auth: authReducer,
     config: configReducer,
     jobs: Reducers("job"),
     users: Reducers("user"),
