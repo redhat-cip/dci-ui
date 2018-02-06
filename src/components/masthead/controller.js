@@ -11,21 +11,29 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
-import * as authActions from "services/auth/actions";
+import { stateGo } from "redux-ui-router";
+import localStorage from "services/localStorage";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, keycloak) {
     this.$ngRedux = $ngRedux;
+    this.keycloak = keycloak;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   logout() {
-    this.$ngRedux.dispatch(authActions.logout());
+    localStorage.remove();
+    if (this.keycloak.authenticated) {
+      this.keycloak.logout({
+        redirectUri: window.location.origin + "/login"
+      });
+    } else {
+      this.$ngRedux.dispatch(stateGo("login"));
+    }
   }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "keycloak"];
 
 export default Ctrl;

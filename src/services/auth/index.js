@@ -12,10 +12,29 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const SET_LOGIN_TYPE = "SET_LOGIN_TYPE";
-export const LOGIN_TYPE = {
-  SSO: "SSO",
-  BASIC_AUTH: "BASIC_AUTH",
-  UNKNOWN: "UNKNOWN"
+import localStorage from "services/localStorage";
+
+export function setJWT(token) {
+  localStorage.setJWT(token);
+}
+
+export function setBasicToken(token) {
+  localStorage.setToken(token);
+}
+
+const refreshJWT = function(keycloak) {
+  setInterval(() => {
+    if (keycloak.authenticated) {
+      const fiveMinutes = 5 * 60;
+      keycloak.updateToken(fiveMinutes).success(refreshed => {
+        if (refreshed) {
+          localStorage.setJWT(keycloak.token);
+        }
+      });
+    }
+  }, 1 * 60 * 1000);
 };
+
+refreshJWT.$inject = ["keycloak"];
+
+export { refreshJWT };

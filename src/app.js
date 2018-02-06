@@ -65,8 +65,10 @@ import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
-import * as configActions from "./services/config/actions";
-import * as currentUserActions from "./services/currentUser/actions";
+import { setConfig } from "./services/config/actions";
+import { initCurrentUser } from "./services/currentUser/actions";
+import { initApp, refreshJWT } from "./services/auth";
+import { createSSO, initSSO, KeycloakFactory } from "./services/sso";
 import * as filters from "./filters";
 import * as directives from "./directives";
 
@@ -87,15 +89,13 @@ angular
 angular.element(document).ready(function() {
   axios.get("config.json").then(response => {
     const config = response.data;
+    window._sso = createSSO(config.sso);
     angular
       .module("app")
-      .run([
-        "$ngRedux",
-        $ngRedux => {
-          $ngRedux.dispatch(configActions.setConfig(config));
-          $ngRedux.dispatch(currentUserActions.getCurrentUser());
-        }
-      ])
+      .factory("keycloak", KeycloakFactory)
+      .run(["$ngRedux", $ngRedux => $ngRedux.dispatch(setConfig(config))])
+      .run(initCurrentUser)
+      .run(refreshJWT)
       .component("dciMenu", Menu)
       .component("dciMasthead", Masthead)
       .component("dciLoading", Loading)
@@ -139,6 +139,9 @@ angular.element(document).ready(function() {
       .component("updatePasswordPage", updatePasswordPage)
       .component("updateSettingsPage", updateSettingsPage)
       .component("notificationPage", notificationPage);
-    angular.bootstrap(document, ["app"]);
+
+    initSSO(window._sso).then(() => {
+      angular.bootstrap(document, ["app"]);
+    });
   });
 });

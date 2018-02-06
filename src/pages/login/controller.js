@@ -12,48 +12,48 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import * as authActions from "services/auth/actions";
-import * as currentUserActions from "services/currentUser/actions";
-import { LOGIN_TYPE } from "services/currentUser/constants";
-import Keycloak from "keycloak-js";
+import { getCurrentUser } from "services/currentUser/actions";
+import { setJWT, setBasicToken } from "services/auth";
+import * as alertsActions from "services/alerts/actions";
 import { stateGo } from "redux-ui-router";
 
 class Ctrl {
-  constructor($ngRedux) {
+  constructor($ngRedux, $stateParams, $urlService, keycloak) {
     this.$ngRedux = $ngRedux;
+    this.$stateParams = $stateParams;
+    this.$urlService = $urlService;
+    this.keycloak = keycloak;
   }
 
   $onInit() {
     this.username = "";
     this.password = "";
-
-    const ssoConfig = this.$ngRedux.getState().config.sso;
-    if (typeof ssoConfig !== "undefined") {
-      this.keycloak = Keycloak({
-        url: `${ssoConfig.url}/auth`,
-        realm: `${ssoConfig.realm}`,
-        clientId: `${ssoConfig.clientId}`
-      });
-
-      this.keycloak.init({ flow: "implicit" }).success(authenticated => {
-        if (authenticated) {
-          this.$ngRedux.dispatch(
-            currentUserActions.setLoginType(LOGIN_TYPE.SSO)
-          );
-          this.$ngRedux.dispatch(authActions.setJWT(this.keycloak.token));
-          this.$ngRedux.dispatch(stateGo("auth.jobs"));
-        }
-      });
+    if (this.keycloak.authenticated) {
+      setJWT(this.keycloak.token);
+      this.$ngRedux.dispatch(getCurrentUser());
+      this.redirectToNextPage();
     }
   }
 
   authenticate() {
-    this.$ngRedux.dispatch(
-      currentUserActions.setLoginType(LOGIN_TYPE.BASIC_AUTH)
-    );
-    this.$ngRedux.dispatch(
-      authActions.login({ username: this.username, password: this.password })
-    );
+    const token = window.btoa(this.username.concat(":", this.password));
+    setBasicToken(token);
+    this.$ngRedux
+      .dispatch(getCurrentUser())
+      .then(() => this.redirectToNextPage())
+      .catch(() =>
+        this.$ngRedux.dispatch(
+          alertsActions.error("Invalid username or password")
+        )
+      );
+  }
+
+  redirectToNextPage() {
+    const nextUrl = this.$stateParams.next;
+    const nextState = this.$urlService.match({ path: nextUrl });
+    const stateName = nextState.rule.state.name;
+    const params = nextState.match;
+    this.$ngRedux.dispatch(stateGo(stateName, params));
   }
 
   sso() {
@@ -61,6 +61,6 @@ class Ctrl {
   }
 }
 
-Ctrl.$inject = ["$ngRedux"];
+Ctrl.$inject = ["$ngRedux", "$stateParams", "$urlService", "keycloak"];
 
 export default Ctrl;
