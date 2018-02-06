@@ -42,9 +42,15 @@ export function setJWT(token) {
   };
 }
 
-export function logout() {
+export function refreshJWT() {
   return dispatch => {
-    localStorage.remove();
-    dispatch(stateGo("login"));
+    const jwt = localStorage.get().auth.jwt;
+    if (jwt && window["_keycloack"]) {
+      window["_keycloack"].updateToken().success(refreshed => {
+        if (refreshed) {
+          localStorage.setJWT(window["_keycloack"].token);
+        }
+      });
+    }
   };
 }

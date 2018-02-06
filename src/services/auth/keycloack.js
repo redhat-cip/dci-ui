@@ -11,24 +11,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+import Keycloak from "keycloak-js";
 
-import localStorage from "services/localStorage";
-
-class Ctrl {
-  constructor($scope, $ngRedux) {
-    this.$ngRedux = $ngRedux;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
-    $scope.$on("$destroy", unsubscribe);
-  }
-
-  logout() {
-    if (window["_keycloack"]) {
-      window["_keycloack"].logout();
-    }
-    localStorage.remove();
-  }
+export default function(config) {
+  const ssoConfig = config.sso;
+  window["_keycloack"] = Keycloak({
+    url: `${ssoConfig.url}/auth`,
+    realm: `${ssoConfig.realm}`,
+    clientId: `${ssoConfig.clientId}`
+  });
 }
-
-Ctrl.$inject = ["$scope", "$ngRedux"];
-
-export default Ctrl;

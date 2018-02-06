@@ -64,8 +64,10 @@ import Title from "./components/title";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
-import * as configActions from "./services/config/actions";
-import * as currentUserActions from "./services/currentUser/actions";
+import { setConfig } from "./services/config/actions";
+import { getCurrentUser } from "./services/currentUser/actions";
+import { refreshJWT } from "./services/auth/actions";
+import keycloack from "./services/auth/keycloack";
 import * as filters from "./filters";
 import * as directives from "./directives";
 
@@ -89,8 +91,12 @@ angular.element(document).ready(function() {
       .run([
         "$ngRedux",
         $ngRedux => {
-          $ngRedux.dispatch(configActions.setConfig(config));
-          $ngRedux.dispatch(currentUserActions.getCurrentUser());
+          $ngRedux.dispatch(setConfig(config));
+          keycloack(config);
+          $ngRedux.dispatch(getCurrentUser());
+          setInterval(() => {
+            $ngRedux.dispatch(refreshJWT());
+          }, 5 * 60 * 1000);
         }
       ])
       .component("dciMenu", Menu)
