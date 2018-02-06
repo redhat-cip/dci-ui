@@ -11,11 +11,29 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+import Keycloak from "keycloak-js";
 
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const SET_LOGIN_TYPE = "SET_LOGIN_TYPE";
-export const LOGIN_TYPE = {
-  SSO: "SSO",
-  BASIC_AUTH: "BASIC_AUTH",
-  UNKNOWN: "UNKNOWN"
+export function createSSO(ssoConfig) {
+  return Keycloak({
+    url: `${ssoConfig.url}/auth`,
+    realm: `${ssoConfig.realm}`,
+    clientId: `${ssoConfig.clientId}`
+  });
+}
+
+export function initSSO(sso) {
+  return new Promise(resolve => {
+    sso
+      .init()
+      .success(() => resolve())
+      .error(() => resolve());
+  });
+}
+
+const KeycloakFactory = function($window) {
+  return $window._sso;
 };
+
+KeycloakFactory.$inject = ["$window"];
+
+export { KeycloakFactory };
