@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import * as authActions from "services/auth/actions";
+import localStorage from "services/localStorage";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -22,7 +22,10 @@ class Ctrl {
   }
 
   logout() {
-    this.$ngRedux.dispatch(authActions.logout());
+    if (window["_keycloack"]) {
+      window["_keycloack"].logout();
+    }
+    localStorage.remove();
   }
 }
 

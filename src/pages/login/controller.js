@@ -27,18 +27,22 @@ class Ctrl {
 
     const ssoConfig = this.$ngRedux.getState().config.sso;
     if (typeof ssoConfig !== "undefined") {
-      this.keycloak = Keycloak({
+      window["_keycloack"] = Keycloak({
         url: `${ssoConfig.url}/auth`,
         realm: `${ssoConfig.realm}`,
         clientId: `${ssoConfig.clientId}`
       });
 
-      this.keycloak.init({ flow: "implicit" }).success(authenticated => {
-        if (authenticated) {
-          this.$ngRedux.dispatch(authActions.setJWT(this.keycloak.token));
-          this.$ngRedux.dispatch(stateGo("auth.jobs"));
-        }
-      });
+      window["_keycloack"]
+        .init({ onLoad: "check-sso" })
+        .success(authenticated => {
+          if (authenticated) {
+            this.$ngRedux.dispatch(
+              authActions.setJWT(window["_keycloack"].token)
+            );
+            this.$ngRedux.dispatch(stateGo("auth.jobs"));
+          }
+        });
     }
   }
 
@@ -49,7 +53,7 @@ class Ctrl {
   }
 
   sso() {
-    this.keycloak.login();
+    window["_keycloack"].login();
   }
 }
 
