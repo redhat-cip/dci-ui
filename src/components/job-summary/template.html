@@ -91,8 +91,23 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 col-md-8 col-lg-6">
+      <div class="col-xs-12 col-md-8 col-lg-5">
         <dl class="dl-horizontal">
+          <dt>Metas</dt>
+          <dd class="mb-1">
+            <small>
+              <span class="label label-info mr-1" ng-repeat="meta in $ctrl.job.metas">
+                {{ meta.name }}
+                <i class="fa fa-fw fa-times pointer" ng-click="$ctrl.deleteMeta($ctrl.job, meta)"></i>
+              </span>
+            </small>
+            <div class="input-group mt-1">
+              <input class="form-control input-sm" ng-model="$ctrl.meta.name">
+              <span class="input-group-addon pointer" ng-click="$ctrl.addMeta($ctrl.job, $ctrl.meta)">
+                <i class="fa fa-fw fa-plus"></i>
+              </span>
+            </div>
+          </dd>
           <dt>Status</dt>
           <dd>
             <select name="status" class="form-control input-sm mb-1"
@@ -100,25 +115,6 @@
                     ng-model="$ctrl.job.status">
               <option ng-repeat="status in $ctrl.statuses">{{status}}</option>
             </select>
-          </dd>
-          <dt>Metas</dt>
-          <dd class="mb-1">
-            <div class="input-group" ng-repeat="meta in $ctrl.job.metas">
-              <input class="form-control input-sm" ng-value="meta.name" disabled>
-              <span class="input-group-btn" style="width:0px;"></span>
-              <input class="form-control input-sm" ng-value="meta.value" disabled>
-              <span class="input-group-addon pointer" ng-click="$ctrl.deleteMeta($ctrl.job, meta)">
-                <i class="fa fa-fw fa-trash text-danger"></i>
-              </span>
-            </div>
-            <div class="input-group">
-              <input class="form-control input-sm" ng-model="$ctrl.meta.name">
-              <span class="input-group-btn" style="width:0px;"></span>
-              <input class="form-control input-sm" ng-model="$ctrl.meta.value">
-              <span class="input-group-addon pointer" ng-click="$ctrl.addMeta($ctrl.job, $ctrl.meta)">
-                <i class="fa fa-fw fa-plus"></i>
-              </span>
-            </div>
           </dd>
           <dt>Comment</dt>
           <dd>
