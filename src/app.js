@@ -65,8 +65,10 @@ import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
-import * as configActions from "./services/config/actions";
-import * as currentUserActions from "./services/currentUser/actions";
+import { setConfig } from "./services/config/actions";
+import { getCurrentUser } from "./services/currentUser/actions";
+import { refreshJWT } from "./services/auth";
+import Keycloak from "keycloak-js";
 import * as filters from "./filters";
 import * as directives from "./directives";
 
@@ -87,15 +89,27 @@ angular
 angular.element(document).ready(function() {
   axios.get("config.json").then(response => {
     const config = response.data;
+    window._keycloak = Keycloak({
+      url: `${config.sso.url}/auth`,
+      realm: `${config.sso.realm}`,
+      clientId: `${config.sso.clientId}`
+    });
     angular
       .module("app")
+      .factory("keycloak", [
+        "$window",
+        $window => {
+          return $window._keycloak;
+        }
+      ])
       .run([
         "$ngRedux",
         $ngRedux => {
-          $ngRedux.dispatch(configActions.setConfig(config));
-          $ngRedux.dispatch(currentUserActions.getCurrentUser());
+          $ngRedux.dispatch(setConfig(config));
+          $ngRedux.dispatch(getCurrentUser());
         }
       ])
+      .run(refreshJWT)
       .component("dciMenu", Menu)
       .component("dciMasthead", Masthead)
       .component("dciLoading", Loading)
@@ -139,6 +153,13 @@ angular.element(document).ready(function() {
       .component("updatePasswordPage", updatePasswordPage)
       .component("updateSettingsPage", updateSettingsPage)
       .component("notificationPage", notificationPage);
-    angular.bootstrap(document, ["app"]);
+
+    window._keycloak
+      .init({
+        onLoad: "check-sso"
+      })
+      .success(() => {
+        angular.bootstrap(document, ["app"]);
+      });
   });
 });

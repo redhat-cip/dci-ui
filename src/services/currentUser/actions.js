@@ -16,6 +16,7 @@ import http from "services/http";
 import pick from "lodash/pick";
 import * as constants from "./constants";
 import schemas from "services/api/schemas";
+import localStorage from "services/localStorage";
 
 export function setUser(user) {
   return {
@@ -44,6 +45,19 @@ export function update(user) {
   };
 }
 
+export function getLoginType() {
+  return dispatch => {
+    const auth = localStorage.get().auth;
+    if (auth.token) {
+      dispatch(setLoginType(constants.LOGIN_TYPE.BASIC_AUTH));
+    } else if (auth.jwt) {
+      dispatch(setLoginType(constants.LOGIN_TYPE.SSO));
+    } else {
+      dispatch(setLoginType(constants.LOGIN_TYPE.UNKNOWN));
+    }
+  };
+}
+
 export function getCurrentUser() {
   return (dispatch, getState) => {
     const state = getState();
@@ -56,6 +70,7 @@ export function getCurrentUser() {
     };
     return http(request).then(response => {
       dispatch(setUser(response.data.user));
+      dispatch(getLoginType());
     });
   };
 }

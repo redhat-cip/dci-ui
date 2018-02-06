@@ -11,24 +11,30 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+
 import localStorage from "services/localStorage";
 
-class Ctrl {
-  constructor($scope, $ngRedux, keycloak) {
-    this.$ngRedux = $ngRedux;
-    this.keycloak = keycloak;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
-    $scope.$on("$destroy", unsubscribe);
-  }
-
-  logout() {
-    localStorage.remove();
-    this.keycloak.logout({
-      redirectUri: window.location.origin + "/login"
-    });
-  }
+export function setJWT(token) {
+  localStorage.setJWT(token);
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux", "keycloak"];
+export function setBasicToken(token) {
+  localStorage.setToken(token);
+}
 
-export default Ctrl;
+const refreshJWT = function(keycloak) {
+  setInterval(() => {
+    if (keycloak.authenticated) {
+      const fiveMinutes = 5 * 60;
+      keycloak.updateToken(fiveMinutes).success(refreshed => {
+        if (refreshed) {
+          localStorage.setJWT(keycloak.token);
+        }
+      });
+    }
+  }, 1 * 60 * 1000);
+};
+
+refreshJWT.$inject = ["keycloak"];
+
+export { refreshJWT };

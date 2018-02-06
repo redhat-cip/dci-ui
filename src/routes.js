@@ -15,6 +15,7 @@
 import localStorage from "services/localStorage";
 
 const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
+  const defaultRoute = "/jobs";
   $stateProvider
     .state({
       name: "auth",
@@ -35,8 +36,11 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     })
     .state({
       name: "login",
-      url: "/login",
-      component: "loginPage"
+      url: "/login?next",
+      component: "loginPage",
+      params: {
+        next: defaultRoute
+      }
     })
     .state({
       name: "auth.jobs",
@@ -185,26 +189,23 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       reloadOnSearch: false
     });
   $locationProvider.html5Mode(true);
-  $urlRouterProvider.otherwise("/jobs");
+  $urlRouterProvider.otherwise(defaultRoute);
 };
 
 routes.$inject = ["$stateProvider", "$urlRouterProvider", "$locationProvider"];
 
 export default routes;
 
-const transition = function($transitions) {
-  $transitions.onStart({ to: "auth.**" }, function(transition) {
-    if (
-      !(
-        localStorage.get().auth.token !== "" ||
-        localStorage.get().auth.jwt !== ""
-      )
-    ) {
-      return transition.router.stateService.target("login");
+const transition = function($transitions, $state) {
+  $transitions.onStart({ to: "auth.**" }, transition => {
+    const auth = localStorage.get().auth;
+    if (!(auth.token !== "" || auth.jwt !== "")) {
+      const next = $state.href(transition.to().name, transition.params());
+      return transition.router.stateService.target("login", { next });
     }
   });
 };
 
-transition.$inject = ["$transitions"];
+transition.$inject = ["$transitions", "$state"];
 
 export { transition };
