@@ -87,7 +87,9 @@ module.exports = function(browser) {
       case "globalStatus":
         return this.click(
           "#navbar-primary__global-status-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='OSP11']");
+        ).waitForXpathElementVisible(
+          "//h2[normalize-space(text())='OSP11 - RH7-RHOS-11.0 2016-11-11.1']"
+        );
       case "topics":
         return this.click(
           "#navbar-primary__topics-link"

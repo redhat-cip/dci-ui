@@ -17,11 +17,13 @@ import thunk from "redux-thunk";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
+import globalStatusReducer from "./services/globalStatus/reducers";
 import Reducers from "./services/api/reducers";
 
 const store = function($ngReduxProvider) {
   const reducers = {
     alerts: alertsReducer,
+    globalStatus: globalStatusReducer,
     currentUser: currentUserReducer,
     config: configReducer,
     jobs: Reducers("job"),
