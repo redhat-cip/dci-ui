@@ -12,25 +12,25 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import api from "services/api";
-import * as topicsActions from "services/topics/actions";
-import { getGlobalStatus } from "services/globalStatus/actions";
+import http from "services/http";
+import * as constants from "./constants";
 
-class Ctrl {
-  constructor($scope, $ngRedux) {
-    this.$ngRedux = $ngRedux;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
-    $scope.$on("$destroy", unsubscribe);
-  }
-
-  $onInit() {
-    this.loading = true;
-    this.$ngRedux.dispatch(getGlobalStatus()).then(() => {
-      this.loading = false;
-    });
-  }
+export function setGlobalStatus(globalStatus) {
+  return {
+    type: constants.SET_GLOBAL_STATUS,
+    payload: globalStatus
+  };
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
-
-export default Ctrl;
+export function getGlobalStatus() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const request = {
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/global_status`
+    };
+    return http(request).then(response => {
+      return dispatch(setGlobalStatus(response.data));
+    });
+  };
+}
