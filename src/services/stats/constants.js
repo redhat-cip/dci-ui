@@ -12,25 +12,4 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import api from "services/api";
-import * as topicsActions from "services/topics/actions";
-import { getGlobalStatus } from "services/stats/actions";
-
-class Ctrl {
-  constructor($scope, $ngRedux) {
-    this.$ngRedux = $ngRedux;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
-    $scope.$on("$destroy", unsubscribe);
-  }
-
-  $onInit() {
-    this.loading = true;
-    this.$ngRedux.dispatch(getGlobalStatus()).then(() => {
-      this.loading = false;
-    });
-  }
-}
-
-Ctrl.$inject = ["$scope", "$ngRedux"];
-
-export default Ctrl;
+export const SET_STATS = "SET_STATS";
