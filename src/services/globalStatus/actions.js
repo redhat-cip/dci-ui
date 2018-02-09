@@ -30,7 +30,7 @@ export function getGlobalStatus() {
       url: `${state.config.apiURL}/api/v1/global_status`
     };
     return http(request).then(response => {
-      return dispatch(setGlobalStatus(response.data));
+      return dispatch(setGlobalStatus(response.data["globalStatus"]));
     });
   };
 }
