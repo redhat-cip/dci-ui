@@ -54,3 +54,14 @@ export function unique() {
     return uniqBy(elements, field);
   };
 }
+
+export function filterGlobalStatus() {
+  return function(components, tab) {
+    if (tab === "all") {
+      return components;
+    }
+    return components.filter(component => {
+      return component.product_name.indexOf(tab) !== -1;
+    });
+  };
+}
