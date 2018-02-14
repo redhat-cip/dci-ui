@@ -173,8 +173,9 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     })
     .state({
       name: "auth.globalStatus",
-      url: "globalStatus",
-      component: "globalStatusPage"
+      url: "globalStatus?tab",
+      component: "globalStatusPage",
+      reloadOnSearch: false
     });
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise("/jobs");
