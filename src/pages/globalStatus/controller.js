@@ -17,20 +17,35 @@ import * as topicsActions from "services/topics/actions";
 import { getGlobalStatus } from "services/globalStatus/actions";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, $state, $stateParams) {
     this.$ngRedux = $ngRedux;
+    this.$stateParams = $stateParams;
+    this.$state = $state;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(getGlobalStatus()).then(() => {
+    this.tab = this.$stateParams.tab || "ALL";
+    this.tabs = ["ALL"];
+    this.$ngRedux.dispatch(getGlobalStatus()).then(globalStatus => {
+      globalStatus.map(stat => {
+        const productName = stat.product_name.toUpperCase();
+        if (this.tabs.indexOf(productName) === -1) {
+          this.tabs.push(productName);
+        }
+      });
       this.loading = false;
     });
   }
+
+  setTab(tab) {
+    this.tab = tab;
+    this.$state.go("auth.globalStatus", { tab });
+  }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "$state", "$stateParams"];
 
 export default Ctrl;
