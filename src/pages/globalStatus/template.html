@@ -1,26 +1,58 @@
-<dci-title title="Global Status"></dci-title>
+<div class="container-fluid">
+  <div class="row pt-3 pb-2">
+    <div class="col-xs-12">
+      <h1>Global Status</h1>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mb-3">
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs">
+        <li ng-click="$ctrl.setTab('ALL')" ng-class="{'active': $ctrl.tab === 'ALL'}">
+          <a href="#">ALL</a>
+        </li>
+        <li ng-click="$ctrl.setTab('OSP')" ng-class="{'active': $ctrl.tab === 'OSP'}">
+          <a href="#">OSP</a>
+        </li>
+        <li ng-click="$ctrl.setTab('RDO')" ng-class="{'active': $ctrl.tab === 'RDO'}">
+          <a href="#">RDO</a>
+        </li>
+        <li ng-click="$ctrl.setTab('ANSIBLE')" ng-class="{'active': $ctrl.tab === 'ANSIBLE'}">
+          <a href="#">ANSIBLE</a>
+        </li>
+        <li ng-click="$ctrl.setTab('RHEL')" ng-class="{'active': $ctrl.tab === 'RHEL'}">
+          <a href="#">RHEL</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12">
       <dci-loading ng-if="$ctrl.loading"></dci-loading>
       <div ng-hide="$ctrl.loading">
+        <div class="row" ng-hide="filteredGlobalStatus.length">
+          <div class="col-xs-12">
+            There are no statistics for {{$ctrl.tab}} product.
+          </div>
+        </div>
         <div class="row">
           <div class="col-xs-12">
             <div class="global-status__summary">
-              <div class="global-status__item text-center"
-                   ng-repeat="stat in $ctrl.globalStatus"
-                   ng-class="{
+              <div class="global-status__item text-center" 
+                ng-repeat="stat in filteredGlobalStatus = ($ctrl.globalStatus  | filterGlobalStatus: $ctrl.tab)" 
+                ng-class="{
                         'global-status__item--success': stat.percentageOfSuccess > 30,
                         'global-status__item--danger': stat.percentageOfSuccess <= 30
                         }">
-                <h3>
+                <h3 class="global-status__title">
                   <i class="fa fa-warning" ng-if="stat.percentageOfSuccess === 0"></i>
                   {{stat.topic_name}}
                 </h3>
                 <p class="global-status__body">
-                  <span>
-                    {{stat.percentageOfSuccess}}% success
-                  </span>
+                  {{stat.percentageOfSuccess}}% success
                 </p>
               </div>
             </div>
@@ -28,27 +60,30 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <div ng-repeat="stat in $ctrl.globalStatus">
-              <h2>{{stat.topic_name}} - {{stat.name}}</h2>
-              <br>
+            <div ng-repeat="stat in $ctrl.globalStatus | filterGlobalStatus: $ctrl.tab">
+              <h2>
+                <b>{{stat.topic_name}}</b>
+                (<span class="global-status__component-name">{{stat.name}}</span>)
+              </h2>
               <table class="table table-bordered">
                 <thead>
-                <th>Team</th>
-                <th>Remote CI (Configuration)</th>
-                <th class="text-center">Status</th>
-                <th class="text-right">Last run</th>
+                  <th>Team</th>
+                  <th>Remote CI (Configuration)</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-right">Last run</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="job in stat.jobs"
-                    ng-class="{'success': job.status === 'success', 'danger': job.status === 'failure'}">
-                  <td>{{ job.team_name | uppercase }}</td>
-                  <td>
-                    {{ job.remoteci_name }}
-                    <span ng-if="job.rconfiguration_name">({{ job.rconfiguration_name }})</span>
-                  </td>
-                  <td class="text-center"><a ui-sref="auth.job.jobStates({id: job.id})">{{ job.status }}</a></td>
-                  <td class="text-right">{{job.created_at | dciFromNow}}</td>
-                </tr>
+                  <tr ng-repeat="job in stat.jobs" ng-class="{'success': job.status === 'success', 'danger': job.status === 'failure'}">
+                    <td>{{ job.team_name | uppercase }}</td>
+                    <td>
+                      {{ job.remoteci_name }}
+                      <span ng-if="job.rconfiguration_name">({{ job.rconfiguration_name }})</span>
+                    </td>
+                    <td class="text-center">
+                      <a ui-sref="auth.job.jobStates({id: job.id})">{{ job.status }}</a>
+                    </td>
+                    <td class="text-right">{{job.created_at | dciFromNow}}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
