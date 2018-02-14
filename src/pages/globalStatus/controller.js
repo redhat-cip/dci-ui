@@ -15,22 +15,33 @@
 import api from "services/api";
 import * as topicsActions from "services/topics/actions";
 import { getGlobalStatus } from "services/globalStatus/actions";
+import { getProductsNames } from "services/globalStatus";
 
 class Ctrl {
-  constructor($scope, $ngRedux) {
+  constructor($scope, $ngRedux, $state, $stateParams) {
     this.$ngRedux = $ngRedux;
+    this.$stateParams = $stateParams;
+    this.$state = $state;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(getGlobalStatus()).then(() => {
+    this.tab = this.$stateParams.tab || "ALL";
+    this.tabs = ["ALL"];
+    this.$ngRedux.dispatch(getGlobalStatus()).then(globalStatus => {
+      this.tabs = this.tabs.concat(getProductsNames(globalStatus));
       this.loading = false;
     });
   }
+
+  setTab(tab) {
+    this.tab = tab;
+    this.$state.go("auth.globalStatus", { tab });
+  }
 }
 
-Ctrl.$inject = ["$scope", "$ngRedux"];
+Ctrl.$inject = ["$scope", "$ngRedux", "$state", "$stateParams"];
 
 export default Ctrl;
