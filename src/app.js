@@ -79,6 +79,7 @@ angular
   .filter("dciDateDiffInMin", filters.dciDateDiffInMin)
   .filter("msToSec", filters.msToSec)
   .filter("unique", filters.unique)
+  .filter("filterGlobalStatus", filters.filterGlobalStatus)
   .directive("jsonText", directives.jsonText);
 
 angular.element(document).ready(function() {
