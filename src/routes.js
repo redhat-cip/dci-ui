@@ -19,11 +19,18 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth",
       url: "/",
-      template: `<div>
-          <dci-masthead></dci-masthead>
-          <dci-menu></dci-menu>
-          <ui-view class="pf-main-content"></ui-view>
-      </div>`,
+      template: `
+<div class="pf-grid">
+    <div class="pf-header">
+      <dci-masthead></dci-masthead>
+    </div>
+    <div class="pf-sidebar">
+      <dci-menu></dci-menu>
+    </div>
+    <div class="pf-content">
+      <ui-view class="pf-main-content"></ui-view>
+    </div>
+</div>`,
       abstract: true
     })
     .state({
