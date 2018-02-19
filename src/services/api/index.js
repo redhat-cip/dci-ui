@@ -26,11 +26,16 @@ export default function(resource) {
   const constants = Constants(resources);
 
   function all(params) {
+    let endpoint = resources;
+    if (params && params.endpoint) {
+      endpoint = params.endpoint;
+      delete params.endpoint;
+    }
     return (dispatch, getState) => {
       const state = getState();
       const request = {
         method: "get",
-        url: `${state.config.apiURL}/api/v1/${resources}`,
+        url: `${state.config.apiURL}/api/v1/${endpoint}`,
         params
       };
       return http(request)

@@ -13,7 +13,6 @@
 // under the License.
 
 import api from "services/api";
-import * as topicsActions from "services/topics/actions";
 import * as alertsActions from "services/alerts/actions";
 
 class Ctrl {
@@ -27,19 +26,11 @@ class Ctrl {
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(api("topic").all()).then(response => {
-      this.$ngRedux
-        .dispatch(
-          topicsActions.fetchComponents(response.data.topics, {
-            limit: 5,
-            offset: 0
-          })
-        )
-        .then(components => {
-          this.$ngRedux.dispatch(api("component").save(components));
-          this.loading = false;
-        });
-    });
+    this.$ngRedux
+      .dispatch(api("component").all({ endpoint: "components/latest" }))
+      .then(response => {
+        this.loading = false;
+      });
   }
 
   deleteComponent(component) {

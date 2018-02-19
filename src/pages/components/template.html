@@ -1,4 +1,4 @@
-<dci-title title="Components"></dci-title>
+<dci-title title="Latest components"></dci-title>
 
 <div class="container-fluid">
   <div class="row">
@@ -8,12 +8,11 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
           <tr>
-            <th>Topic</th>
+            <th class="text-center">ID</th>
             <th>Name</th>
-            <th>Created At</th>
-            <th>Url</th>
-            <th>Type</th>
-            <th class="text-center">Export control</th>
+            <th>Product</th>
+            <th>Topic</th>
+            <th>Created</th>
             <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
               Actions
             </th>
@@ -25,34 +24,35 @@
             </td>
           </tr>
           <tr ng-repeat="component in $ctrl.components | orderBy: '-created_at' | filter: $ctrl.componentsSearch">
-            <td>
-              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
-                 ui-sref="auth.topicEdit({id: component.topic_id})">
-                {{component.topic.name}}
-              </a>
-              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
-                {{component.topic.name}}
-              </span>
+            <td class="text-center">
+                <copy-button before="Click to copy" txt="{{ component.id }}" after="Copied!" position="right" />
             </td>
             <td>
-              <span title="{{ component.name }}">
+              <span>
                 {{component.name | limitTo:42}}
               </span>
               <span ng-if="component.name.length > 42">...</span>
             </td>
             <td>
-              {{component.created_at | dciDate}}
-            </td>
-            <td>
-              {{component.url}}
-            </td>
-            <td>
-              {{component.type}}
-            </td>
-            <td class="text-center">
-              <span ng-if="component.export_control">
-                <i class="fa fa-check-circle fa-lg text-success"></i>
+              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
+                 ui-sref="auth.adminProductEdit({id: component.product_id})">
+                {{component.product_name}}
+              </a>
+              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
+                {{component.product_name}}
               </span>
+            </td>
+            <td>
+              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
+                 ui-sref="auth.topicEdit({id: component.topic_id})">
+                {{component.topic_name}}
+              </a>
+              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
+                {{component.topic_name}}
+              </span>
+            </td>
+            <td>
+              {{component.created_at | dciFromNow}}
             </td>
             <td class="text-center"
                 ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
