@@ -14,7 +14,6 @@
 
 import template from "./template.html";
 import controller from "./controller";
-import "images/dci-logo.svg";
 
 export default {
   controller,
