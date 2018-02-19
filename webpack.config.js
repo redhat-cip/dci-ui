@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -24,7 +24,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!copy-text-to-clipboard)/,
         loader: "babel-loader"
       },
       {
@@ -43,7 +43,7 @@ module.exports = {
           publicPath: ""
         })
       },
-      {test: /\.html$/, loader: "raw-loader"},
+      { test: /\.html$/, loader: "raw-loader" },
       {
         test: /\.(png|jpg|jpeg|gif|ico)$/,
         loader: "file-loader?name=[name].[ext]"
@@ -55,21 +55,21 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin('static'),
+    new CleanWebpackPlugin("static"),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       inject: "body"
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
+      name: "vendor"
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'runtime'
+      name: "runtime"
     }),
     new webpack.HashedModuleIdsPlugin(),
     new ExtractTextPlugin("[name].[contenthash].css"),
-    new CopyWebpackPlugin([{context: "./src", from: "config.json", to: ""}]),
+    new CopyWebpackPlugin([{ context: "./src", from: "config.json", to: "" }]),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.WatchIgnorePlugin(['./src/config.json'])
+    new webpack.WatchIgnorePlugin(["./src/config.json"])
   ]
 };
