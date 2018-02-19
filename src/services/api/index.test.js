@@ -35,6 +35,21 @@ test("GET_USERS > 200 > SET_USERS > GET_USERS_SUCCESS", t => {
   });
 });
 
+test("GET_USERS custom url > 200 > SET_USERS", t => {
+  nock("https://api.example.org/api/v1")
+    .get("/users/latest")
+    .reply(200, { users: [{ id: "u1" }] });
+  const expectedActions = [
+    { type: constants("users").SET, payload: [{ id: "u1" }] }
+  ];
+  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
+  return store
+    .dispatch(api("user").all({ endpoint: "users/latest" }))
+    .then(() => {
+      t.deepEqual(store.getActions(), expectedActions);
+    });
+});
+
 test("GET_USER > 200 > UPDATE_USER > GET_USER_SUCCESS", t => {
   nock("https://api.example.org/api/v1")
     .get("/users/u1")

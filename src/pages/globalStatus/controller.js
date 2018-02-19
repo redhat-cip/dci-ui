@@ -13,7 +13,6 @@
 // under the License.
 
 import api from "services/api";
-import * as topicsActions from "services/topics/actions";
 import { getGlobalStatus } from "services/globalStatus/actions";
 import { getUniqueProductsNames } from "services/globalStatus";
 
