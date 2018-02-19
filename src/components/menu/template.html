@@ -1,84 +1,65 @@
-<div class="pf-vertical-nav pf-vertical-nav-sm">
-  <div class="pf-vertical-nav__logo bg-masthead">
-    <img src="dci-logo.svg" alt="">
-  </div>
+<div class="pf-vertical-nav">
   <div class="pf-vertical-nav__category">
     DCI
   </div>
   <ul class="pf-vertical-nav__menu">
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__jobs-link"
-         ui-sref="auth.jobs" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-list"></i>
-        Jobs
+      <a id="navbar-primary__jobs-link" ui-sref="auth.jobs" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-list pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Jobs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active"
-        ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-      <a id="navbar-primary__global-status-link"
-         ui-sref="auth.globalStatus" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-dashboard"></i>
-        Global Status
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+      <a id="navbar-primary__global-status-link" ui-sref="auth.globalStatus" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-dashboard pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Global Status</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__topics-link"
-         ui-sref="auth.topics" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-cube"></i>
-        Topics
+      <a id="navbar-primary__topics-link" ui-sref="auth.topics" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-cube pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Topics</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__components-link"
-         ui-sref="auth.components" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-cubes"></i>
-        Components
+      <a id="navbar-primary__components-link" ui-sref="auth.components" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-cubes pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Components</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active"
-        ng-if="$ctrl.currentUser.isAdmin">
-      <a id="navbar-primary__remotecis-link"
-         ui-sref="auth.adminRemotecis" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-server"></i>
-        Remote CIs
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isAdmin">
+      <a id="navbar-primary__remotecis-link" ui-sref="auth.adminRemotecis" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-server pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Remote CIs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active"
-        ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-      <a id="navbar-primary__feeders-link"
-         ui-sref="auth.adminFeeders" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-cloud-upload"></i>
-        Feeders
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+      <a id="navbar-primary__feeders-link" ui-sref="auth.adminFeeders" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-cloud-upload pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Feeders</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item"
-        ui-sref-active="active"
-        ng-if="$ctrl.currentUser.isSuperAdmin">
-      <a id="navbar-primary__products-link"
-         ui-sref="auth.adminProducts" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-archive"></i>
-        Products
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdmin">
+      <a id="navbar-primary__products-link" ui-sref="auth.adminProducts" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-archive pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Products</span>
       </a>
     </li>
   </ul>
-  <div class="pf-vertical-nav__category"
-       ng-if="$ctrl.currentUser.isAdmin">
-    Administration
+  <div class="pf-vertical-nav__category" ng-if="$ctrl.currentUser.isAdmin">
+    Admin
   </div>
-  <ul class="pf-vertical-nav__menu"
-      ng-if="$ctrl.currentUser.isAdmin">
+  <ul class="pf-vertical-nav__menu" ng-if="$ctrl.currentUser.isAdmin">
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__admin-teams-link"
-         ui-sref="auth.adminTeams" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-users"></i>
-        Team
+      <a id="navbar-primary__admin-teams-link" ui-sref="auth.adminTeams" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-users pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Team</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__admin-users-link"
-         ui-sref="auth.adminUsers" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-user-plus"></i>
-        Users
+      <a id="navbar-primary__admin-users-link" ui-sref="auth.adminUsers" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-user-plus pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Users</span>
       </a>
     </li>
   </ul>
@@ -87,24 +68,21 @@
   </div>
   <ul class="pf-vertical-nav__menu">
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__settings-link"
-         ui-sref="auth.settings" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-user"></i>
-        Personal information
+      <a id="navbar-primary__settings-link" ui-sref="auth.settings" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-user pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Personal information</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__password-link"
-         ui-sref="auth.password" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-key"></i>
-        Change password
+      <a id="navbar-primary__password-link" ui-sref="auth.password" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-key pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Change password</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active">
-      <a id="navbar-primary__notification-link"
-         ui-sref="auth.notification" class="pf-vertical-nav__link">
-        <i class="fa fa-fw fa-bell"></i>
-        Notifications
+      <a id="navbar-primary__notification-link" ui-sref="auth.notification" class="pf-vertical-nav__link">
+        <i class="fa fa-fw fa-bell pf-vertical-nav__icon"></i>
+        <span class="pf-vertical-nav__link-value">Notifications</span>
       </a>
     </li>
   </ul>

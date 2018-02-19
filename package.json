@@ -33,7 +33,7 @@
     "moment-timezone": "0.5.14",
     "ng-redux": "3.5.2",
     "patternfly": "3.38.0",
-    "pfdemo": "3.0.4",
+    "pfdemo": "4.0.2",
     "rcue": "3.38.0",
     "redux-thunk": "2.2.0",
     "redux-ui-router": "0.7.2"
