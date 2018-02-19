@@ -61,6 +61,7 @@ import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
 import Alerts from "./components/alerts";
 import Title from "./components/title";
+import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store from "./store";
@@ -99,6 +100,7 @@ angular.element(document).ready(function() {
       .component("dciLoading", Loading)
       .component("dciAlerts", Alerts)
       .component("jobSummary", JobSummary)
+      .component("copyButton", CopyButton)
       .component("dciTitle", Title)
       .component("confirmDestructiveAction", ConfirmDestructiveAction)
       .component("noTeamWarning", noTeamWarning)
