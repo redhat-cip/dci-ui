@@ -57,6 +57,11 @@
                   <th class="text-right">Last run</th>
                 </thead>
                 <tbody>
+                  <tr ng-if="stat.jobs.length === 0">
+                    <td colspan="4">
+                      There are no job for the latest component {{stat.name}}
+                    </td>
+                  </tr>
                   <tr ng-repeat="job in stat.jobs" ng-class="{'success': job.status === 'success', 'danger': job.status === 'failure'}">
                     <td>{{ job.team_name | uppercase }}</td>
                     <td>
