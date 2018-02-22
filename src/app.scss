@@ -27,26 +27,29 @@ body {
   cursor: pointer;
 }
 
-.title{
+.title {
   padding-bottom: 1rem;
   border-bottom: 1px solid $color-pf-black-200;
 }
 
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
 
 // Margin and Padding
-
 $spacer: 1rem !default;
 $spacers: (
-        0: 0,
-        1: ($spacer * .25),
-        2: ($spacer * .5),
-        3: $spacer,
-        4: ($spacer * 1.5),
-        5: ($spacer * 3)
-) !default;
+    0: 0,
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 3)
+  )
+  !default;
 @each $prop, $abbrev in (margin: m, padding: p) {
   @each $size, $length in $spacers {
-
     .#{$abbrev}-#{$size} {
       #{$prop}: $length !important;
     }
