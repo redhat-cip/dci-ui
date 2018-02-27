@@ -1,34 +1,15 @@
 <job-menu job="$ctrl.job"></job-menu>
 <div class="container-fluid pt-3">
-  <div ng-repeat="jobstate in $ctrl.job.jobstates | orderBy: 'created_at'" ng-init="jobstate.seeDetails=false">
-    <div class="row">
-      <div class="col-xs-12">
-        <h4>
-          <button type="button" class="btn btn-default btn-xs pull-right"
-                  ng-click="$ctrl.retrieveFiles(jobstate)"
-                  ng-if="jobstate.files.length">
-            <span ng-if="!jobstate.seeDetails"><i class="fa fa-chevron-down"></i>see details</span>
-            <span ng-if="jobstate.seeDetails"><i class="fa fa-chevron-up"></i>close details</span>
-          </button>
-
-          {{ jobstate.status }}:
-          <small>{{ jobstate.comment }}</small>
-        </h4>
-
-        <small>
-          {{ jobstate.created_at | dciDate }}
-        </small>
-
-        <div class="job_state__detail"
-             ng-repeat="file in jobstate.files | orderBy: 'created_at'"
-             ng-if="jobstate.seeDetails"
-             ng-init="file.showDetails=true">
-          <h5 ng-click="file.showDetails=!file.showDetails">
-            {{file.name}}
-          </h5>
-          <pre ng-if="file.showDetails">{{file.content}}</pre>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="code" ng-if="$ctrl.job.jobstates">
+        <div ng-repeat="jobstate in $ctrl.job.jobstates | orderBy: 'created_at'">
+          <div ng-repeat="file in jobstate.files | orderBy: 'created_at'" ng-init="file.seeDetails=false">
+            <pre class="code__pre code__log-line" ng-class="{'code__log-line--failure': jobstate.status === 'failure', 'code__log-line--success': jobstate.status === 'success'}"
+              title="{{ jobstate.created_at | dciDate }}" ng-click="$ctrl.retrieveFile(file)"><span class="fa fa-caret-down code__icon" ng-if="file.seeDetails"></span><span class="fa fa-caret-right code__icon" ng-hide="file.seeDetails"></span>{{file.name}}<span class="code__label">{{ jobstate.status }}</span></pre>
+            <pre class="code__pre code__log-detail" ng-if="file.seeDetails">{{file.content}}</pre>
+          </div>
         </div>
-        <hr>
       </div>
     </div>
   </div>

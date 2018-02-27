@@ -49,15 +49,11 @@ class Ctrl {
       });
   }
 
-  retrieveFiles(jobstate) {
-    jobstate.seeDetails = !jobstate.seeDetails;
-    jobstate.files.forEach(file => {
-      if (!file.content) {
-        this.$ngRedux.dispatch(filesActions.getContent(file)).then(response => {
-          file.content = response.data;
-          this.$scope.$apply();
-        });
-      }
+  retrieveFile(file) {
+    file.seeDetails = !file.seeDetails;
+    this.$ngRedux.dispatch(filesActions.getContent(file)).then(response => {
+      file.content = response.data;
+      this.$scope.$apply();
     });
   }
 }
