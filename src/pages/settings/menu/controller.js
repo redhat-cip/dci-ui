@@ -12,10 +12,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import template from "./template.html";
-import controller from "./controller";
+class Ctrl {
+  constructor($scope, $ngRedux) {
+    this.$ngRedux = $ngRedux;
+    let unsubscribe = $ngRedux.connect(state => state)(this);
+    $scope.$on("$destroy", unsubscribe);
+  }
+}
 
-export default {
-  controller,
-  template
-};
+Ctrl.$inject = ["$scope", "$ngRedux"];
+
+export default Ctrl;

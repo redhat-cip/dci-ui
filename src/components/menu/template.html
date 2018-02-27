@@ -73,7 +73,7 @@
         <span class="pf-vertical-nav__link-value">Personal information</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-hide="$ctrl.currentUser.login === 'SSO'">
       <a id="navbar-primary__password-link" ui-sref="auth.password" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-key pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Change password</span>

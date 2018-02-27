@@ -27,6 +27,7 @@ test("set currentUser", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
+  t.is(newState.login, constants.LOGIN_TYPE.BASIC_AUTH);
 });
 
 test("set currentUser set role shortcut", t => {
@@ -77,4 +78,14 @@ test("set currentUser set isAdmin role shortcut", t => {
   t.false(newState.isSuperAdmin);
   t.false(newState.isSuperAdminOrProductOwner);
   t.true(newState.isAdmin);
+});
+
+test("set login type", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_LOGIN_TYPE,
+    payload: {
+      type: constants.LOGIN_TYPE.SSO
+    }
+  });
+  t.is(newState.login, constants.LOGIN_TYPE.SSO);
 });
