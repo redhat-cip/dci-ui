@@ -1,17 +1,16 @@
 <job-menu job="$ctrl.job"></job-menu>
 <div class="container-fluid pt-3" ng-if="$ctrl.job">
-  <div class="row">
+  <div class="row mb-3" ng-hide="$ctrl.job.issues.length">
     <div class="col-xs-12">
+      There is no issue attached to this job.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
       <form name="issueForm" ng-submit="$ctrl.addIssue($ctrl.job, $ctrl.issue)">
         <div class="form-group">
-          <label for="issueUrl" class="control-label">Issue URL</label>
-          <input type="url"
-                 class="form-control"
-                 id="issueUrl"
-                 name="issue"
-                 placeholder="url"
-                 ng-model="$ctrl.issue.url"
-                 required>
+          <label for="issueUrl">Issue URL</label>
+          <input type="url" class="form-control" id="issueUrl" name="issue" placeholder="url" ng-model="$ctrl.issue.url" required>
         </div>
         <button class="btn btn-default">Add an issue</button>
       </form>
@@ -55,11 +54,6 @@
           </tr>
         </table>
       </div>
-    </div>
-  </div>
-  <div class="row" ng-if="$ctrl.job.issues.length === 0">
-    <div class="col-xs-12">
-      There is no issue attached to this job.
     </div>
   </div>
 </div>
