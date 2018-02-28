@@ -13,7 +13,7 @@
 // under the License.
 
 import test from "ava";
-import reducer from "./reducers";
+import reducer, { orderGlobalStatus } from "./reducers";
 import * as constants from "./constants";
 
 test("set stats", t => {
@@ -49,4 +49,16 @@ test("set stats order topic", t => {
   });
   t.is(newState[0].name, "RH7-RHOS-12.0 2018-02-02.1");
   t.is(newState[1].name, "RH7-RHOS-10.0 2018-02-02.1");
+});
+
+test("order stats order topic also by name", t => {
+  const orderedStats = orderGlobalStatus([
+    { topic_name: "OSP12" },
+    { topic_name: "Ansible-devel" },
+    { topic_name: "Ansible-2.4" }
+  ]);
+
+  t.is(orderedStats[0].topic_name, "OSP12");
+  t.is(orderedStats[1].topic_name, "Ansible-2.4");
+  t.is(orderedStats[2].topic_name, "Ansible-devel");
 });
