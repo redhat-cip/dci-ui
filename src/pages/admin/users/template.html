@@ -3,12 +3,20 @@
     <div class="col-xs-12">
       <h1 class="page-header">
         Users
-        <a class="pull-right btn btn-primary"
-           id="admin__create-user-btn"
-           ui-sref="auth.adminUserCreate">
+        <a class="pull-right btn btn-primary" id="admin__create-user-btn" ui-sref="auth.adminUserCreate">
           <i class="fa fa-plus-circle"></i> create new user
         </a>
       </h1>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-xs-12">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="teamName">Type to find users:</label>
+          <input type="text" class="form-control" id="teamName" ng-model="$ctrl.search">
+        </div>
+      </form>
     </div>
   </div>
   <div class="row">
@@ -19,16 +27,16 @@
           <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
               <thead>
-              <tr>
-                <th>Login</th>
-                <th>Full name</th>
-                <th>Email</th>
-                <th>User ID</th>
-                <th>Team</th>
-                <th>Role</th>
-                <th>Created</th>
-                <th class="text-center">Actions</th>
-              </tr>
+                <tr>
+                  <th class="text-center col-xs-1">ID</th>
+                  <th>Login</th>
+                  <th>Full name</th>
+                  <th>Email</th>
+                  <th>Team</th>
+                  <th>Role</th>
+                  <th>Created</th>
+                  <th class="text-center">Actions</th>
+                </tr>
               </thead>
               <tr ng-if="$ctrl.users.length == 0">
                 <td colspan="8">
@@ -36,7 +44,10 @@
                   <a ui-sref="auth.adminUserCreate">Do you want to create one?</a>
                 </td>
               </tr>
-              <tr ng-repeat="user in $ctrl.users | orderBy: 'name'">
+              <tr ng-repeat="user in $ctrl.users | orderBy: 'name' | filter:$ctrl.search">
+                <td class="text-center">
+                  <copy-button before="Click to copy" txt="{{ user.id }}" after="Copied!" position="right" />
+                </td>
                 <td>
                   <a ui-sref="auth.adminUserEdit({id: user.id})">
                     {{user.name}}
@@ -44,19 +55,14 @@
                 </td>
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.id }}</td>
                 <td>{{ user.team.name }}</td>
                 <td>{{ user.role.name }}</td>
                 <td>{{ user.created_at | dciDate }}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.adminUserEdit({id: user.id})">
+                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.adminUserEdit({id: user.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <button type="button"
-                          class="btn btn-danger btn-sm"
-                          ng-click="$ctrl.deleteUser(user)"
-                          ng-disabled="$ctrl.currentUser.id === user.id">
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteUser(user)" ng-disabled="$ctrl.currentUser.id === user.id">
                     <i class="fa fa-trash"></i>
                   </button>
                 </td>
