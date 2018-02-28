@@ -35,8 +35,8 @@ test("user schema", t => {
 });
 
 test("team schema", t => {
-  t.deepEqual(schemas.team, ["name", "external"]);
-  t.deepEqual(schemas.teams, ["name", "external"]);
+  t.deepEqual(schemas.team, ["name", "parent_id", "external"]);
+  t.deepEqual(schemas.teams, ["name", "parent_id", "external"]);
 });
 
 test("topic schema", t => {

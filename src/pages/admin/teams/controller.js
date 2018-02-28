@@ -25,7 +25,11 @@ class Ctrl {
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(api("team").all()).then(() => {
+    this.$ngRedux.dispatch(api("team").all()).then(response => {
+      this.teamIds = response.data.teams.reduce((obj, team) => {
+        obj[team.id] = team;
+        return obj;
+      }, {});
       this.loading = false;
     });
   }
