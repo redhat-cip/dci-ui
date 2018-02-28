@@ -37,6 +37,11 @@ pre {
   word-wrap: break-word;
 }
 
+.nav > li > a {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 // Margin and Padding
 $spacer: 1rem !default;
 $spacers: (
