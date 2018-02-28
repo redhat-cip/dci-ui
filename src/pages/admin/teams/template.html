@@ -3,12 +3,34 @@
     <div class="col-xs-12">
       <h1 class="page-header">
         Teams
-        <a class="pull-right btn btn-primary"
-           id="admin__create-team-btn"
-           ui-sref="auth.adminTeamCreate">
+        <a class="pull-right btn btn-primary" id="admin__create-team-btn" ui-sref="auth.adminTeamCreate">
           <i class="fa fa-plus-circle"></i> create new team
         </a>
       </h1>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-xs-12 col-md-8">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="teamName">Type to find teams:</label>
+          <input type="text" class="form-control" id="teamName" ng-model="$ctrl.search.name">
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-12 col-md-4 text-right">
+      <ul class="nav nav-pills pull-right">
+        <li ng-click="$ctrl.search.external = ''">
+          <a href="#">
+            All
+          </a>
+        </li>
+        <li ng-click="$ctrl.search.external = true">
+          <a href="#">Partners
+            <span ng-if="$ctrl.search.external == true">({{ filteredTeams.length }})</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="row">
@@ -19,13 +41,13 @@
           <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
               <thead>
-              <tr>
-                <th>Team name</th>
-                <th>Team ID</th>
-                <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
-                <th>Created</th>
-                <th class="text-center">Actions</th>
-              </tr>
+                <tr>
+                  <th class="text-center">ID</th>
+                  <th>Team name</th>
+                  <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
+                  <th>Created</th>
+                  <th class="text-center">Actions</th>
+                </tr>
               </thead>
               <tr ng-if="$ctrl.teams.length === 0">
                 <td colspan="4">
@@ -33,28 +55,26 @@
                   <a ui-sref="auth.adminTeamCreate">Do you want to create one?</a>
                 </td>
               </tr>
-              <tr ng-repeat="team in $ctrl.teams | orderBy: 'name'">
+              <tr ng-repeat="team in $ctrl.teams | orderBy: 'name' | filter:$ctrl.search as filteredTeams">
+                <td class="text-center">
+                  <copy-button before="Click to copy" txt="{{ team.id }}" after="Copied!" position="right" />
+                </td>
                 <td>
                   <a ui-sref="auth.adminTeamEdit({id: team.id})">
                     {{team.name}}
                   </a>
                 </td>
-                <td>{{ team.id }}</td>
                 <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
-                  <span ng-if="team.external">
-                    <i class="fa fa-check-circle fa-lg text-success"></i>
-                  </span>
+                  <span ng-if="team.external" class="label label-success">P</span>
                 </td>
-                <td>{{ team.created_at | dciDate }}</td>
+                <td>
+                  <span title="{{team.created_at }}">{{team.created_at | dciFromNow}}</span>
+                </td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.adminTeamEdit({id: team.id})">
+                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.adminTeamEdit({id: team.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <button type="button"
-                          class="btn btn-danger btn-sm"
-                          ng-click="$ctrl.deleteTeam(team)"
-                          ng-disabled="$ctrl.currentUser.team.id === team.id">
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteTeam(team)" ng-disabled="$ctrl.currentUser.team.id === team.id">
                     <i class="fa fa-trash"></i>
                   </button>
                 </td>
