@@ -43,8 +43,9 @@
               <thead>
                 <tr>
                   <th class="text-center col-xs-1">ID</th>
-                  <th>Team name</th>
-                  <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
+                  <th class="text-center col-xs-1" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
+                  <th>Name</th>
+                  <th>Parent team</th>
                   <th>Created</th>
                   <th class="text-center">Actions</th>
                 </tr>
@@ -59,14 +60,19 @@
                 <td class="text-center">
                   <copy-button before="Click to copy" txt="{{ team.id }}" after="Copied!" position="right" />
                 </td>
+                <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
+                    <span ng-if="team.external" class="label label-success">P</span>
+                  </td>
                 <td>
                   <a ui-sref="auth.adminTeamEdit({id: team.id})">
                     {{team.name}}
                   </a>
                 </td>
-                <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
-                  <span ng-if="team.external" class="label label-success">P</span>
-                </td>
+                <td>
+                    <a ui-sref="auth.adminTeamEdit({id: $ctrl.teamIds[team.parent_id].id})">
+                      {{$ctrl.teamIds[team.parent_id].name}}
+                    </a>
+                  </td>
                 <td>
                   <span title="{{team.created_at }}">{{team.created_at | dciFromNow}}</span>
                 </td>
