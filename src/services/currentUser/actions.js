@@ -24,6 +24,13 @@ export function setUser(user) {
   };
 }
 
+export function setLoginType(type) {
+  return {
+    type: constants.SET_LOGIN_TYPE,
+    payload: { type }
+  };
+}
+
 export function update(user) {
   return (dispatch, getState) => {
     const state = getState();

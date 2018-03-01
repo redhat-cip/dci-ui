@@ -7,7 +7,7 @@
           <a id="navbar-secondary__user-settings-link" ui-sref="auth.settings">Personal information</a>
         </li>
         <li ui-sref-active="active">
-          <a id="navbar-secondary__change-password-link" ui-sref="auth.password">Change password</a>
+          <a id="navbar-secondary__change-password-link" ui-sref="auth.password" ng-hide="$ctrl.currentUser.login === 'SSO'">Change password</a>
         </li>
         <li ui-sref-active="active">
           <a id="navbar-secondary__notification-link" ui-sref="auth.notification">Notifications</a>

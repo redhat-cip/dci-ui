@@ -14,7 +14,11 @@
 
 import * as constants from "./constants";
 
-export default function(state = {}, action) {
+const defaultState = {
+  login: constants.LOGIN_TYPE.BASIC_AUTH
+};
+
+export default function(state = defaultState, action) {
   switch (action.type) {
     case constants.SET_CURRENT_USER:
       const role = action.payload.role;
@@ -28,6 +32,9 @@ export default function(state = {}, action) {
           role.label === "ADMIN"
       };
       return Object.assign({}, state, action.payload, shortcuts);
+    case constants.SET_LOGIN_TYPE:
+      const { type } = action.payload;
+      return Object.assign({}, state, { login: type });
     default:
       return state;
   }

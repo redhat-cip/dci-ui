@@ -13,6 +13,8 @@
 // under the License.
 
 import * as authActions from "services/auth/actions";
+import * as currentUserActions from "services/currentUser/actions";
+import { LOGIN_TYPE } from "services/currentUser/constants";
 import Keycloak from "keycloak-js";
 import { stateGo } from "redux-ui-router";
 
@@ -35,6 +37,9 @@ class Ctrl {
 
       this.keycloak.init({ flow: "implicit" }).success(authenticated => {
         if (authenticated) {
+          this.$ngRedux.dispatch(
+            currentUserActions.setLoginType(LOGIN_TYPE.SSO)
+          );
           this.$ngRedux.dispatch(authActions.setJWT(this.keycloak.token));
           this.$ngRedux.dispatch(stateGo("auth.jobs"));
         }
@@ -43,6 +48,9 @@ class Ctrl {
   }
 
   authenticate() {
+    this.$ngRedux.dispatch(
+      currentUserActions.setLoginType(LOGIN_TYPE.BASIC_AUTH)
+    );
     this.$ngRedux.dispatch(
       authActions.login({ username: this.username, password: this.password })
     );
