@@ -16,7 +16,7 @@
           }"></div>
       <div class="job-summary__info">
         <div class="job-summary__name">
-          {{$ctrl.job.remoteci.name}}
+          <a ui-sref="auth.job.jobStates({id: $ctrl.job.id})">{{$ctrl.job.remoteci.name}}</a>
         </div>
         <div class="job-summary__topic">
           {{$ctrl.job.topic.name}}
@@ -44,14 +44,8 @@
       <div class="job-summary__extra">
         <span ng-if="$ctrl.job.status === 'success' || $ctrl.job.status === 'failure' || $ctrl.job.status === 'killed'">
           <i class="fa fa-fw fa-clock-o"></i>
-          Ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }} minutes
+          Ran for {{$ctrl.job.updated_at | dciDateDiffInMin: $ctrl.job.created_at }}
         </span>
-      </div>
-      <div class="job-summary__extra">
-        <i class="fa fa-fw fa-list-alt"></i>
-        <button type="button" class="btn btn-link px-0" ng-click="$ctrl.open($ctrl.job,'auth.job.jobStates')">
-          See details
-        </button>
       </div>
     </div>
   </div>

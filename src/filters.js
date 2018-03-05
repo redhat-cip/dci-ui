@@ -39,7 +39,9 @@ dciFromNow.$inject = ["$ngRedux"];
 
 export function dciDateDiffInMin() {
   return function(value1, value2) {
-    return moment.utc(value1).diff(moment.utc(value2), "minutes");
+    const date1 = moment.utc(value1);
+    const date2 = moment.utc(value2);
+    return moment.duration(date2.diff(date1)).humanize();
   };
 }
 
