@@ -29,3 +29,5 @@ import "redux-ui-router";
 import "angular-ui-bootstrap";
 import "file-saver";
 import "keycloak-js";
+import "copy-text-to-clipboard";
+import "filesize";

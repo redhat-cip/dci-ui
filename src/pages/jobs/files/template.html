@@ -25,7 +25,7 @@
             </tr>
             <tr ng-repeat="file in $ctrl.job.files | orderBy: 'created_at' | filter:$ctrl.search:strict" ng-hide="file.jobstate_id" ng-init="file.downloading = false">
               <td>{{ file.name }}</td>
-              <td>{{ file.size }} Bytes</td>
+              <td>{{ file.size | humanFileSize }}</td>
               <td>{{ file.mime }}</td>
               <td class="text-center">
                 <button class="btn btn-primary" ng-disabled="file.downloading" ng-click="$ctrl.downloadFile(file)">

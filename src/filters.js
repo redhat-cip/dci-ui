@@ -14,6 +14,7 @@
 
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
 import uniqBy from "lodash/uniqBy";
+import filesize from "filesize";
 
 export function dciDate($ngRedux) {
   const currentUser = $ngRedux.getState().currentUser;
@@ -65,5 +66,11 @@ export function filterGlobalStatus() {
     return components.filter(component => {
       return component.product_name.indexOf(tab) !== -1;
     });
+  };
+}
+
+export function humanFileSize() {
+  return function(value) {
+    return filesize(value, { round: 0 });
   };
 }

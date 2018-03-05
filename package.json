@@ -28,6 +28,7 @@
     "copy-text-to-clipboard": "1.0.4",
     "express": "4.16.2",
     "file-saver": "1.3.3",
+    "filesize": "3.6.0",
     "husky": "0.14.3",
     "keycloak-js": "3.4.3",
     "lodash": "4.17.5",

@@ -81,6 +81,7 @@ angular
   .filter("msToSec", filters.msToSec)
   .filter("unique", filters.unique)
   .filter("filterGlobalStatus", filters.filterGlobalStatus)
+  .filter("humanFileSize", filters.humanFileSize)
   .directive("jsonText", directives.jsonText);
 
 angular.element(document).ready(function() {
