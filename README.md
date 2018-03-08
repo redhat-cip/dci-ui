@@ -16,7 +16,7 @@ To run the app in development mode follow those steps:
 
 To manage the workflow the project use npm scripts
 
-Command list:
+Command list
 
  * `npm start`: start web server without live reload
  * `npm run dev`: start web server with live reload
