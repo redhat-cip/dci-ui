@@ -23,13 +23,15 @@ class Ctrl {
   }
 
   logout() {
-    localStorage.remove();
-    if (this.keycloak.authenticated) {
+    try {
       this.keycloak.logout({
         redirectUri: window.location.origin + "/login"
       });
-    } else {
+    } catch (error) {
+      console.error(error);
       this.$ngRedux.dispatch(stateGo("login"));
+    } finally {
+      localStorage.remove();
     }
   }
 }
