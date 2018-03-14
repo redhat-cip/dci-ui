@@ -21,6 +21,9 @@
         <li ui-sref-active="active">
           <a id="navbar-secondary__job-files-link" ui-sref="auth.job.files">Files</a>
         </li>
+        <li ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdmin">
+          <a id="navbar-secondary__job-certification-link" ui-sref="auth.job.certification">Certification</a>
+        </li>
       </ul>
     </div>
   </div>

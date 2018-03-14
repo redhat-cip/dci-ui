@@ -13,11 +13,9 @@
 // under the License.
 
 import template from "./template.html";
+import controller from "./controller";
 
 export default {
   template,
-  bindings: {
-    job: "<",
-    currentUser: "<"
-  }
+  controller
 };

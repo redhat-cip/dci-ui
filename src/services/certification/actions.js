@@ -12,12 +12,16 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import template from "./template.html";
+import http from "services/http";
 
-export default {
-  template,
-  bindings: {
-    job: "<",
-    currentUser: "<"
-  }
-};
+export function sendCertification(file_id, certification) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const request = {
+      method: "post",
+      url: `${state.config.apiURL}/api/v1/files/${file_id}/certifications`,
+      data: certification
+    };
+    return http(request);
+  };
+}
