@@ -44,6 +44,7 @@ import jobStatesPage from "./pages/jobs/jobstates";
 import jobTestsPage from "./pages/jobs/tests";
 import jobIssuesPage from "./pages/jobs/issues";
 import jobFilesPage from "./pages/jobs/files";
+import jobCertificationPage from "./pages/jobs/certification";
 import topicsPage from "./pages/topics";
 import topicCreatePage from "./pages/topics/create";
 import topicEditPage from "./pages/topics/edit";
@@ -109,9 +110,10 @@ angular.element(document).ready(function() {
       .component("jobsPage", jobsPage)
       .component("jobMenu", jobMenu)
       .component("jobStatesPage", jobStatesPage)
-      .component("jobFilesPage", jobFilesPage)
       .component("jobTestsPage", jobTestsPage)
       .component("jobIssuesPage", jobIssuesPage)
+      .component("jobFilesPage", jobFilesPage)
+      .component("jobCertificationPage", jobCertificationPage)
       .component("topicsPage", topicsPage)
       .component("topicCreatePage", topicCreatePage)
       .component("topicEditPage", topicEditPage)

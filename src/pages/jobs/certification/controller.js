@@ -15,6 +15,9 @@
 import api from "services/api";
 import * as filesActions from "services/files/actions";
 import FileSaver from "file-saver";
+import http from "services/http";
+import { sendCertification } from "services/certification/actions";
+import * as alertsActions from "services/alerts/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -24,7 +27,13 @@ class Ctrl {
   }
 
   $onInit() {
+    this.uploadStarted = false;
     const id = this.$ngRedux.getState().router.currentParams.id;
+    this.certification = {
+      username: "",
+      password: "",
+      certification_id: ""
+    };
     this.$ngRedux
       .dispatch(
         api("job").get(
@@ -36,18 +45,28 @@ class Ctrl {
       )
       .then(response => {
         this.job = response.data.job;
+        this.certificationFiles = this.job.files.filter(file => {
+          return file.name === "certification.xml.gz";
+        });
+        if (this.certificationFiles.length > 0) {
+          this.selectedFileId = this.certificationFiles[0].id;
+        }
       });
   }
 
-  downloadFile(file) {
-    file.downloading = true;
+  upload() {
+    this.uploadStarted = true;
     this.$ngRedux
-      .dispatch(filesActions.getContent(file, { responseType: "blob" }))
-      .then(response => {
-        file.downloading = false;
-        this.$scope.$apply();
-        const blob = new Blob([response.data], { type: file.mime });
-        FileSaver.saveAs(blob, `${file.name}`);
+      .dispatch(sendCertification(this.selectedFileId, this.certification))
+      .catch(() =>
+        this.$ngRedux.dispatch(
+          alertsActions.error(
+            "We are sorry we cannot upload your certification file. Contact a DCI administrator"
+          )
+        )
+      )
+      .finally(() => {
+        this.uploadStarted = false;
       });
   }
 }

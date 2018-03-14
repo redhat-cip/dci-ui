@@ -1,0 +1,46 @@
+<job-menu job="$ctrl.job"></job-menu>
+<div class="container-fluid pt-3" ng-if="$ctrl.job">
+  <div class="row" ng-if="$ctrl.certificationFiles.length > 0">
+    <div class="col-xs-12 col-md-6">
+      <h1>Upload certification file for validation</h1>
+      <div class="alert alert-warning">
+        <span class="pficon pficon-warning-triangle-o"></span>
+        You launched the certification roles after your deployment. We thank you. You can send your files here directly to the certification
+        team for validation. You must have already opened a
+        <strong>certification process</strong> and have the
+        <strong>certification id</strong> for this certification.
+        <a href="#" class="alert-link">More info</a>.
+      </div>
+      <form ng-submit="$ctrl.upload()">
+        <div class="form-group">
+          <label for="certificationFile" class="control-label">Certification file</label>
+          <select id="certificationFile" name="certificationFile" class="form-control" ng-model="$ctrl.selectedFileId" required>
+            <option ng-repeat="file in $ctrl.certificationFiles" value="{{file.id}}" name="{{file.name}}">{{file.name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="Username">Username</label>
+          <input id="username" type="username" name="username" class="form-control" ng-model="$ctrl.certification.username" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="password">Password</label>
+          <input id="password" type="password" class="form-control" name="password" ng-model="$ctrl.certification.password" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="certificationID">Certification ID</label>
+          <input id="certificationID" type="text" class="form-control" name="certificationID" ng-model="$ctrl.certification.certification_id"
+            required>
+        </div>
+        <button class="btn btn-primary" id="createButton" ng-disabled="$ctrl.uploadStarted">
+          <i ng-if="$ctrl.uploadStarted" class="fa fa-spinner fa-pulse fa-fw"></i>
+          Upload certification
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="row" ng-hide="$ctrl.certificationFiles.length > 0">
+    <div class="col-xs-12">
+      There is no certification file attached to this job.
+    </div>
+  </div>
+</div>
