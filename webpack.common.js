@@ -1,25 +1,29 @@
 const path = require("path");
 const webpack = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: {
-    vendor: "./src/vendor.js",
-    app: "./src/app.js"
-  },
-  output: {
-    filename: "[name].[chunkhash].js",
-    path: path.resolve(__dirname, "static")
+    app: "./src/app.js",
+    vendor: "./src/vendor.js"
   },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
-  devServer: {
-    historyApiFallback: true
-  },
+  plugins: [
+    new CleanWebpackPlugin(["static"]),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      inject: "body"
+    }),
+    new ExtractTextPlugin("[name].[contenthash].css"),
+    new CopyWebpackPlugin([{ context: "./src", from: "config.json", to: "" }]),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.WatchIgnorePlugin(["./src/config.json"])
+  ],
   module: {
     rules: [
       {
@@ -54,22 +58,8 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin("static"),
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      inject: "body"
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor"
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "runtime"
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-    new ExtractTextPlugin("[name].[contenthash].css"),
-    new CopyWebpackPlugin([{ context: "./src", from: "config.json", to: "" }]),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.WatchIgnorePlugin(["./src/config.json"])
-  ]
+  output: {
+    filename: "[name].[chunkhash].js",
+    path: path.resolve(__dirname, "static")
+  }
 };
