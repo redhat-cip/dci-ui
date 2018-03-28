@@ -3,10 +3,7 @@
     <div class="col-xs-12">
       <h1 class="page-header">
         Topics
-        <a class="pull-right btn btn-primary"
-           id="topics__create-topic-btn"
-           ui-sref="auth.topicCreate"
-           ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+        <a class="pull-right btn btn-primary" id="topics__create-topic-btn" ui-sref="auth.topicCreate" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
           <i class="fa fa-plus-circle"></i> create new topic
         </a>
       </h1>
@@ -20,26 +17,14 @@
           <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
               <thead>
-              <tr>
-                <th>
-                  Topic name
-                </th>
-                <th>
-                  ID
-                </th>
-                <th ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-                  Next Topic
-                </th>
-                <th>
-                  Product
-                </th>
-                <th>
-                  Created At
-                </th>
-                <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-                  Actions
-                </th>
-              </tr>
+                <tr>
+                  <th class="text-center">ID</th>
+                  <th>Topic name</th>
+                  <th ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">Next Topic</th>
+                  <th>Product</th>
+                  <th>Created At</th>
+                  <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">Actions</th>
+                </tr>
               </thead>
               <tr ng-if="$ctrl.topics.length === 0">
                 <td colspan="4">
@@ -47,17 +32,16 @@
                 </td>
               </tr>
               <tr ng-repeat="topic in $ctrl.topics | orderBy: 'name'">
+                <td class="text-center">
+                  <copy-button before="Click to copy" txt="{{ topic.id }}" after="Copied!" position="right" />
+                </td>
                 <td>
-                  <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
-                     ui-sref="auth.topicEdit({id: topic.id})">
+                  <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner" ui-sref="auth.topicEdit({id: topic.id})">
                     {{topic.name}}
                   </a>
                   <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
                     {{topic.name}}
                   </span>
-                </td>
-                <td>
-                  {{topic.id}}
                 </td>
                 <td ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
                   <a ui-sref="auth.topicEdit({id: topic.next_topic})">
@@ -70,15 +54,11 @@
                 <td>
                   {{topic.created_at | dciDate}}
                 </td>
-                <td class="text-center"
-                    ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-                  <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.topicEdit({id: topic.id})">
+                <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.topicEdit({id: topic.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <button type="button"
-                          class="btn btn-danger btn-sm"
-                          ng-click="$ctrl.deleteTopic(topic)">
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteTopic(topic)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </td>
