@@ -27,10 +27,9 @@ test("set currentUser", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
-  t.is(newState.login, constants.LOGIN_TYPE.BASIC_AUTH);
 });
 
-test("set currentUser set role shortcut", t => {
+test("set SUPER_ADMIN role shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -41,30 +40,30 @@ test("set currentUser set role shortcut", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
-  t.true(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
-  t.true(newState.isAdmin);
+  t.true(newState.hasSuperAdminRole);
+  t.true(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
 });
 
-test("set currentUser unset role shortcut", t => {
-  const newState = reducer(
-    { isSuperAdmin: true, isSuperAdminOrProductOwner: true },
-    {
-      type: constants.SET_CURRENT_USER,
-      payload: {
-        email: "currentUser@example.org",
-        role: {
-          label: "PRODUCT_OWNER"
-        }
+test("set PRODUCT_OWNER role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "PRODUCT_OWNER"
       }
     }
-  );
+  });
   t.is(newState.email, "currentUser@example.org");
-  t.false(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
+  t.false(newState.hasSuperAdminRole);
+  t.true(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
 });
 
-test("set currentUser set isAdmin role shortcut", t => {
+test("set ADMIN role shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -75,17 +74,78 @@ test("set currentUser set isAdmin role shortcut", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
-  t.false(newState.isSuperAdmin);
-  t.false(newState.isSuperAdminOrProductOwner);
-  t.true(newState.isAdmin);
+  t.false(newState.hasSuperAdminRole);
+  t.false(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.false(newState.hasReadOnlyRole);
 });
 
-test("set login type", t => {
+test("set READ_ONLY_USER role shortcut", t => {
   const newState = reducer(undefined, {
-    type: constants.SET_LOGIN_TYPE,
+    type: constants.SET_CURRENT_USER,
     payload: {
-      type: constants.LOGIN_TYPE.SSO
+      email: "currentUser@example.org",
+      role: {
+        label: "READ_ONLY_USER"
+      }
     }
   });
-  t.is(newState.login, constants.LOGIN_TYPE.SSO);
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.hasSuperAdminRole);
+  t.false(newState.hasProductOwnerRole);
+  t.false(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set currentUser unset role shortcut", t => {
+  const newState = reducer(
+    {
+      hasSuperAdminRole: true,
+      hasProductOwnerRole: true,
+      hasAdminRole: true,
+      hasReadOnlyRole: true
+    },
+    {
+      type: constants.SET_CURRENT_USER,
+      payload: {
+        email: "currentUser@example.org",
+        role: {
+          label: "READ_ONLY_USER"
+        }
+      }
+    }
+  );
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.hasSuperAdminRole);
+  t.false(newState.hasProductOwnerRole);
+  t.false(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set currentUser READ_ONLY_USER negative shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "READ_ONLY_USER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isNotRealOnly);
+});
+
+test("set currentUser USER negative shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "USER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.true(newState.isNotRealOnly);
 });

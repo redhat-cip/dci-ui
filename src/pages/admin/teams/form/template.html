@@ -11,7 +11,7 @@
       <option ng-repeat="team in $ctrl.teams" value="{{team.id}}">{{team.name}}</option>
     </datalist>
   </div>
-  <div class="checkbox" ng-if="$ctrl.currentUser.isSuperAdmin">
+  <div class="checkbox" ng-if="$ctrl.currentUser.hasSuperAdminRole">
     <label>
       <input type="checkbox" ng-model="$ctrl.team.external"> Partner
     </label>

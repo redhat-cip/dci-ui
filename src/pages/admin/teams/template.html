@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th class="text-center col-xs-1">ID</th>
-                  <th class="text-center col-xs-1" ng-if="$ctrl.currentUser.isSuperAdmin">Partner</th>
+                  <th class="text-center col-xs-1" ng-if="$ctrl.currentUser.hasSuperAdminRole">Partner</th>
                   <th>Name</th>
                   <th>Parent team</th>
                   <th>Created</th>
@@ -60,7 +60,7 @@
                 <td class="text-center">
                   <copy-button before="Click to copy" txt="{{ team.id }}" after="Copied!" position="right" />
                 </td>
-                <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
+                <td class="text-center" ng-if="$ctrl.currentUser.hasSuperAdminRole">
                     <span ng-if="team.external" class="label label-success">P</span>
                   </td>
                 <td>
