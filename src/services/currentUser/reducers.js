@@ -24,12 +24,21 @@ export default function(state = defaultState, action) {
       const role = action.payload.role;
       const shortcuts = {
         isSuperAdmin: role.label === "SUPER_ADMIN",
-        isSuperAdminOrProductOwner:
+        isProductOwner:
           role.label === "SUPER_ADMIN" || role.label === "PRODUCT_OWNER",
+        isProductOwnerOrReadOnly:
+          role.label === "SUPER_ADMIN" ||
+          role.label === "PRODUCT_OWNER" ||
+          role.label === "READ_ONLY_USER",
         isAdmin:
           role.label === "SUPER_ADMIN" ||
           role.label === "PRODUCT_OWNER" ||
-          role.label === "ADMIN"
+          role.label === "ADMIN",
+        isReadOnly:
+          role.label === "SUPER_ADMIN" ||
+          role.label === "PRODUCT_OWNER" ||
+          role.label === "ADMIN" ||
+          role.label === "READ_ONLY_USER"
       };
       return Object.assign({}, state, action.payload, shortcuts);
     case constants.SET_LOGIN_TYPE:

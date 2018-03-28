@@ -30,7 +30,7 @@ test("set currentUser", t => {
   t.is(newState.login, constants.LOGIN_TYPE.BASIC_AUTH);
 });
 
-test("set currentUser set role shortcut", t => {
+test("set SUPER_ADMIN role shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -42,13 +42,69 @@ test("set currentUser set role shortcut", t => {
   });
   t.is(newState.email, "currentUser@example.org");
   t.true(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
+  t.true(newState.isProductOwner);
+  t.true(newState.isProductOwnerOrReadOnly);
   t.true(newState.isAdmin);
+  t.true(newState.isReadOnly);
+});
+
+test("set PRODUCT_OWNER role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "PRODUCT_OWNER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.true(newState.isProductOwner);
+  t.true(newState.isProductOwnerOrReadOnly);
+  t.true(newState.isAdmin);
+  t.true(newState.isReadOnly);
+});
+
+test("set ADMIN role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "ADMIN"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.false(newState.isProductOwner);
+  t.false(newState.isProductOwnerOrReadOnly);
+  t.true(newState.isAdmin);
+  t.true(newState.isReadOnly);
+});
+
+test("set READ_ONLY_USER role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "READ_ONLY_USER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.false(newState.isProductOwner);
+  t.true(newState.isProductOwnerOrReadOnly);
+  t.false(newState.isAdmin);
+  t.true(newState.isReadOnly);
 });
 
 test("set currentUser unset role shortcut", t => {
   const newState = reducer(
-    { isSuperAdmin: true, isSuperAdminOrProductOwner: true },
+    { isSuperAdmin: true, isProductOwner: true },
     {
       type: constants.SET_CURRENT_USER,
       payload: {
@@ -61,23 +117,7 @@ test("set currentUser unset role shortcut", t => {
   );
   t.is(newState.email, "currentUser@example.org");
   t.false(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
-});
-
-test("set currentUser set isAdmin role shortcut", t => {
-  const newState = reducer(undefined, {
-    type: constants.SET_CURRENT_USER,
-    payload: {
-      email: "currentUser@example.org",
-      role: {
-        label: "ADMIN"
-      }
-    }
-  });
-  t.is(newState.email, "currentUser@example.org");
-  t.false(newState.isSuperAdmin);
-  t.false(newState.isSuperAdminOrProductOwner);
-  t.true(newState.isAdmin);
+  t.true(newState.isProductOwner);
 });
 
 test("set login type", t => {

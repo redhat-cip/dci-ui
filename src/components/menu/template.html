@@ -9,7 +9,7 @@
         <span class="pf-vertical-nav__link-value">Jobs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isProductOwnerOrReadOnly">
       <a id="navbar-primary__global-status-link" ui-sref="auth.globalStatus" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-dashboard pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Global Status</span>
@@ -33,7 +33,7 @@
         <span class="pf-vertical-nav__link-value">Remote CIs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isProductOwner">
       <a id="navbar-primary__feeders-link" ui-sref="auth.feeders" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-cloud-upload pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Feeders</span>
