@@ -13,9 +13,3 @@
 // under the License.
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const SET_LOGIN_TYPE = "SET_LOGIN_TYPE";
-export const LOGIN_TYPE = {
-  SSO: "SSO",
-  BASIC_AUTH: "BASIC_AUTH",
-  UNKNOWN: "UNKNOWN"
-};

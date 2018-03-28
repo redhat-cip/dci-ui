@@ -9,7 +9,7 @@
         <span class="pf-vertical-nav__link-value">Jobs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.hasReadOnlyRole">
       <a id="navbar-primary__global-status-link" ui-sref="auth.globalStatus" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-dashboard pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Global Status</span>
@@ -27,13 +27,13 @@
         <span class="pf-vertical-nav__link-value">Components</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isAdmin">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.hasAdminRole">
       <a id="navbar-primary__remotecis-link" ui-sref="auth.remotecis" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-server pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Remote CIs</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.hasProductOwnerRole">
       <a id="navbar-primary__feeders-link" ui-sref="auth.feeders" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-cloud-upload pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Feeders</span>
@@ -46,10 +46,10 @@
       </a>
     </li>
   </ul>
-  <div class="pf-vertical-nav__category" ng-if="$ctrl.currentUser.isAdmin">
+  <div class="pf-vertical-nav__category" ng-if="$ctrl.currentUser.hasAdminRole">
     Admin
   </div>
-  <ul class="pf-vertical-nav__menu" ng-if="$ctrl.currentUser.isAdmin">
+  <ul class="pf-vertical-nav__menu" ng-if="$ctrl.currentUser.hasAdminRole">
     <li class="pf-vertical-nav__item" ui-sref-active="active">
       <a id="navbar-primary__admin-teams-link" ui-sref="auth.adminTeams" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-users pf-vertical-nav__icon"></i>
@@ -73,7 +73,7 @@
         <span class="pf-vertical-nav__link-value">Personal information</span>
       </a>
     </li>
-    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-hide="$ctrl.currentUser.login === 'SSO'">
+    <li class="pf-vertical-nav__item" ui-sref-active="active" ng-hide="$ctrl.currentUser.isRealOnly">
       <a id="navbar-primary__password-link" ui-sref="auth.password" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-key pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Change password</span>

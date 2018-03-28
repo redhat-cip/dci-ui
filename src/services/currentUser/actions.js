@@ -25,13 +25,6 @@ export function setUser(user) {
   };
 }
 
-export function setLoginType(type) {
-  return {
-    type: constants.SET_LOGIN_TYPE,
-    payload: { type }
-  };
-}
-
 export function update(user) {
   return (dispatch, getState) => {
     const state = getState();
@@ -42,19 +35,6 @@ export function update(user) {
       headers: { "If-Match": user.etag }
     };
     return http(request);
-  };
-}
-
-export function getLoginType() {
-  return dispatch => {
-    const auth = localStorage.get().auth;
-    if (auth.token) {
-      dispatch(setLoginType(constants.LOGIN_TYPE.BASIC_AUTH));
-    } else if (auth.jwt) {
-      dispatch(setLoginType(constants.LOGIN_TYPE.SSO));
-    } else {
-      dispatch(setLoginType(constants.LOGIN_TYPE.UNKNOWN));
-    }
   };
 }
 
@@ -70,7 +50,6 @@ export function getCurrentUser() {
     };
     return http(request).then(response => {
       dispatch(setUser(response.data.user));
-      dispatch(getLoginType());
     });
   };
 }

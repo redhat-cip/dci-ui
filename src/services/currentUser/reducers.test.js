@@ -27,10 +27,96 @@ test("set currentUser", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
-  t.is(newState.login, constants.LOGIN_TYPE.BASIC_AUTH);
 });
 
-test("set currentUser set role shortcut", t => {
+test("set SUPER_ADMIN role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "SUPER_ADMIN"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.true(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set PRODUCT_OWNER role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "PRODUCT_OWNER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.true(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set ADMIN role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "ADMIN"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.hasProductOwnerRole);
+  t.true(newState.hasAdminRole);
+  t.false(newState.hasReadOnlyRole);
+});
+
+test("set READ_ONLY_USER role shortcut", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_CURRENT_USER,
+    payload: {
+      email: "currentUser@example.org",
+      role: {
+        label: "READ_ONLY_USER"
+      }
+    }
+  });
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.hasProductOwnerRole);
+  t.false(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set currentUser unset role shortcut", t => {
+  const newState = reducer(
+    {
+      hasProductOwnerRole: true,
+      hasAdminRole: true,
+      hasReadOnlyRole: true
+    },
+    {
+      type: constants.SET_CURRENT_USER,
+      payload: {
+        email: "currentUser@example.org",
+        role: {
+          label: "READ_ONLY_USER"
+        }
+      }
+    }
+  );
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.hasProductOwnerRole);
+  t.false(newState.hasAdminRole);
+  t.true(newState.hasReadOnlyRole);
+});
+
+test("set currentUser SUPER_ADMIN shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -42,50 +128,35 @@ test("set currentUser set role shortcut", t => {
   });
   t.is(newState.email, "currentUser@example.org");
   t.true(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
-  t.true(newState.isAdmin);
+  t.false(newState.isReadOnly);
 });
 
-test("set currentUser unset role shortcut", t => {
-  const newState = reducer(
-    { isSuperAdmin: true, isSuperAdminOrProductOwner: true },
-    {
-      type: constants.SET_CURRENT_USER,
-      payload: {
-        email: "currentUser@example.org",
-        role: {
-          label: "PRODUCT_OWNER"
-        }
-      }
-    }
-  );
-  t.is(newState.email, "currentUser@example.org");
-  t.false(newState.isSuperAdmin);
-  t.true(newState.isSuperAdminOrProductOwner);
-});
-
-test("set currentUser set isAdmin role shortcut", t => {
+test("set currentUser READ_ONLY_USER shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
       email: "currentUser@example.org",
       role: {
-        label: "ADMIN"
+        label: "READ_ONLY_USER"
       }
     }
   });
   t.is(newState.email, "currentUser@example.org");
   t.false(newState.isSuperAdmin);
-  t.false(newState.isSuperAdminOrProductOwner);
-  t.true(newState.isAdmin);
+  t.true(newState.isReadOnly);
 });
 
-test("set login type", t => {
+test("set currentUser USER shortcut", t => {
   const newState = reducer(undefined, {
-    type: constants.SET_LOGIN_TYPE,
+    type: constants.SET_CURRENT_USER,
     payload: {
-      type: constants.LOGIN_TYPE.SSO
+      email: "currentUser@example.org",
+      role: {
+        label: "USER"
+      }
     }
   });
-  t.is(newState.login, constants.LOGIN_TYPE.SSO);
+  t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isSuperAdmin);
+  t.false(newState.isReadOnly);
 });

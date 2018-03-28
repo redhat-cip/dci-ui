@@ -14,27 +14,25 @@
 
 import * as constants from "./constants";
 
-const defaultState = {
-  login: constants.LOGIN_TYPE.BASIC_AUTH
-};
-
-export default function(state = defaultState, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case constants.SET_CURRENT_USER:
       const role = action.payload.role;
       const shortcuts = {
         isSuperAdmin: role.label === "SUPER_ADMIN",
-        isSuperAdminOrProductOwner:
+        hasProductOwnerRole:
           role.label === "SUPER_ADMIN" || role.label === "PRODUCT_OWNER",
-        isAdmin:
+        hasAdminRole:
           role.label === "SUPER_ADMIN" ||
           role.label === "PRODUCT_OWNER" ||
-          role.label === "ADMIN"
+          role.label === "ADMIN",
+        hasReadOnlyRole:
+          role.label === "SUPER_ADMIN" ||
+          role.label === "PRODUCT_OWNER" ||
+          role.label === "READ_ONLY_USER",
+        isReadOnly: role.label === "READ_ONLY_USER"
       };
       return Object.assign({}, state, action.payload, shortcuts);
-    case constants.SET_LOGIN_TYPE:
-      const { type } = action.payload;
-      return Object.assign({}, state, { login: type });
     default:
       return state;
   }
