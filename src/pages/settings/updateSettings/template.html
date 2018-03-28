@@ -12,6 +12,7 @@
             <input id="current_password"
                    class="form-control"
                    ng-model="$ctrl.current_password"
+                   ng-readonly="$ctrl.currentUser.isReadOnly"
                    type="password"
                    required>
           </div>

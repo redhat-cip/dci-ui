@@ -13,7 +13,7 @@
             <th>Product</th>
             <th>Topic</th>
             <th>Created</th>
-            <th class="text-center" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+            <th class="text-center" ng-if="$ctrl.currentUser.hasProductOwnerRole">
               Actions
             </th>
           </tr>
@@ -34,20 +34,20 @@
               <span ng-if="component.name.length > 42">...</span>
             </td>
             <td>
-              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
+              <a ng-if="$ctrl.currentUser.hasProductOwnerRole"
                  ui-sref="auth.productEdit({id: component.product_id})">
                 {{component.product_name}}
               </a>
-              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
+              <span ng-hide="$ctrl.currentUser.hasProductOwnerRole">
                 {{component.product_name}}
               </span>
             </td>
             <td>
-              <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
+              <a ng-if="$ctrl.currentUser.hasProductOwnerRole"
                  ui-sref="auth.topicEdit({id: component.topic_id})">
                 {{component.topic_name}}
               </a>
-              <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">
+              <span ng-hide="$ctrl.currentUser.hasProductOwnerRole">
                 {{component.topic_name}}
               </span>
             </td>
@@ -55,7 +55,7 @@
               {{component.created_at | dciFromNow}}
             </td>
             <td class="text-center"
-                ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
+                ng-if="$ctrl.currentUser.hasProductOwnerRole">
               <button type="button"
                       class="btn btn-danger btn-sm"
                       ng-click="$ctrl.deleteComponent(component)">
