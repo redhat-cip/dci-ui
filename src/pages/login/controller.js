@@ -26,6 +26,7 @@ class Ctrl {
   }
 
   $onInit() {
+    this.seeLoginForm = false;
     this.username = "";
     this.password = "";
     if (this.keycloak.authenticated) {

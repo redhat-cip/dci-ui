@@ -17,16 +17,19 @@ const assert = require("assert");
 module.exports = function(browser) {
   browser.login = function(user = "admin", password = "admin") {
     this.url(browser.launch_url)
+      .pause(250)
+      .waitForElementVisible("#loginToggleFormLink")
+      .click("#loginToggleFormLink")
       .waitForElementVisible("#inputUsername")
-      .pause(1000)
       .clearValue("#inputUsername")
-      .clearValue("#inputPassword")
       .setValue("#inputUsername", user)
+      .waitForElementVisible("#inputPassword")
+      .clearValue("#inputPassword")
       .setValue("#inputPassword", password)
       .waitForElementVisible("#logInButton")
       .click("#logInButton")
       .waitForElementVisible("job-summary")
-      .pause(300)
+      .pause(250)
       .waitForElementVisible("h1")
       .assert.containsText("h1", "Dashboard");
     return this;

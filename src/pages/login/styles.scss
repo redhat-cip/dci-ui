@@ -13,20 +13,10 @@
 // under the License.
 
 .login__cover {
-  height: 100vh;
-  color: white;
+  min-height: 100vh;
   background: #333333 url('./bg-login.jpg') no-repeat fixed center center;
   background-size: cover;
-}
-
-.login__dci-logo {
-  width: 384px;
-  max-width: 100%;
-}
-
-@media (min-width: 768px) {
-  .login__main-content {
-    position: absolute;
-    top: 42%;
-  }
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
 }

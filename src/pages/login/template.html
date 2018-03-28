@@ -1,66 +1,38 @@
-<div class="login__cover">
+<div class="login-pf-page login__cover">
   <div class="container-fluid">
-    <div class="row hidden-xs">
-      <div class="col-xs-12 text-right pt-3">
-        <img src="redhat-logo.svg" alt="Red Hat">
-      </div>
-    </div>
-  </div>
-  <div class="container-fluid login__main-content">
-    <div class="row pt-3">
-      <div class="col-xs-12 col-sm-6 col-sm-offset-1">
-        <img class="login__dci-logo" src="dci-logo.svg" alt="Distributed CI"/>
-      </div>
-    </div>
-    <div class="row pt-3">
-      <div class="col-xs-12 col-sm-8 col-sm-offset-1 text-justify">
-         <p><strong>Welcome to DCI project!</strong></p>
-        <p>
-          DCI or Distributed CI is a continuous integration project that aims to bring partners inside our CI framework
-          by running CI on dedicated lab environments that are running in their data centers with their configurations
-          and their applications.
-        </p>
-      </div>
-    </div>
-    <div class="row pt-3">
-      <div class="col-xs-12 col-sm-5 col-sm-offset-1">
-        <form class="form-horizontal" role="form" ng-submit="$ctrl.authenticate()">
-          <div class="form-group">
-            <label for="inputUsername" class="col-sm-3 control-label">Username</label>
-            <div class="col-sm-9">
-              <input id="inputUsername"
-                     type="text"
-                     class="form-control"
-                     placeholder=""
-                     ng-model="$ctrl.username">
+    <div class="row">
+      <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-4">
+        <header class="login-pf-page-header">
+          <img class="login-pf-brand mt-0" src="dci-logo.svg" alt="Distributed CI">
+          <p>
+            DCI or Distributed CI is a continuous integration project that aims to bring partners inside our CI framework by running
+            CI on dedicated lab environments that are running in their data centers with their configurations and their applications.
+          </p>
+        </header>
+        <div class="card-pf">
+          <header class="login-pf-header">
+            <h1>Log In to Your Account</h1>
+          </header>
+          <form ng-hide="$ctrl.seeLoginForm">
+            <button type="button" class="btn btn-primary btn-block btn-lg" ng-click="$ctrl.sso()">
+              Red Hat SSO
+            </button>
+          </form>
+          <form ng-if="$ctrl.seeLoginForm" ng-submit="$ctrl.authenticate()">
+            <div class="form-group">
+              <label class="sr-only" for="inputUsername">Username</label>
+              <input id="inputUsername" type="text" class="form-control input-lg" placeholder="Username" ng-model="$ctrl.username">
             </div>
-          </div>
-          <div class="form-group">
-            <label for="inputPassword" class="col-sm-3 control-label">Password</label>
-            <div class="col-sm-9">
-              <input id="inputPassword"
-                     type="password"
-                     class="form-control"
-                     placeholder=""
-                     ng-model="$ctrl.password">
+            <div class="form-group">
+              <label class="sr-only" for="inputPassword">Password</label>
+              <input id="inputPassword" type="password" class="form-control input-lg" placeholder="Password" ng-model="$ctrl.password">
             </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-9 col-sm-offset-3">
-              <button id="logInButton"
-                      type="submit"
-                      class="btn btn-primary">
-                Log In
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="col-xs-12 col-sm-3 login__sso">
-        <button type="button" class="btn btn-danger btn-block"
-                ng-click="$ctrl.sso()">
-          Log in with your Red Hat Account
-        </button>
+            <button id="logInButton" type="submit" class="btn btn-primary btn-block btn-lg mt-3">Log In</button>
+          </form>
+          <p class="login-pf-signup">
+            <a href="#" id="loginToggleFormLink" ng-click="$ctrl.seeLoginForm=!$ctrl.seeLoginForm">toggle login form</a>
+          </p>
+        </div>
       </div>
     </div>
   </div>
