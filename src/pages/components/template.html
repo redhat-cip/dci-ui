@@ -35,7 +35,7 @@
             </td>
             <td>
               <a ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner"
-                 ui-sref="auth.adminProductEdit({id: component.product_id})">
+                 ui-sref="auth.productEdit({id: component.product_id})">
                 {{component.product_name}}
               </a>
               <span ng-hide="$ctrl.currentUser.isSuperAdminOrProductOwner">

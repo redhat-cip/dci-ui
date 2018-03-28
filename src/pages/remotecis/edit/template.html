@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="page-header">
-        <h1>Create a new remoteci</h1>
+        <h1>Edit remoteci {{$ctrl.remoteci.name}}</h1>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-3">
-      <form ng-submit="$ctrl.create()">
+      <form ng-submit="$ctrl.update()">
         <div class="form-group">
           <label class="control-label" for="remoteciName">Name</label>
           <input id="remoteciName"
@@ -18,19 +18,35 @@
                  required>
         </div>
         <div class="form-group">
+          <label for="remoteciApiSecret" class="control-label">
+            Api secret
+            <i class="fa fa-refresh pointer" ng-click="$ctrl.refreshApiSecret()"></i>
+          </label>
+          <input id="remoteciApiSecret"
+                 class="form-control"
+                 name="token"
+                 ng-model="$ctrl.remoteci.api_secret"
+                 readonly>
+        </div>
+        <div class="form-group">
           <label for="selectTeam" class="control-label">Team</label>
           <select id="selectTeam" name="selectTeam" class="form-control"
                   ng-model="$ctrl.remoteci.team_id">
             <option ng-repeat="team in $ctrl.teams" value="{{team.id}}">{{team.name}}</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="remoteciData" class="control-label">Data</label>
+          <textarea class="form-control" ng-model="$ctrl.remoteci.data" id="remoteciData" name="data" rows="5"
+                    json-text></textarea>
+        </div>
         <div class="checkbox">
           <label>
             <input type="checkbox" ng-model="$ctrl.remoteci.allow_upgrade_job"> Allow upgrade
           </label>
         </div>
-        <button class="btn btn-primary">Create</button>
-        <a class="btn btn-default btn-cancel" ui-sref="auth.adminRemotecis">Cancel</a>
+        <button class="btn btn-primary">Update</button>
+        <a class="btn btn-default btn-cancel" ui-sref="auth.remotecis">Cancel</a>
       </form>
     </div>
   </div>

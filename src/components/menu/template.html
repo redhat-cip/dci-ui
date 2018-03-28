@@ -28,19 +28,19 @@
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isAdmin">
-      <a id="navbar-primary__remotecis-link" ui-sref="auth.adminRemotecis" class="pf-vertical-nav__link">
+      <a id="navbar-primary__remotecis-link" ui-sref="auth.remotecis" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-server pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Remote CIs</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdminOrProductOwner">
-      <a id="navbar-primary__feeders-link" ui-sref="auth.adminFeeders" class="pf-vertical-nav__link">
+      <a id="navbar-primary__feeders-link" ui-sref="auth.feeders" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-cloud-upload pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Feeders</span>
       </a>
     </li>
     <li class="pf-vertical-nav__item" ui-sref-active="active" ng-if="$ctrl.currentUser.isSuperAdmin">
-      <a id="navbar-primary__products-link" ui-sref="auth.adminProducts" class="pf-vertical-nav__link">
+      <a id="navbar-primary__products-link" ui-sref="auth.products" class="pf-vertical-nav__link">
         <i class="fa fa-fw fa-archive pf-vertical-nav__icon"></i>
         <span class="pf-vertical-nav__link-value">Products</span>
       </a>

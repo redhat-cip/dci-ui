@@ -15,7 +15,7 @@
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
 import * as alertsActions from "services/alerts/actions";
-import * as feedersActions from "services/feeders/actions";
+import * as remotecisActions from "services/remotecis/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -27,31 +27,31 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("feeder").get({ id })).then(response => {
-      this.feeder = response.data.feeder;
+    this.$ngRedux.dispatch(api("remoteci").get({ id })).then(response => {
+      this.remoteci = response.data.remoteci;
     });
     this.$ngRedux.dispatch(api("team").all());
   }
 
   update() {
-    this.$ngRedux.dispatch(api("feeder").put(this.feeder)).then(() => {
+    this.$ngRedux.dispatch(api("remoteci").put(this.remoteci)).then(() => {
       this.$ngRedux.dispatch(
         alertsActions.success(
-          `feeder ${this.feeder.name} updated successfully`
+          `remoteci ${this.remoteci.name} updated successfully`
         )
       );
-      this.$ngRedux.dispatch(stateGo("auth.adminFeeders"));
+      this.$ngRedux.dispatch(stateGo("auth.remotecis"));
     });
   }
 
   refreshApiSecretConfirmed() {
     this.$ngRedux
-      .dispatch(feedersActions.refreshApiSecret(this.feeder))
-      .then(feeder => {
+      .dispatch(remotecisActions.refreshApiSecret(this.remoteci))
+      .then(remoteci => {
         this.$ngRedux.dispatch(
-          alertsActions.success("feeder api secret has been refreshed")
+          alertsActions.success("remoteci api secret has been refreshed")
         );
-        this.feeder = feeder;
+        this.remoteci = remoteci;
       });
   }
 
@@ -61,8 +61,8 @@ class Ctrl {
       resolve: {
         data: function() {
           return {
-            title: "Refresh feeder api secret",
-            body: "Are you you want to refresh feeeder api secret?",
+            title: "Refresh remoteci api secret",
+            body: "Are you you want to refresh remoteci api secret?",
             okButton: "Yes refresh it",
             cancelButton: "oups no!"
           };

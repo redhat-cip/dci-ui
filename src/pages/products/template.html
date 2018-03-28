@@ -5,7 +5,7 @@
         Products
         <a class="pull-right btn btn-primary"
            id="admin__create-product-btn"
-           ui-sref="auth.adminProductCreate">
+           ui-sref="auth.productCreate">
           <i class="fa fa-plus-circle"></i> create new product
         </a>
       </h1>
@@ -32,12 +32,12 @@
               <tr ng-if="$ctrl.products.length === 0">
                 <td colspan="7">
                   There is no product.
-                  <a ui-sref="auth.adminProductCreate">Do you want to create one?</a>
+                  <a ui-sref="auth.productCreate">Do you want to create one?</a>
                 </td>
               </tr>
               <tr ng-repeat="product in $ctrl.products | orderBy: 'name'">
                 <td>
-                  <a ui-sref="auth.adminProductEdit({id: product.id})">
+                  <a ui-sref="auth.productEdit({id: product.id})">
                     {{product.name}}
                   </a>
                 </td>
@@ -48,7 +48,7 @@
                 <td>{{product.created_at | dciDate}}</td>
                 <td class="text-center">
                   <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.adminProductEdit({id: product.id})">
+                     ui-sref="auth.productEdit({id: product.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <button type="button"

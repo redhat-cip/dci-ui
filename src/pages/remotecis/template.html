@@ -3,7 +3,7 @@
     <div class="col-xs-12">
       <h1 class="page-header">
         Remotecis
-        <a class="pull-right btn btn-primary" id="admin__create-remoteci-btn" ui-sref="auth.adminRemoteciCreate">
+        <a class="pull-right btn btn-primary" id="admin__create-remoteci-btn" ui-sref="auth.remoteciCreate">
           <i class="fa fa-plus-circle"></i> create new remoteci
         </a>
       </h1>
@@ -30,7 +30,7 @@
               <tr ng-if="$ctrl.remotecis.length === 0">
                 <td colspan="8">
                   There is no remoteci.
-                  <a ui-sref="auth.adminRemoteciCreate">Do you want to create one?</a>
+                  <a ui-sref="auth.remoteciCreate">Do you want to create one?</a>
                 </td>
               </tr>
               <tr ng-repeat="remoteci in $ctrl.remotecis | orderBy: 'name'">
@@ -52,7 +52,7 @@
                   </span>
                 </td>
                 <td>
-                  <a ui-sref="auth.adminRemoteciEdit({id: remoteci.id})">
+                  <a ui-sref="auth.remoteciEdit({id: remoteci.id})">
                     {{remoteci.name}}
                   </a>
                 </td>
@@ -68,7 +68,7 @@
                 </td>
                 <td>{{ remoteci.created_at | dciDate }}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.adminRemoteciEdit({id: remoteci.id})">
+                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.remoteciEdit({id: remoteci.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteRemoteci(remoteci)">

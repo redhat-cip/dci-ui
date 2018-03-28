@@ -29,15 +29,15 @@ import adminTeamsPage from "./pages/admin/teams";
 import adminTeamEditPage from "./pages/admin/teams/edit";
 import adminTeamCreatePage from "./pages/admin/teams/create";
 import adminTeamForm from "./pages/admin/teams/form";
-import adminProductsPage from "./pages/admin/products";
-import adminProductEditPage from "./pages/admin/products/edit";
-import adminProductCreatePage from "./pages/admin/products/create";
-import adminRemotecisPage from "./pages/admin/remotecis";
-import adminRemoteciEditPage from "./pages/admin/remotecis/edit";
-import adminRemoteciCreatePage from "./pages/admin/remotecis/create";
-import adminFeedersPage from "./pages/admin/feeders";
-import adminFeederEditPage from "./pages/admin/feeders/edit";
-import adminFeederCreatePage from "./pages/admin/feeders/create";
+import productsPage from "./pages/products";
+import productEditPage from "./pages/products/edit";
+import productCreatePage from "./pages/products/create";
+import remotecisPage from "./pages/remotecis";
+import remoteciEditPage from "./pages/remotecis/edit";
+import remoteciCreatePage from "./pages/remotecis/create";
+import feedersPage from "./pages/feeders";
+import feederEditPage from "./pages/feeders/edit";
+import feederCreatePage from "./pages/feeders/create";
 import jobsPage from "./pages/jobs";
 import jobMenu from "./pages/jobs/menu";
 import jobStatesPage from "./pages/jobs/jobstates";
@@ -127,15 +127,15 @@ angular.element(document).ready(function() {
       .component("adminTeamEditPage", adminTeamEditPage)
       .component("adminTeamCreatePage", adminTeamCreatePage)
       .component("adminTeamForm", adminTeamForm)
-      .component("adminProductsPage", adminProductsPage)
-      .component("adminProductEditPage", adminProductEditPage)
-      .component("adminProductCreatePage", adminProductCreatePage)
-      .component("adminRemotecisPage", adminRemotecisPage)
-      .component("adminRemoteciEditPage", adminRemoteciEditPage)
-      .component("adminRemoteciCreatePage", adminRemoteciCreatePage)
-      .component("adminFeedersPage", adminFeedersPage)
-      .component("adminFeederEditPage", adminFeederEditPage)
-      .component("adminFeederCreatePage", adminFeederCreatePage)
+      .component("productsPage", productsPage)
+      .component("productEditPage", productEditPage)
+      .component("productCreatePage", productCreatePage)
+      .component("remotecisPage", remotecisPage)
+      .component("remoteciEditPage", remoteciEditPage)
+      .component("remoteciCreatePage", remoteciCreatePage)
+      .component("feedersPage", feedersPage)
+      .component("feederEditPage", feederEditPage)
+      .component("feederCreatePage", feederCreatePage)
       .component("globalStatusPage", globalStatusPage)
       .component("settingsMenu", settingsMenu)
       .component("updatePasswordPage", updatePasswordPage)

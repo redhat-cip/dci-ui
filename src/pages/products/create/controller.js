@@ -15,7 +15,6 @@
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
 import * as alertsActions from "services/alerts/actions";
-import * as currentUserActions from "services/currentUser/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -25,27 +24,22 @@ class Ctrl {
   }
 
   $onInit() {
-    this.remoteci = {
-      name: "",
-      team_id: null,
-      allow_upgrade_job: false
-    };
     this.$ngRedux.dispatch(api("team").all());
+    this.product = {
+      name: "",
+      team_id: "",
+      label: null
+    };
   }
 
   create() {
-    if (this.remoteci.team_id === null) {
-      this.$ngRedux.dispatch(alertsActions.error("Remoteci need a team"));
-      return;
-    }
-
-    this.$ngRedux.dispatch(api("remoteci").post(this.remoteci)).then(() => {
+    this.$ngRedux.dispatch(api("product").post(this.product)).then(() => {
       this.$ngRedux.dispatch(
         alertsActions.success(
-          `remoteci ${this.remoteci.name} created successfully`
+          `product ${this.product.name} created successfully`
         )
       );
-      this.$ngRedux.dispatch(stateGo("auth.adminRemotecis"));
+      this.$ngRedux.dispatch(stateGo("auth.products"));
     });
   }
 }

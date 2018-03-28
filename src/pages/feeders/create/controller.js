@@ -27,7 +27,7 @@ class Ctrl {
   $onInit() {
     this.feeder = {
       name: "",
-      team_id: null,
+      team_id: null
     };
     this.$ngRedux.dispatch(api("team").all());
   }
@@ -40,11 +40,9 @@ class Ctrl {
 
     this.$ngRedux.dispatch(api("feeder").post(this.feeder)).then(() => {
       this.$ngRedux.dispatch(
-        alertsActions.success(
-          `feeder ${this.feeder.name} created successfully`
-        )
+        alertsActions.success(`feeder ${this.feeder.name} created successfully`)
       );
-      this.$ngRedux.dispatch(stateGo("auth.adminFeeders"));
+      this.$ngRedux.dispatch(stateGo("auth.feeders"));
     });
   }
 }

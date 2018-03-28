@@ -143,49 +143,49 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       component: "adminTeamCreatePage"
     })
     .state({
-      name: "auth.adminProducts",
-      url: "admin/products",
-      component: "adminProductsPage"
+      name: "auth.products",
+      url: "products",
+      component: "productsPage"
     })
     .state({
-      name: "auth.adminProductEdit",
-      url: "admin/products/:id",
-      component: "adminProductEditPage"
+      name: "auth.productEdit",
+      url: "products/:id",
+      component: "productEditPage"
     })
     .state({
-      name: "auth.adminProductCreate",
-      url: "admin/products/create",
-      component: "adminProductCreatePage"
+      name: "auth.productCreate",
+      url: "products/create",
+      component: "productCreatePage"
     })
     .state({
-      name: "auth.adminRemotecis",
-      url: "admin/remotecis",
-      component: "adminRemotecisPage"
+      name: "auth.remotecis",
+      url: "remotecis",
+      component: "remotecisPage"
     })
     .state({
-      name: "auth.adminRemoteciEdit",
-      url: "admin/remotecis/:id",
-      component: "adminRemoteciEditPage"
+      name: "auth.remoteciEdit",
+      url: "remotecis/:id",
+      component: "remoteciEditPage"
     })
     .state({
-      name: "auth.adminRemoteciCreate",
-      url: "admin/remotecis/create",
-      component: "adminRemoteciCreatePage"
+      name: "auth.remoteciCreate",
+      url: "remotecis/create",
+      component: "remoteciCreatePage"
     })
     .state({
-      name: "auth.adminFeeders",
-      url: "admin/feeders",
-      component: "adminFeedersPage"
+      name: "auth.feeders",
+      url: "feeders",
+      component: "feedersPage"
     })
     .state({
-      name: "auth.adminFeederEdit",
-      url: "admin/feeders/:id",
-      component: "adminFeederEditPage"
+      name: "auth.feederEdit",
+      url: "feeders/:id",
+      component: "feederEditPage"
     })
     .state({
-      name: "auth.adminFeederCreate",
-      url: "admin/feeders/create",
-      component: "adminFeederCreatePage"
+      name: "auth.feederCreate",
+      url: "feeders/create",
+      component: "feederCreatePage"
     })
     .state({
       name: "auth.globalStatus",

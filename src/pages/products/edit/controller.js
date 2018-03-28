@@ -18,6 +18,7 @@ import * as alertsActions from "services/alerts/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
+    this.$scope = $scope;
     this.$ngRedux = $ngRedux;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
@@ -25,21 +26,20 @@ class Ctrl {
 
   $onInit() {
     this.$ngRedux.dispatch(api("team").all());
-    this.product = {
-      name: "",
-      team_id: "",
-      label: null
-    };
+    const id = this.$ngRedux.getState().router.currentParams.id;
+    this.$ngRedux.dispatch(api("product").get({ id })).then(response => {
+      this.product = response.data.product;
+    });
   }
 
-  create() {
-    this.$ngRedux.dispatch(api("product").post(this.product)).then(() => {
+  update() {
+    this.$ngRedux.dispatch(api("product").put(this.product)).then(() => {
       this.$ngRedux.dispatch(
         alertsActions.success(
-          `product ${this.product.name} created successfully`
+          `product ${this.product.name} updated successfully`
         )
       );
-      this.$ngRedux.dispatch(stateGo("auth.adminProducts"));
+      this.$ngRedux.dispatch(stateGo("auth.products"));
     });
   }
 }

@@ -5,7 +5,7 @@
         Feeders
         <a class="pull-right btn btn-primary"
            id="admin__create-feeder-btn"
-           ui-sref="auth.adminFeederCreate">
+           ui-sref="auth.feederCreate">
           <i class="fa fa-plus-circle"></i> create new feeder
         </a>
       </h1>
@@ -32,7 +32,7 @@
               <tr ng-if="$ctrl.feeders.length === 0">
                 <td colspan="8">
                   There is no feeder.
-                  <a ui-sref="auth.adminFeederCreate">Do you want to create one?</a>
+                  <a ui-sref="auth.feederCreate">Do you want to create one?</a>
                 </td>
               </tr>
               <tr ng-repeat="feeder in $ctrl.feeders | orderBy: 'name'">
@@ -51,7 +51,7 @@
                   </span>
                 </td>
                 <td>
-                  <a ui-sref="auth.adminFeederEdit({id: feeder.id})">
+                  <a ui-sref="auth.feederEdit({id: feeder.id})">
                     {{feeder.name}}
                   </a>
                 </td>
@@ -71,7 +71,7 @@
                 <td>{{ feeder.created_at | dciDate }}</td>
                 <td class="text-center">
                   <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.adminFeederEdit({id: feeder.id})">
+                     ui-sref="auth.feederEdit({id: feeder.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <button type="button"
