@@ -3,9 +3,7 @@
     <div class="col-xs-12">
       <h1 class="page-header">
         Remotecis
-        <a class="pull-right btn btn-primary"
-           id="admin__create-remoteci-btn"
-           ui-sref="auth.adminRemoteciCreate">
+        <a class="pull-right btn btn-primary" id="admin__create-remoteci-btn" ui-sref="auth.adminRemoteciCreate">
           <i class="fa fa-plus-circle"></i> create new remoteci
         </a>
       </h1>
@@ -19,16 +17,15 @@
           <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
               <thead>
-              <tr>
-                <th>Status</th>
-                <th>RemoteCI name</th>
-                <th>RemoteCI ID</th>
-                <th class="text-center" title="Download run commands file">Download rc file</th>
-                <th class="text-center">Team</th>
-                <th class="text-center">Upgrade allowed</th>
-                <th>Date</th>
-                <th class="text-center">Actions</th>
-              </tr>
+                <tr>
+                  <th class="text-center">ID</th>
+                  <th>Status</th>
+                  <th>RemoteCI name</th>
+                  <th class="text-center" title="Download run commands file">Download rc file</th>
+                  <th class="text-center">Team</th>
+                  <th>Date</th>
+                  <th class="text-center">Actions</th>
+                </tr>
               </thead>
               <tr ng-if="$ctrl.remotecis.length === 0">
                 <td colspan="8">
@@ -37,6 +34,9 @@
                 </td>
               </tr>
               <tr ng-repeat="remoteci in $ctrl.remotecis | orderBy: 'name'">
+                <td class="text-center">
+                  <copy-button before="Click to copy" txt="{{ remoteci.id }}" after="Copied!" position="right" />
+                </td>
                 <td>
                   <span ng-if="remoteci.state == 'inactive'">
                     <span class="label label-danger">Locked</span>
@@ -47,7 +47,7 @@
                   <span ng-if="remoteci.state == 'active'">
                     <span class="label label-success">Active</span>
                     <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.toggleLockRemoteci(remoteci)">
-                       <i class="fa fa-toggle-on"></i>
+                      <i class="fa fa-toggle-on"></i>
                     </button>
                   </span>
                 </td>
@@ -56,11 +56,8 @@
                     {{remoteci.name}}
                   </a>
                 </td>
-                <td>{{ remoteci.id }}</td>
                 <td class="text-center">
-                  <button class="btn btn-sm btn-default"
-                          type="button"
-                          ng-click="$ctrl.downloadDCIRCFile(remoteci)">
+                  <button class="btn btn-sm btn-default" type="button" ng-click="$ctrl.downloadDCIRCFile(remoteci)">
                     <fa class="fa fa-download"></fa> remotecirc.sh
                   </button>
                 </td>
@@ -69,20 +66,12 @@
                     {{remoteci.team.name}}
                   </a>
                 </td>
-                <td class="text-center">
-                  <span ng-if="remoteci.allow_upgrade_job">
-                    <i class="fa fa-check-circle fa-lg text-success"></i>
-                  </span>
-                </td>
                 <td>{{ remoteci.created_at | dciDate }}</td>
                 <td class="text-center">
-                  <a class="btn btn-primary btn-sm btn-edit"
-                     ui-sref="auth.adminRemoteciEdit({id: remoteci.id})">
+                  <a class="btn btn-primary btn-sm btn-edit" ui-sref="auth.adminRemoteciEdit({id: remoteci.id})">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <button type="button"
-                          class="btn btn-danger btn-sm"
-                          ng-click="$ctrl.deleteRemoteci(remoteci)">
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteRemoteci(remoteci)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </td>
