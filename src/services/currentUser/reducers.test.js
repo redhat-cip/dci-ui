@@ -122,7 +122,7 @@ test("set currentUser unset role shortcut", t => {
   t.true(newState.hasReadOnlyRole);
 });
 
-test("set currentUser READ_ONLY_USER negative shortcut", t => {
+test("set currentUser READ_ONLY_USER shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -133,10 +133,11 @@ test("set currentUser READ_ONLY_USER negative shortcut", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
+  t.true(newState.isRealOnly);
   t.false(newState.isNotRealOnly);
 });
 
-test("set currentUser USER negative shortcut", t => {
+test("set currentUser USER shortcut", t => {
   const newState = reducer(undefined, {
     type: constants.SET_CURRENT_USER,
     payload: {
@@ -147,5 +148,6 @@ test("set currentUser USER negative shortcut", t => {
     }
   });
   t.is(newState.email, "currentUser@example.org");
+  t.false(newState.isRealOnly);
   t.true(newState.isNotRealOnly);
 });

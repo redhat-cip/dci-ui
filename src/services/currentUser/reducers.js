@@ -30,6 +30,7 @@ export default function(state = {}, action) {
           role.label === "SUPER_ADMIN" ||
           role.label === "PRODUCT_OWNER" ||
           role.label === "READ_ONLY_USER",
+        isRealOnly: role.label === "READ_ONLY_USER",
         isNotRealOnly: role.label !== "READ_ONLY_USER"
       };
       return Object.assign({}, state, action.payload, shortcuts);
