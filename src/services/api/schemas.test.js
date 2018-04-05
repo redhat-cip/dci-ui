@@ -63,14 +63,12 @@ test("remoteci schema", t => {
   t.deepEqual(schemas.remoteci, [
     "name",
     "state",
-    "allow_upgrade_job",
     "data",
     "team_id"
   ]);
   t.deepEqual(schemas.remotecis, [
     "name",
     "state",
-    "allow_upgrade_job",
     "data",
     "team_id"
   ]);
