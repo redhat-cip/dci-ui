@@ -33,8 +33,8 @@ const jobSchema = {
 };
 
 const remoteciSchema = {
-  post: ["name", "state", "allow_upgrade_job", "data", "team_id"],
-  put: ["name", "state", "allow_upgrade_job", "data", "team_id"]
+  post: ["name", "state", "data", "team_id"],
+  put: ["name", "state", "data", "team_id"]
 };
 
 const feederSchema = {
