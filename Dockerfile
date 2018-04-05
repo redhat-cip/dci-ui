@@ -3,6 +3,8 @@ FROM centos:7
 LABEL name="DCI APP" version="0.0.2"
 MAINTAINER DCI Team <distributed-ci@redhat.com>
 
+ENV LANG en_US.UTF-8
+
 RUN echo -e "[google-chrome]\n\
 name=google-chrome - x86_64\n\
 baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64\n\
