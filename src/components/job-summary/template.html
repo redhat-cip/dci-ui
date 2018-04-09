@@ -1,7 +1,8 @@
 <div class="job"
      ng-class="{
             'job--success': $ctrl.job.status === 'success',
-            'job--failure': $ctrl.job.status.endsWith('failure'),
+            'job--failure': $ctrl.job.status === 'failure',
+            'job--error': $ctrl.job.status === 'error',
             'job--killed': $ctrl.job.status === 'killed',
             'job--running': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
           }">
@@ -10,7 +11,7 @@
       <div class="fa fa-fw fa-2x job-summary__icon"
            ng-class="{
             'fa-check-circle': $ctrl.job.status === 'success',
-            'fa-exclamation-circle': $ctrl.job.status.endsWith('failure'),
+            'fa-exclamation-circle': $ctrl.job.status === 'failure' || $ctrl.job.status === 'error',
             'fa-stop-circle': $ctrl.job.status === 'killed',
             'fa-pause-circle': $ctrl.job.status === 'running' || $ctrl.job.status === 'post-run' || $ctrl.job.status === 'pre-run' || $ctrl.job.status === 'new'
           }"></div>

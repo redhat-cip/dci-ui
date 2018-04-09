@@ -27,6 +27,13 @@
     color: $color-pf-red-100;
   }
 }
+.job--error {
+  border-left: 3px solid $color-pf-red-100;
+
+  .job-summary__icon {
+    color: $color-pf-red-100;
+  }
+}
 .job--killed {
   border-left: 3px solid $color-pf-orange-400;
 
