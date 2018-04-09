@@ -68,6 +68,12 @@ class Ctrl {
         name: "Failure",
         icon: "fa-exclamation-circle",
         btn: "btn-danger"
+      },
+      {
+        value: "error",
+        name: "Error",
+        icon: "fa-stop-circle",
+        btn: "btn"
       }
     ];
     this.status = "";
