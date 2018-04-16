@@ -13,26 +13,26 @@
 // under the License.
 
 import { getCurrentUser } from "services/currentUser/actions";
-import { setJWT, setBasicToken } from "services/auth";
+import { setJWT, setBasicToken } from "services/localStorage";
 import * as alertsActions from "services/alerts/actions";
 import { stateGo } from "redux-ui-router";
 
 class Ctrl {
-  constructor($ngRedux, $stateParams, $urlService, keycloak) {
+  constructor($ngRedux, $stateParams, $urlService) {
     this.$ngRedux = $ngRedux;
     this.$stateParams = $stateParams;
     this.$urlService = $urlService;
-    this.keycloak = keycloak;
   }
 
   $onInit() {
     this.seeLoginForm = false;
     this.username = "";
     this.password = "";
-    if (this.keycloak.authenticated) {
-      setJWT(this.keycloak.token);
-      this.$ngRedux.dispatch(getCurrentUser());
-      this.redirectToNextPage();
+    if (window._sso && window._sso.authenticated) {
+      setJWT(window._sso.token);
+      this.$ngRedux.dispatch(getCurrentUser()).then(() => {
+        this.redirectToNextPage();
+      });
     }
   }
 
@@ -58,10 +58,10 @@ class Ctrl {
   }
 
   sso() {
-    this.keycloak.login();
+    window._sso.login();
   }
 }
 
-Ctrl.$inject = ["$ngRedux", "$stateParams", "$urlService", "keycloak"];
+Ctrl.$inject = ["$ngRedux", "$stateParams", "$urlService"];
 
 export default Ctrl;
