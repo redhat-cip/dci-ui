@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import { stateGo } from "redux-ui-router";
-import localStorage from "services/localStorage";
+import { removeToken } from "services/localStorage";
 
 class Ctrl {
   constructor($scope, $ngRedux, keycloak) {
@@ -28,10 +28,9 @@ class Ctrl {
         redirectUri: window.location.origin + "/login"
       });
     } catch (error) {
-      console.error(error);
       this.$ngRedux.dispatch(stateGo("login"));
     } finally {
-      localStorage.remove();
+      removeToken();
     }
   }
 }

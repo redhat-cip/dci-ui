@@ -13,7 +13,7 @@
 // under the License.
 
 import { getCurrentUser } from "services/currentUser/actions";
-import { setJWT, setBasicToken } from "services/auth";
+import { setJWT, setBasicToken } from "services/localStorage";
 import * as alertsActions from "services/alerts/actions";
 import { stateGo } from "redux-ui-router";
 
@@ -31,8 +31,9 @@ class Ctrl {
     this.password = "";
     if (this.keycloak.authenticated) {
       setJWT(this.keycloak.token);
-      this.$ngRedux.dispatch(getCurrentUser());
-      this.redirectToNextPage();
+      this.$ngRedux.dispatch(getCurrentUser()).then(() => {
+        this.redirectToNextPage();
+      });
     }
   }
 
