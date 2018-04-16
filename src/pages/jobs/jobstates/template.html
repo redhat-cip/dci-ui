@@ -5,8 +5,7 @@
       <div class="code" ng-if="$ctrl.job.jobstates">
         <div ng-repeat="jobstate in $ctrl.job.jobstates | orderBy: 'created_at'">
           <div ng-repeat="file in jobstate.files | orderBy: 'created_at'" ng-init="file.seeDetails=false">
-            <pre class="code__pre code__log-line" ng-class="{'code__log-line--failure': jobstate.status === 'failure', 'code__log-line--success': jobstate.status === 'success'}"
-              title="{{ jobstate.created_at | dciDate }}" ng-click="$ctrl.retrieveFile(file)"><span class="fa fa-caret-down code__icon" ng-if="file.seeDetails"></span><span class="fa fa-caret-right code__icon" ng-hide="file.seeDetails"></span>{{file.name}}<span class="code__label">{{ jobstate.status }}</span></pre>
+            <pre class="code__pre code__log-line" ng-class="{'code__log-line--failure': jobstate.status === 'failure', 'code__log-line--error': jobstate.status === 'error', 'code__log-line--success': jobstate.status === 'success'}" title="{{ jobstate.created_at | dciDate }}" ng-click="$ctrl.retrieveFile(file)"><span class="fa fa-caret-down code__icon" ng-if="file.seeDetails"></span><span class="fa fa-caret-right code__icon" ng-hide="file.seeDetails"></span>{{file.name}}<span class="code__label">{{ jobstate.status }}</span></pre>
             <pre class="code__pre code__log-detail" ng-if="file.seeDetails">{{file.content}}</pre>
           </div>
         </div>

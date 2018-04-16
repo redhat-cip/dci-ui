@@ -28,7 +28,7 @@ class Ctrl {
 
   $onInit() {
     this.seeDetails = false;
-    this.statuses = ["success", "failure"];
+    this.statuses = ["success", "failure", "error"];
   }
 
   open(job, page) {
