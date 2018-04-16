@@ -75,7 +75,11 @@ import * as directives from "./directives";
 
 angular
   .module("app", [uiRouter, ngRedux, ngReduxRouter, uiBootstrap])
-  .config(store)
+  .config([
+    "$ngReduxProvider",
+    $ngReduxProvider =>
+      $ngReduxProvider.provideStore(store, ["ngUiRouterMiddleware"])
+  ])
   .config(routes)
   .run(routesAuthTransition)
   .filter("dciDate", filters.dciDate)
@@ -90,11 +94,11 @@ angular
 angular.element(document).ready(function() {
   axios.get("config.json").then(response => {
     const config = response.data;
+    store.dispatch(setConfig(config));
     window._sso = createSSO(config.sso);
     angular
       .module("app")
       .factory("keycloak", KeycloakFactory)
-      .run(["$ngRedux", $ngRedux => $ngRedux.dispatch(setConfig(config))])
       .run(initCurrentUser)
       .run(refreshJWT)
       .component("dciMenu", Menu)

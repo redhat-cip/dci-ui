@@ -12,35 +12,30 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import { router } from "redux-ui-router";
-import thunk from "redux-thunk";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import Reducers from "./services/api/reducers";
+import { router as RouterReducer } from "redux-ui-router";
+import thunk from "redux-thunk";
 
-const store = function($ngReduxProvider) {
-  const reducers = {
-    alerts: alertsReducer,
-    globalStatus: globalStatusReducer,
-    currentUser: currentUserReducer,
-    config: configReducer,
-    jobs: Reducers("job"),
-    users: Reducers("user"),
-    teams: Reducers("team"),
-    roles: Reducers("role"),
-    topics: Reducers("topic"),
-    remotecis: Reducers("remoteci"),
-    feeders: Reducers("feeder"),
-    products: Reducers("product"),
-    components: Reducers("component"),
-    router
-  };
-  const middleware = ["ngUiRouterMiddleware", thunk];
-  return $ngReduxProvider.createStoreWith(reducers, middleware);
-};
+export const rootReducer = combineReducers({
+  alerts: alertsReducer,
+  globalStatus: globalStatusReducer,
+  currentUser: currentUserReducer,
+  config: configReducer,
+  jobs: Reducers("job"),
+  users: Reducers("user"),
+  teams: Reducers("team"),
+  roles: Reducers("role"),
+  topics: Reducers("topic"),
+  remotecis: Reducers("remoteci"),
+  feeders: Reducers("feeder"),
+  products: Reducers("product"),
+  components: Reducers("component"),
+  router: RouterReducer
+});
 
-store.$inject = ["$ngReduxProvider"];
-
-export default store;
+export default createStore(rootReducer, applyMiddleware(thunk));
