@@ -13,16 +13,45 @@
 // under the License.
 
 import axios from "axios";
-import localStorage from "./localStorage";
+import { removeToken, setJWT, getToken } from "./localStorage";
+
+function refreshJWT() {
+  return new Promise((resolve, reject) => {
+    const nightySecond = 90;
+    window._sso
+      .updateToken(nightySecond)
+      .then(resolve(window._sso.token))
+      .catch(error => reject(error));
+  });
+}
 
 axios.interceptors.request.use(config => {
-  const auth = localStorage.get().auth;
-  if (auth.jwt) {
-    config.headers["Authorization"] = `Bearer ${auth.jwt}`;
-  } else {
-    config.headers["Authorization"] = `Basic ${auth.token}`;
+  const token = getToken();
+  if (token && token.type === "Basic") {
+    config.headers.Authorization = `${token.type} ${token.value}`;
+    return Promise.resolve(config);
+  }
+  if (token && token.type === "Bearer") {
+    return refreshJWT()
+      .then(token => {
+        setJWT(token);
+        config.headers.Authorization = `${token.type} ${token}`;
+        return Promise.resolve(config);
+      })
+      .catch(error => removeToken());
   }
   return config;
 });
+
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    const statusCode = error.response && error.response.status;
+    if (statusCode === 401) removeToken();
+    return Promise.reject(error);
+  }
+);
 
 export default axios;

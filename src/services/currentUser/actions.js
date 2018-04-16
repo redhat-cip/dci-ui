@@ -16,7 +16,6 @@ import http from "services/http";
 import pick from "lodash/pick";
 import * as constants from "./constants";
 import schemas from "services/api/schemas";
-import localStorage from "services/localStorage";
 
 export function setUser(user) {
   return {
@@ -49,15 +48,9 @@ export function getCurrentUser() {
       }
     };
     return http(request).then(response => {
-      dispatch(setUser(response.data.user));
+      const currentUser = response.data.user;
+      dispatch(setUser(currentUser));
+      return Promise.resolve(currentUser);
     });
   };
 }
-
-const initCurrentUser = function($ngRedux) {
-  $ngRedux.dispatch(getCurrentUser());
-};
-
-initCurrentUser.$inject = ["$ngRedux"];
-
-export { initCurrentUser };

@@ -13,7 +13,6 @@
 // under the License.
 
 import * as constants from "./constants";
-import localStorage from "../localStorage";
 
 export function sendAlert(alert) {
   return {
@@ -81,9 +80,6 @@ export function createAlert(response) {
 }
 
 export function errorApi(response, persist = false) {
-  if (response.status === 401) {
-    localStorage.remove();
-  }
   const alert = createAlert(response);
   return dispatch => {
     dispatch(error(alert, persist));
