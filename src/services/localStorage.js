@@ -12,28 +12,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export default {
-  keyPrefix: "dci",
-  get() {
-    if (
-      typeof localStorage === "undefined" ||
-      !localStorage.getItem(this.keyPrefix)
-    ) {
-      return { auth: { token: "", jwt: "" } };
-    }
-    return JSON.parse(localStorage.getItem(this.keyPrefix));
-  },
-  setToken(token) {
-    const newLocalStorage = this.get();
-    newLocalStorage.auth.token = token;
-    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
-  },
-  setJWT(token) {
-    const newLocalStorage = this.get();
-    newLocalStorage.auth.jwt = token;
-    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
-  },
-  remove() {
-    localStorage.removeItem(this.keyPrefix);
+export const TOKEN = "dci";
+
+export function get() {
+  if (typeof localStorage === "undefined" || !localStorage.getItem(TOKEN)) {
+    return { auth: { token: "", jwt: "" } };
   }
-};
+  return JSON.parse(localStorage.getItem(TOKEN));
+}
+
+export function setToken(token) {
+  const newLocalStorage = get();
+  newLocalStorage.auth.token = token;
+  localStorage.setItem(TOKEN, JSON.stringify(newLocalStorage));
+}
+
+export function setJWT(token) {
+  const newLocalStorage = get();
+  newLocalStorage.auth.jwt = token;
+  localStorage.setItem(TOKEN, JSON.stringify(newLocalStorage));
+}
+
+export function clearLocalStorage() {
+  localStorage.removeItem(TOKEN);
+}

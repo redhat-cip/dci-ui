@@ -13,16 +13,43 @@
 // under the License.
 
 import axios from "axios";
-import localStorage from "./localStorage";
+import { clearLocalStorage, setJWT, get } from "./localStorage";
+
+function refreshJWT() {
+  return new Promise((resolve, reject) => {
+    const nightySecond = 90;
+    window._sso
+      .updateToken(nightySecond)
+      .then(resolve(window._sso.token))
+      .catch(error => reject(error));
+  });
+}
 
 axios.interceptors.request.use(config => {
-  const auth = localStorage.get().auth;
+  const auth = get().auth;
   if (auth.jwt) {
-    config.headers["Authorization"] = `Bearer ${auth.jwt}`;
+    return refreshJWT()
+      .then(token => {
+        setJWT(token);
+        config.headers.Authorization = `Bearer ${token}`;
+        return Promise.resolve(config);
+      })
+      .catch(error => clearLocalStorage());
   } else {
-    config.headers["Authorization"] = `Basic ${auth.token}`;
+    config.headers.Authorization = `Basic ${auth.token}`;
+    return Promise.resolve(config);
   }
-  return config;
 });
+
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    const statusCode = error.response && error.response.status;
+    if (statusCode === 401) clearLocalStorage();
+    return Promise.reject(error);
+  }
+);
 
 export default axios;

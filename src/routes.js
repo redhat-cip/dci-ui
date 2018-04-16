@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import localStorage from "services/localStorage";
+import * as localStorage from "services/localStorage";
 
 const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
   const defaultRoute = "/jobs";

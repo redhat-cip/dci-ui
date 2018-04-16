@@ -13,10 +13,21 @@
 // under the License.
 
 import * as constants from "./constants";
+import http from "../http";
 
 export function setConfig(config) {
   return {
     type: constants.SET_CONFIG,
     payload: config
+  };
+}
+
+export function getConfig() {
+  return dispatch => {
+    return http.get("config.json").then(response => {
+      const config = response.data;
+      dispatch(setConfig(config));
+      return Promise.resolve(config);
+    });
   };
 }
