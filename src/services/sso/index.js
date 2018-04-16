@@ -12,28 +12,31 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import Keycloak from "keycloak-js";
+import localStorage from "../localStorage";
 
-export function createSSO(ssoConfig) {
-  return Keycloak({
-    url: `${ssoConfig.url}/auth`,
-    realm: `${ssoConfig.realm}`,
-    clientId: `${ssoConfig.clientId}`
-  });
+export function configureSSO(config) {
+  return () => {
+    const ssoConfig = config.sso;
+    const sso = new Keycloak({
+      url: `${ssoConfig.url}/auth`,
+      realm: `${ssoConfig.realm}`,
+      clientId: `${ssoConfig.clientId}`
+    });
+
+    return new Promise(resolve => {
+      sso.init({ onLoad: "check-sso" }).success(authenticated => {
+        if (authenticated) {
+          localStorage.setJWT(sso.token);
+        }
+        window._sso = sso;
+        resolve(sso);
+      });
+    });
+  };
 }
 
-export function initSSO(sso) {
-  return new Promise(resolve => {
-    sso
-      .init()
-      .success(() => resolve())
-      .error(() => resolve());
-  });
-}
-
-const KeycloakFactory = function($window) {
+export function KeycloakFactory($window) {
   return $window._sso;
-};
+}
 
 KeycloakFactory.$inject = ["$window"];
-
-export { KeycloakFactory };

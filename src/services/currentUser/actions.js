@@ -49,15 +49,9 @@ export function getCurrentUser() {
       }
     };
     return http(request).then(response => {
-      dispatch(setUser(response.data.user));
+      const currentUser = response.data.user;
+      dispatch(setUser(currentUser));
+      return Promise.resolve(currentUser);
     });
   };
 }
-
-const initCurrentUser = function($ngRedux) {
-  $ngRedux.dispatch(getCurrentUser());
-};
-
-initCurrentUser.$inject = ["$ngRedux"];
-
-export { initCurrentUser };

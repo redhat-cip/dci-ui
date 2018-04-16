@@ -31,8 +31,9 @@ class Ctrl {
     this.password = "";
     if (this.keycloak.authenticated) {
       setJWT(this.keycloak.token);
-      this.$ngRedux.dispatch(getCurrentUser());
-      this.redirectToNextPage();
+      this.$ngRedux.dispatch(getCurrentUser()).then(() => {
+        this.redirectToNextPage();
+      });
     }
   }
 

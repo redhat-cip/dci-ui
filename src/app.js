@@ -13,7 +13,6 @@
 // under the License.
 
 import angular from "angular";
-import axios from "axios";
 import uiRouter from "@uirouter/angularjs";
 import uiBootstrap from "angular-ui-bootstrap";
 import ngRedux from "ng-redux";
@@ -66,84 +65,80 @@ import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
 import store, { configureStore } from "./store";
-import { setConfig } from "./services/config/actions";
-import { initCurrentUser } from "./services/currentUser/actions";
+import { getConfig } from "./services/config/actions";
+import { getCurrentUser } from "./services/currentUser/actions";
 import { refreshJWT } from "./services/auth";
-import { createSSO, initSSO, KeycloakFactory } from "./services/sso";
+import { configureSSO, KeycloakFactory } from "./services/sso";
 import * as filters from "./filters";
 import * as directives from "./directives";
 
-angular
-  .module("app", [uiRouter, ngRedux, ngReduxRouter, uiBootstrap])
-  .config(configureStore)
-  .config(routes)
-  .run(routesAuthTransition)
-  .filter("dciDate", filters.dciDate)
-  .filter("dciFromNow", filters.dciFromNow)
-  .filter("dciDateDiffInMin", filters.dciDateDiffInMin)
-  .filter("msToSec", filters.msToSec)
-  .filter("unique", filters.unique)
-  .filter("filterGlobalStatus", filters.filterGlobalStatus)
-  .filter("humanFileSize", filters.humanFileSize)
-  .directive("jsonText", directives.jsonText);
-
 angular.element(document).ready(function() {
-  axios.get("config.json").then(response => {
-    const config = response.data;
-    store.dispatch(setConfig(config));
-    window._sso = createSSO(config.sso);
-    angular
-      .module("app")
-      .factory("keycloak", KeycloakFactory)
-      .run(initCurrentUser)
-      .run(refreshJWT)
-      .component("dciMenu", Menu)
-      .component("dciMasthead", Masthead)
-      .component("dciLoading", Loading)
-      .component("dciAlerts", Alerts)
-      .component("jobSummary", JobSummary)
-      .component("copyButton", CopyButton)
-      .component("dciTitle", Title)
-      .component("confirmDestructiveAction", ConfirmDestructiveAction)
-      .component("noTeamWarning", noTeamWarning)
-      .component("loginPage", loginPage)
-      .component("jobsPage", jobsPage)
-      .component("jobMenu", jobMenu)
-      .component("jobStatesPage", jobStatesPage)
-      .component("jobTestsPage", jobTestsPage)
-      .component("jobIssuesPage", jobIssuesPage)
-      .component("jobFilesPage", jobFilesPage)
-      .component("jobCertificationPage", jobCertificationPage)
-      .component("topicsPage", topicsPage)
-      .component("topicCreatePage", topicCreatePage)
-      .component("topicEditPage", topicEditPage)
-      .component("topicForm", topicForm)
-      .component("componentsPage", componentsPage)
-      .component("adminUsersPage", adminUsersPage)
-      .component("adminUserEditPage", adminUserEditPage)
-      .component("adminUserCreatePage", adminUserCreatePage)
-      .component("adminUserForm", adminUserForm)
-      .component("adminTeamsPage", adminTeamsPage)
-      .component("adminTeamEditPage", adminTeamEditPage)
-      .component("adminTeamCreatePage", adminTeamCreatePage)
-      .component("adminTeamForm", adminTeamForm)
-      .component("productsPage", productsPage)
-      .component("productEditPage", productEditPage)
-      .component("productCreatePage", productCreatePage)
-      .component("remotecisPage", remotecisPage)
-      .component("remoteciEditPage", remoteciEditPage)
-      .component("remoteciCreatePage", remoteciCreatePage)
-      .component("feedersPage", feedersPage)
-      .component("feederEditPage", feederEditPage)
-      .component("feederCreatePage", feederCreatePage)
-      .component("globalStatusPage", globalStatusPage)
-      .component("settingsMenu", settingsMenu)
-      .component("updatePasswordPage", updatePasswordPage)
-      .component("updateSettingsPage", updateSettingsPage)
-      .component("notificationPage", notificationPage);
-
-    initSSO(window._sso).then(() => {
+  store
+    .dispatch(getConfig())
+    .then(config => {
+      store.dispatch(getCurrentUser());
+      return store.dispatch(configureSSO(config));
+    })
+    .finally(() => {
+      angular
+        .module("app", [uiRouter, ngRedux, ngReduxRouter, uiBootstrap])
+        .config(configureStore)
+        .config(routes)
+        .run(routesAuthTransition)
+        .filter("dciDate", filters.dciDate)
+        .filter("dciFromNow", filters.dciFromNow)
+        .filter("dciDateDiffInMin", filters.dciDateDiffInMin)
+        .filter("msToSec", filters.msToSec)
+        .filter("unique", filters.unique)
+        .filter("filterGlobalStatus", filters.filterGlobalStatus)
+        .filter("humanFileSize", filters.humanFileSize)
+        .directive("jsonText", directives.jsonText)
+        .factory("keycloak", KeycloakFactory)
+        .run(refreshJWT)
+        .component("dciMenu", Menu)
+        .component("dciMasthead", Masthead)
+        .component("dciLoading", Loading)
+        .component("dciAlerts", Alerts)
+        .component("jobSummary", JobSummary)
+        .component("copyButton", CopyButton)
+        .component("dciTitle", Title)
+        .component("confirmDestructiveAction", ConfirmDestructiveAction)
+        .component("noTeamWarning", noTeamWarning)
+        .component("loginPage", loginPage)
+        .component("jobsPage", jobsPage)
+        .component("jobMenu", jobMenu)
+        .component("jobStatesPage", jobStatesPage)
+        .component("jobTestsPage", jobTestsPage)
+        .component("jobIssuesPage", jobIssuesPage)
+        .component("jobFilesPage", jobFilesPage)
+        .component("jobCertificationPage", jobCertificationPage)
+        .component("topicsPage", topicsPage)
+        .component("topicCreatePage", topicCreatePage)
+        .component("topicEditPage", topicEditPage)
+        .component("topicForm", topicForm)
+        .component("componentsPage", componentsPage)
+        .component("adminUsersPage", adminUsersPage)
+        .component("adminUserEditPage", adminUserEditPage)
+        .component("adminUserCreatePage", adminUserCreatePage)
+        .component("adminUserForm", adminUserForm)
+        .component("adminTeamsPage", adminTeamsPage)
+        .component("adminTeamEditPage", adminTeamEditPage)
+        .component("adminTeamCreatePage", adminTeamCreatePage)
+        .component("adminTeamForm", adminTeamForm)
+        .component("productsPage", productsPage)
+        .component("productEditPage", productEditPage)
+        .component("productCreatePage", productCreatePage)
+        .component("remotecisPage", remotecisPage)
+        .component("remoteciEditPage", remoteciEditPage)
+        .component("remoteciCreatePage", remoteciCreatePage)
+        .component("feedersPage", feedersPage)
+        .component("feederEditPage", feederEditPage)
+        .component("feederCreatePage", feederCreatePage)
+        .component("globalStatusPage", globalStatusPage)
+        .component("settingsMenu", settingsMenu)
+        .component("updatePasswordPage", updatePasswordPage)
+        .component("updateSettingsPage", updateSettingsPage)
+        .component("notificationPage", notificationPage);
       angular.bootstrap(document, ["app"]);
     });
-  });
 });
