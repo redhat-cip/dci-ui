@@ -11,7 +11,7 @@
     "dev": "npm run rcue && webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.dev.js",
     "rcue": "cp node_modules/patternfly/dist/img/* node_modules/rcue/dist/img/",
     "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "ava src/**/*.test.js",
+    "test:unit": "ava src/**/**/*.test.js src/**/*.test.js",
     "test:e2e": "nightwatch --config ./test/e2e/nightwatch.conf.js"
   },
   "babel": {
@@ -47,7 +47,6 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
-    "browser-env": "^3.2.4",
     "chromedriver": "^2.37.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.1",
@@ -74,7 +73,8 @@
   "ava": {
     "babel": "inherit",
     "require": [
-      "babel-register"
+      "babel-register",
+      "./test/localStorageMock.js"
     ]
   },
   "lint-staged": {
