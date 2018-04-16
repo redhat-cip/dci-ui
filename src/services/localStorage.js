@@ -11,29 +11,26 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+const TOKEN = "DCI";
 
-export default {
-  keyPrefix: "dci",
-  get() {
-    if (
-      typeof localStorage === "undefined" ||
-      !localStorage.getItem(this.keyPrefix)
-    ) {
-      return { auth: { token: "", jwt: "" } };
-    }
-    return JSON.parse(localStorage.getItem(this.keyPrefix));
-  },
-  setToken(token) {
-    const newLocalStorage = this.get();
-    newLocalStorage.auth.token = token;
-    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
-  },
-  setJWT(token) {
-    const newLocalStorage = this.get();
-    newLocalStorage.auth.jwt = token;
-    localStorage.setItem(this.keyPrefix, JSON.stringify(newLocalStorage));
-  },
-  remove() {
-    localStorage.removeItem(this.keyPrefix);
-  }
-};
+export function getToken() {
+  const token = localStorage.getItem(TOKEN);
+  if (!token) return null;
+  return JSON.parse(token);
+}
+
+export function setToken(token) {
+  localStorage.setItem(TOKEN, JSON.stringify(token));
+}
+
+export function setJWT(value) {
+  return setToken({ type: "Bearer", value });
+}
+
+export function setBasicToken(value) {
+  return setToken({ type: "Basic", value });
+}
+
+export function removeToken() {
+  localStorage.removeItem(TOKEN);
+}
