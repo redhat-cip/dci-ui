@@ -85,7 +85,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__jobs-link"
         ).waitForXpathElementVisible(
-          "//div[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.2']"
+          "//div[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.1']"
         );
       case "globalStatus":
         return this.click(
@@ -106,7 +106,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__components-link"
         ).waitForXpathElementVisible(
-          "//span[normalize-space(text())='RH7-RHOS-10.0 2016-10-28.1']"
+          "//span[normalize-space(text())='RH7-RHOS-10.0 2016-11-12.1']"
         );
       case "Remotecis":
         return this.click(
