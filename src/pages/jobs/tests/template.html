@@ -70,6 +70,7 @@
                 <span ng-if="testcase.action == 'failure'" class="label label-danger">Failure</span>
                 <span ng-if="testcase.action == 'error'" class="label label-default">Error</span>
                 <span ng-if="testcase.action == 'passed'" class="label label-success">Pass</span>
+                <span ng-if="testcase.regression" class="label label-regression">Regression</span>
               </td>
               <td>{{testcase.classname || testcase.name}}</td>
               <td>{{testcase.name}}</td>
