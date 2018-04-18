@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import localStorage from "services/localStorage";
+import { getToken } from "services/localStorage";
 
 const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
   const defaultRoute = "/jobs";
@@ -203,8 +203,8 @@ export default routes;
 
 const transition = function($transitions, $state) {
   $transitions.onStart({ to: "auth.**" }, transition => {
-    const auth = localStorage.get().auth;
-    if (!(auth.token !== "" || auth.jwt !== "")) {
+    const token = getToken();
+    if (!token) {
       const next = $state.href(transition.to().name, transition.params());
       return transition.router.stateService.target("login", { next });
     }
