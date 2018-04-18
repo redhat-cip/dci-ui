@@ -3,14 +3,13 @@ set -ex
 export DCI_LOGIN=admin
 export DCI_PASSWORD=admin
 export DCI_CS_URL=http://localhost:5000
-export DCI_SETTINGS_FILE="$(pwd)/test/zuul/settings.py"
 
 pushd "../dci-control-server"
 sudo "PATH=$PATH" python -m pip install -r requirements.txt
 sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 python bin/dci-dbinit
-python bin/dci-runtestserver &
+FILES_UPLOAD_FOLDER=/tmp/dci-control-server python bin/dci-runtestserver &
 python bin/dci-dbprovisioning
 popd
 npm install
