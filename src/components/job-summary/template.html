@@ -1,5 +1,4 @@
-<div class="job"
-     ng-class="{
+<div class="job" ng-class="{
             'job--success': $ctrl.job.status === 'success',
             'job--failure': $ctrl.job.status === 'failure',
             'job--error': $ctrl.job.status === 'error',
@@ -8,8 +7,7 @@
           }">
   <div class="job-summary" ng-click="$ctrl.seeDetails=!$ctrl.seeDetails">
     <div class="job-summary__header">
-      <div class="fa fa-fw fa-2x job-summary__icon"
-           ng-class="{
+      <div class="fa fa-fw fa-2x job-summary__icon" ng-class="{
             'fa-check-circle': $ctrl.job.status === 'success',
             'fa-exclamation-circle': $ctrl.job.status === 'failure' || $ctrl.job.status === 'error',
             'fa-stop-circle': $ctrl.job.status === 'killed',
@@ -29,13 +27,16 @@
       </div>
     </div>
     <div class="job-summary__tests">
-      <div class="job-summary__test"
-           ng-repeat="test in $ctrl.job.results | orderBy:'name'">
+      <div class="job-summary__test" ng-repeat="test in $ctrl.job.results | orderBy:'name'">
         <span class="label label-success">{{test.success}}</span>
         <span class="label label-warning">{{test.skips}}</span>
         <span class="label label-default">{{test.errors}}</span>
         <span class="label label-danger">{{test.failures}}</span>
+        <span ng-if="test.regressions > 0" class="label label-regression" title="This test has a regression compared to the previous test">{{test.regressions}}
+          <i class="fa fa-exclamation-triangle"></i>
+        </span>
         <button class="btn btn-link" ng-click="$ctrl.open($ctrl.job,'auth.job.tests')">{{test.name}}</button>
+        
       </div>
     </div>
     <div class="job-summary__extra-info">
@@ -50,8 +51,7 @@
       </div>
     </div>
   </div>
-  <div class="job-details"
-       ng-class="{'job-details--hidden': !$ctrl.seeDetails}">
+  <div class="job-details" ng-class="{'job-details--hidden': !$ctrl.seeDetails}">
     <div class="row">
       <div class="col-xs-12">
         <button type="button" class="btn btn-danger btn-sm pull-right" ng-click="$ctrl.delete($ctrl.job)">
@@ -77,10 +77,12 @@
             Job states
           </dt>
           <dd>
-             <span ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
-               {{ jobstate.status }}
-               <span ng-if="!$last"><i class="fa fa-fw fa-angle-right"></i></span>
-             </span>
+            <span ng-repeat="jobstate in $ctrl.job.jobstates | orderBy:'created_at'">
+              {{ jobstate.status }}
+              <span ng-if="!$last">
+                <i class="fa fa-fw fa-angle-right"></i>
+              </span>
+            </span>
           </dd>
         </dl>
       </div>
@@ -105,16 +107,13 @@
           </dd>
           <dt>Status</dt>
           <dd>
-            <select name="status" class="form-control input-sm mb-1"
-                    ng-change="$ctrl.updateJob()"
-                    ng-model="$ctrl.job.status">
+            <select name="status" class="form-control input-sm mb-1" ng-change="$ctrl.updateJob()" ng-model="$ctrl.job.status">
               <option ng-repeat="status in $ctrl.statuses">{{status}}</option>
             </select>
           </dd>
           <dt>Comment</dt>
           <dd>
-            <textarea name="jobComment" id="jobComment" style="width: 100%" rows="2"
-                      ng-model="$ctrl.job.comment"></textarea>
+            <textarea name="jobComment" id="jobComment" style="width: 100%" rows="2" ng-model="$ctrl.job.comment"></textarea>
           </dd>
           <dd>
             <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.updateJob()">save</button>
