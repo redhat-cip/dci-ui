@@ -13,7 +13,9 @@
 // under the License.
 
 import api from "services/api";
+import { stateGo } from "redux-ui-router";
 import * as alertsActions from "services/alerts/actions";
+import { setTopic } from "services/topics/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
@@ -25,9 +27,16 @@ class Ctrl {
 
   $onInit() {
     this.loading = true;
-    this.$ngRedux.dispatch(api("topic").all({ embed: "product,nexttopic" })).then(() => {
-      this.loading = false;
-    });
+    this.$ngRedux
+      .dispatch(api("topic").all({ embed: "product,nexttopic" }))
+      .then(() => {
+        this.loading = false;
+      });
+  }
+
+  viewTopicDetails(topic) {
+    this.$ngRedux.dispatch(setTopic(topic));
+    this.$ngRedux.dispatch(stateGo("auth.topicDetails", { id: topic.id }));
   }
 
   deleteTopic(topic) {

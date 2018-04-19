@@ -36,12 +36,9 @@
                   <copy-button before="Click to copy" txt="{{ topic.id }}" after="Copied!" position="right" />
                 </td>
                 <td>
-                  <a ng-if="$ctrl.currentUser.hasProductOwnerRole" ui-sref="auth.topicEdit({id: topic.id})">
+                  <button type="button" class="btn btn-link" ng-click="$ctrl.viewTopicDetails(topic)">
                     {{topic.name}}
-                  </a>
-                  <span ng-hide="$ctrl.currentUser.hasProductOwnerRole">
-                    {{topic.name}}
-                  </span>
+                  </button>
                 </td>
                 <td ng-if="$ctrl.currentUser.hasProductOwnerRole">
                   <a ui-sref="auth.topicEdit({id: topic.next_topic})">

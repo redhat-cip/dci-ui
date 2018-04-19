@@ -1,0 +1,6 @@
+<div>
+  <dci-loading ng-if="$ctrl.loading"></dci-loading>
+  <div ng-hide="$ctrl.loading">
+      {{$ctrl.topic | json}}
+  </div>
+</div>

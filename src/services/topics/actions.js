@@ -13,6 +13,33 @@
 // under the License.
 
 import http from "services/http";
+import * as constants from "./constants";
+import * as alertsActions from "services/alerts/actions";
+
+export function setTopic(topic) {
+  return {
+    type: constants.SET_TOPIC,
+    topic
+  };
+}
+
+export function getTopic(topic) {
+  return (dispatch, getState) => {
+    const state = getState();
+    return http({
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/topics/${topic.id}`
+    })
+      .then(response => {
+        dispatch(setTopic(response.data.topic));
+        return response;
+      })
+      .catch(error => {
+        dispatch(alertsActions.errorApi(error.response));
+        throw error;
+      });
+  };
+}
 
 export function associateTeamToTopic(topic, team) {
   return (dispatch, getState) => {
