@@ -11,7 +11,7 @@
     "dev": "npm run rcue && webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.dev.js",
     "rcue": "cp node_modules/patternfly/dist/img/* node_modules/rcue/dist/img/",
     "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "ava src/**/**/*.test.js src/**/*.test.js",
+    "test:unit": "ava 'src/**/*.test.js'",
     "test:e2e": "nightwatch --config ./test/e2e/nightwatch.conf.js"
   },
   "babel": {
