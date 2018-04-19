@@ -76,7 +76,8 @@ angular.element(document).ready(function() {
     .dispatch(getConfig())
     .then(config => store.dispatch(configureSSO(config)))
     .then(() => store.dispatch(getCurrentUser()))
-    .finally(() => {
+    .catch(error => console.error(error))
+    .then(() => {
       angular
         .module("app", [uiRouter, ngRedux, ngReduxRouter, uiBootstrap])
         .config(configureStore)
