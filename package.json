@@ -15,9 +15,8 @@
     "test:e2e": "nightwatch --config ./test/e2e/nightwatch.conf.js"
   },
   "babel": {
-    "presets": [
-      "env"
-    ]
+    "presets": ["env"],
+    "plugins": ["transform-object-rest-spread"]
   },
   "dependencies": {
     "@uirouter/angularjs": "1.0.15",
@@ -45,6 +44,7 @@
     "ava": "^0.25.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "chromedriver": "^2.37.0",
@@ -72,15 +72,9 @@
   },
   "ava": {
     "babel": "inherit",
-    "require": [
-      "babel-register",
-      "./test/localStorageMock.js"
-    ]
+    "require": ["babel-register", "./test/localStorageMock.js"]
   },
   "lint-staged": {
-    "{src,test}/**/*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "{src,test}/**/*.js": ["prettier --write", "git add"]
   }
 }

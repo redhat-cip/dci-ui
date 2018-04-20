@@ -18,6 +18,7 @@ import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import Reducers from "./services/api/reducers";
+import teamReducer from "./services/team/reducer";
 import { router as RouterReducer } from "redux-ui-router";
 import thunk from "redux-thunk";
 
@@ -29,6 +30,7 @@ export const rootReducer = combineReducers({
   jobs: Reducers("job"),
   users: Reducers("user"),
   teams: Reducers("team"),
+  team: teamReducer,
   roles: Reducers("role"),
   topics: Reducers("topic"),
   remotecis: Reducers("remoteci"),
