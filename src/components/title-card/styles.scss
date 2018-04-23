@@ -11,24 +11,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+@import "~scss/variables";
 
-import "moment-timezone/builds/moment-timezone-with-data-2012-2022";
-import "angular";
-import "axios";
-import "lodash/find";
-import "lodash/uniqBy";
-import "lodash/pick";
-import "lodash/omitBy";
-import "lodash/isNil";
-import "lodash/differenceWith";
-import "lodash/differenceBy";
-import "lodash/isEqual";
-import "lodash/remove";
-import "@uirouter/angularjs";
-import "ng-redux";
-import "redux-ui-router";
-import "angular-ui-bootstrap";
-import "file-saver";
-import "keycloak-js";
-import "copy-text-to-clipboard";
-import "filesize";
+.title-card__h1{
+  font-size: 2em;
+  margin: 0;
+  padding: 0;
+}
