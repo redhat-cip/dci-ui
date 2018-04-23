@@ -47,6 +47,7 @@ import jobCertificationPage from "./pages/jobs/certification";
 import topicsPage from "./pages/topics";
 import topicCreatePage from "./pages/topics/create";
 import topicEditPage from "./pages/topics/edit";
+import topicDetailsPage from "./pages/topics/details";
 import topicForm from "./pages/topics/form";
 import componentsPage from "./pages/components";
 import loginPage from "./pages/login";
@@ -114,6 +115,7 @@ angular.element(document).ready(function() {
         .component("topicsPage", topicsPage)
         .component("topicCreatePage", topicCreatePage)
         .component("topicEditPage", topicEditPage)
+        .component("topicDetailsPage", topicDetailsPage)
         .component("topicForm", topicForm)
         .component("componentsPage", componentsPage)
         .component("adminUsersPage", adminUsersPage)

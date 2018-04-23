@@ -23,22 +23,14 @@ class Ctrl {
     $scope.$on("$destroy", unsubscribe);
   }
 
-  $onInit() {
-    this.topic = {
-      name: "",
-      component_types: [],
-      next_topic: null,
-      product_id: null
-    };
-  }
-
   create() {
-    if (!this.topic.next_topic) {
-      this.topic.next_topic = null;
+    const topic = this.topic;
+    if (!topic.next_topic) {
+      topic.next_topic = null;
     }
-    this.$ngRedux.dispatch(api("topic").post(this.topic)).then(() => {
+    this.$ngRedux.dispatch(api("topic").post(topic)).then(() => {
       this.$ngRedux.dispatch(
-        alertsActions.success(`topic ${this.topic.name} created successfully`)
+        alertsActions.success(`topic ${topic.name} created successfully`)
       );
       this.$ngRedux.dispatch(stateGo("auth.topics"));
     });

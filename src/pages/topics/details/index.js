@@ -12,23 +12,10 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import differenceBy from "lodash/differenceBy";
-import * as types from "./actionTypes";
+import template from "./template.html";
+import controller from "./controller";
 
-export default function(state = null, action) {
-  switch (action.type) {
-    case types.SET_TEAM:
-      return {
-        ...state,
-        ...action.team
-      };
-    case types.FILTER_AVAILABLE_TOPICS:
-      const availableTopics = differenceBy(action.topics, state.topics, "id");
-      return {
-        ...state,
-        availableTopics
-      };
-    default:
-      return state;
-  }
-}
+export default {
+  template,
+  controller
+};

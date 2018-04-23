@@ -14,53 +14,60 @@
 
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
+import { getTopic } from "services/topic/actions";
 import * as alertsActions from "services/alerts/actions";
-import { setTopic } from "services/topic/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {
     this.$ngRedux = $ngRedux;
     this.$uibModal = $uibModal;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
+    let unsubscribe = $ngRedux.connect(state => {
+      return {
+        topic: state.topic,
+        currentUser: state.currentUser
+      };
+    })(this);
     $scope.$on("$destroy", unsubscribe);
   }
 
   $onInit() {
     this.loading = true;
+    const id = this.$ngRedux.getState().router.currentParams.id;
     this.$ngRedux
-      .dispatch(api("topic").all({ embed: "product,nexttopic" }))
+      .dispatch(getTopic({ id }))
+      .catch(error => {
+        this.$ngRedux.dispatch(stateGo("auth.topics"));
+      })
       .then(() => {
         this.loading = false;
       });
   }
 
-  viewTopicDetails(topic) {
-    this.$ngRedux.dispatch(setTopic(topic));
-    this.$ngRedux.dispatch(stateGo("auth.topicDetails", { id: topic.id }));
-  }
-
-  deleteTopic(topic) {
-    const topicName = topic.name;
-    const deleteTopicModal = this.$uibModal.open({
+  deleteComponent(component) {
+    const componentName = component.name;
+    const deleteComponentModal = this.$uibModal.open({
       component: "confirmDestructiveAction",
       resolve: {
         data: function() {
           return {
-            title: "Delete topic " + topicName,
-            body: "Are you you want to delete topic " + topicName + "?",
-            okButton: "Yes delete " + topicName,
+            title: "Delete component " + componentName,
+            body: "Are you you want to delete component " + componentName + "?",
+            okButton: "Yes delete " + componentName,
             cancelButton: "oups no!"
           };
         }
       }
     });
-    deleteTopicModal.result.then(() => {
-      this.$ngRedux.dispatch(api("topic").delete(topic)).then(() => {
+    deleteComponentModal.result.then(() => {
+      this.$ngRedux.dispatch(api("component").delete(component)).then(() => {
         this.$ngRedux.dispatch(
-          alertsActions.success(`topic deleted successfully`)
+          alertsActions.success(`component deleted successfully`)
         );
       });
     });
+  }
+  editTopic(topic) {
+    this.$ngRedux.dispatch(stateGo("auth.topicEdit", { id: topic.id }));
   }
 }
 

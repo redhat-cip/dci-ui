@@ -14,11 +14,8 @@
 
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
-import differenceWith from "lodash/differenceWith";
-import isEqual from "lodash/isEqual";
-import remove from "lodash/remove";
 import * as alertsActions from "services/alerts/actions";
-import * as topicsActions from "services/topics/actions";
+import { getTopic } from "services/topic/actions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -29,33 +26,16 @@ class Ctrl {
   }
 
   $onInit() {
+    this.loading = true;
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("product").all());
-    this.$ngRedux.dispatch(api("team").all()).then(response => {
-      const teams = response.data.teams;
-      this.$ngRedux
-        .dispatch(api("topic").get({ id }, { embed: "teams" }))
-        .then(response => {
-          this.topic = response.data.topic;
-          this.topicTeams = this.topic.teams;
-          this.availableTeams = differenceWith(teams, this.topicTeams, isEqual);
-          this.$scope.$apply();
-        });
-    });
-  }
-
-  associateTeamToTopic(team) {
-    remove(this.availableTeams, team);
-    this.topicTeams.push(team);
-    this.$ngRedux.dispatch(
-      topicsActions.associateTeamToTopic(this.topic, team)
-    );
-  }
-
-  removeTeamFromTopic(team) {
-    remove(this.topicTeams, team);
-    this.availableTeams.push(team);
-    this.$ngRedux.dispatch(topicsActions.removeTeamFromTopic(this.topic, team));
+    this.$ngRedux
+      .dispatch(getTopic({ id }))
+      .catch(error => {
+        this.$ngRedux.dispatch(stateGo("auth.topics"));
+      })
+      .then(() => {
+        this.loading = false;
+      });
   }
 
   update() {

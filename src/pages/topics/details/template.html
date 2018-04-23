@@ -1,0 +1,74 @@
+<div class="container-fluid bg-grey full-height">
+  <title-card title="Edit topic {{$ctrl.topic.name}}" btn-text="edit" btn-classes="btn-primary" on-click="$ctrl.editTopic($ctrl.topic)"
+    icon="fa fa-pencil"></title-card>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="card-pf">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">
+            Allowed Teams
+          </h2>
+        </div>
+        <div class="card-pf-body">
+          <i class="fa fa-spinner fa-pulse fa-fw" ng-if="$ctrl.loading && !$ctrl.topic.teams"></i>
+          <div ng-hide="$ctrl.loading && !$ctrl.topic.teams">
+            <p class="help-block mb-3">All of these teams can download {{$ctrl.topic.name}}'s rpm</p>
+            <table class="table table-striped table-bordered table-hover">
+              <tr ng-repeat="team in $ctrl.topic.teams | orderBy: 'name' | filter: $ctrl.searchInTopicTeams:name">
+                <td>{{team.name}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="card-pf">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">
+            Components
+          </h2>
+        </div>
+        <div class="card-pf-body">
+          <i class="fa fa-spinner fa-pulse fa-fw" ng-if="$ctrl.loading"></i>
+          <table ng-hide="$ctrl.loading" class="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">ID</th>
+                <th>Name</th>
+                <th>Created</th>
+                <th class="text-center" ng-if="$ctrl.currentUser.hasProductOwnerRole">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tr ng-if="$ctrl.components.length === 0">
+              <td colspan="8">
+                There is no component.
+              </td>
+            </tr>
+            <tr ng-repeat="component in $ctrl.topic.components | orderBy: '-created_at'">
+              <td class="text-center">
+                <copy-button before="Click to copy" txt="{{ component.id }}" after="Copied!" position="right" />
+              </td>
+              <td>
+                <span>
+                  {{component.name | limitTo:42}}
+                </span>
+                <span ng-if="component.name.length > 42">...</span>
+              </td>
+              <td>
+                {{component.created_at | dciFromNow}}
+              </td>
+              <td class="text-center" ng-if="$ctrl.currentUser.hasProductOwnerRole">
+                <button type="button" class="btn btn-danger btn-sm" ng-click="$ctrl.deleteComponent(component)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
