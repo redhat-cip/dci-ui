@@ -19,6 +19,7 @@ import FileSaver from "file-saver";
 class Ctrl {
   constructor($scope, $ngRedux) {
     this.$ngRedux = $ngRedux;
+    this.$scope = $scope;
     let unsubscribe = $ngRedux.connect(state => state)(this);
     $scope.$on("$destroy", unsubscribe);
   }
