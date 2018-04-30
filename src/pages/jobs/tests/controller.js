@@ -14,6 +14,7 @@
 
 import api from "services/api";
 import * as jobsActions from "services/jobs/actions";
+import * as testsFilters from "./testsFilters";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
@@ -25,6 +26,7 @@ class Ctrl {
 
   $onInit() {
     this.filters = {
+      regression: false,
       passed: false,
       skipped: false,
       error: false,
@@ -51,17 +53,7 @@ class Ctrl {
   }
 
   filterTestsCases(filters) {
-    return testscase => {
-      if (
-        !filters.passed &&
-        !filters.skipped &&
-        !filters.error &&
-        !filters.failure
-      ) {
-        return true;
-      }
-      return filters[testscase.action];
-    };
+    return testsFilters.filterTestsCases(filters);
   }
 }
 
