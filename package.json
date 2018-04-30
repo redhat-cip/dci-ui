@@ -38,6 +38,7 @@
     "moment": "2.22.0",
     "moment-timezone": "0.5.14",
     "ng-redux": "4.0.3",
+    "object.values": "^1.0.4",
     "patternfly": "3.42.0",
     "pfdemo": "4.0.3",
     "rcue": "3.42.0",
