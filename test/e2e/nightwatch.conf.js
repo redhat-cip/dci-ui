@@ -27,7 +27,7 @@ module.exports = {
       default_path_prefix: "",
       skip_testcases_on_fail: false,
       globals: {
-        waitForConditionTimeout: 10000
+        waitForConditionTimeout: 20000
       },
       desiredCapabilities: {
         browserName: "chrome",

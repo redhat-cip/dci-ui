@@ -20,7 +20,7 @@ module.exports = {
     setTimeout(() => {
       console.log("wait for chromedriver to start");
       done();
-    }, 10000);
+    }, 20000);
   },
 
   after: function(done) {
