@@ -1,9 +1,13 @@
 {
   "name": "dci-ui",
   "version": "0.1.0",
-  "description": "",
+  "description": "A static web app pluggable through CORS on DCI API",
   "author": "Guillaume Vincent <gvincent@redhat.com>",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redhat-cip/dci-ui"
+  },
   "scripts": {
     "precommit": "npm run test:unit && lint-staged",
     "build": "npm run rcue && webpack --config webpack.prod.js",
