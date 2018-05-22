@@ -13,6 +13,11 @@
 // under the License.
 
 import api from "services/api";
+import {
+  getTeam,
+  associateTopicToTeam,
+  removeTopicFromTeam
+} from "services/team/actions";
 import { stateGo } from "redux-ui-router";
 import * as alertsActions from "services/alerts/actions";
 
@@ -25,9 +30,9 @@ class Ctrl {
 
   $onInit() {
     const id = this.$ngRedux.getState().router.currentParams.id;
-    this.$ngRedux.dispatch(api("team").get({ id })).then(response => {
-      this.team = response.data.team;
-    });
+    this.$ngRedux
+      .dispatch(api("topic").all())
+      .then(() => this.$ngRedux.dispatch(getTeam({ id })));
   }
 
   update() {
@@ -37,6 +42,14 @@ class Ctrl {
       );
       this.$ngRedux.dispatch(stateGo("auth.adminTeams"));
     });
+  }
+
+  removeTopicFromTeam(topic, team) {
+    this.$ngRedux.dispatch(removeTopicFromTeam(topic, team));
+  }
+
+  associateTopicToTeam(topic, team) {
+    this.$ngRedux.dispatch(associateTopicToTeam(topic, team));
   }
 }
 

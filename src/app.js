@@ -61,6 +61,7 @@ import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
 import Alerts from "./components/alerts";
 import Title from "./components/title";
+import TitleCard from "./components/title-card";
 import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import noTeamWarning from "./components/noTeamWarning";
@@ -99,6 +100,7 @@ angular.element(document).ready(function() {
         .component("jobSummary", JobSummary)
         .component("copyButton", CopyButton)
         .component("dciTitle", Title)
+        .component("titleCard", TitleCard)
         .component("confirmDestructiveAction", ConfirmDestructiveAction)
         .component("noTeamWarning", noTeamWarning)
         .component("loginPage", loginPage)

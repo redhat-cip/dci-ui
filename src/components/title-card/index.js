@@ -12,23 +12,12 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import "moment-timezone/builds/moment-timezone-with-data-2012-2022";
-import "angular";
-import "axios";
-import "lodash/find";
-import "lodash/uniqBy";
-import "lodash/pick";
-import "lodash/omitBy";
-import "lodash/isNil";
-import "lodash/differenceWith";
-import "lodash/differenceBy";
-import "lodash/isEqual";
-import "lodash/remove";
-import "@uirouter/angularjs";
-import "ng-redux";
-import "redux-ui-router";
-import "angular-ui-bootstrap";
-import "file-saver";
-import "keycloak-js";
-import "copy-text-to-clipboard";
-import "filesize";
+import "./styles.scss";
+import template from "./template.html";
+
+export default {
+  template,
+  bindings: {
+    title: "@"
+  }
+};
