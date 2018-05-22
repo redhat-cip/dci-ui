@@ -17,6 +17,7 @@ import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./services/alerts/reducers";
 import globalStatusReducer from "./services/globalStatus/reducers";
+import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";
 import teamReducer from "./services/team/reducer";
 import { router as RouterReducer } from "redux-ui-router";
@@ -33,6 +34,7 @@ export const rootReducer = combineReducers({
   team: teamReducer,
   roles: Reducers("role"),
   topics: Reducers("topic"),
+  topic: TopicReducer,
   remotecis: Reducers("remoteci"),
   feeders: Reducers("feeder"),
   products: Reducers("product"),

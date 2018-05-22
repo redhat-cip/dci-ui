@@ -13,6 +13,37 @@
 // under the License.
 
 import http from "services/http";
+import * as constants from "./constants";
+import * as alertsActions from "services/alerts/actions";
+
+export function setTopic(topic) {
+  return {
+    type: constants.SET_TOPIC,
+    topic
+  };
+}
+
+export function getTopic(topic) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const topicUrl = `${state.config.apiURL}/api/v1/topics/${topic.id}`;
+    return http({ url: topicUrl, params: { embed: "product,teams,nexttopic" } })
+      .then(response => {
+        const topic = response.data.topic;
+        http({ url: `${topicUrl}/components?limit=10` }).then(
+          responseComponents => {
+            topic.components = responseComponents.data.components;
+            dispatch(setTopic(topic));
+            return responseComponents;
+          }
+        );
+      })
+      .catch(error => {
+        dispatch(alertsActions.errorApi(error.response));
+        throw error;
+      });
+  };
+}
 
 export function associateTeamToTopic(topic, team) {
   return (dispatch, getState) => {

@@ -18,6 +18,10 @@ import template from "./template.html";
 export default {
   template,
   bindings: {
-    title: "@"
+    title: "@",
+    onClick: "&",
+    btnText: "@",
+    btnClasses: "@",
+    icon: "@"
   }
 };

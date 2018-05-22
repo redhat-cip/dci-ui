@@ -12,23 +12,25 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import differenceBy from "lodash/differenceBy";
-import * as types from "./actionTypes";
+import test from "ava";
+import reducer from "./reducers";
+import * as constants from "./constants";
 
-export default function(state = null, action) {
-  switch (action.type) {
-    case types.SET_TEAM:
-      return {
-        ...state,
-        ...action.team
-      };
-    case types.FILTER_AVAILABLE_TOPICS:
-      const availableTopics = differenceBy(action.topics, state.topics, "id");
-      return {
-        ...state,
-        availableTopics
-      };
-    default:
-      return state;
-  }
-}
+test("initial topic reducer state", t => {
+  t.deepEqual(reducer(undefined, {}), {
+    name: "",
+    component_types: [],
+    next_topic: null,
+    product_id: null
+  });
+});
+
+test("set topic", t => {
+  const newState = reducer(undefined, {
+    type: constants.SET_TOPIC,
+    topic: {
+      name: "OSP10"
+    }
+  });
+  t.is(newState.name, "OSP10");
+});

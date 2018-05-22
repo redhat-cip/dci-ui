@@ -14,45 +14,5 @@
         <a class="btn btn-default btn-cancel" ui-sref="auth.topics">Cancel</a>
       </form>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-8">
-      <div class="row mb-3">
-        <div class="col-sm-6 table-responsive">
-          <label>Topic's teams</label>
-          <span class="ml-3">
-            <label for="searchInTopicTeams"><i class="fa fa-search"></i></label>
-            <input id="searchInTopicTeams" type="search" style="border: none" ng-model="$ctrl.searchInTopicTeams">
-          </span>
-          <table class="table table-striped table-bordered table-hover">
-            <tr ng-repeat="team in $ctrl.topicTeams | orderBy: 'name' | filter: $ctrl.searchInTopicTeams">
-              <td>{{team.name}}</td>
-              <td class="text-center" style="width: 50px">
-                <button type="button" class="btn btn-danger btn-sm"
-                        ng-click="$ctrl.removeTeamFromTopic(team, $ctrl.topic)">
-                  <i class="fa fa-minus"></i>
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="col-sm-6 table-responsive">
-          <label>Teams available</label>
-          <span class="ml-3">
-            <label for="searchInAvailableTeams"><i class="fa fa-search"></i></label>
-            <input id="searchInAvailableTeams" type="search" style="border: none" ng-model="$ctrl.searchInAvailableTeams">
-          </span>
-          <table class="table table-striped table-bordered table-hover">
-            <tr ng-repeat="team in $ctrl.availableTeams | orderBy: 'name' | filter: $ctrl.searchInAvailableTeams">
-              <td>{{team.name}}</td>
-              <td class="text-center" style="width: 50px">
-                <button type="button" class="btn btn-primary btn-sm"
-                        ng-click="$ctrl.associateTeamToTopic(team, $ctrl.topic)">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
