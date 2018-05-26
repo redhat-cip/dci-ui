@@ -8,9 +8,9 @@ dci-ui is a static web app pluggable through CORS on a DCI server.
 To run the app in development mode follow those steps:
 
  * clone this repository
- * ensure that control server is running (ex: on localhost:5000) see `dci-dev-env`
+ * ensure DCI api is listening on localhost:5000. See `dci-dev-env`. An alternative is to consume an existing API (edit apiURL in [src/config.json](src/config.json))
  * install node dependencies: `npm install`
- * run the development server : `npm run dev`
+ * run the development server : `npm start`
 
 ## Build tools
 
@@ -18,8 +18,8 @@ To manage the workflow the project use npm scripts
 
 Command list:
 
- * `npm start`: start web server without live reload
- * `npm run dev`: start web server with live reload
+ * `npm start`: start web server with live reload
  * `npm run build`: build application in `static/` folder
  * `npm run test:unit`: start unit test
+ * `npm test`: start unit and end to end tests
 
