@@ -61,7 +61,7 @@ import Masthead from "./components/masthead";
 import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
 import Alerts from "./components/alerts";
-import Title from "./components/title";
+import Title from "./components/Title";
 import TitleCard from "./components/title-card";
 import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
@@ -72,6 +72,7 @@ import { getCurrentUser } from "./services/currentUser/actions";
 import { configureSSO, refreshJWT } from "./services/sso";
 import * as filters from "./filters";
 import * as directives from "./directives";
+import { react2angular } from "react2angular";
 
 angular.element(document).ready(function() {
   store
@@ -100,7 +101,7 @@ angular.element(document).ready(function() {
         .component("dciAlerts", Alerts)
         .component("jobSummary", JobSummary)
         .component("copyButton", CopyButton)
-        .component("dciTitle", Title)
+        .component("dciTitle", react2angular(Title, ["title"]))
         .component("titleCard", TitleCard)
         .component("confirmDestructiveAction", ConfirmDestructiveAction)
         .component("noTeamWarning", noTeamWarning)

@@ -19,7 +19,8 @@
   },
   "babel": {
     "presets": [
-      "env"
+      "env",
+      "react"
     ],
     "plugins": [
       "transform-object-rest-spread"
@@ -44,8 +45,12 @@
     "patternfly": "^3.47.1",
     "pfdemo": "4.0.3",
     "rcue": "^3.47.1",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react2angular": "^4.0.2",
     "redux-thunk": "2.2.0",
-    "redux-ui-router": "0.7.2"
+    "redux-ui-router": "0.7.2",
+    "styled-components": "^3.3.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -53,6 +58,7 @@
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
     "chromedriver": "^2.38.3",
     "clean-webpack-plugin": "^0.1.19",

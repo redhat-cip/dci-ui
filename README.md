@@ -3,6 +3,11 @@
 Source code for dci user interface. [https://distributed-ci.io](https://distributed-ci.io)
 dci-ui is a static web app pluggable through CORS on a DCI server.
 
+## Work In Progress
+
+We are currently migrating DCI from AngularJS to React.
+The bundle size optimization was removed.
+
 ## Getting started
 
 To run the app in development mode follow those steps:
