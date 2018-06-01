@@ -12,57 +12,52 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import * as constants from "./constants";
+import * as types from "./AlertsActionsTypes";
 
-export function sendAlert(alert) {
+export function showAlert(alert) {
   return {
-    type: constants.SEND_ALERT,
-    payload: alert
+    type: types.ADD_ALERT,
+    alert
   };
 }
 
-export function closeAlert(id) {
+export function hideAlert(alert) {
   return {
-    type: constants.CLOSE_ALERT,
-    payload: {
-      id
-    }
+    type: types.DELETE_ALERT,
+    alert
   };
 }
 
-export function sendAndDeleteAlert(message, persist, type) {
+function showAndHideAfter10s(alert) {
   return dispatch => {
-    const id = Date.now();
-    dispatch(sendAlert({ id, message, type: type }));
-    if (!persist) {
-      setTimeout(() => dispatch(closeAlert(id)), 10000);
-    }
+    dispatch(showAlert(alert));
+    setTimeout(() => dispatch(hideAlert(alert)), 10000);
   };
 }
 
-export function success(message, persist = false) {
-  return dispatch => {
-    dispatch(sendAndDeleteAlert(message, persist, "success"));
+export function success(message) {
+  const alert = {
+    id: Date.now(),
+    message,
+    type: "success"
   };
+  return showAndHideAfter10s(alert);
 }
 
-export function error(message, persist = false) {
-  return dispatch => {
-    dispatch(sendAndDeleteAlert(message, persist, "danger"));
+export function error(message) {
+  const alert = {
+    id: Date.now(),
+    message,
+    type: "error"
   };
+  return showAndHideAfter10s(alert);
 }
 
-export function close({ id }) {
-  return dispatch => {
-    dispatch(closeAlert(id));
-  };
-}
-
-export function createAlert(response) {
-  let alert =
+export function createAlertMessage(response) {
+  let alertMessage =
     "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?";
   if (response.data && response.data.message) {
-    alert = response.data.message;
+    alertMessage = response.data.message;
   }
   if (response.data && response.data.payload) {
     let errorDetails = "";
@@ -73,15 +68,12 @@ export function createAlert(response) {
       errorDetails += `${errorKey}: ${error[errorKey]}\n`;
     });
     if (errorDetails) {
-      alert += `\n${errorDetails}`;
+      alertMessage += `\n${errorDetails}`;
     }
   }
-  return alert;
+  return alertMessage;
 }
 
-export function errorApi(response, persist = false) {
-  const alert = createAlert(response);
-  return dispatch => {
-    dispatch(error(alert, persist));
-  };
+export function errorApi(response) {
+  return error(createAlertMessage(response));
 }

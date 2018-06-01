@@ -12,11 +12,5 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import "./styles.scss";
-import template from "./template.html";
-import controller from "./controller";
-
-export default {
-  template,
-  controller
-};
+export const ADD_ALERT = "ADD_ALERT";
+export const DELETE_ALERT = "DELETE_ALERT";

@@ -12,10 +12,12 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+import React from "react";
+import { connect } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
-import alertsReducer from "./services/alerts/reducers";
+import alertsReducer from "./components/Alert/AlertsReducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";
@@ -51,3 +53,10 @@ export function configureStore($ngReduxProvider) {
 }
 
 configureStore.$inject = ["$ngReduxProvider"];
+
+export function connectWithStore(WrappedComponent, ...args) {
+  var ConnectedWrappedComponent = connect(...args)(WrappedComponent);
+  return function(props) {
+    return <ConnectedWrappedComponent {...props} store={store} />;
+  };
+}
