@@ -13,7 +13,7 @@
 // under the License.
 
 import api from "services/api";
-import * as alertsActions from "services/alerts/actions";
+import * as alertsActions from "components/Alert/AlertsActions";
 import DCIRCFile from "services/DCIRCFile";
 
 class Ctrl {

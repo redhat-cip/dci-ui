@@ -30,8 +30,8 @@ module.exports = function(browser) {
       .click("#logInButton")
       .waitForElementVisible("job-summary")
       .pause(250)
-      .waitForElementVisible("h1")
-      .assert.containsText("h1", "Dashboard");
+      .waitForElementVisible("#dashboard__title")
+      .assert.containsText("#dashboard__title", "Dashboard");
     return this;
   };
 

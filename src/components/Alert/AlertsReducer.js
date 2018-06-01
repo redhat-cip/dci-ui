@@ -12,5 +12,23 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const SEND_ALERT = "SEND_ALERT";
-export const CLOSE_ALERT = "CLOSE_ALERT";
+import * as types from "./AlertsActionsTypes";
+
+const initialState = {};
+
+export default function(state = initialState, action) {
+  switch (action.type) {
+    case types.ADD_ALERT:
+      return {
+        ...state,
+        [action.alert.id]: action.alert
+      };
+    case types.DELETE_ALERT:
+      delete state[action.alert.id];
+      return {
+        ...state
+      };
+    default:
+      return state;
+  }
+}

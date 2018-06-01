@@ -14,7 +14,7 @@
 
 import { stateGo } from "redux-ui-router";
 import * as userActions from "services/currentUser/actions";
-import * as alertsActions from "services/alerts/actions";
+import * as alertsActions from "components/Alert/AlertsActions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {

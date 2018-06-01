@@ -60,7 +60,7 @@ import Menu from "./components/menu";
 import Masthead from "./components/masthead";
 import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
-import Alerts from "./components/alerts";
+import Alert from "./components/Alert";
 import Title from "./components/Title";
 import TitleCard from "./components/title-card";
 import CopyButton from "./components/copyButton";
@@ -98,7 +98,7 @@ angular.element(document).ready(function() {
         .component("dciMenu", Menu)
         .component("dciMasthead", Masthead)
         .component("dciLoading", Loading)
-        .component("dciAlerts", Alerts)
+        .component("dciAlerts", react2angular(Alert))
         .component("jobSummary", JobSummary)
         .component("copyButton", CopyButton)
         .component("dciTitle", react2angular(Title, ["title"]))

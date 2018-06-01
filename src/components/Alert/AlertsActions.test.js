@@ -13,22 +13,44 @@
 // under the License.
 
 import test from "ava";
-import * as alertsActions from "./actions";
+import * as actions from "./AlertsActions";
+import * as types from "./AlertsActionsTypes";
 
-test("create alert", t => {
+test("showAlert", t => {
+  const alert = {
+    id: "a1"
+  };
+  const expectedAction = {
+    type: types.ADD_ALERT,
+    alert
+  };
+  t.deepEqual(actions.showAlert(alert), expectedAction);
+});
+
+test("hideAlert", t => {
+  const alert = {
+    id: "a1"
+  };
+  const expectedAction = {
+    type: types.DELETE_ALERT,
+    alert
+  };
+  t.deepEqual(actions.hideAlert(alert), expectedAction);
+});
+
+test("createAlertMessage", t => {
   const data = {
     _status: "Unauthorized",
     message:
       "Could not verify your access level for that URL. Please login with proper credentials."
   };
-  const alert = alertsActions.createAlert({ data, status: 401 });
   t.is(
-    alert,
+    actions.createAlertMessage({ data, status: 401 }),
     "Could not verify your access level for that URL. Please login with proper credentials."
   );
 });
 
-test("create alert with one error", t => {
+test("createAlertMessage with one error", t => {
   const data = {
     message: "conflict on topics",
     payload: {
@@ -38,11 +60,13 @@ test("create alert with one error", t => {
     },
     status_code: 409
   };
-  const alert = alertsActions.createAlert({ data, status: 409 });
-  t.is(alert, "conflict on topics\nname: already_exists\n");
+  t.is(
+    actions.createAlertMessage({ data, status: 409 }),
+    "conflict on topics\nname: already_exists\n"
+  );
 });
 
-test("create alert with multiple errors", t => {
+test("createAlertMessage with multiple errors", t => {
   const data = {
     message: "Request malformed",
     payload: {
@@ -53,38 +77,34 @@ test("create alert with multiple errors", t => {
     },
     status_code: 400
   };
-  const alert = alertsActions.createAlert({ data, status: 400 });
   t.is(
-    alert,
+    actions.createAlertMessage({ data, status: 400 }),
     "Request malformed\nname: already_exists\nteam_id: not a valid team id\n"
   );
 });
 
-test("create alert with empty payload", t => {
+test("createAlertMessage with empty payload", t => {
   const data = {
     message: "Request malformed",
     payload: {},
     status_code: 400
   };
-  const alert = alertsActions.createAlert({ data, status: 400 });
-  t.is(alert, "Request malformed");
+  t.is(actions.createAlertMessage({ data, status: 400 }), "Request malformed");
 });
 
-test("create alert with unknown format", t => {
+test("createAlertMessage with unknown format", t => {
   const data = {
     error: "Request malformed"
   };
-  const alert = alertsActions.createAlert({ data, status: 400 });
   t.is(
-    alert,
+    actions.createAlertMessage({ data, status: 400 }),
     "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
   );
 });
 
-test("create alert with no data format", t => {
-  const alert = alertsActions.createAlert({ status: 400 });
+test("createAlertMessage with no data format", t => {
   t.is(
-    alert,
+    actions.createAlertMessage({ status: 400 }),
     "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
   );
 });

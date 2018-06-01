@@ -14,7 +14,7 @@
 
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
-import * as alertsActions from "services/alerts/actions";
+import * as alertsActions from "components/Alert/AlertsActions";
 import * as currentUserActions from "services/currentUser/actions";
 
 class Ctrl {
@@ -27,7 +27,7 @@ class Ctrl {
   $onInit() {
     this.remoteci = {
       name: "",
-      team_id: null,
+      team_id: null
     };
     this.$ngRedux.dispatch(api("team").all());
   }
