@@ -12,11 +12,11 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import values from "object.values";
+import objectValues from "object.values";
 
 export function filterTestsCases(filters) {
   return testscase => {
-    const noFilter = values(filters).every(filter => !filter);
+    const noFilter = objectValues(filters).every(filter => !filter);
     if (noFilter) return true;
     const hasRegression = testscase.regression && filters.regression;
     return filters[testscase.action] || hasRegression;

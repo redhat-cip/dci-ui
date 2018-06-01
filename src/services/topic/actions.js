@@ -14,7 +14,7 @@
 
 import http from "services/http";
 import * as constants from "./constants";
-import * as alertsActions from "services/alerts/actions";
+import * as alertsActions from "components/Alert/AlertsActions";
 
 export function setTopic(topic) {
   return {

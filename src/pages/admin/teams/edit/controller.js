@@ -19,7 +19,7 @@ import {
   removeTopicFromTeam
 } from "services/team/actions";
 import { stateGo } from "redux-ui-router";
-import * as alertsActions from "services/alerts/actions";
+import * as alertsActions from "components/Alert/AlertsActions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {
