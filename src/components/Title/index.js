@@ -13,6 +13,7 @@
 // under the License.
 
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { colors } from "styles";
 import { ContainerFluid, Row, Col } from "components/Grid";
@@ -22,7 +23,7 @@ const Title = styled.h1`
   border-bottom: 1px solid ${colors.black100};
 `;
 
-export default function({ title }) {
+export default function TitleContainer({ title }) {
   return (
     <ContainerFluid>
       <Row>
@@ -33,3 +34,7 @@ export default function({ title }) {
     </ContainerFluid>
   );
 }
+
+TitleContainer.propTypes = {
+  title: PropTypes.string.isRequired
+};

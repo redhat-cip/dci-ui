@@ -65,6 +65,7 @@ import Title from "./components/Title";
 import TitleCard from "./components/title-card";
 import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 import noTeamWarning from "./components/noTeamWarning";
 import store, { configureStore } from "./store";
 import { getConfig } from "./services/config/actions";
@@ -101,9 +102,10 @@ angular.element(document).ready(function() {
         .component("dciAlerts", react2angular(Alert))
         .component("jobSummary", JobSummary)
         .component("copyButton", CopyButton)
-        .component("dciTitle", react2angular(Title, ["title"]))
+        .component("dciTitle", react2angular(Title))
         .component("titleCard", TitleCard)
         .component("confirmDestructiveAction", ConfirmDestructiveAction)
+        .component("confirmDeleteModal", react2angular(ConfirmDeleteModal))
         .component("noTeamWarning", noTeamWarning)
         .component("loginPage", loginPage)
         .component("jobsPage", jobsPage)
