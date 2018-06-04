@@ -21,6 +21,7 @@ module.exports = {
   },
   test_settings: {
     default: {
+      disable_colors: true,
       launch_url: "http://localhost:8000/",
       selenium_port: 9515,
       selenium_host: "localhost",
