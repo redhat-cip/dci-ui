@@ -18,7 +18,7 @@ import omitBy from "lodash/omitBy";
 import isNil from "lodash/isNil";
 import Constants from "./constants";
 import schemas from "./schemas";
-import * as alertsActions from "../../components/Alert/AlertsActions";
+import * as alertsActions from "../../Components/Alert/AlertsActions";
 
 export default function(resource) {
   const resources = `${resource}s`;
