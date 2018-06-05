@@ -17,7 +17,8 @@ import { connect } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
-import alertsReducer from "./components/Alert/AlertsReducer";
+import alertsReducer from "./Components/Alerts/AlertsReducer";
+import jobsReducer from "./Components/Jobs/reducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";
@@ -31,6 +32,7 @@ export const rootReducer = combineReducers({
   currentUser: currentUserReducer,
   config: configReducer,
   jobs: Reducers("job"),
+  jobs2: jobsReducer,
   users: Reducers("user"),
   teams: Reducers("team"),
   team: teamReducer,

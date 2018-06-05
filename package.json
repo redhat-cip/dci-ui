@@ -42,6 +42,7 @@
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.17",
     "ng-redux": "4.0.3",
+    "normalizr": "^3.2.4",
     "object.values": "^1.0.4",
     "patternfly": "^3.48.1",
     "patternfly-react": "^2.4.1",
@@ -51,6 +52,7 @@
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "react2angular": "^4.0.2",
+    "redux-saga": "^0.16.0",
     "redux-thunk": "2.2.0",
     "redux-ui-router": "0.7.2",
     "styled-components": "^3.3.0"

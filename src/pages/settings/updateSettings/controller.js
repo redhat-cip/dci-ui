@@ -14,7 +14,7 @@
 
 import { stateGo } from "redux-ui-router";
 import * as currentUserActions from "services/currentUser/actions";
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alerts/AlertsActions";
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
 
 class Ctrl {
