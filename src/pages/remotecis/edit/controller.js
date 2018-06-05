@@ -14,7 +14,7 @@
 
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alert/AlertsActions";
 import * as remotecisActions from "services/remotecis/actions";
 
 class Ctrl {
