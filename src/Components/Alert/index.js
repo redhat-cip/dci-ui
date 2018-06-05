@@ -11,51 +11,27 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import objectValues from "object.values";
-
-import { connectWithStore } from "store";
 import { Alert } from "patternfly-react";
-import { hideAlert } from "./AlertsActions";
 
-const AlertsDiv = styled.h1`
+const AlertContainer = styled.div`
   position: absolute;
   z-index: 100;
+  top: 20px;
   right: 20px;
 `;
 
-export function Alerts({ alerts, hide }) {
+export default function DCIAlert({ message, type = "error" }) {
   return (
-    <AlertsDiv>
-      {objectValues(alerts).map((alert, i) => (
-        <Alert key={i} type={alert.type} onDismiss={() => hide(alert)}>
-          {alert.message}
-        </Alert>
-      ))}
-    </AlertsDiv>
+    <AlertContainer>
+      <Alert type={type}>{message}</Alert>
+    </AlertContainer>
   );
 }
 
-Alerts.propTypes = {
-  alerts: PropTypes.object,
-  hide: PropTypes.func
+DCIAlert.propTypes = {
+  message: PropTypes.string.isRequired,
+  type: PropTypes.string
 };
-
-function mapStateToProps(state) {
-  return {
-    alerts: state.alerts
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    hide: alert => {
-      dispatch(hideAlert(alert));
-    }
-  };
-}
-
-export default connectWithStore(Alerts, mapStateToProps, mapDispatchToProps);

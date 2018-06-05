@@ -11,30 +11,18 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
 import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { colors } from "styles";
-import { ContainerFluid, Row, Col } from "components/Grid";
+import { Grid, Row, Col } from "patternfly-react";
+import Spinner from "./Spinner";
 
-const Title = styled.h1`
-  padding-bottom: 1rem;
-  border-bottom: 1px solid ${colors.black100};
-`;
-
-export default function TitleContainer({ title }) {
+export default function() {
   return (
-    <ContainerFluid>
+    <Grid fluid>
       <Row>
-        <Col>
-          <Title>{title}</Title>
+        <Col className="text-center pt-5 mt-5">
+          <Spinner />
         </Col>
       </Row>
-    </ContainerFluid>
+    </Grid>
   );
 }
-
-TitleContainer.propTypes = {
-  title: PropTypes.string.isRequired
-};
