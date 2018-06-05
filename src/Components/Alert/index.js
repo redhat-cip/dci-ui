@@ -21,25 +21,25 @@ import { connectWithStore } from "store";
 import { Alert } from "patternfly-react";
 import { hideAlert } from "./AlertsActions";
 
-const AlertsDiv = styled.h1`
+const Alerts = styled.h1`
   position: absolute;
   z-index: 100;
   right: 20px;
 `;
 
-export function Alerts({ alerts, hide }) {
+export function AlertsContainer({ alerts, hide }) {
   return (
-    <AlertsDiv>
+    <Alerts>
       {objectValues(alerts).map((alert, i) => (
         <Alert key={i} type={alert.type} onDismiss={() => hide(alert)}>
           {alert.message}
         </Alert>
       ))}
-    </AlertsDiv>
+    </Alerts>
   );
 }
 
-Alerts.propTypes = {
+AlertsContainer.propTypes = {
   alerts: PropTypes.object,
   hide: PropTypes.func
 };
@@ -58,4 +58,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connectWithStore(Alerts, mapStateToProps, mapDispatchToProps);
+export default connectWithStore(
+  AlertsContainer,
+  mapStateToProps,
+  mapDispatchToProps
+);

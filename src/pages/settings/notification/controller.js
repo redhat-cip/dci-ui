@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alert/AlertsActions";
 import * as remotecisActions from "services/remotecis/actions";
 import api from "services/api";
 import remove from "lodash/remove";

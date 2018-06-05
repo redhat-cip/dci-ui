@@ -15,7 +15,7 @@
 import api from "services/api";
 import { stateGo } from "redux-ui-router";
 import { getTopic } from "services/topic/actions";
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alert/AlertsActions";
 
 class Ctrl {
   constructor($scope, $ngRedux, $uibModal) {

@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
-import alertsReducer from "./components/Alert/AlertsReducer";
+import alertsReducer from "./Components/Alert/AlertsReducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";

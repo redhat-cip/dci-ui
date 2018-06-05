@@ -14,7 +14,7 @@
 
 import { getCurrentUser } from "services/currentUser/actions";
 import { setJWT, setBasicToken } from "services/localStorage";
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alert/AlertsActions";
 import { stateGo } from "redux-ui-router";
 
 class Ctrl {
