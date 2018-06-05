@@ -17,7 +17,7 @@ import * as filesActions from "services/files/actions";
 import FileSaver from "file-saver";
 import http from "services/http";
 import { sendCertification } from "services/certification/actions";
-import * as alertsActions from "components/Alert/AlertsActions";
+import * as alertsActions from "Components/Alerts/AlertsActions";
 
 class Ctrl {
   constructor($scope, $ngRedux) {

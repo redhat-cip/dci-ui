@@ -38,6 +38,7 @@ import feedersPage from "./pages/feeders";
 import feederEditPage from "./pages/feeders/edit";
 import feederCreatePage from "./pages/feeders/create";
 import jobsPage from "./pages/jobs";
+import JobsScreen from "./Screens/Jobs";
 import jobMenu from "./pages/jobs/menu";
 import jobStatesPage from "./pages/jobs/jobstates";
 import jobTestsPage from "./pages/jobs/tests";
@@ -60,12 +61,12 @@ import Menu from "./components/menu";
 import Masthead from "./components/masthead";
 import Loading from "./components/loading";
 import JobSummary from "./components/job-summary";
-import Alert from "./components/Alert";
-import Title from "./components/Title";
+import Alerts from "./Components/Alerts";
+import Title from "./Components/Title";
 import TitleCard from "./components/title-card";
 import CopyButton from "./components/copyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
-import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
+import ConfirmDeleteModal from "./Components/ConfirmDeleteModal";
 import noTeamWarning from "./components/noTeamWarning";
 import store, { configureStore } from "./store";
 import { getConfig } from "./services/config/actions";
@@ -99,7 +100,7 @@ angular.element(document).ready(function() {
         .component("dciMenu", Menu)
         .component("dciMasthead", Masthead)
         .component("dciLoading", Loading)
-        .component("dciAlerts", react2angular(Alert))
+        .component("dciAlerts", react2angular(Alerts))
         .component("jobSummary", JobSummary)
         .component("copyButton", CopyButton)
         .component("dciTitle", react2angular(Title))
@@ -109,6 +110,7 @@ angular.element(document).ready(function() {
         .component("noTeamWarning", noTeamWarning)
         .component("loginPage", loginPage)
         .component("jobsPage", jobsPage)
+        .component("jobsScreen", react2angular(JobsScreen))
         .component("jobMenu", jobMenu)
         .component("jobStatesPage", jobStatesPage)
         .component("jobTestsPage", jobTestsPage)
