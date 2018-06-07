@@ -17,12 +17,14 @@ import { connectWithStore } from "../store";
 import objectValues from "object.values";
 import PropTypes from "prop-types";
 import { Grid, Row, Col } from "patternfly-react";
+import { denormalize } from "normalizr";
 
 import Alert from "../Components/Alert";
 import LoadingContainer from "../Components/Loading/LoadingContainer";
 import JobSummary from "../Components/Jobs/JobSummary";
 import { MainContent } from "../Components/Layout";
-import { fetchJobs } from "../Components/Jobs/actions";
+import jobsActions from "../Components/Jobs/actions";
+import { jobs as jobsSchema } from "../Components/api/schema";
 
 export class JobsScreen extends React.Component {
   constructor(props) {
@@ -34,8 +36,18 @@ export class JobsScreen extends React.Component {
   }
 
   render() {
-    const { isFetching, errorMessage, byId } = this.props.jobs;
-    const jobs = objectValues(byId);
+    const state = this.props.state;
+    const { isFetching, errorMessage } = state.jobs2;
+    const jobs = denormalize(state.jobs2.allIds, jobsSchema, {
+      jobs: state.jobs2.byId,
+      topics: state.topics2.byId,
+      remotecis: state.remotecis2.byId,
+      jobstates: state.jobstates2.byId,
+      results: state.results2.byId,
+      components: state.components2.byId,
+      rconfigurations: state.rconfigurations2.byId
+    });
+
     return (
       <MainContent>
         {errorMessage && !jobs.length ? <Alert message={errorMessage} /> : null}
@@ -54,20 +66,26 @@ export class JobsScreen extends React.Component {
 }
 
 JobsScreen.propTypes = {
-  jobs: PropTypes.object,
+  state: PropTypes.object,
   fetchJobs: PropTypes.func
 };
 
 function mapStateToProps(state) {
   return {
-    jobs: state.jobs2
+    state: state
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: () => {
-      dispatch(fetchJobs());
+      dispatch(
+        jobsActions.all({
+          embed: "remoteci,topic,components,rconfiguration,results",
+          limit: 40,
+          offset: 0
+        })
+      );
     }
   };
 }

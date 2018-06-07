@@ -11,41 +11,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-import axios from "axios";
-import { normalize } from "normalizr";
-import * as types from "./actionsTypes";
-import * as schema from "./schema";
+import { createActions } from "../api/actions";
 
-export function fetchJobs(params = {}) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: types.FETCH_JOBS_REQUEST
-    });
-    const { apiURL } = getState().config;
-    return axios
-      .request({
-        method: "get",
-        url: `${apiURL}/api/v1/jobs`,
-        params
-      })
-      .then(response => {
-        const jobs = normalize(response.data.jobs, schema.jobsSchema);
-        dispatch({
-          type: types.FETCH_JOBS_SUCCESS,
-          ...jobs
-        });
-        return response;
-      })
-      .catch(error => {
-        dispatch({
-          type: types.FETCH_JOBS_FAILURE,
-          message:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            "Something went wrong"
-        });
-        return error;
-      });
-  };
-}
+export default createActions("job");

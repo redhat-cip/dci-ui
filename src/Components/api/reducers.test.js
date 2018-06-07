@@ -13,11 +13,14 @@
 // under the License.
 
 import test from "ava";
-import { jobsReducer } from "./reducers";
-import * as types from "./actionsTypes";
+import { createReducer } from "./reducers";
+import { createActionsTypes } from "./actionsTypes";
 
-test("jobsReducer initial state", t => {
-  t.deepEqual(jobsReducer(undefined, {}), {
+const jobActionsTypes = createActionsTypes("job");
+const userActionsTypes = createActionsTypes("user");
+
+test("reducer initial state", t => {
+  t.deepEqual(createReducer("job")(undefined, {}), {
     byId: {},
     allIds: [],
     errorMessage: null,
@@ -26,14 +29,14 @@ test("jobsReducer initial state", t => {
 });
 
 test("FETCH_REQUEST", t => {
-  const state = jobsReducer(undefined, {
-    type: types.jobs.FETCH_REQUEST
+  const state = createReducer("job")(undefined, {
+    type: jobActionsTypes.FETCH_ALL_REQUEST
   });
   t.true(state.isFetching);
 });
 
 test("FETCH_SUCCESS", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: {},
       allIds: [],
@@ -41,7 +44,7 @@ test("FETCH_SUCCESS", t => {
       isFetching: true
     },
     {
-      type: types.jobs.FETCH_SUCCESS,
+      type: jobActionsTypes.FETCH_ALL_SUCCESS,
       result: ["j1"],
       entities: {
         jobs: { j1: { id: "j1" } }
@@ -58,7 +61,7 @@ test("FETCH_SUCCESS", t => {
 });
 
 test("FETCH_FAILURE", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: {},
       allIds: [],
@@ -66,7 +69,7 @@ test("FETCH_FAILURE", t => {
       isFetching: true
     },
     {
-      type: types.jobs.FETCH_FAILURE,
+      type: jobActionsTypes.FETCH_ALL_FAILURE,
       message: "Authorization header missing"
     }
   );
@@ -80,7 +83,7 @@ test("FETCH_FAILURE", t => {
 });
 
 test("fetch another reducer with updated entity", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
@@ -88,7 +91,7 @@ test("fetch another reducer with updated entity", t => {
       isFetching: false
     },
     {
-      type: types.users.FETCH_SUCCESS,
+      type: userActionsTypes.FETCH_ALL_SUCCESS,
       result: ["u1"],
       entities: {
         users: { u1: { id: "u1" } },
@@ -106,7 +109,7 @@ test("fetch another reducer with updated entity", t => {
 });
 
 test("fetch one entity", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
@@ -114,7 +117,7 @@ test("fetch one entity", t => {
       isFetching: false
     },
     {
-      type: types.job.FETCH_SUCCESS,
+      type: jobActionsTypes.FETCH_SUCCESS,
       result: "j2",
       entities: {
         jobs: { j2: { id: "j2" } }
@@ -131,7 +134,7 @@ test("fetch one entity", t => {
 });
 
 test("update one entity", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: { j1: { id: "j1", etag: "e1" } },
       allIds: ["j1"],
@@ -139,7 +142,7 @@ test("update one entity", t => {
       isFetching: false
     },
     {
-      type: types.job.UPDATE_SUCCESS,
+      type: jobActionsTypes.UPDATE_SUCCESS,
       result: "j1",
       entities: {
         jobs: { j1: { id: "j1", etag: "e2" } }
@@ -156,7 +159,7 @@ test("update one entity", t => {
 });
 
 test("delete one entity", t => {
-  const state = jobsReducer(
+  const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
@@ -164,7 +167,7 @@ test("delete one entity", t => {
       isFetching: false
     },
     {
-      type: types.job.DELETE_SUCCESS,
+      type: jobActionsTypes.DELETE_SUCCESS,
       id: "j1"
     }
   );
