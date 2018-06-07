@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import merge from "lodash/merge";
-import * as types from "./actionsTypes";
+import { createActionsTypes } from "./actionsTypes";
 
 const initialState = {
   byId: {},
@@ -30,27 +30,27 @@ function mergeEntities(state, resources) {
   };
 }
 
-function creatReducer(resource) {
+export function createReducer(resource) {
   const resources = `${resource}s`;
   return (state = initialState, action) => {
     switch (action.type) {
-      case types[resources].FETCH_REQUEST:
+      case createActionsTypes(resource).FETCH_ALL_REQUEST:
         return {
           ...state,
           isFetching: true
         };
-      case types[resources].FETCH_SUCCESS:
+      case createActionsTypes(resource).FETCH_ALL_SUCCESS:
         return {
           ...mergeEntities(state, action.entities[resources]),
           isFetching: false
         };
-      case types[resources].FETCH_FAILURE:
+      case createActionsTypes(resource).FETCH_ALL_FAILURE:
         return {
           ...state,
           isFetching: false,
           errorMessage: action.message
         };
-      case types[resource].DELETE_SUCCESS:
+      case createActionsTypes(resource).DELETE_SUCCESS:
         const newState = { ...state, isFetching: false };
         delete newState.byId[action.id];
         return {
@@ -65,5 +65,3 @@ function creatReducer(resource) {
     }
   };
 }
-
-export const jobsReducer = creatReducer("job");

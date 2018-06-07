@@ -13,7 +13,7 @@
 // under the License.
 import axios from "axios";
 import { normalize } from "normalizr";
-import * as types from "./actionsTypes";
+import { createActionsTypes } from "./actionsTypes";
 import * as schema from "./schema";
 
 export function createActions(endpoint) {
@@ -21,7 +21,7 @@ export function createActions(endpoint) {
     all: (params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: types[`${endpoint}s`].FETCH_REQUEST
+          type: createActionsTypes(endpoint).FETCH_ALL_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
@@ -32,7 +32,7 @@ export function createActions(endpoint) {
           })
           .then(response => {
             dispatch({
-              type: types[`${endpoint}s`].FETCH_SUCCESS,
+              type: createActionsTypes(endpoint).FETCH_ALL_SUCCESS,
               ...normalize(
                 response.data[`${endpoint}s`],
                 schema[`${endpoint}s`]
@@ -42,7 +42,7 @@ export function createActions(endpoint) {
           })
           .catch(error => {
             dispatch({
-              type: types[`${endpoint}s`].FETCH_FAILURE,
+              type: createActionsTypes(endpoint).FETCH_ALL_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -56,7 +56,7 @@ export function createActions(endpoint) {
     one: (resource, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: types[endpoint].FETCH_REQUEST
+          type: createActionsTypes(endpoint).FETCH_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
@@ -67,14 +67,14 @@ export function createActions(endpoint) {
           })
           .then(response => {
             dispatch({
-              type: types[endpoint].FETCH_SUCCESS,
+              type: createActionsTypes(endpoint).FETCH_SUCCESS,
               ...normalize(response.data[endpoint], schema[endpoint])
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: types[endpoint].FETCH_FAILURE,
+              type: createActionsTypes(endpoint).FETCH_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -88,7 +88,7 @@ export function createActions(endpoint) {
     create: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: types[endpoint].CREATE_REQUEST
+          type: createActionsTypes(endpoint).CREATE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
@@ -100,14 +100,14 @@ export function createActions(endpoint) {
           })
           .then(response => {
             dispatch({
-              type: types[endpoint].CREATE_SUCCESS,
+              type: createActionsTypes(endpoint).CREATE_SUCCESS,
               ...normalize(response.data[endpoint], schema[endpoint])
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: types[endpoint].CREATE_FAILURE,
+              type: createActionsTypes(endpoint).CREATE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -121,7 +121,7 @@ export function createActions(endpoint) {
     update: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: types[endpoint].UPDATE_REQUEST
+          type: createActionsTypes(endpoint).UPDATE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
@@ -134,7 +134,7 @@ export function createActions(endpoint) {
           })
           .then(response => {
             dispatch({
-              type: types[endpoint].UPDATE_SUCCESS,
+              type: createActionsTypes(endpoint).UPDATE_SUCCESS,
               ...normalize(
                 { ...data, etag: response.headers.etag },
                 schema[endpoint]
@@ -144,7 +144,7 @@ export function createActions(endpoint) {
           })
           .catch(error => {
             dispatch({
-              type: types[endpoint].UPDATE_FAILURE,
+              type: createActionsTypes(endpoint).UPDATE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -158,7 +158,7 @@ export function createActions(endpoint) {
     delete: resource => {
       return (dispatch, getState) => {
         dispatch({
-          type: types[endpoint].DELETE_REQUEST
+          type: createActionsTypes(endpoint).DELETE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
@@ -169,14 +169,14 @@ export function createActions(endpoint) {
           })
           .then(response => {
             dispatch({
-              type: types[endpoint].DELETE_SUCCESS,
+              type: createActionsTypes(endpoint).DELETE_SUCCESS,
               id: resource.id
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: types[endpoint].DELETE_FAILURE,
+              type: createActionsTypes(endpoint).DELETE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -189,6 +189,3 @@ export function createActions(endpoint) {
     }
   };
 }
-
-export const users = createActions("user");
-export const jobs = createActions("job");

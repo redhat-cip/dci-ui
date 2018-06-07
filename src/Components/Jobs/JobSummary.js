@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Icon } from "patternfly-react";
 import { colors } from "../../styles";
+import { connectWithStore } from "../../store";
 
 const Job = styled.div`
   text-transform: uppercase;
@@ -121,15 +122,19 @@ function getIcon(job) {
   }
 }
 
-export default function JobSummary({ job }) {
-  console.log(job.status);
+export default function JobSummary({ job, topic }) {
   return (
     <Job>
       <JobStatus>{getIcon(job)}</JobStatus>
       <JobInfo>
-        <a href="#">OSLAB</a>
-        <a href="#">OSP13</a>
-        <span>RH7-RHOS-11.0 2018-05-24.1 </span>
+        <a href="#">{job.remoteci.name}</a>
+        <a href="#">{job.topic.name}</a>
+        {job.rconfiguration && job.rconfiguration.name ? (
+          <span>{job.rconfiguration.name}</span>
+        ) : null}
+        {job.components.map((component, i) => (
+          <span key={i}>{component.name}</span>
+        ))}
       </JobInfo>
       <JobTests>
         <Test>

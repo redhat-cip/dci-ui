@@ -19,17 +19,19 @@ function createResourcesActionsTypes(resource) {
   }, {});
 }
 
-function createResourceActionsTypes(resource) {
+export function createActionsTypes(resource) {
+  let RESOURCE = resource.toUpperCase();
   return ["REQUEST", "SUCCESS", "FAILURE"].reduce((accumulator, type) => {
-    accumulator[`FETCH_${type}`] = `FETCH_${resource}_${type}`;
-    accumulator[`CREATE_${type}`] = `CREATE_${resource}_${type}`;
-    accumulator[`UPDATE_${type}`] = `UPDATE_${resource}_${type}`;
-    accumulator[`DELETE_${type}`] = `DELETE_${resource}_${type}`;
+    accumulator[`FETCH_ALL_${type}`] = `FETCH_${RESOURCE}S_${type}`;
+    accumulator[`FETCH_${type}`] = `FETCH_${RESOURCE}_${type}`;
+    accumulator[`CREATE_${type}`] = `CREATE_${RESOURCE}_${type}`;
+    accumulator[`UPDATE_${type}`] = `UPDATE_${RESOURCE}_${type}`;
+    accumulator[`DELETE_${type}`] = `DELETE_${RESOURCE}_${type}`;
     return accumulator;
   }, {});
 }
 
 export const jobs = createResourcesActionsTypes("JOBS");
 export const users = createResourcesActionsTypes("USERS");
-export const job = createResourceActionsTypes("JOB");
-export const user = createResourceActionsTypes("USER");
+export const job = createActionsTypes("JOB");
+export const user = createActionsTypes("USER");

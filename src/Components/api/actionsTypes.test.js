@@ -13,34 +13,34 @@
 // under the License.
 
 import test from "ava";
-import * as types from "./actionsTypes";
+import { createActionsTypes } from "./actionsTypes";
 
 test("fetch all actions types", t => {
-  t.is(types.jobs.FETCH_REQUEST, "FETCH_JOBS_REQUEST");
-  t.is(types.jobs.FETCH_SUCCESS, "FETCH_JOBS_SUCCESS");
-  t.is(types.jobs.FETCH_FAILURE, "FETCH_JOBS_FAILURE");
+  t.is(createActionsTypes("user").FETCH_ALL_REQUEST, "FETCH_USERS_REQUEST");
+  t.is(createActionsTypes("user").FETCH_ALL_SUCCESS, "FETCH_USERS_SUCCESS");
+  t.is(createActionsTypes("user").FETCH_ALL_FAILURE, "FETCH_USERS_FAILURE");
 });
 
 test("fetch one actions types", t => {
-  t.is(types.user.FETCH_REQUEST, "FETCH_USER_REQUEST");
-  t.is(types.user.FETCH_SUCCESS, "FETCH_USER_SUCCESS");
-  t.is(types.user.FETCH_FAILURE, "FETCH_USER_FAILURE");
+  t.is(createActionsTypes("user").FETCH_REQUEST, "FETCH_USER_REQUEST");
+  t.is(createActionsTypes("user").FETCH_SUCCESS, "FETCH_USER_SUCCESS");
+  t.is(createActionsTypes("user").FETCH_FAILURE, "FETCH_USER_FAILURE");
 });
 
 test("create actions types", t => {
-  t.is(types.user.CREATE_REQUEST, "CREATE_USER_REQUEST");
-  t.is(types.user.CREATE_SUCCESS, "CREATE_USER_SUCCESS");
-  t.is(types.user.CREATE_FAILURE, "CREATE_USER_FAILURE");
+  t.is(createActionsTypes("user").CREATE_REQUEST, "CREATE_USER_REQUEST");
+  t.is(createActionsTypes("user").CREATE_SUCCESS, "CREATE_USER_SUCCESS");
+  t.is(createActionsTypes("user").CREATE_FAILURE, "CREATE_USER_FAILURE");
 });
 
 test("update actions types", t => {
-  t.is(types.user.UPDATE_REQUEST, "UPDATE_USER_REQUEST");
-  t.is(types.user.UPDATE_SUCCESS, "UPDATE_USER_SUCCESS");
-  t.is(types.user.UPDATE_FAILURE, "UPDATE_USER_FAILURE");
+  t.is(createActionsTypes("user").UPDATE_REQUEST, "UPDATE_USER_REQUEST");
+  t.is(createActionsTypes("user").UPDATE_SUCCESS, "UPDATE_USER_SUCCESS");
+  t.is(createActionsTypes("user").UPDATE_FAILURE, "UPDATE_USER_FAILURE");
 });
 
 test("delete actions types", t => {
-  t.is(types.user.DELETE_REQUEST, "DELETE_USER_REQUEST");
-  t.is(types.user.DELETE_SUCCESS, "DELETE_USER_SUCCESS");
-  t.is(types.user.DELETE_FAILURE, "DELETE_USER_FAILURE");
+  t.is(createActionsTypes("user").DELETE_REQUEST, "DELETE_USER_REQUEST");
+  t.is(createActionsTypes("user").DELETE_SUCCESS, "DELETE_USER_SUCCESS");
+  t.is(createActionsTypes("user").DELETE_FAILURE, "DELETE_USER_FAILURE");
 });
