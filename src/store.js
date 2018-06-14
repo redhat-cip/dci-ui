@@ -13,7 +13,6 @@
 // under the License.
 
 import React from "react";
-import { connect } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
@@ -25,6 +24,7 @@ import Reducers from "./services/api/reducers";
 import teamReducer from "./services/team/reducer";
 import { router as RouterReducer } from "redux-ui-router";
 import thunk from "redux-thunk";
+import createConnect from "redux-connect-standalone";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
@@ -67,9 +67,4 @@ export function configureStore($ngReduxProvider) {
 
 configureStore.$inject = ["$ngReduxProvider"];
 
-export function connectWithStore(WrappedComponent, ...args) {
-  var ConnectedWrappedComponent = connect(...args)(WrappedComponent);
-  return function(props) {
-    return <ConnectedWrappedComponent {...props} store={store} />;
-  };
-}
+export const connect = createConnect(store);

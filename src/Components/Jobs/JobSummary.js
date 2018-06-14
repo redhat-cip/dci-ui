@@ -12,27 +12,62 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Icon } from "patternfly-react";
 import { colors } from "../../styles";
-import { connectWithStore } from "../../store";
+import { connect } from "../../store";
+import * as date from "../Date";
 
-const Job = styled.div`
-  text-transform: uppercase;
-  background-color: ${colors.white};
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14),
-    0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
-  min-height: 60px;
-  padding: 1rem 2rem;
+function getBackground(status) {
+  switch (status) {
+    case "success":
+      return `linear-gradient(to right,${colors.green400} 0,${
+        colors.green400
+      } 10px,${colors.white} 10px,${colors.white} 100%) no-repeat`;
+    case "failure":
+    case "error":
+      return `linear-gradient(to right,${colors.red} 0,${colors.red} 10px,${
+        colors.white
+      } 10px,${colors.white} 100%) no-repeat`;
+    case "killed":
+      return `linear-gradient(to right,${orange400} 0,${orange400} 10px,${
+        colors.white
+      } 10px,${colors.white} 100%) no-repeat`;
+    default:
+      return `linear-gradient(to right,${colors.blue400} 0,${
+        colors.blue400
+      } 10px,${colors.white} 10px,${colors.white} 100%) no-repeat`;
+  }
+}
+
+const JobSummary = styled.div`
+  border: 1px solid ${colors.black200};
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+
+  @media (min-width: 780px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  background: ${props => getBackground(props.status)};
+`;
+
+const JobSummaryHeader = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  &:hover {
-    background-color: ${colors.black100};
-    cursor: pointer;
+  margin-bottom: 1em;
+  min-width: 200px;
+
+  @media (min-width: 780px) {
+    margin-bottom: 0;
   }
+`;
+
+const JobSummaryIcon = styled.div`
+  margin: 0 0.5em;
 `;
 
 const JobItem = styled.div`
@@ -40,26 +75,28 @@ const JobItem = styled.div`
   flex-direction: column;
 `;
 
-const JobStatus = JobItem.extend`
-  flex-basis: 24px;
+const JobSummaryTests = styled.div`
+  margin-bottom: 1em;
+  overflow: hidden;
+  a {
+    margin-left: 0.5em;
+  }
+  @media (min-width: 780px) {
+    margin-bottom: 0;
+  }
 `;
 
-const JobInfo = JobItem.extend`
-  flex-basis: calc(320px - 6rem);
-  margin-left: 2em;
-`;
-
-const JobTests = JobItem.extend`
-  flex-grow: 1;
-`;
-
-const Test = styled.div`
+const JobSummaryTest = styled.div`
   display: flex;
   align-items: center;
 `;
 
+const JobSummaryExtraInfo = styled.div`
+  min-width: 170px;
+`;
+
 const TestNumber = styled.span`
-  margin: 0 0.7em 0 0.5em;
+  margin: 0 0.5em 0 0.5em;
   min-width: 30px;
   text-align: center;
 `;
@@ -72,15 +109,15 @@ const Dot = styled.span`
 `;
 
 const DotSuccess = Dot.extend`
-  background-color: ${colors.green300};
+  background-color: ${colors.green200};
 `;
 
 const DotSkipped = Dot.extend`
-  background-color: ${colors.orange300};
+  background-color: ${colors.orange200};
 `;
 
 const DotError = Dot.extend`
-  background-color: ${colors.red300};
+  background-color: ${colors.red200};
 `;
 
 const JobDate = JobItem.extend`
@@ -122,46 +159,64 @@ function getIcon(job) {
   }
 }
 
-export default function JobSummary({ job, topic }) {
+export function JobSummaryContainer({ job }) {
+  if (!job || !job.remoteci) return null;
   return (
-    <Job>
-      <JobStatus>{getIcon(job)}</JobStatus>
-      <JobInfo>
-        <a href="#">{job.remoteci.name}</a>
-        <a href="#">{job.topic.name}</a>
-        {job.rconfiguration && job.rconfiguration.name ? (
-          <span>{job.rconfiguration.name}</span>
+    <JobSummary status={job.status}>
+      <JobSummaryHeader>
+        <JobSummaryIcon>{getIcon(job)}</JobSummaryIcon>
+        <JobItem>
+          <a href={`/jobs/${job.id}/jobStates`}>{job.remoteci.name}</a>
+          <span>{job.topic.name}</span>
+          {job.rconfiguration && job.rconfiguration.name ? (
+            <span>{job.rconfiguration.name}</span>
+          ) : null}
+          {job.components.map((component, i) => (
+            <span key={i}>{component.name}</span>
+          ))}
+        </JobItem>
+      </JobSummaryHeader>
+      <JobSummaryTests>
+        {job.results.length > 0 ? (
+          <a href={`/jobs/${job.id}/tests`}>Tests</a>
         ) : null}
-        {job.components.map((component, i) => (
-          <span key={i}>{component.name}</span>
+        {job.results.map((test, i) => (
+          <JobSummaryTest key={i}>
+            <DotSuccess />
+            <TestNumber>{test.success}</TestNumber>
+            <DotSkipped />
+            <TestNumber>{test.skips}</TestNumber>
+            <DotError />
+            <TestNumber>{test.failures + test.errors}</TestNumber>
+            <span>{test.name}</span>
+          </JobSummaryTest>
         ))}
-      </JobInfo>
-      <JobTests>
-        <Test>
-          <DotSuccess />
-          <TestNumber>1867</TestNumber>
-          <DotSkipped />
-          <TestNumber>356</TestNumber>
-          <DotError />
-          <TestNumber>187</TestNumber>
-          <span className="job__test-name">Tempest</span>
-        </Test>
-        <Test>
-          <DotSuccess />
-          <TestNumber>3</TestNumber>
-          <DotSkipped />
-          <TestNumber>41</TestNumber>
-          <DotError />
-          <TestNumber>1</TestNumber>
-          <span className="job__test-name">certification</span>
-        </Test>
-      </JobTests>
-      <JobDate>
-        <span>an hour ago</span>
-        <span>
-          Ran for <b>29 minutes</b>
-        </span>
-      </JobDate>
-    </Job>
+      </JobSummaryTests>
+      <JobSummaryExtraInfo>
+        <JobDate>
+          <span>{job.created_at}</span>
+          <span>
+            Ran for <b>{job.duration}</b>
+          </span>
+        </JobDate>
+      </JobSummaryExtraInfo>
+    </JobSummary>
   );
 }
+
+function enhanceJob(job, state) {
+  if (!job) return null;
+  return {
+    ...job,
+    created_at: date.fromNow(job.created_at, state.currentUser.timezone),
+    duration: date.duration(job.created_at, job.updated_at)
+  };
+}
+
+function mapStateToProps(state, ownProps) {
+  return {
+    job: enhanceJob(ownProps.job, state)
+  };
+}
+
+export default connect(mapStateToProps)(JobSummaryContainer);

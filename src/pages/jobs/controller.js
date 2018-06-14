@@ -28,30 +28,6 @@ class Ctrl {
   $onInit() {
     this.statuses = [
       {
-        value: "new",
-        name: "new",
-        icon: "fa-pause-circle",
-        btn: "btn-primary"
-      },
-      {
-        value: "pre-run",
-        name: "Pre Run",
-        icon: "fa-pause-circle",
-        btn: "btn-primary"
-      },
-      {
-        value: "running",
-        name: "Running",
-        icon: "fa-pause-circle",
-        btn: "btn-primary"
-      },
-      {
-        value: "post-run",
-        name: "Post Run",
-        icon: "fa-pause-circle",
-        btn: "btn-primary"
-      },
-      {
         value: "killed",
         name: "Killed",
         icon: "fa-stop-circle",

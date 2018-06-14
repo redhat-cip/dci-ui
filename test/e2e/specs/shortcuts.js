@@ -29,9 +29,7 @@ module.exports = function(browser) {
       .waitForElementVisible("#logInButton")
       .click("#logInButton")
       .waitForElementVisible("job-summary")
-      .pause(250)
-      .waitForElementVisible("#dashboard__title")
-      .assert.containsText("#dashboard__title", "Dashboard");
+      .pause(250);
     return this;
   };
 
@@ -92,7 +90,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__jobs-link"
         ).waitForXpathElementVisible(
-          "//div[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.1']"
+          "//span[normalize-space(text())='RH7-RHOS-12.0 2016-11-12.1']"
         );
       case "globalStatus":
         return this.click(

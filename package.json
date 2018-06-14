@@ -52,6 +52,7 @@
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "react2angular": "^4.0.2",
+    "redux-connect-standalone": "0.0.1",
     "redux-saga": "^0.16.0",
     "redux-thunk": "2.2.0",
     "redux-ui-router": "0.7.2",

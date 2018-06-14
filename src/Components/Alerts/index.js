@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import objectValues from "object.values";
 
-import { connectWithStore } from "store";
+import { connect } from "../../store";
 import { Alert } from "patternfly-react";
 import { hideAlert } from "./AlertsActions";
 
@@ -58,8 +58,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connectWithStore(
-  AlertsContainer,
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-);
+)(AlertsContainer);
