@@ -60,7 +60,7 @@ import globalStatusPage from "./pages/globalStatus";
 import Menu from "./components/menu";
 import Masthead from "./components/masthead";
 import Loading from "./components/loading";
-import JobSummary from "./components/job-summary";
+import JobSummary from "./Components/Jobs/JobSummary";
 import Alerts from "./Components/Alerts";
 import Title from "./Components/Title";
 import TitleCard from "./components/title-card";
@@ -101,7 +101,7 @@ angular.element(document).ready(function() {
         .component("dciMasthead", Masthead)
         .component("dciLoading", Loading)
         .component("dciAlerts", react2angular(Alerts))
-        .component("jobSummary", JobSummary)
+        .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
         .component("copyButton", CopyButton)
         .component("dciTitle", react2angular(Title))
         .component("titleCard", TitleCard)

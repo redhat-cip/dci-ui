@@ -13,7 +13,7 @@
     "precommit": "npm run test:unit && lint-staged",
     "build": "webpack --config webpack.prod.js",
     "start": "webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.dev.js",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "npm run test:unit",
     "test:unit": "ava 'src/**/*.test.js'",
     "test:e2e": "nightwatch --config ./test/e2e/nightwatch.conf.js"
   },
@@ -52,6 +52,7 @@
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "react2angular": "^4.0.2",
+    "redux-connect-standalone": "0.0.1",
     "redux-saga": "^0.16.0",
     "redux-thunk": "2.2.0",
     "redux-ui-router": "0.7.2",
