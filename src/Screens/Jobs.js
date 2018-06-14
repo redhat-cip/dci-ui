@@ -13,7 +13,7 @@
 // under the License.
 
 import React from "react";
-import { connectWithStore } from "../store";
+import { connect } from "../store";
 import objectValues from "object.values";
 import PropTypes from "prop-types";
 import { Grid, Row, Col } from "patternfly-react";
@@ -90,8 +90,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connectWithStore(
-  JobsScreen,
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-);
+)(JobsScreen);
