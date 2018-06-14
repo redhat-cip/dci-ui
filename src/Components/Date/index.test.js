@@ -12,14 +12,21 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import "./styles.scss";
-import template from "./template.html";
-import controller from "./controller";
+import test from "ava";
+import * as date from "./index";
 
-export default {
-  template,
-  controller,
-  bindings: {
-    job: "<"
-  }
-};
+test("date from now", t => {
+  const now = new Date(Date.UTC(2018, 5, 14, 8, 30, 59));
+  const timezone = "UTC";
+  t.is(
+    date.fromNow("2018-06-14T08:20:39.139451", timezone, now),
+    "10 minutes ago"
+  );
+});
+
+test("date duration", t => {
+  t.is(
+    date.duration("2018-06-14T08:30:39.139451", "2018-06-14T08:20:39.139451"),
+    "10 minutes"
+  );
+});
