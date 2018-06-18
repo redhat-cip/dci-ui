@@ -35,7 +35,7 @@
               </tr>
               <tr ng-repeat="remoteci in $ctrl.remotecis | orderBy: 'name'">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ remoteci.id }}" after="Copied!" position="right" />
+                  <copy-button text="remoteci.id" />
                 </td>
                 <td>
                   <span ng-if="remoteci.state == 'inactive'">

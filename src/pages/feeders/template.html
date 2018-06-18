@@ -35,7 +35,7 @@
               </tr>
               <tr ng-repeat="feeder in $ctrl.feeders | orderBy: 'name'">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ feeder.id }}" after="Copied!" position="right" />
+                  <copy-button text="feeder.id" />
                 </td>
                 <td>
                   <span ng-if="feeder.state == 'inactive'">

@@ -64,7 +64,7 @@ import JobSummary from "./Components/Jobs/JobSummary";
 import Alerts from "./Components/Alerts";
 import Title from "./Components/Title";
 import TitleCard from "./components/title-card";
-import CopyButton from "./components/copyButton";
+import CopyButton from "./Components/CopyButton";
 import ConfirmDestructiveAction from "./components/confirmDestructiveAction";
 import ConfirmDeleteModal from "./Components/ConfirmDeleteModal";
 import noTeamWarning from "./components/noTeamWarning";
@@ -102,7 +102,7 @@ angular.element(document).ready(function() {
         .component("dciLoading", Loading)
         .component("dciAlerts", react2angular(Alerts))
         .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
-        .component("copyButton", CopyButton)
+        .component("copyButton", react2angular(CopyButton))
         .component("dciTitle", react2angular(Title))
         .component("titleCard", TitleCard)
         .component("confirmDestructiveAction", ConfirmDestructiveAction)
