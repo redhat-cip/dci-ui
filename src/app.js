@@ -28,7 +28,7 @@ import adminTeamsPage from "./pages/admin/teams";
 import adminTeamEditPage from "./pages/admin/teams/edit";
 import adminTeamCreatePage from "./pages/admin/teams/create";
 import adminTeamForm from "./pages/admin/teams/form";
-import productsPage from "./pages/products";
+import ProductsScreen from "./Screens/Products";
 import productEditPage from "./pages/products/edit";
 import productCreatePage from "./pages/products/create";
 import remotecisPage from "./pages/remotecis";
@@ -131,7 +131,7 @@ angular.element(document).ready(function() {
         .component("adminTeamEditPage", adminTeamEditPage)
         .component("adminTeamCreatePage", adminTeamCreatePage)
         .component("adminTeamForm", adminTeamForm)
-        .component("productsPage", productsPage)
+        .component("productsScreen", react2angular(ProductsScreen))
         .component("productEditPage", productEditPage)
         .component("productCreatePage", productCreatePage)
         .component("remotecisPage", remotecisPage)

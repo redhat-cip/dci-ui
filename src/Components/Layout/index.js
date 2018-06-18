@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { colors } from "styles";
 
 const DivBackgroundGrey = styled.div`
-  background: ${colors.black100};
+  background: ${colors.black150};
   min-height: calc(100vh - 60px);
   padding: 2rem 0;
 `;

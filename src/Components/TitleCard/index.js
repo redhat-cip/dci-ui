@@ -13,28 +13,33 @@
 // under the License.
 
 import React from "react";
-import { Grid, Row, Col } from "patternfly-react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { colors } from "styles";
+import {
+  Grid,
+  Row,
+  Col,
+  Card,
+  CardHeading,
+  CardTitle,
+  CardBody
+} from "patternfly-react";
+import Spinner from "../Loading/Spinner";
 
-export const TitleContainer = styled.h1`
-  padding-bottom: 1rem;
-  border-bottom: 1px solid ${colors.black100};
-`;
-
-export default function Title({ title }) {
+export default function TitleCard({ title, headerButton, loading, children }) {
   return (
     <Grid fluid>
       <Row>
         <Col xs={12}>
-          <TitleContainer>{title}</TitleContainer>
+          <Card>
+            <CardHeading>
+              {headerButton}
+              <CardTitle>{title}</CardTitle>
+            </CardHeading>
+            <CardBody className={loading ? "text-center" : ""}>
+              {loading ? <Spinner /> : children}
+            </CardBody>
+          </Card>
         </Col>
       </Row>
     </Grid>
   );
 }
-
-Title.propTypes = {
-  title: PropTypes.string.isRequired
-};
