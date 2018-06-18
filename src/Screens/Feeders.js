@@ -20,42 +20,42 @@ import objectValues from "object.values";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Products/actions";
+import actions from "../Components/Feeders/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 
-export class ProductsScreen extends React.Component {
+export class FeedersScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchProducts();
+    this.props.fetchFeeders();
   }
 
   render() {
-    const { products, isFetching, errorMessage } = this.props;
+    const { feeders, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
-        {errorMessage && !products.length ? (
+        {errorMessage && !feeders.length ? (
           <Alert message={errorMessage} />
         ) : null}
         <TableCard
-          loading={isFetching && !products.length}
-          title="Products"
+          loading={isFetching && !feeders.length}
+          title="Feeders"
           headerButton={
-            <a className="pull-right btn btn-primary" href="/products/create">
-              Create a new product
+            <a className="pull-right btn btn-primary" href="/feeders/create">
+              Create a new feeder
             </a>
           }
         >
-          {!errorMessage && !products.length ? (
+          {!errorMessage && !feeders.length ? (
             <EmptyState
-              title="There is no products"
+              title="There is no feeder"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/productss/create">
-                  Create a new product
+                <a className="btn btn-primary" href="/feeders/create">
+                  Create a new feeder
                 </a>
               }
             />
@@ -64,7 +64,7 @@ export class ProductsScreen extends React.Component {
               <thead>
                 <tr>
                   <th className="text-center">ID</th>
-                  <th>Product name</th>
+                  <th>Feeder name</th>
                   <th>Label</th>
                   <th>Team Owner</th>
                   <th>Description</th>
@@ -73,29 +73,29 @@ export class ProductsScreen extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, i) => (
+                {feeders.map((feeder, i) => (
                   <tr key={i}>
                     <td className="text-center">
-                      <CopyButton text={product.id} />
+                      <CopyButton text={feeder.id} />
                     </td>
                     <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
+                      <a href={`/feeders/${feeder.id}`}>{feeder.name}</a>
                     </td>
-                    <td>{product.label}</td>
-                    <td>{product.team.name}</td>
-                    <td>{product.description}</td>
-                    <td>{product.created_at}</td>
+                    <td>{feeder.label}</td>
+                    <td>{feeder.team.name}</td>
+                    <td>{feeder.description}</td>
+                    <td>{feeder.created_at}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
+                        href={`/feeders/${feeder.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
                       <button
                         type="button"
                         className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteProduct(product)"
+                        ng-click="$ctrl.deleteFeeder(feeder)"
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -111,27 +111,27 @@ export class ProductsScreen extends React.Component {
   }
 }
 
-ProductsScreen.propTypes = {
-  products: PropTypes.array,
+FeedersScreen.propTypes = {
+  feeders: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchProducts: PropTypes.func
+  fetchFeeders: PropTypes.func
 };
 
-function enhanceProducts(state) {
-  const products = objectValues(state.products2.byId);
-  return products.map(product => {
+function enhanceFeeders(state) {
+  const feeders = objectValues(state.feeders2.byId);
+  return feeders.map(feeder => {
     return {
-      ...product,
-      created_at: date.fromNow(product.created_at, state.currentUser.timezone)
+      ...feeder,
+      created_at: date.fromNow(feeder.created_at, state.currentUser.timezone)
     };
   });
 }
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.products2;
+  const { isFetching, errorMessage } = state.feeders2;
   return {
-    products: enhanceProducts(state),
+    feeders: enhanceFeeders(state),
     isFetching,
     errorMessage
   };
@@ -139,7 +139,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProducts: () => {
+    fetchFeeders: () => {
       dispatch(actions.all({ embed: "team" }));
     }
   };
@@ -148,4 +148,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsScreen);
+)(FeedersScreen);

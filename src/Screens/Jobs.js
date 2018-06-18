@@ -14,7 +14,6 @@
 
 import React from "react";
 import { connect } from "../store";
-import objectValues from "object.values";
 import PropTypes from "prop-types";
 import { Grid, Row, Col } from "patternfly-react";
 import { denormalize } from "normalizr";

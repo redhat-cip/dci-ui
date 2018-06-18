@@ -34,7 +34,7 @@ import productCreatePage from "./pages/products/create";
 import remotecisPage from "./pages/remotecis";
 import remoteciEditPage from "./pages/remotecis/edit";
 import remoteciCreatePage from "./pages/remotecis/create";
-import feedersPage from "./pages/feeders";
+import FeedersScreen from "./Screens/Feeders";
 import feederEditPage from "./pages/feeders/edit";
 import feederCreatePage from "./pages/feeders/create";
 import jobsPage from "./pages/jobs";
@@ -137,7 +137,7 @@ angular.element(document).ready(function() {
         .component("remotecisPage", remotecisPage)
         .component("remoteciEditPage", remoteciEditPage)
         .component("remoteciCreatePage", remoteciCreatePage)
-        .component("feedersPage", feedersPage)
+        .component("feedersScreen", react2angular(FeedersScreen))
         .component("feederEditPage", feederEditPage)
         .component("feederCreatePage", feederCreatePage)
         .component("globalStatusPage", globalStatusPage)

@@ -180,7 +180,7 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth.feeders",
       url: "feeders",
-      component: "feedersPage"
+      component: "feedersScreen"
     })
     .state({
       name: "auth.feederEdit",
