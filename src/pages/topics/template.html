@@ -33,7 +33,7 @@
               </tr>
               <tr ng-repeat="topic in $ctrl.topics | orderBy: 'name'">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ topic.id }}" after="Copied!" position="right" />
+                  <copy-button text="topic.id" />
                 </td>
                 <td>
                   <button type="button" class="btn btn-link" ng-click="$ctrl.viewTopicDetails(topic)">

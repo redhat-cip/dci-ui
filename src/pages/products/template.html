@@ -35,7 +35,7 @@
               </tr>
               <tr ng-repeat="product in $ctrl.products | orderBy: 'name'">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ product.id }}" after="Copied!" position="right" />
+                  <copy-button text="product.id" />
                 </td>
                 <td>
                   <a ui-sref="auth.productEdit({id: product.id})">

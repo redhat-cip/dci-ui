@@ -49,7 +49,7 @@
             </tr>
             <tr ng-repeat="component in $ctrl.topic.components | orderBy: '-created_at'">
               <td class="text-center">
-                <copy-button before="Click to copy" txt="{{ component.id }}" after="Copied!" position="right" />
+                <copy-button text="component.id" />
               </td>
               <td>
                 <span>

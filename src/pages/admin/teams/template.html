@@ -58,7 +58,7 @@
               </tr>
               <tr ng-repeat="team in $ctrl.teams | orderBy: 'name' | filter:$ctrl.search as filteredTeams">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ team.id }}" after="Copied!" position="right" />
+                  <copy-button text="team.id" />
                 </td>
                 <td class="text-center" ng-if="$ctrl.currentUser.isSuperAdmin">
                     <span ng-if="team.external" class="label label-success">P</span>

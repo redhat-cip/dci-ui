@@ -46,7 +46,7 @@
               </tr>
               <tr ng-repeat="user in $ctrl.users | orderBy: 'name' | filter:$ctrl.search">
                 <td class="text-center">
-                  <copy-button before="Click to copy" txt="{{ user.id }}" after="Copied!" position="right" />
+                  <copy-button text="user.id" />
                 </td>
                 <td>
                   <a ui-sref="auth.adminUserEdit({id: user.id})">
