@@ -14,32 +14,27 @@
 
 import React from "react";
 import {
-  Grid,
-  Row,
-  Col,
-  Card,
-  CardHeading,
-  CardTitle,
-  CardBody
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateInfo,
+  EmptyStateAction
 } from "patternfly-react";
-import Spinner from "../Loading/Spinner";
+import styled from "styled-components";
+import { colors } from "../../styles";
 
-export default function TitleCard({ title, headerButton, loading, children }) {
+const DCIEmptyState = styled(EmptyState)`
+  background-color: ${colors.white};
+  border: none;
+`;
+
+export default function({ title, info, button }) {
   return (
-    <Grid fluid>
-      <Row>
-        <Col xs={12}>
-          <Card>
-            <CardHeading>
-              {headerButton}
-              <CardTitle>{title}</CardTitle>
-            </CardHeading>
-            <CardBody className={loading ? "text-center" : ""}>
-              {loading ? <Spinner /> : children}
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Grid>
+    <DCIEmptyState>
+      <EmptyStateIcon />
+      <EmptyStateTitle>{title}</EmptyStateTitle>
+      <EmptyStateInfo>{info}</EmptyStateInfo>
+      <EmptyStateAction>{button}</EmptyStateAction>
+    </DCIEmptyState>
   );
 }

@@ -34,3 +34,6 @@ export const users = [user];
 
 export const product = new schema.Entity("products");
 export const products = [product];
+
+export const feeder = new schema.Entity("feeders");
+export const feeders = [feeder];
