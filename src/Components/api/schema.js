@@ -31,3 +31,6 @@ export const jobs = [job];
 
 export const user = new schema.Entity("users");
 export const users = [user];
+
+export const product = new schema.Entity("products");
+export const products = [product];

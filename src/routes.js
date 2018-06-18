@@ -150,7 +150,7 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth.products",
       url: "products",
-      component: "productsPage"
+      component: "productsScreen"
     })
     .state({
       name: "auth.productEdit",
