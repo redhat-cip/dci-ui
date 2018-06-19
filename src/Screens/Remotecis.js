@@ -19,42 +19,44 @@ import * as date from "../Components/Date";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Products/actions";
+import actions from "../Components/Remotecis/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import { Label, Button, Icon } from "patternfly-react";
+import DCIRCFile from "../services/DCIRCFile";
 
-export class ProductsScreen extends React.Component {
+export class RemotecisScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchProducts();
+    this.props.fetchRemotecis();
   }
 
   render() {
-    const { products, isFetching, errorMessage } = this.props;
+    const { remotecis, isFetching, errorMessage, updateRemotecis } = this.props;
     return (
       <MainContent>
-        {errorMessage && !products.length ? (
+        {errorMessage && !remotecis.length ? (
           <Alert message={errorMessage} />
         ) : null}
         <TableCard
-          loading={isFetching && !products.length}
-          title="Products"
+          loading={isFetching && !remotecis.length}
+          title="Remotecis"
           headerButton={
-            <a className="pull-right btn btn-primary" href="/products/create">
-              Create a new product
+            <a className="pull-right btn btn-primary" href="/remotecis/create">
+              Create a new remoteci
             </a>
           }
         >
-          {!errorMessage && !products.length ? (
+          {!errorMessage && !remotecis.length ? (
             <EmptyState
-              title="There is no products"
+              title="There is no remotecis"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/productss/create">
-                  Create a new product
+                <a className="btn btn-primary" href="/remoteciss/create">
+                  Create a new remoteci
                 </a>
               }
             />
@@ -64,37 +66,54 @@ export class ProductsScreen extends React.Component {
                 <tr>
                   <th className="text-center">ID</th>
                   <th>Name</th>
-                  <th>Label</th>
-                  <th>Team Owner</th>
-                  <th>Description</th>
+                  <th className="text-center">Status</th>
+                  <th
+                    className="text-center"
+                    title="Download run commands file"
+                  >
+                    Download rc file
+                  </th>
+                  <th className="text-center">Team</th>
                   <th>Created At</th>
                   <th className="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, i) => (
+                {remotecis.map((remoteci, i) => (
                   <tr key={i}>
                     <td className="text-center">
-                      <CopyButton text={product.id} />
+                      <CopyButton text={remoteci.id} />
                     </td>
                     <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
+                      <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
                     </td>
-                    <td>{product.label}</td>
-                    <td>{product.team.name}</td>
-                    <td>{product.description}</td>
-                    <td>{product.created_at}</td>
+                    <td className="text-center">
+                      {remoteci.state === "active" ? (
+                        <Label bsStyle="success">active</Label>
+                      ) : (
+                        <Label bsStyle="danger">inactive</Label>
+                      )}
+                    </td>
+                    <td className="text-center">
+                      <Button
+                        onClick={() => DCIRCFile.download(remoteci, "remoteci")}
+                      >
+                        <Icon type="fa" name="download" /> remotecirc.sh
+                      </Button>
+                    </td>
+                    <td className="text-center">{remoteci.team.name}</td>
+                    <td>{remoteci.created_at}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
+                        href={`/remotecis/${remoteci.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
                       <button
                         type="button"
                         className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteProduct(product)"
+                        ng-click="$ctrl.deleteRemoteci(remoteci)"
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -110,18 +129,19 @@ export class ProductsScreen extends React.Component {
   }
 }
 
-ProductsScreen.propTypes = {
-  products: PropTypes.array,
+RemotecisScreen.propTypes = {
+  remotecis: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchProducts: PropTypes.func
+  fetchRemotecis: PropTypes.func,
+  updateRemotecis: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.products2;
+  const { isFetching, errorMessage } = state.remotecis2;
   return {
-    products: date.transformObjectsDates(
-      state.products2.byId,
+    remotecis: date.transformObjectsDates(
+      state.remotecis2.byId,
       state.currentUser.timezone
     ),
     isFetching,
@@ -131,8 +151,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProducts: () => {
+    fetchRemotecis: () => {
       dispatch(actions.all({ embed: "team" }));
+    },
+    updateRemotecis: remoteci => {
+      dispatch(actions.update(remoteci));
     }
   };
 }
@@ -140,4 +163,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsScreen);
+)(RemotecisScreen);

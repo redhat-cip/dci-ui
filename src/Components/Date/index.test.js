@@ -15,7 +15,7 @@
 import test from "ava";
 import * as date from "./index";
 
-test("date from now", t => {
+test("fromNow", t => {
   const now = new Date(Date.UTC(2018, 5, 14, 8, 30, 59));
   const timezone = "UTC";
   t.is(
@@ -24,7 +24,7 @@ test("date from now", t => {
   );
 });
 
-test("date duration", t => {
+test("duration", t => {
   t.is(
     date.duration("2018-06-14T08:30:39.139451", "2018-06-14T08:20:39.139451"),
     "10 minutes"

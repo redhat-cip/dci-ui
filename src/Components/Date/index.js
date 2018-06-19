@@ -13,6 +13,7 @@
 // under the License.
 
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
+import objectValues from "object.values";
 
 export function fromNow(dateString, timezone, now) {
   now = now ? moment(now) : moment();
@@ -25,4 +26,13 @@ export function duration(dateString1, dateString2) {
   const date1 = moment.utc(dateString1);
   const date2 = moment.utc(dateString2);
   return moment.duration(date2.diff(date1)).humanize();
+}
+
+export function transformObjectsDates(elements, timezone) {
+  return objectValues(elements).map(element => {
+    return {
+      ...element,
+      created_at: fromNow(element.created_at, timezone)
+    };
+  });
 }
