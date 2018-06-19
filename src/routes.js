@@ -165,7 +165,7 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth.remotecis",
       url: "remotecis",
-      component: "remotecisPage"
+      component: "remotecisScreen"
     })
     .state({
       name: "auth.remoteciEdit",

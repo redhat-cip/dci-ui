@@ -15,7 +15,10 @@ import { schema } from "normalizr";
 
 const component = new schema.Entity("components");
 const jobstate = new schema.Entity("jobstates");
-const remoteci = new schema.Entity("remotecis");
+
+export const remoteci = new schema.Entity("remotecis");
+export const remotecis = [remoteci];
+
 const result = new schema.Entity("results");
 const topic = new schema.Entity("topics");
 const rconfiguration = new schema.Entity("rconfigurations");

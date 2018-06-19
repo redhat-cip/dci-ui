@@ -17,7 +17,9 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import currentUserReducer from "./services/currentUser/reducers";
 import configReducer from "./services/config/reducers";
 import alertsReducer from "./Components/Alerts/AlertsReducer";
-import { createReducer } from "./Components/api/reducers";
+import ProductsReducer from "./Components/Products/reducer";
+import RemotecisReducer from "./Components/Remotecis/reducer";
+import FeedersReducer from "./Components/Feeders/reducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";
@@ -32,29 +34,20 @@ export const rootReducer = combineReducers({
   currentUser: currentUserReducer,
   config: configReducer,
   jobs: Reducers("job"),
-  jobs2: createReducer("job"),
   users: Reducers("user"),
-  users2: createReducer("user"),
   teams: Reducers("team"),
-  teams2: createReducer("team"),
   team: teamReducer,
   roles: Reducers("role"),
-  roles2: createReducer("role"),
   topics: Reducers("topic"),
-  topics2: createReducer("topic"),
   topic: TopicReducer,
   remotecis: Reducers("remoteci"),
-  remotecis2: createReducer("remoteci"),
   feeders: Reducers("feeder"),
-  feeders2: createReducer("feeder"),
   products: Reducers("product"),
-  products2: createReducer("product"),
   components: Reducers("component"),
-  components2: createReducer("component"),
-  results2: createReducer("result"),
-  rconfigurations2: createReducer("rconfiguration"),
-  jobstates2: createReducer("jobstate"),
-  router: RouterReducer
+  router: RouterReducer,
+  feeders2: FeedersReducer,
+  remotecis2: RemotecisReducer,
+  products2: ProductsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

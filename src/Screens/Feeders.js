@@ -16,7 +16,6 @@ import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import * as date from "../Components/Date";
-import objectValues from "object.values";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
@@ -64,7 +63,7 @@ export class FeedersScreen extends React.Component {
               <thead>
                 <tr>
                   <th className="text-center">ID</th>
-                  <th>Feeder name</th>
+                  <th>Name</th>
                   <th>Label</th>
                   <th>Team Owner</th>
                   <th>Description</th>
@@ -118,20 +117,13 @@ FeedersScreen.propTypes = {
   fetchFeeders: PropTypes.func
 };
 
-function enhanceFeeders(state) {
-  const feeders = objectValues(state.feeders2.byId);
-  return feeders.map(feeder => {
-    return {
-      ...feeder,
-      created_at: date.fromNow(feeder.created_at, state.currentUser.timezone)
-    };
-  });
-}
-
 function mapStateToProps(state) {
   const { isFetching, errorMessage } = state.feeders2;
   return {
-    feeders: enhanceFeeders(state),
+    feeders: date.transformObjectsDates(
+      state.feeders2.byId,
+      state.currentUser.timezone
+    ),
     isFetching,
     errorMessage
   };

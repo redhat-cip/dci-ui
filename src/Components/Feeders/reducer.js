@@ -11,17 +11,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+import { createReducer } from "../api/reducers";
 
-import React from "react";
-import styled from "styled-components";
-import { colors } from "styles";
-
-const DivBackgroundGrey = styled.div`
-  background: ${colors.black150};
-  min-height: calc(100vh - 60px);
-  padding: 1rem 0;
-`;
-
-export function MainContent({ children }) {
-  return <DivBackgroundGrey>{children}</DivBackgroundGrey>;
-}
+export default createReducer("feeder");
