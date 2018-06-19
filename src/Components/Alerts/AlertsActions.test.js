@@ -21,7 +21,7 @@ test("showAlert", t => {
     id: "a1"
   };
   const expectedAction = {
-    type: types.ADD_ALERT,
+    type: types.SHOW_ALERT,
     alert
   };
   t.deepEqual(actions.showAlert(alert), expectedAction);
@@ -32,7 +32,7 @@ test("hideAlert", t => {
     id: "a1"
   };
   const expectedAction = {
-    type: types.DELETE_ALERT,
+    type: types.HIDE_ALERT,
     alert
   };
   t.deepEqual(actions.hideAlert(alert), expectedAction);

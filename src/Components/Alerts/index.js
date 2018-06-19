@@ -24,6 +24,7 @@ import { hideAlert } from "./AlertsActions";
 const Alerts = styled.div`
   position: absolute;
   z-index: 100;
+  top: 20px;
   right: 20px;
 `;
 

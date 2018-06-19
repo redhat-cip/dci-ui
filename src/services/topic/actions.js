@@ -39,7 +39,7 @@ export function getTopic(topic) {
         );
       })
       .catch(error => {
-        dispatch(alertsActions.errorApi(error.response));
+        dispatch(alertsActions.showAPIError(error.response));
         throw error;
       });
   };

@@ -32,7 +32,7 @@ export function transformObjectsDates(elements, timezone) {
   return objectValues(elements).map(element => {
     return {
       ...element,
-      created_at: fromNow(element.created_at, timezone)
+      from_now: fromNow(element.created_at, timezone)
     };
   });
 }

@@ -45,7 +45,7 @@ class Ctrl {
         this.$scope.$apply();
       })
       .catch(err => {
-        this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
+        this.$ngRedux.dispatch(alertsActions.showAPIError(err.response));
       });
   }
 
@@ -58,7 +58,7 @@ class Ctrl {
         this.$scope.$apply();
       })
       .catch(err => {
-        this.$ngRedux.dispatch(alertsActions.errorApi(err.response));
+        this.$ngRedux.dispatch(alertsActions.showAPIError(err.response));
       });
   }
 }

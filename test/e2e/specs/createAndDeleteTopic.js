@@ -29,15 +29,13 @@ module.exports = {
       .click("option[name='OpenStack']")
       .waitForElementVisible("#createButton")
       .click("#createButton")
-      .waitForXpathElementVisible(
-        `//button[normalize-space(text())="${topicName}"]`
-      )
+      .waitForXpathElementVisible(`//a[normalize-space(text())="${topicName}"]`)
       .waitForElementVisible(".btn-danger")
       .click(".btn-danger")
       .waitForXpathElementVisible(`//button[text()="Yes delete ${topicName}"]`)
-      .clickXpath(`//button[normalize-space(text())="Yes delete ${topicName}"]`)
-      .waitForXpathElementVisible(
-        `//button[normalize-space(text())="${topicName}"]`
+      .clickXpath(`//button[text()="Yes delete ${topicName}"]`)
+      .waitForXpathElementNotPresent(
+        `//a[normalize-space(text())="${topicName}"]`
       )
       .end();
   }

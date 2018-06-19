@@ -16,11 +16,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Icon, Button } from "patternfly-react";
 
-export default class ConfirmDeleteModal extends React.Component {
+export default class ConfirmDeleteButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: this.props.show || false
+      show: this.props.show
     };
   }
 
@@ -30,8 +30,7 @@ export default class ConfirmDeleteModal extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.props.children}
+      <React.Fragment>
         <Modal show={this.state.show} onHide={this.close}>
           <Modal.Header>
             <button
@@ -53,23 +52,42 @@ export default class ConfirmDeleteModal extends React.Component {
               className="btn-cancel"
               onClick={this.close}
             >
-              {this.props.cancelButton || "cancel"}
+              {this.props.cancelButton}
             </Button>
-            <Button bsStyle="danger" onClick={this.afterConfirmation}>
-              {this.props.okButton || "ok"}
+            <Button
+              bsStyle="danger"
+              onClick={() => {
+                this.setState({ show: false });
+                this.props.whenConfirmed();
+              }}
+            >
+              {this.props.okButton}
             </Button>
           </Modal.Footer>
         </Modal>
-      </div>
+        <button
+          type="button"
+          className="btn btn-danger btn-sm"
+          onClick={() => this.setState({ show: true })}
+        >
+          <i className="fa fa-trash" />
+        </button>
+      </React.Fragment>
     );
   }
 }
 
-ConfirmDeleteModal.propTypes = {
+ConfirmDeleteButton.propTypes = {
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   okButton: PropTypes.string,
   cancelButton: PropTypes.string,
   show: PropTypes.bool,
-  confirmed: PropTypes.func.isRequired
+  whenConfirmed: PropTypes.func.isRequired
+};
+
+ConfirmDeleteButton.defaultProps = {
+  show: false,
+  okButton: "ok",
+  cancelButton: "cancel"
 };
