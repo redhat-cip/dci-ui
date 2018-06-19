@@ -118,7 +118,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__components-link"
         ).waitForXpathElementVisible(
-          "//span[normalize-space(text())='RH7-RHOS-10.0 2016-11-12.1']"
+          "//td[normalize-space(text())='RH7-RHOS-10.0 2016-11-12.1']"
         );
       case "Remotecis":
         return this.click(

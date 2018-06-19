@@ -78,6 +78,11 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       component: "jobCertificationPage"
     })
     .state({
+      name: "auth.components",
+      url: "components",
+      component: "componentsScreen"
+    })
+    .state({
       name: "auth.topics",
       url: "topics",
       component: "topicsScreen"
