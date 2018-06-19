@@ -35,7 +35,7 @@ export class RemotecisScreen extends React.Component {
   }
 
   render() {
-    const { remotecis, isFetching, errorMessage, updateRemotecis } = this.props;
+    const { remotecis, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
         {errorMessage && !remotecis.length ? (
@@ -55,7 +55,7 @@ export class RemotecisScreen extends React.Component {
               title="There is no remotecis"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/remoteciss/create">
+                <a className="btn btn-primary" href="/remotecis/create">
                   Create a new remoteci
                 </a>
               }
@@ -153,9 +153,6 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchRemotecis: () => {
       dispatch(actions.all({ embed: "team" }));
-    },
-    updateRemotecis: remoteci => {
-      dispatch(actions.update(remoteci));
     }
   };
 }

@@ -38,14 +38,13 @@ import RemotecisScreen from "./Screens/Remotecis";
 import feederEditPage from "./pages/feeders/edit";
 import feederCreatePage from "./pages/feeders/create";
 import jobsPage from "./pages/jobs";
-import JobsScreen from "./Screens/Jobs";
 import jobMenu from "./pages/jobs/menu";
 import jobStatesPage from "./pages/jobs/jobstates";
 import jobTestsPage from "./pages/jobs/tests";
 import jobIssuesPage from "./pages/jobs/issues";
 import jobFilesPage from "./pages/jobs/files";
 import jobCertificationPage from "./pages/jobs/certification";
-import topicsPage from "./pages/topics";
+import TopicsScreen from "./Screens/Topics";
 import topicCreatePage from "./pages/topics/create";
 import topicEditPage from "./pages/topics/edit";
 import topicDetailsPage from "./pages/topics/details";
@@ -110,14 +109,13 @@ angular.element(document).ready(function() {
         .component("noTeamWarning", noTeamWarning)
         .component("loginPage", loginPage)
         .component("jobsPage", jobsPage)
-        .component("jobsScreen", react2angular(JobsScreen))
         .component("jobMenu", jobMenu)
         .component("jobStatesPage", jobStatesPage)
         .component("jobTestsPage", jobTestsPage)
         .component("jobIssuesPage", jobIssuesPage)
         .component("jobFilesPage", jobFilesPage)
         .component("jobCertificationPage", jobCertificationPage)
-        .component("topicsPage", topicsPage)
+        .component("topicsScreen", react2angular(TopicsScreen))
         .component("topicCreatePage", topicCreatePage)
         .component("topicEditPage", topicEditPage)
         .component("topicDetailsPage", topicDetailsPage)

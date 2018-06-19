@@ -19,6 +19,7 @@ import configReducer from "./services/config/reducers";
 import alertsReducer from "./Components/Alerts/AlertsReducer";
 import ProductsReducer from "./Components/Products/reducer";
 import RemotecisReducer from "./Components/Remotecis/reducer";
+import TopicsReducer from "./Components/Topics/reducer";
 import FeedersReducer from "./Components/Feeders/reducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
@@ -47,7 +48,8 @@ export const rootReducer = combineReducers({
   router: RouterReducer,
   feeders2: FeedersReducer,
   remotecis2: RemotecisReducer,
-  products2: ProductsReducer
+  products2: ProductsReducer,
+  topics2: TopicsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

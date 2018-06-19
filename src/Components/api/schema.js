@@ -13,15 +13,24 @@
 // under the License.
 import { schema } from "normalizr";
 
-const component = new schema.Entity("components");
-const jobstate = new schema.Entity("jobstates");
+export const component = new schema.Entity("components");
+export const components = [component];
+
+export const jobstate = new schema.Entity("jobstates");
+export const jobstates = [jobstate];
 
 export const remoteci = new schema.Entity("remotecis");
 export const remotecis = [remoteci];
 
-const result = new schema.Entity("results");
-const topic = new schema.Entity("topics");
-const rconfiguration = new schema.Entity("rconfigurations");
+export const result = new schema.Entity("results");
+export const results = [result];
+
+export const topic = new schema.Entity("topics");
+export const topics = [topic];
+
+export const rconfiguration = new schema.Entity("rconfigurations");
+export const rconfigurations = [rconfiguration];
+
 export const job = new schema.Entity("jobs", {
   components: [component],
   jobstates: [jobstate],

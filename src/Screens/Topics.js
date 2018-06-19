@@ -19,42 +19,44 @@ import * as date from "../Components/Date";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Products/actions";
+import actions from "../Components/Topics/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import { Label, Button, Icon } from "patternfly-react";
+import DCIRCFile from "../services/DCIRCFile";
 
-export class ProductsScreen extends React.Component {
+export class TopicsScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchProducts();
+    this.props.fetchTopics();
   }
 
   render() {
-    const { products, isFetching, errorMessage } = this.props;
+    const { topics, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
-        {errorMessage && !products.length ? (
+        {errorMessage && !topics.length ? (
           <Alert message={errorMessage} />
         ) : null}
         <TableCard
-          loading={isFetching && !products.length}
-          title="Products"
+          loading={isFetching && !topics.length}
+          title="Topics"
           headerButton={
-            <a className="pull-right btn btn-primary" href="/products/create">
-              Create a new product
+            <a className="pull-right btn btn-primary" href="/topics/create">
+              Create a new topic
             </a>
           }
         >
-          {!errorMessage && !products.length ? (
+          {!errorMessage && !topics.length ? (
             <EmptyState
-              title="There is no products"
+              title="There is no topics"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/products/create">
-                  Create a new product
+                <a className="btn btn-primary" href="/topics/create">
+                  Create a new topic
                 </a>
               }
             />
@@ -64,37 +66,45 @@ export class ProductsScreen extends React.Component {
                 <tr>
                   <th className="text-center">ID</th>
                   <th>Name</th>
-                  <th>Label</th>
-                  <th>Team Owner</th>
-                  <th>Description</th>
+                  <th>Next Topic</th>
+                  <th>Product</th>
                   <th>Created At</th>
-                  <th className="text-center">Actions</th>
+                  <th
+                    className="text-center"
+                    ng-if="$ctrl.currentUser.hasProductOwnerRole"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, i) => (
+                {topics.map((topic, i) => (
                   <tr key={i}>
                     <td className="text-center">
-                      <CopyButton text={product.id} />
+                      <CopyButton text={topic.id} />
                     </td>
                     <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
+                      <a href={`/topics/${topic.id}`}>{topic.name}</a>
                     </td>
-                    <td>{product.label}</td>
-                    <td>{product.team.name}</td>
-                    <td>{product.description}</td>
-                    <td>{product.created_at}</td>
+                    <td>
+                      <a href={`/topics/${topic.nexttopic.id}`}>
+                        {topic.nexttopic.name}
+                      </a>
+                    </td>
+
+                    <td>{topic.product.name}</td>
+                    <td>{topic.created_at}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
+                        href={`/topics/${topic.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
                       <button
                         type="button"
                         className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteProduct(product)"
+                        ng-click="$ctrl.deleteTopic(topic)"
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -110,18 +120,19 @@ export class ProductsScreen extends React.Component {
   }
 }
 
-ProductsScreen.propTypes = {
-  products: PropTypes.array,
+TopicsScreen.propTypes = {
+  topics: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchProducts: PropTypes.func
+  fetchTopics: PropTypes.func,
+  updateTopics: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.products2;
+  const { isFetching, errorMessage } = state.topics2;
   return {
-    products: date.transformObjectsDates(
-      state.products2.byId,
+    topics: date.transformObjectsDates(
+      state.topics2.byId,
       state.currentUser.timezone
     ),
     isFetching,
@@ -131,8 +142,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProducts: () => {
-      dispatch(actions.all({ embed: "team" }));
+    fetchTopics: () => {
+      dispatch(actions.all({ embed: "product,nexttopic" }));
     }
   };
 }
@@ -140,4 +151,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsScreen);
+)(TopicsScreen);

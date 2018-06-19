@@ -85,7 +85,7 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state({
       name: "auth.topics",
       url: "topics",
-      component: "topicsPage"
+      component: "topicsScreen"
     })
     .state({
       name: "auth.topicCreate",
