@@ -35,7 +35,7 @@ export class RemotecisScreen extends React.Component {
   }
 
   render() {
-    const { remotecis, isFetching, errorMessage, updateRemotecis } = this.props;
+    const { remotecis, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
         {errorMessage && !remotecis.length ? (
@@ -55,7 +55,7 @@ export class RemotecisScreen extends React.Component {
               title="There is no remotecis"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/remoteciss/create">
+                <a className="btn btn-primary" href="/remotecis/create">
                   Create a new remoteci
                 </a>
               }
@@ -74,7 +74,7 @@ export class RemotecisScreen extends React.Component {
                     Download rc file
                   </th>
                   <th className="text-center">Team</th>
-                  <th>Created At</th>
+                  <th>Created</th>
                   <th className="text-center">Actions</th>
                 </tr>
               </thead>
@@ -85,7 +85,9 @@ export class RemotecisScreen extends React.Component {
                       <CopyButton text={remoteci.id} />
                     </td>
                     <td>
-                      <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
+                      <a href={`/remotecis/details/${remoteci.id}`}>
+                        {remoteci.name}
+                      </a>
                     </td>
                     <td className="text-center">
                       {remoteci.state === "active" ? (
@@ -106,7 +108,7 @@ export class RemotecisScreen extends React.Component {
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/remotecis/${remoteci.id}`}
+                        href={`/remotecis/details/${remoteci.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
@@ -153,9 +155,6 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchRemotecis: () => {
       dispatch(actions.all({ embed: "team" }));
-    },
-    updateRemotecis: remoteci => {
-      dispatch(actions.update(remoteci));
     }
   };
 }

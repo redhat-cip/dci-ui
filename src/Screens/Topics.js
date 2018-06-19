@@ -19,42 +19,44 @@ import * as date from "../Components/Date";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Feeders/actions";
+import actions from "../Components/Topics/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import { Label, Button, Icon } from "patternfly-react";
+import DCIRCFile from "../services/DCIRCFile";
 
-export class FeedersScreen extends React.Component {
+export class TopicsScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchFeeders();
+    this.props.fetchTopics();
   }
 
   render() {
-    const { feeders, isFetching, errorMessage } = this.props;
+    const { topics, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
-        {errorMessage && !feeders.length ? (
+        {errorMessage && !topics.length ? (
           <Alert message={errorMessage} />
         ) : null}
         <TableCard
-          loading={isFetching && !feeders.length}
-          title="Feeders"
+          loading={isFetching && !topics.length}
+          title="Topics"
           headerButton={
-            <a className="pull-right btn btn-primary" href="/feeders/create">
-              Create a new feeder
+            <a className="pull-right btn btn-primary" href="/topics/create">
+              Create a new topic
             </a>
           }
         >
-          {!errorMessage && !feeders.length ? (
+          {!errorMessage && !topics.length ? (
             <EmptyState
-              title="There is no feeder"
+              title="There is no topics"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/feeders/create">
-                  Create a new feeder
+                <a className="btn btn-primary" href="/topics/create">
+                  Create a new topic
                 </a>
               }
             />
@@ -64,39 +66,45 @@ export class FeedersScreen extends React.Component {
                 <tr>
                   <th className="text-center">ID</th>
                   <th>Name</th>
-                  <th>Label</th>
-                  <th>Team Owner</th>
-                  <th>Description</th>
+                  <th>Next Topic</th>
+                  <th>Product</th>
                   <th>Created</th>
-                  <th className="text-center">Actions</th>
+                  <th
+                    className="text-center"
+                    ng-if="$ctrl.currentUser.hasProductOwnerRole"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {feeders.map((feeder, i) => (
+                {topics.map((topic, i) => (
                   <tr key={i}>
                     <td className="text-center">
-                      <CopyButton text={feeder.id} />
+                      <CopyButton text={topic.id} />
                     </td>
                     <td>
-                      <a href={`/feeders/details/${feeder.id}`}>
-                        {feeder.name}
+                      <a href={`/topics/details/${topic.id}`}>{topic.name}</a>
+                    </td>
+                    <td>
+                      <a href={`/topics/details/${topic.nexttopic.id}`}>
+                        {topic.nexttopic.name}
                       </a>
                     </td>
-                    <td>{feeder.label}</td>
-                    <td>{feeder.team.name}</td>
-                    <td>{feeder.description}</td>
-                    <td>{feeder.created_at}</td>
+
+                    <td>{topic.product.name}</td>
+                    <td>{topic.created_at}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/feeders/details/${feeder.id}`}
+                        href={`/topics/details/${topic.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
                       <button
                         type="button"
                         className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteFeeder(feeder)"
+                        ng-click="$ctrl.deleteTopic(topic)"
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -112,18 +120,19 @@ export class FeedersScreen extends React.Component {
   }
 }
 
-FeedersScreen.propTypes = {
-  feeders: PropTypes.array,
+TopicsScreen.propTypes = {
+  topics: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchFeeders: PropTypes.func
+  fetchTopics: PropTypes.func,
+  updateTopics: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.feeders2;
+  const { isFetching, errorMessage } = state.topics2;
   return {
-    feeders: date.transformObjectsDates(
-      state.feeders2.byId,
+    topics: date.transformObjectsDates(
+      state.topics2.byId,
       state.currentUser.timezone
     ),
     isFetching,
@@ -133,8 +142,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchFeeders: () => {
-      dispatch(actions.all({ embed: "team" }));
+    fetchTopics: () => {
+      dispatch(actions.all({ embed: "product,nexttopic" }));
     }
   };
 }
@@ -142,4 +151,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FeedersScreen);
+)(TopicsScreen);

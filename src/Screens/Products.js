@@ -53,7 +53,7 @@ export class ProductsScreen extends React.Component {
               title="There is no products"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/productss/create">
+                <a className="btn btn-primary" href="/products/create">
                   Create a new product
                 </a>
               }
@@ -67,7 +67,7 @@ export class ProductsScreen extends React.Component {
                   <th>Label</th>
                   <th>Team Owner</th>
                   <th>Description</th>
-                  <th>Created At</th>
+                  <th>Created</th>
                   <th className="text-center">Actions</th>
                 </tr>
               </thead>
@@ -78,7 +78,9 @@ export class ProductsScreen extends React.Component {
                       <CopyButton text={product.id} />
                     </td>
                     <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
+                      <a href={`/products/details/${product.id}`}>
+                        {product.name}
+                      </a>
                     </td>
                     <td>{product.label}</td>
                     <td>{product.team.name}</td>
@@ -87,7 +89,7 @@ export class ProductsScreen extends React.Component {
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
+                        href={`/products/details/${product.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
