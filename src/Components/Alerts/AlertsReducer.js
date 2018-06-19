@@ -18,12 +18,12 @@ const initialState = {};
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case types.ADD_ALERT:
+    case types.SHOW_ALERT:
       return {
         ...state,
         [action.alert.id]: action.alert
       };
-    case types.DELETE_ALERT:
+    case types.HIDE_ALERT:
       delete state[action.alert.id];
       return {
         ...state

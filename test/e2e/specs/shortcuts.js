@@ -61,6 +61,13 @@ module.exports = function(browser) {
     return this;
   };
 
+  browser.waitForXpathElementNotPresent = function(element) {
+    this.useXpath()
+      .waitForElementNotPresent(element)
+      .useCss();
+    return this;
+  };
+
   browser.checkLogs = function(page) {
     this.getLog(logs => {
       const formattedLogs = JSON.stringify(logs, null, 2);
@@ -101,9 +108,7 @@ module.exports = function(browser) {
       case "topics":
         return this.click(
           "#navbar-primary__topics-link"
-        ).waitForXpathElementVisible(
-          "//button[normalize-space(text())='OSP10']"
-        );
+        ).waitForXpathElementVisible("//a[normalize-space(text())='OSP10']");
       case "createTopic":
         return this.click("#navbar-primary__topics-link")
           .waitForElementVisible("#topics__create-topic-btn")

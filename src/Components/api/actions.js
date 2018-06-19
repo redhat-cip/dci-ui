@@ -15,6 +15,7 @@ import axios from "axios";
 import { normalize } from "normalizr";
 import { createActionsTypes } from "./actionsTypes";
 import * as schema from "./schema";
+import { showAPIError, showSuccess } from "../Alerts/AlertsActions";
 
 export function createActions(endpoint) {
   return {
@@ -41,14 +42,7 @@ export function createActions(endpoint) {
             return response;
           })
           .catch(error => {
-            dispatch({
-              type: createActionsTypes(endpoint).FETCH_ALL_FAILURE,
-              message:
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                "Something went wrong"
-            });
+            dispatch(showAPIError(error.response));
             return error;
           });
       };
@@ -73,14 +67,7 @@ export function createActions(endpoint) {
             return response;
           })
           .catch(error => {
-            dispatch({
-              type: createActionsTypes(endpoint).FETCH_FAILURE,
-              message:
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                "Something went wrong"
-            });
+            dispatch(showAPIError(error.response));
             return error;
           });
       };
@@ -106,14 +93,7 @@ export function createActions(endpoint) {
             return response;
           })
           .catch(error => {
-            dispatch({
-              type: createActionsTypes(endpoint).CREATE_FAILURE,
-              message:
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                "Something went wrong"
-            });
+            dispatch(showAPIError(error.response));
             return error;
           });
       };
@@ -143,14 +123,7 @@ export function createActions(endpoint) {
             return response;
           })
           .catch(error => {
-            dispatch({
-              type: createActionsTypes(endpoint).UPDATE_FAILURE,
-              message:
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                "Something went wrong"
-            });
+            dispatch(showAPIError(error.response));
             return error;
           });
       };
@@ -168,6 +141,9 @@ export function createActions(endpoint) {
             headers: { "If-Match": resource.etag }
           })
           .then(response => {
+            dispatch(
+              showSuccess(`${endpoint} ${resource.name} deleted successfully!`)
+            );
             dispatch({
               type: createActionsTypes(endpoint).DELETE_SUCCESS,
               id: resource.id
@@ -175,14 +151,7 @@ export function createActions(endpoint) {
             return response;
           })
           .catch(error => {
-            dispatch({
-              type: createActionsTypes(endpoint).DELETE_FAILURE,
-              message:
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                "Something went wrong"
-            });
+            dispatch(showAPIError(error.response));
             return error;
           });
       };

@@ -16,39 +16,37 @@ import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import * as date from "../Components/Date";
-import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Feeders/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
+import _ from "lodash";
 
 export class FeedersScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchFeeders();
   }
 
   render() {
-    const { feeders, isFetching, errorMessage } = this.props;
+    const { feeders, isFetching } = this.props;
     return (
       <MainContent>
-        {errorMessage && !feeders.length ? (
-          <Alert message={errorMessage} />
-        ) : null}
         <TableCard
-          loading={isFetching && !feeders.length}
           title="Feeders"
-          headerButton={
-            <a className="pull-right btn btn-primary" href="/feeders/create">
+          loading={isFetching && !feeders.length}
+          empty={!isFetching && !feeders.length}
+          HeaderButton={
+            <a
+              id="feeders__create-feeder-btn"
+              className="pull-right btn btn-primary"
+              href="/feeders/create"
+            >
               Create a new feeder
             </a>
           }
-        >
-          {!errorMessage && !feeders.length ? (
+          EmptyComponent={
             <EmptyState
               title="There is no feeder"
               info="Do you want to create one?"
@@ -58,52 +56,56 @@ export class FeedersScreen extends React.Component {
                 </a>
               }
             />
-          ) : (
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th className="text-center">ID</th>
-                  <th>Name</th>
-                  <th>Label</th>
-                  <th>Team Owner</th>
-                  <th>Description</th>
-                  <th>Created At</th>
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {feeders.map((feeder, i) => (
+          }
+        >
+          <table className="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th className="text-center">ID</th>
+                <th>Name</th>
+                <th>Label</th>
+                <th>Team Owner</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {_.sortBy(feeders, [e => e.name.toLowerCase()]).map(
+                (feeder, i) => (
                   <tr key={i}>
                     <td className="text-center">
                       <CopyButton text={feeder.id} />
                     </td>
                     <td>
-                      <a href={`/feeders/${feeder.id}`}>{feeder.name}</a>
+                      <a href={`/feeders/details/${feeder.id}`}>
+                        {feeder.name}
+                      </a>
                     </td>
                     <td>{feeder.label}</td>
                     <td>{feeder.team.name}</td>
                     <td>{feeder.description}</td>
-                    <td>{feeder.created_at}</td>
+                    <td>{feeder.from_now}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/feeders/${feeder.id}`}
+                        href={`/feeders/details/${feeder.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteFeeder(feeder)"
-                      >
-                        <i className="fa fa-trash" />
-                      </button>
+                      <ConfirmDeleteButton
+                        title={`Delete feeder ${feeder.name}`}
+                        body={`Are you you want to delete ${feeder.name}?`}
+                        okButton={`Yes delete ${feeder.name}`}
+                        cancelButton="oups no!"
+                        whenConfirmed={() => this.props.deleteFeeder(feeder)}
+                      />
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                )
+              )}
+            </tbody>
+          </table>
         </TableCard>
       </MainContent>
     );
@@ -131,9 +133,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchFeeders: () => {
-      dispatch(actions.all({ embed: "team" }));
-    }
+    fetchFeeders: () => dispatch(actions.all({ embed: "team" })),
+    deleteFeeder: feeder => dispatch(actions.delete(feeder))
   };
 }
 

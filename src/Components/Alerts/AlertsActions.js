@@ -16,14 +16,14 @@ import * as types from "./AlertsActionsTypes";
 
 export function showAlert(alert) {
   return {
-    type: types.ADD_ALERT,
+    type: types.SHOW_ALERT,
     alert
   };
 }
 
 export function hideAlert(alert) {
   return {
-    type: types.DELETE_ALERT,
+    type: types.HIDE_ALERT,
     alert
   };
 }
@@ -44,6 +44,10 @@ export function success(message) {
   return showAndHideAfter10s(alert);
 }
 
+export function showSuccess(message) {
+  return success(message);
+}
+
 export function error(message) {
   const alert = {
     id: Date.now(),
@@ -51,6 +55,10 @@ export function error(message) {
     type: "error"
   };
   return showAndHideAfter10s(alert);
+}
+
+export function showAPIError(response) {
+  return error(createAlertMessage(response));
 }
 
 export function createAlertMessage(response) {
@@ -72,8 +80,4 @@ export function createAlertMessage(response) {
     }
   }
   return alertMessage;
-}
-
-export function errorApi(response) {
-  return error(createAlertMessage(response));
 }

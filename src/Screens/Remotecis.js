@@ -16,7 +16,6 @@ import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import * as date from "../Components/Date";
-import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Remotecis/actions";
@@ -24,68 +23,68 @@ import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import { Label, Button, Icon } from "patternfly-react";
 import DCIRCFile from "../services/DCIRCFile";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
+import _ from "lodash";
 
 export class RemotecisScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchRemotecis();
   }
 
   render() {
-    const { remotecis, isFetching, errorMessage, updateRemotecis } = this.props;
+    const { remotecis, isFetching } = this.props;
     return (
       <MainContent>
-        {errorMessage && !remotecis.length ? (
-          <Alert message={errorMessage} />
-        ) : null}
         <TableCard
-          loading={isFetching && !remotecis.length}
           title="Remotecis"
-          headerButton={
-            <a className="pull-right btn btn-primary" href="/remotecis/create">
+          loading={isFetching && !remotecis.length}
+          empty={!isFetching && !remotecis.length}
+          HeaderButton={
+            <a
+              id="remotecis__create-remoteci-btn"
+              className="pull-right btn btn-primary"
+              href="/remotecis/create"
+            >
               Create a new remoteci
             </a>
           }
-        >
-          {!errorMessage && !remotecis.length ? (
+          EmptyComponent={
             <EmptyState
               title="There is no remotecis"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/remoteciss/create">
+                <a className="btn btn-primary" href="/remotecis/create">
                   Create a new remoteci
                 </a>
               }
             />
-          ) : (
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th className="text-center">ID</th>
-                  <th>Name</th>
-                  <th className="text-center">Status</th>
-                  <th
-                    className="text-center"
-                    title="Download run commands file"
-                  >
-                    Download rc file
-                  </th>
-                  <th className="text-center">Team</th>
-                  <th>Created At</th>
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {remotecis.map((remoteci, i) => (
+          }
+        >
+          <table className="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th className="text-center">ID</th>
+                <th>Name</th>
+                <th className="text-center">Status</th>
+                <th className="text-center" title="Download run commands file">
+                  Download rc file
+                </th>
+                <th className="text-center">Team</th>
+                <th>Created</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {_.sortBy(remotecis, [e => e.name.toLowerCase()]).map(
+                (remoteci, i) => (
                   <tr key={i}>
                     <td className="text-center">
                       <CopyButton text={remoteci.id} />
                     </td>
                     <td>
-                      <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
+                      <a href={`/remotecis/details/${remoteci.id}`}>
+                        {remoteci.name}
+                      </a>
                     </td>
                     <td className="text-center">
                       {remoteci.state === "active" ? (
@@ -102,27 +101,29 @@ export class RemotecisScreen extends React.Component {
                       </Button>
                     </td>
                     <td className="text-center">{remoteci.team.name}</td>
-                    <td>{remoteci.created_at}</td>
+                    <td>{remoteci.from_now}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/remotecis/${remoteci.id}`}
+                        href={`/remotecis/details/${remoteci.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteRemoteci(remoteci)"
-                      >
-                        <i className="fa fa-trash" />
-                      </button>
+                      <ConfirmDeleteButton
+                        title={`Delete remoteci ${remoteci.name}`}
+                        body={`Are you you want to delete ${remoteci.name}?`}
+                        okButton={`Yes delete ${remoteci.name}`}
+                        cancelButton="oups no!"
+                        whenConfirmed={() =>
+                          this.props.deleteRemoteci(remoteci)
+                        }
+                      />
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                )
+              )}
+            </tbody>
+          </table>
         </TableCard>
       </MainContent>
     );
@@ -151,12 +152,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchRemotecis: () => {
-      dispatch(actions.all({ embed: "team" }));
-    },
-    updateRemotecis: remoteci => {
-      dispatch(actions.update(remoteci));
-    }
+    fetchRemotecis: () => dispatch(actions.all({ embed: "team" })),
+    deleteRemoteci: remoteci => dispatch(actions.delete(remoteci))
   };
 }
 

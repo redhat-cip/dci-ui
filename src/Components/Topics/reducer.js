@@ -11,27 +11,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Alert } from "patternfly-react";
+import { createReducer } from "../api/reducers";
 
-const AlertContainer = styled.div`
-  position: absolute;
-  z-index: 100;
-  top: 20px;
-  right: 20px;
-`;
-
-export default function DCIAlert({ message, type = "error" }) {
-  return (
-    <AlertContainer>
-      <Alert type={type}>{message}</Alert>
-    </AlertContainer>
-  );
-}
-
-DCIAlert.propTypes = {
-  message: PropTypes.string.isRequired,
-  type: PropTypes.string
-};
+export default createReducer("topic");

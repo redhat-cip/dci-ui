@@ -18,6 +18,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { createActions } from "./actions";
 import { createActionsTypes } from "./actionsTypes";
+import * as alertActionsTypes from "../Alerts/AlertsActionsTypes";
 
 const usersActions = createActions("user");
 const jobsActions = createActions("job");
@@ -75,16 +76,11 @@ test("fetch error", t => {
       message: "Authorization header missing",
       status_code: 401
     });
-  const expectedActions = [
-    { type: jobActionsTypes.FETCH_ALL_REQUEST },
-    {
-      type: jobActionsTypes.FETCH_ALL_FAILURE,
-      message: "Authorization header missing"
-    }
-  ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.all()).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
+    const actions = store.getActions();
+    t.deepEqual(actions[0], { type: jobActionsTypes.FETCH_ALL_REQUEST });
+    t.is(actions[1].alert.message, "Authorization header missing");
   });
 });
 
@@ -92,16 +88,14 @@ test("fetch error no message", t => {
   nock("https://api.example.org/api/v1")
     .get("/jobs")
     .reply(500);
-  const expectedActions = [
-    { type: jobActionsTypes.FETCH_ALL_REQUEST },
-    {
-      type: jobActionsTypes.FETCH_ALL_FAILURE,
-      message: "Something went wrong"
-    }
-  ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.all()).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
+    const actions = store.getActions();
+    t.deepEqual(actions[0], { type: jobActionsTypes.FETCH_ALL_REQUEST });
+    t.is(
+      actions[1].alert.message,
+      "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
+    );
   });
 });
 
@@ -252,7 +246,7 @@ test("update one user with params", t => {
 });
 
 test("delete one user", t => {
-  const user = { id: "u1", etag: "eu1" };
+  const user = { id: "u1", etag: "eu1", name: "user 1" };
   nock("https://api.example.org/api/v1", {
     reqheaders: {
       "If-Match": "eu1"
@@ -260,15 +254,14 @@ test("delete one user", t => {
   })
     .delete("/users/u1")
     .reply(204);
-  const expectedActions = [
-    { type: userActionsTypes.DELETE_REQUEST },
-    {
-      type: userActionsTypes.DELETE_SUCCESS,
-      id: "u1"
-    }
-  ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.delete(user)).then(() => {
-    t.deepEqual(store.getActions(), expectedActions);
+    const actions = store.getActions();
+    t.deepEqual(actions[0], { type: userActionsTypes.DELETE_REQUEST });
+    t.is(actions[1].alert.message, "user user 1 deleted successfully!");
+    t.deepEqual(actions[2], {
+      type: userActionsTypes.DELETE_SUCCESS,
+      id: "u1"
+    });
   });
 });

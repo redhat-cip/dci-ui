@@ -12,5 +12,5 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-export const ADD_ALERT = "ADD_ALERT";
-export const DELETE_ALERT = "DELETE_ALERT";
+export const SHOW_ALERT = "SHOW_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";

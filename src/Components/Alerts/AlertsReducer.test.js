@@ -20,10 +20,10 @@ test("AlertsReducer initial state", t => {
   t.deepEqual(reducer(undefined, {}), {});
 });
 
-test("ADD_ALERT", t => {
+test("SHOW_ALERT", t => {
   t.deepEqual(
     reducer(undefined, {
-      type: types.ADD_ALERT,
+      type: types.SHOW_ALERT,
       alert: {
         id: "a1"
       }
@@ -36,7 +36,7 @@ test("ADD_ALERT", t => {
   );
 });
 
-test("ADD_ALERT keep existing alerts", t => {
+test("SHOW_ALERT keep existing alerts", t => {
   t.deepEqual(
     reducer(
       {
@@ -45,7 +45,7 @@ test("ADD_ALERT keep existing alerts", t => {
         }
       },
       {
-        type: types.ADD_ALERT,
+        type: types.SHOW_ALERT,
         alert: {
           id: "a2"
         }
@@ -62,7 +62,7 @@ test("ADD_ALERT keep existing alerts", t => {
   );
 });
 
-test("DELETE_ALERT", t => {
+test("HIDE_ALERT", t => {
   t.deepEqual(
     reducer(
       {
@@ -74,7 +74,7 @@ test("DELETE_ALERT", t => {
         }
       },
       {
-        type: types.DELETE_ALERT,
+        type: types.HIDE_ALERT,
         alert: {
           id: "a1"
         }

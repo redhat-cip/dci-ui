@@ -44,7 +44,7 @@ export default function(resource) {
           return response;
         })
         .catch(error => {
-          dispatch(alertsActions.errorApi(error.response));
+          dispatch(alertsActions.showAPIError(error.response));
           throw error;
         });
     };
@@ -64,7 +64,7 @@ export default function(resource) {
           return response;
         })
         .catch(error => {
-          dispatch(alertsActions.errorApi(error.response));
+          dispatch(alertsActions.showAPIError(error.response));
           throw error;
         });
     };
@@ -89,7 +89,7 @@ export default function(resource) {
           return response;
         })
         .catch(error => {
-          dispatch(alertsActions.errorApi(error.response));
+          dispatch(alertsActions.showAPIError(error.response));
           throw error;
         });
     };
@@ -111,7 +111,7 @@ export default function(resource) {
           return response;
         })
         .catch(error => {
-          dispatch(alertsActions.errorApi(error.response));
+          dispatch(alertsActions.showAPIError(error.response));
           throw error;
         });
     };
@@ -131,7 +131,7 @@ export default function(resource) {
           return response;
         })
         .catch(error => {
-          dispatch(alertsActions.errorApi(error.response));
+          dispatch(alertsActions.showAPIError(error.response));
           throw error;
         });
     };

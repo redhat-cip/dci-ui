@@ -16,94 +16,96 @@ import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import * as date from "../Components/Date";
-import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Products/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
+import _ from "lodash";
 
 export class ProductsScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchProducts();
   }
 
   render() {
-    const { products, isFetching, errorMessage } = this.props;
+    const { products, isFetching } = this.props;
     return (
       <MainContent>
-        {errorMessage && !products.length ? (
-          <Alert message={errorMessage} />
-        ) : null}
         <TableCard
-          loading={isFetching && !products.length}
           title="Products"
-          headerButton={
-            <a className="pull-right btn btn-primary" href="/products/create">
+          loading={isFetching && !products.length}
+          empty={!isFetching && !products.length}
+          HeaderButton={
+            <a
+              id="products__create-product-btn"
+              className="pull-right btn btn-primary"
+              href="/products/create"
+            >
               Create a new product
             </a>
           }
-        >
-          {!errorMessage && !products.length ? (
+          EmptyComponent={
             <EmptyState
               title="There is no products"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/productss/create">
+                <a className="btn btn-primary" href="/products/create">
                   Create a new product
                 </a>
               }
             />
-          ) : (
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th className="text-center">ID</th>
-                  <th>Name</th>
-                  <th>Label</th>
-                  <th>Team Owner</th>
-                  <th>Description</th>
-                  <th>Created At</th>
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product, i) => (
+          }
+        >
+          <table className="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th className="text-center">ID</th>
+                <th>Name</th>
+                <th>Label</th>
+                <th>Team Owner</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {_.sortBy(products, [e => e.name.toLowerCase()]).map(
+                (product, i) => (
                   <tr key={i}>
                     <td className="text-center">
                       <CopyButton text={product.id} />
                     </td>
                     <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
+                      <a href={`/products/details/${product.id}`}>
+                        {product.name}
+                      </a>
                     </td>
                     <td>{product.label}</td>
                     <td>{product.team.name}</td>
                     <td>{product.description}</td>
-                    <td>{product.created_at}</td>
+                    <td>{product.from_now}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
+                        href={`/products/details/${product.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteProduct(product)"
-                      >
-                        <i className="fa fa-trash" />
-                      </button>
+                      <ConfirmDeleteButton
+                        title={`Delete product ${product.name}`}
+                        body={`Are you you want to delete ${product.name}?`}
+                        okButton={`Yes delete ${product.name}`}
+                        cancelButton="oups no!"
+                        whenConfirmed={() => this.props.deleteProduct(product)}
+                      />
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                )
+              )}
+            </tbody>
+          </table>
         </TableCard>
       </MainContent>
     );
@@ -131,9 +133,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProducts: () => {
-      dispatch(actions.all({ embed: "team" }));
-    }
+    fetchProducts: () => dispatch(actions.all({ embed: "team" })),
+    deleteProduct: product => dispatch(actions.delete(product))
   };
 }
 
