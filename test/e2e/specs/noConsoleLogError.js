@@ -29,6 +29,8 @@ module.exports = {
       .checkLogs("Global Status")
       .go("topics")
       .checkLogs("Topics")
+      .go("components")
+      .checkLogs("Components")
       .go("Remotecis")
       .checkLogs("Admin Remotecis")
       .go("Feeders")

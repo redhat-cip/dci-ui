@@ -21,6 +21,7 @@ import ProductsReducer from "./Components/Products/reducer";
 import RemotecisReducer from "./Components/Remotecis/reducer";
 import TopicsReducer from "./Components/Topics/reducer";
 import FeedersReducer from "./Components/Feeders/reducer";
+import ComponentsReducer from "./Components/Components/reducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
 import Reducers from "./services/api/reducers";
@@ -49,7 +50,8 @@ export const rootReducer = combineReducers({
   feeders2: FeedersReducer,
   remotecis2: RemotecisReducer,
   products2: ProductsReducer,
-  topics2: TopicsReducer
+  topics2: TopicsReducer,
+  components2: ComponentsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
