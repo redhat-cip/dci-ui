@@ -11,12 +11,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+import { createActions } from "../api/actions";
 
-.list-group{
-  border-top: none !important;
-  background-color: inherit;
-}
-
-.list-view-pf-view{
-  margin-top: 1em;
-}
+export default createActions("component");

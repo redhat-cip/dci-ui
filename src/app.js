@@ -32,6 +32,7 @@ import ProductsScreen from "./Screens/Products";
 import FeedersScreen from "./Screens/Feeders";
 import RemotecisScreen from "./Screens/Remotecis";
 import TopicsScreen from "./Screens/Topics";
+import ComponentsScreen from "./Screens/Components";
 import productEditPage from "./pages/products/edit";
 import productCreatePage from "./pages/products/create";
 import remoteciEditPage from "./pages/remotecis/edit";
@@ -49,7 +50,6 @@ import topicCreatePage from "./pages/topics/create";
 import topicEditPage from "./pages/topics/edit";
 import topicDetailsPage from "./pages/topics/details";
 import topicForm from "./pages/topics/form";
-import componentsPage from "./pages/components";
 import loginPage from "./pages/login";
 import settingsMenu from "./pages/settings/menu";
 import updatePasswordPage from "./pages/settings/updatePassword";
@@ -99,13 +99,8 @@ angular.element(document).ready(function() {
         .component("dciMenu", Menu)
         .component("dciMasthead", Masthead)
         .component("dciLoading", Loading)
-        .component("dciAlerts", react2angular(Alerts))
-        .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
-        .component("copyButton", react2angular(CopyButton))
-        .component("dciTitle", react2angular(Title))
         .component("titleCard", TitleCard)
         .component("confirmDestructiveAction", ConfirmDestructiveAction)
-        .component("confirmDeleteModal", react2angular(ConfirmDeleteModal))
         .component("noTeamWarning", noTeamWarning)
         .component("loginPage", loginPage)
         .component("jobsPage", jobsPage)
@@ -115,12 +110,10 @@ angular.element(document).ready(function() {
         .component("jobIssuesPage", jobIssuesPage)
         .component("jobFilesPage", jobFilesPage)
         .component("jobCertificationPage", jobCertificationPage)
-        .component("topicsScreen", react2angular(TopicsScreen))
         .component("topicCreatePage", topicCreatePage)
         .component("topicEditPage", topicEditPage)
         .component("topicDetailsPage", topicDetailsPage)
         .component("topicForm", topicForm)
-        .component("componentsPage", componentsPage)
         .component("adminUsersPage", adminUsersPage)
         .component("adminUserEditPage", adminUserEditPage)
         .component("adminUserCreatePage", adminUserCreatePage)
@@ -129,20 +122,27 @@ angular.element(document).ready(function() {
         .component("adminTeamEditPage", adminTeamEditPage)
         .component("adminTeamCreatePage", adminTeamCreatePage)
         .component("adminTeamForm", adminTeamForm)
-        .component("productsScreen", react2angular(ProductsScreen))
         .component("productEditPage", productEditPage)
         .component("productCreatePage", productCreatePage)
-        .component("remotecisScreen", react2angular(RemotecisScreen))
         .component("remoteciEditPage", remoteciEditPage)
         .component("remoteciCreatePage", remoteciCreatePage)
-        .component("feedersScreen", react2angular(FeedersScreen))
         .component("feederEditPage", feederEditPage)
         .component("feederCreatePage", feederCreatePage)
         .component("globalStatusPage", globalStatusPage)
         .component("settingsMenu", settingsMenu)
         .component("updatePasswordPage", updatePasswordPage)
         .component("updateSettingsPage", updateSettingsPage)
-        .component("notificationPage", notificationPage);
+        .component("notificationPage", notificationPage)
+        .component("dciAlerts", react2angular(Alerts))
+        .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
+        .component("copyButton", react2angular(CopyButton))
+        .component("dciTitle", react2angular(Title))
+        .component("confirmDeleteModal", react2angular(ConfirmDeleteModal))
+        .component("topicsScreen", react2angular(TopicsScreen))
+        .component("productsScreen", react2angular(ProductsScreen))
+        .component("remotecisScreen", react2angular(RemotecisScreen))
+        .component("feedersScreen", react2angular(FeedersScreen))
+        .component("componentsScreen", react2angular(ComponentsScreen));
       angular.bootstrap(document, ["app"]);
     });
 });

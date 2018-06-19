@@ -16,33 +16,38 @@ import { normalize } from "normalizr";
 import { createActionsTypes } from "./actionsTypes";
 import * as schema from "./schema";
 
-export function createActions(endpoint) {
+export function createActions(resource) {
   return {
     all: (params = {}) => {
+      let endpoint = `${resource}s`;
+      if (params && params.endpoint) {
+        endpoint = params.endpoint;
+        delete params.endpoint;
+      }
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(endpoint).FETCH_ALL_REQUEST
+          type: createActionsTypes(resource).FETCH_ALL_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
           .request({
             method: "get",
-            url: `${apiURL}/api/v1/${endpoint}s`,
+            url: `${apiURL}/api/v1/${endpoint}`,
             params
           })
           .then(response => {
             dispatch({
-              type: createActionsTypes(endpoint).FETCH_ALL_SUCCESS,
+              type: createActionsTypes(resource).FETCH_ALL_SUCCESS,
               ...normalize(
-                response.data[`${endpoint}s`],
-                schema[`${endpoint}s`]
+                response.data[`${resource}s`],
+                schema[`${resource}s`]
               )
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: createActionsTypes(endpoint).FETCH_ALL_FAILURE,
+              type: createActionsTypes(resource).FETCH_ALL_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -53,28 +58,28 @@ export function createActions(endpoint) {
           });
       };
     },
-    one: (resource, params = {}) => {
+    one: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(endpoint).FETCH_REQUEST
+          type: createActionsTypes(resource).FETCH_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
           .request({
             method: "get",
-            url: `${apiURL}/api/v1/${endpoint}s/${resource.id}`,
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
             params
           })
           .then(response => {
             dispatch({
-              type: createActionsTypes(endpoint).FETCH_SUCCESS,
-              ...normalize(response.data[endpoint], schema[endpoint])
+              type: createActionsTypes(resource).FETCH_SUCCESS,
+              ...normalize(response.data[resource], schema[resource])
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: createActionsTypes(endpoint).FETCH_FAILURE,
+              type: createActionsTypes(resource).FETCH_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -88,26 +93,26 @@ export function createActions(endpoint) {
     create: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(endpoint).CREATE_REQUEST
+          type: createActionsTypes(resource).CREATE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
           .request({
             method: "post",
-            url: `${apiURL}/api/v1/${endpoint}s`,
+            url: `${apiURL}/api/v1/${resource}s`,
             data,
             params
           })
           .then(response => {
             dispatch({
-              type: createActionsTypes(endpoint).CREATE_SUCCESS,
-              ...normalize(response.data[endpoint], schema[endpoint])
+              type: createActionsTypes(resource).CREATE_SUCCESS,
+              ...normalize(response.data[resource], schema[resource])
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: createActionsTypes(endpoint).CREATE_FAILURE,
+              type: createActionsTypes(resource).CREATE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -121,30 +126,30 @@ export function createActions(endpoint) {
     update: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(endpoint).UPDATE_REQUEST
+          type: createActionsTypes(resource).UPDATE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
           .request({
             method: "put",
-            url: `${apiURL}/api/v1/${endpoint}s/${data.id}`,
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
             headers: { "If-Match": data.etag },
             data,
             params
           })
           .then(response => {
             dispatch({
-              type: createActionsTypes(endpoint).UPDATE_SUCCESS,
+              type: createActionsTypes(resource).UPDATE_SUCCESS,
               ...normalize(
                 { ...data, etag: response.headers.etag },
-                schema[endpoint]
+                schema[resource]
               )
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: createActionsTypes(endpoint).UPDATE_FAILURE,
+              type: createActionsTypes(resource).UPDATE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&
@@ -155,28 +160,28 @@ export function createActions(endpoint) {
           });
       };
     },
-    delete: resource => {
+    delete: data => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(endpoint).DELETE_REQUEST
+          type: createActionsTypes(resource).DELETE_REQUEST
         });
         const { apiURL } = getState().config;
         return axios
           .request({
             method: "delete",
-            url: `${apiURL}/api/v1/${endpoint}s/${resource.id}`,
-            headers: { "If-Match": resource.etag }
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+            headers: { "If-Match": data.etag }
           })
           .then(response => {
             dispatch({
-              type: createActionsTypes(endpoint).DELETE_SUCCESS,
-              id: resource.id
+              type: createActionsTypes(resource).DELETE_SUCCESS,
+              id: data.id
             });
             return response;
           })
           .catch(error => {
             dispatch({
-              type: createActionsTypes(endpoint).DELETE_FAILURE,
+              type: createActionsTypes(resource).DELETE_FAILURE,
               message:
                 (error.response &&
                   error.response.data &&

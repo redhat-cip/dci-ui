@@ -19,42 +19,42 @@ import * as date from "../Components/Date";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Topics/actions";
+import actions from "../Components/Components/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 
-export class TopicsScreen extends React.Component {
+export class ComponentsScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchTopics();
+    this.props.fetchComponents();
   }
 
   render() {
-    const { topics, isFetching, errorMessage } = this.props;
+    const { components, isFetching, errorMessage } = this.props;
     return (
       <MainContent>
-        {errorMessage && !topics.length ? (
+        {errorMessage && !components.length ? (
           <Alert message={errorMessage} />
         ) : null}
         <TableCard
-          loading={isFetching && !topics.length}
-          title="Topics"
+          loading={isFetching && !components.length}
+          title="Latest Components"
           headerButton={
-            <a className="pull-right btn btn-primary" href="/topics/create">
-              Create a new topic
+            <a className="pull-right btn btn-primary" href="/components/create">
+              Create a new component
             </a>
           }
         >
-          {!errorMessage && !topics.length ? (
+          {!errorMessage && !components.length ? (
             <EmptyState
-              title="There is no topics"
+              title="There is no components"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/topics/create">
-                  Create a new topic
+                <a className="btn btn-primary" href="/components/create">
+                  Create a new component
                 </a>
               }
             />
@@ -64,8 +64,8 @@ export class TopicsScreen extends React.Component {
                 <tr>
                   <th className="text-center">ID</th>
                   <th>Name</th>
-                  <th>Next Topic</th>
                   <th>Product</th>
+                  <th>Topic</th>
                   <th>Created</th>
                   <th
                     className="text-center"
@@ -76,33 +76,34 @@ export class TopicsScreen extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {topics.map((topic, i) => (
+                {components.map((component, i) => (
                   <tr key={i}>
                     <td className="text-center">
-                      <CopyButton text={topic.id} />
+                      <CopyButton text={component.id} />
                     </td>
+                    <td>{component.name.substring(0, 42)}</td>
                     <td>
-                      <a href={`/topics/details/${topic.id}`}>{topic.name}</a>
-                    </td>
-                    <td>
-                      <a href={`/topics/details/${topic.nexttopic.id}`}>
-                        {topic.nexttopic.name}
+                      <a href={`/products/details/${component.product_id}`}>
+                        {component.product_name}
                       </a>
                     </td>
-
-                    <td>{topic.product.name}</td>
-                    <td>{topic.created_at}</td>
+                    <td>
+                      <a href={`/topics/details/${component.topic_id}`}>
+                        {component.topic_name}
+                      </a>
+                    </td>
+                    <td>{component.created_at}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/topics/details/${topic.id}`}
+                        href={`/components/details/${component.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>
                       <button
                         type="button"
                         className="btn btn-danger btn-sm"
-                        ng-click="$ctrl.deleteTopic(topic)"
+                        ng-click="$ctrl.deleteComponent(component)"
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -118,19 +119,19 @@ export class TopicsScreen extends React.Component {
   }
 }
 
-TopicsScreen.propTypes = {
-  topics: PropTypes.array,
+ComponentsScreen.propTypes = {
+  components: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchTopics: PropTypes.func,
-  updateTopics: PropTypes.func
+  fetchComponents: PropTypes.func,
+  updateComponents: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.topics2;
+  const { isFetching, errorMessage } = state.components2;
   return {
-    topics: date.transformObjectsDates(
-      state.topics2.byId,
+    components: date.transformObjectsDates(
+      state.components2.byId,
       state.currentUser.timezone
     ),
     isFetching,
@@ -140,8 +141,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTopics: () => {
-      dispatch(actions.all({ embed: "product,nexttopic" }));
+    fetchComponents: () => {
+      dispatch(actions.all({ endpoint: "components/latest" }));
     }
   };
 }
@@ -149,4 +150,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TopicsScreen);
+)(ComponentsScreen);
