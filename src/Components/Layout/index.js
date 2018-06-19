@@ -19,7 +19,7 @@ import { colors } from "styles";
 const DivBackgroundGrey = styled.div`
   background: ${colors.black150};
   min-height: calc(100vh - 60px);
-  padding: 2rem 0;
+  padding: 1rem 0;
 `;
 
 export function MainContent({ children }) {

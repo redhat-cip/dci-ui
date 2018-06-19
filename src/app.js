@@ -31,10 +31,10 @@ import adminTeamForm from "./pages/admin/teams/form";
 import ProductsScreen from "./Screens/Products";
 import productEditPage from "./pages/products/edit";
 import productCreatePage from "./pages/products/create";
-import remotecisPage from "./pages/remotecis";
 import remoteciEditPage from "./pages/remotecis/edit";
 import remoteciCreatePage from "./pages/remotecis/create";
 import FeedersScreen from "./Screens/Feeders";
+import RemotecisScreen from "./Screens/Remotecis";
 import feederEditPage from "./pages/feeders/edit";
 import feederCreatePage from "./pages/feeders/create";
 import jobsPage from "./pages/jobs";
@@ -134,7 +134,7 @@ angular.element(document).ready(function() {
         .component("productsScreen", react2angular(ProductsScreen))
         .component("productEditPage", productEditPage)
         .component("productCreatePage", productCreatePage)
-        .component("remotecisPage", remotecisPage)
+        .component("remotecisScreen", react2angular(RemotecisScreen))
         .component("remoteciEditPage", remoteciEditPage)
         .component("remoteciCreatePage", remoteciCreatePage)
         .component("feedersScreen", react2angular(FeedersScreen))

@@ -16,7 +16,6 @@ import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import * as date from "../Components/Date";
-import objectValues from "object.values";
 import Alert from "../Components/Alert";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
@@ -64,7 +63,7 @@ export class ProductsScreen extends React.Component {
               <thead>
                 <tr>
                   <th className="text-center">ID</th>
-                  <th>Product name</th>
+                  <th>Name</th>
                   <th>Label</th>
                   <th>Team Owner</th>
                   <th>Description</th>
@@ -118,20 +117,13 @@ ProductsScreen.propTypes = {
   fetchProducts: PropTypes.func
 };
 
-function enhanceProducts(state) {
-  const products = objectValues(state.products2.byId);
-  return products.map(product => {
-    return {
-      ...product,
-      created_at: date.fromNow(product.created_at, state.currentUser.timezone)
-    };
-  });
-}
-
 function mapStateToProps(state) {
   const { isFetching, errorMessage } = state.products2;
   return {
-    products: enhanceProducts(state),
+    products: date.transformObjectsDates(
+      state.products2.byId,
+      state.currentUser.timezone
+    ),
     isFetching,
     errorMessage
   };
