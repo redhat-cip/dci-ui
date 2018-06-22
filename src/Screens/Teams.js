@@ -21,8 +21,10 @@ import TableCard from "../Components/TableCard";
 import actions from "../Components/Teams/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import _ from "lodash";
+import NewTeamButton from "../Components/Teams/NewTeamButton";
+import EditTeamButton from "../Components/Teams/EditTeamButton";
+import DeleteTeamButton from "../Components/Teams/DeleteTeamButton";
 
 export class TeamsScreen extends React.Component {
   componentDidMount() {
@@ -36,15 +38,7 @@ export class TeamsScreen extends React.Component {
           title="Teams"
           loading={isFetching && !teams.length}
           empty={!isFetching && !teams.length}
-          HeaderButton={
-            <a
-              id="teams__create-team-btn"
-              className="pull-right btn btn-primary"
-              href="/teams/create"
-            >
-              Create a new team
-            </a>
-          }
+          HeaderButton={<NewTeamButton className="pull-right" />}
           EmptyComponent={
             <EmptyState
               title="There is no teams"
@@ -85,20 +79,8 @@ export class TeamsScreen extends React.Component {
                   </td>
                   <td>{team.from_now}</td>
                   <td className="text-center">
-                    <a
-                      className="btn btn-primary btn-sm btn-edit"
-                      href={`/teams/${team.id}`}
-                    >
-                      <i className="fa fa-pencil" />
-                    </a>
-
-                    <ConfirmDeleteButton
-                      title={`Delete team ${team.name}`}
-                      body={`Are you you want to delete ${team.name}?`}
-                      okButton={`Yes delete ${team.name}`}
-                      cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteTeam(team)}
-                    />
+                    <EditTeamButton team={team} />
+                    <DeleteTeamButton team={team} />
                   </td>
                 </tr>
               ))}
