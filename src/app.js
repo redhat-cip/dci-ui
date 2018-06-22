@@ -24,7 +24,6 @@ import adminUsersPage from "./pages/admin/users";
 import adminUserEditPage from "./pages/admin/users/edit";
 import adminUserCreatePage from "./pages/admin/users/create";
 import adminUserForm from "./pages/admin/users/form";
-import adminTeamsPage from "./pages/admin/teams";
 import adminTeamEditPage from "./pages/admin/teams/edit";
 import adminTeamCreatePage from "./pages/admin/teams/create";
 import adminTeamForm from "./pages/admin/teams/form";
@@ -33,6 +32,7 @@ import FeedersScreen from "./Screens/Feeders";
 import RemotecisScreen from "./Screens/Remotecis";
 import TopicsScreen from "./Screens/Topics";
 import ComponentsScreen from "./Screens/Components";
+import TeamsScreen from "./Screens/Teams";
 import productEditPage from "./pages/products/edit";
 import productCreatePage from "./pages/products/create";
 import remoteciEditPage from "./pages/remotecis/edit";
@@ -117,7 +117,6 @@ angular.element(document).ready(function() {
         .component("adminUserEditPage", adminUserEditPage)
         .component("adminUserCreatePage", adminUserCreatePage)
         .component("adminUserForm", adminUserForm)
-        .component("adminTeamsPage", adminTeamsPage)
         .component("adminTeamEditPage", adminTeamEditPage)
         .component("adminTeamCreatePage", adminTeamCreatePage)
         .component("adminTeamForm", adminTeamForm)
@@ -136,6 +135,7 @@ angular.element(document).ready(function() {
         .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
         .component("copyButton", react2angular(CopyButton))
         .component("dciTitle", react2angular(Title))
+        .component("teamsScreen", react2angular(TeamsScreen))
         .component("topicsScreen", react2angular(TopicsScreen))
         .component("productsScreen", react2angular(ProductsScreen))
         .component("remotecisScreen", react2angular(RemotecisScreen))

@@ -49,3 +49,6 @@ export const products = [product];
 
 export const feeder = new schema.Entity("feeders");
 export const feeders = [feeder];
+
+export const team = new schema.Entity("teams");
+export const teams = [team];

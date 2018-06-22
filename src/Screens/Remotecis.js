@@ -82,9 +82,7 @@ export class RemotecisScreen extends React.Component {
                       <CopyButton text={remoteci.id} />
                     </td>
                     <td>
-                      <a href={`/remotecis/details/${remoteci.id}`}>
-                        {remoteci.name}
-                      </a>
+                      <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
                     </td>
                     <td className="text-center">
                       {remoteci.state === "active" ? (
@@ -100,12 +98,14 @@ export class RemotecisScreen extends React.Component {
                         <Icon type="fa" name="download" /> remotecirc.sh
                       </Button>
                     </td>
-                    <td className="text-center">{remoteci.team.name}</td>
+                    <td className="text-center">
+                      {remoteci.team.name.toUpperCase()}
+                    </td>
                     <td>{remoteci.from_now}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/remotecis/details/${remoteci.id}`}
+                        href={`/remotecis/${remoteci.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>

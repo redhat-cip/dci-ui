@@ -78,9 +78,7 @@ export class FeedersScreen extends React.Component {
                       <CopyButton text={feeder.id} />
                     </td>
                     <td>
-                      <a href={`/feeders/details/${feeder.id}`}>
-                        {feeder.name}
-                      </a>
+                      <a href={`/feeders/${feeder.id}`}>{feeder.name}</a>
                     </td>
                     <td>{feeder.label}</td>
                     <td>{feeder.team.name}</td>
@@ -89,7 +87,7 @@ export class FeedersScreen extends React.Component {
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/feeders/details/${feeder.id}`}
+                        href={`/feeders/${feeder.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>

@@ -134,17 +134,17 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     })
     .state({
       name: "auth.adminTeams",
-      url: "admin/teams",
-      component: "adminTeamsPage"
+      url: "teams",
+      component: "teamsScreen"
     })
     .state({
       name: "auth.adminTeamEdit",
-      url: "admin/teams/:id",
+      url: "teams/:id",
       component: "adminTeamEditPage"
     })
     .state({
       name: "auth.adminTeamCreate",
-      url: "admin/teams/create",
+      url: "teams/create",
       component: "adminTeamCreatePage"
     })
     .state({
