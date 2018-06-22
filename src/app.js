@@ -23,9 +23,6 @@ import "./app.scss";
 import adminUserEditPage from "./pages/admin/users/edit";
 import adminUserCreatePage from "./pages/admin/users/create";
 import adminUserForm from "./pages/admin/users/form";
-import adminTeamEditPage from "./pages/admin/teams/edit";
-import adminTeamCreatePage from "./pages/admin/teams/create";
-import adminTeamForm from "./pages/admin/teams/form";
 import ProductsScreen from "./Screens/Products";
 import FeedersScreen from "./Screens/Feeders";
 import RemotecisScreen from "./Screens/Remotecis";
@@ -116,9 +113,6 @@ angular.element(document).ready(function() {
         .component("adminUserEditPage", adminUserEditPage)
         .component("adminUserCreatePage", adminUserCreatePage)
         .component("adminUserForm", adminUserForm)
-        .component("adminTeamEditPage", adminTeamEditPage)
-        .component("adminTeamCreatePage", adminTeamCreatePage)
-        .component("adminTeamForm", adminTeamForm)
         .component("productEditPage", productEditPage)
         .component("productCreatePage", productCreatePage)
         .component("remoteciEditPage", remoteciEditPage)
