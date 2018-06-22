@@ -113,19 +113,17 @@ export class FeedersScreen extends React.Component {
 FeedersScreen.propTypes = {
   feeders: PropTypes.array,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  fetchFeeders: PropTypes.func
+  fetchFeeders: PropTypes.func,
+  deleteFeeder: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.feeders2;
   return {
     feeders: date.transformObjectsDates(
       state.feeders2.byId,
       state.currentUser.timezone
     ),
-    isFetching,
-    errorMessage
+    isFetching: state.feeders2.isFetching
   };
 }
 

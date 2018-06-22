@@ -133,20 +133,17 @@ export class RemotecisScreen extends React.Component {
 RemotecisScreen.propTypes = {
   remotecis: PropTypes.array,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
   fetchRemotecis: PropTypes.func,
-  updateRemotecis: PropTypes.func
+  deleteRemoteci: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.remotecis2;
   return {
     remotecis: date.transformObjectsDates(
       state.remotecis2.byId,
       state.currentUser.timezone
     ),
-    isFetching,
-    errorMessage
+    isFetching: state.remotecis2.isFetching
   };
 }
 
