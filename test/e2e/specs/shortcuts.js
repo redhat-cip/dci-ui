@@ -143,7 +143,7 @@ module.exports = function(browser) {
       case "createUser":
         return this.click("#navbar-primary__admin-users-link")
           .waitForXpathElementVisible("//a[normalize-space(text())='user_hp']")
-          .click("#admin__create-user-btn")
+          .click("#users__create-user-btn")
           .waitForElementVisible("button#createButton");
       case "adminTeams":
         return this.click(

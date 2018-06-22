@@ -113,19 +113,17 @@ export class ProductsScreen extends React.Component {
 ProductsScreen.propTypes = {
   products: PropTypes.array,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  fetchProducts: PropTypes.func
+  fetchProducts: PropTypes.func,
+  deleteProduct: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.products2;
   return {
     products: date.transformObjectsDates(
       state.products2.byId,
       state.currentUser.timezone
     ),
-    isFetching,
-    errorMessage
+    isFetching: state.products2.isFetching
   };
 }
 

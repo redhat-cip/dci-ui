@@ -112,22 +112,20 @@ export class TeamsScreen extends React.Component {
 
 TeamsScreen.propTypes = {
   teams: PropTypes.array,
+  teamsById: PropTypes.object,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
   fetchTeams: PropTypes.func,
-  updateTeams: PropTypes.func
+  deleteTeam: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.teams2;
   return {
     teams: date.transformObjectsDates(
       state.teams2.byId,
       state.currentUser.timezone
     ),
     teamsById: state.teams2.byId,
-    isFetching,
-    errorMessage
+    isFetching: state.teams2.isFetching
   };
 }
 

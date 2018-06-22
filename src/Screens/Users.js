@@ -18,40 +18,40 @@ import PropTypes from "prop-types";
 import * as date from "../Components/Date";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Topics/actions";
+import actions from "../Components/Users/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import _ from "lodash";
 
-export class TopicsScreen extends React.Component {
+export class UsersScreen extends React.Component {
   componentDidMount() {
-    this.props.fetchTopics();
+    this.props.fetchUsers();
   }
   render() {
-    const { topics, isFetching } = this.props;
+    const { users, isFetching } = this.props;
     return (
       <MainContent>
         <TableCard
-          title="Topics"
-          loading={isFetching && !topics.length}
-          empty={!isFetching && !topics.length}
+          title="Users"
+          loading={isFetching && !users.length}
+          empty={!isFetching && !users.length}
           HeaderButton={
             <a
-              id="topics__create-topic-btn"
+              id="users__create-user-btn"
               className="pull-right btn btn-primary"
-              href="/topics/create"
+              href="/users/create"
             >
-              Create a new topic
+              Create a new user
             </a>
           }
           EmptyComponent={
             <EmptyState
-              title="There is no topics"
+              title="There is no users"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/topics/create">
-                  Create a new topic
+                <a className="btn btn-primary" href="/users/create">
+                  Create a new user
                 </a>
               }
             />
@@ -60,50 +60,44 @@ export class TopicsScreen extends React.Component {
           <table className="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th className="text-center">ID</th>
-                <th>Name</th>
-                <th>Next Topic</th>
-                <th>Product</th>
+                <th className="text-center col-xs-1">ID</th>
+                <th>Login</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Team</th>
+                <th>Role</th>
                 <th>Created</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(topics, [e => e.name.toLowerCase()]).map((topic, i) => (
+              {_.sortBy(users, [e => e.name.toLowerCase()]).map((user, i) => (
                 <tr key={i}>
                   <td className="text-center">
-                    <CopyButton text={topic.id} />
+                    <CopyButton text={user.id} />
                   </td>
                   <td>
-                    <a href={`/topics/details/${topic.id}`}>{topic.name}</a>
+                    <a href={`/users/${user.id}`}>{user.name}</a>
                   </td>
-                  <td>
-                    <a href={`/topics/details/${topic.nexttopic.id}`}>
-                      {topic.nexttopic.name}
-                    </a>
-                  </td>
-
-                  <td>{topic.product.name}</td>
-                  <td>{topic.from_now}</td>
+                  <td>{user.fullname}</td>
+                  <td>{user.email}</td>
+                  <td>{user.team.name.toUpperCase()}</td>
+                  <td>{user.role.name}</td>
+                  <td>{user.from_now}</td>
                   <td className="text-center">
                     <a
                       className="btn btn-primary btn-sm btn-edit"
-                      href={`/topics/details/${topic.id}`}
-                    >
-                      <i className="fa fa-eye" />
-                    </a>
-                    <a
-                      className="btn btn-primary btn-sm btn-edit"
-                      href={`/topics/edit/${topic.id}`}
+                      href={`/users/${user.id}`}
                     >
                       <i className="fa fa-pencil" />
                     </a>
+
                     <ConfirmDeleteButton
-                      title={`Delete topic ${topic.name}`}
-                      body={`Are you you want to delete ${topic.name}?`}
-                      okButton={`Yes delete ${topic.name}`}
+                      title={`Delete user ${user.name}`}
+                      body={`Are you you want to delete ${user.name}?`}
+                      okButton={`Yes delete ${user.name}`}
                       cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteTopic(topic)}
+                      whenConfirmed={() => this.props.deleteUser(user)}
                     />
                   </td>
                 </tr>
@@ -116,31 +110,31 @@ export class TopicsScreen extends React.Component {
   }
 }
 
-TopicsScreen.propTypes = {
-  topics: PropTypes.array,
+UsersScreen.propTypes = {
+  users: PropTypes.array,
   isFetching: PropTypes.bool,
-  fetchTopics: PropTypes.func,
-  deleteTopic: PropTypes.func
+  fetchUsers: PropTypes.func,
+  deleteUser: PropTypes.func
 };
 
 function mapStateToProps(state) {
   return {
-    topics: date.transformObjectsDates(
-      state.topics2.byId,
+    users: date.transformObjectsDates(
+      state.users2.byId,
       state.currentUser.timezone
     ),
-    isFetching: state.topics2.isFetching
+    isFetching: state.users2.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTopics: () => dispatch(actions.all({ embed: "product,nexttopic" })),
-    deleteTopic: topic => dispatch(actions.delete(topic))
+    fetchUsers: () => dispatch(actions.all({ embed: "team,role" })),
+    deleteUser: user => dispatch(actions.delete(user))
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TopicsScreen);
+)(UsersScreen);
