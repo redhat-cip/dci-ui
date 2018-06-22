@@ -18,40 +18,40 @@ import PropTypes from "prop-types";
 import * as date from "../Components/Date";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Teams/actions";
+import actions from "../Components/Users/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import _ from "lodash";
 
-export class TeamsScreen extends React.Component {
+export class UsersScreen extends React.Component {
   componentDidMount() {
-    this.props.fetchTeams();
+    this.props.fetchUsers();
   }
   render() {
-    const { teams, isFetching, teamsById } = this.props;
+    const { users, isFetching } = this.props;
     return (
       <MainContent>
         <TableCard
-          title="Teams"
-          loading={isFetching && !teams.length}
-          empty={!isFetching && !teams.length}
+          title="Users"
+          loading={isFetching && !users.length}
+          empty={!isFetching && !users.length}
           HeaderButton={
             <a
-              id="teams__create-team-btn"
+              id="users__create-user-btn"
               className="pull-right btn btn-primary"
-              href="/teams/create"
+              href="/users/create"
             >
-              Create a new team
+              Create a new user
             </a>
           }
           EmptyComponent={
             <EmptyState
-              title="There is no teams"
+              title="There is no users"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/teams/create">
-                  Create a new team
+                <a className="btn btn-primary" href="/users/create">
+                  Create a new user
                 </a>
               }
             />
@@ -60,44 +60,44 @@ export class TeamsScreen extends React.Component {
           <table className="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th className="text-center">ID</th>
-                <th>Name</th>
-                <th>Parent Team</th>
+                <th className="text-center col-xs-1">ID</th>
+                <th>Login</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Team</th>
+                <th>Role</th>
                 <th>Created</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(teams, [e => e.name.toLowerCase()]).map((team, i) => (
+              {_.sortBy(users, [e => e.name.toLowerCase()]).map((user, i) => (
                 <tr key={i}>
                   <td className="text-center">
-                    <CopyButton text={team.id} />
+                    <CopyButton text={user.id} />
                   </td>
                   <td>
-                    <a href={`/teams/${team.id}`}>{team.name.toUpperCase()}</a>
+                    <a href={`/users/${user.id}`}>{user.name}</a>
                   </td>
-                  <td>
-                    <a href={`/teams/${team.parent_id}`}>
-                      {teamsById[team.parent_id]
-                        ? teamsById[team.parent_id].name.toUpperCase()
-                        : ""}
-                    </a>
-                  </td>
-                  <td>{team.from_now}</td>
+                  <td>{user.fullname}</td>
+                  <td>{user.email}</td>
+                  <td>{user.team.name.toUpperCase()}</td>
+                  <td>{user.role.name}</td>
+                  <td>{user.from_now}</td>
                   <td className="text-center">
                     <a
                       className="btn btn-primary btn-sm btn-edit"
-                      href={`/teams/${team.id}`}
+                      href={`/users/${user.id}`}
                     >
                       <i className="fa fa-pencil" />
                     </a>
 
                     <ConfirmDeleteButton
-                      title={`Delete team ${team.name}`}
-                      body={`Are you you want to delete ${team.name}?`}
-                      okButton={`Yes delete ${team.name}`}
+                      title={`Delete user ${user.name}`}
+                      body={`Are you you want to delete ${user.name}?`}
+                      okButton={`Yes delete ${user.name}`}
                       cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteTeam(team)}
+                      whenConfirmed={() => this.props.deleteUser(user)}
                     />
                   </td>
                 </tr>
@@ -110,33 +110,31 @@ export class TeamsScreen extends React.Component {
   }
 }
 
-TeamsScreen.propTypes = {
-  teams: PropTypes.array,
-  teamsById: PropTypes.object,
+UsersScreen.propTypes = {
+  users: PropTypes.array,
   isFetching: PropTypes.bool,
-  fetchTeams: PropTypes.func,
-  deleteTeam: PropTypes.func
+  fetchUsers: PropTypes.func,
+  deleteUser: PropTypes.func
 };
 
 function mapStateToProps(state) {
   return {
-    teams: date.transformObjectsDates(
-      state.teams2.byId,
+    users: date.transformObjectsDates(
+      state.users2.byId,
       state.currentUser.timezone
     ),
-    teamsById: state.teams2.byId,
-    isFetching: state.teams2.isFetching
+    isFetching: state.users2.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTeams: () => dispatch(actions.all()),
-    deleteTeam: team => dispatch(actions.delete(team))
+    fetchUsers: () => dispatch(actions.all({ embed: "team,role" })),
+    deleteUser: user => dispatch(actions.delete(user))
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TeamsScreen);
+)(UsersScreen);

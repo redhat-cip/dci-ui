@@ -119,17 +119,17 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
     })
     .state({
       name: "auth.adminUsers",
-      url: "admin/users",
-      component: "adminUsersPage"
+      url: "users",
+      component: "usersScreen"
     })
     .state({
       name: "auth.adminUserEdit",
-      url: "admin/users/:id",
+      url: "users/:id",
       component: "adminUserEditPage"
     })
     .state({
       name: "auth.adminUserCreate",
-      url: "admin/users/create",
+      url: "users/create",
       component: "adminUserCreatePage"
     })
     .state({

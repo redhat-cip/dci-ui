@@ -119,20 +119,17 @@ export class TopicsScreen extends React.Component {
 TopicsScreen.propTypes = {
   topics: PropTypes.array,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
   fetchTopics: PropTypes.func,
-  updateTopics: PropTypes.func
+  deleteTopic: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.topics2;
   return {
     topics: date.transformObjectsDates(
       state.topics2.byId,
       state.currentUser.timezone
     ),
-    isFetching,
-    errorMessage
+    isFetching: state.topics2.isFetching
   };
 }
 

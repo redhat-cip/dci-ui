@@ -20,7 +20,6 @@ import ngReduxRouter from "redux-ui-router";
 import "./favicon.ico";
 import routes, { transition as routesAuthTransition } from "./routes";
 import "./app.scss";
-import adminUsersPage from "./pages/admin/users";
 import adminUserEditPage from "./pages/admin/users/edit";
 import adminUserCreatePage from "./pages/admin/users/create";
 import adminUserForm from "./pages/admin/users/form";
@@ -33,6 +32,7 @@ import RemotecisScreen from "./Screens/Remotecis";
 import TopicsScreen from "./Screens/Topics";
 import ComponentsScreen from "./Screens/Components";
 import TeamsScreen from "./Screens/Teams";
+import UsersScreen from "./Screens/Users";
 import productEditPage from "./pages/products/edit";
 import productCreatePage from "./pages/products/create";
 import remoteciEditPage from "./pages/remotecis/edit";
@@ -113,7 +113,6 @@ angular.element(document).ready(function() {
         .component("topicEditPage", topicEditPage)
         .component("topicDetailsPage", topicDetailsPage)
         .component("topicForm", topicForm)
-        .component("adminUsersPage", adminUsersPage)
         .component("adminUserEditPage", adminUserEditPage)
         .component("adminUserCreatePage", adminUserCreatePage)
         .component("adminUserForm", adminUserForm)
@@ -135,6 +134,7 @@ angular.element(document).ready(function() {
         .component("jobSummary", react2angular(JobSummary, ["job", "go"]))
         .component("copyButton", react2angular(CopyButton))
         .component("dciTitle", react2angular(Title))
+        .component("usersScreen", react2angular(UsersScreen))
         .component("teamsScreen", react2angular(TeamsScreen))
         .component("topicsScreen", react2angular(TopicsScreen))
         .component("productsScreen", react2angular(ProductsScreen))

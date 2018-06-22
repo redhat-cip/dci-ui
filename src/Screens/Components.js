@@ -112,20 +112,17 @@ export class ComponentsScreen extends React.Component {
 ComponentsScreen.propTypes = {
   components: PropTypes.array,
   isFetching: PropTypes.bool,
-  errorMessage: PropTypes.string,
   fetchComponents: PropTypes.func,
-  updateComponents: PropTypes.func
+  deleteComponent: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.components2;
   return {
     components: date.transformObjectsDates(
       state.components2.byId,
       state.currentUser.timezone
     ),
-    isFetching,
-    errorMessage
+    isFetching: state.components2.isFetching
   };
 }
 
