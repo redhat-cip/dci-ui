@@ -65,12 +65,7 @@ export class ComponentsScreen extends React.Component {
                 <th>Product</th>
                 <th>Topic</th>
                 <th>Created</th>
-                <th
-                  className="text-center"
-                  ng-if="$ctrl.currentUser.hasProductOwnerRole"
-                >
-                  Actions
-                </th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +77,7 @@ export class ComponentsScreen extends React.Component {
                     </td>
                     <td>{component.name.substring(0, 42)}</td>
                     <td>
-                      <a href={`/products/details/${component.product_id}`}>
+                      <a href={`/products/${component.product_id}`}>
                         {component.product_name}
                       </a>
                     </td>
@@ -93,12 +88,6 @@ export class ComponentsScreen extends React.Component {
                     </td>
                     <td>{component.created_at}</td>
                     <td className="text-center">
-                      <a
-                        className="btn btn-primary btn-sm btn-edit"
-                        href={`/components/details/${component.id}`}
-                      >
-                        <i className="fa fa-pencil" />
-                      </a>
                       <ConfirmDeleteButton
                         title={`Delete component ${component.name}`}
                         body={`Are you you want to delete ${component.name}?`}

@@ -149,7 +149,7 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__admin-teams-link"
         ).waitForXpathElementVisible(
-          "//a[normalize-space(text())='OpenStack']"
+          "//a[normalize-space(text())='OPENSTACK']"
         );
       case "settings":
         return this.click(

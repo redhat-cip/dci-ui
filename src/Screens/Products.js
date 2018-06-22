@@ -78,18 +78,16 @@ export class ProductsScreen extends React.Component {
                       <CopyButton text={product.id} />
                     </td>
                     <td>
-                      <a href={`/products/details/${product.id}`}>
-                        {product.name}
-                      </a>
+                      <a href={`/products/${product.id}`}>{product.name}</a>
                     </td>
                     <td>{product.label}</td>
-                    <td>{product.team.name}</td>
+                    <td>{product.team.name.toUpperCase()}</td>
                     <td>{product.description}</td>
                     <td>{product.from_now}</td>
                     <td className="text-center">
                       <a
                         className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/details/${product.id}`}
+                        href={`/products/${product.id}`}
                       >
                         <i className="fa fa-pencil" />
                       </a>

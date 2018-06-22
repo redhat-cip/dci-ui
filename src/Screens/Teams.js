@@ -18,40 +18,40 @@ import PropTypes from "prop-types";
 import * as date from "../Components/Date";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Topics/actions";
+import actions from "../Components/Teams/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import _ from "lodash";
 
-export class TopicsScreen extends React.Component {
+export class TeamsScreen extends React.Component {
   componentDidMount() {
-    this.props.fetchTopics();
+    this.props.fetchTeams();
   }
   render() {
-    const { topics, isFetching } = this.props;
+    const { teams, isFetching, teamsById } = this.props;
     return (
       <MainContent>
         <TableCard
-          title="Topics"
-          loading={isFetching && !topics.length}
-          empty={!isFetching && !topics.length}
+          title="Teams"
+          loading={isFetching && !teams.length}
+          empty={!isFetching && !teams.length}
           HeaderButton={
             <a
-              id="topics__create-topic-btn"
+              id="teams__create-team-btn"
               className="pull-right btn btn-primary"
-              href="/topics/create"
+              href="/teams/create"
             >
-              Create a new topic
+              Create a new team
             </a>
           }
           EmptyComponent={
             <EmptyState
-              title="There is no topics"
+              title="There is no teams"
               info="Do you want to create one?"
               button={
-                <a className="btn btn-primary" href="/topics/create">
-                  Create a new topic
+                <a className="btn btn-primary" href="/teams/create">
+                  Create a new team
                 </a>
               }
             />
@@ -62,48 +62,42 @@ export class TopicsScreen extends React.Component {
               <tr>
                 <th className="text-center">ID</th>
                 <th>Name</th>
-                <th>Next Topic</th>
-                <th>Product</th>
+                <th>Parent Team</th>
                 <th>Created</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(topics, [e => e.name.toLowerCase()]).map((topic, i) => (
+              {_.sortBy(teams, [e => e.name.toLowerCase()]).map((team, i) => (
                 <tr key={i}>
                   <td className="text-center">
-                    <CopyButton text={topic.id} />
+                    <CopyButton text={team.id} />
                   </td>
                   <td>
-                    <a href={`/topics/details/${topic.id}`}>{topic.name}</a>
+                    <a href={`/teams/${team.id}`}>{team.name.toUpperCase()}</a>
                   </td>
                   <td>
-                    <a href={`/topics/details/${topic.nexttopic.id}`}>
-                      {topic.nexttopic.name}
+                    <a href={`/teams/${team.parent_id}`}>
+                      {teamsById[team.parent_id]
+                        ? teamsById[team.parent_id].name.toUpperCase()
+                        : ""}
                     </a>
                   </td>
-
-                  <td>{topic.product.name}</td>
-                  <td>{topic.from_now}</td>
+                  <td>{team.from_now}</td>
                   <td className="text-center">
                     <a
                       className="btn btn-primary btn-sm btn-edit"
-                      href={`/topics/details/${topic.id}`}
-                    >
-                      <i className="fa fa-eye" />
-                    </a>
-                    <a
-                      className="btn btn-primary btn-sm btn-edit"
-                      href={`/topics/edit/${topic.id}`}
+                      href={`/teams/${team.id}`}
                     >
                       <i className="fa fa-pencil" />
                     </a>
+
                     <ConfirmDeleteButton
-                      title={`Delete topic ${topic.name}`}
-                      body={`Are you you want to delete ${topic.name}?`}
-                      okButton={`Yes delete ${topic.name}`}
+                      title={`Delete team ${team.name}`}
+                      body={`Are you you want to delete ${team.name}?`}
+                      okButton={`Yes delete ${team.name}`}
                       cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteTopic(topic)}
+                      whenConfirmed={() => this.props.deleteTeam(team)}
                     />
                   </td>
                 </tr>
@@ -116,21 +110,22 @@ export class TopicsScreen extends React.Component {
   }
 }
 
-TopicsScreen.propTypes = {
-  topics: PropTypes.array,
+TeamsScreen.propTypes = {
+  teams: PropTypes.array,
   isFetching: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchTopics: PropTypes.func,
-  updateTopics: PropTypes.func
+  fetchTeams: PropTypes.func,
+  updateTeams: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { isFetching, errorMessage } = state.topics2;
+  const { isFetching, errorMessage } = state.teams2;
   return {
-    topics: date.transformObjectsDates(
-      state.topics2.byId,
+    teams: date.transformObjectsDates(
+      state.teams2.byId,
       state.currentUser.timezone
     ),
+    teamsById: state.teams2.byId,
     isFetching,
     errorMessage
   };
@@ -138,12 +133,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTopics: () => dispatch(actions.all({ embed: "product,nexttopic" })),
-    deleteTopic: topic => dispatch(actions.delete(topic))
+    fetchTeams: () => dispatch(actions.all()),
+    deleteTeam: team => dispatch(actions.delete(team))
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TopicsScreen);
+)(TeamsScreen);
