@@ -47,7 +47,6 @@
     "object.values": "^1.0.4",
     "patternfly": "^3.50.0",
     "patternfly-react": "^2.7.0",
-    "pfdemo": "4.0.3",
     "prop-types": "^15.6.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

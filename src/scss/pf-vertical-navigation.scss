@@ -1,0 +1,88 @@
+@import "variables";
+
+.pf-vertical-nav {
+  width: 100%;
+  background: #292e34;
+  display: block;
+  color: $color-pf-white;
+  padding-bottom: 1em;
+  height: 100%;
+}
+
+.pf-vertical-nav a {
+  color: $color-pf-white;
+  text-decoration: none;
+}
+
+.pf-vertical-nav__menu {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.pf-vertical-nav__category {
+  padding: 1.5em 0 0.5em 1em;
+  text-transform: uppercase;
+  color: $color-pf-black-400;
+}
+
+.pf-vertical-nav__link {
+  display: block;
+  padding: 0.5em 1em 0.5em 1.5em;
+
+  &:hover {
+    background-color: $color-pf-black-800;
+  }
+}
+
+.pf-vertical-nav__icon {
+  margin-right: 0.5em;
+  color: $color-pf-black-600;
+}
+
+.pf-vertical-nav__item {
+  &.active {
+    border-top: 1px solid $color-pf-black;
+    border-bottom: 1px solid $color-pf-black;
+
+    .pf-vertical-nav__link {
+      border-left: 5px solid $color-pf-blue-300;
+      padding: 0.5em 1em 0.5em calc(1.5em - 5px);
+
+      .pf-vertical-nav__icon {
+        color: $color-pf-blue-400;
+      }
+    }
+  }
+}
+
+@media (min-width: 480px) and (max-width: 960px) {
+  .pf-vertical-nav {
+    width: 100px;
+  }
+
+  .pf-vertical-nav__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1em;
+  }
+
+  .pf-vertical-nav__icon {
+    margin: 0;
+    display: block;
+  }
+
+  .pf-vertical-nav__category {
+    text-align: center;
+    padding: 1em;
+  }
+}
+
+@media (min-width: 960px) {
+  .pf-vertical-nav {
+    width: 240px;
+  }
+}
