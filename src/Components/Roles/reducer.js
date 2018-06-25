@@ -11,11 +11,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+import { createReducer } from "../api/reducers";
 
-import template from "./template.html";
-import controller from "./controller";
-
-export default {
-  template,
-  controller
-};
+export default createReducer("role");

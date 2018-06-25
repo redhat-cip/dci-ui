@@ -15,14 +15,18 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
+import _ from "lodash";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Users/actions";
+import usersActions from "../Components/Users/actions";
+import rolesActions from "../Components/Roles/actions";
+import teamsActions from "../Components/Teams/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
-import _ from "lodash";
+import NewUserButton from "../Components/Users/NewUserButton";
+import EditUserButton from "../Components/Users/EditUserButton";
+import DeleteUserButton from "../Components/Users/DeleteUserButton";
+import { getUsers } from "../Components/Users/selectors";
 
 export class UsersScreen extends React.Component {
   componentDidMount() {
@@ -34,26 +38,14 @@ export class UsersScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Users"
-          loading={isFetching && !users.length}
-          empty={!isFetching && !users.length}
-          HeaderButton={
-            <a
-              id="users__create-user-btn"
-              className="pull-right btn btn-primary"
-              href="/users/create"
-            >
-              Create a new user
-            </a>
-          }
+          loading={isFetching && _.isEmpty(users)}
+          empty={!isFetching && _.isEmpty(users)}
+          HeaderButton={<NewUserButton className="pull-right" />}
           EmptyComponent={
             <EmptyState
               title="There is no users"
               info="Do you want to create one?"
-              button={
-                <a className="btn btn-primary" href="/users/create">
-                  Create a new user
-                </a>
-              }
+              button={<NewUserButton />}
             />
           }
         >
@@ -71,34 +63,20 @@ export class UsersScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(users, [e => e.name.toLowerCase()]).map((user, i) => (
+              {users.map((user, i) => (
                 <tr key={i}>
                   <td className="text-center">
                     <CopyButton text={user.id} />
                   </td>
-                  <td>
-                    <a href={`/users/${user.id}`}>{user.name}</a>
-                  </td>
+                  <td>{user.name}</td>
                   <td>{user.fullname}</td>
                   <td>{user.email}</td>
                   <td>{user.team.name.toUpperCase()}</td>
                   <td>{user.role.name}</td>
                   <td>{user.from_now}</td>
                   <td className="text-center">
-                    <a
-                      className="btn btn-primary btn-sm btn-edit"
-                      href={`/users/${user.id}`}
-                    >
-                      <i className="fa fa-pencil" />
-                    </a>
-
-                    <ConfirmDeleteButton
-                      title={`Delete user ${user.name}`}
-                      body={`Are you you want to delete ${user.name}?`}
-                      okButton={`Yes delete ${user.name}`}
-                      cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteUser(user)}
-                    />
+                    <EditUserButton user={user} />
+                    <DeleteUserButton user={user} />
                   </td>
                 </tr>
               ))}
@@ -119,17 +97,21 @@ UsersScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    users: date.transformObjectsDates(
-      state.users2.byId,
-      state.currentUser.timezone
-    ),
-    isFetching: state.users2.isFetching
+    users: getUsers(state),
+    isFetching:
+      state.teams2.isFetching ||
+      state.users2.isFetching ||
+      state.roles2.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => dispatch(actions.all({ embed: "team,role" })),
+    fetchUsers: () => {
+      dispatch(rolesActions.all());
+      dispatch(teamsActions.all());
+      dispatch(usersActions.all({ embed: "team,role" }));
+    },
     deleteUser: user => dispatch(actions.delete(user))
   };
 }

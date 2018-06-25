@@ -33,7 +33,12 @@ export function AlertsContainer({ alerts, hide }) {
     <Alerts>
       {objectValues(alerts).map((alert, i) => (
         <Alert key={i} type={alert.type} onDismiss={() => hide(alert)}>
-          {alert.message}
+          {alert.message.split("\n").map((item, key) => (
+            <span key={key}>
+              {item}
+              <br />
+            </span>
+          ))}
         </Alert>
       ))}
     </Alerts>

@@ -13,6 +13,7 @@
 // under the License.
 
 import React from "react";
+import PropTypes from "prop-types";
 import { withFormsy } from "formsy-react";
 
 class Checkbox extends React.Component {
@@ -26,12 +27,12 @@ class Checkbox extends React.Component {
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { label, name } = this.props;
+    const { id, label, name } = this.props;
     return (
       <div className="form-group">
-        <label>
+        <label htmlFor={name}>
           <input
-            id={name}
+            id={id || name}
             type="checkbox"
             name={name}
             value={this.props.getValue()}
@@ -45,5 +46,11 @@ class Checkbox extends React.Component {
     );
   }
 }
+
+Checkbox.PropTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+};
 
 export default withFormsy(Checkbox);

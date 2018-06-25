@@ -20,9 +20,6 @@ import ngReduxRouter from "redux-ui-router";
 import "./favicon.ico";
 import routes, { transition as routesAuthTransition } from "./routes";
 import "./app.scss";
-import adminUserEditPage from "./pages/admin/users/edit";
-import adminUserCreatePage from "./pages/admin/users/create";
-import adminUserForm from "./pages/admin/users/form";
 import ProductsScreen from "./Screens/Products";
 import FeedersScreen from "./Screens/Feeders";
 import RemotecisScreen from "./Screens/Remotecis";
@@ -110,9 +107,6 @@ angular.element(document).ready(function() {
         .component("topicEditPage", topicEditPage)
         .component("topicDetailsPage", topicDetailsPage)
         .component("topicForm", topicForm)
-        .component("adminUserEditPage", adminUserEditPage)
-        .component("adminUserCreatePage", adminUserCreatePage)
-        .component("adminUserForm", adminUserForm)
         .component("productEditPage", productEditPage)
         .component("productCreatePage", productCreatePage)
         .component("remoteciEditPage", remoteciEditPage)

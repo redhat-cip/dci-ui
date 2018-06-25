@@ -13,6 +13,7 @@
 // under the License.
 
 import React from "react";
+import PropTypes from "prop-types";
 import { withFormsy } from "formsy-react";
 
 class Input extends React.Component {
@@ -26,18 +27,18 @@ class Input extends React.Component {
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { label, name } = this.props;
+    const { id, label, name, type } = this.props;
     return (
       <div className="form-group">
-        <label className="control-label" id={name}>
+        <label className="control-label" htmlFor={name}>
           {label}
         </label>
         <input
-          id={name}
+          id={id || name}
           name={name}
           className="form-control"
           onChange={this.changeValue}
-          type="text"
+          type={type}
           value={this.props.getValue() || ""}
         />
         <span className="help-block">{errorMessage}</span>
@@ -45,5 +46,16 @@ class Input extends React.Component {
     );
   }
 }
+
+Input.PropTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string
+};
+
+Input.defaultProps = {
+  type: "text"
+};
 
 export default withFormsy(Input);

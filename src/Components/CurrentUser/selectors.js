@@ -12,13 +12,4 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import template from "./template.html";
-import controller from "./controller";
-
-export default {
-  template,
-  controller,
-  bindings: {
-    user: "="
-  }
-};
+export const getTimezone = state => state.currentUser.timezone;

@@ -15,7 +15,6 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Teams/actions";
@@ -25,13 +24,14 @@ import _ from "lodash";
 import NewTeamButton from "../Components/Teams/NewTeamButton";
 import EditTeamButton from "../Components/Teams/EditTeamButton";
 import DeleteTeamButton from "../Components/Teams/DeleteTeamButton";
+import { getTeams } from "../Components/Teams/selectors";
 
 export class TeamsScreen extends React.Component {
   componentDidMount() {
     this.props.fetchTeams();
   }
   render() {
-    const { teams, isFetching, teamsById } = this.props;
+    const { teams, isFetching } = this.props;
     return (
       <MainContent>
         <TableCard
@@ -69,8 +69,8 @@ export class TeamsScreen extends React.Component {
                   </td>
                   <td>{team.name.toUpperCase()}</td>
                   <td>
-                    {teamsById[team.parent_id]
-                      ? teamsById[team.parent_id].name.toUpperCase()
+                    {team.parent_team
+                      ? team.parent_team.name.toUpperCase()
                       : ""}
                   </td>
                   <td>{team.from_now}</td>
@@ -90,7 +90,6 @@ export class TeamsScreen extends React.Component {
 
 TeamsScreen.propTypes = {
   teams: PropTypes.array,
-  teamsById: PropTypes.object,
   isFetching: PropTypes.bool,
   fetchTeams: PropTypes.func,
   deleteTeam: PropTypes.func
@@ -98,11 +97,7 @@ TeamsScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    teams: date.transformObjectsDates(
-      state.teams2.byId,
-      state.currentUser.timezone
-    ),
-    teamsById: state.teams2.byId,
+    teams: getTeams(state),
     isFetching: state.teams2.isFetching
   };
 }

@@ -42,6 +42,7 @@ export default class ModalForm extends React.Component {
               {this.props.cancelButton}
             </Button>
             <Button
+              id="submit-modal-button"
               bsStyle="primary"
               type="submit"
               form={this.props.formRef}

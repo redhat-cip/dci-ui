@@ -136,16 +136,11 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__products-link"
         ).waitForXpathElementVisible("//a[normalize-space(text())='Ansible']");
-      case "adminUsers":
+      case "Users":
         return this.click(
           "#navbar-primary__admin-users-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='user_hp']");
-      case "createUser":
-        return this.click("#navbar-primary__admin-users-link")
-          .waitForXpathElementVisible("//a[normalize-space(text())='user_hp']")
-          .click("#users__create-user-btn")
-          .waitForElementVisible("button#createButton");
-      case "adminTeams":
+        ).waitForXpathElementVisible("//td[normalize-space(text())='user_hp']");
+      case "Teams":
         return this.click(
           "#navbar-primary__admin-teams-link"
         ).waitForXpathElementVisible(
