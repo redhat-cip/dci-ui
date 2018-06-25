@@ -23,6 +23,7 @@ import TopicsReducer from "./Components/Topics/reducer";
 import FeedersReducer from "./Components/Feeders/reducer";
 import ComponentsReducer from "./Components/Components/reducer";
 import TeamsReducer from "./Components/Teams/reducer";
+import RolesReducer from "./Components/Roles/reducer";
 import UsersReducer from "./Components/Users/reducer";
 import globalStatusReducer from "./services/globalStatus/reducers";
 import TopicReducer from "./services/topic/reducers";
@@ -55,7 +56,8 @@ export const rootReducer = combineReducers({
   topics2: TopicsReducer,
   components2: ComponentsReducer,
   teams2: TeamsReducer,
-  users2: UsersReducer
+  users2: UsersReducer,
+  roles2: RolesReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

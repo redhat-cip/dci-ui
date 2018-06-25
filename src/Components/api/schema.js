@@ -41,7 +41,16 @@ export const job = new schema.Entity("jobs", {
 });
 export const jobs = [job];
 
-export const user = new schema.Entity("users");
+export const role = new schema.Entity("roles");
+export const roles = [role];
+
+export const team = new schema.Entity("teams");
+export const teams = [team];
+
+export const user = new schema.Entity("users", {
+  team: team,
+  role: role
+});
 export const users = [user];
 
 export const product = new schema.Entity("products");
@@ -49,6 +58,3 @@ export const products = [product];
 
 export const feeder = new schema.Entity("feeders");
 export const feeders = [feeder];
-
-export const team = new schema.Entity("teams");
-export const teams = [team];

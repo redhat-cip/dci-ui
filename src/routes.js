@@ -123,29 +123,9 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       component: "usersScreen"
     })
     .state({
-      name: "auth.adminUserEdit",
-      url: "users/:id",
-      component: "adminUserEditPage"
-    })
-    .state({
-      name: "auth.adminUserCreate",
-      url: "users/create",
-      component: "adminUserCreatePage"
-    })
-    .state({
       name: "auth.adminTeams",
       url: "teams",
       component: "teamsScreen"
-    })
-    .state({
-      name: "auth.adminTeamEdit",
-      url: "teams/:id",
-      component: "adminTeamEditPage"
-    })
-    .state({
-      name: "auth.adminTeamCreate",
-      url: "teams/create",
-      component: "adminTeamCreatePage"
     })
     .state({
       name: "auth.products",

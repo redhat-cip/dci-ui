@@ -13,33 +13,30 @@
 // under the License.
 
 import React from "react";
+import PropTypes from "prop-types";
 import { withFormsy } from "formsy-react";
 
 class Select extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   changeValue = event => {
     this.props.setValue(event.currentTarget.value || null);
   };
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { label, name } = this.props;
+    const { id, label, name, required, options } = this.props;
     return (
       <div className="form-group">
-        <label>{label}</label>
+        <label htmlFor={name}>{label}</label>
         <select
-          id={name}
+          id={id || name}
           name={name}
-          value={this.props.getValue() || this.props.defaultValue}
+          value={this.props.getValue() || ""}
           onChange={this.changeValue}
           className="form-control"
         >
-          {this.props.required ? null : <option value="" />}
-          {this.props.options.map((option, i) => (
-            <option key={i} value={option.id}>
+          {required ? null : <option value="" />}
+          {options.map((option, i) => (
+            <option key={i} value={option.id} name={option.name}>
               {option.name}
             </option>
           ))}
@@ -49,5 +46,12 @@ class Select extends React.Component {
     );
   }
 }
+
+Select.PropTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired
+};
 
 export default withFormsy(Select);

@@ -62,7 +62,7 @@ test("createAlertMessage with one error", t => {
   };
   t.is(
     actions.createAlertMessage({ data, status: 409 }),
-    "conflict on topics\nname: already_exists\n"
+    "conflict on topics\nname: already_exists"
   );
 });
 
@@ -79,7 +79,7 @@ test("createAlertMessage with multiple errors", t => {
   };
   t.is(
     actions.createAlertMessage({ data, status: 400 }),
-    "Request malformed\nname: already_exists\nteam_id: not a valid team id\n"
+    "Request malformed\nname: already_exists\nteam_id: not a valid team id"
   );
 });
 

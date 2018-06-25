@@ -79,7 +79,7 @@ export default class TeamForm extends React.Component {
               label="Parent team"
               name="parent_id"
               options={this.props.teams}
-              defaultValue={this.state.team.parent_id || this.props.teams[0]}
+              value={this.state.team.parent_id}
             />
             <Checkbox
               label="Partner"

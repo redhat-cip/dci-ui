@@ -12,21 +12,11 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-import api from "services/api";
+import objectValues from "object.values";
+import { createSelector } from "reselect";
 
-class Ctrl {
-  constructor($scope, $ngRedux) {
-    this.$ngRedux = $ngRedux;
-    let unsubscribe = $ngRedux.connect(state => state)(this);
-    $scope.$on("$destroy", unsubscribe);
-  }
-
-  $onInit() {
-    this.$ngRedux.dispatch(api("team").all());
-    this.$ngRedux.dispatch(api("role").all());
-  }
-}
-
-Ctrl.$inject = ["$scope", "$ngRedux"];
-
-export default Ctrl;
+export const getRolesById = state => state.roles2.byId;
+export const getRolesAllIds = state => state.roles2.allIds;
+export const getRoles = createSelector(getRolesById, roles =>
+  objectValues(roles)
+);

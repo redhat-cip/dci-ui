@@ -73,10 +73,10 @@ export function createAlertMessage(response) {
     const error = payload.error || payload.errors || {};
     const errorKeys = Object.keys(error);
     errorKeys.forEach(errorKey => {
-      errorDetails += `${errorKey}: ${error[errorKey]}\n`;
+      errorDetails += `\n${errorKey}: ${error[errorKey]}`;
     });
     if (errorDetails) {
-      alertMessage += `\n${errorDetails}`;
+      alertMessage += errorDetails;
     }
   }
   return alertMessage;
