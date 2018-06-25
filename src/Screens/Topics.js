@@ -34,8 +34,8 @@ export class TopicsScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Topics"
-          loading={isFetching && !topics.length}
-          empty={!isFetching && !topics.length}
+          loading={isFetching && _.isEmpty(topics)}
+          empty={!isFetching && _.isEmpty(topics)}
           HeaderButton={
             <a
               id="topics__create-topic-btn"

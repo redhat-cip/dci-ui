@@ -34,8 +34,8 @@ export class ComponentsScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Components"
-          loading={isFetching && !components.length}
-          empty={!isFetching && !components.length}
+          loading={isFetching && _.isEmpty(components)}
+          empty={!isFetching && _.isEmpty(components)}
           HeaderButton={
             <a
               id="components__create-component-btn"

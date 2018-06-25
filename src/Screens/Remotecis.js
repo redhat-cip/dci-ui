@@ -37,8 +37,8 @@ export class RemotecisScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Remotecis"
-          loading={isFetching && !remotecis.length}
-          empty={!isFetching && !remotecis.length}
+          loading={isFetching && _.isEmpty(remotecis)}
+          empty={!isFetching && _.isEmpty(remotecis)}
           HeaderButton={
             <a
               id="remotecis__create-remoteci-btn"

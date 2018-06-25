@@ -13,24 +13,18 @@
 // under the License.
 import React from "react";
 import { connect } from "../../store";
-import TeamForm from "./TeamForm";
+import ProductForm from "./ProductForm";
 import actions from "./actions";
 
-export class EditTeamForm extends React.Component {
+export class NewProductForm extends React.Component {
   render() {
     return (
-      <TeamForm
-        title="Edit team"
-        team={this.props.team}
-        showModalButton={<i className="fa fa-pencil" />}
-        okButton="Edit"
-        submit={team => {
-          const newTeam = {
-            id: this.props.team.id,
-            ...team
-          };
-          this.props.editTeam(newTeam);
-        }}
+      <ProductForm
+        title="Create a new product"
+        showModalButton="Create a new product"
+        okButton="Create"
+        submit={this.props.createProduct}
+        className={this.props.className}
       />
     );
   }
@@ -38,11 +32,11 @@ export class EditTeamForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editTeam: team => dispatch(actions.update(team))
+    createProduct: product => dispatch(actions.create(product))
   };
 }
 
 export default connect(
   null,
   mapDispatchToProps
-)(EditTeamForm);
+)(NewProductForm);

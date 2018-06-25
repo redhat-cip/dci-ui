@@ -15,14 +15,17 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
+import _ from "lodash";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Products/actions";
+import productsActions from "../Components/Products/actions";
+import teamsActions from "../Components/Teams/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
-import _ from "lodash";
+import NewProductButton from "../Components/Products/NewProductButton";
+import EditProductButton from "../Components/Products/EditProductButton";
+import DeleteProductButton from "../Components/Products/DeleteProductButton";
+import { getProducts } from "../Components/Products/selectors";
 
 export class ProductsScreen extends React.Component {
   componentDidMount() {
@@ -35,26 +38,14 @@ export class ProductsScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Products"
-          loading={isFetching && !products.length}
-          empty={!isFetching && !products.length}
-          HeaderButton={
-            <a
-              id="products__create-product-btn"
-              className="pull-right btn btn-primary"
-              href="/products/create"
-            >
-              Create a new product
-            </a>
-          }
+          loading={isFetching && _.isEmpty(products)}
+          empty={!isFetching && _.isEmpty(products)}
+          HeaderButton={<NewProductButton className="pull-right" />}
           EmptyComponent={
             <EmptyState
               title="There is no products"
               info="Do you want to create one?"
-              button={
-                <a className="btn btn-primary" href="/products/create">
-                  Create a new product
-                </a>
-              }
+              button={<NewProductButton />}
             />
           }
         >
@@ -71,37 +62,22 @@ export class ProductsScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(products, [e => e.name.toLowerCase()]).map(
-                (product, i) => (
-                  <tr key={i}>
-                    <td className="text-center">
-                      <CopyButton text={product.id} />
-                    </td>
-                    <td>
-                      <a href={`/products/${product.id}`}>{product.name}</a>
-                    </td>
-                    <td>{product.label}</td>
-                    <td>{product.team.name.toUpperCase()}</td>
-                    <td>{product.description}</td>
-                    <td>{product.from_now}</td>
-                    <td className="text-center">
-                      <a
-                        className="btn btn-primary btn-sm btn-edit"
-                        href={`/products/${product.id}`}
-                      >
-                        <i className="fa fa-pencil" />
-                      </a>
-                      <ConfirmDeleteButton
-                        title={`Delete product ${product.name}`}
-                        body={`Are you you want to delete ${product.name}?`}
-                        okButton={`Yes delete ${product.name}`}
-                        cancelButton="oups no!"
-                        whenConfirmed={() => this.props.deleteProduct(product)}
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
+              {products.map((product, i) => (
+                <tr key={i}>
+                  <td className="text-center">
+                    <CopyButton text={product.id} />
+                  </td>
+                  <td>{product.name}</td>
+                  <td>{product.label}</td>
+                  <td>{product.team.name.toUpperCase()}</td>
+                  <td>{product.description}</td>
+                  <td>{product.from_now}</td>
+                  <td className="text-center">
+                    <EditProductButton product={product} />
+                    <DeleteProductButton product={product} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </TableCard>
@@ -119,17 +95,17 @@ ProductsScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    products: date.transformObjectsDates(
-      state.products2.byId,
-      state.currentUser.timezone
-    ),
-    isFetching: state.products2.isFetching
+    products: getProducts(state),
+    isFetching: state.products2.isFetching || state.teams2.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProducts: () => dispatch(actions.all({ embed: "team" })),
+    fetchProducts: () => {
+      dispatch(productsActions.all({ embed: "team" }));
+      dispatch(teamsActions.all());
+    },
     deleteProduct: product => dispatch(actions.delete(product))
   };
 }
