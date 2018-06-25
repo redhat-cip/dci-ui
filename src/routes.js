@@ -133,16 +133,6 @@ const routes = function($stateProvider, $urlRouterProvider, $locationProvider) {
       component: "productsScreen"
     })
     .state({
-      name: "auth.productEdit",
-      url: "products/:id",
-      component: "productEditPage"
-    })
-    .state({
-      name: "auth.productCreate",
-      url: "products/create",
-      component: "productCreatePage"
-    })
-    .state({
       name: "auth.remotecis",
       url: "remotecis",
       component: "remotecisScreen"

@@ -17,20 +17,20 @@ import FormModal from "../FormModal";
 import { Button } from "patternfly-react";
 import Formsy from "formsy-react";
 import Input from "../Form/Input";
-import Checkbox from "../Form/Checkbox";
 import Select from "../Form/Select";
-import { getTeams } from "./selectors";
+import { getProducts } from "./selectors";
+import { getTeams } from "../Teams/selectors";
 
-export class TeamForm extends React.Component {
+export class ProductForm extends React.Component {
   constructor(props) {
     super(props);
-    const initialTeam = { name: "", parent_id: null, external: true };
+    const initialProduct = { name: "" };
     this.state = {
       canSubmit: false,
       show: false,
-      team: {
-        ...initialTeam,
-        ...this.props.team
+      product: {
+        ...initialProduct,
+        ...this.props.product
       }
     };
   }
@@ -52,21 +52,29 @@ export class TeamForm extends React.Component {
   };
 
   render() {
+    const {
+      title,
+      okButton,
+      submit,
+      className,
+      showModalButton,
+      teams
+    } = this.props;
     return (
       <React.Fragment>
         <FormModal
-          title={this.props.title}
-          okButton={this.props.okButton}
-          formRef="teamForm"
+          title={title}
+          okButton={okButton}
+          formRef="product-form"
           canSubmit={this.state.canSubmit}
           show={this.state.show}
           close={this.closeModal}
         >
           <Formsy
-            id="teamForm"
-            onValidSubmit={team => {
+            id="product-form"
+            onValidSubmit={product => {
               this.closeModal();
-              this.props.submit(team);
+              submit(product);
             }}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
@@ -74,28 +82,32 @@ export class TeamForm extends React.Component {
             <Input
               label="Name"
               name="name"
-              value={this.state.team.name}
+              value={this.state.product.name}
               required
             />
-            <Select
-              label="Parent team"
-              name="parent_id"
-              options={this.props.teams}
-              value={this.state.team.parent_id}
+            <Input
+              label="Description"
+              name="description"
+              value={this.state.product.description}
             />
-            <Checkbox
-              label="Partner"
-              name="external"
-              value={this.state.team.external}
-            />
+            {_.isEmpty(teams) ? null : (
+              <Select
+                id="product-form__team"
+                label="Team Owner"
+                name="team_id"
+                options={teams}
+                value={this.state.product.team_id || teams[0].id}
+                required
+              />
+            )}
           </Formsy>
         </FormModal>
         <Button
           bsStyle="primary"
-          className={this.props.className}
+          className={className}
           onClick={this.showModal}
         >
-          {this.props.showModalButton}
+          {showModalButton}
         </Button>
       </React.Fragment>
     );
@@ -104,8 +116,9 @@ export class TeamForm extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    products: getProducts(state),
     teams: getTeams(state)
   };
 }
 
-export default connect(mapStateToProps)(TeamForm);
+export default connect(mapStateToProps)(ProductForm);

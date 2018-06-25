@@ -13,6 +13,7 @@
 // under the License.
 
 import React from "react";
+import _ from "lodash";
 import { connect } from "../store";
 import PropTypes from "prop-types";
 import { MainContent } from "../Components/Layout";
@@ -20,7 +21,6 @@ import TableCard from "../Components/TableCard";
 import actions from "../Components/Teams/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import _ from "lodash";
 import NewTeamButton from "../Components/Teams/NewTeamButton";
 import EditTeamButton from "../Components/Teams/EditTeamButton";
 import DeleteTeamButton from "../Components/Teams/DeleteTeamButton";
@@ -36,9 +36,9 @@ export class TeamsScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Teams"
-          loading={isFetching && !teams.length}
-          empty={!isFetching && !teams.length}
-          HeaderButton={<NewTeamButton className="pull-right" teams={teams} />}
+          loading={isFetching && _.isEmpty(teams)}
+          empty={!isFetching && _.isEmpty(teams)}
+          HeaderButton={<NewTeamButton className="pull-right" />}
           EmptyComponent={
             <EmptyState
               title="There is no teams"
@@ -62,7 +62,7 @@ export class TeamsScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(teams, [e => e.name.toLowerCase()]).map((team, i) => (
+              {teams.map((team, i) => (
                 <tr key={i}>
                   <td className="text-center">
                     <CopyButton text={team.id} />
@@ -75,7 +75,7 @@ export class TeamsScreen extends React.Component {
                   </td>
                   <td>{team.from_now}</td>
                   <td className="text-center">
-                    <EditTeamButton team={team} teams={teams} />
+                    <EditTeamButton team={team} />
                     <DeleteTeamButton team={team} />
                   </td>
                 </tr>

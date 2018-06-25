@@ -27,8 +27,6 @@ import TopicsScreen from "./Screens/Topics";
 import ComponentsScreen from "./Screens/Components";
 import TeamsScreen from "./Screens/Teams";
 import UsersScreen from "./Screens/Users";
-import productEditPage from "./pages/products/edit";
-import productCreatePage from "./pages/products/create";
 import remoteciEditPage from "./pages/remotecis/edit";
 import remoteciCreatePage from "./pages/remotecis/create";
 import feederEditPage from "./pages/feeders/edit";
@@ -107,8 +105,6 @@ angular.element(document).ready(function() {
         .component("topicEditPage", topicEditPage)
         .component("topicDetailsPage", topicDetailsPage)
         .component("topicForm", topicForm)
-        .component("productEditPage", productEditPage)
-        .component("productCreatePage", productCreatePage)
         .component("remoteciEditPage", remoteciEditPage)
         .component("remoteciCreatePage", remoteciCreatePage)
         .component("feederEditPage", feederEditPage)

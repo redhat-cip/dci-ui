@@ -135,7 +135,7 @@ module.exports = function(browser) {
       case "Products":
         return this.click(
           "#navbar-primary__products-link"
-        ).waitForXpathElementVisible("//a[normalize-space(text())='Ansible']");
+        ).waitForXpathElementVisible("//td[normalize-space(text())='Ansible']");
       case "Users":
         return this.click(
           "#navbar-primary__admin-users-link"

@@ -108,9 +108,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchUsers: () => {
+      dispatch(usersActions.all({ embed: "team,role" }));
       dispatch(rolesActions.all());
       dispatch(teamsActions.all());
-      dispatch(usersActions.all({ embed: "team,role" }));
     },
     deleteUser: user => dispatch(actions.delete(user))
   };

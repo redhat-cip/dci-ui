@@ -25,7 +25,6 @@ export class NewTeamForm extends React.Component {
         okButton="Create"
         submit={this.props.createTeam}
         className={this.props.className}
-        teams={this.props.teams}
       />
     );
   }

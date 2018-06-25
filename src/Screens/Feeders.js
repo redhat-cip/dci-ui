@@ -35,8 +35,8 @@ export class FeedersScreen extends React.Component {
       <MainContent>
         <TableCard
           title="Feeders"
-          loading={isFetching && !feeders.length}
-          empty={!isFetching && !feeders.length}
+          loading={isFetching && _.isEmpty(feeders)}
+          empty={!isFetching && _.isEmpty(feeders)}
           HeaderButton={
             <a
               id="feeders__create-feeder-btn"
