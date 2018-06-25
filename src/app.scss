@@ -11,14 +11,14 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+@import "~scss/variables";
 @import "~patternfly/dist/css/rcue.min.css";
 @import "~patternfly/dist/css/rcue-additions.min.css";
 @import "~patternfly-react/dist/css/patternfly-react.css";
-@import "~pfdemo/dist/css/pf-holy-grail-layout.css";
-@import "~pfdemo/dist/css/pf-vertical-navigation.css";
-@import "~pfdemo/dist/css/pf-masthead.css";
+@import "~scss/pf-holy-grail-layout";
+@import "~scss/pf-vertical-navigation";
+@import "~scss/pf-masthead";
 @import "~balloon-css/balloon.css";
-@import "~scss/variables";
 
 body {
   background-color: #ffffff;
@@ -54,14 +54,21 @@ pre {
 // Margin and Padding
 $spacer: 1rem !default;
 $spacers: (
-    0: 0,
-    1: ($spacer * 0.25),
-    2: ($spacer * 0.5),
-    3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 3)
+  0: 0,
+  1: (
+    $spacer * 0.25
+  ),
+  2: (
+    $spacer * 0.5
+  ),
+  3: $spacer,
+  4: (
+    $spacer * 1.5
+  ),
+  5: (
+    $spacer * 3
   )
-  !default;
+) !default;
 @each $prop, $abbrev in (margin: m, padding: p) {
   @each $size, $length in $spacers {
     .#{$abbrev}-#{$size} {
