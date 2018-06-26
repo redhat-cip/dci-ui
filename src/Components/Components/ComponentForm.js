@@ -19,18 +19,18 @@ import Formsy from "formsy-react";
 import Input from "../Form/Input";
 import Checkbox from "../Form/Checkbox";
 import Select from "../Form/Select";
-import { getTeams } from "./selectors";
+import { getComponents } from "./selectors";
 
-export class TeamForm extends React.Component {
+export class ComponentForm extends React.Component {
   constructor(props) {
     super(props);
-    const initialTeam = { name: "", parent_id: null, external: true };
+    const initialComponent = { name: "", parent_id: null, external: true };
     this.state = {
       canSubmit: false,
       show: false,
-      team: {
-        ...initialTeam,
-        ...this.props.team
+      component: {
+        ...initialComponent,
+        ...this.props.component
       }
     };
   }
@@ -57,16 +57,16 @@ export class TeamForm extends React.Component {
         <FormModal
           title={this.props.title}
           okButton={this.props.okButton}
-          formRef="teamForm"
+          formRef="componentForm"
           canSubmit={this.state.canSubmit}
           show={this.state.show}
           close={this.closeModal}
         >
           <Formsy
-            id="teamForm"
-            onValidSubmit={team => {
+            id="componentForm"
+            onValidSubmit={component => {
               this.closeModal();
-              this.props.submit(team);
+              this.props.submit(component);
             }}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
@@ -74,20 +74,20 @@ export class TeamForm extends React.Component {
             <Input
               label="Name"
               name="name"
-              value={this.state.team.name}
+              value={this.state.component.name}
               required
             />
             <Select
-              label="Parent team"
+              label="Parent component"
               name="parent_id"
-              options={this.props.teams}
-              value={this.state.team.parent_id}
+              options={this.props.components}
+              value={this.state.component.parent_id}
               required
             />
             <Checkbox
               label="Partner"
               name="external"
-              value={this.state.team.external}
+              value={this.state.component.external}
             />
           </Formsy>
         </FormModal>
@@ -105,8 +105,8 @@ export class TeamForm extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    teams: getTeams(state)
+    components: getComponents(state)
   };
 }
 
-export default connect(mapStateToProps)(TeamForm);
+export default connect(mapStateToProps)(ComponentForm);

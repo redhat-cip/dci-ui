@@ -75,53 +75,49 @@ export class RemotecisScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(remotecis, [e => e.name.toLowerCase()]).map(
-                (remoteci, i) => (
-                  <tr key={i}>
-                    <td className="text-center">
-                      <CopyButton text={remoteci.id} />
-                    </td>
-                    <td>
-                      <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
-                    </td>
-                    <td className="text-center">
-                      {remoteci.state === "active" ? (
-                        <Label bsStyle="success">active</Label>
-                      ) : (
-                        <Label bsStyle="danger">inactive</Label>
-                      )}
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        onClick={() => DCIRCFile.download(remoteci, "remoteci")}
-                      >
-                        <Icon type="fa" name="download" /> remotecirc.sh
-                      </Button>
-                    </td>
-                    <td className="text-center">
-                      {remoteci.team.name.toUpperCase()}
-                    </td>
-                    <td>{remoteci.from_now}</td>
-                    <td className="text-center">
-                      <a
-                        className="btn btn-primary btn-sm btn-edit"
-                        href={`/remotecis/${remoteci.id}`}
-                      >
-                        <i className="fa fa-pencil" />
-                      </a>
-                      <ConfirmDeleteButton
-                        title={`Delete remoteci ${remoteci.name}`}
-                        body={`Are you you want to delete ${remoteci.name}?`}
-                        okButton={`Yes delete ${remoteci.name}`}
-                        cancelButton="oups no!"
-                        whenConfirmed={() =>
-                          this.props.deleteRemoteci(remoteci)
-                        }
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
+              {remotecis.map((remoteci, i) => (
+                <tr key={i}>
+                  <td className="text-center">
+                    <CopyButton text={remoteci.id} />
+                  </td>
+                  <td>
+                    <a href={`/remotecis/${remoteci.id}`}>{remoteci.name}</a>
+                  </td>
+                  <td className="text-center">
+                    {remoteci.state === "active" ? (
+                      <Label bsStyle="success">active</Label>
+                    ) : (
+                      <Label bsStyle="danger">inactive</Label>
+                    )}
+                  </td>
+                  <td className="text-center">
+                    <Button
+                      onClick={() => DCIRCFile.download(remoteci, "remoteci")}
+                    >
+                      <Icon type="fa" name="download" /> remotecirc.sh
+                    </Button>
+                  </td>
+                  <td className="text-center">
+                    {remoteci.team.name.toUpperCase()}
+                  </td>
+                  <td>{remoteci.from_now}</td>
+                  <td className="text-center">
+                    <a
+                      className="btn btn-primary btn-sm btn-edit"
+                      href={`/remotecis/${remoteci.id}`}
+                    >
+                      <i className="fa fa-pencil" />
+                    </a>
+                    <ConfirmDeleteButton
+                      title={`Delete remoteci ${remoteci.name}`}
+                      body={`Are you you want to delete ${remoteci.name}?`}
+                      okButton={`Yes delete ${remoteci.name}`}
+                      cancelButton="oups no!"
+                      whenConfirmed={() => this.props.deleteRemoteci(remoteci)}
+                    />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </TableCard>

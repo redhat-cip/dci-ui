@@ -15,13 +15,13 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Topics/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
+import { getTopics } from "../Components/Topics/selectors";
 import _ from "lodash";
 
 export class TopicsScreen extends React.Component {
@@ -69,7 +69,7 @@ export class TopicsScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(topics, [e => e.name.toLowerCase()]).map((topic, i) => (
+              {topics.map((topic, i) => (
                 <tr key={i}>
                   <td className="text-center">
                     <CopyButton text={topic.id} />
@@ -125,10 +125,7 @@ TopicsScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    topics: date.transformObjectsDates(
-      state.topics2.byId,
-      state.currentUser.timezone
-    ),
+    topics: getTopics(state),
     isFetching: state.topics2.isFetching
   };
 }

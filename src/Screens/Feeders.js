@@ -71,37 +71,35 @@ export class FeedersScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(feeders, [e => e.name.toLowerCase()]).map(
-                (feeder, i) => (
-                  <tr key={i}>
-                    <td className="text-center">
-                      <CopyButton text={feeder.id} />
-                    </td>
-                    <td>
-                      <a href={`/feeders/${feeder.id}`}>{feeder.name}</a>
-                    </td>
-                    <td>{feeder.label}</td>
-                    <td>{feeder.team.name}</td>
-                    <td>{feeder.description}</td>
-                    <td>{feeder.from_now}</td>
-                    <td className="text-center">
-                      <a
-                        className="btn btn-primary btn-sm btn-edit"
-                        href={`/feeders/${feeder.id}`}
-                      >
-                        <i className="fa fa-pencil" />
-                      </a>
-                      <ConfirmDeleteButton
-                        title={`Delete feeder ${feeder.name}`}
-                        body={`Are you you want to delete ${feeder.name}?`}
-                        okButton={`Yes delete ${feeder.name}`}
-                        cancelButton="oups no!"
-                        whenConfirmed={() => this.props.deleteFeeder(feeder)}
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
+              {feeders.map((feeder, i) => (
+                <tr key={i}>
+                  <td className="text-center">
+                    <CopyButton text={feeder.id} />
+                  </td>
+                  <td>
+                    <a href={`/feeders/${feeder.id}`}>{feeder.name}</a>
+                  </td>
+                  <td>{feeder.label}</td>
+                  <td>{feeder.team.name}</td>
+                  <td>{feeder.description}</td>
+                  <td>{feeder.from_now}</td>
+                  <td className="text-center">
+                    <a
+                      className="btn btn-primary btn-sm btn-edit"
+                      href={`/feeders/${feeder.id}`}
+                    >
+                      <i className="fa fa-pencil" />
+                    </a>
+                    <ConfirmDeleteButton
+                      title={`Delete feeder ${feeder.name}`}
+                      body={`Are you you want to delete ${feeder.name}?`}
+                      okButton={`Yes delete ${feeder.name}`}
+                      cancelButton="oups no!"
+                      whenConfirmed={() => this.props.deleteFeeder(feeder)}
+                    />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </TableCard>
