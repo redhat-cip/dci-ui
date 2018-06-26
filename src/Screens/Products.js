@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchProducts: () => {
       dispatch(productsActions.all({ embed: "team" }));
-      dispatch(teamsActions.all());
+      dispatch(teamsActions.all()); // todo(gvincent) move this in create or edit component
     },
     deleteProduct: product => dispatch(actions.delete(product))
   };

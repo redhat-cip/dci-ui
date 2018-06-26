@@ -17,9 +17,12 @@ import { connect } from "../store";
 import PropTypes from "prop-types";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
-import actions from "../Components/Topics/actions";
+import productsActions from "../Components/Products/actions";
+import topicsActions from "../Components/Topics/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
+import NewTopicButton from "../Components/Topics/NewTopicButton";
+import EditTopicButton from "../Components/Topics/EditTopicButton";
 import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import { getTopics } from "../Components/Topics/selectors";
 import _ from "lodash";
@@ -36,24 +39,12 @@ export class TopicsScreen extends React.Component {
           title="Topics"
           loading={isFetching && _.isEmpty(topics)}
           empty={!isFetching && _.isEmpty(topics)}
-          HeaderButton={
-            <a
-              id="topics__create-topic-btn"
-              className="pull-right btn btn-primary"
-              href="/topics/create"
-            >
-              Create a new topic
-            </a>
-          }
+          HeaderButton={<NewTopicButton className="pull-right" />}
           EmptyComponent={
             <EmptyState
               title="There is no topics"
               info="Do you want to create one?"
-              button={
-                <a className="btn btn-primary" href="/topics/create">
-                  Create a new topic
-                </a>
-              }
+              button={<NewTopicButton />}
             />
           }
         >
@@ -78,12 +69,19 @@ export class TopicsScreen extends React.Component {
                     <a href={`/topics/details/${topic.id}`}>{topic.name}</a>
                   </td>
                   <td>
+<<<<<<< HEAD
                     <a href={`/topics/details/${topic.next_topic.id}`}>
                       {topic.next_topic.name}
                     </a>
+=======
+                    {topic.next_topic ? (
+                      <a href={`/topics/details/${topic.next_topic.id}`}>
+                        {topic.next_topic.name}
+                      </a>
+                    ) : null}
+>>>>>>> transform topic edit, topic creation page into react components
                   </td>
-
-                  <td>{topic.product.name}</td>
+                  <td>{topic.product ? topic.product.name : null}</td>
                   <td>{topic.from_now}</td>
                   <td className="text-center">
                     <a
@@ -92,12 +90,7 @@ export class TopicsScreen extends React.Component {
                     >
                       <i className="fa fa-eye" />
                     </a>
-                    <a
-                      className="btn btn-primary btn-sm btn-edit"
-                      href={`/topics/edit/${topic.id}`}
-                    >
-                      <i className="fa fa-pencil" />
-                    </a>
+                    <EditTopicButton topic={topic} />
                     <ConfirmDeleteButton
                       name="topic"
                       resource={topic}
@@ -124,14 +117,17 @@ TopicsScreen.propTypes = {
 function mapStateToProps(state) {
   return {
     topics: getTopics(state),
-    isFetching: state.topics2.isFetching
+    isFetching: state.topics2.isFetching || state.products2.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTopics: () => dispatch(actions.all({ embed: "product,next_topic" })),
-    deleteTopic: topic => dispatch(actions.delete(topic))
+    fetchTopics: () => {
+      dispatch(productsActions.all());
+      dispatch(topicsActions.all());
+    },
+    deleteTopic: topic => dispatch(topicsActions.delete(topic))
   };
 }
 

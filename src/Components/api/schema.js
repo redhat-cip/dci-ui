@@ -25,21 +25,8 @@ export const remotecis = [remoteci];
 export const result = new schema.Entity("results");
 export const results = [result];
 
-export const topic = new schema.Entity("topics");
-export const topics = [topic];
-
 export const rconfiguration = new schema.Entity("rconfigurations");
 export const rconfigurations = [rconfiguration];
-
-export const job = new schema.Entity("jobs", {
-  components: [component],
-  jobstates: [jobstate],
-  results: [result],
-  remoteci: remoteci,
-  topic: topic,
-  rconfiguration: rconfiguration
-});
-export const jobs = [job];
 
 export const role = new schema.Entity("roles");
 export const roles = [role];
@@ -58,5 +45,20 @@ export const product = new schema.Entity("products", {
 });
 export const products = [product];
 
+export const topic = new schema.Entity("topics", {
+  product: product
+});
+export const topics = [topic];
+
 export const feeder = new schema.Entity("feeders");
 export const feeders = [feeder];
+
+export const job = new schema.Entity("jobs", {
+  components: [component],
+  jobstates: [jobstate],
+  results: [result],
+  remoteci: remoteci,
+  topic: topic,
+  rconfiguration: rconfiguration
+});
+export const jobs = [job];

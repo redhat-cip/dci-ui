@@ -109,11 +109,6 @@ module.exports = function(browser) {
         return this.click(
           "#navbar-primary__topics-link"
         ).waitForXpathElementVisible("//a[normalize-space(text())='OSP10']");
-      case "createTopic":
-        return this.click("#navbar-primary__topics-link")
-          .waitForElementVisible("#topics__create-topic-btn")
-          .click("#topics__create-topic-btn")
-          .waitForElementVisible("button#createButton");
       case "components":
         return this.click(
           "#navbar-primary__components-link"
