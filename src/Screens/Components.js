@@ -13,16 +13,16 @@
 // under the License.
 
 import React from "react";
-import { connect } from "../store";
+import _ from "lodash";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
+import { connect } from "../store";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Components/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
-import _ from "lodash";
+import DeleteComponentButton from "../Components/Components/DeleteComponentButton";
+import { getComponents } from "../Components/Components/selectors";
 
 export class ComponentsScreen extends React.Component {
   componentDidMount() {
@@ -36,24 +36,10 @@ export class ComponentsScreen extends React.Component {
           title="Components"
           loading={isFetching && _.isEmpty(components)}
           empty={!isFetching && _.isEmpty(components)}
-          HeaderButton={
-            <a
-              id="components__create-component-btn"
-              className="pull-right btn btn-primary"
-              href="/components/create"
-            >
-              Create a new component
-            </a>
-          }
           EmptyComponent={
             <EmptyState
               title="There is no components"
-              info="Do you want to create one?"
-              button={
-                <a className="btn btn-primary" href="/components/create">
-                  Create a new component
-                </a>
-              }
+              info="The components are created by the feeder. See documentation"
             />
           }
         >
@@ -69,38 +55,20 @@ export class ComponentsScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(components, [e => e.name.toLowerCase()]).map(
-                (component, i) => (
-                  <tr key={i}>
-                    <td className="text-center">
-                      <CopyButton text={component.id} />
-                    </td>
-                    <td>{component.name.substring(0, 42)}</td>
-                    <td>
-                      <a href={`/products/${component.product_id}`}>
-                        {component.product_name}
-                      </a>
-                    </td>
-                    <td>
-                      <a href={`/topics/details/${component.topic_id}`}>
-                        {component.topic_name}
-                      </a>
-                    </td>
-                    <td>{component.created_at}</td>
-                    <td className="text-center">
-                      <ConfirmDeleteButton
-                        title={`Delete component ${component.name}`}
-                        body={`Are you you want to delete ${component.name}?`}
-                        okButton={`Yes delete ${component.name}`}
-                        cancelButton="oups no!"
-                        whenConfirmed={() =>
-                          this.props.deleteComponent(component)
-                        }
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
+              {components.map((component, i) => (
+                <tr key={i}>
+                  <td className="text-center">
+                    <CopyButton text={component.id} />
+                  </td>
+                  <td>{component.name.substring(0, 42)}</td>
+                  <td>{component.product_name}</td>
+                  <td>{component.topic_name}</td>
+                  <td>{component.from_now}</td>
+                  <td className="text-center">
+                    <DeleteComponentButton component={component} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </TableCard>
@@ -118,10 +86,7 @@ ComponentsScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    components: date.transformObjectsDates(
-      state.components2.byId,
-      state.currentUser.timezone
-    ),
+    components: getComponents(state),
     isFetching: state.components2.isFetching
   };
 }

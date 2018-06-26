@@ -69,7 +69,7 @@ export class TopicsScreen extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {_.sortBy(topics, [e => e.name.toLowerCase()]).map((topic, i) => (
+              {topics.map((topic, i) => (
                 <tr key={i}>
                   <td className="text-center">
                     <CopyButton text={topic.id} />
