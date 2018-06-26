@@ -15,20 +15,24 @@
 import { createSelector } from "reselect";
 import _ from "lodash";
 import { getTimezone } from "../CurrentUser/selectors";
+import { getProductsById } from "../Products/selectors";
 import { fromNow } from "../Date";
 
 export const getTopicsById = state => state.topics2.byId;
 export const getTopicsAllIds = state => state.topics2.allIds;
 export const getTopics = createSelector(
   getTimezone,
+  getProductsById,
   getTopicsById,
   getTopicsAllIds,
-  (timezone, topics, topicsAllIds) =>
+  (timezone, products, topics, topicsAllIds) =>
     _.sortBy(
       topicsAllIds.map(id => {
         const topic = topics[id];
         return {
           ...topic,
+          product: topic.product_id ? products[topic.product_id] : null,
+          next_topic: topic.next_topic ? topics[topic.next_topic] : null,
           from_now: fromNow(topic.created_at, timezone)
         };
       }),

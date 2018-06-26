@@ -47,7 +47,7 @@ class Input extends React.Component {
   }
 }
 
-Input.PropTypes = {
+Input.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
