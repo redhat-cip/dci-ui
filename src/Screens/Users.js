@@ -116,7 +116,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(rolesActions.all());
       dispatch(teamsActions.all());
     },
-    deleteUser: user => dispatch(actions.delete(user))
+    deleteUser: user => dispatch(usersActions.delete(user))
   };
 }
 

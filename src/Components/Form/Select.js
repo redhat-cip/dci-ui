@@ -47,7 +47,7 @@ class Select extends React.Component {
   }
 }
 
-Select.PropTypes = {
+Select.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,

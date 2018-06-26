@@ -14,15 +14,42 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { withFormsy } from "formsy-react";
+import { withFormsy, addValidationRule } from "formsy-react";
 
-class Checkbox extends React.Component {
+addValidationRule("isJSON", function(values, value) {
+  if (typeof value === "string") {
+    try {
+      JSON.parse(value);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  return true;
+});
+
+class TextareaJSON extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      value: "{}"
+    };
+  }
+
+  componentDidMount() {
+    const value = this.props.value || {};
+    this.props.setValue(value);
+    this.setState({ value: JSON.stringify(value) });
   }
 
   changeValue = event => {
-    this.props.setValue(event.currentTarget.checked);
+    const text = event.currentTarget.value;
+    if (this.props.isValidValue(text)) {
+      this.props.setValue(JSON.parse(text));
+    } else {
+      this.props.setValue(text);
+    }
+    this.setState({ value: text });
   };
 
   render() {
@@ -30,27 +57,27 @@ class Checkbox extends React.Component {
     const { id, label, name } = this.props;
     return (
       <div className="form-group">
-        <label htmlFor={name}>
-          <input
-            id={id || name}
-            type="checkbox"
-            name={name}
-            value={this.props.getValue()}
-            checked={!!this.props.getValue()}
-            onChange={this.changeValue}
-          />
+        <label className="control-label" htmlFor={name}>
           {label}
         </label>
+        <textarea
+          id={id || name}
+          name={name}
+          className="form-control"
+          onChange={this.changeValue}
+          rows="5"
+          value={this.state.value}
+        />
         <span className="help-block">{errorMessage}</span>
       </div>
     );
   }
 }
 
-Checkbox.propTypes = {
+TextareaJSON.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired
 };
 
-export default withFormsy(Checkbox);
+export default withFormsy(TextareaJSON);

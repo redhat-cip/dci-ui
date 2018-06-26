@@ -69,7 +69,9 @@ export class ProductsScreen extends React.Component {
                   </td>
                   <td>{product.name}</td>
                   <td>{product.label}</td>
-                  <td>{product.team.name.toUpperCase()}</td>
+                  <td>
+                    {product.team ? product.team.name.toUpperCase() : null}
+                  </td>
                   <td>{product.description}</td>
                   <td>{product.from_now}</td>
                   <td className="text-center">
@@ -110,7 +112,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchProducts: () => {
       dispatch(productsActions.all({ embed: "team" }));
-      dispatch(teamsActions.all());
+      dispatch(teamsActions.all()); // todo(gvincent) move this in create or edit component
     },
     deleteProduct: product => dispatch(actions.delete(product))
   };
