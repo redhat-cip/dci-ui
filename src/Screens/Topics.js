@@ -99,11 +99,9 @@ export class TopicsScreen extends React.Component {
                       <i className="fa fa-pencil" />
                     </a>
                     <ConfirmDeleteButton
-                      title={`Delete topic ${topic.name}`}
-                      body={`Are you you want to delete ${topic.name}?`}
-                      okButton={`Yes delete ${topic.name}`}
-                      cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteTopic(topic)}
+                      name="topic"
+                      resource={topic}
+                      whenConfirmed={topic => this.props.deleteTopic(topic)}
                     />
                   </td>
                 </tr>

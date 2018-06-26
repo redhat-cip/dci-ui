@@ -91,11 +91,9 @@ export class FeedersScreen extends React.Component {
                       <i className="fa fa-pencil" />
                     </a>
                     <ConfirmDeleteButton
-                      title={`Delete feeder ${feeder.name}`}
-                      body={`Are you you want to delete ${feeder.name}?`}
-                      okButton={`Yes delete ${feeder.name}`}
-                      cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteFeeder(feeder)}
+                      name="feeder"
+                      resource={feeder}
+                      whenConfirmed={feeder => this.props.deleteFeeder(feeder)}
                     />
                   </td>
                 </tr>

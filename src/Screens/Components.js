@@ -21,7 +21,7 @@ import TableCard from "../Components/TableCard";
 import actions from "../Components/Components/actions";
 import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
-import DeleteComponentButton from "../Components/Components/DeleteComponentButton";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import { getComponents } from "../Components/Components/selectors";
 
 export class ComponentsScreen extends React.Component {
@@ -65,7 +65,13 @@ export class ComponentsScreen extends React.Component {
                   <td>{component.topic_name}</td>
                   <td>{component.from_now}</td>
                   <td className="text-center">
-                    <DeleteComponentButton component={component} />
+                    <ConfirmDeleteButton
+                      name="component"
+                      resource={component}
+                      whenConfirmed={component =>
+                        this.props.deleteComponent(component)
+                      }
+                    />
                   </td>
                 </tr>
               ))}
