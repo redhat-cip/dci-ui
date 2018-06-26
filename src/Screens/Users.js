@@ -71,7 +71,7 @@ export class UsersScreen extends React.Component {
                   <td>{user.name}</td>
                   <td>{user.fullname}</td>
                   <td>{user.email}</td>
-                  <td>{user.team.name.toUpperCase()}</td>
+                  <td>{user.team ? user.team.name.toUpperCase() : null}</td>
                   <td>{user.role.name}</td>
                   <td>{user.from_now}</td>
                   <td className="text-center">
@@ -116,7 +116,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(rolesActions.all());
       dispatch(teamsActions.all());
     },
-    deleteUser: user => dispatch(actions.delete(user))
+    deleteUser: user => dispatch(usersActions.delete(user))
   };
 }
 

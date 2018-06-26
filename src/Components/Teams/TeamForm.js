@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import React from "react";
+import _ from "lodash";
 import { connect } from "../../store";
 import FormModal from "../FormModal";
 import { Button } from "patternfly-react";
@@ -24,7 +25,7 @@ import { getTeams } from "./selectors";
 export class TeamForm extends React.Component {
   constructor(props) {
     super(props);
-    const initialTeam = { name: "", parent_id: null, external: true };
+    const initialTeam = { name: "", external: true };
     this.state = {
       canSubmit: false,
       show: false,
@@ -52,21 +53,29 @@ export class TeamForm extends React.Component {
   };
 
   render() {
+    const {
+      title,
+      okButton,
+      submit,
+      teams,
+      className,
+      showModalButton
+    } = this.props;
     return (
       <React.Fragment>
         <FormModal
-          title={this.props.title}
-          okButton={this.props.okButton}
-          formRef="teamForm"
+          title={title}
+          okButton={okButton}
+          formRef="team-form"
           canSubmit={this.state.canSubmit}
           show={this.state.show}
           close={this.closeModal}
         >
           <Formsy
-            id="teamForm"
+            id="team-form"
             onValidSubmit={team => {
               this.closeModal();
-              this.props.submit(team);
+              submit(team);
             }}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
@@ -77,26 +86,28 @@ export class TeamForm extends React.Component {
               value={this.state.team.name}
               required
             />
-            <Select
-              label="Parent team"
-              name="parent_id"
-              options={this.props.teams}
-              value={this.state.team.parent_id}
-              required
-            />
+            {_.isEmpty(teams) ? null : (
+              <Select
+                label="Parent team"
+                name="parent_id"
+                options={teams}
+                value={this.state.team.parent_id || teams[0].id}
+                required
+              />
+            )}
             <Checkbox
               label="Partner"
               name="external"
-              value={this.state.team.external}
+              value={this.state.team.external || true}
             />
           </Formsy>
         </FormModal>
         <Button
           bsStyle="primary"
-          className={this.props.className}
+          className={className}
           onClick={this.showModal}
         >
-          {this.props.showModalButton}
+          {showModalButton}
         </Button>
       </React.Fragment>
     );

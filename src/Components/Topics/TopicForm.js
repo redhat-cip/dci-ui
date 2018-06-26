@@ -12,26 +12,27 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 import React from "react";
-import _ from "lodash";
 import { connect } from "../../store";
 import FormModal from "../FormModal";
 import { Button } from "patternfly-react";
 import Formsy from "formsy-react";
 import Input from "../Form/Input";
 import Select from "../Form/Select";
-import { getTeams } from "../Teams/selectors";
-import { getRoles } from "../Roles/selectors";
+import Textarea from "../Form/TextareaJSON";
+import { getProducts } from "../Products/selectors";
+import { getTopics } from "./selectors";
+import _ from "lodash";
 
-export class UserForm extends React.Component {
+export class TopicForm extends React.Component {
   constructor(props) {
     super(props);
-    const initialUser = { name: "" };
+    const initialTopic = { name: "" };
     this.state = {
       canSubmit: false,
       show: false,
-      user: {
-        ...initialUser,
-        ...this.props.user
+      topic: {
+        ...initialTopic,
+        ...this.props.topic
       }
     };
   }
@@ -53,86 +54,76 @@ export class UserForm extends React.Component {
   };
 
   render() {
-    const { title, okButton, submit, teams, roles } = this.props;
+    const {
+      title,
+      okButton,
+      submit,
+      topics,
+      products,
+      className,
+      showModalButton
+    } = this.props;
     return (
       <React.Fragment>
         <FormModal
           title={title}
           okButton={okButton}
-          formRef="user-form"
+          formRef="topic-form"
           canSubmit={this.state.canSubmit}
           show={this.state.show}
           close={this.closeModal}
         >
           <Formsy
-            id="user-form"
-            onValidSubmit={user => {
+            id="topic-form"
+            onValidSubmit={topic => {
               this.closeModal();
-              submit(user);
+              submit(topic);
             }}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
             <Input
-              id="user-form__name"
-              label="Login"
+              id="topic-form__name"
+              label="Name"
               name="name"
-              value={this.state.user.name}
+              value={this.state.topic.name}
               required
             />
-            <Input
-              id="user-form__fullname"
-              label="Full name"
-              name="fullname"
-              value={this.state.user.fullname}
-              required
+            <Select
+              id="topic-form__next_topic"
+              label="Next topic"
+              name="next_topic"
+              options={topics}
+              value={this.state.topic.next_topic}
             />
-            <Input
-              id="user-form__email"
-              label="Email"
-              name="email"
-              type="email"
-              validations="isEmail"
-              validationError="This is not a valid email"
-              value={this.state.user.email}
-              required
-            />
-            <Input
-              id="user-form__password"
-              label="Password"
-              name="password"
-              type="password"
-              required
-            />
-            {_.isEmpty(teams) ? null : (
+            {_.isEmpty(products) ? null : (
               <Select
-                id="user-form__team"
-                label="Team"
-                name="team_id"
-                options={teams}
-                value={this.state.user.team_id || teams[0].id}
+                id="topic-form__product_id"
+                label="Product"
+                name="product_id"
+                options={products}
+                value={this.state.topic.product_id || products[0].id}
                 required
               />
             )}
-            {_.isEmpty(roles) ? null : (
-              <Select
-                id="user-form__role"
-                label="Role"
-                name="role_id"
-                options={roles}
-                value={this.state.user.role_id || roles[0].id}
-                required
-              />
-            )}
+            <Textarea
+              id="topic-form__component_types"
+              label="Component types"
+              name="component_types"
+              required
+              validations="isJSON"
+              validationError="Component types should be a valid JSON"
+              value={this.state.topic.component_types || []}
+            />
           </Formsy>
         </FormModal>
         <Button
-          id="users-screen__show-modal-button"
+          id="topics-screen__show-modal-button"
           bsStyle="primary"
-          className={this.props.className}
+          className={className}
           onClick={this.showModal}
         >
-          {this.props.showModalButton}
+          {showModalButton}
         </Button>
       </React.Fragment>
     );
@@ -141,9 +132,9 @@ export class UserForm extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    teams: getTeams(state),
-    roles: getRoles(state)
+    products: getProducts(state),
+    topics: getTopics(state)
   };
 }
 
-export default connect(mapStateToProps)(UserForm);
+export default connect(mapStateToProps)(TopicForm);
