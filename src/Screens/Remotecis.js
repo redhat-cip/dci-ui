@@ -109,11 +109,11 @@ export class RemotecisScreen extends React.Component {
                       <i className="fa fa-pencil" />
                     </a>
                     <ConfirmDeleteButton
-                      title={`Delete remoteci ${remoteci.name}`}
-                      body={`Are you you want to delete ${remoteci.name}?`}
-                      okButton={`Yes delete ${remoteci.name}`}
-                      cancelButton="oups no!"
-                      whenConfirmed={() => this.props.deleteRemoteci(remoteci)}
+                      name="remoteci"
+                      resource={remoteci}
+                      whenConfirmed={remoteci =>
+                        this.props.deleteRemoteci(remoteci)
+                      }
                     />
                   </td>
                 </tr>
