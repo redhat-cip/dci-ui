@@ -15,7 +15,7 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
+import { getFeeders } from "../Components/Feeders/selectors";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Feeders/actions";
@@ -115,10 +115,7 @@ FeedersScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    feeders: date.transformObjectsDates(
-      state.feeders2.byId,
-      state.currentUser.timezone
-    ),
+    feeders: getFeeders(state),
     isFetching: state.feeders2.isFetching
   };
 }

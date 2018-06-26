@@ -15,7 +15,7 @@
 import React from "react";
 import { connect } from "../store";
 import PropTypes from "prop-types";
-import * as date from "../Components/Date";
+import { getRemotecis } from "../Components/Remotecis/selectors";
 import { MainContent } from "../Components/Layout";
 import TableCard from "../Components/TableCard";
 import actions from "../Components/Remotecis/actions";
@@ -135,10 +135,7 @@ RemotecisScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    remotecis: date.transformObjectsDates(
-      state.remotecis2.byId,
-      state.currentUser.timezone
-    ),
+    remotecis: getRemotecis(state),
     isFetching: state.remotecis2.isFetching
   };
 }

@@ -27,12 +27,3 @@ export function duration(dateString1, dateString2) {
   const date2 = moment.utc(dateString2);
   return moment.duration(date2.diff(date1)).humanize();
 }
-
-export function transformObjectsDates(elements, timezone) {
-  return objectValues(elements).map(element => {
-    return {
-      ...element,
-      from_now: fromNow(element.created_at, timezone)
-    };
-  });
-}
