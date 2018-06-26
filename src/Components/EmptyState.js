@@ -13,28 +13,28 @@
 // under the License.
 
 import React from "react";
-import { Grid, Row, Col } from "patternfly-react";
-import PropTypes from "prop-types";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateInfo,
+  EmptyStateAction
+} from "patternfly-react";
 import styled from "styled-components";
-import { colors } from "styles";
+import { colors } from "../styles";
 
-export const TitleContainer = styled.h1`
-  padding-bottom: 1rem;
-  border-bottom: 1px solid ${colors.black100};
+const DCIEmptyState = styled(EmptyState)`
+  background-color: ${colors.white};
+  border: none;
 `;
 
-export default function Title({ title }) {
+export default function({ title, info, button }) {
   return (
-    <Grid fluid>
-      <Row>
-        <Col xs={12}>
-          <TitleContainer>{title}</TitleContainer>
-        </Col>
-      </Row>
-    </Grid>
+    <DCIEmptyState>
+      <EmptyStateIcon />
+      <EmptyStateTitle>{title}</EmptyStateTitle>
+      <EmptyStateInfo>{info}</EmptyStateInfo>
+      {button ? <EmptyStateAction>{button}</EmptyStateAction> : null}
+    </DCIEmptyState>
   );
 }
-
-Title.propTypes = {
-  title: PropTypes.string.isRequired
-};
