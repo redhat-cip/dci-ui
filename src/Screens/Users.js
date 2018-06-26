@@ -25,7 +25,7 @@ import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import NewUserButton from "../Components/Users/NewUserButton";
 import EditUserButton from "../Components/Users/EditUserButton";
-import DeleteUserButton from "../Components/Users/DeleteUserButton";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import { getUsers } from "../Components/Users/selectors";
 
 export class UsersScreen extends React.Component {
@@ -76,7 +76,11 @@ export class UsersScreen extends React.Component {
                   <td>{user.from_now}</td>
                   <td className="text-center">
                     <EditUserButton user={user} />
-                    <DeleteUserButton user={user} />
+                    <ConfirmDeleteButton
+                      name="user"
+                      resource={user}
+                      whenConfirmed={user => this.props.deleteUser(user)}
+                    />
                   </td>
                 </tr>
               ))}

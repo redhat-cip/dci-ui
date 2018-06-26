@@ -11,83 +11,47 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
-
 import React from "react";
-import PropTypes from "prop-types";
-import { Modal, Icon, Button } from "patternfly-react";
+import { Button } from "patternfly-react";
+import ConfirmModal from "./ConfirmModal";
 
 export default class ConfirmDeleteButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: this.props.show
+      show: false
     };
   }
 
-  close = () => {
+  showModal = () => {
+    this.setState({ show: true });
+  };
+
+  closeModal = () => {
     this.setState({ show: false });
   };
 
   render() {
+    const { resource, whenConfirmed, name } = this.props;
     return (
       <React.Fragment>
-        <Modal show={this.state.show} onHide={this.close}>
-          <Modal.Header>
-            <button
-              className="close"
-              onClick={this.close}
-              aria-hidden="true"
-              aria-label="Close"
-            >
-              <Icon type="pf" name="close" />
-            </button>
-            <Modal.Title>{this.props.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{this.props.body}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              bsStyle="default"
-              className="btn-cancel"
-              onClick={this.close}
-            >
-              {this.props.cancelButton}
-            </Button>
-            <Button
-              bsStyle="danger"
-              onClick={() => {
-                this.setState({ show: false });
-                this.props.whenConfirmed();
-              }}
-            >
-              {this.props.okButton}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <button
-          type="button"
-          className="btn btn-danger btn-sm"
-          onClick={() => this.setState({ show: true })}
+        <ConfirmModal
+          title={`Delete ${name} ${resource.name}`}
+          okButton={`Yes delete ${resource.name}`}
+          cancelButton="oups no!"
+          show={this.state.show}
+          close={this.closeModal}
+          onValidSubmit={() => {
+            this.closeModal();
+            whenConfirmed(resource);
+          }}
         >
+          {`Are you sure you want to delete ${resource.name}?`}
+        </ConfirmModal>
+        <Button bsStyle="danger" onClick={this.showModal}>
           <i className="fa fa-trash" />
-        </button>
+        </Button>
       </React.Fragment>
     );
   }
 }
-
-ConfirmDeleteButton.propTypes = {
-  title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
-  okButton: PropTypes.string,
-  cancelButton: PropTypes.string,
-  show: PropTypes.bool,
-  whenConfirmed: PropTypes.func.isRequired
-};
-
-ConfirmDeleteButton.defaultProps = {
-  show: false,
-  okButton: "ok",
-  cancelButton: "cancel"
-};

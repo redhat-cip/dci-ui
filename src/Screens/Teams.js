@@ -23,7 +23,7 @@ import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import NewTeamButton from "../Components/Teams/NewTeamButton";
 import EditTeamButton from "../Components/Teams/EditTeamButton";
-import DeleteTeamButton from "../Components/Teams/DeleteTeamButton";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import { getTeams } from "../Components/Teams/selectors";
 
 export class TeamsScreen extends React.Component {
@@ -76,7 +76,11 @@ export class TeamsScreen extends React.Component {
                   <td>{team.from_now}</td>
                   <td className="text-center">
                     <EditTeamButton team={team} />
-                    <DeleteTeamButton team={team} />
+                    <ConfirmDeleteButton
+                      name="team"
+                      resource={team}
+                      whenConfirmed={team => this.props.deleteTeam(team)}
+                    />
                   </td>
                 </tr>
               ))}

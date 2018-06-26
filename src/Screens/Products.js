@@ -24,7 +24,7 @@ import CopyButton from "../Components/CopyButton";
 import EmptyState from "../Components/EmptyState";
 import NewProductButton from "../Components/Products/NewProductButton";
 import EditProductButton from "../Components/Products/EditProductButton";
-import DeleteProductButton from "../Components/Products/DeleteProductButton";
+import ConfirmDeleteButton from "../Components/ConfirmDeleteButton";
 import { getProducts } from "../Components/Products/selectors";
 
 export class ProductsScreen extends React.Component {
@@ -74,7 +74,13 @@ export class ProductsScreen extends React.Component {
                   <td>{product.from_now}</td>
                   <td className="text-center">
                     <EditProductButton product={product} />
-                    <DeleteProductButton product={product} />
+                    <ConfirmDeleteButton
+                      name="product"
+                      resource={product}
+                      whenConfirmed={product =>
+                        this.props.deleteProduct(product)
+                      }
+                    />
                   </td>
                 </tr>
               ))}
