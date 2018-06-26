@@ -109,7 +109,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchProducts: () => {
-      dispatch(productsActions.all({ embed: "team" }));
+      dispatch(productsActions.all());
       dispatch(teamsActions.all());
     },
     deleteProduct: product => dispatch(actions.delete(product))
