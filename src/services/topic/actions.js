@@ -27,7 +27,7 @@ export function getTopic(topic) {
   return (dispatch, getState) => {
     const state = getState();
     const topicUrl = `${state.config.apiURL}/api/v1/topics/${topic.id}`;
-    return http({ url: topicUrl, params: { embed: "product,teams,nexttopic" } })
+    return http({ url: topicUrl, params: { embed: "product,teams,next_topic" } })
       .then(response => {
         const topic = response.data.topic;
         http({ url: `${topicUrl}/components?limit=10` }).then(

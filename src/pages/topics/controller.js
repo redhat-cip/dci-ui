@@ -28,7 +28,7 @@ class Ctrl {
   $onInit() {
     this.loading = true;
     this.$ngRedux
-      .dispatch(api("topic").all({ embed: "product,nexttopic" }))
+      .dispatch(api("topic").all({ embed: "product,next_topic" }))
       .then(() => {
         this.loading = false;
       });
