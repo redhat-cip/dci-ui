@@ -117,10 +117,10 @@ test("update user don't clean null value if in schema", t => {
   // empty answer see https://github.com/redhat-cip/dci-control-server/issues/48
   nock("https://api.example.org/api/v1")
     .filteringRequestBody(data => {
-      t.is(data, '{"name":"new topic","next_topic":null}');
+      t.is(data, '{"name":"new topic","next_topic_id":null}');
       return data;
     })
-    .put("/topics/t1", { name: "new topic", next_topic: null })
+    .put("/topics/t1", { name: "new topic", next_topic_id: null })
     .reply(201, {}, { etag: "e2" });
 
   const expectedActions = [
@@ -129,7 +129,7 @@ test("update user don't clean null value if in schema", t => {
       payload: {
         id: "t1",
         name: "new topic",
-        next_topic: null,
+        next_topic_id: null,
         unknown_field: null,
         etag: "e2"
       }
@@ -140,7 +140,7 @@ test("update user don't clean null value if in schema", t => {
     .dispatch(
       api("topic").put({
         id: "t1",
-        next_topic: null,
+        next_topic_id: null,
         unknown_field: null,
         name: "new topic",
         etag: "e1"

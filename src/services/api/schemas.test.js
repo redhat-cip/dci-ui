@@ -42,13 +42,13 @@ test("team schema", t => {
 test("topic schema", t => {
   t.deepEqual(schemas.topic, [
     "name",
-    "next_topic",
+    "next_topic_id",
     "product_id",
     "component_types"
   ]);
   t.deepEqual(schemas.topics, [
     "name",
-    "next_topic",
+    "next_topic_id",
     "product_id",
     "component_types"
   ]);

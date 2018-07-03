@@ -25,8 +25,8 @@ class Ctrl {
 
   create() {
     const topic = this.topic;
-    if (!topic.next_topic) {
-      topic.next_topic = null;
+    if (!topic.next_topic_id) {
+      topic.next_topic_id = null;
     }
     this.$ngRedux.dispatch(api("topic").post(topic)).then(() => {
       this.$ngRedux.dispatch(
