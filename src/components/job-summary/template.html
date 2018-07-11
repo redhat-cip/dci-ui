@@ -94,7 +94,7 @@
           <dd class="mb-1">
             <small>
               <span class="label label-info mr-1" ng-repeat="meta in $ctrl.job.metas">
-                {{ meta.name }}
+                {{ meta.name }}: {{ meta.value }}
                 <i class="fa fa-fw fa-times pointer" ng-click="$ctrl.deleteMeta($ctrl.job, meta)"></i>
               </span>
             </small>
