@@ -16,6 +16,24 @@
       "revId": "8e9fcbc2e8aa1131108ce694a367fe9ad50cd052",
       "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0a9018b_30a9e35f",
+        "filename": "src/components/job-summary/template.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 56
+      },
+      "writtenOn": "2018-07-12T14:06:51Z",
+      "side": 1,
+      "message": "there\u0027s no error when meta.value doesn\u0027t exist only meta.name: is displayed.\nThe real question is : do we allow to set metadata key without value ?",
+      "parentUuid": "22f6d324_545e44ad",
+      "revId": "8e9fcbc2e8aa1131108ce694a367fe9ad50cd052",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
     }
   ]
 }
