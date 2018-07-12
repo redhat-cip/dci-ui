@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22f6d324_545e44ad",
+        "filename": "src/components/job-summary/template.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 115
+      },
+      "writtenOn": "2018-07-12T06:30:43Z",
+      "side": 1,
+      "message": "What happens if there is no value? An error variable does not exist? a simple {{ meta.name }}: with trailing \u0027:\u0027 ?",
+      "revId": "8e9fcbc2e8aa1131108ce694a367fe9ad50cd052",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
