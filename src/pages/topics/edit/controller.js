@@ -39,8 +39,8 @@ class Ctrl {
   }
 
   update() {
-    if (!this.topic.next_topic) {
-      this.topic.next_topic = null;
+    if (!this.topic.next_topic_id) {
+      this.topic.next_topic_id = null;
     }
     this.$ngRedux.dispatch(api("topic").put(this.topic)).then(() => {
       this.$ngRedux.dispatch(

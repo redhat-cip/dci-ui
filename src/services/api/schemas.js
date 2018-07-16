@@ -23,8 +23,8 @@ const teamSchema = {
 };
 
 const topicSchema = {
-  post: ["name", "next_topic", "product_id", "component_types"],
-  put: ["name", "next_topic", "product_id", "component_types"]
+  post: ["name", "next_topic_id", "product_id", "component_types"],
+  put: ["name", "next_topic_id", "product_id", "component_types"]
 };
 
 const jobSchema = {

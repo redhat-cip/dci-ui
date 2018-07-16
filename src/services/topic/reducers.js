@@ -17,7 +17,7 @@ import * as constants from "./constants";
 const initialState = {
   name: "",
   component_types: [],
-  next_topic: null,
+  next_topic_id: null,
   product_id: null
 };
 

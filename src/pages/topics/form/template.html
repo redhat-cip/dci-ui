@@ -10,7 +10,7 @@
   <div class="form-group">
     <label class="control-label" for="nextTopic">Next topic</label>
     <select id="nextTopic" name="nextTopic" class="form-control"
-            ng-model="$ctrl.topic.next_topic">
+            ng-model="$ctrl.topic.next_topic_id">
       <option value=''></option>
       <option ng-repeat="topic in $ctrl.topics"
               ng-if="topic.id !== $ctrl.topic.id"
