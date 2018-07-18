@@ -10,7 +10,7 @@ sudo "PATH=$PATH" python setup.py install
 sh scripts/start_db.sh
 python bin/dci-dbinit
 FILES_UPLOAD_FOLDER=/tmp/dci-control-server python bin/dci-runtestserver &
-python bin/dci-dbprovisioning
+bin/dci-db-restore
 popd
 npm install
 npm run build
