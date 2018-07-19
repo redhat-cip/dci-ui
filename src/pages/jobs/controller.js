@@ -77,28 +77,54 @@ class Ctrl {
       }
     ];
     this.status = "";
+    this.count = 0;
+    this.nbPages = 1;
+    this.page = this.$stateParams.page ? parseInt(this.$stateParams.page) : 1;
+    this.limit = 10;
+    this.offset = (this.page - 1) * this.limit;
     this.params = {
       embed: "results,remoteci,components,jobstates,metas,topic,rconfiguration",
-      limit: 40,
-      offset: 0
+      limit: this.limit,
+      offset: this.offset
     };
-    const remoteci_id = this.$stateParams.remoteci_id;
-    if (remoteci_id) {
-      this.params.where = `remoteci_id:${remoteci_id}`;
+    this.remoteci_id = this.$stateParams.remoteci_id;
+    if (this.remoteci_id) {
+      this.params.where = `remoteci_id:${this.remoteci_id}`;
     }
     this.loading = true;
-    this.$ngRedux.dispatch(api("job").all(this.params)).then(() => {
+    this.getJobs(this.params).then(() => {
       this.$ngRedux
         .dispatch(api("remoteci").all({ embed: "team" }))
         .then(response => {
-          const remotecis = order(response["data"]["remotecis"]);
+          const remotecis = order(response.data.remotecis);
           this.teams = order(get_teams_from_remotecis(remotecis));
           this.remoteci = find(
             remotecis,
-            remoteci => remoteci.id === remoteci_id
+            remoteci => remoteci.id === this.remoteci_id
           );
           this.loading = false;
         });
+    });
+  }
+
+  goToPage(page) {
+    if (page < 1 || page > this.nbPages) return;
+    this.$ngRedux.dispatch(
+      stateGo(
+        "auth.jobs",
+        {
+          remoteci_id: this.remoteci_id,
+          page
+        },
+        { reload: true }
+      )
+    );
+  }
+
+  getJobs(params) {
+    return this.$ngRedux.dispatch(api("job").all(params)).then(response => {
+      this.count = response.data._meta.count;
+      this.nbPages = Math.round(this.count / this.limit);
     });
   }
 

@@ -15,12 +15,49 @@
         <h1>Dashboard</h1>
       </div>
       <div class="list-group list-view-pf list-view-pf-view">
-        <job-summary job="job"
-                     ng-repeat="job in $ctrl.jobs | filter:$ctrl.search | filter:$ctrl.status"></job-summary>
+        <job-summary job="job" ng-repeat="job in $ctrl.jobs | filter:$ctrl.search | filter:$ctrl.status"></job-summary>
         <div ng-if="$ctrl.jobs.length === 0">
-          There is no job available <span ng-if="$ctrl.remoteci">for remote CI {{ $ctrl.remoteci.name }}</span>
+          There is no job available
+          <span ng-if="$ctrl.remoteci">for remote CI {{ $ctrl.remoteci.name }}</span>
         </div>
       </div>
+      <form class="content-view-pf-pagination clearfix" ng-submit="$ctrl.goToPage($ctrl.page)" ng-if="$ctrl.nbPages > 1">
+        <div class="form-group">
+          <span>
+            <span class="pagination-pf-items-current">{{ $ctrl.offset ? $ctrl.offset : 1}}-{{ $ctrl.offset + $ctrl.limit }}</span> of
+            <span class="pagination-pf-items-total">{{ $ctrl.count }}</span>
+          </span>
+          <ul class="pagination pagination-pf-back">
+            <li ng-class="{'disabled': $ctrl.offset === 0}">
+              <a href="#" title="First Page" ng-click="$ctrl.goToPage(1)">
+                <span class="i fa fa-angle-double-left"></span>
+              </a>
+            </li>
+            <li ng-class="{'disabled': $ctrl.offset === 0}">
+              <a href="#" title="Previous Page" ng-click="$ctrl.goToPage($ctrl.page - 1)">
+                <span class="i fa fa-angle-left"></span>
+              </a>
+            </li>
+          </ul>
+          <label for="-page" class="sr-only">Current Page</label>
+          <input class="pagination-pf-page" ng-model="$ctrl.page" type="text" style="width: 4em;">
+          <span>of
+            <span class="pagination-pf-pages">{{ $ctrl.nbPages }}</span>
+          </span>
+          <ul class="pagination pagination-pf-forward">
+            <li ng-class="{'disabled': $ctrl.offset + $ctrl.limit >= $ctrl.count}">
+              <a href="#" title="Next Page" ng-click="$ctrl.goToPage($ctrl.page + 1)">
+                <span class="i fa fa-angle-right"></span>
+              </a>
+            </li>
+            <li ng-class="{'disabled': $ctrl.offset + $ctrl.limit >= $ctrl.count}">
+              <a href="#" title="Last Page" ng-click="$ctrl.goToPage($ctrl.nbPages)">
+                <span class="i fa fa-angle-double-right"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </form>
     </div>
     <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height:90vh; height:100%">
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
@@ -35,19 +72,16 @@
             <div class="form-group has-clear">
               <div class="search-pf-input-group">
                 <label for="searchJobs" class="sr-only">Search</label>
-                <input id="searchJobs" type="search" class="form-control"
-                       placeholder="Search"
-                       ng-model="$ctrl.search">
-                <button type="button"
-                        class="clear"
-                        ng-if="$ctrl.search"
-                        ng-click="$ctrl.search=''">
+                <input id="searchJobs" type="search" class="form-control" placeholder="Search" ng-model="$ctrl.search">
+                <button type="button" class="clear" ng-if="$ctrl.search" ng-click="$ctrl.search=''">
                   <span class="fa fa-times"></span>
                 </button>
               </div>
             </div>
             <div class="form-group">
-              <button class="btn btn-default" type="button"><span class="fa fa-search"></span></button>
+              <button class="btn btn-default" type="button">
+                <span class="fa fa-search"></span>
+              </button>
             </div>
           </form>
         </div>
@@ -56,11 +90,8 @@
         <h2 class="h5">
           Status
           <div class="actions pull-right" ng-if="$ctrl.status">
-            <button type="button" class="btn"
-                    ng-repeat="status in $ctrl.statuses"
-                    ng-if="status.value === $ctrl.status"
-                    ng-class="status.btn"
-                    ng-click="$ctrl.status = ''">
+            <button type="button" class="btn" ng-repeat="status in $ctrl.statuses" ng-if="status.value === $ctrl.status" ng-class="status.btn"
+              ng-click="$ctrl.status = ''">
               <i class="fa" ng-class="status.icon"></i>
               {{status.name}}
               <i class="fa fa-times-circle"></i>
@@ -72,13 +103,9 @@
         <div class="col-xs-12">
           <div class="form-group">
             <div class="btn-toolbar" role="toolbar">
-              <div class="btn-group" role="group"
-                   ng-repeat="status in $ctrl.statuses"
-                   ng-click="$ctrl.status=status.value">
-                <button type="button" class="btn mb-2"
-                        ng-class="status.btn">
-                  <i class="fa"
-                     ng-class="status.icon"></i>
+              <div class="btn-group" role="group" ng-repeat="status in $ctrl.statuses" ng-click="$ctrl.status=status.value">
+                <button type="button" class="btn mb-2" ng-class="status.btn">
+                  <i class="fa" ng-class="status.icon"></i>
                   {{status.name}}
                 </button>
               </div>
@@ -90,8 +117,7 @@
         <h2 class="h5">
           Remotecis
           <div class="actions pull-right" ng-if="$ctrl.remoteci">
-            <button type="button" class="btn btn-default"
-                    ng-click="$ctrl.clearFilters()">
+            <button type="button" class="btn btn-default" ng-click="$ctrl.clearFilters()">
               {{$ctrl.remoteci.name}}
               <i class="fa fa-times-circle"></i>
             </button>
@@ -103,13 +129,11 @@
           <div class="form-group">
             <ul class="list-unstyled">
               <li ng-repeat="team in $ctrl.teams">
-                  <i class="fa fa-angle-down fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length > 0"></i>
-                  <i class="fa fa-angle-right fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length === 0"></i>
-                  {{team.name}}
+                <i class="fa fa-angle-down fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length > 0"></i>
+                <i class="fa fa-angle-right fa-fw" ng-if="(team.remotecis | filter:$ctrl.search).length === 0"></i>
+                {{team.name}}
                 <br>
-                <button class="btn btn-link" type="button"
-                        ng-repeat="remoteci in team.remotecis | filter:$ctrl.search"
-                        ng-click="$ctrl.getJobsFromRemoteci(remoteci)">
+                <button class="btn btn-link" type="button" ng-repeat="remoteci in team.remotecis | filter:$ctrl.search" ng-click="$ctrl.getJobsFromRemoteci(remoteci)">
                   <i class="fa fa-server fa-fw"></i> {{remoteci.name}}
                 </button>
               </li>
