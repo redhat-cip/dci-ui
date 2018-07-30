@@ -21,7 +21,7 @@ enabled=1\n\
 gpgcheck=0\n" > /etc/yum.repos.d/dci-extras.repo
 
 RUN yum install -y epel-release && \
-    yum install -y http-parser nodejs npm google-chrome-stable liberation-mono-fonts && \
+    yum install -y http-parser nodejs npm git google-chrome-stable liberation-mono-fonts && \
     yum clean all
 
 RUN mkdir -p /opt/dci-ui
