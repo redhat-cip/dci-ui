@@ -1,0 +1,8 @@
+{
+  "apiURL": "https://api.distributed-ci.io",
+  "sso": {
+    "url": "https://sso.redhat.com",
+    "realm": "redhat-external",
+    "clientId": "dci"
+  }
+}
