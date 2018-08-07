@@ -5,12 +5,12 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./src/app.js",
+  entry: "./src/index.js",
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
   plugins: [
-    new CleanWebpackPlugin(["static"]),
+    new CleanWebpackPlugin(["build"]),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       inject: "body"
@@ -21,7 +21,7 @@ module.exports = {
   ],
   output: {
     filename: "[name].[chunkhash].js",
-    path: path.resolve(__dirname, "static")
+    path: path.resolve(__dirname, "build")
   },
   module: {
     rules: [
