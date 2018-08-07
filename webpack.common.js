@@ -3,14 +3,20 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const productionMode = process.env.NODE_ENV === "production";
 
 module.exports = {
-  entry: "./src/app.js",
+  entry: "./src/index.js",
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
   plugins: [
-    new CleanWebpackPlugin(["static"]),
+    new MiniCssExtractPlugin({
+      filename: productionMode ? "[name].[hash].css" : "[name].css",
+      chunkFilename: productionMode ? "[id].[hash].css" : "[id].css"
+    }),
+    new CleanWebpackPlugin(["build"]),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       inject: "body"
@@ -21,7 +27,7 @@ module.exports = {
   ],
   output: {
     filename: "[name].[chunkhash].js",
-    path: path.resolve(__dirname, "static")
+    path: path.resolve(__dirname, "build")
   },
   module: {
     rules: [
@@ -32,11 +38,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: [
+          productionMode ? MiniCssExtractPlugin.loader : "style-loader",
+          "css-loader"
+        ]
       },
       {
         test: /\.(png|svg|jpg|gif|ico)$/,
