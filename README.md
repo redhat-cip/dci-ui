@@ -5,15 +5,15 @@ dci-ui is a static web app pluggable through CORS on a DCI server.
 
 ## Work In Progress
 
-We are currently migrating DCI from AngularJS to React.
-The bundle size optimization was removed.
+We recently migrate DCI from AngularJS to React.
+The bundle size optimization will be done in the future.
 
 ## Getting started
 
 To run the app in development mode follow those steps:
 
  * clone this repository
- * ensure DCI api is listening on localhost:5000. See `dci-dev-env`. An alternative is to consume an existing API (edit apiURL in [src/config.json](src/config.json))
+ * ensure DCI api is listening on localhost:5000. See `dci-dev-env`. An alternative is to consume DCI API (edit apiURL in [public/config.json](public/config.json))
  * install node dependencies: `npm install`
  * run the development server : `npm start`
 
@@ -24,7 +24,6 @@ To manage the workflow the project use npm scripts
 Command list:
 
  * `npm start`: start web server with live reload
- * `npm run build`: build application in `static/` folder
- * `npm run test:unit`: start unit test
- * `npm test`: start unit and end to end tests
+ * `npm run build`: build application in `build/` folder
+ * `npm run test`: start unit test
 

@@ -1,4 +1,3 @@
-import test from "ava";
 import {
   setToken,
   getToken,
@@ -7,27 +6,27 @@ import {
   setBasicToken
 } from "./localStorage";
 
-test("localStorage getToken", t => {
-  t.is(getToken(), null);
+it("localStorage getToken", () => {
+  expect(getToken()).toBe(null);
 });
 
-test("localStorage setToken getToken removeToken", t => {
+it("localStorage setToken getToken removeToken", () => {
   const token = {
     type: "Bearer",
     value: "eyJhbGciOiJSUzI1NiIsInR5cC"
   };
   setToken(token);
-  t.deepEqual(getToken(), token);
+  expect(getToken()).toEqual(token);
   removeToken();
-  t.is(getToken(), null);
+  expect(getToken()).toBe(null);
 });
 
-test("localStorage setJWT", t => {
+it("localStorage setJWT", () => {
   setJWT("");
-  t.is(getToken().type, "Bearer");
+  expect(getToken().type).toBe("Bearer");
 });
 
-test("localStorage setBasicToken", t => {
+it("localStorage setBasicToken", () => {
   setBasicToken("");
-  t.is(getToken().type, "Basic");
+  expect(getToken().type).toBe("Basic");
 });
