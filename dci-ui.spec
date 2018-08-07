@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           dci-ui
-Version:        0.0.VERS
-Release:        1%{?dist}
+Version:        0.1.0
+Release:        1.VERS%{?dist}
 
 Summary:        DCI UI static files
 License:        ASL 2.0
@@ -15,9 +15,6 @@ BuildRequires:  epel-release
 %endif
 BuildRequires:  nodejs
 BuildRequires:  npm
-BuildRequires:  tar
-BuildRequires:  bzip2
-BuildRequires:  git
 
 %description
 DCI UI static files
@@ -32,7 +29,7 @@ npm run build
 %install
 install -d -m0755 %{buildroot}/srv/www/dci-ui
 install -d -m0755 %{buildroot}/etc/dci-ui
-cp -r static/* %{buildroot}/srv/www/dci-ui
+cp -r build/* %{buildroot}/srv/www/dci-ui
 ln -sf /srv/www/dci-ui/config.json %{buildroot}/etc/dci-ui/config.json
 
 %files
@@ -41,6 +38,9 @@ ln -sf /srv/www/dci-ui/config.json %{buildroot}/etc/dci-ui/config.json
 %config(noreplace) /srv/www/dci-ui/config.json
 
 %changelog
+* Tue Aug 7 2018 Guillaume Vincent <gvincent@redhat.com> 0.1.0-1
+- Migration from AngularJS to React
+
 * Fri Jun 23 2017 Guillaume Vincent <gvincent@redhat.com> 0.0-2
 - Use npm script instead of gulp to build the application
 
