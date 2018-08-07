@@ -1,0 +1,93 @@
+.pf-vertical-nav {
+  width: 100%;
+  background-color: #292e34;
+  display: block;
+  color: #fff;
+  height: 100%;
+  
+}
+
+.pf-vertical-nav__logo{
+  background-color: #030303;
+  height: 60px;
+  line-height: 60px;
+}
+
+.pf-vertical-nav__logo a {
+  display: block;
+  padding: 0;
+}
+
+.pf-vertical-nav__logo img {
+  width: 100%;
+  padding: 1em;
+  display: block;
+}
+
+.pf-vertical-nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.pf-vertical-nav__menu {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.pf-vertical-nav__category {
+  padding: 1.5em 0 0.5em 1em;
+  text-transform: uppercase;
+  color: #bbb;
+}
+
+.pf-vertical-nav__link {
+  display: block;
+  padding: 0.5em 1em 0.5em 1.5em;
+}
+
+.pf-vertical-nav__link:hover {
+  background-color: #393f44;
+}
+
+.pf-vertical-nav__icon {
+  margin-right: 0.5em;
+  color: #72767b;
+}
+
+.pf-vertical-nav__item {
+  background-color: #292e34;
+}
+
+.pf-vertical-nav__item.active {
+  border-top: 1px solid #030303;
+  border-bottom: 1px solid #030303;
+}
+
+.pf-vertical-nav__item.active .pf-vertical-nav__link {
+  border-left: 5px solid #39a5dc;
+  padding: 0.5em 1em 0.5em calc(1.5em - 5px);
+}
+
+.pf-vertical-nav__item.active .pf-vertical-nav__link .pf-vertical-nav__icon {
+  color: #0088ce;
+}
+
+@media (min-width: 480px) and (max-width: 960px) {
+  .pf-vertical-nav__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1em;
+  }
+  .pf-vertical-nav__icon {
+    margin: 0;
+    display: block;
+  }
+  .pf-vertical-nav__category {
+    text-align: center;
+    padding: 1em;
+  }
+}
