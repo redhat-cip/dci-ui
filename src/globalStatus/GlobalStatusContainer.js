@@ -36,6 +36,7 @@ const GlobalStatusItem = styled.div`
   background: ${props =>
     props.stat.percentageOfSuccess > 30 ? Colors.green400 : Colors.red100};
   box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
+  color: ${Colors.white};
   display: flex;
   justify-content: center;
   flex-direction: column;
