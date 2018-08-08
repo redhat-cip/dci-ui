@@ -1,6 +1,7 @@
 import JobsContainer from "./jobs/JobsContainer";
 import JobContainer from "./jobs/JobContainer";
 import GlobalStatusContainer from "./globalStatus/GlobalStatusContainer";
+import TrendsContainer from "./trends/TrendsContainer";
 import TopicsContainer from "./topics/TopicsContainer";
 import ComponentsContainer from "./components/ComponentsContainer";
 import RemotecisContainer from "./remotecis/RemotecisContainer";
@@ -25,5 +26,6 @@ export default {
   ProfileContainer,
   SubscriptionsContainer,
   LoadingContainer,
-  LoginContainer
+  LoginContainer,
+  TrendsContainer
 };

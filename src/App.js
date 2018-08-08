@@ -63,6 +63,10 @@ class App extends Component {
                     component={Pages.GlobalStatusContainer}
                   />
                   <PrivateRoute
+                    path="/trends"
+                    component={Pages.TrendsContainer}
+                  />
+                  <PrivateRoute
                     path="/topics"
                     component={Pages.TopicsContainer}
                   />
