@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { PaginationRow } from "patternfly-react";
+import { PaginationRow, Row, Col } from "patternfly-react";
 import actions from "./jobsActions";
 import { getJobs, paginate } from "./jobsSelectors";
 import JobClickableSummary from "./JobClickableSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
 import { MainContentWithLoader } from "../layout";
+import TrendsContainer from "../trends/TrendsContainer";
+
 
 export class JobsContainer extends Component {
   constructor(props) {
@@ -16,8 +18,8 @@ export class JobsContainer extends Component {
         page: 1,
         perPage: 10,
         perPageOptions: [10, 20, 50]
-      }
-    };
+      },
+      };
   }
 
   componentDidMount() {
@@ -69,28 +71,33 @@ export class JobsContainer extends Component {
     const offset = (page - 1) * perPage;
     return (
       <MainContentWithLoader loading={isFetching && isEmpty(jobs)}>
-        <PaginationRow
-          viewType="list"
-          pageInputValue={page}
-          pagination={this.state.pagination}
-          amountOfPages={nbPages ? nbPages : 1}
-          itemCount={count}
-          itemsStart={count > offset + 1 ? offset + 1 : 1}
-          itemsEnd={count < perPage ? count : offset + perPage}
-          onPerPageSelect={this.onPerPageSelect}
-          onFirstPage={() => this.setPageAnFetchJobs(1)}
-          onLastPage={() => this.setPageAnFetchJobs(nbPages)}
-          onPreviousPage={() =>
-            this.setPageAnFetchJobs(this.state.pagination.page - 1)
-          }
-          onNextPage={() =>
-            this.setPageAnFetchJobs(this.state.pagination.page + 1)
-          }
-          className="bgWhite mb-3"
-        />
-        {paginate(jobs, this.state.pagination).map((job, i) => (
-          <JobClickableSummary key={job.etag} job={job} history={history} />
-        ))}
+        <TrendsContainer/>
+        <Row>
+          <Col xs={12}>
+            <PaginationRow
+              viewType="list"
+              pageInputValue={page}
+              pagination={this.state.pagination}
+              amountOfPages={nbPages ? nbPages : 1}
+              itemCount={count}
+              itemsStart={count > offset + 1 ? offset + 1 : 1}
+              itemsEnd={count < perPage ? count : offset + perPage}
+              onPerPageSelect={this.onPerPageSelect}
+              onFirstPage={() => this.setPageAnFetchJobs(1)}
+              onLastPage={() => this.setPageAnFetchJobs(nbPages)}
+              onPreviousPage={() =>
+                this.setPageAnFetchJobs(this.state.pagination.page - 1)
+              }
+              onNextPage={() =>
+                this.setPageAnFetchJobs(this.state.pagination.page + 1)
+              }
+              className="bgWhite mb-3"
+            />
+            {paginate(jobs, this.state.pagination).map((job, i) => (
+              <JobClickableSummary key={job.etag} job={job} history={history} />
+            ))}
+          </Col>
+        </Row>
       </MainContentWithLoader>
     );
   }
