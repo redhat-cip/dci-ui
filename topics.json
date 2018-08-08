@@ -1,0 +1,401 @@
+{
+  "_meta": {
+    "count": 24
+  },
+  "topics": [
+    {
+      "component_types": [
+        "rpm_ansible"
+      ],
+      "created_at": "2018-06-26T08:34:19.866941",
+      "data": {},
+      "etag": "8c1ec4b561712c3bd38ac01e5cb069b5",
+      "id": "db062002-3590-4a9f-9bb2-6284280bd7b4",
+      "label": null,
+      "name": "Ansible-2.6-rpm",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2018-06-26T08:34:19.866941"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2018-05-26T08:23:23.369044",
+      "data": {},
+      "etag": "c49850b6dce89d95ddfba379260c792b",
+      "id": "58f3bc7e-2958-407b-84cf-3562bc1455ec",
+      "label": null,
+      "name": "Ansible-2.6",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2018-05-26T08:24:54.254374"
+    },
+    {
+      "component_types": [
+        "puddle_osp"
+      ],
+      "created_at": "2018-04-06T18:45:58.110140",
+      "data": {
+        "registry": {
+          "login": "dci-registry-user-osp14.service",
+          "password": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRjaS1yZWdpc3RyeS11c2VyLW9zcDE0LnNlcnZpY2UtdG9rZW4tY2h4bWYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGNpLXJlZ2lzdHJ5LXVzZXItb3NwMTQuc2VydmljZSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjlkZDBkNzFmLTY0MzMtMTFlOC1hODlmLWZhMTYzZTdmOGIzMyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRjaS1yZWdpc3RyeS11c2VyLW9zcDE0LnNlcnZpY2UifQ.kjVrijpPKnfeVBG-Av-VIcZG-ArdPDzehziB_lDL2yCCSQuPChCLDad9OfmYcEIu99kFWaiUSChSHNDgAyRjIFEuym4ge58W1Lgd0M9scmjsC9lvzU_x_VK7B3IF9ZXVsjztKvU32hi8iq5f2X-4nNjUGBS9mJlmqvrTdAsZCNN0oiGZ5p_-DXSdXsEurkIAIhD8W6vvN6XjWGVXapAqUeTXFYrc1dbrJnVdG-2ES5A-DabdG1qw5K7TmzlvkjLtOfqKwmr8JlReqrqRcOAx5LevvWXyLFTOcDRAYWl3vX1xYML2iJyGxa-N67mdqgTJppRRyJ2zva-70GvSaVAaig"
+        },
+        "releasename": "rocky"
+      },
+      "etag": "73e01ff66c5f028998c58f2f45b394f0",
+      "id": "c07b19a4-d11e-494f-b931-df800a200e74",
+      "label": null,
+      "name": "OSP14",
+      "next_topic_id": null,
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-04-12T06:50:43.114337"
+    },
+    {
+      "component_types": [
+        "snapshot_rdo"
+      ],
+      "created_at": "2018-03-07T13:16:18.897076",
+      "data": {
+        "releasename": "rocky"
+      },
+      "etag": "c93a88098a4ad4fda147c83fd5166495",
+      "id": "907db160-2630-4506-a5e4-9e4a59aefa5d",
+      "label": null,
+      "name": "RDO-Rocky",
+      "next_topic_id": null,
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-03-07T13:16:18.897076"
+    },
+    {
+      "component_types": [],
+      "created_at": "2018-02-09T14:25:13.795127",
+      "data": null,
+      "etag": "a0b6fb6c3e473c8b57cee652342cd2e0",
+      "id": "64afe5bf-b936-4944-bef9-b74f2acb1bfa",
+      "label": null,
+      "name": "Ansible-2.5-coverage",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2018-02-09T14:25:52.894129"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2018-02-09T14:25:02.390661",
+      "data": null,
+      "etag": "5c138e54188e396ab42243ae0193a16f",
+      "id": "688bc1d5-549f-4014-974f-776111a6ad0d",
+      "label": null,
+      "name": "Ansible-2.5",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2018-02-16T12:07:43.393308"
+    },
+    {
+      "component_types": [
+        "puddle_osp"
+      ],
+      "created_at": "2018-01-24T14:25:33.193841",
+      "data": {
+        "registry": {
+          "login": "dci-registry-user-osp13.service",
+          "password": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRjaS1yZWdpc3RyeS11c2VyLW9zcDEzLnNlcnZpY2UtdG9rZW4tcjR3djIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGNpLXJlZ2lzdHJ5LXVzZXItb3NwMTMuc2VydmljZSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImM4ZGUwZWZhLTI1NzktMTFlOC05M2MxLWZhMTYzZTdmOGIzMyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRjaS1yZWdpc3RyeS11c2VyLW9zcDEzLnNlcnZpY2UifQ.P1mCDxaeqXm0ytOpjeR7ENkiRAHey3qPTs91Uvivd7ahsQI8pbMa9aqK9u5zY1ddq4s83eqnYFrHp-JT8M5XN0v2t8N_taMUYiK_TChuS8m4ZSQNRLYiw6bzfpAOGRoR3kGshvKyhI7AXf3MoHF9vuTdkaiRrAjLQH7nhkuwailsx2cAj9-JVl_ekOca98yvRMbXva5VMtvZ7UXFFyDiGNHASlCub_HPzBhYHqoOmZHA06DTt1bc-AJmxEy1RyA2Z-D_1eu_kxSAq4cbxHi_kAlhD2EDyIrRSah4n0-jIIAvsnd9XqGjcJtwJFrke_cr35zbcIyFPVDVLIsTIUixFA"
+        },
+        "releasename": "queens"
+      },
+      "etag": "4c54b611035c6cc6d9f77a1f183bd57a",
+      "id": "8bd5a6f6-fe80-4699-b422-27c33e92f60a",
+      "label": null,
+      "name": "OSP13",
+      "next_topic_id": "c07b19a4-d11e-494f-b931-df800a200e74",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-04-23T14:47:40.346778"
+    },
+    {
+      "component_types": [
+        "Compose"
+      ],
+      "created_at": "2017-11-22T08:49:10.368602",
+      "data": null,
+      "etag": "5570d0e679236d47ebe16c33839a058b",
+      "id": "0ebde9d5-22d5-4a5f-b7d2-27d664b70789",
+      "label": null,
+      "name": "RHEL-8",
+      "next_topic_id": null,
+      "product_id": "b3d8d6f3-8223-4553-bf08-9b2cecb869f2",
+      "state": "active",
+      "updated_at": "2018-04-16T13:18:35.941919"
+    },
+    {
+      "component_types": [
+        "Compose"
+      ],
+      "created_at": "2017-11-10T17:45:53.332951",
+      "data": null,
+      "etag": "0fd7e28310a1de8adf4aca0bd79edd4a",
+      "id": "e6ff2abf-b109-4dd5-b06a-39f8846ad252",
+      "label": null,
+      "name": "RHEL-7",
+      "next_topic_id": null,
+      "product_id": "b3d8d6f3-8223-4553-bf08-9b2cecb869f2",
+      "state": "active",
+      "updated_at": "2018-05-03T10:10:50.062276"
+    },
+    {
+      "component_types": [
+        "test"
+      ],
+      "created_at": "2017-11-08T08:05:33.269965",
+      "data": null,
+      "etag": "3ca3efe3d8da92fe0ebbb3282a3eb1fc",
+      "id": "0b26faa4-1a84-44a1-b627-93c439572a31",
+      "label": null,
+      "name": "test",
+      "next_topic_id": null,
+      "product_id": "ea7fad68-3d0b-4177-8c87-7de03f4cc7e6",
+      "state": "active",
+      "updated_at": "2017-11-09T14:25:20.566565"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2017-10-30T07:52:21.172214",
+      "data": null,
+      "etag": "663b2d829e462241d51d991f95d7ce21",
+      "id": "b2fe20c8-a76c-454f-bcce-a998ee7b6f3a",
+      "label": null,
+      "name": "Ansible-devel-coverage",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2017-11-02T14:29:20.508387"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2017-09-11T07:26:42.232823",
+      "data": null,
+      "etag": "e38088cbe4e7fdb60b958fa2ac0c7873",
+      "id": "0aa763a9-497f-4f61-94fa-396020963041",
+      "label": null,
+      "name": "Ansible-devel",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2018-01-15T15:56:52.396031"
+    },
+    {
+      "component_types": [
+        "snapshot_rdo"
+      ],
+      "created_at": "2017-09-05T13:55:12.943542",
+      "data": {
+        "releasename": "queens"
+      },
+      "etag": "ff66d7e4d2430deda07c1417c697ef61",
+      "id": "e199e899-5d5f-46c5-8e6c-9cf60fdb3d65",
+      "label": null,
+      "name": "RDO-Queens",
+      "next_topic_id": "907db160-2630-4506-a5e4-9e4a59aefa5d",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-03-07T13:16:28.326414"
+    },
+    {
+      "component_types": [],
+      "created_at": "2017-07-28T09:25:03.990913",
+      "data": null,
+      "etag": "d218c61e8128c5196bd2df25ad9cffc2",
+      "id": "0fec773d-c670-43fd-b77c-97838f3888cc",
+      "label": null,
+      "name": "Ceph-Ansible",
+      "next_topic_id": null,
+      "product_id": "3d42e666-66f4-4002-a856-1c7d3b6d5c47",
+      "state": "active",
+      "updated_at": "2017-12-01T07:29:07.369903"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2017-06-26T05:59:45.310576",
+      "data": null,
+      "etag": "bcbe585b3f035f5879a93c218ff899ff",
+      "id": "418454ff-5315-429e-adb6-3dbb5866a99b",
+      "label": null,
+      "name": "Ansible-2.4",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2017-12-06T16:52:29.387820"
+    },
+    {
+      "component_types": [
+        "snapshot_ansible"
+      ],
+      "created_at": "2017-06-26T05:59:15.151211",
+      "data": null,
+      "etag": "c079d4ace47eeade0817f5cc730171ce",
+      "id": "44096679-ba7d-46e7-a5d7-2196c5e61e4a",
+      "label": null,
+      "name": "Ansible-2.3",
+      "next_topic_id": null,
+      "product_id": "28e8944d-c4e8-4b9e-8d6c-ff8d591ec3a0",
+      "state": "active",
+      "updated_at": "2017-10-28T08:17:42.452041"
+    },
+    {
+      "component_types": [
+        "puddle_osp"
+      ],
+      "created_at": "2017-04-06T13:35:07.744011",
+      "data": {
+        "registry": {
+          "login": "dci-registry-user-osp12.service",
+          "password": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRjaS1yZWdpc3RyeS11c2VyLW9zcDEyLnNlcnZpY2UtdG9rZW4ta2RiYmMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGNpLXJlZ2lzdHJ5LXVzZXItb3NwMTIuc2VydmljZSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImMzOTQ3MzU4LWY2NTEtMTFlNy05MWE5LWZhMTYzZTdmOGIzMyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRjaS1yZWdpc3RyeS11c2VyLW9zcDEyLnNlcnZpY2UifQ.GgeVmw6rtZQDcOAGERGPycAVXY8CO6fvxxiZxyElfLdxQUvZj02db9xOyYtd800xBIEei1ex1fMxkz6CJVirnSQUksZQFTE_qsTKXKctVk6nr6PQZBVLfqDuk7Co9kiiAb4WXEg3L7Ja7qJE4bOYKttpdttXa5qUyjHnqDO-PRGrakrhH2QIKl5GoqM2GQaJnSn6ZMZjXbHnma1utlHVyILYUygIM9t19wHupUuqtpxJIAi1C-z89oLRQn8YgcvC4E3Gc2Dp5_pE6v2OJn91iePKhn_mC9s2kKNfQGv6FL8kDVoiSy-_iTgAB9YyQBumLc03OyBlcaj06ENE7nROsg"
+        },
+        "releasename": "pike"
+      },
+      "etag": "2cdc129ae927e2df80cf84e00e672a8d",
+      "id": "e33fe610-f7ac-4bb5-9c37-423b3ffdd245",
+      "label": null,
+      "name": "OSP12",
+      "next_topic_id": "8bd5a6f6-fe80-4699-b422-27c33e92f60a",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-02-08T15:23:49.086485"
+    },
+    {
+      "component_types": [
+        "snapshot_rdo"
+      ],
+      "created_at": "2017-03-03T09:33:15.421802",
+      "data": {
+        "releasename": "pike"
+      },
+      "etag": "e481ef027b0aea1024e46bb6f73f389b",
+      "id": "e7a71aa8-fd65-4c7c-b4c0-da73b88d8c39",
+      "label": null,
+      "name": "RDO-Pike",
+      "next_topic_id": "e199e899-5d5f-46c5-8e6c-9cf60fdb3d65",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-02-05T09:11:21.057814"
+    },
+    {
+      "component_types": [
+        "snapshot_rdo"
+      ],
+      "created_at": "2016-12-18T14:36:29.857728",
+      "data": {
+        "releasename": "newton"
+      },
+      "etag": "3125141fb955dbbcc50bcd65fb141742",
+      "id": "469f09eb-6942-4ea4-96aa-15c08cb1c5c6",
+      "label": null,
+      "name": "RDO-Newton",
+      "next_topic_id": "351ce681-38dc-4297-b807-7c404562be11",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-01-30T15:46:21.315863"
+    },
+    {
+      "component_types": [
+        "snapshot_rdo"
+      ],
+      "created_at": "2016-12-18T14:36:14.202376",
+      "data": {
+        "releasename": "ocata"
+      },
+      "etag": "3ccaa42ec047a47a86c209bb7cf9dc30",
+      "id": "351ce681-38dc-4297-b807-7c404562be11",
+      "label": null,
+      "name": "RDO-Ocata",
+      "next_topic_id": "e7a71aa8-fd65-4c7c-b4c0-da73b88d8c39",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-01-30T15:46:30.076216"
+    },
+    {
+      "component_types": [
+        "puddle_osp"
+      ],
+      "created_at": "2016-12-12T00:53:32.191437",
+      "data": {
+        "releasename": "ocata"
+      },
+      "etag": "a6319f761b51f94a3f14b1539b8dafa6",
+      "id": "46d3a70b-0f68-4bc6-a04f-11d07b5effc0",
+      "label": null,
+      "name": "OSP11",
+      "next_topic_id": "e33fe610-f7ac-4bb5-9c37-423b3ffdd245",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-01-02T17:56:46.709579"
+    },
+    {
+      "component_types": [
+        "puddle_osp",
+        "puddle_ospd"
+      ],
+      "created_at": "2016-11-24T08:57:03.537039",
+      "data": {
+        "releasename": "mitaka"
+      },
+      "etag": "641e2fe4ffba7104ddfd0fa5790a4c93",
+      "id": "49c53850-7335-44f8-9b18-55153fd77300",
+      "label": null,
+      "name": "OSP9",
+      "next_topic_id": "065ad95c-fbc4-453c-9d9e-171454d1a9a7",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2017-10-19T11:32:13.784559"
+    },
+    {
+      "component_types": [
+        "puddle_osp"
+      ],
+      "created_at": "2016-11-24T08:56:04.539457",
+      "data": {
+        "releasename": "newton"
+      },
+      "etag": "557bdf0f711132a04e7e4719aac2f31d",
+      "id": "065ad95c-fbc4-453c-9d9e-171454d1a9a7",
+      "label": null,
+      "name": "OSP10",
+      "next_topic_id": "46d3a70b-0f68-4bc6-a04f-11d07b5effc0",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2018-01-02T17:56:35.042945"
+    },
+    {
+      "component_types": [
+        "puddle_osp",
+        "puddle_ospd"
+      ],
+      "created_at": "2016-03-01T16:32:17.244327",
+      "data": {
+        "releasename": "liberty"
+      },
+      "etag": "bf42ac4baf45e00240767b67ef5bd2e5",
+      "id": "996f1599-887a-4be6-bad6-758cf6c969ef",
+      "label": null,
+      "name": "OSP8",
+      "next_topic_id": "49c53850-7335-44f8-9b18-55153fd77300",
+      "product_id": "89295c7f-aa9d-49f8-9c50-71c2d6d5b297",
+      "state": "active",
+      "updated_at": "2017-10-19T11:31:56.348092"
+    }
+  ]
+}
