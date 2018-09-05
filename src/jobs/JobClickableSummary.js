@@ -148,13 +148,16 @@ function InnerJob({ job }) {
           <span>
             <b>{job.topic.name}</b>
           </span>
-          {job.components.map((component, i) => (
-            <span key={i}>{component.name}</span>
+          {job.components.map(component => (
+            <span key={component.id}>{component.name}</span>
           ))}
-          <span>{job.remoteci.name}</span>
-          {job.rconfiguration && job.rconfiguration.name ? (
-            <span>{job.rconfiguration.name}</span>
-          ) : null}
+          <span>
+            {job.remoteci.name} (
+            {job.rconfiguration && job.rconfiguration.name
+              ? job.rconfiguration.name
+              : null}
+            )
+          </span>
           <span>
             {job.metas.map((meta, i) => (
               <span key={i} className="label label-primary mr-1">
@@ -166,7 +169,7 @@ function InnerJob({ job }) {
       </JobInfo>
       <JobTests>
         {job.results.map((test, i) => (
-          <div key={i}>
+          <div key={test.id}>
             <span className="label label-success mr-1">{test.success}</span>
             <span className="label label-warning mr-1">{test.skips}</span>
             <span className="label label-danger mr-1">

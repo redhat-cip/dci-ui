@@ -71,6 +71,7 @@ export class JobsContainer extends Component {
         return {
           pagination: {
             ...prevState.pagination,
+            page: 1,
             perPage
           }
         };
@@ -81,8 +82,14 @@ export class JobsContainer extends Component {
 
   _setRemoteciAndFetchJobs = remoteci_id => {
     this.setState(
-      {
-        remoteci_id
+      prevState => {
+        return {
+          pagination: {
+            ...prevState.pagination,
+            page: 1
+          },
+          remoteci_id
+        };
       },
       () => this._fetchJobsAndChangeUrl()
     );

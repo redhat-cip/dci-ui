@@ -7,7 +7,6 @@ it("jobs normalize", () => {
       components: [{ id: "component1" }],
       id: "job1",
       jobstates: [{ id: "jobstate1" }],
-      rconfiguration: { id: "rconfiguration1" },
       remoteci: { id: "remoteci1" },
       topic: { id: "topic1" }
     },
@@ -15,7 +14,6 @@ it("jobs normalize", () => {
       components: [{ id: "component1" }],
       id: "job2",
       jobstates: [{ id: "jobstate2" }],
-      rconfiguration: { id: "rconfiguration1" },
       remoteci: { id: "remoteci1" },
       topic: { id: "topic1" }
     }
@@ -28,7 +26,6 @@ it("jobs normalize", () => {
           components: ["component1"],
           id: "job1",
           jobstates: ["jobstate1"],
-          rconfiguration: "rconfiguration1",
           remoteci: "remoteci1",
           topic: "topic1"
         },
@@ -36,7 +33,6 @@ it("jobs normalize", () => {
           components: ["component1"],
           id: "job2",
           jobstates: ["jobstate2"],
-          rconfiguration: "rconfiguration1",
           remoteci: "remoteci1",
           topic: "topic1"
         }
@@ -63,11 +59,6 @@ it("jobs normalize", () => {
         component1: {
           id: "component1"
         }
-      },
-      rconfigurations: {
-        rconfiguration1: {
-          id: "rconfiguration1"
-        }
       }
     }
   };
@@ -81,7 +72,6 @@ it("jobs denormalize", () => {
         components: ["component1"],
         id: "job1",
         jobstates: ["jobstate1"],
-        rconfiguration: "rconfiguration1",
         remoteci: "remoteci1",
         topic: "topic1"
       },
@@ -89,7 +79,6 @@ it("jobs denormalize", () => {
         components: ["component1"],
         id: "job2",
         jobstates: ["jobstate2"],
-        rconfiguration: "rconfiguration1",
         remoteci: "remoteci1",
         topic: "topic1"
       }
@@ -116,11 +105,6 @@ it("jobs denormalize", () => {
       component1: {
         id: "component1"
       }
-    },
-    rconfigurations: {
-      rconfiguration1: {
-        id: "rconfiguration1"
-      }
     }
   };
   const denormalizedJobs = [
@@ -128,7 +112,6 @@ it("jobs denormalize", () => {
       components: [{ id: "component1" }],
       id: "job1",
       jobstates: [{ id: "jobstate1" }],
-      rconfiguration: { id: "rconfiguration1" },
       remoteci: { id: "remoteci1" },
       topic: { id: "topic1" }
     },
@@ -136,7 +119,6 @@ it("jobs denormalize", () => {
       components: [{ id: "component1" }],
       id: "job2",
       jobstates: [{ id: "jobstate2" }],
-      rconfiguration: { id: "rconfiguration1" },
       remoteci: { id: "remoteci1" },
       topic: { id: "topic1" }
     }
