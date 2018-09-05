@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 import { EmptyState } from "../../ui";
 import Test from "./Test";
 
@@ -12,7 +12,9 @@ export default class TestsList extends Component {
       );
     return (
       <div className="TestsList">
-        {tests.map((test, i) => <Test key={i} test={test} />)}
+        {tests.map((test, i) => (
+          <Test key={i} test={test} />
+        ))}
       </div>
     );
   }

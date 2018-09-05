@@ -30,7 +30,6 @@ export default function(state = initialState, action) {
     case types.DELETE_CURRENT_USER:
       return {
         ...initialState
-
       };
     case types.SUBSCRIBED_TO_A_REMOTECI:
       return {

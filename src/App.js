@@ -11,6 +11,7 @@ import "patternfly/dist/css/patternfly.min.css";
 import "patternfly/dist/css/patternfly-additions.min.css";
 import "balloon-css/balloon.css";
 import "./App.css";
+import "./favicon.ico";
 
 import store from "./store";
 import Pages from "./pages";
@@ -34,7 +35,7 @@ class App extends Component {
       .then(config => configureSSO(config))
       .then(() => store.dispatch(getCurrentUser()))
       .catch(error => console.error(error))
-      .then(() => this.setState({ loading: false }))
+      .then(() => this.setState({ loading: false }));
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 import { EmptyState } from "../../ui";
 import Issue from "./Issue";
 import NewIssueButton from "./NewIssueButton";
@@ -15,7 +15,6 @@ export default class IssuesList extends Component {
         />
       );
     return (
-
       <div className="IssuesList">
         <NewIssueButton createIssue={createIssue} />
         {issues.map((issue, i) => (

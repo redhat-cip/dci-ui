@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getFileContent } from "../files/filesActions";
-import {FileRow,
+import {
+  FileRow,
   FileName,
   Arrow,
-  Pre,DurationLabel} from "./JobStateComponents"
+  Pre,
+  DurationLabel
+} from "./JobStateComponents";
 
 export class JobStateFile extends Component {
   constructor(props) {

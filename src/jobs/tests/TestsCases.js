@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 import { EmptyState } from "../../ui";
 import TestsCase from "./TestsCase";
 
@@ -8,10 +8,7 @@ export default class TestsCases extends Component {
     const { testscases } = this.props;
     if (isEmpty(testscases))
       return (
-        <EmptyState
-          title="No tests"
-          info="There is no tests for this test"
-        />
+        <EmptyState title="No tests" info="There is no tests for this test" />
       );
     return (
       <table className="table table-condensed table-bordered">

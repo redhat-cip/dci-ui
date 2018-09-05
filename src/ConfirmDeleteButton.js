@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Button } from "patternfly-react";
 import ConfirmModal from "./ConfirmModal";
 

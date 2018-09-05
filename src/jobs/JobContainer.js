@@ -18,7 +18,7 @@ import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
-import {JobSummary} from "./JobClickableSummary";
+import { JobSummary } from "./JobClickableSummary";
 
 export class JobContainer extends Component {
   constructor(props) {
