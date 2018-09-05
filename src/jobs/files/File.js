@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import FileSaver from "file-saver";
 import { Button } from "patternfly-react";
-
 import { getFileContent } from "./filesActions";
 import { humanFileSize } from "./filesGetters";
 
@@ -30,6 +29,7 @@ export class File extends Component {
   render() {
     const { file } = this.props;
     const { downloading } = this.state;
+    if (file.jobstate_id) return null;
     return (
       <tr>
         <td>{file.name}</td>

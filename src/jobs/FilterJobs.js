@@ -53,11 +53,12 @@ class TeamRemotecisList extends Component {
       <FilterPanelCategoryItems>
         <FilterPanelCategoryTitle>{team.name}</FilterPanelCategoryTitle>
         {team.remotecis.map(remoteci => (
-          <FilterPanelCategoryItem
-            key={remoteci.etag}
-            onChange={() => selectRemoteci(remoteci.id)}
-          >
-            <Radio name="filter-job-radio" checked={remoteci.id === remoteciId}>
+          <FilterPanelCategoryItem key={remoteci.etag}>
+            <Radio
+              name="filter-job-radio"
+              onChange={() => selectRemoteci(remoteci.id)}
+              checked={remoteci.id === remoteciId}
+            >
               <FilterPanelCategoryIcon>
                 <i className="fa fa-fw fa-server" />
               </FilterPanelCategoryIcon>

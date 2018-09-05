@@ -9,9 +9,6 @@ export const jobstates = [jobstate];
 export const remoteci = new schema.Entity("remotecis");
 export const remotecis = [remoteci];
 
-export const rconfiguration = new schema.Entity("rconfigurations");
-export const rconfigurations = [rconfiguration];
-
 export const role = new schema.Entity("roles");
 export const roles = [role];
 
@@ -39,7 +36,6 @@ export const job = new schema.Entity("jobs", {
   components: [component],
   jobstates: [jobstate],
   remoteci: remoteci,
-  topic: topic,
-  rconfiguration: rconfiguration
+  topic: topic
 });
 export const jobs = [job];
