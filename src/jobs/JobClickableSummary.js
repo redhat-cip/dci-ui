@@ -139,6 +139,13 @@ function getIcon(job) {
   }
 }
 
+function getRemoteciName(job) {
+  if (job.rconfiguration && job.rconfiguration.name) {
+    return `${job.remoteci.name} (${job.rconfiguration.name})`;
+  }
+  return `${job.remoteci.name}`;
+}
+
 function InnerJob({ job }) {
   return (
     <React.Fragment>
@@ -151,13 +158,7 @@ function InnerJob({ job }) {
           {job.components.map(component => (
             <span key={component.id}>{component.name}</span>
           ))}
-          <span>
-            {job.remoteci.name} (
-            {job.rconfiguration && job.rconfiguration.name
-              ? job.rconfiguration.name
-              : null}
-            )
-          </span>
+          <span>{getRemoteciName(job)}</span>
           <span>
             {job.metas.map((meta, i) => (
               <span key={i} className="label label-primary mr-1">

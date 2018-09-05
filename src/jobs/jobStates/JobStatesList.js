@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 import { addDuration } from "./jobStatesActions";
 import JobStateFile from "./JobStateFile";
 import {
@@ -30,7 +30,9 @@ export default class JobStatesList extends Component {
   render() {
     const { jobstates } = this.props;
     if (isEmpty(jobstates))
-      return <EmptyState title="No logs" info="There is no logs for this job" />;
+      return (
+        <EmptyState title="No logs" info="There is no logs for this job" />
+      );
     return (
       <JobStates>
         {addDuration(jobstates).map((jobstate, i) => (

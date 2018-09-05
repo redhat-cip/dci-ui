@@ -92,7 +92,7 @@ it("fetch error no message", () => {
 
 it("jobs remove cache", () => {
   const expectedAction = {
-    type: jobActionsTypes.CLEAR_CACHE ,
+    type: jobActionsTypes.CLEAR_CACHE
   };
   expect(jobsActions.clear()).toEqual(expectedAction);
 });

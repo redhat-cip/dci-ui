@@ -26,12 +26,12 @@ export default class BlinkLogo extends Component {
   render() {
     const { className } = this.props;
     return (
-        <BlinkImg
-          id="dci-blink-gecko-paw"
-          src={DCIGeckoPawImage}
-          alt="Distributed CI"
-          className={className}
-        />
+      <BlinkImg
+        id="dci-blink-gecko-paw"
+        src={DCIGeckoPawImage}
+        alt="Distributed CI"
+        className={className}
+      />
     );
   }
 }
