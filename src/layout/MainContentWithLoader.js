@@ -15,7 +15,6 @@ export default function MainContentWithLoader({ loading, children }) {
     <MainContent>
       {loading ? (
         <FullHeightDiv>
-          {" "}
           <BlinkLogo />
         </FullHeightDiv>
       ) : (

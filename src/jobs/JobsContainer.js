@@ -13,7 +13,7 @@ import jobsActions from "./jobsActions";
 import teamsActions from "../teams/teamsActions";
 import { getJobs } from "./jobsSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import JobClickableSummary from "./JobClickableSummary";
+import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
 import { MainContentWithLoader } from "../layout";
@@ -122,7 +122,7 @@ export class JobsContainer extends Component {
               className="bgWhite mb-3"
             />
             {jobs.map(job => (
-              <JobClickableSummary key={job.etag} job={job} history={history} />
+              <JobSummary key={job.etag} job={job} history={history} />
             ))}
             {remoteci_id && isEmpty(jobs) ? (
               <p>There is no job for this remoteci</p>

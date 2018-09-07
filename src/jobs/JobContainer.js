@@ -18,7 +18,7 @@ import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
-import { JobSummary } from "./JobClickableSummary";
+import JobSummary from "./JobSummary";
 
 export class JobContainer extends Component {
   constructor(props) {
@@ -105,7 +105,7 @@ export class JobContainer extends Component {
     };
     return (
       <MainContentWithLoader loading={isFetching}>
-        <JobSummary job={job} history={history} />
+        <JobSummary clickable={false} job={job} history={history} />
         <TabContainer id="basic-tabs" defaultActiveKey={tabsIndexes[tab]}>
           <React.Fragment>
             <Nav bsClass="nav nav-tabs">
