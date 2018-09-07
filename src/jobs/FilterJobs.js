@@ -101,7 +101,7 @@ export default class FilterJobs extends Component {
         </FilterPanelCategory>
         <FilterPanelCategory>
           {teams
-            .filter(team => team.name.toLowerCase().includes(filter))
+            .filter(team => team.name.toLowerCase().includes(filter.toLowerCase()))
             .map(team => (
               <TeamRemotecisList
                 key={team.etag}
