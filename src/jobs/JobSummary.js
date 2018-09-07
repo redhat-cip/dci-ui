@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { Colors, Labels } from "../ui";
+import { fromNow, formatDate, duration } from "../services/date";
 
 function getBackground(status, backgroundColor = Colors.white) {
   switch (status) {
@@ -24,7 +26,7 @@ function getBackground(status, backgroundColor = Colors.white) {
   }
 }
 
-const Job = styled.div`
+export const Job = styled.div`
   width: 100%;
   box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
   background: ${props => getBackground(props.status)};
@@ -146,82 +148,75 @@ function getRemoteciName(job) {
   return `${job.remoteci.name}`;
 }
 
-function InnerJob({ job }) {
-  return (
-    <React.Fragment>
-      <JobInfo>
-        <JobIcon>{getIcon(job)}</JobIcon>
-        <JobNames>
-          <span>
-            <b>{job.topic.name}</b>
-          </span>
-          {job.components.map(component => (
-            <span key={component.id}>{component.name}</span>
-          ))}
-          <span>{getRemoteciName(job)}</span>
-          <span>
-            {job.metas.map((meta, i) => (
-              <span key={i} className="label label-primary mr-1">
-                {meta.name}
-              </span>
-            ))}
-          </span>
-        </JobNames>
-      </JobInfo>
-      <JobTests>
-        {job.results.map(test => (
-          <div key={test.id}>
-            <span className="label label-success mr-1">{test.success}</span>
-            <span className="label label-warning mr-1">{test.skips}</span>
-            <span className="label label-danger mr-1">
-              {test.errors + test.failures}
-            </span>
-            {test.regressions ? (
-              <Labels.Regression>{test.regressions}</Labels.Regression>
-            ) : null}
-            <span>{test.name}</span>
-          </div>
-        ))}
-      </JobTests>
-      {job.from_now && job.duration ? (
-        <JobExtraInfo>
-          <span>
-            <i className="fa fa-fw fa-calendar mr-1" />
-            {job.from_now}
-          </span>
-          <span>
-            <i className="fa fa-fw fa-clock-o mr-1" />
-            Ran for <b>{job.duration}</b>
-          </span>
-        </JobExtraInfo>
-      ) : null}
-    </React.Fragment>
-  );
-}
-
-export default class JobClickableSummary extends Component {
+export class JobSummary extends Component {
   render() {
-    const { job, history } = this.props;
+    const { enhancedJob: job, history, clickable = true } = this.props;
     if (typeof job.id === "undefined") return null;
+    const Container = clickable ? JobClickable : Job;
     return (
-      <JobClickable
+      <Container
         status={job.status}
         onClick={() => history.push(`/jobs/${job.id}/jobStates`)}
       >
-        <InnerJob job={job} />
-      </JobClickable>
+        <JobInfo>
+          <JobIcon>{getIcon(job)}</JobIcon>
+          <JobNames>
+            <span>
+              <b>{job.topic.name}</b>
+            </span>
+            {job.components.map(component => (
+              <span key={component.id}>{component.name}</span>
+            ))}
+            <span>{getRemoteciName(job)}</span>
+            <span>
+              {job.metas.map((meta, i) => (
+                <span key={i} className="label label-primary mr-1">
+                  {meta.name}
+                </span>
+              ))}
+            </span>
+          </JobNames>
+        </JobInfo>
+        <JobTests>
+          {job.results.map(test => (
+            <div key={test.id}>
+              <span className="label label-success mr-1">{test.success}</span>
+              <span className="label label-warning mr-1">{test.skips}</span>
+              <span className="label label-danger mr-1">
+                {test.errors + test.failures}
+              </span>
+              {test.regressions ? (
+                <Labels.Regression>{test.regressions}</Labels.Regression>
+              ) : null}
+              <span>{test.name}</span>
+            </div>
+          ))}
+        </JobTests>
+        <JobExtraInfo>
+          <time datetime={job.created_at} title={job.created_at}>
+            <i className="fa fa-fw fa-calendar mr-1" />
+            {job.datetime}
+          </time>
+          {job.status !== "new" && job.status !== "running" ? (
+            <span title={`From ${job.created_at} to ${job.updated_at}`}>
+              <i className="fa fa-fw fa-clock-o mr-1" />
+              Ran for <b>{job.duration}</b>
+            </span>
+          ) : null}
+        </JobExtraInfo>
+      </Container>
     );
   }
 }
 
-export class JobSummary extends Component {
-  render() {
-    const { job } = this.props;
-    if (typeof job.id === "undefined") return null;
-    return (
-      <Job status={job.status}>
-        <InnerJob job={job} />{" "}
-      </Job>
-    );
-  }
+function mapStateToProps(state, ownProps) {
+  const { job } = ownProps;
+  return {
+    enhancedJob: {
+      ...job,
+      datetime: formatDate(job.created_at, state.currentUser.timezone),
+      duration: duration(job.created_at, job.updated_at)
+    }
+  };
 }
+export default connect(mapStateToProps)(JobSummary);
