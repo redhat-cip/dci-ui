@@ -105,7 +105,7 @@ export class JobContainer extends Component {
     };
     return (
       <MainContentWithLoader loading={isFetching}>
-        <JobSummary clickable={false} job={job} history={history} />
+        <JobSummary clickable={false} seeDetails job={job} history={history} />
         <TabContainer id="basic-tabs" defaultActiveKey={tabsIndexes[tab]}>
           <React.Fragment>
             <Nav bsClass="nav nav-tabs">
@@ -183,7 +183,7 @@ function mapDispatchToProps(dispatch) {
           { id },
           {
             embed:
-              "results,remoteci,components,metas,topic,rconfiguration,files"
+              "results,team,remoteci,components,metas,topic,rconfiguration,files"
           }
         )
       ),

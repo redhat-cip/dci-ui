@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Colors, Labels } from "../ui";
 import { formatDate, duration } from "../services/date";
+import { isEmpty } from "lodash";
 
 function getBackground(status, backgroundColor = Colors.white) {
   switch (status) {
@@ -94,6 +95,19 @@ const JobNames = styled.div`
   flex-direction: column;
 `;
 
+const JobComponents = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  padding-top: 0;
+
+  @media only screen and (min-width: 720px) {
+    width: 240px;
+    margin-right: 1em;
+    padding: 1em;
+  }
+`;
+
 const JobExtraInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -141,7 +155,7 @@ function getIcon(job) {
   }
 }
 
-function getRemoteciName(job) {
+function getRemoteciInfo(job) {
   if (job.rconfiguration && job.rconfiguration.name) {
     return `${job.remoteci.name} (${job.rconfiguration.name})`;
   }
@@ -150,7 +164,12 @@ function getRemoteciName(job) {
 
 export class JobSummary extends Component {
   render() {
-    const { enhancedJob: job, history, clickable = true } = this.props;
+    const {
+      enhancedJob: job,
+      history,
+      clickable = true,
+      seeDetails = false
+    } = this.props;
     if (typeof job.id === "undefined") return null;
     const Container = clickable ? JobClickable : Job;
     return (
@@ -164,10 +183,16 @@ export class JobSummary extends Component {
             <span>
               <b>{job.topic.name}</b>
             </span>
-            {job.components.map(component => (
-              <span key={component.id}>{component.name}</span>
-            ))}
-            <span>{getRemoteciName(job)}</span>
+            {isEmpty(job.team) ? null : (
+              <span>
+                <i className="fa fa-fw fa-users mr-1" />
+                {job.team.name}
+              </span>
+            )}
+            <span>
+              <i className="fa fa-fw fa-server mr-1" />
+              {getRemoteciInfo(job)}
+            </span>
             <span>
               {job.metas.map((meta, i) => (
                 <span key={i} className="label label-primary mr-1">
@@ -177,7 +202,16 @@ export class JobSummary extends Component {
             </span>
           </JobNames>
         </JobInfo>
+        {seeDetails ? (
+          <JobComponents>
+            <b>Components:</b>
+            {job.components.map(component => (
+              <span key={component.id}>{component.name}</span>
+            ))}
+          </JobComponents>
+        ) : null}
         <JobTests>
+          {seeDetails && !isEmpty(job.results) ? <b>Tests:</b> : null}
           {job.results.map(test => (
             <div key={test.id}>
               <span className="label label-success mr-1">{test.success}</span>
@@ -193,14 +227,14 @@ export class JobSummary extends Component {
           ))}
         </JobTests>
         <JobExtraInfo>
-          <time datetime={job.created_at} title={job.created_at}>
+          <time dateTime={job.created_at} title={job.created_at}>
             <i className="fa fa-fw fa-calendar mr-1" />
             {job.datetime}
           </time>
           {job.status !== "new" && job.status !== "running" ? (
             <span title={`From ${job.created_at} to ${job.updated_at}`}>
               <i className="fa fa-fw fa-clock-o mr-1" />
-              Ran for <b>{job.duration}</b>
+              Ran for {job.duration}
             </span>
           ) : null}
         </JobExtraInfo>
