@@ -14,12 +14,11 @@ export class EditRemoteciButton extends Component {
         showModalButton={<i className="fa fa-pencil" />}
         okButton="Edit"
         teams={teams}
-        submit={remoteci => {
-          const newRemoteci = {
+        submit={newRemoteci => {
+          editRemoteci({
             id: remoteci.id,
-            ...remoteci
-          };
-          editRemoteci(newRemoteci);
+            ...newRemoteci
+          });
         }}
       />
     );

@@ -80,7 +80,6 @@ export class RemotecisContainer extends Component {
                   <td>{remoteci.from_now}</td>
                   <td className="text-center">
                     <EditRemoteciButton
-                      key={remoteci.etag}
                       className="mr-1"
                       remoteci={remoteci}
                       teams={teams}

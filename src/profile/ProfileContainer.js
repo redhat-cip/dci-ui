@@ -26,7 +26,7 @@ export class ProfileContainer extends Component {
               </CardHeading>
               <CardBody>
                 <ProfileForm
-                  key={currentUser.etag}
+                  key={`ProfileForm.${currentUser.id}.${currentUser.etag}`}
                   currentUser={currentUser}
                   submit={newCurrentUser => updateCurrentUser(newCurrentUser)}
                 />
@@ -41,7 +41,7 @@ export class ProfileContainer extends Component {
                 </CardHeading>
                 <CardBody>
                   <ChangePasswordForm
-                    key={currentUser.etag}
+                    key={`ChangePasswordForm.${currentUser.id}.${currentUser.etag}`}
                     currentUser={currentUser}
                     submit={newCurrentUser => {
                       updateCurrentUser(newCurrentUser)

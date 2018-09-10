@@ -45,8 +45,8 @@ export class TopicsContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {topics.map((topic, i) => (
-                <tr key={i}>
+              {topics.map(topic => (
+                <tr key={`${topic.id}.${topic.etag}`}>
                   <td className="text-center">
                     <CopyButton text={topic.id} />
                   </td>
@@ -57,7 +57,6 @@ export class TopicsContainer extends Component {
                   <td className="text-center">
                     <EditTopicButton
                       className="mr-1"
-                      key={topic.etag}
                       topic={topic}
                     />
                     <ConfirmDeleteButton

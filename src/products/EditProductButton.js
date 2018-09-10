@@ -13,12 +13,11 @@ export class EditProductButton extends Component {
         product={product}
         showModalButton={<i className="fa fa-pencil" />}
         okButton="Edit"
-        submit={product => {
-          const newProduct = {
+        submit={newProduct => {
+          editProduct({
             id: product.id,
-            ...product
-          };
-          editProduct(newProduct);
+            ...newProduct
+          });
         }}
       />
     );

@@ -122,7 +122,7 @@ export class JobsContainer extends Component {
               className="bgWhite mb-3"
             />
             {jobs.map(job => (
-              <JobSummary key={job.etag} job={job} history={history} />
+              <JobSummary key={`${job.id}.${job.etag}`} job={job} history={history} />
             ))}
             {remoteci_id && isEmpty(jobs) ? (
               <p>There is no job for this remoteci</p>

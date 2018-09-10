@@ -13,12 +13,11 @@ export class EditTopicButton extends Component {
         topic={topic}
         showModalButton={<i className="fa fa-pencil" />}
         okButton="Edit"
-        submit={topic => {
-          const newTopic = {
+        submit={newTopic => {
+          editTopic({
             id: topic.id,
-            ...topic
-          };
-          editTopic(newTopic);
+            ...newTopic
+          });
         }}
       />
     );

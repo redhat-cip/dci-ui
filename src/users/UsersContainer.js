@@ -51,8 +51,8 @@ export class UsersContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, i) => (
-                <tr key={i}>
+              {users.map(user=> (
+                <tr key={`${user.id}.${user.etag}`}>
                   <td className="text-center">
                     <CopyButton text={user.id} />
                   </td>
@@ -65,7 +65,6 @@ export class UsersContainer extends Component {
                   <td className="text-center">
                     <EditUserButton
                       className="mr-1"
-                      key={user.etag}
                       user={user}
                       teams={teams}
                       roles={roles}

@@ -47,8 +47,8 @@ export class TeamsContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {teams.map((team, i) => (
-                <tr key={i}>
+              {teams.map(team => (
+                <tr key={`${team.id}.${team.etag}`}>
                   <td className="text-center">
                     <CopyButton text={team.id} />
                   </td>
@@ -62,7 +62,6 @@ export class TeamsContainer extends Component {
                   <td className="text-center">
                     <EditTeamButton
                       className="mr-1"
-                      key={team.etag}
                       team={team}
                     />
                     <ConfirmDeleteButton

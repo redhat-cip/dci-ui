@@ -53,7 +53,7 @@ class TeamRemotecisList extends Component {
       <FilterPanelCategoryItems>
         <FilterPanelCategoryTitle>{team.name}</FilterPanelCategoryTitle>
         {team.remotecis.map(remoteci => (
-          <FilterPanelCategoryItem key={remoteci.etag}>
+          <FilterPanelCategoryItem key={`${remoteci.id}.${remoteci.etag}`}>
             <Radio
               name="filter-job-radio"
               onChange={() => selectRemoteci(remoteci.id)}
@@ -104,7 +104,7 @@ export default class FilterJobs extends Component {
             .filter(team => team.name.toLowerCase().includes(filter.toLowerCase()))
             .map(team => (
               <TeamRemotecisList
-                key={team.etag}
+                key={`${team.id}.${team.etag}`}
                 remoteciId={remoteciId}
                 selectRemoteci={selectRemoteci}
                 team={team}

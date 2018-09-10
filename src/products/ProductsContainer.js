@@ -47,8 +47,8 @@ export class ProductsContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {products.map((product, i) => (
-                <tr key={i}>
+              {products.map(product=> (
+                <tr key={`${product.id}.${product.etag}`}>
                   <td className="text-center">
                     <CopyButton text={product.id} />
                   </td>
@@ -62,7 +62,6 @@ export class ProductsContainer extends Component {
                   <td className="text-center">
                     <EditProductButton
                       className="mr-1"
-                      key={product.etag}
                       product={product}
                     />
                     <ConfirmDeleteButton
