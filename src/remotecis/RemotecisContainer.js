@@ -54,8 +54,8 @@ export class RemotecisContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {remotecis.map((remoteci, i) => (
-                <tr key={i}>
+              {remotecis.map(remoteci => (
+                <tr key={`${remoteci.id}.${remoteci.etag}`}>
                   <td className="text-center">
                     <CopyButton text={remoteci.id} />
                   </td>

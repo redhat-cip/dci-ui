@@ -6,14 +6,16 @@ export const components = [component];
 export const jobstate = new schema.Entity("jobstates");
 export const jobstates = [jobstate];
 
-export const remoteci = new schema.Entity("remotecis");
-export const remotecis = [remoteci];
-
 export const role = new schema.Entity("roles");
 export const roles = [role];
 
 export const team = new schema.Entity("teams");
 export const teams = [team];
+
+export const remoteci = new schema.Entity("remotecis", {
+  team: team
+});
+export const remotecis = [remoteci];
 
 export const user = new schema.Entity("users", {
   team: team,
