@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import {
+  ListViewItem,
+  DropdownKebab,
+  MenuItem,
+  Button,
+  Icon
+} from "patternfly-react";
 import { Colors, Labels } from "../ui";
 import { formatDate, duration } from "../services/date";
 import { isEmpty } from "lodash";
+import jobsActions from "./jobsActions";
 
 function getBackground(status, backgroundColor = Colors.white) {
   switch (status) {
@@ -27,98 +35,44 @@ function getBackground(status, backgroundColor = Colors.white) {
   }
 }
 
-const Job = styled.div`
-  width: 100%;
-  box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
+const Job = styled(ListViewItem)`
   background: ${props => getBackground(props.status)};
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14),
-    0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
-  margin-bottom: 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media only screen and (min-width: 720px) {
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 75px;
-  }
-
-  span {
-    display: inline-block;
-    margin: 0;
-  }
-`;
-
-const JobClickable = styled(Job)`
-  cursor: pointer;
-  &:hover {
-    background: ${props => getBackground(props.status, Colors.black200)};
-  }
 `;
 
 const JobInfo = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 1em;
-
-  @media only screen and (min-width: 720px) {
-    width: 288px;
-    padding: 1em;
-  }
-`;
-
-const JobIcon = styled.div`
-  width: 40px;
-  text-align: center;
-  margin-right: 1em;
-`;
-
-const JobTests = styled.div`
-  padding: 1em;
-  padding-top: 0;
-  display: none;
-
-  @media only screen and (min-width: 480px) {
-    display: flex;
-    flex-direction: column;
-  }
-
-  @media only screen and (min-width: 720px) {
-    padding: 1em;
-  }
-`;
-
-const JobNames = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 const JobComponents = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 1em;
-  padding-top: 0;
+  flex-direction: row;
+`;
 
-  @media only screen and (min-width: 720px) {
-    width: 240px;
-    margin-right: 1em;
-    padding: 1em;
+const JobComponent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const JobTests = styled(JobInfo)``;
+
+const JobTest = styled.div`
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
   }
 `;
 
 const JobExtraInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 1em;
-  padding-top: 0;
+  flex-direction: row;
+  align-items: center;
+`;
 
-  @media only screen and (min-width: 720px) {
-    width: 180px;
-    margin-left: auto;
-    padding: 1em;
-  }
+const JobDateInfo = styled(JobInfo)`
+  margin-right: 1em;
 `;
 
 function getIcon(job) {
@@ -166,20 +120,18 @@ export class JobSummary extends Component {
   render() {
     const {
       enhancedJob: job,
+      deleteJob,
+      currentUser,
       history,
-      clickable = true,
       seeDetails = false
     } = this.props;
     if (typeof job.id === "undefined") return null;
-    const Container = clickable ? JobClickable : Job;
     return (
-      <Container
+      <Job
         status={job.status}
-        onClick={() => history.push(`/jobs/${job.id}/jobStates`)}
-      >
-        <JobInfo>
-          <JobIcon>{getIcon(job)}</JobIcon>
-          <JobNames>
+        leftContent={getIcon(job)}
+        heading={
+          <JobInfo>
             <span>
               <b>{job.topic.name}</b>
             </span>
@@ -200,45 +152,73 @@ export class JobSummary extends Component {
                 </span>
               ))}
             </span>
-          </JobNames>
-        </JobInfo>
-        {seeDetails ? (
-          <JobComponents>
-            <b>Components:</b>
-            {job.components.map(component => (
-              <span key={component.id}>{component.name}</span>
+          </JobInfo>
+        }
+        description={
+          seeDetails ? (
+            <JobComponents>
+              <JobComponent>
+                <Icon name="cubes" className="mr-2" />
+              </JobComponent>
+              <JobComponent>
+                {job.components.map(component => (
+                  <span key={component.id}>{component.name}</span>
+                ))}
+              </JobComponent>
+            </JobComponents>
+          ) : null
+        }
+        additionalInfo={[
+          <JobTests key={`${job.id}.tests`}>
+            {job.results.map(test => (
+              <JobTest key={test.id}>
+                <span className="label label-success mr-1">{test.success}</span>
+                <span className="label label-warning mr-1">{test.skips}</span>
+                <span className="label label-danger mr-1">
+                  {test.errors + test.failures}
+                </span>
+                {test.regressions ? (
+                  <Labels.Regression className="mr-1">
+                    {test.regressions}
+                  </Labels.Regression>
+                ) : null}
+                <small>{test.name}</small>
+              </JobTest>
             ))}
-          </JobComponents>
-        ) : null}
-        <JobTests>
-          {seeDetails && !isEmpty(job.results) ? <b>Tests:</b> : null}
-          {job.results.map(test => (
-            <div key={test.id}>
-              <span className="label label-success mr-1">{test.success}</span>
-              <span className="label label-warning mr-1">{test.skips}</span>
-              <span className="label label-danger mr-1">
-                {test.errors + test.failures}
-              </span>
-              {test.regressions ? (
-                <Labels.Regression className="mr-1">{test.regressions}</Labels.Regression>
+          </JobTests>
+        ]}
+        actions={
+          <JobExtraInfo>
+            <JobDateInfo>
+              <time dateTime={job.created_at} title={job.created_at}>
+                <i className="fa fa-fw fa-calendar mr-1" />
+                {job.datetime}
+              </time>
+              {job.status !== "new" && job.status !== "running" ? (
+                <span title={`From ${job.created_at} to ${job.updated_at}`}>
+                  <i className="fa fa-fw fa-clock-o mr-1" />
+                  Ran for {job.duration}
+                </span>
               ) : null}
-              <span>{test.name}</span>
-            </div>
-          ))}
-        </JobTests>
-        <JobExtraInfo>
-          <time dateTime={job.created_at} title={job.created_at}>
-            <i className="fa fa-fw fa-calendar mr-1" />
-            {job.datetime}
-          </time>
-          {job.status !== "new" && job.status !== "running" ? (
-            <span title={`From ${job.created_at} to ${job.updated_at}`}>
-              <i className="fa fa-fw fa-clock-o mr-1" />
-              Ran for {job.duration}
-            </span>
-          ) : null}
-        </JobExtraInfo>
-      </Container>
+            </JobDateInfo>
+            {seeDetails ? null : (
+              <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
+                See details
+              </Button>
+            )}
+            {currentUser.hasProductOwnerRole ? (
+              <DropdownKebab id="action2kebab" pullRight>
+                <MenuItem>
+                  <span className="text-danger" onClick={() => deleteJob(job)}>
+                    <Icon name="warning" className="mr-2" />
+                    delete job
+                  </span>
+                </MenuItem>
+              </DropdownKebab>
+            ) : null}
+          </JobExtraInfo>
+        }
+      />
     );
   }
 }
@@ -246,6 +226,7 @@ export class JobSummary extends Component {
 function mapStateToProps(state, ownProps) {
   const { job } = ownProps;
   return {
+    currentUser: state.currentUser,
     enhancedJob: {
       ...job,
       datetime: formatDate(job.created_at, state.currentUser.timezone),
@@ -253,4 +234,16 @@ function mapStateToProps(state, ownProps) {
     }
   };
 }
-export default connect(mapStateToProps)(JobSummary);
+
+function mapDispatchToProps(dispatch) {
+  return {
+    deleteJob: job => {
+      dispatch(jobsActions.delete(job));
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(JobSummary);

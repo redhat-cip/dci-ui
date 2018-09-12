@@ -6,7 +6,8 @@ import {
   CardBody,
   TabContent,
   TabPane,
-  TabContainer
+  TabContainer,
+  ListView
 } from "patternfly-react";
 import { MainContentWithLoader } from "../layout";
 import { connect } from "react-redux";
@@ -105,7 +106,9 @@ export class JobContainer extends Component {
     };
     return (
       <MainContentWithLoader loading={isFetching}>
-        <JobSummary clickable={false} seeDetails job={job} history={history} />
+        <ListView>
+          <JobSummary seeDetails job={job} history={history} />
+        </ListView>
         <TabContainer id="basic-tabs" defaultActiveKey={tabsIndexes[tab]}>
           <React.Fragment>
             <Nav bsClass="nav nav-tabs">

@@ -140,9 +140,8 @@ export function createActions(resource) {
             headers: { "If-Match": data.etag }
           })
           .then(response => {
-            dispatch(
-              showSuccess(`${resource} ${data.name} deleted successfully!`)
-            );
+            const name = data.name ? data.name : data.id;
+            dispatch(showSuccess(`${resource} ${name} deleted successfully!`));
             dispatch({
               type: createActionsTypes(resource).DELETE_SUCCESS,
               id: data.id

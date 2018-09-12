@@ -7,7 +7,8 @@ import {
   Card,
   CardHeading,
   CardTitle,
-  CardBody
+  CardBody,
+  ListView
 } from "patternfly-react";
 import jobsActions from "./jobsActions";
 import teamsActions from "../teams/teamsActions";
@@ -119,11 +120,17 @@ export class JobsContainer extends Component {
               onLastPage={() => this._setPageAndFetchJobs(nbPages)}
               onPreviousPage={() => this._setPageAndFetchJobs(page - 1)}
               onNextPage={() => this._setPageAndFetchJobs(page + 1)}
-              className="bgWhite mb-3"
+              className="bgWhite"
             />
-            {jobs.map(job => (
-              <JobSummary key={`${job.id}.${job.etag}`} job={job} history={history} />
-            ))}
+            <ListView className="mt-3">
+              {jobs.map(job => (
+                <JobSummary
+                  key={`${job.id}.${job.etag}`}
+                  job={job}
+                  history={history}
+                />
+              ))}
+            </ListView>
             {remoteci_id && isEmpty(jobs) ? (
               <p>There is no job for this remoteci</p>
             ) : null}
