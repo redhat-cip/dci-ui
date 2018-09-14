@@ -14,9 +14,10 @@ const DCIEmptyState = styled(EmptyState)`
   border: none;
 `;
 
-export default function({ title, info, button }) {
+export default function({ title, info, button, icon }) {
   return (
     <DCIEmptyState>
+      {icon ? icon : null}
       {button ? <EmptyStateIcon /> : null}
       <EmptyStateTitle>{title}</EmptyStateTitle>
       <EmptyStateInfo>{info}</EmptyStateInfo>

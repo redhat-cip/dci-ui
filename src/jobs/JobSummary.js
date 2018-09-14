@@ -36,6 +36,7 @@ function getBackground(status, backgroundColor = Colors.white) {
 }
 
 const Job = styled(ListViewItem)`
+  border-top: 1px solid ${Colors.black300} !important;
   background: ${props => getBackground(props.status)};
 `;
 

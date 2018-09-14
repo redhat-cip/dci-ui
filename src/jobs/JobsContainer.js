@@ -1,55 +1,52 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  PaginationRow,
-  Row,
-  Col,
-  Card,
-  CardHeading,
-  CardTitle,
-  CardBody,
-  ListView
-} from "patternfly-react";
+import { ListView } from "patternfly-react";
 import jobsActions from "./jobsActions";
-import teamsActions from "../teams/teamsActions";
 import { getJobs } from "./jobsSelectors";
-import { getTeams } from "../teams/teamsSelectors";
 import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { MainContentWithLoader } from "../layout";
-import FilterJobs from "./FilterJobs";
+import { MainContent, FullHeightDiv } from "../layout";
+import { BlinkLogo, EmptyState } from "../ui";
+import Toolbar from "./Toolbar";
 
 export class JobsContainer extends Component {
   constructor(props) {
     super(props);
     const { location } = this.props;
-    const { page, perPage, remoteci_id } = queryString.parse(location.search);
+    const { page, perPage, where } = queryString.parse(location.search);
+    const filters = where
+      ? where.split(",").map(f => {
+          const keyvalue = f.split(":");
+          return {
+            key: keyvalue[0],
+            value: keyvalue[1]
+          };
+        })
+      : [];
     this.state = {
       pagination: {
         page: page ? parseInt(page, 10) : 1,
-        perPage: perPage ? parseInt(perPage, 10) : 10,
-        perPageOptions: [10, 20, 50]
+        perPage: perPage ? parseInt(perPage, 10) : 20
       },
-      remoteci_id
+      filters
     };
   }
 
   componentDidMount() {
-    const { fetchTeams } = this.props;
-    fetchTeams();
-    this._fetchJobsAndChangeUrl(this.state);
+    this._fetchJobsAndChangeUrl();
   }
 
   _fetchJobsAndChangeUrl = () => {
     const { history, fetchJobs } = this.props;
-    const { pagination, remoteci_id } = this.state;
+    const { pagination, filters } = this.state;
     let url = `/jobs?page=${pagination.page}&perPage=${pagination.perPage}`;
-    if (remoteci_id) {
-      url += `&remoteci_id=${remoteci_id}`;
+    const where = filters.map(f => `${f.key}:${f.value}`).join(",");
+    if (where) {
+      url += `&where=${where}`;
     }
     history.push(url);
-    fetchJobs({ pagination, remoteci_id });
+    fetchJobs({ pagination, filters });
   };
 
   _setPageAndFetchJobs = page => {
@@ -66,93 +63,45 @@ export class JobsContainer extends Component {
     );
   };
 
-  _onPerPageSelect = perPage => {
-    this.setState(
-      prevState => {
-        return {
-          pagination: {
-            ...prevState.pagination,
-            page: 1,
-            perPage
-          }
-        };
-      },
-      () => this._fetchJobsAndChangeUrl()
-    );
-  };
-
-  _setRemoteciAndFetchJobs = remoteci_id => {
-    this.setState(
-      prevState => {
-        return {
-          pagination: {
-            ...prevState.pagination,
-            page: 1
-          },
-          remoteci_id
-        };
-      },
-      () => this._fetchJobsAndChangeUrl()
-    );
-  };
-
   render() {
-    const { jobs, isFetching, teams, count, history } = this.props;
-    const { pagination, remoteci_id } = this.state;
-    const { page, perPage } = pagination;
-    const nbPages = Math.ceil(count / perPage);
-    const itemsStart = (page - 1) * perPage + 1;
-    const itemsEnd = page * perPage > count ? count : page * perPage;
+    const { jobs, isFetching, count, history } = this.props;
+    const { filters, pagination } = this.state;
     return (
-      <MainContentWithLoader loading={isFetching && isEmpty(jobs)}>
-        <Row>
-          <Col xs={12} md={9} lg={10}>
-            <PaginationRow
-              viewType="list"
-              pageInputValue={page}
-              pagination={pagination}
-              amountOfPages={nbPages}
-              itemCount={count}
-              itemsStart={itemsStart}
-              itemsEnd={itemsEnd}
-              onPerPageSelect={this._onPerPageSelect}
-              onFirstPage={() => this._setPageAndFetchJobs(1)}
-              onLastPage={() => this._setPageAndFetchJobs(nbPages)}
-              onPreviousPage={() => this._setPageAndFetchJobs(page - 1)}
-              onNextPage={() => this._setPageAndFetchJobs(page + 1)}
-              className="bgWhite"
-            />
-            <ListView className="mt-3">
-              {jobs.map(job => (
-                <JobSummary
-                  key={`${job.id}.${job.etag}`}
-                  job={job}
-                  history={history}
-                />
-              ))}
-            </ListView>
-            {remoteci_id && isEmpty(jobs) ? (
-              <p>There is no job for this remoteci</p>
-            ) : null}
-          </Col>
-          <Col xs={12} md={3} lg={2}>
-            <Card>
-              <CardHeading>
-                <CardTitle>Filter by remoteci</CardTitle>
-              </CardHeading>
-              <CardBody>
-                <FilterJobs
-                  teams={teams}
-                  remoteciId={remoteci_id}
-                  selectRemoteci={remoteciId =>
-                    this._setRemoteciAndFetchJobs(remoteciId)
-                  }
-                />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </MainContentWithLoader>
+      <MainContent>
+        <Toolbar
+          count={count}
+          pagination={pagination}
+          activeFilters={filters}
+          goTo={page => this._setPageAndFetchJobs(page)}
+          filterJobs={filters =>
+            this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+          }
+          clearFilters={() =>
+            this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
+          }
+        />
+        {isFetching ? (
+          <FullHeightDiv>
+            <BlinkLogo />
+          </FullHeightDiv>
+        ) : isEmpty(jobs) ? (
+          <EmptyState
+            title="No job"
+            info="There is no job at the moment. Edit your filters to restart a search."
+            icon={<i className="fa fa-frown-o fa-5x fa-fw" />}
+          />
+        ) : (
+          <ListView className="mt-0">
+            {jobs.map(job => (
+              <JobSummary
+                key={`${job.id}.${job.etag}`}
+                job={job}
+                history={history}
+              />
+            ))}
+          </ListView>
+        )}
+      </MainContent>
     );
   }
 }
@@ -161,26 +110,25 @@ function mapStateToProps(state) {
   return {
     jobs: getJobs(state),
     count: state.jobs.count,
-    teams: getTeams(state),
     isFetching: state.jobs.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchJobs: ({ pagination, remoteci_id }) => {
+    fetchJobs: ({ pagination, filters }) => {
       const params = {
         embed: "results,team,remoteci,components,metas,topic,rconfiguration",
         limit: pagination.perPage,
         offset: (pagination.page - 1) * pagination.perPage
       };
-      if (remoteci_id) {
-        params.where = `remoteci_id:${remoteci_id}`;
+      const where = filters.map(f => `${f.key}:${f.value}`).join(",");
+      if (where) {
+        params.where = where;
       }
       dispatch(jobsActions.clear());
       return dispatch(jobsActions.all(params));
-    },
-    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" }))
+    }
   };
 }
 
