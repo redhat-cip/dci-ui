@@ -58,38 +58,39 @@ export class StatusFilter extends Component {
     };
   }
   render() {
-    const { addFilter } = this.props;
+    const defaultFilters = [
+      {
+        title: "New",
+        key: "status",
+        value: "new"
+      },
+      {
+        title: "Running",
+        key: "status",
+        value: "running"
+      },
+      {
+        title: "Success",
+        key: "status",
+        value: "success"
+      },
+      {
+        title: "Failure",
+        key: "status",
+        value: "failure"
+      },
+      {
+        title: "Error",
+        key: "status",
+        value: "error"
+      }
+    ];
+    const { addFilter, filters = defaultFilters } = this.props;
     const { currentFilter } = this.state;
     return (
       <Filter style={{ borderRight: 0 }}>
         <Filter.ValueSelector
-          filterValues={[
-            {
-              title: "New",
-              key: "status",
-              value: "new"
-            },
-            {
-              title: "Running",
-              key: "status",
-              value: "running"
-            },
-            {
-              title: "Success",
-              key: "status",
-              value: "success"
-            },
-            {
-              title: "Failure",
-              key: "status",
-              value: "failure"
-            },
-            {
-              title: "Error",
-              key: "status",
-              value: "error"
-            }
-          ]}
+          filterValues={filters}
           placeholder="Filter by Status"
           currentValue={currentFilter}
           onFilterValueSelected={filter =>
