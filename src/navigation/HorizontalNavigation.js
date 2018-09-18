@@ -10,7 +10,7 @@ export function HorizontalNavigation({ currentUser, logout }) {
   return (
     <div className="pf-masthead vertical-navigation">
       <ul className="pf-masthead__menu">
-        <li className="pf-masthead__item" ng-if="$ctrl.currentUser.fullname">
+        <li className="pf-masthead__item">
           <Link
             to="/profile"
             id="navbar-utility__profile-link"
