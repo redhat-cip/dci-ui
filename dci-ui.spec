@@ -30,11 +30,9 @@ npm run build
 install -d -m0755 %{buildroot}/srv/www/dci-ui
 install -d -m0755 %{buildroot}/etc/dci-ui
 cp -r build/* %{buildroot}/srv/www/dci-ui
-ln -sf /srv/www/dci-ui/config.json %{buildroot}/etc/dci-ui/config.json
 
 %files
 /srv/www/dci-ui/*
-%config /etc/dci-ui/config.json
 %config(noreplace) /srv/www/dci-ui/config.json
 
 %changelog
