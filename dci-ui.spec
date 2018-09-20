@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           dci-ui
-Version:        0.1.0
+Version:        0.1.1
 Release:        1.VERS%{?dist}
 
 Summary:        DCI UI static files
@@ -28,7 +28,6 @@ npm run build
 
 %install
 install -d -m0755 %{buildroot}/srv/www/dci-ui
-install -d -m0755 %{buildroot}/etc/dci-ui
 cp -r build/* %{buildroot}/srv/www/dci-ui
 
 %files
@@ -36,6 +35,9 @@ cp -r build/* %{buildroot}/srv/www/dci-ui
 %config(noreplace) /srv/www/dci-ui/config.json
 
 %changelog
+* Thu Sep 20 2018 Dimitri Savineau <dsavinea@redhat.com> 0.1.1-1
+- Remove simlink for config file
+
 * Tue Aug 7 2018 Guillaume Vincent <gvincent@redhat.com> 0.1.0-1
 - Migration from AngularJS to React
 
