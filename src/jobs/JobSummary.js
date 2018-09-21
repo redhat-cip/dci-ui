@@ -207,7 +207,7 @@ export class JobSummary extends Component {
                 See details
               </Button>
             )}
-            {currentUser.hasProductOwnerRole ? (
+            {currentUser.hasAdminRole ? (
               <DropdownKebab id="action2kebab" pullRight>
                 <MenuItem>
                   <span className="text-danger" onClick={() => deleteJob(job)}>
