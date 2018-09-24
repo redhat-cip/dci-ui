@@ -88,7 +88,7 @@ export class JobsContainer extends Component {
           <EmptyState
             title="No job"
             info="There is no job at the moment. Edit your filters to restart a search."
-            icon={<i className="fa fa-frown-o fa-5x fa-fw" />}
+            icon={<i className="fa fa-frown-o fa-3x fa-fw" />}
           />
         ) : (
           <ListView className="mt-0">

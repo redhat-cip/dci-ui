@@ -48,12 +48,6 @@ export function VerticalNavigation({ currentUser }) {
           <i className="fa fa-fw fa-list pf-vertical-nav__icon" />
           <span className="pf-vertical-nav__link-value">Jobs</span>
         </NavItem>
-        {currentUser.hasReadOnlyRole ? (
-          <NavItem to="/globalStatus">
-            <i className="fa fa-fw fa-dashboard pf-vertical-nav__icon" />
-            <span className="pf-vertical-nav__link-value">Global Status</span>
-          </NavItem>
-        ) : null}
         <NavItem to="/topics">
           <i className="fa fa-fw fa-cube pf-vertical-nav__icon" />
           <span className="pf-vertical-nav__link-value">Topics</span>
@@ -75,6 +69,21 @@ export function VerticalNavigation({ currentUser }) {
           </NavItem>
         ) : null}
       </ul>
+      {currentUser.hasReadOnlyRole ? (
+        <React.Fragment>
+          <div className="pf-vertical-nav__category">STATS</div>
+          <ul className="pf-vertical-nav__menu">
+            <NavItem to="/globalStatus">
+              <i className="fa fa-fw fa-dashboard pf-vertical-nav__icon" />
+              <span className="pf-vertical-nav__link-value">Global Status</span>
+            </NavItem>
+            <NavItem to="/trends">
+              <i className="fa fa-fw fa-line-chart pf-vertical-nav__icon" />
+              <span className="pf-vertical-nav__link-value">Trends</span>
+            </NavItem>
+          </ul>
+        </React.Fragment>
+      ) : null}
       {currentUser.hasAdminRole ? (
         <React.Fragment>
           <div className="pf-vertical-nav__category">Admin</div>
