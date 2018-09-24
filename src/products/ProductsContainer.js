@@ -47,7 +47,7 @@ export class ProductsContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {products.map(product=> (
+              {products.map(product => (
                 <tr key={`${product.id}.${product.etag}`}>
                   <td className="text-center">
                     <CopyButton text={product.id} />
@@ -60,10 +60,7 @@ export class ProductsContainer extends Component {
                   <td>{product.description}</td>
                   <td>{product.from_now}</td>
                   <td className="text-center">
-                    <EditProductButton
-                      className="mr-1"
-                      product={product}
-                    />
+                    <EditProductButton className="mr-1" product={product} />
                     <ConfirmDeleteButton
                       name="product"
                       resource={product}

@@ -60,10 +60,7 @@ export class TeamsContainer extends Component {
                   </td>
                   <td>{team.from_now}</td>
                   <td className="text-center">
-                    <EditTeamButton
-                      className="mr-1"
-                      team={team}
-                    />
+                    <EditTeamButton className="mr-1" team={team} />
                     <ConfirmDeleteButton
                       name="team"
                       resource={team}

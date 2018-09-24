@@ -51,7 +51,7 @@ export class UsersContainer extends Component {
               </tr>
             </thead>
             <tbody>
-              {users.map(user=> (
+              {users.map(user => (
                 <tr key={`${user.id}.${user.etag}`}>
                   <td className="text-center">
                     <CopyButton text={user.id} />

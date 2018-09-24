@@ -55,10 +55,7 @@ export class TopicsContainer extends Component {
                   <td>{topic.product ? topic.product.name : null}</td>
                   <td>{topic.from_now}</td>
                   <td className="text-center">
-                    <EditTopicButton
-                      className="mr-1"
-                      topic={topic}
-                    />
+                    <EditTopicButton className="mr-1" topic={topic} />
                     <ConfirmDeleteButton
                       name="topic"
                       resource={topic}
