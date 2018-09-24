@@ -12,6 +12,7 @@ import usersReducer from "./users/usersReducer";
 import rolesReducer from "./roles/rolesReducer";
 import jobsReducer from "./jobs/jobsReducer";
 import globalStatusReducer from "./globalStatus/globalStatusReducer";
+import trendsReducer from "./trends/trendsReducer";
 
 const store = createStore(
   combineReducers({
@@ -26,7 +27,8 @@ const store = createStore(
     components: componentsReducer,
     teams: teamsReducer,
     users: usersReducer,
-    roles: rolesReducer
+    roles: rolesReducer,
+    trends: trendsReducer
   }),
   applyMiddleware(thunk)
 );
