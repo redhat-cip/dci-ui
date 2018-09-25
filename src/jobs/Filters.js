@@ -16,6 +16,8 @@ export class RemoteciInTeamFilter extends Component {
     return teamsWithRemotecis.map(team => ({
       id: team.id,
       title: team.name,
+      key: "team_id",
+      value: team.id,
       filterValues: team.remotecis.map(remoteci => ({
         title: remoteci.name,
         key: "remoteci_id",
@@ -33,7 +35,7 @@ export class RemoteciInTeamFilter extends Component {
           currentCategory={currentCategory}
           placeholder="Filter by team"
           onFilterCategorySelected={category =>
-            this.setState({ currentCategory: category, currentFilter: null })
+            this.setState({ currentCategory: category, currentFilter: null }, () => addFilter(category))
           }
         >
           <Filter.CategoryValueSelector
