@@ -1,33 +1,32 @@
 import moment from "moment";
 import http from "../../services/http";
 
-export function addDuration(jobStates, initial_duration = null) {
-  const lastItemIndex = jobStates.length - 1;
-  if (lastItemIndex < 0) return jobStates;
-  if (lastItemIndex === 0 && initial_duration === null)
-    return [
-      {
-        ...jobStates[0],
-        pre_duration: null,
-        next_duration: null
-      }
-    ];
+export function addDuration(jobStates) {
   return jobStates
     .sort((js1, js2) => moment(js1.created_at).diff(moment(js2.created_at)))
     .map((jobState, i) => {
-      const d = moment(jobState.created_at);
-      const pre_d =
-        i === 0
-          ? initial_duration === null
-            ? null
-            : moment(initial_duration)
-          : moment(jobStates[i - 1].created_at);
-      const next_d =
-        i === lastItemIndex ? null : moment(jobStates[i + 1].created_at);
+      const { filesWithDuration, jobStateDuration } = jobState.files
+        .sort((f1, f2) => moment(f1.created_at).diff(moment(f2.created_at)))
+        .reduce(
+          (acc, file) => {
+            const newCreatedAt = moment(file.created_at);
+            const fileDuration = newCreatedAt.diff(acc.createdAt, "seconds");
+            file.duration = fileDuration;
+            acc.jobStateDuration += fileDuration;
+            acc.filesWithDuration.push(file);
+            acc.createdAt = newCreatedAt;
+            return acc;
+          },
+          {
+            createdAt: moment(jobState.created_at),
+            filesWithDuration: [],
+            jobStateDuration: 0
+          }
+        );
       return {
         ...jobState,
-        pre_duration: pre_d ? d.diff(pre_d, "seconds") : null,
-        next_duration: next_d ? next_d.diff(d, "seconds") : null
+        duration: jobStateDuration,
+        files: filesWithDuration
       };
     });
 }
