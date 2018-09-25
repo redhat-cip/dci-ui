@@ -10,3 +10,16 @@ export function getFileContent(file, params = {}) {
     });
   };
 }
+
+export function getFilesWithJobStates(job) {
+  return (dispatch, getState) => {
+    const state = getState();
+    return http({
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/files`,
+      params: {
+        embed: "jobstate"
+      }
+    });
+  };
+}

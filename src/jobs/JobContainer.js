@@ -17,7 +17,7 @@ import TestsList from "./tests/TestsList";
 import JobStatesList from "./jobStates/JobStatesList";
 import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
-import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
+import { getFilesWithJobStates } from "./files/filesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
 
@@ -36,26 +36,24 @@ export class JobContainer extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props
-      .fetchJob(id)
+    const { match, getResults, getFiles, getIssues, fetchJob } = this.props;
+    fetchJob(match.params.id)
       .then(response => {
         const job = response.data.job;
-        const getResults = this.props.getResults(job);
-        const getJobStates = this.props.getJobStates(job);
-        const getIssues = this.props.getIssues(job);
-        return Promise.all([getResults, getJobStates, getIssues]).then(
-          values => {
-            this.setState({
-              job: {
-                ...job,
-                tests: values[0].data.results,
-                jobstates: values[1].data.jobstates,
-                issues: values[2].data.issues
-              }
-            });
-          }
-        );
+        return Promise.all([
+          getResults(job),
+          getFiles(job),
+          getIssues(job)
+        ]).then(values => {
+          this.setState({
+            job: {
+              ...job,
+              tests: values[0].data.results,
+              files: values[1].data.files,
+              issues: values[2].data.issues
+            }
+          });
+        });
       })
       .catch(error => console.log(error))
       .then(() => this.setState({ isFetching: false }));
@@ -141,7 +139,7 @@ export class JobContainer extends Component {
               <TabPane eventKey={1}>
                 <Card>
                   <CardBody>
-                    <JobStatesList jobstates={job.jobstates} />
+                    <JobStatesList files={job.files} />
                   </CardBody>
                 </Card>
               </TabPane>
@@ -185,13 +183,12 @@ function mapDispatchToProps(dispatch) {
         jobsActions.one(
           { id },
           {
-            embed:
-              "results,team,remoteci,components,metas,topic,rconfiguration,files"
+            embed: "results,team,remoteci,components,metas,topic,rconfiguration"
           }
         )
       ),
     getResults: job => dispatch(getResults(job)),
-    getJobStates: job => dispatch(getJobStatesWithFiles(job)),
+    getFiles: job => dispatch(getFilesWithJobStates(job)),
     getIssues: job => dispatch(getIssues(job)),
     createIssue: (job, issue) => dispatch(createIssue(job, issue)),
     deleteIssue: (job, issue) => dispatch(deleteIssue(job, issue))
