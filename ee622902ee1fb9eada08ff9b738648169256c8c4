@@ -1,0 +1,10 @@
+Code-Review+2: Gonéri Le Bouder <goneri@lebouder.net>
+Workflow+1: Gonéri Le Bouder <goneri@lebouder.net>
+Code-Review+2: Thomas Vassilian <tvassili@redhat.com>
+Workflow+1: Thomas Vassilian <tvassili@redhat.com>
+Verified+2: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-by: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-at: Thu, 27 Sep 2018 18:25:47 +0000
+Reviewed-on: https://softwarefactory-project.io/r/13795
+Project: dci-ui
+Branch: refs/heads/master
