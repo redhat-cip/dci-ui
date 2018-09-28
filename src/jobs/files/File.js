@@ -56,7 +56,7 @@ export class File extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getFileContent: file => dispatch(getFileContent(file))
+    getFileContent: (file, params) => dispatch(getFileContent(file, params))
   };
 }
 
