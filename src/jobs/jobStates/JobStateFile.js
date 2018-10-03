@@ -55,7 +55,7 @@ export class JobStateFile extends Component {
             )}
           </Arrow>
           <FileName>{this.state.file.name}</FileName>
-          <DurationLabel duration={this.state.file.pre_duration} />
+          <DurationLabel duration={this.state.file.duration} />
         </FileRow>
         {this.state.seeDetails ? (
           <Pre>

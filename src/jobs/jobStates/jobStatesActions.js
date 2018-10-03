@@ -1,35 +1,34 @@
 import moment from "moment";
 import http from "../../services/http";
 
-export function addDuration(jobStates, initial_duration = null) {
-  const lastItemIndex = jobStates.length - 1;
-  if (lastItemIndex < 0) return jobStates;
-  if (lastItemIndex === 0 && initial_duration === null)
-    return [
-      {
-        ...jobStates[0],
-        pre_duration: null,
-        next_duration: null
-      }
-    ];
-  return jobStates
+export function addDuration(jobStates) {
+  const { newJobStates } = jobStates
     .sort((js1, js2) => moment(js1.created_at).diff(moment(js2.created_at)))
-    .map((jobState, i) => {
-      const d = moment(jobState.created_at);
-      const pre_d =
-        i === 0
-          ? initial_duration === null
-            ? null
-            : moment(initial_duration)
-          : moment(jobStates[i - 1].created_at);
-      const next_d =
-        i === lastItemIndex ? null : moment(jobStates[i + 1].created_at);
-      return {
-        ...jobState,
-        pre_duration: pre_d ? d.diff(pre_d, "seconds") : null,
-        next_duration: next_d ? next_d.diff(d, "seconds") : null
-      };
-    });
+    .reduce(
+      (acc, jobState) => {
+        const { newFiles, duration } = jobState.files
+          .sort((f1, f2) => moment(f1.created_at).diff(moment(f2.created_at)))
+          .reduce(
+            (fileAcc, file) => {
+              const duration = acc.currentDate
+                ? moment(file.created_at).diff(acc.currentDate, "seconds")
+                : 0;
+              file.duration = duration;
+              fileAcc.newFiles.push(file);
+              fileAcc.duration += duration;
+              acc.currentDate = moment(file.updated_at);
+              return fileAcc;
+            },
+            { newFiles: [], duration: 0 }
+          );
+        jobState.files = newFiles;
+        jobState.duration = duration;
+        acc.newJobStates.push(jobState);
+        return acc;
+      },
+      { newJobStates: [], currentDate: null }
+    );
+  return newJobStates;
 }
 
 export function getJobStatesWithFiles(job) {

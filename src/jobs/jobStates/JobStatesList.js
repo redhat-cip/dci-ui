@@ -40,10 +40,10 @@ export default class JobStatesList extends Component {
             {jobstate.files.length === 0 ? null : (
               <JobStateRow>
                 {this.getLabel(jobstate)}
-                <DurationLabel duration={jobstate.next_duration} />
+                <DurationLabel duration={jobstate.duration} />
               </JobStateRow>
             )}
-            {addDuration(jobstate.files, jobstate.created_at).map((file, i) => (
+            {jobstate.files.map((file, i) => (
               <JobStateFile key={i} file={file} />
             ))}
           </div>
