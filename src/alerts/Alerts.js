@@ -7,7 +7,7 @@ import { Alert } from "patternfly-react";
 import { hideAlert } from "./alertsActions";
 
 const Alerts = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 100;
   top: 20px;
   right: 20px;
