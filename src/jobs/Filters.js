@@ -1,49 +1,68 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
+import { isEmpty, find, differenceWith } from "lodash";
 import { Filter } from "patternfly-react";
 
+export function createTeamsFilter(teams) {
+  const teamsWithRemotecis = teams.filter(team => !isEmpty(team.remotecis));
+  return teamsWithRemotecis.map(team => ({
+    id: team.id,
+    title: team.name,
+    key: "team_id",
+    value: team.id,
+    filterValues: team.remotecis.map(remoteci => ({
+      title: remoteci.name,
+      key: "remoteci_id",
+      value: remoteci.id
+    }))
+  }));
+}
+
+export function getCurrentFilters(activeFilters, filters) {
+  return activeFilters.reduce((acc, filter) => {
+    const keyFilter = find(filters, { key: filter.key, value: filter.value });
+    acc[filter.key] = keyFilter ? keyFilter : null;
+    return acc;
+  }, {});
+}
+
+export function removeFilters(filters, keys) {
+  return differenceWith(filters, keys, (filter, key) => filter.key === key);
+}
+
+
 export class RemoteciInTeamFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filterCategories: this._getFilterCategories(props.teams),
-      currentCategory: null,
-      currentFilter: null
-    };
-  }
-  _getFilterCategories = teams => {
-    const teamsWithRemotecis = teams.filter(team => !isEmpty(team.remotecis));
-    return teamsWithRemotecis.map(team => ({
-      id: team.id,
-      title: team.name,
-      key: "team_id",
-      value: team.id,
-      filterValues: team.remotecis.map(remoteci => ({
-        title: remoteci.name,
-        key: "remoteci_id",
-        value: remoteci.id
-      }))
-    }));
+  _cleanFiltersAndFilterJobs = filters => {
+    const { filterJobs, activeFilters } = this.props;
+    const otherFilters = removeFilters(activeFilters, [
+      "team_id",
+      "remoteci_id"
+    ]);
+    filterJobs(otherFilters.concat(filters));
   };
+
   render() {
-    const { filterCategories, currentCategory, currentFilter } = this.state;
-    const { addFilter } = this.props;
+    const { teams, activeFilters } = this.props;
+    const teamsFilter = createTeamsFilter(teams);
+    const teamFilter = getCurrentFilters(activeFilters, teamsFilter).team_id;
+    const remoteciFilter = isEmpty(teamFilter)
+      ? null
+      : getCurrentFilters(activeFilters, teamFilter.filterValues).remoteci_id;
     return (
       <Filter style={{ borderRight: 0 }}>
         <Filter.CategorySelector
-          filterCategories={filterCategories}
-          currentCategory={currentCategory}
+          filterCategories={teamsFilter}
+          currentCategory={teamFilter}
           placeholder="Filter by team"
-          onFilterCategorySelected={category =>
-            this.setState({ currentCategory: category, currentFilter: null }, () => addFilter(category))
+          onFilterCategorySelected={newTeamFilter =>
+            this._cleanFiltersAndFilterJobs([newTeamFilter])
           }
         >
           <Filter.CategoryValueSelector
-            categoryValues={currentCategory && currentCategory.filterValues}
-            currentValue={currentFilter}
+            categoryValues={teamFilter && teamFilter.filterValues}
+            currentValue={remoteciFilter}
             placeholder="Filter by remoteci"
-            onCategoryValueSelected={filter =>
-              this.setState({ currentFilter: filter }, () => addFilter(filter))
+            onCategoryValueSelected={newRemoteciFilter =>
+              this._cleanFiltersAndFilterJobs([teamFilter, newRemoteciFilter])
             }
           />
         </Filter.CategorySelector>
@@ -52,15 +71,20 @@ export class RemoteciInTeamFilter extends Component {
   }
 }
 
+
+export function removeFilter(filters, key) {
+  return removeFilters(filters, [key]);
+}
+
 export class StatusFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentFilter: null
-    };
-  }
+  _cleanFiltersAndFilterJobs = filters => {
+    const { filterJobs, activeFilters } = this.props;
+    const otherFilters = removeFilter(activeFilters, "status");
+    filterJobs(otherFilters.concat(filters));
+  };
+
   render() {
-    const defaultFilters = [
+    const filters = [
       {
         title: "New",
         key: "status",
@@ -87,16 +111,16 @@ export class StatusFilter extends Component {
         value: "error"
       }
     ];
-    const { addFilter, filters = defaultFilters } = this.props;
-    const { currentFilter } = this.state;
+    const { activeFilters } = this.props;
+    const { status: statusFilter } = getCurrentFilters(activeFilters, filters);
     return (
       <Filter style={{ borderRight: 0 }}>
         <Filter.ValueSelector
           filterValues={filters}
           placeholder="Filter by Status"
-          currentValue={currentFilter}
-          onFilterValueSelected={filter =>
-            this.setState({ currentFilter: filter }, () => addFilter(filter))
+          currentValue={statusFilter}
+          onFilterValueSelected={newStatusFilter =>
+            this._cleanFiltersAndFilterJobs([newStatusFilter])
           }
         />
       </Filter>

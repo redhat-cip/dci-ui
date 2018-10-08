@@ -5,7 +5,7 @@ import teamsActions from "../teams/teamsActions";
 import { getTeams } from "../teams/teamsSelectors";
 import { Filter, Toolbar, Button } from "patternfly-react";
 import styled from "styled-components";
-import { RemoteciInTeamFilter, StatusFilter } from "./Filters";
+import { RemoteciInTeamFilter, StatusFilter, removeFilter } from "./Filters";
 import Pagination from "./Pagination";
 
 const UnboarderedToolbar = styled(Toolbar)`
@@ -20,39 +20,30 @@ export class DCIToolbar extends Component {
     this.props.fetchTeams();
   }
 
-  _removeFilter = (filters, filter) => {
-    return [...filters.filter(f => f.key !== filter.key)];
-  };
-
-  _addFilter = (filters, filter) => {
-    const newFilters = this._removeFilter(filters, filter);
-    newFilters.push(filter);
-    return newFilters;
-  };
-
-  _addFilterAndFilterJobs = filter => {
+  _removeFilterAndFilterJobs = filter => {
     const { filterJobs, activeFilters } = this.props;
-    const newFilters = this._addFilter(activeFilters, filter);
+    const newFilters = removeFilter(activeFilters, filter.key);
     filterJobs(newFilters);
   };
 
   render() {
     const {
       teams,
-      activeFilters,
       filterJobs,
       clearFilters,
+      activeFilters,
       pagination,
       count,
       goTo
     } = this.props;
     return (
       <UnboarderedToolbar>
-        <StatusFilter addFilter={this._addFilterAndFilterJobs} />
+        <StatusFilter activeFilters={activeFilters} filterJobs={filterJobs} />
         {isEmpty(teams) ? null : (
           <RemoteciInTeamFilter
             teams={teams}
-            addFilter={this._addFilterAndFilterJobs}
+            activeFilters={activeFilters}
+            filterJobs={filterJobs}
           />
         )}
         <Toolbar.RightContent>
@@ -67,13 +58,7 @@ export class DCIToolbar extends Component {
                   return (
                     <Filter.Item
                       key={i}
-                      onRemove={filter => {
-                        const newFilters = this._removeFilter(
-                          activeFilters,
-                          filter
-                        );
-                        filterJobs(newFilters);
-                      }}
+                      onRemove={this._removeFilterAndFilterJobs}
                       filterData={filter}
                     >
                       {`${filter.key} ${filter.value}`}
