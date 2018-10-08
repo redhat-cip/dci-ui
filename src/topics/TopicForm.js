@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import FormModal from "../FormModal";
 import { Button } from "patternfly-react";
 import Formsy from "formsy-react";
-import { Input, Select, TextareaJSON, HiddenInput } from "../form";
+import { Input, Select, TextareaJSON, HiddenInput, Checkbox } from "../form";
 import { getProducts } from "../products/productSelectors";
 import { getTopics } from "./topicsSelectors";
 import { isEmpty } from "lodash";
@@ -11,7 +11,7 @@ import { isEmpty } from "lodash";
 export class TopicForm extends Component {
   constructor(props) {
     super(props);
-    const initialTopic = { name: "" };
+    const initialTopic = { name: "", export_control: false };
     this.state = {
       canSubmit: false,
       show: false,
@@ -46,7 +46,8 @@ export class TopicForm extends Component {
       topics,
       products,
       className,
-      showModalButton
+      showModalButton,
+      currentUser
     } = this.props;
     return (
       <React.Fragment>
@@ -79,6 +80,13 @@ export class TopicForm extends Component {
               value={this.state.topic.name}
               required
             />
+            {currentUser.isSuperAdmin ? (
+              <Checkbox
+                label="Export Control"
+                name="export_control"
+                value={this.state.topic.export_control}
+              />
+            ) : null}
             <Select
               id="topic-form__next_topic"
               label="Next topic"
@@ -123,7 +131,8 @@ export class TopicForm extends Component {
 function mapStateToProps(state) {
   return {
     products: getProducts(state),
-    topics: getTopics(state)
+    topics: getTopics(state),
+    currentUser: state.currentUser
   };
 }
 

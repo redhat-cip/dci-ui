@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Label } from "patternfly-react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { MainContent } from "../layout";
@@ -37,6 +38,12 @@ export class TopicsContainer extends Component {
             <thead>
               <tr>
                 <th className="text-center">ID</th>
+                <th
+                  className="text-center"
+                  title="This column indicates whether export control was performed on the topic"
+                >
+                  Export control
+                </th>
                 <th>Name</th>
                 <th>Next Topic</th>
                 <th>Product</th>
@@ -50,6 +57,13 @@ export class TopicsContainer extends Component {
                   <td className="text-center">
                     <CopyButton text={topic.id} />
                   </td>
+                  <th className="text-center">
+                    <Label
+                      bsStyle={topic.export_control ? "success" : "default"}
+                    >
+                      {topic.export_control ? "yes" : "no"}
+                    </Label>
+                  </th>
                   <td>{topic.name}</td>
                   <td>{topic.next_topic ? topic.next_topic.name : null}</td>
                   <td>{topic.product ? topic.product.name : null}</td>
