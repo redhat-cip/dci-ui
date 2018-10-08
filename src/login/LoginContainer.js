@@ -76,7 +76,12 @@ export class LoginContainer extends Component {
                     <button
                       type="button"
                       className="btn btn-primary btn-block btn-lg"
-                      onClick={() => window._sso.login()}
+                      onClick={() => {
+                        const redirectUri = `${window.location.origin}${
+                          from.pathname
+                        }`;
+                        window._sso.login({ redirectUri });
+                      }}
                     >
                       Red Hat SSO
                     </button>
