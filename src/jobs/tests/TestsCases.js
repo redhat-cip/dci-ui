@@ -2,24 +2,11 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { EmptyState } from "../../ui";
 import TestsCase from "./TestsCase";
-import { StatusFilter } from "../Filters";
+import { ListFilter } from "../Filters";
 
 export default class TestsCases extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      status: null
-    };
-  }
-  render() {
-    const { testscases } = this.props;
-    if (isEmpty(testscases))
-      return (
-        <EmptyState
-          title="No testcases"
-          info="There is no testcases for this test"
-        />
-      );
     const filters = [
       {
         title: "All",
@@ -47,16 +34,35 @@ export default class TestsCases extends Component {
         value: "error"
       }
     ];
-    const { status } = this.state;
+    this.state = {
+      filter: filters[0],
+      filters
+    };
+  }
+  render() {
+    const { testscases } = this.props;
+    if (isEmpty(testscases))
+      return (
+        <EmptyState
+          title="No testcases"
+          info="There is no testcases for this test"
+        />
+      );
+
+    const { filter, filters } = this.state;
     const filteredTestCases = testscases.filter(testcase => {
-      if (!status) return true;
-      return testcase.action === status;
+      if (!filter.value) return true;
+      return testcase.action === filter.value;
     });
     return (
       <div>
-        <StatusFilter
+        <ListFilter
+          placeholder="Filter by Status"
+          filter={filter}
           filters={filters}
-          addFilter={filter => this.setState({ status: filter.value })}
+          onFilterValueSelected={newFilter =>
+            this.setState({ filter: newFilter })
+          }
         />
         {isEmpty(filteredTestCases) ? (
           <EmptyState

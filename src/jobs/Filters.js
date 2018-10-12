@@ -29,7 +29,6 @@ export function removeFilters(filters, keys) {
   return differenceWith(filters, keys, (filter, key) => filter.key === key);
 }
 
-
 export class RemoteciInTeamFilter extends Component {
   _cleanFiltersAndFilterJobs = filters => {
     const { filterJobs, activeFilters } = this.props;
@@ -71,9 +70,24 @@ export class RemoteciInTeamFilter extends Component {
   }
 }
 
-
 export function removeFilter(filters, key) {
   return removeFilters(filters, [key]);
+}
+
+export class ListFilter extends Component {
+  render() {
+    const { filters, filter, placeholder, onFilterValueSelected } = this.props;
+    return (
+      <Filter style={{ borderRight: 0 }}>
+        <Filter.ValueSelector
+          filterValues={filters}
+          placeholder={placeholder}
+          currentValue={filter}
+          onFilterValueSelected={onFilterValueSelected}
+        />
+      </Filter>
+    );
+  }
 }
 
 export class StatusFilter extends Component {
@@ -114,16 +128,14 @@ export class StatusFilter extends Component {
     const { activeFilters } = this.props;
     const { status: statusFilter } = getCurrentFilters(activeFilters, filters);
     return (
-      <Filter style={{ borderRight: 0 }}>
-        <Filter.ValueSelector
-          filterValues={filters}
-          placeholder="Filter by Status"
-          currentValue={statusFilter}
-          onFilterValueSelected={newStatusFilter =>
-            this._cleanFiltersAndFilterJobs([newStatusFilter])
-          }
-        />
-      </Filter>
+      <ListFilter
+        placeholder="Filter by Status"
+        filter={statusFilter}
+        filters={filters}
+        onFilterValueSelected={newStatusFilter =>
+          this._cleanFiltersAndFilterJobs([newStatusFilter])
+        }
+      />
     );
   }
 }
