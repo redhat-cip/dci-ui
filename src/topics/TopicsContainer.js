@@ -96,7 +96,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchTopics: () => {
-      dispatch(topicsActions.all({ embed: "next_topic" }));
+      dispatch(topicsActions.all({ embed: "next_topic,product" }));
       dispatch(productsActions.all());
     },
     deleteTopic: topic => dispatch(topicsActions.delete(topic))
