@@ -9,21 +9,26 @@ class Input extends Component {
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { id, label, name, type } = this.props;
+    const { id, label, name, type, required = false } = this.props;
     return (
-      <div className="form-group">
-        <label className="control-label" htmlFor={name}>
+      <div className="pf-c-form__group">
+        <label className="pf-c-form__label" htmlFor={name}>
           {label}
+          {required ? (
+            <span className="pf-c-form__label__required" aria-hidden="true">
+              &#42;
+            </span>
+          ) : null}
         </label>
         <input
           id={id || name}
           name={name}
-          className="form-control"
+          className="pf-c-form-control"
           onChange={this.changeValue}
           type={type}
           value={this.props.getValue() || ""}
         />
-        <span className="help-block">{errorMessage}</span>
+        <p className="pf-c-form__helper-text pf-m-error">{errorMessage}</p>
       </div>
     );
   }

@@ -1,53 +1,39 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Modal, Icon, Button } from "patternfly-react";
+import { Button, Modal } from "@patternfly/react-core";
 
 export default class ConfirmModal extends Component {
   render() {
+    const {
+      title,
+      close,
+      onValidSubmit,
+      children,
+      okButton = "ok",
+      cancelButton = "cancel",
+      show = false
+    } = this.props;
     return (
-      <React.Fragment>
-        <Modal show={this.props.show} onHide={this.props.close}>
-          <Modal.Header>
-            <button
-              className="close"
-              onClick={this.props.close}
-              aria-hidden="true"
-              aria-label="Close"
-            >
-              <Icon type="pf" name="close" />
-            </button>
-            <Modal.Title>{this.props.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.props.children}</Modal.Body>
-          <Modal.Footer>
-            <Button
-              bsStyle="default"
-              className="btn-cancel"
-              onClick={this.props.close}
-            >
-              {this.props.cancelButton}
-            </Button>
-            <Button bsStyle="danger" onClick={this.props.onValidSubmit}>
-              {this.props.okButton}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </React.Fragment>
+      <Modal
+        title={title}
+        isOpen={show}
+        onClose={close}
+        isLarge
+        actions={[
+          <Button
+            key="cancel"
+            variant="secondary"
+            className="btn-cancel"
+            onClick={close}
+          >
+            {cancelButton}
+          </Button>,
+          <Button key="ok" variant="danger" onClick={onValidSubmit}>
+            {okButton}
+          </Button>
+        ]}
+      >
+        {children}
+      </Modal>
     );
   }
 }
-
-ConfirmModal.propTypes = {
-  title: PropTypes.string.isRequired,
-  okButton: PropTypes.string,
-  cancelButton: PropTypes.string,
-  show: PropTypes.bool,
-  close: PropTypes.func,
-  onValidSubmit: PropTypes.func.isRequired
-};
-
-ConfirmModal.defaultProps = {
-  show: false,
-  okButton: "ok",
-  cancelButton: "cancel"
-};

@@ -1,8 +1,16 @@
 import React, { Component } from "react";
-import { Button } from "patternfly-react";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
+import {
+  Button,
+  ActionGroup,
+  Toolbar,
+  ToolbarGroup,
+  Card,
+  CardHeader,
+  CardBody
+} from "@patternfly/react-core";
 
 export default class ProfileForm extends Component {
   constructor(props) {
@@ -27,63 +35,72 @@ export default class ProfileForm extends Component {
 
   render() {
     const { submit } = this.props;
+
     return (
-      <Formsy
-        id="profile-form"
-        onValidSubmit={currentUser => submit(currentUser)}
-        onValid={this.enableButton}
-        onInvalid={this.disableButton}
-      >
-        <HiddenInput
-          id="profile-form__etag"
-          name="etag"
-          value={this.state.currentUser.etag}
-        />
-        <Input
-          id="profile-form__email"
-          label="Email"
-          name="email"
-          value={this.state.currentUser.email}
-          required
-        />
-        <Input
-          id="profile-form__fullname"
-          label="Full name"
-          name="fullname"
-          value={this.state.currentUser.fullname}
-          required
-        />
-        <Select
-          id="profile-form__currentUser"
-          label="Time zone"
-          name="timezone"
-          options={this.state.timezones}
-          value={this.state.currentUser.timezone}
-          required
-        />
-        <Input
-          id="profile-form__current_password"
-          label="Current password"
-          name="current_password"
-          type="password"
-          value={this.state.currentUser.current_password}
-          required
-        />
-        <HiddenInput
-          id="profile-form__new_password"
-          label="Current password"
-          name="new_password"
-          type="password"
-          value=""
-        />
-        <Button
-          type="submit"
-          bsStyle="primary"
-          disabled={!this.state.canSubmit}
-        >
-          Update your settings
-        </Button>
-      </Formsy>
+      <Card>
+        <CardHeader>Personal information</CardHeader>
+        <CardBody>
+          <Formsy
+            id="profile-form"
+            className="pf-c-form"
+            onValidSubmit={currentUser => submit(currentUser)}
+            onValid={this.enableButton}
+            onInvalid={this.disableButton}
+          >
+            <HiddenInput
+              id="profile-form__etag"
+              name="etag"
+              value={this.state.currentUser.etag}
+            />
+            <Input
+              id="profile-form__email"
+              label="Email"
+              name="email"
+              value={this.state.currentUser.email}
+              required
+            />
+            <Input
+              id="profile-form__fullname"
+              label="Full name"
+              name="fullname"
+              value={this.state.currentUser.fullname}
+              required
+            />
+            <Select
+              id="profile-form__currentUser"
+              label="Time zone"
+              name="timezone"
+              options={this.state.timezones}
+              value={this.state.currentUser.timezone}
+              required
+            />
+            <Input
+              id="profile-form__current_password"
+              label="Current password"
+              name="current_password"
+              type="password"
+              value={this.state.currentUser.current_password}
+              required
+            />
+            <HiddenInput
+              id="profile-form__new_password"
+              label="Current password"
+              name="new_password"
+              type="password"
+              value=""
+            />
+            <ActionGroup>
+              <Toolbar>
+                <ToolbarGroup>
+                  <Button type="submit" disabled={!this.state.canSubmit}>
+                    Update your settings
+                  </Button>
+                </ToolbarGroup>
+              </Toolbar>
+            </ActionGroup>
+          </Formsy>
+        </CardBody>
+      </Card>
     );
   }
 }

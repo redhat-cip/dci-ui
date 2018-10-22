@@ -40,21 +40,28 @@ class TextareaJSON extends Component {
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { id, label, name } = this.props;
+    const { id, label, name, required = false } = this.props;
     return (
-      <div className="form-group">
-        <label className="control-label" htmlFor={name}>
+      <div className="pf-c-form__group">
+        <label className="pf-c-form__label" htmlFor={name}>
           {label}
+          {required ? (
+            <span className="pf-c-form__label__required" aria-hidden="true">
+              &#42;
+            </span>
+          ) : null}
         </label>
         <textarea
           id={id || name}
           name={name}
-          className="form-control"
+          className="pf-c-form-control"
           onChange={this.changeValue}
           rows="5"
           value={this.state.value}
         />
-        <span className="help-block">{errorMessage}</span>
+        <span className="pf-c-form__helper-text pf-m-error">
+          {errorMessage}
+        </span>
       </div>
     );
   }
