@@ -1,60 +1,41 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Modal, Icon, Button } from "patternfly-react";
+import { Button, Modal } from "@patternfly/react-core";
 
 export default class ModalForm extends Component {
   render() {
+    const {
+      title,
+      show = false,
+      close,
+      cancelButton = "cancel",
+      formRef,
+      canSubmit,
+      okButton = "create",
+      children
+    } = this.props;
     return (
-      <React.Fragment>
-        <Modal show={this.props.show} onHide={this.props.close}>
-          <Modal.Header>
-            <button
-              className="close"
-              onClick={this.props.close}
-              aria-hidden="true"
-              aria-label="Close"
-            >
-              <Icon type="pf" name="close" />
-            </button>
-            <Modal.Title>{this.props.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.props.children}</Modal.Body>
-          <Modal.Footer>
-            <Button
-              bsStyle="default"
-              className="btn-cancel"
-              onClick={this.props.close}
-            >
-              {this.props.cancelButton}
-            </Button>
-            <Button
-              id="submit-modal-button"
-              bsStyle="primary"
-              type="submit"
-              form={this.props.formRef}
-              disabled={!this.props.canSubmit}
-            >
-              {this.props.okButton}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </React.Fragment>
+      <Modal
+        title={title}
+        isOpen={show}
+        onClose={close}
+        isLarge
+        actions={[
+          <Button variant="secondary" className="btn-cancel" onClick={close}>
+            {cancelButton}
+          </Button>,
+          <Button
+            id="submit-modal-button"
+            variant="primary"
+            type="submit"
+            form={formRef}
+            disabled={!canSubmit}
+          >
+            {okButton}
+          </Button>
+        ]}
+      >
+        {children}
+      </Modal>
     );
   }
 }
-
-ModalForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  formRef: PropTypes.string.isRequired,
-  okButton: PropTypes.string,
-  cancelButton: PropTypes.string,
-  show: PropTypes.bool,
-  canSubmit: PropTypes.bool,
-  close: PropTypes.func
-};
-
-ModalForm.defaultProps = {
-  show: false,
-  okButton: "create",
-  cancelButton: "cancel"
-};

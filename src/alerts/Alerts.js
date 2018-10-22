@@ -1,9 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import objectValues from "object.values";
 
-import { Alert } from "patternfly-react";
+import { Alert } from "@patternfly/react-core";
 import { hideAlert } from "./alertsActions";
 
 const Alerts = styled.div`
@@ -16,14 +15,16 @@ const Alerts = styled.div`
 export function AlertsContainer({ alerts, hide }) {
   return (
     <Alerts>
-      {objectValues(alerts).map((alert, i) => (
-        <Alert key={i} type={alert.type} onDismiss={() => hide(alert)}>
-          {alert.message.split("\n").map((item, key) => (
-            <span key={key}>
-              {item}
-              <br />
-            </span>
-          ))}
+      {Object.values(alerts).map((alert, i) => (
+        <Alert key={i} variant={alert.type} title={alert.title}>
+          {alert.message
+            ? alert.message.split("\n").map((item, key) => (
+                <span key={key}>
+                  {item}
+                  <br />
+                </span>
+              ))
+            : null}
         </Alert>
       ))}
     </Alerts>

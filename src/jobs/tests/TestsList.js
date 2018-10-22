@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { EmptyState } from "../../ui";
 import Test from "./Test";
+import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 
 export default class TestsList extends Component {
   render() {
@@ -11,11 +12,11 @@ export default class TestsList extends Component {
         <EmptyState title="No tests" info="There is no tests for this job" />
       );
     return (
-      <div className="TestsList">
+      <PageSection variant={PageSectionVariants.light}>
         {tests.map((test, i) => (
           <Test key={i} test={test} />
         ))}
-      </div>
+      </PageSection>
     );
   }
 }
