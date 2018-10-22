@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import { getProducts } from "./productSelectors";
@@ -59,6 +59,7 @@ export class ProductForm extends Component {
         >
           <Formsy
             id="product-form"
+            className="pf-c-form"
             onValidSubmit={product => {
               this.closeModal();
               submit(product);
@@ -97,7 +98,7 @@ export class ProductForm extends Component {
           </Formsy>
         </FormModal>
         <Button
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

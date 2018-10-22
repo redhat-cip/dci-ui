@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import productsActions from "./producstActions";
 import teamsActions from "../teams/teamsActions";
 import { CopyButton, EmptyState } from "../ui";
@@ -10,7 +10,6 @@ import EditProductButton from "./EditProductButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getProducts } from "./productSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 
 export class ProductsContainer extends Component {
   componentDidMount() {
@@ -20,12 +19,11 @@ export class ProductsContainer extends Component {
   render() {
     const { products, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Products"
           loading={isFetching && isEmpty(products)}
           empty={!isFetching && isEmpty(products)}
-          HeaderButton={<NewProductButton className="pull-right" />}
+          HeaderButton={<NewProductButton />}
           EmptyComponent={
             <EmptyState
               title="There is no products"
@@ -34,22 +32,22 @@ export class ProductsContainer extends Component {
             />
           }
         >
-          <table className="table table-striped table-bordered table-hover">
+          <table className="pf-c-table pf-m-compact pf-m-grid-md">
             <thead>
               <tr>
-                <th className="text-center">ID</th>
+                <th className="pf-u-text-align-center">ID</th>
                 <th>Name</th>
                 <th>Label</th>
                 <th>Team Owner</th>
                 <th>Description</th>
                 <th>Created</th>
-                <th className="text-center">Actions</th>
+                <th className="pf-u-text-align-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {products.map(product => (
                 <tr key={`${product.id}.${product.etag}`}>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     <CopyButton text={product.id} />
                   </td>
                   <td>{product.name}</td>
@@ -59,8 +57,8 @@ export class ProductsContainer extends Component {
                   </td>
                   <td>{product.description}</td>
                   <td>{product.from_now}</td>
-                  <td className="text-center">
-                    <EditProductButton className="mr-1" product={product} />
+                  <td className="pf-u-text-align-center">
+                    <EditProductButton className="pf-u-mr-xl" product={product} />
                     <ConfirmDeleteButton
                       name="product"
                       resource={product}
@@ -73,8 +71,7 @@ export class ProductsContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

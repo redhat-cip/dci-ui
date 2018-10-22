@@ -5,7 +5,7 @@ import { getGlobalStatus } from "./globalStatusActions";
 import styled from "styled-components";
 import { SplitButton, MenuItem } from "patternfly-react";
 import { Colors } from "../ui";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import { getUniqueProductsNames } from "./globalStatusGetters";
 import StatDetails from "./StatDetails";
 
@@ -85,12 +85,12 @@ export class GlobalStatusContainer extends Component {
   render() {
     const { globalStatus: stats } = this.props;
     return (
-      <MainContentWithLoader loading={isEmpty(stats)}>
+      <Page loading={isEmpty(stats)}>
         <SplitButton
-          bsStyle="default"
+          variant="primary"
           title={this.state.tab}
           id="globalStatus__filter-btn"
-          className="mb-3"
+          className="pf-u-mb-xl"
         >
           <MenuItem eventKey="1" onClick={() => this.setState({ tab: "all" })}>
             All
@@ -129,7 +129,7 @@ export class GlobalStatusContainer extends Component {
             <StatDetails stat={this.state.stat} />
           </div>
         ) : null}
-      </MainContentWithLoader>
+      </Page>
     );
   }
 }

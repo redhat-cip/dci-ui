@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import ProductForm from "./ProductForm";
 import actions from "./producstActions";
+import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditProductButton extends Component {
   render() {
@@ -11,7 +12,7 @@ export class EditProductButton extends Component {
         {...props}
         title="Edit product"
         product={product}
-        showModalButton={<i className="fa fa-pencil" />}
+        showModalButton={<EditAltIcon />}
         okButton="Edit"
         submit={newProduct => {
           editProduct({

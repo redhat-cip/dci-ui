@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Colors } from "../../ui";
 import { Label } from "patternfly-react";
+import { TimesIcon } from "@patternfly/react-icons";
 
 const LabelRegression = styled(Label)`
   background-color: ${Colors.purple300};
@@ -29,7 +30,7 @@ export default class Testcases extends Component {
     return (
       <React.Fragment>
         <tr>
-          <td onClick={this.toggleDetails} className="text-center">
+          <td onClick={this.toggleDetails} className="pf-u-text-align-center">
             {seeDetails ? (
               <span className="fa fa-caret-down code__icon" />
             ) : (
@@ -55,7 +56,7 @@ export default class Testcases extends Component {
           </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>
-          <td className="text-right col-xs-1">{testscase.time} ms</td>
+          <td className="pf-u-text-align-right col-xs-1">{testscase.time} ms</td>
         </tr>
         {seeDetails ? (
           <tr style={{ borderTop: 0 }}>

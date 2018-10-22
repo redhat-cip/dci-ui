@@ -4,6 +4,7 @@ import C3Chart from "react-c3js";
 import moment from "moment";
 import { isEmpty } from "lodash";
 import { EmptyState } from "../ui";
+import { TimesIcon } from "@patternfly/react-icons";
 
 const GraphContainer = styled.div`
   width: 100%;
