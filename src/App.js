@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import "patternfly/dist/css/patternfly.min.css";
-import "patternfly/dist/css/patternfly-additions.min.css";
+import "@patternfly/patternfly-next/patternfly.css";
+import "c3/c3.css";
 import "balloon-css/balloon.css";
 import "./App.css";
 import "./favicon.ico";

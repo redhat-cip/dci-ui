@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import usersActions from "./usersActions";
 import rolesActions from "../roles/rolesActions";
 import teamsActions from "../teams/teamsActions";
@@ -12,75 +12,71 @@ import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getUsers } from "./usersSelectors";
 import { getTeams } from "../teams/teamsSelectors";
 import { getRoles } from "../roles/rolesSelectors";
-import { MainContent } from "../layout";
 
 export class UsersContainer extends Component {
   componentDidMount() {
     this.props.fetchUsers();
   }
   render() {
-    const { users, teams, roles, isFetching } = this.props;
+    const { users, teams, roles, isFetching, currentUser } = this.props;
     return (
-      <MainContent>
-        <DCICard
-          title="Users"
-          loading={isFetching && isEmpty(users)}
-          empty={!isFetching && isEmpty(users)}
-          HeaderButton={
-            <NewUserButton teams={teams} roles={roles} className="pull-right" />
-          }
-          EmptyComponent={
-            <EmptyState
-              title="There is no users"
-              info="Do you want to create one?"
-              button={<NewUserButton teams={teams} roles={roles} />}
-            />
-          }
-        >
-          <table className="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th className="text-center col-xs-1">ID</th>
-                <th>Login</th>
-                <th>Full name</th>
-                <th>Email</th>
-                <th>Team</th>
-                <th>Role</th>
-                <th>Created</th>
-                <th className="text-center">Actions</th>
+      <Page
+        title="Users"
+        loading={isFetching && isEmpty(users)}
+        empty={!isFetching && isEmpty(users)}
+        HeaderButton={<NewUserButton teams={teams} roles={roles} />}
+        EmptyComponent={
+          <EmptyState
+            title="There is no users"
+            info="Do you want to create one?"
+          />
+        }
+      >
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
+          <thead>
+            <tr>
+              <th className="pf-u-text-align-center col-xs-1">ID</th>
+              <th>Login</th>
+              <th>Full name</th>
+              <th>Email</th>
+              <th>Team</th>
+              <th>Role</th>
+              <th>Created</th>
+              <th className="pf-u-text-align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={`${user.id}.${user.etag}`}>
+                <td className="pf-u-text-align-center">
+                  <CopyButton text={user.id} />
+                </td>
+                <td>{user.name}</td>
+                <td>{user.fullname}</td>
+                <td>{user.email}</td>
+                <td>{user.team ? user.team.name.toUpperCase() : null}</td>
+                <td>{user.role.name}</td>
+                <td>{user.from_now}</td>
+                <td className="pf-u-text-align-center">
+                  <EditUserButton
+                    className="pf-u-mr-xl"
+                    user={user}
+                    teams={teams}
+                    roles={roles}
+                    isDisabled={currentUser.id === user.id}
+                  />
+                  <ConfirmDeleteButton
+                    name="user"
+                    resource={user}
+                    whenConfirmed={user => this.props.deleteUser(user)}
+                    isDisabled={currentUser.id === user.id}
+                  />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {users.map(user => (
-                <tr key={`${user.id}.${user.etag}`}>
-                  <td className="text-center">
-                    <CopyButton text={user.id} />
-                  </td>
-                  <td>{user.name}</td>
-                  <td>{user.fullname}</td>
-                  <td>{user.email}</td>
-                  <td>{user.team ? user.team.name.toUpperCase() : null}</td>
-                  <td>{user.role.name}</td>
-                  <td>{user.from_now}</td>
-                  <td className="text-center">
-                    <EditUserButton
-                      className="mr-1"
-                      user={user}
-                      teams={teams}
-                      roles={roles}
-                    />
-                    <ConfirmDeleteButton
-                      name="user"
-                      resource={user}
-                      whenConfirmed={user => this.props.deleteUser(user)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </DCICard>
-      </MainContent>
+            ))}
+          </tbody>
+        </table>
+      </Page>
     );
   }
 }
@@ -91,7 +87,10 @@ function mapStateToProps(state) {
     teams: getTeams(state),
     roles: getRoles(state),
     isFetching:
-      state.teams.isFetching || state.users.isFetching || state.roles.isFetching
+      state.teams.isFetching ||
+      state.users.isFetching ||
+      state.roles.isFetching,
+    currentUser: state.currentUser
   };
 }
 

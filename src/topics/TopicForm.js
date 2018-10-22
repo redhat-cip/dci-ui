@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, TextareaJSON, HiddenInput, Checkbox } from "../form";
 import { getProducts } from "../products/productSelectors";
@@ -49,18 +49,20 @@ export class TopicForm extends Component {
       showModalButton,
       currentUser
     } = this.props;
+    const { canSubmit, show, topic } = this.state;
     return (
       <React.Fragment>
         <FormModal
           title={title}
           okButton={okButton}
           formRef="topic-form"
-          canSubmit={this.state.canSubmit}
-          show={this.state.show}
+          canSubmit={canSubmit}
+          show={show}
           close={this.closeModal}
         >
           <Formsy
             id="topic-form"
+            className="pf-c-form"
             onValidSubmit={topic => {
               this.closeModal();
               submit(topic);
@@ -68,23 +70,19 @@ export class TopicForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="topic-form__etag"
-              name="etag"
-              value={this.state.topic.etag}
-            />
+            <HiddenInput id="topic-form__etag" name="etag" value={topic.etag} />
             <Input
               id="topic-form__name"
               label="Name"
               name="name"
-              value={this.state.topic.name}
+              value={topic.name}
               required
             />
             {currentUser.isSuperAdmin ? (
               <Checkbox
                 label="Export Control"
                 name="export_control"
-                value={this.state.topic.export_control}
+                value={topic.export_control}
               />
             ) : null}
             <Select
@@ -92,7 +90,7 @@ export class TopicForm extends Component {
               label="Next topic"
               name="next_topic_id"
               options={topics}
-              value={this.state.topic.next_topic_id}
+              value={topic.next_topic_id}
             />
             {isEmpty(products) ? null : (
               <Select
@@ -100,7 +98,7 @@ export class TopicForm extends Component {
                 label="Product"
                 name="product_id"
                 options={products}
-                value={this.state.topic.product_id || products[0].id}
+                value={topic.product_id || products[0].id}
                 required
               />
             )}
@@ -111,13 +109,13 @@ export class TopicForm extends Component {
               required
               validations="isJSON"
               validationError="Component types should be a valid JSON"
-              value={this.state.topic.component_types || []}
+              value={topic.component_types || []}
             />
           </Formsy>
         </FormModal>
         <Button
           id="topics-screen__show-modal-button"
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

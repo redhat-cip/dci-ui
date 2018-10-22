@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import { getProducts } from "./productSelectors";
@@ -47,18 +47,20 @@ export class ProductForm extends Component {
       showModalButton,
       teams
     } = this.props;
+    const { canSubmit, show, product } = this.state;
     return (
       <React.Fragment>
         <FormModal
           title={title}
           okButton={okButton}
           formRef="product-form"
-          canSubmit={this.state.canSubmit}
-          show={this.state.show}
+          canSubmit={canSubmit}
+          show={show}
           close={this.closeModal}
         >
           <Formsy
             id="product-form"
+            className="pf-c-form"
             onValidSubmit={product => {
               this.closeModal();
               submit(product);
@@ -69,20 +71,20 @@ export class ProductForm extends Component {
             <HiddenInput
               id="product-form__etag"
               name="etag"
-              value={this.state.product.etag}
+              value={product.etag}
             />
             <Input
               id="product-form__name"
               label="Name"
               name="name"
-              value={this.state.product.name}
+              value={product.name}
               required
             />
             <Input
               id="product-form__description"
               label="Description"
               name="description"
-              value={this.state.product.description}
+              value={product.description}
             />
             {isEmpty(teams) ? null : (
               <Select
@@ -90,14 +92,14 @@ export class ProductForm extends Component {
                 label="Team Owner"
                 name="team_id"
                 options={teams}
-                value={this.state.product.team_id || teams[0].id}
+                value={product.team_id || teams[0].id}
                 required
               />
             )}
           </Formsy>
         </FormModal>
         <Button
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

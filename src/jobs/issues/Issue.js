@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { TrashIcon } from "@patternfly/react-icons";
+import { Button } from "@patternfly/react-core";
 
 export default class Issue extends Component {
   render() {
@@ -6,17 +8,14 @@ export default class Issue extends Component {
     return (
       <div className="issue">
         <h3>
-          <button
-            className="btn btn-danger pull-right"
-            onClick={() => deleteIssue(issue)}
-          >
-            <span className="fa fa-trash" />
-          </button>
+          <Button variant="danger" onClick={() => deleteIssue(issue)}>
+            <TrashIcon />
+          </Button>
           <a href={issue.url} target="_blank" rel="noopener noreferrer">
             {issue.title}
           </a>
         </h3>
-        <table className="table">
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <tbody>
             <tr>
               <th>Product</th>

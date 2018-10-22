@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TeamForm from "./TeamForm";
 import actions from "./teamsActions";
+import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditTeamButton extends Component {
   render() {
@@ -11,7 +12,7 @@ export class EditTeamButton extends Component {
         {...props}
         title="Edit team"
         team={team}
-        showModalButton={<i className="fa fa-pencil" />}
+        showModalButton={<EditAltIcon />}
         okButton="Edit"
         submit={newTeam => {
           editTeam({
