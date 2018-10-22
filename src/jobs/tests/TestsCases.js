@@ -77,7 +77,7 @@ export default class TestsCases extends Component {
                 <th>Status</th>
                 <th>Classname</th>
                 <th>Name</th>
-                <th className="text-right">Time</th>
+                <th className="pf-u-text-align-right">Time</th>
               </tr>
             </thead>
             <tbody>

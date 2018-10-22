@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Label, Button, Icon } from "patternfly-react";
+import { Label, Icon } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import remotecisActions from "./remotecisActions";
 import teamsActions from "../teams/teamsActions";
 import { CopyButton } from "../ui";
@@ -12,7 +13,6 @@ import EditRemoteciButton from "./EditRemoteciButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 import { downloadRCFile } from "../services/runcom";
 
 export class RemotecisContainer extends Component {
@@ -23,13 +23,12 @@ export class RemotecisContainer extends Component {
   render() {
     const { remotecis, teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Remotecis"
           loading={isFetching && isEmpty(remotecis)}
           empty={!isFetching && isEmpty(remotecis)}
           HeaderButton={
-            <NewRemoteciButton teams={teams} className="pull-right" />
+            <NewRemoteciButton teams={teams} />
           }
           EmptyComponent={
             <EmptyState
@@ -39,48 +38,48 @@ export class RemotecisContainer extends Component {
             />
           }
         >
-          <table className="table table-striped table-bordered table-hover">
+          <table className="pf-c-table pf-m-compact pf-m-grid-md">
             <thead>
               <tr>
-                <th className="text-center">ID</th>
+                <th className="pf-u-text-align-center">ID</th>
                 <th>Name</th>
-                <th className="text-center">Status</th>
-                <th className="text-center" title="Download run commands file">
+                <th className="pf-u-text-align-center">Status</th>
+                <th className="pf-u-text-align-center" title="Download run commands file">
                   Download rc file
                 </th>
-                <th className="text-center">Team</th>
+                <th className="pf-u-text-align-center">Team</th>
                 <th>Created</th>
-                <th className="text-center">Actions</th>
+                <th className="pf-u-text-align-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {remotecis.map(remoteci => (
                 <tr key={`${remoteci.id}.${remoteci.etag}`}>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     <CopyButton text={remoteci.id} />
                   </td>
                   <td>{remoteci.name}</td>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     {remoteci.state === "active" ? (
-                      <Label bsStyle="success">active</Label>
+                      <Label variant="success">active</Label>
                     ) : (
-                      <Label bsStyle="danger">inactive</Label>
+                      <Label variant="danger">inactive</Label>
                     )}
                   </td>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     <Button
                       onClick={() => downloadRCFile(remoteci, "remoteci")}
                     >
                       <Icon type="fa" name="download" /> remotecirc.sh
                     </Button>
                   </td>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     {remoteci.team ? remoteci.team.name.toUpperCase() : null}
                   </td>
                   <td>{remoteci.from_now}</td>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     <EditRemoteciButton
-                      className="mr-1"
+                      className="pf-u-mr-xl"
                       remoteci={remoteci}
                       teams={teams}
                     />
@@ -96,8 +95,7 @@ export class RemotecisContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

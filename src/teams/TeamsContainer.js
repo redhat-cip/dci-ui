@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import actions from "../teams/teamsActions";
 import { CopyButton } from "../ui";
 import { EmptyState } from "../ui";
@@ -9,7 +9,6 @@ import NewTeamButton from "../teams/NewTeamButton";
 import EditTeamButton from "../teams/EditTeamButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 
 export class TeamsContainer extends Component {
   componentDidMount() {
@@ -18,12 +17,11 @@ export class TeamsContainer extends Component {
   render() {
     const { teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Teams"
           loading={isFetching && isEmpty(teams)}
           empty={!isFetching && isEmpty(teams)}
-          HeaderButton={<NewTeamButton className="pull-right" />}
+          HeaderButton={<NewTeamButton />}
           EmptyComponent={
             <EmptyState
               title="There is no teams"
@@ -36,20 +34,20 @@ export class TeamsContainer extends Component {
             />
           }
         >
-          <table className="table table-striped table-bordered table-hover">
+          <table className="pf-c-table pf-m-compact pf-m-grid-md">
             <thead>
               <tr>
-                <th className="text-center">ID</th>
+                <th className="pf-u-text-align-center">ID</th>
                 <th>Name</th>
                 <th>Parent Team</th>
                 <th>Created</th>
-                <th className="text-center">Actions</th>
+                <th className="pf-u-text-align-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {teams.map(team => (
                 <tr key={`${team.id}.${team.etag}`}>
-                  <td className="text-center">
+                  <td className="pf-u-text-align-center">
                     <CopyButton text={team.id} />
                   </td>
                   <td>{team.name.toUpperCase()}</td>
@@ -59,8 +57,8 @@ export class TeamsContainer extends Component {
                       : ""}
                   </td>
                   <td>{team.from_now}</td>
-                  <td className="text-center">
-                    <EditTeamButton className="mr-1" team={team} />
+                  <td className="pf-u-text-align-center">
+                    <EditTeamButton className="pf-u-mr-xl" team={team} />
                     <ConfirmDeleteButton
                       name="team"
                       resource={team}
@@ -71,8 +69,7 @@ export class TeamsContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

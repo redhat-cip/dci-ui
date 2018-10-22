@@ -1,27 +1,23 @@
-import React from "react";
+import React, { Component } from "react";
+import { SadTearIcon } from "@patternfly/react-icons";
 import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateTitle,
-  EmptyStateInfo,
-  EmptyStateAction
-} from "patternfly-react";
-import styled from "styled-components";
-import { Colors } from "../ui";
+  TextContent,
+  Text,
+  TextVariants,
+  Bullseye
+} from "@patternfly/react-core";
 
-const DCIEmptyState = styled(EmptyState)`
-  background-color: ${Colors.white};
-  border: none;
-`;
-
-export default function({ title, info, button, icon }) {
-  return (
-    <DCIEmptyState>
-      {icon ? icon : null}
-      {button ? <EmptyStateIcon /> : null}
-      <EmptyStateTitle>{title}</EmptyStateTitle>
-      <EmptyStateInfo>{info}</EmptyStateInfo>
-      {button ? <EmptyStateAction>{button}</EmptyStateAction> : null}
-    </DCIEmptyState>
-  );
+export default class EmptyState extends Component {
+  render() {
+    const { title, info } = this.props;
+    return (
+      <Bullseye>
+        <TextContent className="pf-u-text-align-center">
+          <SadTearIcon size="lg" />
+          <Text component={TextVariants.h1}>{title}</Text>
+          <Text component={TextVariants.h3}>{info}</Text>
+        </TextContent>
+      </Bullseye>
+    );
+  }
 }

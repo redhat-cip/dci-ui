@@ -9,7 +9,7 @@ import {
   TabContainer,
   ListView
 } from "patternfly-react";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import { connect } from "react-redux";
 import FilesList from "./files/FilesList";
 import IssuesList from "./issues/IssuesList";
@@ -105,7 +105,7 @@ export class JobContainer extends Component {
       files: 4
     };
     return (
-      <MainContentWithLoader loading={isFetching}>
+      <Page loading={isFetching}>
         <ListView>
           <JobSummary seeDetails job={job} history={history} />
         </ListView>
@@ -173,7 +173,7 @@ export class JobContainer extends Component {
             </TabContent>
           </React.Fragment>
         </TabContainer>
-      </MainContentWithLoader>
+      </Page>
     );
   }
 }

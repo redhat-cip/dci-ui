@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { ClipboardIcon } from "@patternfly/react-icons";
 
 export default class CopyButton extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export default class CopyButton extends Component {
           data-balloon-pos={this.props.position}
           onClick={() => this.textCopied()}
         >
-          <i className="fa fa-fw fa-clipboard pointer" />
+          <ClipboardIcon />
         </span>
       </CopyToClipboard>
     );
