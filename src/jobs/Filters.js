@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { isEmpty, find, differenceWith } from "lodash";
-import { Filter } from "patternfly-react";
+import { Filter } from "../ui";
 
 export function createTeamsFilter(teams) {
   const teamsWithRemotecis = teams.filter(team => !isEmpty(team.remotecis));
   return teamsWithRemotecis.map(team => ({
     id: team.id,
-    title: team.name,
     key: "team_id",
+    name: team.name,
     value: team.id,
     filterValues: team.remotecis.map(remoteci => ({
-      title: remoteci.name,
       key: "remoteci_id",
+      name: remoteci.name,
       value: remoteci.id
     }))
   }));
@@ -46,48 +46,35 @@ export class RemoteciInTeamFilter extends Component {
     const remoteciFilter = isEmpty(teamFilter)
       ? null
       : getCurrentFilters(activeFilters, teamFilter.filterValues).remoteci_id;
+    const remoteciFilters = isEmpty(teamFilter) ? [] : teamFilter.filterValues;
     return (
-      <Filter style={{ borderRight: 0 }}>
-        <Filter.CategorySelector
-          filterCategories={teamsFilter}
-          currentCategory={teamFilter}
-          placeholder="Filter by team"
-          onFilterCategorySelected={newTeamFilter =>
+      <React.Fragment>
+        <Filter
+          placeholder="Filter by Team"
+          filter={teamFilter}
+          filters={teamsFilter}
+          onFilterValueSelected={newTeamFilter =>
             this._cleanFiltersAndFilterJobs([newTeamFilter])
           }
-        >
-          <Filter.CategoryValueSelector
-            categoryValues={teamFilter && teamFilter.filterValues}
-            currentValue={remoteciFilter}
-            placeholder="Filter by remoteci"
-            onCategoryValueSelected={newRemoteciFilter =>
+          className="pf-u-mr-lg"
+        />
+        {isEmpty(remoteciFilters) ? null : (
+          <Filter
+            placeholder="Filter by Remoteci"
+            filter={remoteciFilter}
+            filters={remoteciFilters}
+            onFilterValueSelected={newRemoteciFilter =>
               this._cleanFiltersAndFilterJobs([teamFilter, newRemoteciFilter])
             }
           />
-        </Filter.CategorySelector>
-      </Filter>
+        )}
+      </React.Fragment>
     );
   }
 }
 
 export function removeFilter(filters, key) {
   return removeFilters(filters, [key]);
-}
-
-export class ListFilter extends Component {
-  render() {
-    const { filters, filter, placeholder, onFilterValueSelected } = this.props;
-    return (
-      <Filter style={{ borderRight: 0 }}>
-        <Filter.ValueSelector
-          filterValues={filters}
-          placeholder={placeholder}
-          currentValue={filter}
-          onFilterValueSelected={onFilterValueSelected}
-        />
-      </Filter>
-    );
-  }
 }
 
 export class StatusFilter extends Component {
@@ -100,27 +87,27 @@ export class StatusFilter extends Component {
   render() {
     const filters = [
       {
-        title: "New",
+        name: "New",
         key: "status",
         value: "new"
       },
       {
-        title: "Running",
+        name: "Running",
         key: "status",
         value: "running"
       },
       {
-        title: "Success",
+        name: "Success",
         key: "status",
         value: "success"
       },
       {
-        title: "Failure",
+        name: "Failure",
         key: "status",
         value: "failure"
       },
       {
-        title: "Error",
+        name: "Error",
         key: "status",
         value: "error"
       }
@@ -128,13 +115,14 @@ export class StatusFilter extends Component {
     const { activeFilters } = this.props;
     const { status: statusFilter } = getCurrentFilters(activeFilters, filters);
     return (
-      <ListFilter
+      <Filter
         placeholder="Filter by Status"
         filter={statusFilter}
         filters={filters}
         onFilterValueSelected={newStatusFilter =>
           this._cleanFiltersAndFilterJobs([newStatusFilter])
         }
+        className="pf-u-mr-lg"
       />
     );
   }

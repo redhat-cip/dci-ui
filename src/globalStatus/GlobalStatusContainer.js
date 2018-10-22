@@ -1,64 +1,43 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
+import { isNull, isEmpty } from "lodash";
 import { connect } from "react-redux";
 import { getGlobalStatus } from "./globalStatusActions";
 import styled from "styled-components";
-import { SplitButton, MenuItem } from "patternfly-react";
-import { Colors } from "../ui";
-import { MainContentWithLoader } from "../layout";
-import { getUniqueProductsNames } from "./globalStatusGetters";
+import { Colors, Filter } from "../ui";
+import { Page } from "../layout";
+import { getGlobalStatusFilters } from "./globalStatusGetters";
 import StatDetails from "./StatDetails";
+import { Grid, GridItem, Button } from "@patternfly/react-core";
 
-const GlobalStatusSummary = styled.div`
-  display: grid;
-  width: 100%;
-  max-width: 100vw;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 100px;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-
-  @media (min-width: 480px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (min-width: 1200px) {
-    grid-template-columns: repeat(8, 1fr);
-  }
-`;
+import { LongArrowAltLeftIcon } from "@patternfly/react-icons";
 
 const GlobalStatusItem = styled.div`
   text-align: center;
   background: ${props =>
     props.stat.percentageOfSuccess > 30 ? Colors.green400 : Colors.red100};
-  box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
   color: ${Colors.white};
   display: flex;
   justify-content: center;
   flex-direction: column;
   alignitems: center;
   cursor: pointer;
+  height: 170px;
 `;
 
 const GlobalStatusItemTitle = styled.div`
   overflow: hidden;
-  font-size: 2rem;
+  font-size: 1.8em;
   font-weight: 500;
 `;
 const GlobalStatusItemBody = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.3em;
 `;
 
 export class GlobalStatusContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: "all",
-      tabs: ["all"],
+      filter: null,
       seeDetails: false,
       stat: null
     };
@@ -68,7 +47,7 @@ export class GlobalStatusContainer extends Component {
     this.props.getGlobalStatus();
   }
 
-  seeStatDetails = stat =>
+  seeStatDetails = stat => {
     this.setState(prevState => {
       if (prevState.stat && prevState.stat.id === stat.id) {
         return {
@@ -81,55 +60,70 @@ export class GlobalStatusContainer extends Component {
         stat
       };
     });
+  };
 
   render() {
     const { globalStatus: stats } = this.props;
+    const { filter, seeDetails, stat } = this.state;
+    const filters = getGlobalStatusFilters(stats);
+    const defaultFilter = { name: "All" };
     return (
-      <MainContentWithLoader loading={isEmpty(stats)}>
-        <SplitButton
-          bsStyle="default"
-          title={this.state.tab}
-          id="globalStatus__filter-btn"
-          className="mb-3"
-        >
-          <MenuItem eventKey="1" onClick={() => this.setState({ tab: "all" })}>
-            All
-          </MenuItem>
-          {getUniqueProductsNames(stats).map((productName, i) => (
-            <MenuItem
-              key={i}
-              eventKey="4"
-              onClick={() => this.setState({ tab: productName })}
-            >
-              {productName}
-            </MenuItem>
-          ))}
-        </SplitButton>
-        <GlobalStatusSummary>
-          {stats
-            .filter(stat => {
-              if (this.state.tab === "all") return true;
-              return stat.product_name === this.state.tab;
-            })
-            .map(stat => (
-              <GlobalStatusItem
-                key={stat.id}
-                stat={stat}
-                onClick={() => this.seeStatDetails(stat)}
+      <Page
+        title="Global Status"
+        loading={isEmpty(stats)}
+        Toolbar={
+          <Filter
+            placeholder={isNull(filter) ? defaultFilter.name : filter.name}
+            filter={filter || defaultFilter}
+            filters={[defaultFilter, ...filters]}
+            onFilterValueSelected={newFilter =>
+              this.setState({ filter: newFilter })
+            }
+          />
+        }
+      >
+        {seeDetails ? (
+          <Grid gutter="xl">
+            <GridItem>
+              <Button
+                variant="plain"
+                aria-label="Back button hide details"
+                onClick={() =>
+                  this.setState(prevState => ({
+                    seeDetails: !prevState.seeDetails
+                  }))
+                }
               >
-                <GlobalStatusItemTitle>{stat.topic_name}</GlobalStatusItemTitle>
-                <GlobalStatusItemBody>
-                  {stat.percentageOfSuccess}% success
-                </GlobalStatusItemBody>
-              </GlobalStatusItem>
-            ))}
-        </GlobalStatusSummary>
-        {this.state.seeDetails ? (
-          <div className="mt-1">
-            <StatDetails stat={this.state.stat} />
-          </div>
-        ) : null}
-      </MainContentWithLoader>
+                <LongArrowAltLeftIcon size="lg" />
+              </Button>
+              <StatDetails stat={stat} />
+            </GridItem>
+          </Grid>
+        ) : (
+          <Grid gutter="xl" sm={3} md={2}>
+            {stats
+              .filter(stat => {
+                if (isNull(filter) || filter.name === "All") return true;
+                return stat.product_name === filter.name;
+              })
+              .map(stat => (
+                <GridItem
+                  key={stat.id}
+                  onClick={() => this.seeStatDetails(stat)}
+                >
+                  <GlobalStatusItem stat={stat}>
+                    <GlobalStatusItemTitle>
+                      {stat.topic_name}
+                    </GlobalStatusItemTitle>
+                    <GlobalStatusItemBody>
+                      {stat.percentageOfSuccess}% success
+                    </GlobalStatusItemBody>
+                  </GlobalStatusItem>
+                </GridItem>
+              ))}
+          </Grid>
+        )}
+      </Page>
     );
   }
 }

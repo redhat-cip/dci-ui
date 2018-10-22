@@ -1,32 +1,43 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import objectValues from "object.values";
 
-import { Alert } from "patternfly-react";
+import { Alert, Button } from "@patternfly/react-core";
 import { hideAlert } from "./alertsActions";
+import { TimesIcon } from "@patternfly/react-icons";
 
-const Alerts = styled.div`
+const AlertsContainer = styled.div`
   position: fixed;
   z-index: 100;
   top: 20px;
   right: 20px;
 `;
 
-export function AlertsContainer({ alerts, hide }) {
+export function Alerts({ alerts, hide }) {
   return (
-    <Alerts>
-      {objectValues(alerts).map((alert, i) => (
-        <Alert key={i} type={alert.type} onDismiss={() => hide(alert)}>
-          {alert.message.split("\n").map((item, key) => (
-            <span key={key}>
-              {item}
-              <br />
-            </span>
-          ))}
+    <AlertsContainer>
+      {Object.values(alerts).map((alert, i) => (
+        <Alert
+          key={i}
+          variant={alert.type}
+          title={alert.title}
+          action={
+            <Button variant="plain" onClick={() => hide(alert)}>
+              <TimesIcon />
+            </Button>
+          }
+        >
+          {alert.message
+            ? alert.message.split("\n").map((item, key) => (
+                <span key={key}>
+                  {item}
+                  <br />
+                </span>
+              ))
+            : null}
         </Alert>
       ))}
-    </Alerts>
+    </AlertsContainer>
   );
 }
 
@@ -47,4 +58,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlertsContainer);
+)(Alerts);

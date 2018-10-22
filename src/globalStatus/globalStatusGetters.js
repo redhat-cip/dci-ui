@@ -1,6 +1,7 @@
-export function getUniqueProductsNames(globalStatus) {
+export function getGlobalStatusFilters(globalStatus) {
   const productsNames = globalStatus
     .map(stat => stat.product_name)
     .filter(stat => stat);
-  return Array.from(new Set(productsNames));
+  const uniqueProductsNames = Array.from(new Set(productsNames));
+  return uniqueProductsNames.map(productName => ({ name: productName }));
 }

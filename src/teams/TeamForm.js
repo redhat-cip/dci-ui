@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, Checkbox, HiddenInput } from "../form";
 import { getTeams } from "./teamsSelectors";
@@ -46,18 +46,20 @@ export class TeamForm extends Component {
       className,
       showModalButton
     } = this.props;
+    const { canSubmit, show, team } = this.state;
     return (
       <React.Fragment>
         <FormModal
           title={title}
           okButton={okButton}
           formRef="team-form"
-          canSubmit={this.state.canSubmit}
-          show={this.state.show}
+          canSubmit={canSubmit}
+          show={show}
           close={this.closeModal}
         >
           <Formsy
             id="team-form"
+            className="pf-c-form"
             onValidSubmit={team => {
               this.closeModal();
               submit(team);
@@ -65,16 +67,12 @@ export class TeamForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="team-form__etag"
-              name="etag"
-              value={this.state.team.etag}
-            />
+            <HiddenInput id="team-form__etag" name="etag" value={team.etag} />
             <Input
               id="team-form__name"
               label="Name"
               name="name"
-              value={this.state.team.name}
+              value={team.name}
               required
             />
             {isEmpty(teams) ? null : (
@@ -83,19 +81,15 @@ export class TeamForm extends Component {
                 label="Parent team"
                 name="parent_id"
                 options={teams}
-                value={this.state.team.parent_id || teams[0].id}
+                value={team.parent_id || teams[0].id}
                 required
               />
             )}
-            <Checkbox
-              label="Partner"
-              name="external"
-              value={this.state.team.external || true}
-            />
+            <Checkbox label="Partner" name="external" value={team.external} />
           </Formsy>
         </FormModal>
         <Button
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

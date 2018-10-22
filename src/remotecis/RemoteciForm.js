@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import { isEmpty } from "lodash";
@@ -44,18 +44,20 @@ export default class RemoteciForm extends Component {
       showModalButton,
       teams
     } = this.props;
+    const { canSubmit, show, remoteci } = this.state;
     return (
       <React.Fragment>
         <FormModal
           title={title}
           okButton={okButton}
           formRef="remoteci-form"
-          canSubmit={this.state.canSubmit}
-          show={this.state.show}
+          canSubmit={canSubmit}
+          show={show}
           close={this.closeModal}
         >
           <Formsy
             id="remoteci-form"
+            className="pf-c-form"
             onValidSubmit={remoteci => {
               this.closeModal();
               submit(remoteci);
@@ -66,13 +68,13 @@ export default class RemoteciForm extends Component {
             <HiddenInput
               id="remoteci-form__etag"
               name="etag"
-              value={this.state.remoteci.etag}
+              value={remoteci.etag}
             />
             <Input
               id="remoteci-form__name"
               label="Name"
               name="name"
-              value={this.state.remoteci.name}
+              value={remoteci.name}
               required
             />
             {isEmpty(teams) ? null : (
@@ -81,14 +83,14 @@ export default class RemoteciForm extends Component {
                 label="Team Owner"
                 name="team_id"
                 options={teams}
-                value={this.state.remoteci.team_id || teams[0].id}
+                value={remoteci.team_id || teams[0].id}
                 required
               />
             )}
           </Formsy>
         </FormModal>
         <Button
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

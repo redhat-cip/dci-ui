@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import actions from "../teams/teamsActions";
-import { CopyButton } from "../ui";
-import { EmptyState } from "../ui";
+import { CopyButton, EmptyState, Labels } from "../ui";
 import NewTeamButton from "../teams/NewTeamButton";
 import EditTeamButton from "../teams/EditTeamButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 
 export class TeamsContainer extends Component {
   componentDidMount() {
@@ -18,61 +16,58 @@ export class TeamsContainer extends Component {
   render() {
     const { teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
-          title="Teams"
-          loading={isFetching && isEmpty(teams)}
-          empty={!isFetching && isEmpty(teams)}
-          HeaderButton={<NewTeamButton className="pull-right" />}
-          EmptyComponent={
-            <EmptyState
-              title="There is no teams"
-              info="Do you want to create one?"
-              button={
-                <a className="btn btn-primary" href="/teams/create">
-                  Create a new team
-                </a>
-              }
-            />
-          }
-        >
-          <table className="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th className="text-center">ID</th>
-                <th>Name</th>
-                <th>Parent Team</th>
-                <th>Created</th>
-                <th className="text-center">Actions</th>
+      <Page
+        title="Teams"
+        loading={isFetching && isEmpty(teams)}
+        empty={!isFetching && isEmpty(teams)}
+        HeaderButton={<NewTeamButton />}
+        EmptyComponent={
+          <EmptyState
+            title="There is no teams"
+            info="Do you want to create one?"
+          />
+        }
+      >
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
+          <thead>
+            <tr>
+              <th className="pf-u-text-align-center">ID</th>
+              <th>Name</th>
+              <th className="pf-u-text-align-center">Partner</th>
+              <th>Parent Team</th>
+              <th>Created</th>
+              <th className="pf-u-text-align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teams.map(team => (
+              <tr key={`${team.id}.${team.etag}`}>
+                <td className="pf-u-text-align-center">
+                  <CopyButton text={team.id} />
+                </td>
+                <td>{team.name.toUpperCase()}</td>
+                <td className="pf-u-text-align-center">
+                  {team.external ? (
+                    <Labels.Success>partner</Labels.Success>
+                  ) : null}
+                </td>
+                <td>
+                  {team.parent_team ? team.parent_team.name.toUpperCase() : ""}
+                </td>
+                <td>{team.from_now}</td>
+                <td className="pf-u-text-align-center">
+                  <EditTeamButton className="pf-u-mr-xl" team={team} />
+                  <ConfirmDeleteButton
+                    name="team"
+                    resource={team}
+                    whenConfirmed={team => this.props.deleteTeam(team)}
+                  />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {teams.map(team => (
-                <tr key={`${team.id}.${team.etag}`}>
-                  <td className="text-center">
-                    <CopyButton text={team.id} />
-                  </td>
-                  <td>{team.name.toUpperCase()}</td>
-                  <td>
-                    {team.parent_team
-                      ? team.parent_team.name.toUpperCase()
-                      : ""}
-                  </td>
-                  <td>{team.from_now}</td>
-                  <td className="text-center">
-                    <EditTeamButton className="mr-1" team={team} />
-                    <ConfirmDeleteButton
-                      name="team"
-                      resource={team}
-                      whenConfirmed={team => this.props.deleteTeam(team)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </DCICard>
-      </MainContent>
+            ))}
+          </tbody>
+        </table>
+      </Page>
     );
   }
 }
