@@ -12,13 +12,13 @@ export default class FilesList extends Component {
       );
     return (
       <div className="table-responsive">
-        <table className="table table-striped table-bordered table-hover">
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
               <th>Filename</th>
               <th>Size</th>
               <th>mime-type</th>
-              <th className="text-center">Actions</th>
+              <th className="pf-u-text-align-center">Actions</th>
             </tr>
           </thead>
           <tbody>

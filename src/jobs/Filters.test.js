@@ -18,13 +18,13 @@ it("createTeamsFilter", () => {
       filterValues: [
         {
           key: "remoteci_id",
-          title: "r1",
+          name: "r1",
           value: "r1"
         }
       ],
       id: "t1",
       key: "team_id",
-      title: "t1",
+      name: "t1",
       value: "t1"
     }
   ];
@@ -58,13 +58,13 @@ it("getCurrentFilters", () => {
     {
       id: "t1",
       key: "team_id",
-      title: "t1",
+      name: "t1",
       value: "t1"
     },
     {
       id: "t2",
       key: "team_id",
-      title: "t2",
+      name: "t2",
       value: "t2"
     }
   ];
@@ -73,7 +73,7 @@ it("getCurrentFilters", () => {
     team_id: {
       id: "t1",
       key: "team_id",
-      title: "t1",
+      name: "t1",
       value: "t1"
     }
   };

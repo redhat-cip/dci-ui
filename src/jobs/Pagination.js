@@ -1,24 +1,23 @@
 import React, { Component } from "react";
-import {
-  Filter,
-  FormGroup,
-  PaginationRowBack,
-  PaginationRowForward
-} from "patternfly-react";
 import styled from "styled-components";
+import { Button } from "@patternfly/react-core";
+import {
+  AngleLeftIcon,
+  AngleRightIcon,
+  AngleDoubleLeftIcon,
+  AngleDoubleRightIcon
+} from "@patternfly/react-icons";
 
-const FormGroupPagination = styled(FormGroup)`
-  display: flex;
-  background-color: transparent;
-  align-items: center;
-  border: none;
-  & > .pagination {
-    margin: 0;
+const PaginationBlock = styled.div`
+  .pf-c-dropdown {
+    margin-right: 2em;
   }
-`;
-
-const PageInfo = styled.span`
-  margin: 0 1em;
+  .pf-c-dropdown__toggle::before {
+    border: none;
+  }
+  .pf-c-dropdown__menu {
+    border-top: 1px solid #007bba;
+  }
 `;
 
 export default class Pagination extends Component {
@@ -30,27 +29,38 @@ export default class Pagination extends Component {
     const itemsStart = (page - 1) * perPage + 1;
     const itemsEnd = page * perPage > count ? count : page * perPage;
     return (
-      <Filter>
-        <FormGroupPagination>
-          <PageInfo>{`${itemsStart} - ${itemsEnd} of ${count}`}</PageInfo>
-          <PaginationRowBack
-            page={page}
-            messagesFirstPage="First Page"
-            messagesPreviousPage="Previous Page"
-            onFirstPage={() => goTo(1)}
-            onPreviousPage={() => goTo(page - 1)}
-          />
-          <PageInfo>{`${page} of ${nbPages}`}</PageInfo>
-          <PaginationRowForward
-            page={page}
-            amountOfPages={nbPages}
-            messagesNextPage="Next Page"
-            messagesLastPage="Last Page"
-            onNextPage={() => goTo(page + 1)}
-            onLastPage={() => goTo(nbPages)}
-          />
-        </FormGroupPagination>
-      </Filter>
+      <PaginationBlock>
+        <span>{`${itemsStart} - ${itemsEnd} of ${count}`}</span>
+        <Button
+          variant="plain"
+          aria-label="select first page"
+          onClick={() => goTo(1)}
+        >
+          <AngleLeftIcon />
+        </Button>
+        <Button
+          variant="plain"
+          aria-label="select previous page"
+          onClick={() => goTo(page - 1)}
+        >
+          <AngleDoubleLeftIcon />
+        </Button>
+        <span>{`${page} of ${nbPages}`}</span>
+        <Button
+          variant="plain"
+          aria-label="select first page"
+          onClick={() => goTo(page + 1)}
+        >
+          <AngleRightIcon />
+        </Button>
+        <Button
+          variant="plain"
+          aria-label="select next page"
+          onClick={() => goTo(nbPages)}
+        >
+          <AngleDoubleRightIcon />
+        </Button>
+      </PaginationBlock>
     );
   }
 }

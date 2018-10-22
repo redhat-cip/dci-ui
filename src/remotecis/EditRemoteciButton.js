@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import RemoteciForm from "./RemoteciForm";
 import actions from "./remotecisActions";
+import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditRemoteciButton extends Component {
   render() {
@@ -11,7 +12,7 @@ export class EditRemoteciButton extends Component {
         {...props}
         title="Edit remoteci"
         remoteci={remoteci}
-        showModalButton={<i className="fa fa-pencil" />}
+        showModalButton={<EditAltIcon />}
         okButton="Edit"
         teams={teams}
         submit={newRemoteci => {
