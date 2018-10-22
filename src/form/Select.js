@@ -11,14 +11,14 @@ class Select extends Component {
     const errorMessage = this.props.getErrorMessage();
     const { id, label, name, required, options } = this.props;
     return (
-      <div className="form-group">
+      <div className="pf-c-form__group">
         <label htmlFor={name}>{label}</label>
         <select
           id={id || name}
           name={name}
           value={this.props.getValue() || ""}
           onChange={this.changeValue}
-          className="form-control"
+          className="pf-c-form-control"
         >
           {required ? null : <option value="" />}
           {options.map((option, i) => (
@@ -27,7 +27,7 @@ class Select extends Component {
             </option>
           ))}
         </select>
-        <span className="help-block">{errorMessage}</span>
+        <span className="pf-c-form__helper-text pf-m-error">{errorMessage}</span>
       </div>
     );
   }

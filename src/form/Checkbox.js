@@ -9,9 +9,9 @@ class Checkbox extends Component {
 
   render() {
     const errorMessage = this.props.getErrorMessage();
-    const { id, label, name } = this.props;
+    const { id, label, name, required = false } = this.props;
     return (
-      <div className="form-group">
+      <div className="pf-c-form__group">
         <label htmlFor={name}>
           <input
             id={id || name}
@@ -22,8 +22,15 @@ class Checkbox extends Component {
             onChange={this.changeValue}
           />
           {label}
+          {required ? (
+            <span className="pf-c-form__label__required" aria-hidden="true">
+              &#42;
+            </span>
+          ) : null}
         </label>
-        <span className="help-block">{errorMessage}</span>
+        <span className="pf-c-form__helper-text pf-m-error">
+          {errorMessage}
+        </span>
       </div>
     );
   }

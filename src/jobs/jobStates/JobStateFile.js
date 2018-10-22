@@ -8,6 +8,7 @@ import {
   Pre,
   DurationLabel
 } from "./JobStateComponents";
+import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 
 export class JobStateFile extends Component {
   constructor(props) {
@@ -48,11 +49,7 @@ export class JobStateFile extends Component {
           }}
         >
           <Arrow>
-            {this.state.seeDetails ? (
-              <span className="fa fa-caret-down code__icon" />
-            ) : (
-              <span className="fa fa-caret-right code__icon" />
-            )}
+            {this.state.seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
           </Arrow>
           <FileName>{this.state.file.name}</FileName>
           <DurationLabel duration={this.state.file.duration} />

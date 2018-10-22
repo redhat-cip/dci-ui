@@ -5,9 +5,10 @@ import { Row, Col, SplitButton, MenuItem } from "patternfly-react";
 import topicsActions from "../topics/topicsActions";
 import { getTopics } from "../topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import TrendGraph from "./TrendGraph";
 import { EmptyState } from "../ui";
+import { TimesIcon } from "@patternfly/react-icons";
 
 export class TrendsContainer extends Component {
   constructor(props) {
@@ -25,14 +26,14 @@ export class TrendsContainer extends Component {
     const { topics, trends } = this.props;
     const { topic } = this.state;
     return (
-      <MainContentWithLoader loading={isEmpty(trends) || isEmpty(topics)}>
+      <Page loading={isEmpty(trends) || isEmpty(topics)}>
         <Row>
           <Col xs={12}>
             <SplitButton
-              bsStyle="default"
+              variant="primary"
               id="trends_topic_select"
               title={isEmpty(topic) ? "Select a topic" : topic.name}
-              className="mb-3"
+              className="pf-u-mb-xl"
             >
               {topics.map(topic => (
                 <MenuItem
@@ -51,14 +52,13 @@ export class TrendsContainer extends Component {
               <EmptyState
                 title="Select a topic"
                 info="Select a topic in the top left corner to see its trend."
-                icon={<i className="fa fa-line-chart fa-3x fa-fw" />}
               />
             ) : (
               <TrendGraph trend={trends[topic.id]} topic={topic} />
             )}
           </Col>
         </Row>
-      </MainContentWithLoader>
+      </Page>
     );
   }
 }
