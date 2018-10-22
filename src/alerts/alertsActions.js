@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import * as types from "./alertsActionsTypes";
 
 export function showAlert(alert) {
@@ -24,7 +25,7 @@ function showAndHideAfter10s(alert) {
 export function showSuccess(message) {
   const alert = {
     id: Date.now(),
-    message,
+    title: message,
     type: "success"
   };
   return showAndHideAfter10s(alert);
@@ -33,7 +34,8 @@ export function showSuccess(message) {
 export function showWarning(message) {
   const alert = {
     id: Date.now(),
-    message,
+    title: message,
+    message: "",
     type: "warning"
   };
   return showAndHideAfter10s(alert);
@@ -42,33 +44,43 @@ export function showWarning(message) {
 export function showError(message) {
   const alert = {
     id: Date.now(),
-    message,
-    type: "error"
+    title: message,
+    message: "",
+    type: "danger"
   };
   return showAndHideAfter10s(alert);
 }
 
 export function showAPIError(response) {
-  return showError(createAlertMessage(response));
+  return showAndHideAfter10s(createAlert(response));
 }
 
-export function createAlertMessage(response) {
-  let alertMessage =
-    "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?";
-  if (response && response.data && response.data.message) {
-    alertMessage = response.data.message;
-  }
-  if (response && response.data && response.data.payload) {
-    let errorDetails = "";
+export function createAlert(response) {
+  if (isEmpty(response) || isEmpty(response.data))
+    return {
+      id: Date.now(),
+      title: "Unknown error",
+      message:
+        "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
+      type: "danger"
+    };
+  const alert = {
+    id: Date.now(),
+    title: "Request malformed",
+    message: "",
+    type: "danger"
+  };
+  if (response && response.data) {
+    if (response.data.message) {
+      alert.title = response.data.message;
+    }
     const payload = response.data.payload;
-    const error = payload.error || payload.errors || {};
-    const errorKeys = Object.keys(error);
-    errorKeys.forEach(errorKey => {
-      errorDetails += `\n${errorKey}: ${error[errorKey]}`;
-    });
-    if (errorDetails) {
-      alertMessage += errorDetails;
+    if (payload) {
+      const error = payload.error || payload.errors || {};
+      alert.message = Object.keys(error)
+        .map(k => `${k}: ${error[k]}`)
+        .join("\n");
     }
   }
-  return alertMessage;
+  return alert;
 }

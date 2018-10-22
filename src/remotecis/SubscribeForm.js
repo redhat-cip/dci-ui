@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import Formsy from "formsy-react";
-import { Button } from "patternfly-react";
+import { Button, Card, CardBody } from "@patternfly/react-core";
 import { Select } from "../form";
 import { subscribeToARemoteci } from "../currentUser/currentUserActions";
 
@@ -29,31 +29,36 @@ export class SubscribeForm extends Component {
       return accumulator;
     }, {});
     return (
-      <Formsy
-        id="subscription-form"
-        onValid={this.enableButton}
-        onInvalid={this.disableButton}
-        onValidSubmit={remoteci => {
-          subscribeToARemoteci(remoteciIds[remoteci.id]);
-        }}
-      >
-        <Select
-          id="subscription-form__subscribeSelect"
-          label="Available Remotecis"
-          name="id"
-          options={remotecis}
-          value={isEmpty(remotecis) ? null : remotecis[0].id}
-          required
-        />
-        <Button
-          id="subscription-form__submitButton"
-          type="submit"
-          bsStyle="primary"
-          disabled={!this.state.canSubmit}
-        >
-          Subscribe
-        </Button>
-      </Formsy>
+      <Card>
+        <CardBody>
+          <Formsy
+            id="subscription-form"
+            className="pf-c-form"
+            onValid={this.enableButton}
+            onInvalid={this.disableButton}
+            onValidSubmit={remoteci => {
+              subscribeToARemoteci(remoteciIds[remoteci.id]);
+            }}
+          >
+            <Select
+              id="subscription-form__subscribeSelect"
+              label="Available Remotecis"
+              name="id"
+              options={remotecis}
+              value={isEmpty(remotecis) ? null : remotecis[0].id}
+              required
+            />
+            <Button
+              id="subscription-form__submitButton"
+              type="submit"
+              variant="primary"
+              disabled={!this.state.canSubmit}
+            >
+              Subscribe
+            </Button>
+          </Formsy>
+        </CardBody>
+      </Card>
     );
   }
 }

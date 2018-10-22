@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TopicForm from "./TopicForm";
 import actions from "./topicsActions";
+import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditTopicButton extends Component {
   render() {
@@ -11,7 +12,7 @@ export class EditTopicButton extends Component {
         {...props}
         title="Edit topic"
         topic={topic}
-        showModalButton={<i className="fa fa-pencil" />}
+        showModalButton={<EditAltIcon />}
         okButton="Edit"
         submit={newTopic => {
           editTopic({
