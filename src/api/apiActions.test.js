@@ -74,7 +74,7 @@ it("fetch error", () => {
   return store.dispatch(jobsActions.all()).then(() => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({ type: jobActionsTypes.FETCH_ALL_REQUEST });
-    expect(actions[1].alert.message).toBe("Authorization header missing");
+    expect(actions[1].alert.title).toBe("Authorization header missing");
   });
 });
 
@@ -196,7 +196,7 @@ it("delete one user", () => {
   return store.dispatch(usersActions.delete(user)).then(() => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({ type: userActionsTypes.DELETE_REQUEST });
-    expect(actions[1].alert.message).toBe("user user 1 deleted successfully!");
+    expect(actions[1].alert.title).toBe("user user 1 deleted successfully!");
     expect(actions[2]).toEqual({
       type: userActionsTypes.DELETE_SUCCESS,
       id: "u4"

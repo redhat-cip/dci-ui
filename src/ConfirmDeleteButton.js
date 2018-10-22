@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Button } from "patternfly-react";
 import ConfirmModal from "./ConfirmModal";
+import { Button } from "@patternfly/react-core";
+import { TrashIcon } from "@patternfly/react-icons";
 
 export default class ConfirmDeleteButton extends Component {
   constructor(props) {
@@ -35,8 +36,8 @@ export default class ConfirmDeleteButton extends Component {
         >
           {`Are you sure you want to delete ${resource.name}?`}
         </ConfirmModal>
-        <Button bsStyle="danger" onClick={this.showModal}>
-          <i className="fa fa-trash" />
+        <Button variant="danger" onClick={this.showModal}>
+          <TrashIcon />
         </Button>
       </React.Fragment>
     );

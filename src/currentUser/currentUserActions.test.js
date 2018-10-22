@@ -60,7 +60,7 @@ it("subscribeToARemoteci", () => {
       });
       expect(actions[1].type).toBe(alertaActionsTypes.SHOW_ALERT);
       expect(actions[1].alert.type).toBe("success");
-      expect(actions[1].alert.message).toBe(
+      expect(actions[1].alert.title).toBe(
         "You are subscribed to the remoteci remoteci 1"
       );
     });
@@ -86,8 +86,8 @@ it("subscribeToARemoteci error", () => {
     .then(() => {
       const action = store.getActions()[0];
       expect(action.type).toBe(alertaActionsTypes.SHOW_ALERT);
-      expect(action.alert.type).toBe("error");
-      expect(action.alert.message).toBe(
+      expect(action.alert.type).toBe("danger");
+      expect(action.alert.title).toBe(
         "Cannot subscribe to remoteci remoteci 3"
       );
     });
@@ -112,7 +112,7 @@ it("unsubscribeFromARemoteci", () => {
       });
       expect(actions[1].type).toBe(alertaActionsTypes.SHOW_ALERT);
       expect(actions[1].alert.type).toBe("warning");
-      expect(actions[1].alert.message).toBe(
+      expect(actions[1].alert.title).toBe(
         "You will no longer receive notification for the remoteci remoteci 2"
       );
     });
@@ -140,8 +140,8 @@ it("unsubscribeFromARemoteci error", () => {
     .then(() => {
       const action = store.getActions()[0];
       expect(action.type).toBe(alertaActionsTypes.SHOW_ALERT);
-      expect(action.alert.type).toBe("error");
-      expect(action.alert.message).toBe(
+      expect(action.alert.type).toBe("danger");
+      expect(action.alert.title).toBe(
         "Cannot unsubscribe to remoteci remoteci 4"
       );
     });

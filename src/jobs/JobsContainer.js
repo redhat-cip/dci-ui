@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ListView } from "patternfly-react";
 import jobsActions from "./jobsActions";
 import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { MainContent, FullHeightDiv } from "../layout";
-import { BlinkLogo, EmptyState } from "../ui";
+import { Page } from "../layout";
+import { EmptyState } from "../ui";
 import Toolbar from "./Toolbar";
 
 export class JobsContainer extends Component {
@@ -67,41 +66,45 @@ export class JobsContainer extends Component {
     const { jobs, isFetching, count, history } = this.props;
     const { filters, pagination } = this.state;
     return (
-      <MainContent>
-        <Toolbar
-          count={count}
-          pagination={pagination}
-          activeFilters={filters}
-          goTo={page => this._setPageAndFetchJobs(page)}
-          filterJobs={filters =>
-            this.setState({ filters }, () => this._setPageAndFetchJobs(1))
-          }
-          clearFilters={() =>
-            this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
-          }
-        />
-        {isFetching ? (
-          <FullHeightDiv>
-            <BlinkLogo />
-          </FullHeightDiv>
-        ) : isEmpty(jobs) ? (
+      <Page
+        title="Jobs"
+        loading={isFetching && isEmpty(jobs)}
+        empty={!isFetching && isEmpty(jobs)}
+        EmptyComponent={
           <EmptyState
             title="No job"
             info="There is no job at the moment. Edit your filters to restart a search."
-            icon={<i className="fa fa-frown-o fa-3x fa-fw" />}
           />
-        ) : (
-          <ListView className="mt-0">
-            {jobs.map(job => (
-              <JobSummary
-                key={`${job.id}.${job.etag}`}
-                job={job}
-                history={history}
-              />
-            ))}
-          </ListView>
-        )}
-      </MainContent>
+        }
+        Toolbar={
+          <Toolbar
+            count={count}
+            pagination={pagination}
+            activeFilters={filters}
+            goTo={page => this._setPageAndFetchJobs(page)}
+            filterJobs={filters =>
+              this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+            }
+            clearFilters={() =>
+              this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
+            }
+          />
+        }
+      >
+        <ul
+          className="pf-c-data-list pf-u-box-shadow-md"
+          role="list"
+          aria-label="job list"
+        >
+          {jobs.map(job => (
+            <JobSummary
+              key={`${job.id}.${job.etag}`}
+              job={job}
+              history={history}
+            />
+          ))}
+        </ul>
+      </Page>
     );
   }
 }
