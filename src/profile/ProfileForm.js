@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import { Button } from "patternfly-react";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
+import {
+  Button,
+  ActionGroup,
+  Toolbar,
+  ToolbarGroup
+} from "@patternfly/react-core";
 
 export default class ProfileForm extends Component {
   constructor(props) {
@@ -30,6 +35,7 @@ export default class ProfileForm extends Component {
     return (
       <Formsy
         id="profile-form"
+        className="pf-c-form"
         onValidSubmit={currentUser => submit(currentUser)}
         onValid={this.enableButton}
         onInvalid={this.disableButton}
@@ -76,13 +82,18 @@ export default class ProfileForm extends Component {
           type="password"
           value=""
         />
-        <Button
-          type="submit"
-          bsStyle="primary"
-          disabled={!this.state.canSubmit}
-        >
-          Update your settings
-        </Button>
+        <ActionGroup>
+          <Toolbar>
+            <ToolbarGroup>
+              <Button
+                type="submit"
+                disabled={!this.state.canSubmit}
+              >
+                Update your settings
+              </Button>
+            </ToolbarGroup>
+          </Toolbar>
+        </ActionGroup>
       </Formsy>
     );
   }

@@ -66,7 +66,7 @@ export class DCIToolbar extends Component {
                   );
                 })}
               </Filter.List>
-              <Button bsStyle="link" onClick={() => clearFilters()}>
+              <Button variant="link" onClick={() => clearFilters()}>
                 Clear All Filters
               </Button>
             </Toolbar.Results>

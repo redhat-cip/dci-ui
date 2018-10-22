@@ -2,19 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import LoginForm from "./LoginForm";
+import SSOForm from "./SSOForm";
 import { getCurrentUser } from "../currentUser/currentUserActions";
 import { setBasicToken } from "../services/localStorage";
 import Logo from "../logo.svg";
-import { Cover } from "../ui";
 import { showError } from "../alerts/alertsActions";
-import { SiteContent } from "../layout";
 
 export class LoginContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirectToReferrer: false,
-      seeLoginForm: false
+      redirectToReferrer: false
     };
   }
 
@@ -47,65 +45,55 @@ export class LoginContainer extends Component {
     }
 
     return (
-      <SiteContent>
-        <Cover className="login-pf-page">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-4">
-                <header className="login-pf-page-header">
-                  <img
-                    className="login-pf-brand mt-0"
-                    src={Logo}
-                    alt="Distributed CI"
-                  />
-                  <p>
-                    DCI or Distributed CI is a continuous integration project
-                    that aims to bring partners inside our CI framework by
-                    running CI on dedicated lab environments that are running in
-                    their data centers with their configurations and their
-                    applications.
-                  </p>
-                </header>
-                <div className="card-pf">
-                  <header className="login-pf-header">
-                    <h1>Log In to Your Account</h1>
-                  </header>
-                  {this.state.seeLoginForm ? (
-                    <LoginForm submit={this.submit} />
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-block btn-lg"
-                      onClick={() => {
-                        const redirectUri = `${window.location.origin}${
-                          from.pathname
-                        }`;
-                        window._sso.login({ redirectUri });
-                      }}
-                    >
-                      Red Hat SSO
-                    </button>
-                  )}
-
-                  <p className="login-pf-signup">
-                    <button
-                      type="button"
-                      className="btn btn-link"
-                      onClick={() =>
-                        this.setState(prevState => ({
-                          seeLoginForm: !prevState.seeLoginForm
-                        }))
-                      }
-                    >
-                      toggle login form
-                    </button>
-                  </p>
+      <React.Fragment>
+        <div className="pf-c-background-image " />
+        <div className="pf-l-login">
+          <div className="pf-l-login__container">
+            <header className="pf-l-login__header">
+              <div className="pf-l-login__header-brand">
+                <img className="pf-c-brand" src={Logo} alt="Distributed CI" />
+              </div>
+              <div className="pf-c-content">
+                <p>
+                  DCI or Distributed CI is a continuous integration project that
+                  aims to bring partners inside our CI framework by running CI
+                  on dedicated lab environments that are running in their data
+                  centers with their configurations and their applications.
+                </p>
+              </div>
+            </header>
+            <main className="pf-l-login__main">
+              <div className="pf-c-login-box">
+                <div className="pf-c-login-box__header">
+                  <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">SSO Login</h1>
+                </div>
+                <div className="pf-c-login-box__body">
+                  <SSOForm from={from} />
+                </div>
+                <div className="pf-c-login-box__header">
+                  <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">DCI Login</h1>
+                </div>
+                <div className="pf-c-login-box__body">
+                  <LoginForm submit={this.submit} />
                 </div>
               </div>
-            </div>
+            </main>
+            <footer className="pf-l-login__footer">
+              <ul className="pf-c-list pf-m-inline">
+                <li>
+                  <a
+                    href="https://doc.distributed-ci.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Documentation
+                  </a>
+                </li>
+              </ul>
+            </footer>
           </div>
-        </Cover>
-      </SiteContent>
+        </div>
+      </React.Fragment>
     );
   }
 }

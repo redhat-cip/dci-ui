@@ -6,9 +6,10 @@ import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { MainContent, FullHeightDiv } from "../layout";
-import { BlinkLogo, EmptyState } from "../ui";
+import { Page } from "../layout";
+import { EmptyState } from "../ui";
 import Toolbar from "./Toolbar";
+import { TimesIcon } from "@patternfly/react-icons";
 
 export class JobsContainer extends Component {
   constructor(props) {
@@ -67,7 +68,18 @@ export class JobsContainer extends Component {
     const { jobs, isFetching, count, history } = this.props;
     const { filters, pagination } = this.state;
     return (
-      <MainContent>
+      <Page
+        title="Jobs"
+        loading={isFetching && isEmpty(jobs)}
+        empty={!isFetching && isEmpty(jobs)}
+        EmptyComponent={
+          <EmptyState
+            title="No job"
+            info="There is no job at the moment. Edit your filters to restart a search."
+            icon={<i className="fa fa-frown-o fa-3x fa-fw" />}
+          />
+        }
+      >
         <Toolbar
           count={count}
           pagination={pagination}
@@ -80,28 +92,16 @@ export class JobsContainer extends Component {
             this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
           }
         />
-        {isFetching ? (
-          <FullHeightDiv>
-            <BlinkLogo />
-          </FullHeightDiv>
-        ) : isEmpty(jobs) ? (
-          <EmptyState
-            title="No job"
-            info="There is no job at the moment. Edit your filters to restart a search."
-            icon={<i className="fa fa-frown-o fa-3x fa-fw" />}
-          />
-        ) : (
-          <ListView className="mt-0">
-            {jobs.map(job => (
-              <JobSummary
-                key={`${job.id}.${job.etag}`}
-                job={job}
-                history={history}
-              />
-            ))}
-          </ListView>
-        )}
-      </MainContent>
+        <ListView className="mt-0">
+          {jobs.map(job => (
+            <JobSummary
+              key={`${job.id}.${job.etag}`}
+              job={job}
+              history={history}
+            />
+          ))}
+        </ListView>
+      </Page>
     );
   }
 }
