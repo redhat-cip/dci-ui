@@ -6,7 +6,7 @@ import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { MainContent, FullHeightDiv } from "../layout";
+import { MainContent } from "../layout";
 import { BlinkLogo, EmptyState } from "../ui";
 import Toolbar from "./Toolbar";
 
@@ -81,9 +81,7 @@ export class JobsContainer extends Component {
           }
         />
         {isFetching ? (
-          <FullHeightDiv>
             <BlinkLogo />
-          </FullHeightDiv>
         ) : isEmpty(jobs) ? (
           <EmptyState
             title="No job"

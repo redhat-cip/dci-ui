@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import actions from "../teams/teamsActions";
 import { CopyButton } from "../ui";
 import { EmptyState } from "../ui";
@@ -9,7 +9,6 @@ import NewTeamButton from "../teams/NewTeamButton";
 import EditTeamButton from "../teams/EditTeamButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 
 export class TeamsContainer extends Component {
   componentDidMount() {
@@ -18,8 +17,7 @@ export class TeamsContainer extends Component {
   render() {
     const { teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Teams"
           loading={isFetching && isEmpty(teams)}
           empty={!isFetching && isEmpty(teams)}
@@ -71,8 +69,7 @@ export class TeamsContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

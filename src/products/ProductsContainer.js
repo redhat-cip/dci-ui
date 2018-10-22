@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import productsActions from "./producstActions";
 import teamsActions from "../teams/teamsActions";
 import { CopyButton, EmptyState } from "../ui";
@@ -10,7 +10,6 @@ import EditProductButton from "./EditProductButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getProducts } from "./productSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 
 export class ProductsContainer extends Component {
   componentDidMount() {
@@ -20,8 +19,7 @@ export class ProductsContainer extends Component {
   render() {
     const { products, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Products"
           loading={isFetching && isEmpty(products)}
           empty={!isFetching && isEmpty(products)}
@@ -73,8 +71,7 @@ export class ProductsContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

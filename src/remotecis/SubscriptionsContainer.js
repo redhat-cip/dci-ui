@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { isEmpty, differenceBy } from "lodash";
 import remotecisActions from "./remotecisActions";
 import { getRemotecis } from "./remotecisSelectors";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import {
   Row,
   Col,
@@ -28,7 +28,7 @@ export class SubscriptionsContainer extends Component {
       "id"
     );
     return (
-      <MainContentWithLoader
+      <Page
         loading={isFetching && isEmpty(availableRemotecis)}
       >
         <Row>
@@ -56,7 +56,7 @@ export class SubscriptionsContainer extends Component {
             </Card>
           </Col>
         </Row>
-      </MainContentWithLoader>
+      </Page>
     );
   }
 }

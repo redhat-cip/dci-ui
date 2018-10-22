@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { Link } from "react-router-dom";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 
 export default class StatDetails extends Component {
   render() {
     const { stat } = this.props;
     return (
-      <DCICard className="mt-3" title={stat.topic_name}>
+      <Page className="mt-3" title={stat.topic_name}>
         <h3 className="global-status__component-name">
           component: {stat.name}
         </h3>
@@ -42,7 +42,7 @@ export default class StatDetails extends Component {
             </tbody>
           </table>
         )}
-      </DCICard>
+      </Page>
     );
   }
 }

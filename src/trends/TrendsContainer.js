@@ -5,7 +5,7 @@ import { Row, Col, SplitButton, MenuItem } from "patternfly-react";
 import topicsActions from "../topics/topicsActions";
 import { getTopics } from "../topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import TrendGraph from "./TrendGraph";
 import { EmptyState } from "../ui";
 
@@ -25,7 +25,7 @@ export class TrendsContainer extends Component {
     const { topics, trends } = this.props;
     const { topic } = this.state;
     return (
-      <MainContentWithLoader loading={isEmpty(trends) || isEmpty(topics)}>
+      <Page loading={isEmpty(trends) || isEmpty(topics)}>
         <Row>
           <Col xs={12}>
             <SplitButton
@@ -58,7 +58,7 @@ export class TrendsContainer extends Component {
             )}
           </Col>
         </Row>
-      </MainContentWithLoader>
+      </Page>
     );
   }
 }

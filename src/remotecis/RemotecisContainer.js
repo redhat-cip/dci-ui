@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Label, Button, Icon } from "patternfly-react";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import remotecisActions from "./remotecisActions";
 import teamsActions from "../teams/teamsActions";
 import { CopyButton } from "../ui";
@@ -12,7 +12,6 @@ import EditRemoteciButton from "./EditRemoteciButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 import { downloadRCFile } from "../services/runcom";
 
 export class RemotecisContainer extends Component {
@@ -23,8 +22,7 @@ export class RemotecisContainer extends Component {
   render() {
     const { remotecis, teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Remotecis"
           loading={isFetching && isEmpty(remotecis)}
           empty={!isFetching && isEmpty(remotecis)}
@@ -96,8 +94,7 @@ export class RemotecisContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Label } from "patternfly-react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { MainContent } from "../layout";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import productsActions from "../products/producstActions";
 import topicsActions from "./topicsActions";
 import { CopyButton } from "../ui";
@@ -20,8 +19,7 @@ export class TopicsContainer extends Component {
   render() {
     const { topics, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
+        <Page
           title="Topics"
           loading={isFetching && isEmpty(topics)}
           empty={!isFetching && isEmpty(topics)}
@@ -80,8 +78,7 @@ export class TopicsContainer extends Component {
               ))}
             </tbody>
           </table>
-        </DCICard>
-      </MainContent>
+        </Page>
     );
   }
 }
