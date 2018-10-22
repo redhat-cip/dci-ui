@@ -11,7 +11,6 @@ export default class IssuesList extends Component {
         <EmptyState
           title="No issues"
           info="There is no issues for this job"
-          button={<NewIssueButton createIssue={createIssue} />}
         />
       );
     return (

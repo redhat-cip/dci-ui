@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import UserForm from "./UserForm";
 import actions from "./usersActions";
+import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditUserButton extends Component {
   render() {
@@ -11,7 +12,7 @@ export class EditUserButton extends Component {
         {...props}
         title="Edit user"
         user={user}
-        showModalButton={<i className="fa fa-pencil" />}
+        showModalButton={<EditAltIcon />}
         okButton="Edit"
         submit={newUser => {
           editUser({

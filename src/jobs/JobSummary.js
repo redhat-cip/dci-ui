@@ -2,61 +2,65 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import {
-  ListViewItem,
-  DropdownKebab,
-  MenuItem,
   Button,
-  Icon
-} from "patternfly-react";
-import { Colors, Labels } from "../ui";
+  KebabToggle,
+  Dropdown,
+  DropdownItem,
+  DropdownPosition
+} from "@patternfly/react-core";
+import { Labels } from "../ui";
 import { formatDate, duration } from "../services/date";
-import { isEmpty } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import jobsActions from "./jobsActions";
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  StopCircleIcon,
+  PauseCircleIcon,
+  UsersIcon,
+  ServerIcon,
+  CubesIcon,
+  WarningTriangleIcon
+} from "@patternfly/react-icons";
+import {
+  global_danger_color_100,
+  global_success_color_100,
+  global_active_color_100,
+  global_warning_color_100,
+  global_Color_light_100
+} from "@patternfly/react-tokens";
 
-function getBackground(status, backgroundColor = Colors.white) {
+function getBackground(status, backgroundColor = global_Color_light_100.value) {
   switch (status) {
     case "success":
-      return `linear-gradient(to right,${Colors.green400} 0,${
-        Colors.green400
+      return `linear-gradient(to right,${global_success_color_100.value} 0,${
+        global_success_color_100.value
       } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     case "failure":
     case "error":
-      return `linear-gradient(to right,${Colors.red} 0,${
-        Colors.red
+      return `linear-gradient(to right,${global_danger_color_100.value} 0,${
+        global_danger_color_100.value
       } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     case "killed":
-      return `linear-gradient(to right,${Colors.orange400} 0,${
-        Colors.orange400
+      return `linear-gradient(to right,${global_warning_color_100.value} 0,${
+        global_warning_color_100.value
       } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     default:
-      return `linear-gradient(to right,${Colors.blue400} 0,${
-        Colors.blue400
+      return `linear-gradient(to right,${global_active_color_100.value} 0,${
+        global_active_color_100.value
       } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
   }
 }
 
-const Job = styled(ListViewItem)`
-  border-top: 1px solid ${Colors.black300} !important;
+const Job = styled.li`
+  align-items: center;
   background: ${props => getBackground(props.status)};
 `;
 
-const JobInfo = styled.div`
+const JobTests = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-const JobComponents = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const JobComponent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const JobTests = styled(JobInfo)``;
 
 const JobTest = styled.div`
   margin-bottom: 5px;
@@ -66,49 +70,58 @@ const JobTest = styled.div`
   }
 `;
 
-const JobExtraInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const JobDateInfo = styled(JobInfo)`
-  margin-right: 1em;
-`;
-
-function getIcon(job) {
-  switch (job.status) {
+function getIcon(status) {
+  switch (status) {
     case "success":
       return (
-        <i
-          className="fa fa-fw fa-2x fa-check-circle"
-          style={{ color: Colors.green400 }}
+        <CheckCircleIcon
+          size="lg"
+          style={{ color: global_success_color_100.value }}
         />
       );
     case "failure":
     case "error":
       return (
-        <i
-          className="fa fa-fw fa-2x fa-exclamation-circle"
-          style={{ color: Colors.red }}
+        <ExclamationCircleIcon
+          size="lg"
+          style={{ color: global_danger_color_100.value }}
         />
       );
     case "killed":
       return (
-        <i
-          className="fa fa-fw fa-2x fa-stop-circle"
-          style={{ color: Colors.orange400 }}
+        <StopCircleIcon
+          size="lg"
+          style={{ color: global_warning_color_100.value }}
         />
       );
     default:
       return (
-        <i
-          className="fa fa-fw fa-2x fa-pause-circle"
-          style={{ color: Colors.blue400 }}
+        <PauseCircleIcon
+          size="lg"
+          style={{ color: global_active_color_100.value }}
         />
       );
   }
 }
+
+const TextRed = styled.span`
+  color: ${global_danger_color_100.value};
+`;
+
+const RegressionWarningSpan = styled(TextRed)`
+  padding: 1em;
+`;
+
+const RegressionWarning = ({ regressions }) => (
+  <RegressionWarningSpan>
+    <span>( </span>
+    <WarningTriangleIcon
+      color={global_danger_color_100.value}
+      className="pf-u-mr-xs"
+    />
+    <span>{regressions} regressions )</span>
+  </RegressionWarningSpan>
+);
 
 function getRemoteciInfo(job) {
   if (job.rconfiguration && job.rconfiguration.name) {
@@ -117,109 +130,133 @@ function getRemoteciInfo(job) {
   return `${job.remoteci.name}`;
 }
 
+export class KebabDropdown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  onToggle = isOpen => {
+    this.setState({
+      isOpen
+    });
+  };
+
+  onSelect = event => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const { isOpen } = this.state;
+    const { children, ...props } = this.props;
+    return (
+      <Dropdown
+        onToggle={this.onToggle}
+        onSelect={this.onSelect}
+        toggle={<KebabToggle onToggle={this.onToggle} />}
+        isOpen={isOpen}
+        {...props}
+      >
+        {children}
+      </Dropdown>
+    );
+  }
+}
+
 export class JobSummary extends Component {
   render() {
     const {
       enhancedJob: job,
       deleteJob,
       currentUser,
-      history,
-      seeDetails = false
+      history
     } = this.props;
     if (typeof job.id === "undefined") return null;
+    const status = job.status;
     return (
-      <Job
-        status={job.status}
-        leftContent={getIcon(job)}
-        heading={
-          <JobInfo>
-            <span>
-              <b>{job.topic.name}</b>
-            </span>
-            {isEmpty(job.team) ? null : (
-              <span>
-                <i className="fa fa-fw fa-users mr-1" />
-                {job.team.name}
-              </span>
-            )}
-            <span>
-              <i className="fa fa-fw fa-server mr-1" />
-              {getRemoteciInfo(job)}
-            </span>
-            <span>
-              {job.metas.map((meta, i) => (
-                <span key={i} className="label label-primary mr-1">
-                  {meta.name}
-                </span>
-              ))}
-            </span>
-          </JobInfo>
-        }
-        description={
-          seeDetails ? (
-            <JobComponents>
-              <JobComponent>
-                <Icon name="cubes" className="mr-2" />
-              </JobComponent>
-              <JobComponent>
-                {job.components.map(component => (
-                  <span key={component.id}>{component.name}</span>
-                ))}
-              </JobComponent>
-            </JobComponents>
-          ) : null
-        }
-        additionalInfo={[
+      <Job status={status} className="pf-c-data-list__item">
+        <div className="pf-c-data-list__check">{getIcon(status)}</div>
+        <div className="pf-c-data-list__cell pf-m-flex-2">
+          <b>{job.topic.name}</b>
+          {isEmpty(job.team) ? null : (
+            <p>
+              <UsersIcon />
+              {job.team.name}
+            </p>
+          )}
+          <p>
+            <ServerIcon />
+            {getRemoteciInfo(job)}
+          </p>
+        </div>
+        <div className="pf-c-data-list__cell pf-m-flex-4">
+          <CubesIcon />
+          {job.components.map(component => (
+            <p key={component.id}>
+              <small>{component.name}</small>
+            </p>
+          ))}
+        </div>
+        <div className="pf-c-data-list__cell pf-m-flex-4">
           <JobTests key={`${job.id}.tests`}>
-            {job.results.map(test => (
-              <JobTest key={test.id}>
-                <span className="label label-success mr-1">{test.success}</span>
-                <span className="label label-warning mr-1">{test.skips}</span>
-                <span className="label label-danger mr-1">
-                  {test.errors + test.failures}
-                </span>
-                {test.regressions ? (
-                  <Labels.Regression className="mr-1">
-                    {test.regressions}
-                  </Labels.Regression>
-                ) : null}
-                <small>{test.name}</small>
-              </JobTest>
-            ))}
-          </JobTests>
-        ]}
-        actions={
-          <JobExtraInfo>
-            <JobDateInfo>
-              <time dateTime={job.created_at} title={job.created_at}>
-                <i className="fa fa-fw fa-calendar mr-1" />
-                {job.datetime}
-              </time>
-              {job.status !== "new" && job.status !== "running" ? (
-                <span title={`From ${job.created_at} to ${job.updated_at}`}>
-                  <i className="fa fa-fw fa-clock-o mr-1" />
-                  Ran for {job.duration}
-                </span>
-              ) : null}
-            </JobDateInfo>
-            {seeDetails ? null : (
-              <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
-                See details
-              </Button>
+            {orderBy(job.results, [test => test.name.toLowerCase()]).map(
+              test => (
+                <JobTest key={test.id}>
+                  <Labels.Success
+                    title={`${test.success} tests in success`}
+                    className="pf-u-mr-xs"
+                  >
+                    {test.success}
+                  </Labels.Success>
+                  <Labels.Warning
+                    title={`${test.skips} skipped tests`}
+                    className="pf-u-mr-xs"
+                  >
+                    {test.skips}
+                  </Labels.Warning>
+                  <Labels.Error
+                    title={`${test.errors +
+                      test.failures} errors and failures tests`}
+                    className="pf-u-mr-xs"
+                  >
+                    {test.errors + test.failures}
+                  </Labels.Error>
+                  <small>
+                    {test.name}
+                    {test.regressions && (
+                      <RegressionWarning regressions={test.regressions} />
+                    )}
+                  </small>
+                </JobTest>
+              )
             )}
-            {currentUser.hasAdminRole ? (
-              <DropdownKebab id="action2kebab" pullRight>
-                <MenuItem>
-                  <span className="text-danger" onClick={() => deleteJob(job)}>
-                    <Icon name="warning" className="mr-2" />
-                    delete job
-                  </span>
-                </MenuItem>
-              </DropdownKebab>
-            ) : null}
-          </JobExtraInfo>
-        }
-      />
+          </JobTests>
+        </div>
+        <div className="pf-c-data-list__cell">
+          <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
+            See details
+          </Button>
+        </div>
+        <div className="pf-c-data-list__action">
+          {currentUser.hasAdminRole ? (
+            <KebabDropdown position={DropdownPosition.right}>
+              <DropdownItem component="button" onClick={() => deleteJob(job)}>
+                <TextRed>
+                  <WarningTriangleIcon
+                    color={global_danger_color_100.value}
+                    className="pf-u-mr-xs"
+                  />
+                  delete job
+                </TextRed>
+              </DropdownItem>
+            </KebabDropdown>
+          ) : null}
+        </div>
+      </Job>
     );
   }
 }

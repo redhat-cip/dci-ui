@@ -23,18 +23,21 @@ it("hideAlert", () => {
   expect(actions.hideAlert(alert)).toEqual(expectedAction);
 });
 
-it("createAlertMessage", () => {
+it("createAlert", () => {
   const data = {
     _status: "Unauthorized",
     message:
       "Could not verify your access level for that URL. Please login with proper credentials."
   };
-  expect(actions.createAlertMessage({ data, status: 401 })).toBe(
+  const alert = actions.createAlert({ data, status: 401 });
+  expect(alert.title).toBe(
     "Could not verify your access level for that URL. Please login with proper credentials."
   );
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe("");
 });
 
-it("createAlertMessage with one error", () => {
+it("createAlert with one error", () => {
   const data = {
     message: "conflict on topics",
     payload: {
@@ -44,12 +47,13 @@ it("createAlertMessage with one error", () => {
     },
     status_code: 409
   };
-  expect(actions.createAlertMessage({ data, status: 409 })).toBe(
-    "conflict on topics\nname: already_exists"
-  );
+  const alert = actions.createAlert({ data, status: 409 });
+  expect(alert.title).toBe("conflict on topics");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe("name: already_exists");
 });
 
-it("createAlertMessage with multiple errors", () => {
+it("createAlert with multiple errors", () => {
   const data = {
     message: "Request malformed",
     payload: {
@@ -60,33 +64,41 @@ it("createAlertMessage with multiple errors", () => {
     },
     status_code: 400
   };
-  expect(actions.createAlertMessage({ data, status: 400 })).toBe(
-    "Request malformed\nname: already_exists\nteam_id: not a valid team id"
+  const alert = actions.createAlert({ data, status: 400 });
+  expect(alert.title).toBe("Request malformed");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe(
+    "name: already_exists\nteam_id: not a valid team id"
   );
 });
 
-it("createAlertMessage with empty payload", () => {
+it("createAlert with empty payload", () => {
   const data = {
     message: "Request malformed",
     payload: {},
     status_code: 400
   };
-  expect(actions.createAlertMessage({ data, status: 400 })).toBe(
-    "Request malformed"
-  );
+  const alert = actions.createAlert({ data, status: 400 });
+  expect(alert.title).toBe("Request malformed");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe("");
 });
 
-it("createAlertMessage with unknown format", () => {
+it("createAlert with unknown format", () => {
   const data = {
     error: "Request malformed"
   };
-  expect(actions.createAlertMessage({ data, status: 400 })).toBe(
-    "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
-  );
+  const alert = actions.createAlert({ data, status: 400 });
+  expect(alert.title).toBe("Request malformed");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe("");
 });
 
-it("createAlertMessage with no data format", () => {
-  expect(actions.createAlertMessage({ status: 400 })).toBe(
+it("createAlert with no data format", () => {
+  const alert = actions.createAlert({ status: 400 });
+  expect(alert.title).toBe("Unknown error");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe(
     "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
   );
 });

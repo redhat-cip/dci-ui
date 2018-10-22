@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  Nav,
-  NavItem,
-  Card,
-  CardBody,
-  TabContent,
-  TabPane,
-  TabContainer,
-  ListView
-} from "patternfly-react";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import { connect } from "react-redux";
 import FilesList from "./files/FilesList";
 import IssuesList from "./issues/IssuesList";
@@ -20,6 +10,17 @@ import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
+import {
+  Nav,
+  NavList,
+  NavItem,
+  NavVariants,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter
+} from "@patternfly/react-core";
 
 export class JobContainer extends Component {
   constructor(props) {
@@ -31,12 +32,13 @@ export class JobContainer extends Component {
         issues: [],
         files: []
       },
-      isFetching: true
+      isFetching: true,
+      tab: "jobStates"
     };
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
+    const { id, tab } = this.props.match.params;
     this.props
       .fetchJob(id)
       .then(response => {
@@ -52,7 +54,8 @@ export class JobContainer extends Component {
                 tests: values[0].data.results,
                 jobstates: values[1].data.jobstates,
                 issues: values[2].data.issues
-              }
+              },
+              tab
             });
           }
         );
@@ -94,86 +97,66 @@ export class JobContainer extends Component {
     );
   };
 
+  onNavSelect = result => {
+    const tabs = { 0: "jobStates", 1: "tests", 2: "issues", 3: "files" };
+    this.setState({ tab: tabs[result.itemId] });
+  };
+
   render() {
-    const { match, history } = this.props;
-    const { job, isFetching } = this.state;
-    const { id, tab } = match.params;
+    const { history } = this.props;
+    const { job, isFetching, tab } = this.state;
     const tabsIndexes = {
-      jobStates: 1,
-      tests: 2,
-      issues: 3,
-      files: 4
+      jobStates: { id: 0, name: "Logs" },
+      tests: { id: 1, name: "Tests" },
+      issues: { id: 2, name: "Issues" },
+      files: { id: 3, name: "Files" }
     };
+    const activeTab = tabsIndexes[tab];
+    const activeId = activeTab.id;
+    const topNav = (
+      <Nav onSelect={this.onNavSelect} aria-label="Nav">
+        <NavList variant={NavVariants.horizontal}>
+          <NavItem itemId={0} isActive={activeId === 0}>
+            <span>Logs</span>
+          </NavItem>
+          <NavItem itemId={1} isActive={activeId === 1}>
+            <span>Tests</span>
+          </NavItem>
+          <NavItem itemId={2} isActive={activeId === 2}>
+            <span>Issues</span>
+          </NavItem>
+          <NavItem itemId={3} isActive={activeId === 3}>
+            <span>Files</span>
+          </NavItem>
+        </NavList>
+      </Nav>
+    );
     return (
-      <MainContentWithLoader loading={isFetching}>
-        <ListView>
-          <JobSummary seeDetails job={job} history={history} />
-        </ListView>
-        <TabContainer id="basic-tabs" defaultActiveKey={tabsIndexes[tab]}>
-          <React.Fragment>
-            <Nav bsClass="nav nav-tabs">
-              <NavItem
-                onClick={() => history.push(`/jobs/${id}/jobStates`)}
-                eventKey={1}
-              >
-                Logs
-              </NavItem>
-              <NavItem
-                onClick={() => history.push(`/jobs/${id}/tests`)}
-                eventKey={2}
-              >
-                Tests
-              </NavItem>
-              <NavItem
-                onClick={() => history.push(`/jobs/${id}/issues`)}
-                eventKey={3}
-              >
-                Issues
-              </NavItem>
-              <NavItem
-                onClick={() => history.push(`/jobs/${id}/files`)}
-                eventKey={4}
-              >
-                Files
-              </NavItem>
-            </Nav>
-            <TabContent>
-              <TabPane eventKey={1}>
-                <Card>
-                  <CardBody>
-                    <JobStatesList jobstates={job.jobstates} />
-                  </CardBody>
-                </Card>
-              </TabPane>
-              <TabPane eventKey={2}>
-                <Card>
-                  <CardBody>
-                    <TestsList tests={job.tests} />
-                  </CardBody>
-                </Card>
-              </TabPane>
-              <TabPane eventKey={3}>
-                <Card>
-                  <CardBody>
-                    <IssuesList
-                      issues={job.issues}
-                      createIssue={this.createIssue}
-                      deleteIssue={this.deleteIssue}
-                    />
-                  </CardBody>
-                </Card>
-              </TabPane>
-              <TabPane eventKey={4}>
-                <Card>
-                  <CardBody>
-                    <FilesList files={job.files} />
-                  </CardBody>
-                </Card>
-              </TabPane>
-            </TabContent>
-          </React.Fragment>
-        </TabContainer>
-      </MainContentWithLoader>
+      <Page title={activeTab.name} topNav={topNav} loading={isFetching}>
+        <div class="pf-l-stack pf-m-gutter">
+          <div class="pf-l-stack__item">
+            <ul
+              className="pf-c-data-list pf-u-box-shadow-md"
+              role="list"
+              aria-label="job detail"
+            >
+              <JobSummary job={job} history={history} />
+            </ul>
+          </div>
+          <div class="pf-l-stack__item pf-m-main">
+            {activeId === 0 && <JobStatesList jobstates={job.jobstates} />}
+            {activeId === 1 && <TestsList tests={job.tests} />}
+            {activeId === 2 && (
+              <IssuesList
+                issues={job.issues}
+                createIssue={this.createIssue}
+                deleteIssue={this.deleteIssue}
+              />
+            )}
+            {activeId === 3 && <FilesList files={job.files} />}
+          </div>
+        </div>
+      </Page>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 
@@ -49,6 +49,7 @@ export default class UserForm extends Component {
         >
           <Formsy
             id="user-form"
+            className="pf-c-form"
             onValidSubmit={user => {
               this.closeModal();
               submit(user);
@@ -115,7 +116,7 @@ export default class UserForm extends Component {
         </FormModal>
         <Button
           id="users-screen__show-modal-button"
-          bsStyle="primary"
+          variant="primary"
           className={this.props.className}
           onClick={this.showModal}
         >

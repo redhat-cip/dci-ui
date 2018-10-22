@@ -1,18 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Label, Button, Icon } from "patternfly-react";
+import { Icon } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
-import DCICard from "../DCICard";
+import { Page } from "../layout";
 import remotecisActions from "./remotecisActions";
 import teamsActions from "../teams/teamsActions";
-import { CopyButton } from "../ui";
-import { EmptyState } from "../ui";
+import { CopyButton, Labels, EmptyState } from "../ui";
 import NewRemoteciButton from "./NewRemoteciButton";
 import EditRemoteciButton from "./EditRemoteciButton";
 import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "../teams/teamsSelectors";
-import { MainContent } from "../layout";
 import { downloadRCFile } from "../services/runcom";
 
 export class RemotecisContainer extends Component {
@@ -23,81 +22,78 @@ export class RemotecisContainer extends Component {
   render() {
     const { remotecis, teams, isFetching } = this.props;
     return (
-      <MainContent>
-        <DCICard
-          title="Remotecis"
-          loading={isFetching && isEmpty(remotecis)}
-          empty={!isFetching && isEmpty(remotecis)}
-          HeaderButton={
-            <NewRemoteciButton teams={teams} className="pull-right" />
-          }
-          EmptyComponent={
-            <EmptyState
-              title="There is no remotecis"
-              info="Do you want to create one?"
-              button={<NewRemoteciButton teams={teams} />}
-            />
-          }
-        >
-          <table className="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th className="text-center">ID</th>
-                <th>Name</th>
-                <th className="text-center">Status</th>
-                <th className="text-center" title="Download run commands file">
-                  Download rc file
-                </th>
-                <th className="text-center">Team</th>
-                <th>Created</th>
-                <th className="text-center">Actions</th>
+      <Page
+        title="Remotecis"
+        loading={isFetching && isEmpty(remotecis)}
+        empty={!isFetching && isEmpty(remotecis)}
+        HeaderButton={<NewRemoteciButton teams={teams} />}
+        EmptyComponent={
+          <EmptyState
+            title="There is no remotecis"
+            info="Do you want to create one?"
+            button={<NewRemoteciButton teams={teams} />}
+          />
+        }
+      >
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
+          <thead>
+            <tr>
+              <th className="pf-u-text-align-center">ID</th>
+              <th>Name</th>
+              <th className="pf-u-text-align-center">Status</th>
+              <th
+                className="pf-u-text-align-center"
+                title="Download run commands file"
+              >
+                Download rc file
+              </th>
+              <th className="pf-u-text-align-center">Team</th>
+              <th>Created</th>
+              <th className="pf-u-text-align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {remotecis.map(remoteci => (
+              <tr key={`${remoteci.id}.${remoteci.etag}`}>
+                <td className="pf-u-text-align-center">
+                  <CopyButton text={remoteci.id} />
+                </td>
+                <td>{remoteci.name}</td>
+                <td className="pf-u-text-align-center">
+                  {remoteci.state === "active" ? (
+                    <Labels.Success>active</Labels.Success>
+                  ) : (
+                    <Labels.Error>inactive</Labels.Error>
+                  )}
+                </td>
+                <td className="pf-u-text-align-center">
+                  <Button onClick={() => downloadRCFile(remoteci, "remoteci")}>
+                    <Icon type="fa" name="download" /> remotecirc.sh
+                  </Button>
+                </td>
+                <td className="pf-u-text-align-center">
+                  {remoteci.team ? remoteci.team.name.toUpperCase() : null}
+                </td>
+                <td>{remoteci.from_now}</td>
+                <td className="pf-u-text-align-center">
+                  <EditRemoteciButton
+                    className="pf-u-mr-xl"
+                    remoteci={remoteci}
+                    teams={teams}
+                  />
+                  <ConfirmDeleteButton
+                    name="remoteci"
+                    resource={remoteci}
+                    whenConfirmed={remoteci =>
+                      this.props.deleteRemoteci(remoteci)
+                    }
+                  />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {remotecis.map(remoteci => (
-                <tr key={`${remoteci.id}.${remoteci.etag}`}>
-                  <td className="text-center">
-                    <CopyButton text={remoteci.id} />
-                  </td>
-                  <td>{remoteci.name}</td>
-                  <td className="text-center">
-                    {remoteci.state === "active" ? (
-                      <Label bsStyle="success">active</Label>
-                    ) : (
-                      <Label bsStyle="danger">inactive</Label>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    <Button
-                      onClick={() => downloadRCFile(remoteci, "remoteci")}
-                    >
-                      <Icon type="fa" name="download" /> remotecirc.sh
-                    </Button>
-                  </td>
-                  <td className="text-center">
-                    {remoteci.team ? remoteci.team.name.toUpperCase() : null}
-                  </td>
-                  <td>{remoteci.from_now}</td>
-                  <td className="text-center">
-                    <EditRemoteciButton
-                      className="mr-1"
-                      remoteci={remoteci}
-                      teams={teams}
-                    />
-                    <ConfirmDeleteButton
-                      name="remoteci"
-                      resource={remoteci}
-                      whenConfirmed={remoteci =>
-                        this.props.deleteRemoteci(remoteci)
-                      }
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </DCICard>
-      </MainContent>
+            ))}
+          </tbody>
+        </table>
+      </Page>
     );
   }
 }

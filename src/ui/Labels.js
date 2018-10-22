@@ -1,11 +1,56 @@
+import React from "react";
 import styled from "styled-components";
-import { Colors } from "../ui";
-import { Label } from "patternfly-react";
+import {
+  global_danger_color_100,
+  global_success_color_100,
+  global_warning_color_100
+} from "@patternfly/react-tokens";
+
+const Label = ({ children, className, ...props }) => (
+  <span {...props} className={`pf-c-label ${className}`}>
+    {children}
+  </span>
+);
 
 const RegressionLabel = styled(Label)`
-  background-color: ${Colors.purple300};
+  background-color: ${global_danger_color_100.value};
+  &:hover {
+    background-color: ${global_danger_color_100.value};
+  }
+`;
+
+const SuccessLabel = styled(Label)`
+  background-color: ${global_success_color_100.value};
+  &:hover {
+    background-color: ${global_success_color_100.value};
+  }
+`;
+
+const ErrorLabel = styled(Label)`
+  background-color: ${global_danger_color_100.value};
+  &:hover {
+    background-color: ${global_danger_color_100.value};
+  }
+`;
+
+const FailureLabel = styled(Label)`
+  background-color: ${global_danger_color_100.value};
+  &:hover {
+    background-color: ${global_danger_color_100.value};
+  }
+`;
+
+const WarningLabel = styled(Label)`
+  background-color: ${global_warning_color_100.value};
+  &:hover {
+    background-color: ${global_warning_color_100.value};
+  }
 `;
 
 export default {
+  Success: SuccessLabel,
+  Error: ErrorLabel,
+  Failure: FailureLabel,
+  Warning: WarningLabel,
   Regression: RegressionLabel
 };

@@ -4,6 +4,7 @@ import C3Chart from "react-c3js";
 import moment from "moment";
 import { isEmpty } from "lodash";
 import { EmptyState } from "../ui";
+import { TimesIcon } from "@patternfly/react-icons";
 
 const GraphContainer = styled.div`
   width: 100%;
@@ -29,7 +30,6 @@ export default class TrendGraph extends Component {
     if (isEmpty(trend)) return <EmptyState
     title="No stat"
     info={`There is no stats for topic ${topic.name}.`}
-    icon={<i className="fa fa-line-chart fa-3x fa-fw" />}
   />;
     const rows = trend.reduce(
       (acc, trend) => {

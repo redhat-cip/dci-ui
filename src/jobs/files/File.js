@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FileSaver from "file-saver";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
 import { humanFileSize } from "./filesGetters";
+import { SpinnerIcon, FileDownloadIcon } from "@patternfly/react-icons";
 
 export class File extends Component {
   constructor(props) {
@@ -35,17 +36,13 @@ export class File extends Component {
         <td>{file.name}</td>
         <td>{humanFileSize(file.size)}</td>
         <td>{file.mime}</td>
-        <td className="text-center">
+        <td className="pf-u-text-align-center">
           <Button
-            bsStyle="primary"
+            variant="primary"
             onClick={() => this.downloadFile(file)}
             disabled={downloading}
           >
-            {downloading ? (
-              <i className="fa fa-spinner fa-pulse fa-fw" />
-            ) : (
-              <i className="fa fa-file-o fa-fw" />
-            )}
+            {downloading ? <SpinnerIcon /> : <FileDownloadIcon />}
             download
           </Button>
         </td>
