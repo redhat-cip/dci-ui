@@ -8,6 +8,7 @@ import {
   Pre,
   DurationLabel
 } from "./JobStateComponents";
+import { TimesIcon } from "@patternfly/react-icons";
 
 export class JobStateFile extends Component {
   constructor(props) {

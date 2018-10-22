@@ -10,6 +10,9 @@
     "url": "https://github.com/redhat-cip/dci-ui"
   },
   "dependencies": {
+    "@patternfly/patternfly-next": "^1.0.61",
+    "@patternfly/react-core": "^1.25.6",
+    "@patternfly/react-icons": "^2.5.2",
     "axios": "^0.18.0",
     "balloon-css": "^0.5.0",
     "c3": "^0.6.7",

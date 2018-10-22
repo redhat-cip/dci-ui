@@ -1,15 +1,52 @@
-import styled from "styled-components";
+import React, { Component } from "react";
+import { isEmpty } from "lodash";
+import {
+  PageSection,
+  PageSectionVariants,
+  TextContent,
+  Bullseye,
+  Text
+} from "@patternfly/react-core";
+import { BlinkLogo } from "../ui";
+import MainContent from "./MainContent";
 
-const Page = styled.div`
-  @media (min-width: 480px) {
-    display: grid;
-    grid-template-columns: 100px auto;
-    grid-template-rows: 60px auto;
+export default class Page extends Component {
+  render() {
+    const {
+      HeaderButton,
+      title,
+      description,
+      Toolbar,
+      loading,
+      empty,
+      EmptyComponent,
+      children,
+      ...props
+    } = this.props;
+    return (
+      <MainContent>
+        <PageSection variant={PageSectionVariants.light}>
+          <TextContent>
+            <Text component="h1">{title}</Text>
+            {HeaderButton}
+            {description ? <Text component="p">{description}</Text> : null}
+          </TextContent>
+        </PageSection>
+        {isEmpty(Toolbar) ? null : (
+          <PageSection variant={PageSectionVariants.light}>
+            {Toolbar}
+          </PageSection>
+        )}
+        <PageSection>
+          {loading ? (
+            <Bullseye>
+              <BlinkLogo />
+            </Bullseye>
+          ) : null}
+          {!loading && empty ? <Bullseye>{EmptyComponent}</Bullseye> : null}
+          {!loading && !empty ? children : null}
+        </PageSection>
+      </MainContent>
+    );
   }
-
-  @media (min-width: 960px) {
-    grid-template-columns: 220px auto;
-  }
-`;
-
-export default Page;
+}

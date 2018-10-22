@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, HiddenInput } from "../form";
 
@@ -27,6 +27,7 @@ export default class ChangePasswordForm extends Component {
     return (
       <Formsy
         id="change-password-form"
+        className="pf-c-form"
         onValidSubmit={currentUser => submit(currentUser)}
         onValid={this.enableButton}
         onInvalid={this.disableButton}
@@ -54,7 +55,7 @@ export default class ChangePasswordForm extends Component {
         />
         <Button
           type="submit"
-          bsStyle="primary"
+          variant="primary"
           disabled={!this.state.canSubmit}
         >
           Change your password

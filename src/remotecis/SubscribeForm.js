@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import Formsy from "formsy-react";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import { Select } from "../form";
 import { subscribeToARemoteci } from "../currentUser/currentUserActions";
 
@@ -31,6 +31,7 @@ export class SubscribeForm extends Component {
     return (
       <Formsy
         id="subscription-form"
+        className="pf-c-form"
         onValid={this.enableButton}
         onInvalid={this.disableButton}
         onValidSubmit={remoteci => {
@@ -48,7 +49,7 @@ export class SubscribeForm extends Component {
         <Button
           id="subscription-form__submitButton"
           type="submit"
-          bsStyle="primary"
+          variant="primary"
           disabled={!this.state.canSubmit}
         >
           Subscribe

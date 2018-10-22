@@ -19,12 +19,14 @@ it("createTeamsFilter", () => {
         {
           key: "remoteci_id",
           title: "r1",
+          placeholder: "r1",
           value: "r1"
         }
       ],
       id: "t1",
       key: "team_id",
       title: "t1",
+      placeholder: "t1",
       value: "t1"
     }
   ];

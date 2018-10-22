@@ -3,19 +3,12 @@ import { connect } from "react-redux";
 import { isEmpty, differenceBy } from "lodash";
 import remotecisActions from "./remotecisActions";
 import { getRemotecis } from "./remotecisSelectors";
-import { MainContentWithLoader } from "../layout";
-import {
-  Row,
-  Col,
-  Card,
-  CardHeading,
-  CardTitle,
-  CardBody
-} from "patternfly-react";
+import { Page } from "../layout";
+import { Row, Col } from "patternfly-react";
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
 
-export class SubscriptionsContainer extends Component {
+export class NotificationsContainer extends Component {
   componentDidMount() {
     this.props.fetchRemotecis();
   }
@@ -28,35 +21,22 @@ export class SubscriptionsContainer extends Component {
       "id"
     );
     return (
-      <MainContentWithLoader
+      <Page
+        title="Notifications"
+        description="Subscribe to remotecis notifications. You will receive an email for each job in failure."
         loading={isFetching && isEmpty(availableRemotecis)}
       >
-        <Row>
+        <Row className="py-5">
           <Col xs={12} md={6}>
-            <Card>
-              <CardHeading>
-                <CardTitle>Subscriptions</CardTitle>
-              </CardHeading>
-              <CardBody>
-                <p>
-                  Subscribe to remotecis notifications. You will receive an
-                  email for each job in failure.
-                </p>
-                <Row className="py-5">
-                  <Col xs={12} md={6}>
-                    <SubscribeForm remotecis={availableRemotecis} />
-                  </Col>
-                </Row>
-                <Row className="pb-5">
-                  <Col xs={12} md={6}>
-                    <UnsubscribeForm remotecis={currentUser.remotecis} />
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
+            <SubscribeForm remotecis={availableRemotecis} />
           </Col>
         </Row>
-      </MainContentWithLoader>
+        <Row className="pb-5">
+          <Col xs={12} md={6}>
+            <UnsubscribeForm remotecis={currentUser.remotecis} />
+          </Col>
+        </Row>
+      </Page>
     );
   }
 }
@@ -81,4 +61,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SubscriptionsContainer);
+)(NotificationsContainer);
