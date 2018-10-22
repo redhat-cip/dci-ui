@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FormModal from "../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 import { isEmpty } from "lodash";
@@ -56,6 +56,7 @@ export default class RemoteciForm extends Component {
         >
           <Formsy
             id="remoteci-form"
+            className="pf-c-form"
             onValidSubmit={remoteci => {
               this.closeModal();
               submit(remoteci);
@@ -88,7 +89,7 @@ export default class RemoteciForm extends Component {
           </Formsy>
         </FormModal>
         <Button
-          bsStyle="primary"
+          variant="primary"
           className={className}
           onClick={this.showModal}
         >

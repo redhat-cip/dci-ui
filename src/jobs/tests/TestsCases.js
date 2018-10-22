@@ -1,35 +1,34 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
-import { EmptyState } from "../../ui";
+import { EmptyState, Filter } from "../../ui";
 import TestsCase from "./TestsCase";
-import { ListFilter } from "../Filters";
 
 export default class TestsCases extends Component {
   constructor(props) {
     super(props);
     const filters = [
       {
-        title: "All",
+        name: "All",
         key: "status",
         value: null
       },
       {
-        title: "Passed",
+        name: "Passed",
         key: "status",
         value: "passed"
       },
       {
-        title: "Skipped",
+        name: "Skipped",
         key: "status",
         value: "skipped"
       },
       {
-        title: "Failure",
+        name: "Failure",
         key: "status",
         value: "failure"
       },
       {
-        title: "Error",
+        name: "Error",
         key: "status",
         value: "error"
       }
@@ -56,7 +55,7 @@ export default class TestsCases extends Component {
     });
     return (
       <div>
-        <ListFilter
+        <Filter
           placeholder="Filter by Status"
           filter={filter}
           filters={filters}
@@ -77,7 +76,7 @@ export default class TestsCases extends Component {
                 <th>Status</th>
                 <th>Classname</th>
                 <th>Name</th>
-                <th className="text-right">Time</th>
+                <th className="pf-u-text-align-right">Time</th>
               </tr>
             </thead>
             <tbody>

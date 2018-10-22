@@ -1,32 +1,33 @@
 import React, { Component } from "react";
 import { Labels } from "../../ui";
+import { Button } from "@patternfly/react-core";
 
 export default class TestHeader extends Component {
   render() {
     const { test, toggleDetails } = this.props;
     return (
       <h2 className="page-header">
-        <span className="mr-3">{test.name || "Test"}</span>
-        <small className="mr-3">(Duration: {test.time} msec)</small>
+        <span className="pf-u-mr-xl">{test.name || "Test"}</span>
+        <small className="pf-u-mr-xl">(Duration: {test.time} msec)</small>
         <small>
-          <span className="label label-primary mr-1">{test.total} tests</span>
+          <span className="label label-primary pf-u-mr-xl">{test.total} tests</span>
           {test.success ? (
-            <span className="label label-success mr-1">
+            <span className="label label-success pf-u-mr-xl">
               {test.success} success
             </span>
           ) : null}
           {test.skips ? (
-            <span className="label label-warning mr-1">
+            <span className="label label-warning pf-u-mr-xl">
               {test.skips} skipped
             </span>
           ) : null}
           {test.errors ? (
-            <span className="label label-default mr-1">
+            <span className="label label-default pf-u-mr-xl">
               {test.errors} errors
             </span>
           ) : null}
           {test.failures ? (
-            <span className="label label-danger mr-1">
+            <span className="label label-danger pf-u-mr-xl">
               {test.failures} failures
             </span>
           ) : null}
@@ -36,13 +37,13 @@ export default class TestHeader extends Component {
             </Labels.Regression>
           ) : null}
         </small>
-        <button
+        <Button
           type="button"
-          className="btn btn-default pull-right"
+          variant="tertiary"
           onClick={() => toggleDetails()}
         >
           See Details
-        </button>
+        </Button>
       </h2>
     );
   }

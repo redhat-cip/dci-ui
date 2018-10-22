@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import { Colors } from "../../ui";
-import { Label } from "patternfly-react";
-
-const LabelRegression = styled(Label)`
-  background-color: ${Colors.purple300};
-`;
+import { Labels } from "../../ui";
+import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 
 export default class Testcases extends Component {
   constructor(props) {
@@ -29,33 +24,29 @@ export default class Testcases extends Component {
     return (
       <React.Fragment>
         <tr>
-          <td onClick={this.toggleDetails} className="text-center">
-            {seeDetails ? (
-              <span className="fa fa-caret-down code__icon" />
-            ) : (
-              <span className="fa fa-caret-right code__icon" />
-            )}
+          <td onClick={this.toggleDetails} className="pf-u-text-align-center">
+            {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
           </td>
           <td>
-            {testscase.action === "skipped" ? (
-              <Label bsStyle="warning">Skip</Label>
-            ) : null}
-            {testscase.action === "failure" ? (
-              <Label bsStyle="danger">Failure</Label>
-            ) : null}
-            {testscase.action === "error" ? (
-              <Label bsStyle="danger">Error</Label>
-            ) : null}
-            {testscase.action === "passed" ? (
-              <Label bsStyle="success">Pass</Label>
-            ) : null}
-            {testscase.regression ? (
-              <LabelRegression>Regression</LabelRegression>
-            ) : null}
+            {testscase.action === "skipped" && (
+              <Labels.Warning>Skip</Labels.Warning>
+            )}
+            {testscase.action === "failure" && (
+              <Labels.Failure>Failure</Labels.Failure>
+            )}
+            {testscase.action === "error" && <Labels.Error>Error</Labels.Error>}
+            {testscase.action === "passed" && (
+              <Labels.Success>Pass</Labels.Success>
+            )}
+            {testscase.regression && (
+              <Labels.Regression>Regression</Labels.Regression>
+            )}
           </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>
-          <td className="text-right col-xs-1">{testscase.time} ms</td>
+          <td className="pf-u-text-align-right col-xs-1">
+            {testscase.time} ms
+          </td>
         </tr>
         {seeDetails ? (
           <tr style={{ borderTop: 0 }}>

@@ -3,17 +3,11 @@ import { connect } from "react-redux";
 import { isEmpty, differenceBy } from "lodash";
 import remotecisActions from "./remotecisActions";
 import { getRemotecis } from "./remotecisSelectors";
-import { MainContentWithLoader } from "../layout";
-import {
-  Row,
-  Col,
-  Card,
-  CardHeading,
-  CardTitle,
-  CardBody
-} from "patternfly-react";
+import { Page } from "../layout";
+import { Grid, GridItem } from "@patternfly/react-core";
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
+import { EmptyState } from "../ui";
 
 export class NotificationsContainer extends Component {
   componentDidMount() {
@@ -28,35 +22,27 @@ export class NotificationsContainer extends Component {
       "id"
     );
     return (
-      <MainContentWithLoader
+      <Page
+        title="Notifications"
+        description="Subscribe to remotecis notifications. You will receive an email for each job in failure."
         loading={isFetching && isEmpty(availableRemotecis)}
+        empty={!isFetching && isEmpty(availableRemotecis) && isEmpty(currentUser.remotecis)}
+        EmptyComponent={
+          <EmptyState
+            title="No remoteci"
+            info="There is no remoteci you can subscribe to."
+          />
+        }
       >
-        <Row>
-          <Col xs={12} md={6}>
-            <Card>
-              <CardHeading>
-                <CardTitle>Notifications</CardTitle>
-              </CardHeading>
-              <CardBody>
-                <p>
-                  Subscribe to remotecis notifications. You will receive an
-                  email for each job in failure.
-                </p>
-                <Row className="py-5">
-                  <Col xs={12} md={6}>
-                    <SubscribeForm remotecis={availableRemotecis} />
-                  </Col>
-                </Row>
-                <Row className="pb-5">
-                  <Col xs={12} md={6}>
-                    <UnsubscribeForm remotecis={currentUser.remotecis} />
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </MainContentWithLoader>
+        <Grid gutter="md">
+          <GridItem span={6}>
+            <SubscribeForm remotecis={availableRemotecis} />
+          </GridItem>
+          <GridItem span={6}>
+            <UnsubscribeForm remotecis={currentUser.remotecis} />
+          </GridItem>
+        </Grid>
+      </Page>
     );
   }
 }

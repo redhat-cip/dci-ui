@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { Row, Col, SplitButton, MenuItem } from "patternfly-react";
+import { Bullseye } from "@patternfly/react-core";
 import topicsActions from "../topics/topicsActions";
 import { getTopics } from "../topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
-import { MainContentWithLoader } from "../layout";
+import { Page } from "../layout";
 import TrendGraph from "./TrendGraph";
 import { EmptyState } from "../ui";
+import { Filter } from "../ui";
+import { MessagesIcon } from "@patternfly/react-icons";
 
 export class TrendsContainer extends Component {
   constructor(props) {
@@ -22,43 +24,40 @@ export class TrendsContainer extends Component {
   }
 
   render() {
-    const { topics, trends } = this.props;
+    const { topics, trends, isFetching } = this.props;
     const { topic } = this.state;
     return (
-      <MainContentWithLoader loading={isEmpty(trends) || isEmpty(topics)}>
-        <Row>
-          <Col xs={12}>
-            <SplitButton
-              bsStyle="default"
-              id="trends_topic_select"
-              title={isEmpty(topic) ? "Select a topic" : topic.name}
-              className="mb-3"
-            >
-              {topics.map(topic => (
-                <MenuItem
-                  key={topic.id}
-                  onClick={() => this.setState({ topic: topic })}
-                >
-                  {topic.name}
-                </MenuItem>
-              ))}
-            </SplitButton>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            {isEmpty(topic) ? (
-              <EmptyState
-                title="Select a topic"
-                info="Select a topic in the top left corner to see its trend."
-                icon={<i className="fa fa-line-chart fa-3x fa-fw" />}
-              />
-            ) : (
-              <TrendGraph trend={trends[topic.id]} topic={topic} />
-            )}
-          </Col>
-        </Row>
-      </MainContentWithLoader>
+      <Page
+        title="Trends"
+        loading={isFetching && isEmpty(topics) && isEmpty(trends)}
+        empty={!isFetching && isEmpty(topics) && isEmpty(trends)}
+        EmptyComponent={
+          <EmptyState
+            title="There is no trends"
+            info="Add some jobs to see trends"
+          />
+        }
+        Toolbar={
+          <Filter
+            placeholder={isEmpty(topic) ? "Select a topic" : topic.name}
+            filter={topic}
+            filters={topics}
+            onFilterValueSelected={topic => this.setState({ topic: topic })}
+          />
+        }
+      >
+        <Bullseye>
+          {isEmpty(topic) ? (
+            <EmptyState
+              icon={<MessagesIcon size="lg" />}
+              title="Select a topic"
+              info="Select a topic in the top left corner to see its trend."
+            />
+          ) : (
+            <TrendGraph trend={trends[topic.id]} topic={topic} />
+          )}
+        </Bullseye>
+      </Page>
     );
   }
 }
@@ -66,7 +65,8 @@ export class TrendsContainer extends Component {
 function mapStateToProps(state) {
   return {
     topics: getTopics(state),
-    trends: state.trends
+    trends: state.trends,
+    isFetching: state.topics.isFetching
   };
 }
 

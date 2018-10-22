@@ -1,12 +1,12 @@
-import { getUniqueProductsNames } from "./globalStatusGetters";
+import { getGlobalStatusFilters } from "./globalStatusGetters";
 
-it("get products' names", () => {
-  const productsNames = getUniqueProductsNames([
+it("getGlobalStatusFilters", () => {
+  const productsNames = getGlobalStatusFilters([
     { product_name: "OpenStack" },
     { product_name: "OpenStack" },
     { product_name: "Ansible" },
     { product_name: null }
   ]);
-  const exceptedProductsNames = ["OpenStack", "Ansible"];
+  const exceptedProductsNames = [{ name: "OpenStack" }, { name: "Ansible" }];
   expect(productsNames).toEqual(exceptedProductsNames);
 });

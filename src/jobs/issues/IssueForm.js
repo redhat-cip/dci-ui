@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FormModal from "../../FormModal";
-import { Button } from "patternfly-react";
+import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input } from "../../form";
 
@@ -48,6 +48,7 @@ export default class IssueForm extends Component {
         >
           <Formsy
             id="issue-form"
+            className="pf-c-form"
             onValidSubmit={issue => {
               this.closeModal();
               submit(issue);
@@ -66,7 +67,7 @@ export default class IssueForm extends Component {
             />
           </Formsy>
         </FormModal>
-        <Button bsStyle="primary" onClick={this.showModal}>
+        <Button variant="primary" onClick={this.showModal}>
           {showModalButton}
         </Button>
       </React.Fragment>
