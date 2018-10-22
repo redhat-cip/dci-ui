@@ -12,7 +12,7 @@ export default class Issue extends Component {
           >
             <span className="fa fa-trash" />
           </button>
-          <a href={issue.url} target="_blank">
+          <a href={issue.url} target="_blank" rel="noopener noreferrer">
             {issue.title}
           </a>
         </h3>
