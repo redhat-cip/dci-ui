@@ -15,7 +15,7 @@ import {
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
 
-export class SubscriptionsContainer extends Component {
+export class NotificationsContainer extends Component {
   componentDidMount() {
     this.props.fetchRemotecis();
   }
@@ -35,7 +35,7 @@ export class SubscriptionsContainer extends Component {
           <Col xs={12} md={6}>
             <Card>
               <CardHeading>
-                <CardTitle>Subscriptions</CardTitle>
+                <CardTitle>Notifications</CardTitle>
               </CardHeading>
               <CardBody>
                 <p>
@@ -81,4 +81,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SubscriptionsContainer);
+)(NotificationsContainer);

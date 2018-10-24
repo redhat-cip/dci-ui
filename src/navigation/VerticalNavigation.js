@@ -105,9 +105,9 @@ export function VerticalNavigation({ currentUser }) {
           <i className="fa fa-fw fa-user pf-vertical-nav__icon" />
           <span className="pf-vertical-nav__link-value">Profile</span>
         </NavItem>
-        <NavItem to="/subscriptions">
+        <NavItem to="/notifications">
           <i className="fa fa-fw fa-bell pf-vertical-nav__icon" />
-          <span className="pf-vertical-nav__link-value">Subscriptions</span>
+          <span className="pf-vertical-nav__link-value">Notifications</span>
         </NavItem>
       </ul>
     </div>

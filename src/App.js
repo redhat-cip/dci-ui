@@ -96,8 +96,8 @@ class App extends Component {
                     component={Pages.ProfileContainer}
                   />
                   <PrivateRoute
-                    path="/subscriptions"
-                    component={Pages.SubscriptionsContainer}
+                    path="/notifications"
+                    component={Pages.NotificationsContainer}
                   />
                   <Route path="/login" component={Pages.LoginContainer} />
                   <Route component={Container404} />

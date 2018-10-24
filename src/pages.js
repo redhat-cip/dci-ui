@@ -5,7 +5,7 @@ import TrendsContainer from "./trends/TrendsContainer";
 import TopicsContainer from "./topics/TopicsContainer";
 import ComponentsContainer from "./components/ComponentsContainer";
 import RemotecisContainer from "./remotecis/RemotecisContainer";
-import SubscriptionsContainer from "./remotecis/SubscriptionsContainer";
+import NotificationsContainer from "./remotecis/NotificationsContainer";
 import ProductsContainer from "./products/ProductsContainer";
 import TeamsContainer from "./teams/TeamsContainer";
 import UsersContainer from "./users/UsersContainer";
@@ -24,7 +24,7 @@ export default {
   TeamsContainer,
   UsersContainer,
   ProfileContainer,
-  SubscriptionsContainer,
+  NotificationsContainer,
   LoadingContainer,
   LoginContainer,
   TrendsContainer
