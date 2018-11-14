@@ -20,6 +20,8 @@ import {
   UsersIcon,
   ServerIcon,
   CubesIcon,
+  ClockIcon,
+  CalendarAltIcon,
   WarningTriangleIcon
 } from "@patternfly/react-icons";
 import {
@@ -155,17 +157,16 @@ export class KebabDropdown extends Component {
 
   render() {
     const { isOpen } = this.state;
-    const { children, ...props } = this.props;
+    const { children, items, ...props } = this.props;
     return (
       <Dropdown
         onToggle={this.onToggle}
         onSelect={this.onSelect}
         toggle={<KebabToggle onToggle={this.onToggle} />}
         isOpen={isOpen}
+        dropdownItems={items}
         {...props}
-      >
-        {children}
-      </Dropdown>
+      />
     );
   }
 }
@@ -182,12 +183,12 @@ export class JobSummary extends Component {
           <b>{job.topic.name}</b>
           {isEmpty(job.team) ? null : (
             <p>
-              <UsersIcon />
+              <UsersIcon className="pf-u-mr-xs" />
               {job.team.name}
             </p>
           )}
           <p>
-            <ServerIcon />
+            <ServerIcon className="pf-u-mr-xs" />
             {getRemoteciInfo(job)}
           </p>
         </div>
@@ -234,6 +235,24 @@ export class JobSummary extends Component {
             )}
           </JobTests>
         </div>
+        <div className="pf-c-data-list__cell pf-m-flex-2">
+          <p>
+            <small>
+              <CalendarAltIcon className="pf-u-mr-xs" />
+              {job.datetime}
+            </small>
+          </p>
+          <p>
+            <small>
+              {job.status !== "new" && job.status !== "running" ? (
+                <span title={`From ${job.created_at} to ${job.updated_at}`}>
+                  <ClockIcon className="pf-u-mr-xs" />
+                  Ran for {job.duration}
+                </span>
+              ) : null}
+            </small>
+          </p>
+        </div>
         <div className="pf-c-data-list__cell">
           <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
             See details
@@ -241,17 +260,20 @@ export class JobSummary extends Component {
         </div>
         <div className="pf-c-data-list__action">
           {currentUser.hasAdminRole ? (
-            <KebabDropdown position={DropdownPosition.right}>
-              <DropdownItem component="button" onClick={() => deleteJob(job)}>
-                <TextRed>
-                  <WarningTriangleIcon
-                    color={global_danger_color_100.value}
-                    className="pf-u-mr-xs"
-                  />
-                  delete job
-                </TextRed>
-              </DropdownItem>
-            </KebabDropdown>
+            <KebabDropdown
+              position={DropdownPosition.right}
+              items={[
+                <DropdownItem component="button" onClick={() => deleteJob(job)}>
+                  <TextRed>
+                    <WarningTriangleIcon
+                      color={global_danger_color_100.value}
+                      className="pf-u-mr-xs"
+                    />
+                    delete job
+                  </TextRed>
+                </DropdownItem>
+              ]}
+            />
           ) : null}
         </div>
       </Job>

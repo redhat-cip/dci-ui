@@ -38,13 +38,10 @@ function DCINavItem({ children, to, exact = true }) {
 }
 
 class MainContent extends Component {
-  static title = "Using grouped navigation";
-
   constructor(props) {
     super(props);
     this.state = {
       isDropdownOpen: false,
-      isKebabDropdownOpen: false,
       activeItem: "grp-1_itm-1"
     };
   }
