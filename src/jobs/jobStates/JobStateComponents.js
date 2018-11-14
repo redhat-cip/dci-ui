@@ -21,8 +21,8 @@ export const Label = styled.span`
   position: absolute;
   top: 4px;
   padding: 1px 7px 2px;
-  line-height: 10px;
-  font-size: 10px;
+  line-height: 0.8em;
+  font-size: 0.8em;
   background-color: ${Colors.black600};
   border-radius: 6px;
   color: ${Colors.black300};
@@ -55,8 +55,8 @@ export const FileRow = styled(JobStateRow)`
 `;
 
 export const FileName = styled.span`
-  line-height: 19px;
-  font-size: 12px;
+  line-height: 1.2em;
+  font-size: 0.9em;
   display: block;
   left: 3em;
   position: absolute;
@@ -69,8 +69,8 @@ export const Arrow = styled.span`
 
 export const Pre = styled.pre`
   font-family: monospace;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.9em;
+  line-height: 1.2em;
   white-space: pre-wrap;
   word-wrap: break-word;
   padding: 0 2em 0 3em;
