@@ -3,16 +3,31 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
+import styled from "styled-components";
 import { getCurrentUser } from "../currentUser/currentUserActions";
 import { setBasicToken } from "../services/localStorage";
 import Logo from "../logo.svg";
 import { showError } from "../alerts/alertsActions";
+import { Button } from "@patternfly/react-core";
+
+class LoginBox extends Component {
+  render() {
+    const { className, children } = this.props;
+    return <div className={`pf-c-login-box ${className}`}>{children}</div>;
+  }
+}
+
+const DCILoginBox = styled(LoginBox)`
+  min-height: 575px;
+`;
+
 
 export class LoginContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirectToReferrer: false
+      redirectToReferrer: false,
+      seeSSOForm: true
     };
   }
 
@@ -38,7 +53,7 @@ export class LoginContainer extends Component {
   render() {
     const { location, isAuthenticated } = this.props;
     const { from } = location.state || { from: { pathname: "/jobs" } };
-    const { redirectToReferrer } = this.state;
+    const { redirectToReferrer, seeSSOForm } = this.state;
 
     if (redirectToReferrer || isAuthenticated) {
       return <Redirect to={from} />;
@@ -63,20 +78,43 @@ export class LoginContainer extends Component {
               </div>
             </header>
             <main className="pf-l-login__main">
-              <div className="pf-c-login-box">
-                <div className="pf-c-login-box__header">
-                  <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">SSO Login</h1>
+              <DCILoginBox>
+                {seeSSOForm ? (
+                  <React.Fragment>
+                    <div className="pf-c-login-box__header pf-u-mt-3xl">
+                      <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">
+                        SSO Login
+                      </h1>
+                    </div>
+                    <div className="pf-c-login-box__body">
+                      <SSOForm from={from} />
+                    </div>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <div className="pf-c-login-box__header">
+                      <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">
+                        DCI Login
+                      </h1>
+                    </div>
+                    <div className="pf-c-login-box__body">
+                      <LoginForm submit={this.submit} />
+                    </div>
+                  </React.Fragment>
+                )}
+                <div className="pf-c-login-box__footer">
+                  <Button
+                    variant="link"
+                    onClick={() =>
+                      this.setState(prevState => ({
+                        seeSSOForm: !prevState.seeSSOForm
+                      }))
+                    }
+                  >
+                    toggle login form
+                  </Button>
                 </div>
-                <div className="pf-c-login-box__body">
-                  <SSOForm from={from} />
-                </div>
-                <div className="pf-c-login-box__header">
-                  <h1 className="pf-c-title pf-m-3xl pf-u-mb-sm">DCI Login</h1>
-                </div>
-                <div className="pf-c-login-box__body">
-                  <LoginForm submit={this.submit} />
-                </div>
-              </div>
+              </DCILoginBox>
             </main>
             <footer className="pf-l-login__footer">
               <ul className="pf-c-list pf-m-inline">
