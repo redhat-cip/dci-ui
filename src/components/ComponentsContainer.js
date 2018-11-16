@@ -48,11 +48,11 @@ export class ComponentsContainer extends Component {
                 <td>{component.from_now}</td>
                 <td className="pf-u-text-align-center">
                   <ConfirmDeleteButton
-                    name="component"
-                    resource={component}
-                    whenConfirmed={component =>
-                      this.props.deleteComponent(component)
-                    }
+                    title={`Delete component ${component.name}`}
+                    content={`Are you sure you want to delete ${
+                      component.name
+                    }?`}
+                    whenConfirmed={() => this.props.deleteComponent(component)}
                   />
                 </td>
               </tr>
