@@ -74,33 +74,34 @@ class MainContent extends Component {
           <DCINavItem to="/jobs" exact={false}>
             Jobs
           </DCINavItem>
-          {currentUser.isSuperAdmin ? (
+          {currentUser.isSuperAdmin && (
             <DCINavItem to="/products">Products</DCINavItem>
-          ) : null}
+          )}
           <DCINavItem to="/topics">Topics</DCINavItem>
 
           <DCINavItem to="/components">Components</DCINavItem>
 
-          {currentUser.hasAdminRole ? (
+          {currentUser.hasAdminRole && (
             <DCINavItem to="/remotecis">Remotecis</DCINavItem>
-          ) : null}
+          )}
         </NavGroup>
-        {currentUser.hasReadOnlyRole ? (
+        {currentUser.hasReadOnlyRole && (
           <NavGroup title="Stats">
             <DCINavItem to="/globalStatus">Global Status</DCINavItem>
             <DCINavItem to="/trends">Trends</DCINavItem>
           </NavGroup>
-        ) : null}
-        {currentUser.hasAdminRole ? (
+        )}
+        {currentUser.hasAdminRole && (
           <NavGroup title="Admin">
             <DCINavItem to="/teams">Teams</DCINavItem>
-
             <DCINavItem to="/users">Users</DCINavItem>
+            {currentUser.hasProductOwnerRole && (
+              <DCINavItem to="/permissions">Permissions</DCINavItem>
+            )}
           </NavGroup>
-        ) : null}
+        )}
         <NavGroup title="User Preferences">
           <DCINavItem to="/profile">Profile</DCINavItem>
-
           <DCINavItem to="/notifications">Notifications</DCINavItem>
         </NavGroup>
       </Nav>
