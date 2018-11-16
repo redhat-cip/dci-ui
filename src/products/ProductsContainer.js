@@ -34,13 +34,13 @@ export class ProductsContainer extends Component {
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
-              <th className="pf-u-text-align-center">ID</th>
-              <th>Name</th>
-              <th>Label</th>
-              <th>Team Owner</th>
-              <th>Description</th>
-              <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              <th className="pf-u-text-align-center pf-m-width-5">ID</th>
+              <th className="pf-m-width-10">Name</th>
+              <th className="pf-m-width-10">Label</th>
+              <th className="pf-m-width-10">Team Owner</th>
+              <th className="pf-m-width-35">Description</th>
+              <th className="pf-m-width-10 pf-u-text-align-center">Created</th>
+              <th className="pf-u-text-align-center pf-m-width-20">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -53,9 +53,9 @@ export class ProductsContainer extends Component {
                 <td>{product.label}</td>
                 <td>{product.team ? product.team.name.toUpperCase() : null}</td>
                 <td>{product.description}</td>
-                <td>{product.from_now}</td>
+                <td className="pf-u-text-align-center">{product.from_now}</td>
                 <td className="pf-u-text-align-center">
-                  <EditProductButton className="pf-u-mr-xl" product={product} />
+                  <EditProductButton className="pf-u-mr-xs" product={product} />
                   <ConfirmDeleteButton
                     name="product"
                     resource={product}
