@@ -82,11 +82,8 @@ export class RemotecisContainer extends Component {
                     teams={teams}
                   />
                   <ConfirmDeleteButton
-                    name="remoteci"
-                    resource={remoteci}
-                    whenConfirmed={remoteci =>
-                      this.props.deleteRemoteci(remoteci)
-                    }
+                    title={`Delete remoteci ${remoteci.name} ?`}
+                    whenConfirmed={() => this.props.deleteRemoteci(remoteci)}
                   />
                 </td>
               </tr>

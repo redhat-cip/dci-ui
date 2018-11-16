@@ -66,9 +66,9 @@ export class TopicsContainer extends Component {
                 <td className="pf-u-text-align-center">
                   <EditTopicButton className="pf-u-mr-xl" topic={topic} />
                   <ConfirmDeleteButton
-                    name="topic"
-                    resource={topic}
-                    whenConfirmed={topic => this.props.deleteTopic(topic)}
+                    title={`Delete topic ${topic.name}`}
+                    content={`Are you sure you want to delete ${topic.name}?`}
+                    whenConfirmed={() => this.props.deleteTopic(topic)}
                   />
                 </td>
               </tr>

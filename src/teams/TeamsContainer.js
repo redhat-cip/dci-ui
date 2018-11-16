@@ -58,9 +58,9 @@ export class TeamsContainer extends Component {
                 <td className="pf-u-text-align-center">
                   <EditTeamButton className="pf-u-mr-xl" team={team} />
                   <ConfirmDeleteButton
-                    name="team"
-                    resource={team}
-                    whenConfirmed={team => this.props.deleteTeam(team)}
+                    title={`Delete team ${team.name}`}
+                    content={`Are you sure you want to delete ${team.name}?`}
+                    whenConfirmed={() => this.props.deleteTeam(team)}
                   />
                 </td>
               </tr>

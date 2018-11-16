@@ -99,6 +99,10 @@ class App extends Component {
                     path="/notifications"
                     component={Pages.NotificationsContainer}
                   />
+                  <PrivateRoute
+                    path="/permissions"
+                    component={Pages.PermissionsContainer}
+                  />
                   <Route path="/login" component={Pages.LoginContainer} />
                   <Route component={Container404} />
                 </Switch>

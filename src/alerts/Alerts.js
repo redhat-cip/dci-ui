@@ -22,7 +22,11 @@ export function Alerts({ alerts, hide }) {
           variant={alert.type}
           title={alert.title}
           action={
-            <Button variant="plain" onClick={() => hide(alert)}>
+            <Button
+              variant="plain"
+              aria-label="close alert"
+              onClick={() => hide(alert)}
+            >
               <TimesIcon />
             </Button>
           }
