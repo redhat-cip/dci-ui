@@ -57,9 +57,9 @@ export class ProductsContainer extends Component {
                 <td className="pf-u-text-align-center">
                   <EditProductButton className="pf-u-mr-xs" product={product} />
                   <ConfirmDeleteButton
-                    name="product"
-                    resource={product}
-                    whenConfirmed={product => this.props.deleteProduct(product)}
+                    title={`Delete product ${product.name}`}
+                    content={`Are you sure you want to delete ${product.name}?`}
+                    whenConfirmed={() => this.props.deleteProduct(product)}
                   />
                 </td>
               </tr>

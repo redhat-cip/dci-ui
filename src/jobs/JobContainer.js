@@ -133,8 +133,8 @@ export class JobContainer extends Component {
     );
     return (
       <Page title={activeTab.name} topNav={topNav} loading={isFetching}>
-        <div class="pf-l-stack pf-m-gutter">
-          <div class="pf-l-stack__item">
+        <div className="pf-l-stack pf-m-gutter">
+          <div className="pf-l-stack__item">
             <ul
               className="pf-c-data-list pf-u-box-shadow-md"
               role="list"
@@ -143,7 +143,7 @@ export class JobContainer extends Component {
               <JobSummary job={job} history={history} />
             </ul>
           </div>
-          <div class="pf-l-stack__item pf-m-main">
+          <div className="pf-l-stack__item pf-m-main">
             {activeId === 0 && <JobStatesList jobstates={job.jobstates} />}
             {activeId === 1 && <TestsList tests={job.tests} />}
             {activeId === 2 && (

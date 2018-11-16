@@ -20,21 +20,28 @@ export default class ConfirmDeleteButton extends Component {
   };
 
   render() {
-    const { resource, whenConfirmed, name, ...props } = this.props;
+    const {
+      title,
+      content,
+      okButton,
+      cancelButton,
+      whenConfirmed,
+      ...props
+    } = this.props;
     return (
       <React.Fragment>
         <ConfirmModal
-          title={`Delete ${name} ${resource.name}`}
-          okButton={`Yes delete ${resource.name}`}
-          cancelButton="oups no!"
+          title={title}
+          okButton={okButton ? okButton : "yes"}
+          cancelButton={cancelButton ? cancelButton : "oups no!"}
           show={this.state.show}
           close={this.closeModal}
           onValidSubmit={() => {
             this.closeModal();
-            whenConfirmed(resource);
+            whenConfirmed();
           }}
         >
-          {`Are you sure you want to delete ${resource.name}?`}
+          {content ? content : ""}
         </ConfirmModal>
         <Button variant="danger" onClick={this.showModal} {...props}>
           <TrashIcon />
