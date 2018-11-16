@@ -66,9 +66,9 @@ export class UsersContainer extends Component {
                     isDisabled={currentUser.id === user.id}
                   />
                   <ConfirmDeleteButton
-                    name="user"
-                    resource={user}
-                    whenConfirmed={user => this.props.deleteUser(user)}
+                    title={`Delete user ${user.name}`}
+                    content={`Are you sure you want to delete ${user.name}?`}
+                    whenConfirmed={() => this.props.deleteUser(user)}
                     isDisabled={currentUser.id === user.id}
                   />
                 </td>

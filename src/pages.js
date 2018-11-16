@@ -10,6 +10,7 @@ import ProductsContainer from "./products/ProductsContainer";
 import TeamsContainer from "./teams/TeamsContainer";
 import UsersContainer from "./users/UsersContainer";
 import ProfileContainer from "./profile/ProfileContainer";
+import PermissionsContainer from "./permissions/PermissionsContainer";
 import LoadingContainer from "./loading/LoadingContainer";
 import LoginContainer from "./login/LoginContainer";
 
@@ -23,6 +24,7 @@ export default {
   ProductsContainer,
   TeamsContainer,
   UsersContainer,
+  PermissionsContainer,
   ProfileContainer,
   NotificationsContainer,
   LoadingContainer,
