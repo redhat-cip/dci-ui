@@ -72,8 +72,8 @@
   "scripts": {
     "prettier": "prettier --write \"{src,__{tests,mocks}__}/**/*.js\"",
     "precommit": "npm run test && lint-staged",
-    "start": "NODE_ENV=development webpack-dev-server --config webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
     "test": "jest --env=jsdom",
     "test:watch": "jest --env=jsdom --watch"
   },

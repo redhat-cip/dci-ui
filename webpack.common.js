@@ -3,8 +3,6 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const productionMode = process.env.NODE_ENV === "production";
 
 module.exports = {
   entry: "./src/index.js",
@@ -12,10 +10,6 @@ module.exports = {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: productionMode ? "[name].[hash].css" : "[name].css",
-      chunkFilename: productionMode ? "[id].[hash].css" : "[id].css"
-    }),
     new CleanWebpackPlugin(["build"]),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
@@ -33,15 +27,8 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules\/(?!copy-text-to-clipboard)/,
+        exclude: /(node_modules)/,
         loader: "babel-loader"
-      },
-      {
-        test: /\.css$/,
-        use: [
-          productionMode ? MiniCssExtractPlugin.loader : "style-loader",
-          "css-loader"
-        ]
       },
       {
         test: /\.(png|svg|jpg|gif|ico)$/,
