@@ -21,7 +21,7 @@
     "d3": "^5.7.0",
     "file-saver": "^2.0.0",
     "formsy-react": "^1.1.5",
-    "keycloak-js": "^4.5.0",
+    "keycloak-js": "4.5.0",
     "lodash": "^4.17.10",
     "moment-timezone": "^0.5.23",
     "normalizr": "^3.2.4",
