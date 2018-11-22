@@ -66,26 +66,25 @@ export class DCIToolbar extends Component {
           </ToolbarGroup>
         </ToolbarSection>
         <ToolbarSection aria-label="jobs active filters">
-          {activeFilters &&
-            activeFilters.length > 0 && (
-              <ToolbarGroup>
-                <span>Active Filters:</span>
-                {activeFilters.map((filter, i) => {
-                  return (
-                    <Button
-                      key={i}
-                      variant="secondary"
-                      onClick={() => this._removeFilterAndFilterJobs(filter)}
-                    >
-                      {`${filter.key} ${filter.value}`} <TimesIcon />
-                    </Button>
-                  );
-                })}
-                <Button variant="link" onClick={() => clearFilters()}>
-                  Clear All Filters
-                </Button>
-              </ToolbarGroup>
-            )}
+          {activeFilters && activeFilters.length > 0 && (
+            <ToolbarGroup>
+              <span>Active Filters:</span>
+              {activeFilters.map((filter, i) => {
+                return (
+                  <Button
+                    key={i}
+                    variant="secondary"
+                    onClick={() => this._removeFilterAndFilterJobs(filter)}
+                  >
+                    {`${filter.key} ${filter.value}`} <TimesIcon />
+                  </Button>
+                );
+              })}
+              <Button variant="link" onClick={() => clearFilters()}>
+                Clear All Filters
+              </Button>
+            </ToolbarGroup>
+          )}
         </ToolbarSection>
       </Toolbar>
     );

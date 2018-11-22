@@ -21,7 +21,6 @@ const DCILoginBox = styled(LoginBox)`
   min-height: 575px;
 `;
 
-
 export class LoginContainer extends Component {
   constructor(props) {
     super(props);
