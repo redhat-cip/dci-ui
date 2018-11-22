@@ -59,8 +59,8 @@ export class JobStateFile extends Component {
             {this.state.loading
               ? "loading"
               : this.state.file.content
-                ? this.state.file.content
-                : `"${this.state.file.name}" file is empty`}
+              ? this.state.file.content
+              : `"${this.state.file.name}" file is empty`}
           </Pre>
         ) : null}
       </React.Fragment>
