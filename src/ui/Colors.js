@@ -35,6 +35,7 @@ const Colors = {
   gold500: "#b58100",
   gold600: "#795600",
   gold700: "#3d2c00",
+  gray: "#808080",
   green: "#3f9c35",
   green100: "#cfe7cd",
   green200: "#9ecf99",
