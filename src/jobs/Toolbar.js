@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import teamsActions from "../teams/teamsActions";
 import { getTeams } from "../teams/teamsSelectors";
-import { RemoteciInTeamFilter, StatusFilter, removeFilter } from "./Filters";
+import topicsActions from "../topics/topicsActions";
+import { getTopics } from "../topics/topicsSelectors";
+import { RemoteciInTeamFilter, TopicsFilter, StatusFilter, removeFilter } from "./Filters";
 import Pagination from "./Pagination";
 import {
   Toolbar,
@@ -12,7 +14,6 @@ import {
   ToolbarItem,
   Button
 } from "@patternfly/react-core";
-import { Labels } from "../ui";
 import { TimesIcon } from "@patternfly/react-icons";
 
 export class DCIToolbar extends Component {
@@ -29,6 +30,7 @@ export class DCIToolbar extends Component {
   render() {
     const {
       teams,
+      topics,
       filterJobs,
       clearFilters,
       activeFilters,
@@ -49,6 +51,15 @@ export class DCIToolbar extends Component {
                 filterJobs={filterJobs}
               />
             </ToolbarItem>
+            {isEmpty(topics) ? null : (
+              <ToolbarItem>
+                <TopicsFilter
+                  topics={topics}
+                  activeFilters={activeFilters}
+                  filterJobs={filterJobs}
+                />
+              </ToolbarItem>
+            )}
             {isEmpty(teams) ? null : (
               <ToolbarItem>
                 <RemoteciInTeamFilter
@@ -93,13 +104,15 @@ export class DCIToolbar extends Component {
 
 function mapStateToProps(state) {
   return {
-    teams: getTeams(state)
+    teams: getTeams(state),
+    topics: getTopics(state)
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" }))
+    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" })),
+    fetchTopics: () => dispatch(topicsActions.all())
   };
 }
 

@@ -1,5 +1,6 @@
 import {
   createTeamsFilter,
+  createTopicsFilter,
   getCurrentFilters,
   removeFilters,
   removeFilter
@@ -137,4 +138,22 @@ it("removeFilter", () => {
     }
   ];
   expect(removeFilter(filters, "status")).toEqual(expectedFilters);
+});
+
+it("createTopicsFilter", () => {
+  const topics = [
+    {
+      id: "t1",
+      name: "t1"
+    }
+  ];
+  const expectedTopicsFilter = [
+    {
+      id: "t1",
+      key: "topic_id",
+      name: "t1",
+      value: "t1"
+    }
+  ];
+  expect(createTopicsFilter(topics)).toEqual(expectedTopicsFilter);
 });
