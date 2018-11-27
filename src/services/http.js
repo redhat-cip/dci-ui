@@ -20,12 +20,12 @@ axios.interceptors.response.use(
       const token = getToken();
       if (error.config && sso && token) {
         sso
-          .updateToken(30)
-          .success(() => {
+          .updateToken()
+          .then(() => {
             setJWT(sso.token);
             return axios.request(error.config);
           })
-          .error(() => removeToken());
+          .catch(() => removeToken());
       } else {
         removeToken();
       }

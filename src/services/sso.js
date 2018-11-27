@@ -11,7 +11,7 @@ export function configureSSO(config) {
 
   return sso
     .init({ onLoad: "check-sso" })
-    .success(authenticated => {
+    .then(authenticated => {
       if (authenticated) {
         setJWT(sso.token);
       }
