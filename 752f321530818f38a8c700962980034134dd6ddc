@@ -1,0 +1,8 @@
+Code-Review+2: Gonéri Le Bouder <goneri@lebouder.net>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-by: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-at: Tue, 27 Nov 2018 15:33:45 +0000
+Reviewed-on: https://softwarefactory-project.io/r/14405
+Project: dci-ui
+Branch: refs/heads/master
