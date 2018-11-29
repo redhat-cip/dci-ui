@@ -127,3 +127,37 @@ export class StatusFilter extends Component {
     );
   }
 }
+
+export function createTopicsFilter(topics) {
+  return topics.map(topic => ({
+    id: topic.id,
+    key: "topic_id",
+    name: topic.name,
+    value: topic.id
+  }));
+}
+
+export class TopicsFilter extends Component {
+  _cleanFiltersAndFilterJobs = filters => {
+    const { filterJobs, activeFilters } = this.props;
+    const otherFilters = removeFilter(activeFilters, "topic_id");
+    filterJobs(otherFilters.concat(filters));
+  };
+
+  render() {
+    const { topics, activeFilters } = this.props;
+    const topicsFilter = createTopicsFilter(topics);
+    const topicFilter = getCurrentFilters(activeFilters, topicsFilter).topic_id;
+    return (
+      <Filter
+        placeholder="Filter by Topic"
+        filter={topicFilter}
+        filters={topicsFilter}
+        onFilterValueSelected={newTopicFilter =>
+          this._cleanFiltersAndFilterJobs([newTopicFilter])
+        }
+        className="pf-u-mr-lg"
+      />
+    );
+  }
+}
