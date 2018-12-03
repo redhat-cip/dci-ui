@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88bcb180_7b98917f",
+        "filename": "src/jobs/toolbar/StatusFilter.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 56
+      },
+      "writtenOn": "2018-12-03T18:44:33Z",
+      "side": 1,
+      "message": "On a second thought I just discovered that the job statuses are a static list in the code.\nThat means we can\u0027t filter on some useful filter like killed.\nhttps://github.com/redhat-cip/dci-control-server/blob/master/dci/db/models.py#L27-L28",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "ba809693eae2dfbe4e93f0567d5402b790a6e462",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
