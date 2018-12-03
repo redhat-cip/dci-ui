@@ -4,7 +4,7 @@ import {
   getCurrentFilters,
   removeFilters,
   removeFilter
-} from "./Filters";
+} from "./filters";
 
 it("createTeamsFilter", () => {
   const teams = [

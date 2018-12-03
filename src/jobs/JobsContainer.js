@@ -7,7 +7,7 @@ import queryString from "query-string";
 import { isEmpty } from "lodash";
 import { Page } from "../layout";
 import { EmptyState } from "../ui";
-import Toolbar from "./Toolbar";
+import Toolbar from "./toolbar/Toolbar";
 
 export class JobsContainer extends Component {
   constructor(props) {
