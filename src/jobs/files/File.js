@@ -4,7 +4,8 @@ import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
 import { humanFileSize } from "./filesGetters";
-import { SpinnerIcon, FileDownloadIcon } from "@patternfly/react-icons";
+import { FileDownloadIcon } from "@patternfly/react-icons";
+import { RotatingSpinnerIcon } from "../../ui";
 
 export class File extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export class File extends Component {
             onClick={() => this.downloadFile(file)}
             disabled={downloading}
           >
-            {downloading ? <SpinnerIcon /> : <FileDownloadIcon />}
+            {downloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
             download
           </Button>
         </td>

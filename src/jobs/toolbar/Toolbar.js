@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { isEmpty } from "lodash";
-import teamsActions from "../teams/teamsActions";
-import { getTeams } from "../teams/teamsSelectors";
-import topicsActions from "../topics/topicsActions";
-import { getTopics } from "../topics/topicsSelectors";
-import { RemoteciInTeamFilter, TopicsFilter, StatusFilter, removeFilter } from "./Filters";
-import Pagination from "./Pagination";
+import { TimesIcon } from "@patternfly/react-icons";
 import {
   Toolbar,
   ToolbarSection,
@@ -14,13 +7,13 @@ import {
   ToolbarItem,
   Button
 } from "@patternfly/react-core";
-import { TimesIcon } from "@patternfly/react-icons";
+import TopicsFilter from "./TopicsFilter";
+import StatusFilter from "./StatusFilter";
+import RemoteciInTeamFilter from "./RemoteciInTeamFilter";
+import { removeFilter } from "./filters";
+import Pagination from "./Pagination";
 
-export class DCIToolbar extends Component {
-  componentDidMount() {
-    this.props.fetchTeams();
-  }
-
+export default class DCIToolbar extends Component {
   _removeFilterAndFilterJobs = filter => {
     const { filterJobs, activeFilters } = this.props;
     const newFilters = removeFilter(activeFilters, filter.key);
@@ -29,8 +22,6 @@ export class DCIToolbar extends Component {
 
   render() {
     const {
-      teams,
-      topics,
       filterJobs,
       clearFilters,
       activeFilters,
@@ -46,29 +37,23 @@ export class DCIToolbar extends Component {
         >
           <ToolbarGroup>
             <ToolbarItem>
+              <RemoteciInTeamFilter
+                activeFilters={activeFilters}
+                filterJobs={filterJobs}
+              />
+            </ToolbarItem>
+            <ToolbarItem>
+              <TopicsFilter
+                activeFilters={activeFilters}
+                filterJobs={filterJobs}
+              />
+            </ToolbarItem>
+            <ToolbarItem>
               <StatusFilter
                 activeFilters={activeFilters}
                 filterJobs={filterJobs}
               />
             </ToolbarItem>
-            {isEmpty(topics) ? null : (
-              <ToolbarItem>
-                <TopicsFilter
-                  topics={topics}
-                  activeFilters={activeFilters}
-                  filterJobs={filterJobs}
-                />
-              </ToolbarItem>
-            )}
-            {isEmpty(teams) ? null : (
-              <ToolbarItem>
-                <RemoteciInTeamFilter
-                  teams={teams}
-                  activeFilters={activeFilters}
-                  filterJobs={filterJobs}
-                />
-              </ToolbarItem>
-            )}
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarItem>
@@ -101,22 +86,3 @@ export class DCIToolbar extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    teams: getTeams(state),
-    topics: getTopics(state)
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" })),
-    fetchTopics: () => dispatch(topicsActions.all())
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DCIToolbar);

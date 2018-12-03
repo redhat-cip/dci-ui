@@ -4,4 +4,6 @@ export { default as Cover } from "./cover/Cover";
 export { default as EmptyState } from "./EmptyState";
 export { default as Labels } from "./Labels";
 export { default as CopyButton } from "./CopyButton";
-export { default as Filter } from "./Filter";
+export { default as Filter } from "./filters/Filter";
+export { default as LoadingFilter } from "./filters/LoadingFilter";
+export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
