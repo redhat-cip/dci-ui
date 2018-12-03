@@ -7,10 +7,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import "@patternfly/patternfly-next/patternfly.css";
-import "c3/c3.css";
-import "balloon-css/balloon.css";
-import "./App.css";
+import "./styles";
 import "./favicon.ico";
 
 import store from "./store";
