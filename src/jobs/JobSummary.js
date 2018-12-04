@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
+import {
+  Button,
+  KebabToggle,
+  Dropdown,
+  DropdownItem,
+  DropdownPosition
+} from "@patternfly/react-core";
+import { Labels } from "../ui";
+import { formatDate, duration } from "../services/date";
+import { isEmpty, orderBy } from "lodash";
+import jobsActions from "./jobsActions";
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
@@ -21,10 +31,6 @@ import {
   global_warning_color_100,
   global_Color_light_100
 } from "@patternfly/react-tokens";
-import { Labels, KebabDropdown } from "../ui";
-import { formatDate, duration } from "../services/date";
-import { isEmpty, orderBy } from "lodash";
-import jobsActions from "./jobsActions";
 
 function getBackground(status, backgroundColor = global_Color_light_100.value) {
   switch (status) {
@@ -127,6 +133,42 @@ function getRemoteciInfo(job) {
     return `${job.remoteci.name} (${job.rconfiguration.name})`;
   }
   return `${job.remoteci.name}`;
+}
+
+export class KebabDropdown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  onToggle = isOpen => {
+    this.setState({
+      isOpen
+    });
+  };
+
+  onSelect = event => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const { isOpen } = this.state;
+    const { children, items, ...props } = this.props;
+    return (
+      <Dropdown
+        onToggle={this.onToggle}
+        onSelect={this.onSelect}
+        toggle={<KebabToggle onToggle={this.onToggle} />}
+        isOpen={isOpen}
+        dropdownItems={items}
+        {...props}
+      />
+    );
+  }
 }
 
 export class JobSummary extends Component {

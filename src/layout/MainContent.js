@@ -16,14 +16,12 @@ import {
   PageSidebar,
   Toolbar,
   ToolbarGroup,
-  ToolbarItem,
-  Avatar
+  ToolbarItem
 } from "@patternfly/react-core";
 import accessibleStyles from "@patternfly/patternfly-next/utilities/Accessibility/accessibility.css";
 import { css } from "@patternfly/react-styles";
 import Logo from "../logo.svg";
 import { logout } from "../currentUser/currentUserActions";
-import avatarImg from "./img_avatar.svg";
 
 function DCINavItem({ children, to, exact = true }) {
   return (
@@ -128,19 +126,18 @@ class MainContent extends Component {
                   {currentUser.fullname || currentUser.name}
                 </DropdownToggle>
               }
-              dropdownItems={[
-                <DropdownItem
-                  component="button"
-                  onClick={() => history.push("/profile")}
-                >
-                  User preferences
-                </DropdownItem>,
-                <DropdownSeparator />,
-                <DropdownItem component="button" onClick={() => logout()}>
-                  Logout
-                </DropdownItem>
-              ]}
-            />
+            >
+              <DropdownItem
+                component="button"
+                onClick={() => history.push("/profile")}
+              >
+                User preferences
+              </DropdownItem>
+              <DropdownSeparator />
+              <DropdownItem component="button" onClick={() => logout()}>
+                Logout
+              </DropdownItem>
+            </Dropdown>
           </ToolbarItem>
         </ToolbarGroup>
       </Toolbar>
@@ -150,7 +147,6 @@ class MainContent extends Component {
       <PageHeader
         logo={<Brand src={Logo} alt="DCI Logo" />}
         toolbar={PageToolbar}
-        avatar={<Avatar src={avatarImg} alt="Avatar image" />}
         topNav={topNav}
       />
     );
