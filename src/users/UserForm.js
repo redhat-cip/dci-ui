@@ -6,19 +6,14 @@ import Formsy from "formsy-react";
 import { Input, Select, HiddenInput } from "../form";
 
 export default class UserForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialUser = { name: "" };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      user: {
-        ...initialUser,
-        ...this.props.user
-      }
-    };
-  }
-
+  state = {
+    canSubmit: false,
+    show: false,
+    user: {
+      name: "",
+      ...this.props.user
+    }
+  };
   disableButton = () => {
     this.setState({ canSubmit: false });
   };

@@ -12,15 +12,12 @@ import Formsy from "formsy-react";
 import { Input, HiddenInput } from "../form";
 
 export default class ChangePasswordForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      canSubmit: false,
-      currentUser: this.props.currentUser,
-      current_password: "",
-      new_password: ""
-    };
-  }
+  state = {
+    canSubmit: false,
+    currentUser: this.props.currentUser,
+    current_password: "",
+    new_password: ""
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

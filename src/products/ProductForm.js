@@ -9,18 +9,14 @@ import { getTeams } from "../teams/teamsSelectors";
 import { isEmpty } from "lodash";
 
 export class ProductForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialProduct = { name: "" };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      product: {
-        ...initialProduct,
-        ...this.props.product
-      }
-    };
-  }
+  state = {
+    canSubmit: false,
+    show: false,
+    product: {
+      name: "",
+      ...this.props.product
+    }
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

@@ -12,13 +12,10 @@ import { Filter } from "../ui";
 import { MessagesIcon } from "@patternfly/react-icons";
 
 export class TrendsContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      topic: null,
-      isFetching: false
-    };
-  }
+  state = {
+    topic: null,
+    isFetching: false
+  };
 
   componentDidMount() {
     this.setState({ isFetching: true });

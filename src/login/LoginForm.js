@@ -9,10 +9,7 @@ import {
 } from "@patternfly/react-core";
 
 export default class LoginForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { canSubmit: false };
-  }
+  state = { canSubmit: false };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

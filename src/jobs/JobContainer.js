@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Page } from "../layout";
 import { connect } from "react-redux";
+import { Nav, NavList, NavItem, NavVariants } from "@patternfly/react-core";
 import FilesList from "./files/FilesList";
 import IssuesList from "./issues/IssuesList";
 import TestsList from "./tests/TestsList";
@@ -10,32 +11,18 @@ import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
-import {
-  Nav,
-  NavList,
-  NavItem,
-  NavVariants,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter
-} from "@patternfly/react-core";
 
 export class JobContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      job: {
-        tests: [],
-        jobstates: [],
-        issues: [],
-        files: []
-      },
-      isFetching: true,
-      tab: "jobStates"
-    };
-  }
+  state = {
+    job: {
+      tests: [],
+      jobstates: [],
+      issues: [],
+      files: []
+    },
+    isFetching: true,
+    tab: "jobStates"
+  };
 
   componentDidMount() {
     const { id, tab } = this.props.match.params;

@@ -10,13 +10,10 @@ import { showError } from "../alerts/alertsActions";
 import { Button } from "@patternfly/react-core";
 
 export class LoginContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirectToReferrer: false,
-      seeSSOForm: true
-    };
-  }
+  state = {
+    redirectToReferrer: false,
+    seeSSOForm: true
+  };
 
   submit = user => {
     const token = window.btoa(user.username.concat(":", user.password));

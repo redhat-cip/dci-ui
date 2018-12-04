@@ -8,12 +8,9 @@ import { FileDownloadIcon } from "@patternfly/react-icons";
 import { RotatingSpinnerIcon } from "../../ui";
 
 export class File extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      downloading: false
-    };
-  }
+  state = {
+    downloading: false
+  };
 
   downloadFile = file => {
     this.setState({ downloading: true });

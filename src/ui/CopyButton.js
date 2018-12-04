@@ -4,13 +4,9 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ClipboardIcon } from "@patternfly/react-icons";
 
 export default class CopyButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: this.props.titleBefore
-    };
-  }
-
+  state = {
+    title: this.props.titleBefore
+  };
   textCopied = () => {
     this.setState({ title: this.props.titleAfter });
     setTimeout(() => {

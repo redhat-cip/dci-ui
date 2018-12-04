@@ -4,12 +4,9 @@ import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { Pre } from "../jobStates/JobStateComponents";
 
 export default class Testcases extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      seeDetails: false
-    };
-  }
+  state = {
+    seeDetails: false
+  };
 
   toggleDetails = () => {
     this.setState(prevState => {

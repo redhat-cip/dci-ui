@@ -50,7 +50,7 @@ export default class StatusFilter extends Component {
         name: "Post run",
         key: "status",
         value: "post-run"
-      },
+      }
     ];
     const { activeFilters } = this.props;
     const { status: statusFilter } = getCurrentFilters(activeFilters, filters);

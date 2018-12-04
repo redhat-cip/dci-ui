@@ -13,18 +13,14 @@ import {
 } from "@patternfly/react-core";
 
 export default class ProfileForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      canSubmit: false,
-      currentUser: this.props.currentUser,
-      timezones: moment.tz.names().map(timezone => ({
-        id: timezone,
-        name: timezone
-      }))
-    };
-  }
-
+  state = {
+    canSubmit: false,
+    currentUser: this.props.currentUser,
+    timezones: moment.tz.names().map(timezone => ({
+      id: timezone,
+      name: timezone
+    }))
+  };
   disableButton = () => {
     this.setState({ canSubmit: false });
   };

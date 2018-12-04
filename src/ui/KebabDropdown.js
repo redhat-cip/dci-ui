@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import { KebabToggle, Dropdown } from "@patternfly/react-core";
 
 export default class KebabDropdown extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    };
-  }
+  state = {
+    isOpen: false
+  };
 
   onToggle = isOpen => {
     this.setState({

@@ -6,18 +6,14 @@ import { Input, Select, HiddenInput } from "../form";
 import { isEmpty } from "lodash";
 
 export default class RemoteciForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialRemoteci = { name: "" };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      remoteci: {
-        ...initialRemoteci,
-        ...this.props.remoteci
-      }
-    };
-  }
+  state = {
+    canSubmit: false,
+    show: false,
+    remoteci: {
+      name: "",
+      ...this.props.remoteci
+    }
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });
