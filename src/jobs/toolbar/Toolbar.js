@@ -63,23 +63,31 @@ export default class DCIToolbar extends Component {
         </ToolbarSection>
         <ToolbarSection aria-label="jobs active filters">
           {activeFilters && activeFilters.length > 0 && (
-            <ToolbarGroup>
-              <span>Active Filters:</span>
-              {activeFilters.map((filter, i) => {
-                return (
-                  <Button
-                    key={i}
-                    variant="secondary"
-                    onClick={() => this._removeFilterAndFilterJobs(filter)}
-                  >
-                    {`${filter.key} ${filter.value}`} <TimesIcon />
-                  </Button>
-                );
-              })}
-              <Button variant="link" onClick={() => clearFilters()}>
-                Clear All Filters
-              </Button>
-            </ToolbarGroup>
+            <React.Fragment>
+              <div className="pf-c-chip-group pf-m-toolbar">
+                <h4 className="pf-c-chip-group__label">Active Filters</h4>
+                {activeFilters.map((filter, i) => {
+                  return (
+                    <div className="pf-c-chip" key={i}>
+                      <span className="pf-c-chip__text">
+                        {`${filter.key} ${filter.value}`}
+                      </span>
+                      <Button
+                        variant="plain"
+                        onClick={() => this._removeFilterAndFilterJobs(filter)}
+                      >
+                        <TimesIcon />
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+              <div class="pf-c-chip pf-m-overflow pf-u-ml-xs">
+                <Button variant="plain" onClick={() => clearFilters()}>
+                  <span class="pf-c-chip__text">Clear All Filters</span>
+                </Button>
+              </div>
+            </React.Fragment>
           )}
         </ToolbarSection>
       </Toolbar>

@@ -26,7 +26,7 @@ import "@patternfly/patternfly-next/components/DataList/styles.css";
 import "@patternfly/patternfly-next/components/BackgroundImage/background-image.css";
 // import "@patternfly/patternfly-next/components/InputGroup/input-group.css";
 // import "@patternfly/patternfly-next/components/List/list.css";
-// import "@patternfly/patternfly-next/components/Chip/chip.css";
+import "@patternfly/patternfly-next/components/Chip/chip.css";
 // import "@patternfly/patternfly-next/components/Tabs/tabs.css";
 // import "@patternfly/patternfly-next/components/Popover/popover.css";
 // import "@patternfly/patternfly-next/components/Alert/alert.css";
@@ -49,7 +49,7 @@ import "@patternfly/patternfly-next/components/Login/login.css";
 import "@patternfly/patternfly-next/components/FormControl/form-control.css";
 // import "@patternfly/patternfly-next/components/Badge/badge.css";
 import "@patternfly/patternfly-next/components/Title/title.css";
-// import "@patternfly/patternfly-next/components/ChipGroup/chip-group.css";
+import "@patternfly/patternfly-next/components/ChipGroup/chip-group.css";
 import "@patternfly/patternfly-next/components/Label/styles.css";
 
 
