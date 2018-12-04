@@ -3,13 +3,9 @@ import { isEmpty } from "lodash";
 import { Dropdown, DropdownToggle, DropdownItem } from "@patternfly/react-core";
 
 export default class Filter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    };
-  }
-
+  state = {
+    isOpen: false
+  };
   onToggle = isOpen => {
     this.setState({
       isOpen

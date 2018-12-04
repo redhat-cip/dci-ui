@@ -8,18 +8,15 @@ import { Input, Select, Checkbox, HiddenInput } from "../form";
 import { getTeams } from "./teamsSelectors";
 
 export class TeamForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialTeam = { name: "", external: true };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      team: {
-        ...initialTeam,
-        ...this.props.team
-      }
-    };
-  }
+  state = {
+    canSubmit: false,
+    show: false,
+    team: {
+      name: "",
+      external: true,
+      ...this.props.team
+    }
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

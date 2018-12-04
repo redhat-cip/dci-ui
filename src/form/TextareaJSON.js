@@ -15,12 +15,9 @@ addValidationRule("isJSON", function(values, value) {
 });
 
 class TextareaJSON extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: "{}"
-    };
-  }
+  state = {
+    value: "{}"
+  };
 
   componentDidMount() {
     const value = this.props.value || {};

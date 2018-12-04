@@ -7,12 +7,9 @@ import { Select } from "../form";
 import { unsubscribeFromARemoteci } from "../currentUser/currentUserActions";
 
 export class UnsubscribeForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      canSubmit: false
-    };
-  }
+  state = {
+    canSubmit: false
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

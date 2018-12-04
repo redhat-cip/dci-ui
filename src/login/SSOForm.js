@@ -12,10 +12,7 @@ const LoginBox = styled.div`
 `;
 
 export default class SSOForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { canSubmit: false };
-  }
+  state = { canSubmit: false };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

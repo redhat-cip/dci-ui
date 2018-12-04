@@ -14,7 +14,11 @@ import { LongArrowAltLeftIcon } from "@patternfly/react-icons";
 const GlobalStatusItem = styled.div`
   text-align: center;
   background: ${props =>
-    isEmpty(props.stat.jobs) ? Colors.black500 : props.stat.percentageOfSuccess > 30 ? Colors.green400 : Colors.red100};
+    isEmpty(props.stat.jobs)
+      ? Colors.black500
+      : props.stat.percentageOfSuccess > 30
+      ? Colors.green400
+      : Colors.red100};
   color: ${Colors.white};
   display: flex;
   justify-content: center;
@@ -34,14 +38,11 @@ const GlobalStatusItemBody = styled.div`
 `;
 
 export class GlobalStatusContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filter: null,
-      seeDetails: false,
-      stat: null
-    };
-  }
+  state = {
+    filter: null,
+    seeDetails: false,
+    stat: null
+  };
 
   componentDidMount() {
     this.props.getGlobalStatus();

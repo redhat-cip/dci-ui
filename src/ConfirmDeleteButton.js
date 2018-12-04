@@ -4,12 +4,9 @@ import { Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
 export default class ConfirmDeleteButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: false
-    };
-  }
+  state = {
+    show: false
+  };
 
   showModal = () => {
     this.setState({ show: true });

@@ -40,13 +40,10 @@ function DCINavItem({ children, to, exact = true }) {
 }
 
 class MainContent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDropdownOpen: false,
-      activeItem: "grp-1_itm-1"
-    };
-  }
+  state = {
+    isDropdownOpen: false,
+    activeItem: "grp-1_itm-1"
+  };
 
   onDropdownToggle = isDropdownOpen => {
     this.setState({

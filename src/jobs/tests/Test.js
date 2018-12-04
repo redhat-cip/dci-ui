@@ -3,12 +3,9 @@ import TestHeader from "./TestHeader";
 import Testscases from "./TestsCases";
 
 export default class Test extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      seeDetails: false
-    };
-  }
+  state = {
+    seeDetails: false
+  };
 
   toggleDetails = () => {
     this.setState(prevState => {

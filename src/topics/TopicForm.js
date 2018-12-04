@@ -9,18 +9,15 @@ import { getTopics } from "./topicsSelectors";
 import { isEmpty } from "lodash";
 
 export class TopicForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialTopic = { name: "", export_control: false };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      topic: {
-        ...initialTopic,
-        ...this.props.topic
-      }
-    };
-  }
+  state = {
+    canSubmit: false,
+    show: false,
+    topic: {
+      name: "",
+      export_control: false,
+      ...this.props.topic
+    }
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

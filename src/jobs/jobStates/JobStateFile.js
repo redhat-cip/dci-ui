@@ -11,14 +11,11 @@ import {
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 
 export class JobStateFile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: this.props.file,
-      seeDetails: false,
-      loading: false
-    };
-  }
+  state = {
+    file: this.props.file,
+    seeDetails: false,
+    loading: false
+  };
 
   loadFileContent = () => {
     if (!this.state.file.content) this.setState({ loading: true });

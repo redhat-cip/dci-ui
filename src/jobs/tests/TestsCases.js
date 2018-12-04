@@ -5,9 +5,13 @@ import TestsCase from "./TestsCase";
 import { SearchIcon } from "@patternfly/react-icons";
 
 export default class TestsCases extends Component {
-  constructor(props) {
-    super(props);
-    const filters = [
+  state = {
+    filter: {
+      name: "All",
+      key: "status",
+      value: null
+    },
+    filters: [
       {
         name: "All",
         key: "status",
@@ -33,12 +37,8 @@ export default class TestsCases extends Component {
         key: "status",
         value: "error"
       }
-    ];
-    this.state = {
-      filter: filters[0],
-      filters
-    };
-  }
+    ]
+  };
   render() {
     const { testscases } = this.props;
     if (isEmpty(testscases))

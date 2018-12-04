@@ -5,18 +5,14 @@ import Formsy from "formsy-react";
 import { Input } from "../../form";
 
 export default class IssueForm extends Component {
-  constructor(props) {
-    super(props);
-    const initialIssue = { url: "" };
-    this.state = {
-      canSubmit: false,
-      show: false,
-      issue: {
-        ...initialIssue,
-        ...this.props.issue
-      }
-    };
-  }
+  state = {
+    canSubmit: false,
+    show: false,
+    issue: {
+      url: "",
+      ...this.props.issue
+    }
+  };
 
   disableButton = () => {
     this.setState({ canSubmit: false });

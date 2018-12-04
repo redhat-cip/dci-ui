@@ -19,12 +19,9 @@ import { configureSSO } from "./services/sso";
 import Alerts from "./alerts/Alerts";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true
-    };
-  }
+  state = {
+    loading: true
+  };
 
   componentDidMount() {
     store
