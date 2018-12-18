@@ -131,7 +131,13 @@ function getRemoteciInfo(job) {
 
 export class JobSummary extends Component {
   render() {
-    const { enhancedJob: job, deleteJob, currentUser, history } = this.props;
+    const {
+      enhancedJob: job,
+      deleteJob,
+      currentUser,
+      history,
+      seeDetailsButton
+    } = this.props;
     if (typeof job.id === "undefined") return null;
     const status = job.status;
     return (
@@ -211,11 +217,13 @@ export class JobSummary extends Component {
             </small>
           </p>
         </div>
-        <div className="pf-c-data-list__cell">
-          <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
-            See details
-          </Button>
-        </div>
+        {seeDetailsButton && (
+          <div className="pf-c-data-list__cell">
+            <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
+              See details
+            </Button>
+          </div>
+        )}
         <div className="pf-c-data-list__action">
           {currentUser.hasAdminRole ? (
             <KebabDropdown

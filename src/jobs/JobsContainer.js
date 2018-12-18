@@ -98,6 +98,7 @@ export class JobsContainer extends Component {
         >
           {jobs.map(job => (
             <JobSummary
+              seeDetailsButton
               key={`${job.id}.${job.etag}`}
               job={job}
               history={history}
