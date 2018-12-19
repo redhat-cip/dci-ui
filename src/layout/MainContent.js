@@ -64,7 +64,7 @@ class MainContent extends Component {
   };
 
   render() {
-    const { children, currentUser, logout, history, topNav } = this.props;
+    const { children, currentUser, logout, history } = this.props;
     const { isDropdownOpen } = this.state;
 
     const PageNav = (
@@ -148,7 +148,6 @@ class MainContent extends Component {
         logo={<Brand src={Logo} alt="DCI Logo" />}
         toolbar={PageToolbar}
         avatar={<Avatar src={avatarImg} alt="Avatar image" />}
-        topNav={topNav}
       />
     );
     const Sidebar = <PageSidebar nav={PageNav} />;

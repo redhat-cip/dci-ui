@@ -13,6 +13,7 @@ import MainContent from "./MainContent";
 export default class Page extends Component {
   render() {
     const {
+      HeaderSection,
       HeaderButton,
       title,
       description,
@@ -21,19 +22,23 @@ export default class Page extends Component {
       empty,
       EmptyComponent,
       children,
-      topNav,
       ...props
     } = this.props;
+    console.log(isEmpty(HeaderSection))
     return (
-      <MainContent topNav={topNav}>
-        <PageSection variant={PageSectionVariants.light}>
-          <TextContent>
-            <Text component="h1">{title}</Text>
-            {HeaderButton}
-            {description ? <Text component="p">{description}</Text> : null}
-          </TextContent>
-          {!isEmpty(Toolbar) && Toolbar}
-        </PageSection>
+      <MainContent {...props}>
+        {isEmpty(HeaderSection) ? (
+          <PageSection variant={PageSectionVariants.light}>
+            <TextContent>
+              <Text component="h1">{title}</Text>
+              {HeaderButton}
+              {description ? <Text component="p">{description}</Text> : null}
+            </TextContent>
+            {!isEmpty(Toolbar) && Toolbar}
+          </PageSection>
+        ) : (
+          HeaderSection
+        )}
         <PageSection>
           {loading ? (
             <Bullseye>

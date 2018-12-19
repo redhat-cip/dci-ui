@@ -27,7 +27,7 @@ import "@patternfly/patternfly-next/components/BackgroundImage/background-image.
 // import "@patternfly/patternfly-next/components/InputGroup/input-group.css";
 // import "@patternfly/patternfly-next/components/List/list.css";
 import "@patternfly/patternfly-next/components/Chip/chip.css";
-// import "@patternfly/patternfly-next/components/Tabs/tabs.css";
+import "@patternfly/patternfly-next/components/Tabs/tabs.css";
 // import "@patternfly/patternfly-next/components/Popover/popover.css";
 // import "@patternfly/patternfly-next/components/Alert/alert.css";
 import "@patternfly/patternfly-next/components/Nav/nav.css";

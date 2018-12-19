@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Page } from "../layout";
 import { connect } from "react-redux";
-import { Nav, NavList, NavItem, NavVariants } from "@patternfly/react-core";
+import {
+  PageSection,
+  PageSectionVariants,
+  TextContent,
+  Text
+} from "@patternfly/react-core";
+import styled from "styled-components";
 import FilesList from "./files/FilesList";
 import IssuesList from "./issues/IssuesList";
 import TestsList from "./tests/TestsList";
@@ -12,6 +18,10 @@ import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
 
+const HeaderSection = styled(PageSection)`
+  padding-bottom: 0 !important;
+`;
+
 export class JobContainer extends Component {
   state = {
     job: {
@@ -21,7 +31,7 @@ export class JobContainer extends Component {
       files: []
     },
     isFetching: true,
-    tab: "jobStates"
+    tabIndex: 0
   };
 
   componentDidMount() {
@@ -84,42 +94,36 @@ export class JobContainer extends Component {
     );
   };
 
-  onNavSelect = result => {
-    const tabs = { 0: "jobStates", 1: "tests", 2: "issues", 3: "files" };
-    this.setState({ tab: tabs[result.itemId] });
-  };
-
   render() {
     const { history } = this.props;
-    const { job, isFetching, tab } = this.state;
-    const tabsIndexes = {
-      jobStates: { id: 0, name: "Logs" },
-      tests: { id: 1, name: "Tests" },
-      issues: { id: 2, name: "Issues" },
-      files: { id: 3, name: "Files" }
-    };
-    const activeTab = tabsIndexes[tab];
-    const activeId = activeTab.id;
-    const topNav = (
-      <Nav onSelect={this.onNavSelect} aria-label="Nav">
-        <NavList variant={NavVariants.horizontal}>
-          <NavItem itemId={0} isActive={activeId === 0}>
-            <span>Logs</span>
-          </NavItem>
-          <NavItem itemId={1} isActive={activeId === 1}>
-            <span>Tests</span>
-          </NavItem>
-          <NavItem itemId={2} isActive={activeId === 2}>
-            <span>Issues</span>
-          </NavItem>
-          <NavItem itemId={3} isActive={activeId === 3}>
-            <span>Files</span>
-          </NavItem>
-        </NavList>
-      </Nav>
-    );
+    const { job, isFetching, tabIndex } = this.state;
+    const tabs = { 0: "Logs", 1: "Tests", 2: "Issues", 3: "Files" };
+    const tabItems = Object.values(tabs).map((tab, i) => (
+      <li className={`pf-c-tabs__item ${tabIndex === i ? "pf-m-current" : ""}`}>
+        <button
+          className="pf-c-tabs__button"
+          id={`job-details-nav-${tab}`}
+          aria-controls={`${tab}-section`}
+          onClick={() => this.setState({ tabIndex: i })}
+        >
+          {tab}
+        </button>
+      </li>
+    ));
     return (
-      <Page title={activeTab.name} topNav={topNav} loading={isFetching}>
+      <Page
+        HeaderSection={
+          <HeaderSection variant={PageSectionVariants.light}>
+            <TextContent>
+              <Text component="h1">{tabs[tabIndex]}</Text>
+            </TextContent>
+            <div className="pf-c-tabs" aria-label="Job details navigation">
+              <ul className="pf-c-tabs__list">{tabItems}</ul>
+            </div>
+          </HeaderSection>
+        }
+        loading={isFetching}
+      >
         <div className="pf-l-stack pf-m-gutter">
           <div className="pf-l-stack__item">
             <ul
@@ -131,16 +135,16 @@ export class JobContainer extends Component {
             </ul>
           </div>
           <div className="pf-l-stack__item pf-m-main">
-            {activeId === 0 && <JobStatesList jobstates={job.jobstates} />}
-            {activeId === 1 && <TestsList tests={job.tests} />}
-            {activeId === 2 && (
+            {tabIndex === 0 && <JobStatesList jobstates={job.jobstates} />}
+            {tabIndex === 1 && <TestsList tests={job.tests} />}
+            {tabIndex === 2 && (
               <IssuesList
                 issues={job.issues}
                 createIssue={this.createIssue}
                 deleteIssue={this.deleteIssue}
               />
             )}
-            {activeId === 3 && <FilesList files={job.files} />}
+            {tabIndex === 3 && <FilesList files={job.files} />}
           </div>
         </div>
       </Page>
