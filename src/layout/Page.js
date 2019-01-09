@@ -24,7 +24,6 @@ export default class Page extends Component {
       children,
       ...props
     } = this.props;
-    console.log(isEmpty(HeaderSection))
     return (
       <MainContent {...props}>
         {isEmpty(HeaderSection) ? (

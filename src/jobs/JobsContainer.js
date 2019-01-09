@@ -93,7 +93,6 @@ export class JobsContainer extends Component {
       >
         <ul
           className="pf-c-data-list pf-u-box-shadow-md"
-          role="list"
           aria-label="job list"
         >
           {jobs.map(job => (

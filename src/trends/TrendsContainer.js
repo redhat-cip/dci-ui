@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { Bullseye } from "@patternfly/react-core";
 import topicsActions from "../topics/topicsActions";
 import { getTopics } from "../topics/topicsSelectors";
 import { getTrends } from "./trendsActions";

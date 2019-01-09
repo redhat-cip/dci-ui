@@ -3,8 +3,7 @@ import C3Chart from "react-c3js";
 import moment from "moment";
 import { isEmpty } from "lodash";
 import { EmptyState } from "../ui";
-import { TimesIcon } from "@patternfly/react-icons";
-import { Card, CardHeader, CardBody, CardFooter } from "@patternfly/react-core";
+import { Card, CardHeader, CardBody } from "@patternfly/react-core";
 
 export default class TrendGraph extends Component {
   render() {

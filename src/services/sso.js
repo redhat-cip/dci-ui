@@ -9,10 +9,19 @@ export function configureSSO(config) {
     clientId: `${ssoConfig.clientId}`
   });
 
-  return sso.init({ onLoad: "check-sso" }).then(authenticated => {
+  const ssoPromise = sso.init({ onLoad: "check-sso" }).then(authenticated => {
     if (authenticated) {
       setJWT(sso.token);
     }
     window._sso = sso;
   });
+
+  const timeoutPromise = new Promise(resolve => {
+    setTimeout(() => {
+      console.error(`Error in configureSSO, cannot reach ${ssoConfig.url}`);
+      resolve();
+    }, 5000);
+  });
+
+  return Promise.race([ssoPromise, timeoutPromise]);
 }

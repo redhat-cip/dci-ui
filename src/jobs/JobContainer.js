@@ -128,7 +128,6 @@ export class JobContainer extends Component {
           <div className="pf-l-stack__item">
             <ul
               className="pf-c-data-list pf-u-box-shadow-md"
-              role="list"
               aria-label="job detail"
             >
               <JobSummary job={job} history={history} />
