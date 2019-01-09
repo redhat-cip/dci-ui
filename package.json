@@ -5,6 +5,7 @@
   "private": true,
   "author": "Guillaume Vincent <gvincent@redhat.com>",
   "license": "Apache-2.0",
+  "homepage": "https://www.distributed-ci.io/",
   "repository": {
     "type": "git",
     "url": "https://github.com/redhat-cip/dci-ui"
