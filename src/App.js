@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Route,
   Switch,
   Redirect
@@ -41,7 +41,7 @@ class App extends Component {
           <Provider store={store}>
             <React.Fragment>
               <Alerts />
-              <Router>
+              <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Switch>
                   <Redirect from="/" exact to="/jobs" />
                   <PrivateRoute
@@ -100,7 +100,7 @@ class App extends Component {
                   <Route path="/login" component={Pages.LoginContainer} />
                   <Route component={Container404} />
                 </Switch>
-              </Router>
+              </BrowserRouter>
             </React.Fragment>
           </Provider>
         )}
