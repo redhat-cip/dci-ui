@@ -14,14 +14,18 @@ export function configureSSO(config) {
       setJWT(sso.token);
     }
     window._sso = sso;
+    return "sso";
   });
 
   const timeoutPromise = new Promise(resolve => {
     setTimeout(() => {
-      console.error(`Error in configureSSO, cannot reach ${ssoConfig.url}`);
-      resolve();
+      resolve("timeout");
     }, 5000);
   });
 
-  return Promise.race([ssoPromise, timeoutPromise]);
+  return Promise.race([ssoPromise, timeoutPromise]).then(value => {
+    if (value === "timeout") {
+      console.error(`Error in configureSSO, cannot reach ${ssoConfig.url}`);
+    }
+  });
 }
