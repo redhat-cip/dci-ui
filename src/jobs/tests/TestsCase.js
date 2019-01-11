@@ -36,9 +36,6 @@ export default class Testcases extends Component {
             {testscase.action === "passed" && (
               <Labels.Success>Pass</Labels.Success>
             )}
-            {testscase.regression && (
-              <Labels.Regression>Regression</Labels.Regression>
-            )}
           </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>
