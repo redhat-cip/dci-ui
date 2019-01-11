@@ -36,14 +36,14 @@ export default class Pagination extends Component {
           aria-label="select first page"
           onClick={() => goTo(1)}
         >
-          <AngleLeftIcon />
+          <AngleDoubleLeftIcon />
         </Button>
         <Button
           variant="plain"
           aria-label="select previous page"
           onClick={() => goTo(page - 1)}
         >
-          <AngleDoubleLeftIcon />
+          <AngleLeftIcon />
         </Button>
         <span>{`${page} of ${nbPages}`}</span>
         <Button
