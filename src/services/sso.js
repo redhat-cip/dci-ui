@@ -9,11 +9,12 @@ export function configureSSO(config) {
     clientId: `${ssoConfig.clientId}`
   });
 
-  const ssoPromise = sso.init({ onLoad: "check-sso" }).then(authenticated => {
+  window._sso = sso;
+
+  const ssoPromise = sso.init({ onLoad: "check-sso" }).success(authenticated => {
     if (authenticated) {
       setJWT(sso.token);
     }
-    window._sso = sso;
     return "sso";
   });
 

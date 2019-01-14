@@ -1,4 +1,3 @@
-import { isFunction } from "lodash";
 import http from "../services/http";
 import * as types from "./currentUserActionsTypes";
 import {
@@ -62,8 +61,12 @@ export function logout() {
   return dispatch => {
     dispatch(deleteCurrentUser());
     const token = getToken();
-    if (token && token.type === "Bearer" && isFunction(window._sso.logout)) {
-      window._sso.logout();
+    if (token && token.type === "Bearer") {
+      try {
+        window._sso.logout();
+      } catch (error) {
+        console.error("Can't call keycloak logout");
+      }
     }
     removeToken();
   };
