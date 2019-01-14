@@ -1,13 +1,13 @@
 import { isFunction } from "lodash";
 import http from "../services/http";
-import * as types from "./currentUserActionsTypes";
+import * as currentUserTypes from "./currentUserActionsTypes";
+import { login, logout } from "../auth/authActions";
 import {
   showAPIError,
   showError,
   showSuccess,
   showWarning
 } from "../alerts/alertsActions";
-import { removeToken, getToken } from "../services/localStorage";
 
 export function getCurrentUser() {
   return (dispatch, getState) => {
@@ -20,10 +20,15 @@ export function getCurrentUser() {
       .then(response => {
         const currentUser = response.data.user;
         dispatch({
-          type: types.SET_CURRENT_USER,
+          type: currentUserTypes.SET_CURRENT_USER,
           currentUser
         });
-        return currentUser;
+        dispatch(login());
+        return response;
+      })
+      .catch(error => {
+        dispatch(logout());
+        throw error;
       });
   };
 }
@@ -40,7 +45,7 @@ export function updateCurrentUser(currentUser) {
     return http(request)
       .then(response => {
         dispatch({
-          type: types.UPDATE_CURRENT_USER,
+          type: currentUserTypes.UPDATE_CURRENT_USER,
           currentUser: response.data.user
         });
         dispatch(showSuccess("Your settings has been updated"));
@@ -54,18 +59,7 @@ export function updateCurrentUser(currentUser) {
 
 export function deleteCurrentUser() {
   return {
-    type: types.DELETE_CURRENT_USER
-  };
-}
-
-export function logout() {
-  return dispatch => {
-    dispatch(deleteCurrentUser());
-    const token = getToken();
-    if (token && token.type === "Bearer" && isFunction(window._sso.logout)) {
-      window._sso.logout();
-    }
-    removeToken();
+    type: currentUserTypes.DELETE_CURRENT_USER
   };
 }
 
@@ -80,7 +74,7 @@ export function subscribeToARemoteci(remoteci) {
     return http(request)
       .then(response => {
         dispatch({
-          type: types.SUBSCRIBED_TO_A_REMOTECI,
+          type: currentUserTypes.SUBSCRIBED_TO_A_REMOTECI,
           remoteci
         });
         dispatch(
@@ -107,7 +101,7 @@ export function unsubscribeFromARemoteci(remoteci) {
     return http(request)
       .then(response => {
         dispatch({
-          type: types.UNSUBSCRIBED_FROM_A_REMOTECI,
+          type: currentUserTypes.UNSUBSCRIBED_FROM_A_REMOTECI,
           remoteci
         });
         dispatch(

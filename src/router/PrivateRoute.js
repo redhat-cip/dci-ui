@@ -27,7 +27,7 @@ class PrivateRoute extends Component {
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: Object.keys(state.currentUser).length !== 0
+    isAuthenticated: state.auth.isAuthenticated
   };
 }
 

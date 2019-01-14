@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import alertsReducer from "./alerts/alertsReducer";
+import authReducer from "./auth/authReducer";
 import configReducer from "./config/configReducer";
 import currentUserReducer from "./currentUser/currentUserReducer";
 import remotecisReducer from "./remotecis/remotecisReducer";
@@ -17,6 +18,7 @@ import trendsReducer from "./trends/trendsReducer";
 const store = createStore(
   combineReducers({
     alerts: alertsReducer,
+    auth: authReducer,
     config: configReducer,
     globalStatus: globalStatusReducer,
     currentUser: currentUserReducer,

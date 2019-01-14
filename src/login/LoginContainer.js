@@ -107,8 +107,7 @@ export class LoginContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    config: state.config,
-    isAuthenticated: Object.keys(state.currentUser).length !== 0
+    isAuthenticated: state.auth.isAuthenticated
   };
 }
 
