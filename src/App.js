@@ -1,20 +1,15 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./styles";
 
 import store from "./store";
 import Pages from "./pages";
-import { PrivateRoute, Container404 } from "./router";
+import Container404 from "./router/Container404";
+import PrivateRoute from "./router/PrivateRoute";
 import { getConfig } from "./config/configActions";
 import { getCurrentUser } from "./currentUser/currentUserActions";
-import { configureSSO } from "./services/sso";
 import Alerts from "./alerts/Alerts";
 
 class App extends Component {
@@ -25,7 +20,6 @@ class App extends Component {
   componentDidMount() {
     store
       .dispatch(getConfig())
-      .then(config => configureSSO(config))
       .then(() => store.dispatch(getCurrentUser()))
       .catch(error => console.error(error))
       .then(() => this.setState({ loading: false }));

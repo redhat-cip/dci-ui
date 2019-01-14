@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import Keycloak from "keycloak-js";
 import {
   Button,
   ActionGroup,
@@ -6,13 +8,40 @@ import {
   ToolbarGroup
 } from "@patternfly/react-core";
 import styled from "styled-components";
+import { setJWT } from "../services/localStorage";
+import { login, logout } from "../auth/authActions";
 
 const LoginBox = styled.div`
   min-height: 260px;
 `;
 
-export default class SSOForm extends Component {
+export class SSOForm extends Component {
   state = { canSubmit: false };
+
+  componentDidMount() {
+    const { config, login, logout } = this.props;
+    const ssoConfig = config.sso;
+    const sso = Keycloak({
+      url: `${ssoConfig.url}/auth`,
+      realm: `${ssoConfig.realm}`,
+      clientId: `${ssoConfig.clientId}`
+    });
+    window._sso = sso;
+    sso
+      .init({ onLoad: "check-sso" })
+      .success(authenticated => {
+        if (authenticated) {
+          setJWT(sso.token);
+          login();
+        } else {
+          logout();
+        }
+      })
+      .error(e => {
+        console.error(e);
+        logout();
+      });
+  }
 
   disableButton = () => {
     this.setState({ canSubmit: false });
@@ -47,3 +76,21 @@ export default class SSOForm extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    config: state.config
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    login: () => dispatch(login()),
+    logout: () => dispatch(logout())
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SSOForm);

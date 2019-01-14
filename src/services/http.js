@@ -21,11 +21,11 @@ axios.interceptors.response.use(
       if (error.config && sso && token) {
         sso
           .updateToken()
-          .then(() => {
+          .success(() => {
             setJWT(sso.token);
             return axios.request(error.config);
           })
-          .catch(() => removeToken());
+          .error(() => removeToken());
       } else {
         removeToken();
       }

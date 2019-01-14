@@ -23,11 +23,12 @@ it("getCurrentUser", () => {
     {
       type: types.SET_CURRENT_USER,
       currentUser
-    }
+    },
+    { type: "LOGIN" }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(currentUserActions.getCurrentUser()).then(newUser => {
-    expect(newUser).toEqual(currentUser);
+  return store.dispatch(currentUserActions.getCurrentUser()).then(response => {
+    expect(response.data.user).toEqual(currentUser);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
