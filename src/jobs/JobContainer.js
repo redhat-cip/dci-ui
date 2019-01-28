@@ -159,7 +159,7 @@ function mapDispatchToProps(dispatch) {
           { id },
           {
             embed:
-              "results,team,remoteci,components,metas,topic,rconfiguration,files"
+              "results,team,remoteci,components,topic,rconfiguration,files"
           }
         )
       ),
