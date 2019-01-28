@@ -15,6 +15,11 @@ export default class TestHeader extends Component {
             <Labels.Default className="pf-u-mr-xs">
               {test.total} tests
             </Labels.Default>
+            {test.successfixes ? (
+              <Labels.Success className="pf-u-mr-xs">
+                {test.successfixes} fixes
+              </Labels.Success>
+            ) : null}
             {test.success ? (
               <Labels.Success className="pf-u-mr-xs">
                 {test.success} success
@@ -37,7 +42,7 @@ export default class TestHeader extends Component {
             ) : null}
             {test.regressions ? (
               <Labels.Regression>
-                {test.regressions} regressions
+                {`${test.regressions} regression${test.regressions > 1 ? "s" : ""}`}
               </Labels.Regression>
             ) : null}
           </small>

@@ -37,6 +37,14 @@ export default class Testcases extends Component {
               <Labels.Success>Pass</Labels.Success>
             )}
           </td>
+          <td>
+            {testscase.regression && (
+              <Labels.Failure>Regression</Labels.Failure>
+            )}
+            {testscase.successfix && (
+              <Labels.Success>Success fix</Labels.Success>
+            )}
+          </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>
           <td className="pf-u-text-align-right col-xs-1">
@@ -46,7 +54,7 @@ export default class Testcases extends Component {
         </tr>
         {seeDetails ? (
           <tr style={{ borderTop: 0 }}>
-            <td colspan={5}>
+            <td colspan={6}>
               <b>Type:</b> {testscase.type}
               <br />
               <b>Message:</b> {testscase.message}
