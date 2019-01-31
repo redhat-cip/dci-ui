@@ -69,6 +69,7 @@ export default class TestsCases extends Component {
                 }
               />
             </th>
+            <th>Regression<br/>Success Fix</th>
             <th>Classname</th>
             <th>Name</th>
             <th className="pf-u-text-align-right">Time</th>
@@ -77,7 +78,7 @@ export default class TestsCases extends Component {
         <tbody>
           {isEmpty(filteredTestCases) ? (
             <tr>
-              <td colspan={5}>
+              <td colspan={6}>
                 <EmptyState
                   icon={<SearchIcon size="lg" />}
                   title="No testcases"

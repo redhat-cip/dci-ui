@@ -12,7 +12,8 @@ import {
   CubesIcon,
   ClockIcon,
   CalendarAltIcon,
-  WarningTriangleIcon
+  WarningTriangleIcon,
+  ThumbsUpIcon
 } from "@patternfly/react-icons";
 import {
   global_danger_color_100,
@@ -104,22 +105,28 @@ const TextRed = styled.span`
   color: ${global_danger_color_100.value};
 `;
 
-const RegressionWarningSpan = styled(TextRed)`
-  padding: 1em;
+const TextGreen = styled.span`
+  color: ${global_success_color_100.value};
 `;
 
-const RegressionWarning = ({ regressions }) => (
-  <RegressionWarningSpan>
-    <span>( </span>
+const Regressions = ({ regressions }) => (
+  <TextRed className="pf-u-ml-md">
     <WarningTriangleIcon
       color={global_danger_color_100.value}
       className="pf-u-mr-xs"
     />
-    <span>
-      {regressions} regression
-      {regressions > 1 ? "s" : ""} )
-    </span>
-  </RegressionWarningSpan>
+    <span>{`${regressions} regression${regressions > 1 ? "s" : ""}`}</span>
+  </TextRed>
+);
+
+const Successfixes = ({ successfixes }) => (
+  <TextGreen className="pf-u-ml-md">
+    <ThumbsUpIcon
+      color={global_success_color_100.value}
+      className="pf-u-mr-xs"
+    />
+    <span>{`${successfixes} fix${successfixes > 1 ? "es" : ""}`}</span>
+  </TextGreen>
 );
 
 function getRemoteciInfo(job) {
@@ -190,8 +197,11 @@ export class JobSummary extends Component {
                   </Labels.Error>
                   <small>
                     {test.name}
+                    {test.successfixes ? (
+                      <Successfixes successfixes={test.successfixes} />
+                    ) : null}
                     {test.regressions ? (
-                      <RegressionWarning regressions={test.regressions} />
+                      <Regressions regressions={test.regressions} />
                     ) : null}
                   </small>
                 </JobTest>
