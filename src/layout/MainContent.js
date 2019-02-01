@@ -24,7 +24,7 @@ import { css } from "@patternfly/react-styles";
 import Logo from "../logo.svg";
 import { logout } from "../currentUser/currentUserActions";
 import avatarImg from "./img_avatar.svg";
-import {BackgroundImage} from "../ui";
+import { BackgroundImage } from "../ui";
 
 function DCINavItem({ children, to, exact = true }) {
   return (

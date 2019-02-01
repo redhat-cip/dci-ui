@@ -42,7 +42,9 @@ export default class TestHeader extends Component {
             ) : null}
             {test.regressions ? (
               <Labels.Regression>
-                {`${test.regressions} regression${test.regressions > 1 ? "s" : ""}`}
+                {`${test.regressions} regression${
+                  test.regressions > 1 ? "s" : ""
+                }`}
               </Labels.Regression>
             ) : null}
           </small>

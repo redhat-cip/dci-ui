@@ -69,7 +69,11 @@ export default class TestsCases extends Component {
                 }
               />
             </th>
-            <th>Regression<br/>Success Fix</th>
+            <th>
+              Regression
+              <br />
+              Success Fix
+            </th>
             <th>Classname</th>
             <th>Name</th>
             <th className="pf-u-text-align-right">Time</th>

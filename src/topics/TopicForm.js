@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FormModal from "../FormModal";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, TextareaJSON, HiddenInput, Checkbox } from "../form";
+import {
+  Input,
+  Select,
+  TextareaJSON,
+  HiddenInput,
+  Checkbox,
+  FormModal
+} from "../form";
 import { getProducts } from "../products/productSelectors";
 import { getTopics } from "./topicsSelectors";
 import { isEmpty } from "lodash";

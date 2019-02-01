@@ -15,7 +15,7 @@ export function getTestsCases(file) {
     const state = getState();
     return http.request({
       method: "get",
-      url: `${state.config.apiURL}/api/v1/files/${file.id}/testscases`,
+      url: `${state.config.apiURL}/api/v1/files/${file.id}/testscases`
     });
   };
 }

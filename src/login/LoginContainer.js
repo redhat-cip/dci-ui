@@ -9,7 +9,7 @@ import { getCurrentUser } from "../currentUser/currentUserActions";
 import { setBasicToken } from "../services/localStorage";
 import Logo from "../logo.svg";
 import { showError } from "../alerts/alertsActions";
-import {BackgroundImage} from "../ui";
+import { BackgroundImage } from "../ui";
 
 export class LoginContainer extends Component {
   state = {

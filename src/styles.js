@@ -62,6 +62,5 @@ import "@patternfly/patternfly-next/components/Title/title.css";
 import "@patternfly/patternfly-next/components/ChipGroup/chip-group.css";
 import "@patternfly/patternfly-next/components/Label/label.css";
 
-
 import "c3/c3.css";
 import "balloon-css/balloon.css";

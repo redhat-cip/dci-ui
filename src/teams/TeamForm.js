@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import FormModal from "../FormModal";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, Checkbox, HiddenInput } from "../form";
+import { Input, Select, Checkbox, HiddenInput, FormModal } from "../form";
 import { getTeams } from "./teamsSelectors";
 
 export class TeamForm extends Component {

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import FormModal from "../FormModal";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput } from "../form";
+import { Input, Select, HiddenInput, FormModal } from "../form";
 import { isEmpty } from "lodash";
 
 export default class RemoteciForm extends Component {
