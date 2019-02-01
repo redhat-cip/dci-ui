@@ -4,10 +4,9 @@ import { isEmpty } from "lodash";
 import { Page } from "../layout";
 import productsActions from "./producstActions";
 import teamsActions from "../teams/teamsActions";
-import { CopyButton, EmptyState } from "../ui";
+import { CopyButton, EmptyState, ConfirmDeleteButton } from "../ui";
 import NewProductButton from "./NewProductButton";
 import EditProductButton from "./EditProductButton";
-import ConfirmDeleteButton from "../ConfirmDeleteButton";
 import { getProducts } from "./productSelectors";
 import { getTeams } from "../teams/teamsSelectors";
 

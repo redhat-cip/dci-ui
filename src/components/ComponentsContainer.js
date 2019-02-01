@@ -3,8 +3,7 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import { Page } from "../layout";
 import componentsActions from "./componentsActions";
-import { CopyButton, EmptyState } from "../ui";
-import ConfirmDeleteButton from "../ConfirmDeleteButton";
+import { CopyButton, EmptyState, ConfirmDeleteButton } from "../ui";
 import { getComponents } from "./componentSelectors";
 
 export class ComponentsContainer extends Component {

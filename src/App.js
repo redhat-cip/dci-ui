@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import "./styles";
+import "./ui/styles";
 import store from "./store";
 import Pages from "./pages";
 import { PrivateRoute, Container404 } from "./router";
