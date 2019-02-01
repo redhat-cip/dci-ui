@@ -24,6 +24,7 @@ import { css } from "@patternfly/react-styles";
 import Logo from "../logo.svg";
 import { logout } from "../currentUser/currentUserActions";
 import avatarImg from "./img_avatar.svg";
+import {BackgroundImage} from "../ui";
 
 function DCINavItem({ children, to, exact = true }) {
   return (
@@ -153,7 +154,7 @@ class MainContent extends Component {
     const Sidebar = <PageSidebar nav={PageNav} />;
     return (
       <React.Fragment>
-        <div className="pf-c-background-image" />
+        <BackgroundImage />
         <Page header={Header} sidebar={Sidebar}>
           {children}
         </Page>

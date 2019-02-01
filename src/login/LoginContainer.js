@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { Button } from "@patternfly/react-core";
+
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
 import { getCurrentUser } from "../currentUser/currentUserActions";
 import { setBasicToken } from "../services/localStorage";
 import Logo from "../logo.svg";
 import { showError } from "../alerts/alertsActions";
-import { Button } from "@patternfly/react-core";
+import {BackgroundImage} from "../ui";
 
 export class LoginContainer extends Component {
   state = {
@@ -45,7 +47,7 @@ export class LoginContainer extends Component {
 
     return (
       <React.Fragment>
-        <div className="pf-c-background-image" />
+        <BackgroundImage />
         <div className="pf-c-login">
           <div className="pf-c-login__container">
             <header className="pf-c-login__header">

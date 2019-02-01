@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Bullseye } from "@patternfly/react-core";
-import { BlinkLogo } from "../ui";
+import { BlinkLogo, BackgroundImage } from "../ui";
 
 const FullHeightDiv = styled.div`
   height: 100vh;
@@ -11,7 +11,7 @@ export default class LoadingContainer extends Component {
   render() {
     return (
       <FullHeightDiv>
-        <div className="pf-c-background-image" />
+        <BackgroundImage />
         <Bullseye>
           <BlinkLogo />
         </Bullseye>

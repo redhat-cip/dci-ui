@@ -7,3 +7,4 @@ export { default as Filter } from "./filters/Filter";
 export { default as LoadingFilter } from "./filters/LoadingFilter";
 export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
 export { default as KebabDropdown } from "./KebabDropdown";
+export { default as BackgroundImage } from "./BackgroundImage";

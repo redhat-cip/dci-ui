@@ -9,13 +9,15 @@ export function configureSSO(config) {
     clientId: `${ssoConfig.clientId}`
   });
 
-  const ssoPromise = sso.init({ onLoad: "check-sso" }).then(authenticated => {
-    if (authenticated) {
-      setJWT(sso.token);
-    }
-    window._sso = sso;
-    return "sso";
-  });
+  const ssoPromise = sso
+    .init({ onLoad: "check-sso", promiseType: "native" })
+    .then(authenticated => {
+      if (authenticated) {
+        setJWT(sso.token);
+      }
+      window._sso = sso;
+      return "sso";
+    });
 
   const timeoutPromise = new Promise(resolve => {
     setTimeout(() => {
