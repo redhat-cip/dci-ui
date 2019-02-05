@@ -149,13 +149,14 @@ class MainContent extends Component {
         logo={<Brand src={Logo} alt="DCI Logo" />}
         toolbar={PageToolbar}
         avatar={<Avatar src={avatarImg} alt="Avatar image" />}
+        showNavToggle
       />
     );
     const Sidebar = <PageSidebar nav={PageNav} />;
     return (
       <React.Fragment>
         <BackgroundImage />
-        <Page header={Header} sidebar={Sidebar}>
+        <Page header={Header} sidebar={Sidebar} isManagedSidebar>
           {children}
         </Page>
       </React.Fragment>
