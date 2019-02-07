@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import "./App.css";
 import "./ui/styles";
 import store from "./store";
 import Pages from "./pages";
@@ -10,6 +11,7 @@ import { getConfig } from "./config/configActions";
 import { getCurrentUser } from "./currentUser/currentUserActions";
 import { configureSSO } from "./services/sso";
 import Alerts from "./alerts/Alerts";
+import { BackgroundImage } from "./ui";
 
 class App extends Component {
   state = {
@@ -34,6 +36,7 @@ class App extends Component {
       <Provider store={store}>
         <React.Fragment>
           <Alerts />
+          <BackgroundImage />
           <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
               <Redirect from="/" exact to="/jobs" />
