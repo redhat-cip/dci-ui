@@ -9,7 +9,6 @@ import { getCurrentUser } from "../currentUser/currentUserActions";
 import { setBasicToken } from "../services/localStorage";
 import Logo from "../logo.svg";
 import { showError } from "../alerts/alertsActions";
-import { BackgroundImage } from "../ui";
 
 export class LoginContainer extends Component {
   state = {
@@ -47,7 +46,6 @@ export class LoginContainer extends Component {
 
     return (
       <React.Fragment>
-        <BackgroundImage />
         <div className="pf-c-login">
           <div className="pf-c-login__container">
             <header className="pf-c-login__header">

@@ -19,12 +19,11 @@ import {
   ToolbarItem,
   Avatar
 } from "@patternfly/react-core";
-import accessibleStyles from "@patternfly/patternfly-next/utilities/Accessibility/accessibility.css";
+import accessibleStyles from "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 import { css } from "@patternfly/react-styles";
 import Logo from "../logo.svg";
 import { logout } from "../currentUser/currentUserActions";
 import avatarImg from "./img_avatar.svg";
-import { BackgroundImage } from "../ui";
 
 function DCINavItem({ children, to, exact = true }) {
   return (
@@ -155,7 +154,6 @@ class MainContent extends Component {
     const Sidebar = <PageSidebar nav={PageNav} />;
     return (
       <React.Fragment>
-        <BackgroundImage />
         <Page header={Header} sidebar={Sidebar} isManagedSidebar>
           {children}
         </Page>
