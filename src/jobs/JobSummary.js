@@ -6,7 +6,7 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   StopCircleIcon,
-  PauseCircleIcon,
+  InProgressIcon,
   UsersIcon,
   ServerIcon,
   CubesIcon,
@@ -93,7 +93,7 @@ function getIcon(status) {
       );
     default:
       return (
-        <PauseCircleIcon
+        <InProgressIcon
           size="lg"
           style={{ color: global_active_color_100.value }}
         />
