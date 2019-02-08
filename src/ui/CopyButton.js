@@ -1,43 +1,36 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ClipboardIcon } from "@patternfly/react-icons";
+import { Tooltip, TooltipPosition } from "@patternfly/react-core";
 
 export default class CopyButton extends Component {
   state = {
-    title: this.props.titleBefore
+    tooltipText: this.props.tooltipTextBefore || "Click to copy"
   };
+
   textCopied = () => {
-    this.setState({ title: this.props.titleAfter });
-    setTimeout(() => {
-      this.setState({ title: this.props.titleBefore });
-    }, 2000);
+    const { tooltipTextAfter = "Copied!" } = this.props;
+    const { tooltipText } = this.state;
+    this.setState({ tooltipText: tooltipTextAfter });
+    setTimeout(() => this.setState({ tooltipText }), 2000);
   };
 
   render() {
+    const { position = TooltipPosition.right, text } = this.props;
+    const { tooltipText } = this.state;
     return (
-      <CopyToClipboard text={this.props.text} onCopy={() => this.textCopied()}>
-        <span
-          data-balloon={this.state.title}
-          data-balloon-pos={this.props.position}
-          onClick={() => this.textCopied()}
-        >
-          <ClipboardIcon />
-        </span>
+      <CopyToClipboard text={text} onCopy={() => this.textCopied()}>
+        <div>
+          <Tooltip
+            position={position}
+            exitDelay={2000}
+            enableFlip
+            content={<div>{tooltipText}</div>}
+          >
+            <ClipboardIcon />
+          </Tooltip>
+        </div>
       </CopyToClipboard>
     );
   }
 }
-
-CopyButton.propTypes = {
-  titleBefore: PropTypes.string,
-  titleAfter: PropTypes.string,
-  position: PropTypes.string,
-  text: PropTypes.string.isRequired
-};
-
-CopyButton.defaultProps = {
-  titleBefore: "Click to copy",
-  titleAfter: "Copied!",
-  position: "right"
-};

@@ -20,7 +20,7 @@ const AlertsContainer = styled.div`
 export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
-      <ul class="pf-c-alert-group" role="status">
+      <ul className="pf-c-alert-group" role="status">
         {Object.values(alerts).map(alert => (
           <Alert
             key={alert.id}
