@@ -14,7 +14,7 @@ export class TopicsContainer extends Component {
     this.props.fetchTopics();
   }
   render() {
-    const { topics, isFetching } = this.props;
+    const { topics, isFetching, deleteTopic } = this.props;
     return (
       <Page
         title="Topics"
@@ -67,7 +67,7 @@ export class TopicsContainer extends Component {
                   <ConfirmDeleteButton
                     title={`Delete topic ${topic.name}`}
                     content={`Are you sure you want to delete ${topic.name}?`}
-                    whenConfirmed={() => this.props.deleteTopic(topic)}
+                    whenConfirmed={() => deleteTopic(topic)}
                   />
                 </td>
               </tr>

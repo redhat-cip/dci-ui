@@ -11,7 +11,7 @@ export class ComponentsContainer extends Component {
     this.props.fetchComponents();
   }
   render() {
-    const { components, isFetching } = this.props;
+    const { components, isFetching, deleteComponent } = this.props;
     return (
       <Page
         title="Components"
@@ -51,7 +51,7 @@ export class ComponentsContainer extends Component {
                     content={`Are you sure you want to delete ${
                       component.name
                     }?`}
-                    whenConfirmed={() => this.props.deleteComponent(component)}
+                    whenConfirmed={() => deleteComponent(component)}
                   />
                 </td>
               </tr>

@@ -8,8 +8,8 @@ class Checkbox extends Component {
   };
 
   render() {
-    const errorMessage = this.props.getErrorMessage();
-    const { id, label, name, required = false } = this.props;
+    const { id, label, name, required = false, getErrorMessage, getValue } = this.props;
+    const errorMessage = getErrorMessage();
     return (
       <div className="pf-c-form__group">
         <label htmlFor={name}>
@@ -17,8 +17,8 @@ class Checkbox extends Component {
             id={id || name}
             type="checkbox"
             name={name}
-            value={this.props.getValue()}
-            checked={!!this.props.getValue()}
+            value={getValue()}
+            checked={!!getValue()}
             onChange={this.changeValue}
           />
           {label}

@@ -19,7 +19,7 @@ export class RemotecisContainer extends Component {
   }
 
   render() {
-    const { remotecis, teams, isFetching } = this.props;
+    const { remotecis, teams, isFetching, deleteRemoteci } = this.props;
     return (
       <Page
         title="Remotecis"
@@ -82,7 +82,7 @@ export class RemotecisContainer extends Component {
                   />
                   <ConfirmDeleteButton
                     title={`Delete remoteci ${remoteci.name} ?`}
-                    whenConfirmed={() => this.props.deleteRemoteci(remoteci)}
+                    whenConfirmed={() => deleteRemoteci(remoteci)}
                   />
                 </td>
               </tr>

@@ -5,14 +5,14 @@ import actions from "./remotecisActions";
 
 export class NewRemoteciButton extends Component {
   render() {
-    const { teams } = this.props;
+    const { teams, createRemoteci, className } = this.props;
     return (
       <RemoteciForm
         title="Create a new remoteci"
         showModalButton="Create a new remoteci"
         okButton="Create"
-        submit={this.props.createRemoteci}
-        className={this.props.className}
+        submit={createRemoteci}
+        className={className}
         teams={teams}
       />
     );

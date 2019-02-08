@@ -19,16 +19,16 @@ export class LoginContainer extends Component {
   submit = user => {
     const token = window.btoa(user.username.concat(":", user.password));
     setBasicToken(token);
-    this.props
-      .getCurrentUser()
+    const { getCurrentUser, showError } = this.props;
+    getCurrentUser()
       .then(() => {
         this.setState({ redirectToReferrer: true });
       })
       .catch(error => {
         if (error.response && error.response.status) {
-          this.props.showError("Invalid username or password");
+          showError("Invalid username or password");
         } else {
-          this.props.showError(
+          showError(
             "Network error, check your connectivity or contact a DCI administrator"
           );
         }
