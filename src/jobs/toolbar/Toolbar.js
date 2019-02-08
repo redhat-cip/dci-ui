@@ -82,9 +82,9 @@ export default class DCIToolbar extends Component {
                   );
                 })}
               </div>
-              <div class="pf-c-chip pf-m-overflow pf-u-ml-xs">
+              <div className="pf-c-chip pf-m-overflow pf-u-ml-xs">
                 <Button variant="plain" onClick={() => clearFilters()}>
-                  <span class="pf-c-chip__text">Clear All Filters</span>
+                  <span className="pf-c-chip__text">Clear All Filters</span>
                 </Button>
               </div>
             </React.Fragment>
