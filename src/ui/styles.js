@@ -22,7 +22,7 @@ import "@patternfly/patternfly/utilities/Spacing/spacing.css";
 import "@patternfly/patternfly/components/Table/table.css";
 // import "@patternfly/patternfly/components/Table/table-grid.css";
 import "@patternfly/patternfly/components/DataList/data-list.css";
-// import "@patternfly/patternfly/components/AlertGroup/alert-group.css";
+import "@patternfly/patternfly/components/AlertGroup/alert-group.css";
 // import "@patternfly/patternfly/components/Breadcrumb/breadcrumb.css";
 // import "@patternfly/patternfly/components/ModalBox/modal-box.css";
 import "@patternfly/patternfly/components/BackgroundImage/background-image.css";

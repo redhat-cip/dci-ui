@@ -1,46 +1,47 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-
 import { Alert, Button } from "@patternfly/react-core";
-import { hideAlert } from "./alertsActions";
 import { TimesIcon } from "@patternfly/react-icons";
+import { hideAlert } from "./alertsActions";
 
 const AlertsContainer = styled.div`
   position: fixed;
-  z-index: 100;
-  top: 20px;
-  right: 20px;
+  z-index: 600;
+  padding: 1em;
+  width: 100%;
+
+  @media only screen and (min-width: 960px) {
+    width: 75%;
+    right: 1em;
+  }
 `;
 
 export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
-      {Object.values(alerts).map((alert, i) => (
-        <Alert
-          key={i}
-          variant={alert.type}
-          title={alert.title}
-          action={
-            <Button
-              variant="plain"
-              aria-label="close alert"
-              onClick={() => hide(alert)}
-            >
-              <TimesIcon />
-            </Button>
-          }
-        >
-          {alert.message
-            ? alert.message.split("\n").map((item, key) => (
-                <span key={key}>
-                  {item}
-                  <br />
-                </span>
-              ))
-            : null}
-        </Alert>
-      ))}
+      <ul class="pf-c-alert-group" role="status">
+        {Object.values(alerts).map(alert => (
+          <Alert
+            key={alert.id}
+            variant={alert.type}
+            title={alert.title}
+            action={
+              <Button
+                variant="plain"
+                aria-label="close alert"
+                onClick={() => hide(alert)}
+              >
+                <TimesIcon />
+              </Button>
+            }
+          >
+            {alert.message
+              ? alert.message.split("\n").map((m, i) => <p key={i}>{m}</p>)
+              : null}
+          </Alert>
+        ))}
+      </ul>
     </AlertsContainer>
   );
 }
