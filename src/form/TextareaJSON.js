@@ -20,24 +20,25 @@ class TextareaJSON extends Component {
   };
 
   componentDidMount() {
-    const value = this.props.value || {};
-    this.props.setValue(value);
+    const { value = {}, setValue } = this.props;
+    setValue(value);
     this.setState({ value: JSON.stringify(value) });
   }
 
   changeValue = event => {
+    const { isValidValue, setValue } = this.props;
     const text = event.currentTarget.value;
-    if (this.props.isValidValue(text)) {
-      this.props.setValue(JSON.parse(text));
+    if (isValidValue(text)) {
+      setValue(JSON.parse(text));
     } else {
-      this.props.setValue(text);
+      setValue(text);
     }
     this.setState({ value: text });
   };
 
   render() {
-    const errorMessage = this.props.getErrorMessage();
-    const { id, label, name, required = false } = this.props;
+    const { id, label, name, required = false, getErrorMessage } = this.props;
+    const errorMessage = getErrorMessage();
     return (
       <div className="pf-c-form__group">
         <label className="pf-c-form__label" htmlFor={name}>

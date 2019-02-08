@@ -12,11 +12,12 @@ import { getTeams } from "../teams/teamsSelectors";
 
 export class ProductsContainer extends Component {
   componentDidMount() {
-    this.props.fetchProducts();
+    const { fetchProducts } = this.props;
+    fetchProducts();
   }
 
   render() {
-    const { products, isFetching } = this.props;
+    const { products, isFetching, deleteProduct } = this.props;
     return (
       <Page
         title="Products"
@@ -58,7 +59,7 @@ export class ProductsContainer extends Component {
                   <ConfirmDeleteButton
                     title={`Delete product ${product.name}`}
                     content={`Are you sure you want to delete ${product.name}?`}
-                    whenConfirmed={() => this.props.deleteProduct(product)}
+                    whenConfirmed={() => deleteProduct(product)}
                   />
                 </td>
               </tr>

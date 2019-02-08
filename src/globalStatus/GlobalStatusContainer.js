@@ -45,7 +45,8 @@ export class GlobalStatusContainer extends Component {
   };
 
   componentDidMount() {
-    this.props.getGlobalStatus();
+    const { getGlobalStatus } = this.props;
+    getGlobalStatus();
   }
 
   seeStatDetails = stat => {

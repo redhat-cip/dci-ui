@@ -8,7 +8,8 @@ import { createTopicsFilter, getCurrentFilters, removeFilter } from "./filters";
 
 export class TopicsFilter extends Component {
   componentDidMount() {
-    this.props.fetchTopics();
+    const { fetchTopics } = this.props;
+    fetchTopics();
   }
 
   _cleanFiltersAndFilterJobs = filters => {

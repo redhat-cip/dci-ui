@@ -14,10 +14,18 @@ import { getRoles } from "../roles/rolesSelectors";
 
 export class UsersContainer extends Component {
   componentDidMount() {
-    this.props.fetchUsers();
+    const { fetchUsers } = this.props;
+    fetchUsers();
   }
   render() {
-    const { users, teams, roles, isFetching, currentUser } = this.props;
+    const {
+      users,
+      teams,
+      roles,
+      isFetching,
+      currentUser,
+      deleteUser
+    } = this.props;
     return (
       <Page
         title="Users"
@@ -67,7 +75,7 @@ export class UsersContainer extends Component {
                   <ConfirmDeleteButton
                     title={`Delete user ${user.name}`}
                     content={`Are you sure you want to delete ${user.name}?`}
-                    whenConfirmed={() => this.props.deleteUser(user)}
+                    whenConfirmed={() => deleteUser(user)}
                     isDisabled={currentUser.id === user.id}
                   />
                 </td>

@@ -11,7 +11,8 @@ import { EmptyState } from "../ui";
 
 export class NotificationsContainer extends Component {
   componentDidMount() {
-    this.props.fetchRemotecis();
+    const { fetchRemotecis } = this.props;
+    fetchRemotecis();
   }
 
   render() {

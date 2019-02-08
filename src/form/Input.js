@@ -4,12 +4,22 @@ import { withFormsy } from "formsy-react";
 
 class Input extends Component {
   changeValue = event => {
-    this.props.setValue(event.currentTarget.value);
+    const { setValue } = this.props;
+    setValue(event.currentTarget.value);
   };
 
   render() {
-    const errorMessage = this.props.getErrorMessage();
-    const { id, label, name, type, required = false } = this.props;
+    const {
+      id,
+      label,
+      name,
+      type,
+      required = false,
+      getErrorMessage,
+      getValue
+    } = this.props;
+    const errorMessage = getErrorMessage();
+
     return (
       <div className="pf-c-form__group">
         <label className="pf-c-form__label" htmlFor={name}>
@@ -26,7 +36,7 @@ class Input extends Component {
           className="pf-c-form-control"
           onChange={this.changeValue}
           type={type}
-          value={this.props.getValue() || ""}
+          value={getValue() || ""}
         />
         <p className="pf-c-form__helper-text pf-m-error">{errorMessage}</p>
       </div>

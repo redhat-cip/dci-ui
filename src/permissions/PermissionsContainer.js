@@ -23,7 +23,8 @@ export class PermissionsContainer extends Component {
     team: null
   };
   componentDidMount() {
-    this.props.fetchTeamsAndTopics();
+    const { fetchTeamsAndTopics } = this.props;
+    fetchTeamsAndTopics();
   }
 
   render() {

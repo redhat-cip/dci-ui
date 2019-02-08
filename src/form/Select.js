@@ -8,15 +8,24 @@ class Select extends Component {
   };
 
   render() {
-    const errorMessage = this.props.getErrorMessage();
-    const { id, label, name, required, options } = this.props;
+    const {
+      id,
+      label,
+      name,
+      required,
+      options,
+      getErrorMessage,
+      getValue
+    } = this.props;
+    const errorMessage = getErrorMessage();
+
     return (
       <div className="pf-c-form__group">
         <label htmlFor={name}>{label}</label>
         <select
           id={id || name}
           name={name}
-          value={this.props.getValue() || ""}
+          value={getValue() || ""}
           onChange={this.changeValue}
           className="pf-c-form-control"
         >

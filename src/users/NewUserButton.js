@@ -5,14 +5,14 @@ import actions from "./usersActions";
 
 export class NewUserButton extends Component {
   render() {
-    const { teams, roles } = this.props;
+    const { teams, roles, createUser, className } = this.props;
     return (
       <UserForm
         title="Create a new user"
         showModalButton="Create a new user"
         okButton="Create"
-        submit={this.props.createUser}
-        className={this.props.className}
+        submit={createUser}
+        className={className}
         teams={teams}
         roles={roles}
       />

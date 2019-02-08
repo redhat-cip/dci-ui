@@ -5,13 +5,14 @@ import actions from "./topicsActions";
 
 export class NewTopicButton extends Component {
   render() {
+    const { createTopic, className } = this.props;
     return (
       <TopicForm
         title="Create a new topic"
         showModalButton="Create a new topic"
         okButton="Create"
-        submit={this.props.createTopic}
-        className={this.props.className}
+        submit={createTopic}
+        className={className}
       />
     );
   }

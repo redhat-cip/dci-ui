@@ -8,7 +8,8 @@ import { createTeamsFilter, getCurrentFilters, removeFilters } from "./filters";
 
 export class RemoteciInTeamFilter extends Component {
   componentDidMount() {
-    this.props.fetchTeams();
+    const { fetchTeams } = this.props;
+    fetchTeams();
   }
 
   _cleanFiltersAndFilterJobs = filters => {

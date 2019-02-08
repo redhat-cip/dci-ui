@@ -5,13 +5,14 @@ import actions from "./teamsActions";
 
 export class NewTeamButton extends Component {
   render() {
+    const { createTeam, className } = this.props;
     return (
       <TeamForm
         title="Create a new team"
         showModalButton="Create a new team"
         okButton="Create"
-        submit={this.props.createTeam}
-        className={this.props.className}
+        submit={createTeam}
+        className={className}
       />
     );
   }

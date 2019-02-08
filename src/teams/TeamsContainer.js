@@ -10,10 +10,11 @@ import { getTeams } from "../teams/teamsSelectors";
 
 export class TeamsContainer extends Component {
   componentDidMount() {
-    this.props.fetchTeams();
+    const { fetchTeams } = this.props;
+    fetchTeams();
   }
   render() {
-    const { teams, isFetching } = this.props;
+    const { teams, isFetching, deleteTeam } = this.props;
     return (
       <Page
         title="Teams"
@@ -59,7 +60,7 @@ export class TeamsContainer extends Component {
                   <ConfirmDeleteButton
                     title={`Delete team ${team.name}`}
                     content={`Are you sure you want to delete ${team.name}?`}
-                    whenConfirmed={() => this.props.deleteTeam(team)}
+                    whenConfirmed={() => deleteTeam(team)}
                   />
                 </td>
               </tr>

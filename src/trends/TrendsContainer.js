@@ -18,7 +18,8 @@ export class TrendsContainer extends Component {
 
   componentDidMount() {
     this.setState({ isFetching: true });
-    this.props.fetchTrends().then(() => this.setState({ isFetching: false }));
+    const { fetchTrends } = this.props;
+    fetchTrends().then(() => this.setState({ isFetching: false }));
   }
 
   render() {

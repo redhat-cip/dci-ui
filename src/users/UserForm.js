@@ -30,7 +30,16 @@ export default class UserForm extends Component {
   };
 
   render() {
-    const { title, okButton, submit, teams, roles, ...props } = this.props;
+    const {
+      title,
+      okButton,
+      submit,
+      teams,
+      roles,
+      showModalButton,
+      className,
+      ...props
+    } = this.props;
     const { canSubmit, show, user } = this.state;
     return (
       <React.Fragment>
@@ -108,11 +117,11 @@ export default class UserForm extends Component {
         <Button
           id="users-screen__show-modal-button"
           variant="primary"
-          className={this.props.className}
+          className={className}
           onClick={this.showModal}
           {...props}
         >
-          {this.props.showModalButton}
+          {showModalButton}
         </Button>
       </React.Fragment>
     );

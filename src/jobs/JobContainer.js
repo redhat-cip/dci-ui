@@ -35,34 +35,34 @@ export class JobContainer extends Component {
   };
 
   componentDidMount() {
-    const { id, tab } = this.props.match.params;
-    this.props
-      .fetchJob(id)
+    const { match, fetchJob, getResults, getJobStates, getIssues } = this.props;
+    const { id, tab } = match.params;
+    fetchJob(id)
       .then(response => {
         const job = response.data.job;
-        const getResults = this.props.getResults(job);
-        const getJobStates = this.props.getJobStates(job);
-        const getIssues = this.props.getIssues(job);
-        return Promise.all([getResults, getJobStates, getIssues]).then(
-          values => {
-            this.setState({
-              job: {
-                ...job,
-                tests: values[0].data.results,
-                jobstates: values[1].data.jobstates,
-                issues: values[2].data.issues
-              },
-              tab
-            });
-          }
-        );
+        return Promise.all([
+          getResults(job),
+          getJobStates(job),
+          getIssues(job)
+        ]).then(values => {
+          this.setState({
+            job: {
+              ...job,
+              tests: values[0].data.results,
+              jobstates: values[1].data.jobstates,
+              issues: values[2].data.issues
+            },
+            tab
+          });
+        });
       })
       .catch(error => console.log(error))
       .then(() => this.setState({ isFetching: false }));
   }
 
   createIssue = issue => {
-    this.props.createIssue(this.state.job, issue).then(response => {
+    const { createIssue } = this.props;
+    createIssue(this.state.job, issue).then(response => {
       const newIssue = response.data.issue;
       this.setState(prevState => {
         return {
@@ -82,7 +82,8 @@ export class JobContainer extends Component {
   };
 
   deleteIssue = issue => {
-    this.props.deleteIssue(this.state.job, issue).then(() =>
+    const { deleteIssue } = this.props;
+    deleteIssue(this.state.job, issue).then(() =>
       this.setState(prevState => {
         return {
           job: {

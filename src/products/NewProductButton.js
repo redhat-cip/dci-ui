@@ -5,13 +5,14 @@ import actions from "./producstActions";
 
 export class NewProductButton extends Component {
   render() {
+    const { createProduct, className } = this.props;
     return (
       <ProductForm
         title="Create a new product"
         showModalButton="Create a new product"
         okButton="Create"
-        submit={this.props.createProduct}
-        className={this.props.className}
+        submit={createProduct}
+        className={className}
       />
     );
   }
