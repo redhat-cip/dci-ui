@@ -16,7 +16,8 @@ class Input extends Component {
       type,
       required = false,
       getErrorMessage,
-      getValue
+      getValue,
+      placeholder
     } = this.props;
     const errorMessage = getErrorMessage();
 
@@ -37,6 +38,7 @@ class Input extends Component {
           onChange={this.changeValue}
           type={type}
           value={getValue() || ""}
+          placeholder={placeholder}
         />
         <p className="pf-c-form__helper-text pf-m-error">{errorMessage}</p>
       </div>
