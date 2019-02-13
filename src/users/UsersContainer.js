@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Formsy from "formsy-react";
+import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import { Page } from "../layout";
 import usersActions from "./usersActions";
 import rolesActions from "../roles/rolesActions";
 import teamsActions from "../teams/teamsActions";
 import { CopyButton, EmptyState, ConfirmDeleteButton } from "../ui";
+import { Input } from "../form";
 import NewUserButton from "./NewUserButton";
 import EditUserButton from "./EditUserButton";
 import { getUsers } from "./usersSelectors";
@@ -13,6 +16,9 @@ import { getTeams } from "../teams/teamsSelectors";
 import { getRoles } from "../roles/rolesSelectors";
 
 export class UsersContainer extends Component {
+  state = {
+    search: ""
+  };
   componentDidMount() {
     const { fetchUsers } = this.props;
     fetchUsers();
@@ -26,36 +32,66 @@ export class UsersContainer extends Component {
       currentUser,
       deleteUser
     } = this.props;
+    const { search } = this.state;
+    const filteredUsers = users.filter(user => {
+      const lowerSearch = search.toLowerCase();
+      return (
+        user.email.toLowerCase().includes(lowerSearch) ||
+        user.name.toLowerCase().includes(lowerSearch) ||
+        user.fullname.toLowerCase().includes(lowerSearch)
+      );
+    });
     return (
       <Page
         title="Users"
-        loading={isFetching && isEmpty(users)}
-        empty={!isFetching && isEmpty(users)}
-        HeaderButton={<NewUserButton teams={teams} roles={roles} />}
+        loading={isFetching && isEmpty(filteredUsers)}
+        empty={!isFetching && isEmpty(filteredUsers)}
+        HeaderButton={
+          <Toolbar>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <Formsy
+                  onChange={({ search }) => this.setState({ search })}
+                  className="pf-c-form"
+                >
+                  <Input name="search" placeholder="Search a user" />
+                </Formsy>
+              </ToolbarItem>
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <NewUserButton
+                  teams={teams}
+                  roles={roles}
+                />
+              </ToolbarItem>
+            </ToolbarGroup>
+          </Toolbar>
+        }
         EmptyComponent={
           <EmptyState
             title="There is no users"
-            info="Do you want to create one?"
+            info={isEmpty(search) ? "Do you want to create one?" : "Modify your search"}
           />
         }
       >
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
-              <th className="pf-u-text-align-center col-xs-1">ID</th>
+              <th>ID</th>
               <th>Login</th>
               <th>Full name</th>
               <th>Email</th>
               <th>Team</th>
               <th>Role</th>
               <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {filteredUsers.map(user => (
               <tr key={`${user.id}.${user.etag}`}>
-                <td className="pf-u-text-align-center">
+                <td>
                   <CopyButton text={user.id} />
                 </td>
                 <td>{user.name}</td>
@@ -64,9 +100,9 @@ export class UsersContainer extends Component {
                 <td>{user.team ? user.team.name.toUpperCase() : null}</td>
                 <td>{user.role.name}</td>
                 <td>{user.from_now}</td>
-                <td className="pf-u-text-align-center">
+                <td className="pf-u-text-align-right">
                   <EditUserButton
-                    className="pf-u-mr-xl"
+                    className="pf-u-mr-xs"
                     user={user}
                     teams={teams}
                     roles={roles}
