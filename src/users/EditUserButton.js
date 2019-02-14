@@ -6,7 +6,7 @@ import { EditAltIcon } from "@patternfly/react-icons";
 
 export class EditUserButton extends Component {
   render() {
-    const { user, teams, roles, editUser, ...props } = this.props;
+    const { user, editUser, ...props } = this.props;
     return (
       <UserForm
         {...props}
@@ -20,8 +20,6 @@ export class EditUserButton extends Component {
             ...newUser
           });
         }}
-        teams={teams}
-        roles={roles}
       />
     );
   }

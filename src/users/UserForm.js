@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput, FormModal } from "../form";
+import { Input, HiddenInput, FormModal } from "../form";
 
 export default class UserForm extends Component {
   state = {
@@ -34,8 +33,6 @@ export default class UserForm extends Component {
       title,
       okButton,
       submit,
-      teams,
-      roles,
       showModalButton,
       className,
       ...props
@@ -67,6 +64,7 @@ export default class UserForm extends Component {
               label="Login"
               name="name"
               value={user.name}
+              placeholder="jdoe"
               required
             />
             <Input
@@ -74,6 +72,7 @@ export default class UserForm extends Component {
               label="Full name"
               name="fullname"
               value={user.fullname}
+              placeholder="John Doe"
               required
             />
             <Input
@@ -84,6 +83,7 @@ export default class UserForm extends Component {
               validations="isEmail"
               validationError="This is not a valid email"
               value={user.email}
+              placeholder="jdoe@redhat.com"
               required
             />
             <Input
@@ -92,26 +92,6 @@ export default class UserForm extends Component {
               name="password"
               type="password"
             />
-            {isEmpty(teams) ? null : (
-              <Select
-                id="user-form__team"
-                label="Team"
-                name="team_id"
-                options={teams}
-                value={user.team_id || teams[0].id}
-                required
-              />
-            )}
-            {isEmpty(roles) ? null : (
-              <Select
-                id="user-form__role"
-                label="Role"
-                name="role_id"
-                options={roles}
-                value={user.role_id || roles[0].id}
-                required
-              />
-            )}
           </Formsy>
         </FormModal>
         <Button

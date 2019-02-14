@@ -5,7 +5,7 @@ import actions from "./usersActions";
 
 export class NewUserButton extends Component {
   render() {
-    const { teams, roles, createUser, className } = this.props;
+    const { createUser, className } = this.props;
     return (
       <UserForm
         title="Create a new user"
@@ -13,8 +13,6 @@ export class NewUserButton extends Component {
         okButton="Create"
         submit={createUser}
         className={className}
-        teams={teams}
-        roles={roles}
       />
     );
   }
