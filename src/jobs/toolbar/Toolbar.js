@@ -57,7 +57,13 @@ export default class DCIToolbar extends Component {
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarItem>
-              <Pagination pagination={pagination} count={count} goTo={goTo} />
+              <Pagination
+                pagination={pagination}
+                count={count}
+                goTo={goTo}
+                items="jobs"
+                aria-label="Jobs pagination"
+              />
             </ToolbarItem>
           </ToolbarGroup>
         </ToolbarSection>
