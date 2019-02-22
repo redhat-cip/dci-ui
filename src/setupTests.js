@@ -1,5 +1,3 @@
-import "@babel/polyfill";
-
 const localStorageMock = (function() {
   let store = {};
   return {
