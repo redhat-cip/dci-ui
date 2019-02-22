@@ -1,0 +1,6 @@
+- hosts: all
+  roles:
+    - role: npm
+      npm_command: install
+    - role: npm
+      npm_command: test
