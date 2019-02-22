@@ -240,13 +240,11 @@ export class JobSummary extends Component {
               position={DropdownPosition.right}
               items={[
                 <DropdownItem component="button" onClick={() => deleteJob(job)}>
-                  <TextRed>
-                    <WarningTriangleIcon
-                      color={global_danger_color_100.value}
-                      className="pf-u-mr-xs"
-                    />
-                    delete job
-                  </TextRed>
+                  <WarningTriangleIcon
+                    color={global_danger_color_100.value}
+                    className="pf-u-mr-xs"
+                  />
+                  <TextRed>delete job</TextRed>
                 </DropdownItem>
               ]}
             />
