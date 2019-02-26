@@ -7,13 +7,13 @@ import { Page } from "../layout";
 import usersActions from "./usersActions";
 import rolesActions from "../roles/rolesActions";
 import teamsActions from "../teams/teamsActions";
-import { CopyButton, EmptyState, ConfirmDeleteButton } from "../ui";
+import { EmptyState } from "../ui";
 import { Input } from "../form";
 import NewUserButton from "./NewUserButton";
-import EditUserButton from "./EditUserButton";
 import { getUsers } from "./usersSelectors";
 import { getTeams } from "../teams/teamsSelectors";
 import { getRoles } from "../roles/rolesSelectors";
+import UserRow from "./UserRow";
 
 export class UsersContainer extends Component {
   state = {
@@ -83,40 +83,18 @@ export class UsersContainer extends Component {
               <th>Login</th>
               <th>Full name</th>
               <th>Email</th>
-              <th>Team</th>
-              <th>Role</th>
               <th>Created</th>
               <th />
             </tr>
           </thead>
           <tbody>
             {filteredUsers.map(user => (
-              <tr key={`${user.id}.${user.etag}`}>
-                <td>
-                  <CopyButton text={user.id} />
-                </td>
-                <td>{user.name}</td>
-                <td>{user.fullname}</td>
-                <td>{user.email}</td>
-                <td>{user.team ? user.team.name.toUpperCase() : null}</td>
-                <td>{user.role.name}</td>
-                <td>{user.from_now}</td>
-                <td className="pf-u-text-align-right">
-                  <EditUserButton
-                    className="pf-u-mr-xs"
-                    user={user}
-                    teams={teams}
-                    roles={roles}
-                    isDisabled={currentUser.id === user.id}
-                  />
-                  <ConfirmDeleteButton
-                    title={`Delete user ${user.name}`}
-                    content={`Are you sure you want to delete ${user.name}?`}
-                    whenConfirmed={() => deleteUser(user)}
-                    isDisabled={currentUser.id === user.id}
-                  />
-                </td>
-              </tr>
+              <UserRow
+                key={`${user.id}.${user.etag}`}
+                user={user}
+                isDisabled={currentUser.id === user.id}
+                deleteConfirmed={() => deleteUser(user)}
+              />
             ))}
           </tbody>
         </table>
