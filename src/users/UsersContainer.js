@@ -60,10 +60,7 @@ export class UsersContainer extends Component {
             </ToolbarGroup>
             <ToolbarGroup>
               <ToolbarItem>
-                <NewUserButton
-                  teams={teams}
-                  roles={roles}
-                />
+                <NewUserButton teams={teams} roles={roles} />
               </ToolbarItem>
             </ToolbarGroup>
           </Toolbar>
@@ -71,7 +68,11 @@ export class UsersContainer extends Component {
         EmptyComponent={
           <EmptyState
             title="There is no users"
-            info={isEmpty(search) ? "Do you want to create one?" : "Modify your search"}
+            info={
+              isEmpty(search)
+                ? "Do you want to create one?"
+                : "Modify your search"
+            }
           />
         }
       >
@@ -85,7 +86,7 @@ export class UsersContainer extends Component {
               <th>Team</th>
               <th>Role</th>
               <th>Created</th>
-              <th></th>
+              <th />
             </tr>
           </thead>
           <tbody>
