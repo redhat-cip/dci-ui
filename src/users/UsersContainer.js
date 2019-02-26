@@ -7,7 +7,7 @@ import { Page } from "../layout";
 import usersActions from "./usersActions";
 import rolesActions from "../roles/rolesActions";
 import teamsActions from "../teams/teamsActions";
-import { EmptyState } from "../ui";
+import { EmptyState, Pagination } from "../ui";
 import { Input } from "../form";
 import NewUserButton from "./NewUserButton";
 import { getUsers } from "./usersSelectors";
@@ -44,39 +44,49 @@ export class UsersContainer extends Component {
     return (
       <Page
         title="Users"
-        loading={isFetching && isEmpty(filteredUsers)}
-        empty={!isFetching && isEmpty(filteredUsers)}
-        HeaderButton={
-          <Toolbar>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <Formsy
-                  onChange={({ search }) => this.setState({ search })}
-                  className="pf-c-form"
-                >
-                  <Input name="search" placeholder="Search a user" />
-                </Formsy>
-              </ToolbarItem>
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <NewUserButton teams={teams} roles={roles} />
-              </ToolbarItem>
-            </ToolbarGroup>
-          </Toolbar>
-        }
+        loading={isFetching && isEmpty(users)}
+        empty={!isFetching && isEmpty(users)}
         EmptyComponent={
           <EmptyState
             title="There is no users"
-            info={
-              isEmpty(search)
-                ? "Do you want to create one?"
-                : "Modify your search"
-            }
+            info="Do you want to create one?"
           />
         }
       >
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
+          <thead>
+            <tr>
+              <th colSpan={6}>
+                <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
+                  <ToolbarGroup>
+                    <ToolbarItem className="pf-u-mr-md">
+                      <NewUserButton teams={teams} roles={roles} />
+                    </ToolbarItem>
+                    <ToolbarItem>
+                      <Formsy
+                        onChange={({ search }) => this.setState({ search })}
+                        className="pf-c-form"
+                      >
+                        <Input name="search" placeholder="Search a user" />
+                      </Formsy>
+                    </ToolbarItem>
+                  </ToolbarGroup>
+                  <ToolbarGroup>
+                    {/* <Pagination
+                      pagination={{
+                        page: 1,
+                        perPage: 20
+                      }}
+                      count={100}
+                      goTo={page => alert(page)}
+                      items="users"
+                      aria-label="Users pagination"
+                    /> */}
+                  </ToolbarGroup>
+                </Toolbar>
+              </th>
+            </tr>
+          </thead>
           <thead>
             <tr>
               <th>ID</th>
@@ -84,7 +94,7 @@ export class UsersContainer extends Component {
               <th>Full name</th>
               <th>Email</th>
               <th>Created</th>
-              <th />
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
