@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bba6b5d_03907ec9",
+        "filename": "src/users/UsersContainer.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 166
+      },
+      "writtenOn": "2019-02-26T13:11:05Z",
+      "side": 1,
+      "message": "Am I right to assume that the import of EmptyState from ../ui is related to that line and not the current changeset?\n\nIt\u0027s fine, I just want to understand :)",
+      "revId": "889f7cbb4972b0132a4c594047eac85d53fd6e06",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
