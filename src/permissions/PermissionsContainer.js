@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "../layout";
+import { Page } from "layout";
 import {
   Button,
   Card,
@@ -9,11 +9,11 @@ import {
   TextContent,
   Text
 } from "@patternfly/react-core";
-import topicsActions from "../topics/topicsActions";
-import { getTopics } from "../topics/topicsSelectors";
-import teamsActions from "../teams/teamsActions";
-import { getTeams } from "../teams/teamsSelectors";
-import { EmptyState, Filter } from "../ui";
+import topicsActions from "topics/topicsActions";
+import { getTopics } from "topics/topicsSelectors";
+import teamsActions from "teams/teamsActions";
+import { getTeams } from "teams/teamsSelectors";
+import { EmptyState, Filter } from "ui";
 import TeamsTopicsListPermissions from "./TeamsTopicsListPermissions";
 import { associateTopicToTeam } from "./teamsTopicsActions";
 

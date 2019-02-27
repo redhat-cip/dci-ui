@@ -5,7 +5,7 @@ import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
 import { humanFileSize } from "./filesGetters";
 import { FileDownloadIcon } from "@patternfly/react-icons";
-import { RotatingSpinnerIcon } from "../../ui";
+import { RotatingSpinnerIcon } from "ui";
 
 export class File extends Component {
   state = {

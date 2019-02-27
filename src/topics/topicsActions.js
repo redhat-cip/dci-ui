@@ -1,3 +1,3 @@
-import { createActions } from "../api/apiActions";
+import { createActions } from "api/apiActions";
 
 export default createActions("topic");

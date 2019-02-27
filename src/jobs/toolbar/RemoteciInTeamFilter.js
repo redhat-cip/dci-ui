@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import teamsActions from "../../teams/teamsActions";
-import { getTeams } from "../../teams/teamsSelectors";
-import { Filter, LoadingFilter } from "../../ui";
+import teamsActions from "teams/teamsActions";
+import { getTeams } from "teams/teamsSelectors";
+import { Filter, LoadingFilter } from "ui";
 import { createTeamsFilter, getCurrentFilters, removeFilters } from "./filters";
 
 export class RemoteciInTeamFilter extends Component {

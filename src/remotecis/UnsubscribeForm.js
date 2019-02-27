@@ -3,8 +3,8 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import Formsy from "formsy-react";
 import { Button, Card, CardBody } from "@patternfly/react-core";
-import { Select } from "../form";
-import { unsubscribeFromARemoteci } from "../currentUser/currentUserActions";
+import { Select } from "form";
+import { unsubscribeFromARemoteci } from "currentUser/currentUserActions";
 
 export class UnsubscribeForm extends Component {
   state = {

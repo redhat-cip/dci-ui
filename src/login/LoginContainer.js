@@ -5,10 +5,10 @@ import { Button } from "@patternfly/react-core";
 
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
-import { getCurrentUser } from "../currentUser/currentUserActions";
-import { setBasicToken } from "../services/localStorage";
-import Logo from "../logo.svg";
-import { showError } from "../alerts/alertsActions";
+import { getCurrentUser } from "currentUser/currentUserActions";
+import { setBasicToken } from "services/localStorage";
+import Logo from "logo.svg";
+import { showError } from "alerts/alertsActions";
 
 export class LoginContainer extends Component {
   state = {

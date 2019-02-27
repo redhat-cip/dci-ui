@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, GridItem } from "@patternfly/react-core";
-import { updateCurrentUser } from "../currentUser/currentUserActions";
+import { updateCurrentUser } from "currentUser/currentUserActions";
 import ProfileForm from "./ProfileForm";
 import ChangePasswordForm from "./ChangePasswordForm";
-import { Page } from "../layout";
+import { Page } from "layout";
 
 export class ProfileContainer extends Component {
   render() {

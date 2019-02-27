@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
 import { sortBy } from "lodash";
-import { getTeamsById } from "../teams/teamsSelectors";
-import { getTimezone } from "../currentUser/currentUserSelectors";
-import { fromNow } from "../services/date";
+import { getTeamsById } from "teams/teamsSelectors";
+import { getTimezone } from "currentUser/currentUserSelectors";
+import { fromNow } from "services/date";
 
 export const getRemotecisById = state => state.remotecis.byId;
 export const getRemotecisAllIds = state => state.remotecis.allIds;

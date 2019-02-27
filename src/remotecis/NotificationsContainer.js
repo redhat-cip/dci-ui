@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { isEmpty, differenceBy } from "lodash";
 import remotecisActions from "./remotecisActions";
 import { getRemotecis } from "./remotecisSelectors";
-import { Page } from "../layout";
+import { Page } from "layout";
 import { Grid, GridItem } from "@patternfly/react-core";
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
-import { EmptyState } from "../ui";
+import { EmptyState } from "ui";
 
 export class NotificationsContainer extends Component {
   componentDidMount() {

@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
-import { Page } from "../layout";
+import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
-import teamsActions from "../teams/teamsActions";
-import { CopyButton, Labels, EmptyState, ConfirmDeleteButton } from "../ui";
+import teamsActions from "teams/teamsActions";
+import { CopyButton, Labels, EmptyState, ConfirmDeleteButton } from "ui";
 import NewRemoteciButton from "./NewRemoteciButton";
 import EditRemoteciButton from "./EditRemoteciButton";
 import { getRemotecis } from "./remotecisSelectors";
-import { getTeams } from "../teams/teamsSelectors";
-import { downloadRCFile } from "../services/runcom";
+import { getTeams } from "teams/teamsSelectors";
+import { downloadRCFile } from "services/runcom";
 import { DownloadIcon } from "@patternfly/react-icons";
 
 export class RemotecisContainer extends Component {

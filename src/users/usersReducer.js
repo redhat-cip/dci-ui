@@ -1,3 +1,3 @@
-import { createReducer } from "../api/apiReducers";
+import { createReducer } from "api/apiReducers";
 
 export default createReducer("user");

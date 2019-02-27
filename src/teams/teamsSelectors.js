@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { sortBy } from "lodash";
-import { getTimezone } from "../currentUser/currentUserSelectors";
-import { fromNow } from "../services/date";
+import { getTimezone } from "currentUser/currentUserSelectors";
+import { fromNow } from "services/date";
 
 export const getTeamsById = state => state.teams.byId;
 export const getTeamsAllIds = state => state.teams.allIds;

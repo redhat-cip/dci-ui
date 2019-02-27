@@ -5,8 +5,8 @@ import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { Page } from "../layout";
-import { EmptyState } from "../ui";
+import { Page } from "layout";
+import { EmptyState } from "ui";
 import Toolbar from "./toolbar/Toolbar";
 
 export class JobsContainer extends Component {

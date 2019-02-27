@@ -1,5 +1,5 @@
 import moment from "moment";
-import http from "../../services/http";
+import http from "services/http";
 
 export function addDuration(jobStates) {
   const { newJobStates } = jobStates

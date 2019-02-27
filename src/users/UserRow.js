@@ -1,5 +1,5 @@
 import React from "react";
-import { CopyButton, ConfirmDeleteButton } from "../ui";
+import { CopyButton, ConfirmDeleteButton } from "ui";
 import EditUserButton from "./EditUserButton";
 
 export default function UserRow({ user, isDisabled, deleteConfirmed }) {

@@ -22,8 +22,8 @@ import {
   global_warning_color_100,
   global_Color_light_100
 } from "@patternfly/react-tokens";
-import { Labels, KebabDropdown } from "../ui";
-import { formatDate, duration } from "../services/date";
+import { Labels, KebabDropdown } from "ui";
+import { formatDate, duration } from "services/date";
 import { isEmpty, orderBy } from "lodash";
 import jobsActions from "./jobsActions";
 

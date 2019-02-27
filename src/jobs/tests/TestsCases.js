@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
-import { EmptyState, Filter } from "../../ui";
+import { EmptyState, Filter } from "ui";
 import TestsCase from "./TestsCase";
 import { SearchIcon } from "@patternfly/react-icons";
 

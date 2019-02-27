@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import { Page } from "../layout";
-import actions from "../teams/teamsActions";
-import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "../ui";
-import NewTeamButton from "../teams/NewTeamButton";
-import EditTeamButton from "../teams/EditTeamButton";
-import { getTeams } from "../teams/teamsSelectors";
+import { Page } from "layout";
+import actions from "teams/teamsActions";
+import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "ui";
+import NewTeamButton from "teams/NewTeamButton";
+import EditTeamButton from "teams/EditTeamButton";
+import { getTeams } from "teams/teamsSelectors";
 
 export class TeamsContainer extends Component {
   componentDidMount() {

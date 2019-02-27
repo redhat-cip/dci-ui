@@ -1,10 +1,10 @@
-import http from "../services/http";
+import http from "services/http";
 import {
   showAPIError,
   showSuccess,
   showWarning
-} from "../alerts/alertsActions";
-import topicsActions from "../topics/topicsActions";
+} from "alerts/alertsActions";
+import topicsActions from "topics/topicsActions";
 
 export function associateTopicToTeam(topic, team) {
   return (dispatch, getState) => {

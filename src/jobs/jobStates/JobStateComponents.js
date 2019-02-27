@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Colors } from "../../ui";
+import { Colors } from "ui";
 
 export const JobStates = styled.div`
   padding: 1em 0;

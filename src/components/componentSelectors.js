@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { sortBy } from "lodash";
-import { getTimezone } from "../currentUser/currentUserSelectors";
-import { fromNow } from "../services/date";
+import { getTimezone } from "currentUser/currentUserSelectors";
+import { fromNow } from "services/date";
 
 export const getComponentsById = state => state.components.byId;
 export const getComponentsAllIds = state => state.components.allIds;

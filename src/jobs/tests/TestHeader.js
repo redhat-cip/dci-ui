@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Labels } from "../../ui";
+import { Labels } from "ui";
 import { Button } from "@patternfly/react-core";
 
 export default class TestHeader extends Component {

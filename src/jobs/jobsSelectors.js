@@ -1,9 +1,9 @@
 import { createSelector } from "reselect";
 import { sortBy } from "lodash";
-import { getTeamsById } from "../teams/teamsSelectors";
-import { getRemotecisById } from "../remotecis/remotecisSelectors";
-import { getComponentsById } from "../components/componentSelectors";
-import { getTopicsById } from "../topics/topicsSelectors";
+import { getTeamsById } from "teams/teamsSelectors";
+import { getRemotecisById } from "remotecis/remotecisSelectors";
+import { getComponentsById } from "components/componentSelectors";
+import { getTopicsById } from "topics/topicsSelectors";
 
 export const getJobsById = state => state.jobs.byId;
 export const getJobsAllIds = state => state.jobs.allIds;

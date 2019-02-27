@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput, FormModal } from "../form";
+import { Input, Select, HiddenInput, FormModal } from "form";
 import { getProducts } from "./productSelectors";
-import { getTeams } from "../teams/teamsSelectors";
+import { getTeams } from "teams/teamsSelectors";
 import { isEmpty } from "lodash";
 
 export class ProductForm extends Component {

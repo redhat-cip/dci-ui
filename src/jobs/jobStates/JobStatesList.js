@@ -11,7 +11,7 @@ import {
   ErrorLabel,
   DurationLabel
 } from "./JobStateComponents";
-import { EmptyState } from "../../ui";
+import { EmptyState } from "ui";
 
 export default class JobStatesList extends Component {
   getLabel = jobstate => {

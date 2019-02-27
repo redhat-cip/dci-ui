@@ -9,7 +9,7 @@ import {
   CardBody
 } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, HiddenInput } from "../form";
+import { Input, HiddenInput } from "form";
 
 export default class ChangePasswordForm extends Component {
   state = {

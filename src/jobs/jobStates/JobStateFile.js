@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getFileContent } from "../files/filesActions";
+import { getFileContent } from "jobs/files/filesActions";
 import {
   FileRow,
   FileName,

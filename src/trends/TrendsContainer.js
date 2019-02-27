@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import topicsActions from "../topics/topicsActions";
-import { getTopics } from "../topics/topicsSelectors";
+import topicsActions from "topics/topicsActions";
+import { getTopics } from "topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
-import { Page } from "../layout";
+import { Page } from "layout";
 import TrendGraph from "./TrendGraph";
-import { EmptyState } from "../ui";
-import { Filter } from "../ui";
+import { EmptyState } from "ui";
+import { Filter } from "ui";
 import { MessagesIcon } from "@patternfly/react-icons";
 
 export class TrendsContainer extends Component {

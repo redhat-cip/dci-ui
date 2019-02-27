@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "../layout";
+import { Page } from "layout";
 import productsActions from "./producstActions";
-import teamsActions from "../teams/teamsActions";
-import { CopyButton, EmptyState, ConfirmDeleteButton } from "../ui";
+import teamsActions from "teams/teamsActions";
+import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
 import NewProductButton from "./NewProductButton";
 import EditProductButton from "./EditProductButton";
 import { getProducts } from "./productSelectors";
-import { getTeams } from "../teams/teamsSelectors";
+import { getTeams } from "teams/teamsSelectors";
 
 export class ProductsContainer extends Component {
   componentDidMount() {

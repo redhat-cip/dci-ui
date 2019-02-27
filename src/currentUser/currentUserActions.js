@@ -1,13 +1,13 @@
 import { isFunction } from "lodash";
-import http from "../services/http";
+import http from "services/http";
 import * as types from "./currentUserActionsTypes";
 import {
   showAPIError,
   showError,
   showSuccess,
   showWarning
-} from "../alerts/alertsActions";
-import { removeToken, getToken } from "../services/localStorage";
+} from "alerts/alertsActions";
+import { removeToken, getToken } from "services/localStorage";
 
 export function getCurrentUser() {
   return (dispatch, getState) => {

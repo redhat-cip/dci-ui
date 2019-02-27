@@ -5,7 +5,7 @@ import axiosMockAdapter from "axios-mock-adapter";
 
 import * as currentUserActions from "./currentUserActions";
 import * as types from "./currentUserActionsTypes";
-import * as alertaActionsTypes from "../alerts/alertsActionsTypes";
+import * as alertaActionsTypes from "alerts/alertsActionsTypes";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

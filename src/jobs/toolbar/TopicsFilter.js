@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import topicsActions from "../../topics/topicsActions";
-import { getTopics } from "../../topics/topicsSelectors";
-import { Filter, LoadingFilter } from "../../ui";
+import topicsActions from "topics/topicsActions";
+import { getTopics } from "topics/topicsSelectors";
+import { Filter, LoadingFilter } from "ui";
 import { createTopicsFilter, getCurrentFilters, removeFilter } from "./filters";
 
 export class TopicsFilter extends Component {

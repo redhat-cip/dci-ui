@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Labels } from "../../ui";
+import { Labels } from "ui";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
-import { Pre } from "../jobStates/JobStateComponents";
+import { Pre } from "jobs/jobStates/JobStateComponents";
 
 export default class Testcases extends Component {
   state = {

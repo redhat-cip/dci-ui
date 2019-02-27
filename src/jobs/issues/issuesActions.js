@@ -1,4 +1,4 @@
-import http from "../../services/http";
+import http from "services/http";
 
 export function getIssues(job) {
   return (dispatch, getState) => {

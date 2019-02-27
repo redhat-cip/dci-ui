@@ -9,8 +9,8 @@ import {
   HiddenInput,
   Checkbox,
   FormModal
-} from "../form";
-import { getProducts } from "../products/productSelectors";
+} from "form";
+import { getProducts } from "products/productSelectors";
 import { getTopics } from "./topicsSelectors";
 import { isEmpty } from "lodash";
 

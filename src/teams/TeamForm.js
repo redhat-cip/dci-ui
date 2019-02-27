@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, Checkbox, HiddenInput, FormModal } from "../form";
+import { Input, Select, Checkbox, HiddenInput, FormModal } from "form";
 import { getTeams } from "./teamsSelectors";
 
 export class TeamForm extends Component {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Page } from "../layout";
+import { Page } from "layout";
 import { connect } from "react-redux";
 import {
   PageSection,

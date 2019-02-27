@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import RotatingSpinnerIcon from "../RotatingSpinnerIcon";
+import RotatingSpinnerIcon from "./RotatingSpinnerIcon";
 
 export default class LoadingFilter extends Component {
   render() {

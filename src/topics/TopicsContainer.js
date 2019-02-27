@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "../layout";
-import productsActions from "../products/producstActions";
+import { Page } from "layout";
+import productsActions from "products/producstActions";
 import topicsActions from "./topicsActions";
-import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "../ui";
+import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "ui";
 import NewTopicButton from "./NewTopicButton";
 import EditTopicButton from "./EditTopicButton";
 import { getTopics } from "./topicsSelectors";

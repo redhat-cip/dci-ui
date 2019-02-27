@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import C3Chart from "react-c3js";
 import moment from "moment";
 import { isEmpty } from "lodash";
-import { EmptyState } from "../ui";
+import { EmptyState } from "ui";
 import { Card, CardHeader, CardBody } from "@patternfly/react-core";
 
 export default class TrendGraph extends Component {

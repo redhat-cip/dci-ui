@@ -1,4 +1,4 @@
-import http from "../services/http";
+import http from "services/http";
 import * as types from "./trendsActionsTypes";
 
 export function getTrends() {

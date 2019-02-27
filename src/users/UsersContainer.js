@@ -4,16 +4,16 @@ import Formsy from "formsy-react";
 import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import queryString from "query-string";
-import { Page } from "../layout";
+import { Page } from "layout";
 import usersActions from "./usersActions";
-import rolesActions from "../roles/rolesActions";
-import teamsActions from "../teams/teamsActions";
-import { EmptyState, Pagination } from "../ui";
-import { Input } from "../form";
+import rolesActions from "roles/rolesActions";
+import teamsActions from "teams/teamsActions";
+import { EmptyState, Pagination } from "ui";
+import { Input } from "form";
 import NewUserButton from "./NewUserButton";
 import { getUsers } from "./usersSelectors";
-import { getTeams } from "../teams/teamsSelectors";
-import { getRoles } from "../roles/rolesSelectors";
+import { getTeams } from "teams/teamsSelectors";
+import { getRoles } from "roles/rolesSelectors";
 import UserRow from "./UserRow";
 
 export class UsersContainer extends Component {

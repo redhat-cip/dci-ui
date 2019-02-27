@@ -1,4 +1,4 @@
-import http from "../services/http";
+import http from "services/http";
 import * as constants from "./globalStatusActionsTypes";
 
 export function getGlobalStatus() {

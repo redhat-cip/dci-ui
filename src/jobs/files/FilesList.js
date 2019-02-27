@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
-import { EmptyState } from "../../ui";
+import { EmptyState } from "ui";
 import File from "./File";
 import { FileArchiveIcon } from "@patternfly/react-icons";
 

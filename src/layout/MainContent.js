@@ -21,8 +21,8 @@ import {
 } from "@patternfly/react-core";
 import accessibleStyles from "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 import { css } from "@patternfly/react-styles";
-import Logo from "../logo.svg";
-import { logout } from "../currentUser/currentUserActions";
+import Logo from "logo.svg";
+import { logout } from "currentUser/currentUserActions";
 import avatarImg from "./img_avatar.svg";
 
 function DCINavItem({ children, to, exact = true }) {

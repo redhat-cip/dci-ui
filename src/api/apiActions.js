@@ -1,8 +1,8 @@
 import { normalize } from "normalizr";
-import http from "../services/http";
+import http from "services/http";
 import { createActionsTypes } from "./apiActionsTypes";
 import * as schema from "./schema";
-import { showAPIError, showSuccess } from "../alerts/alertsActions";
+import { showAPIError, showSuccess } from "alerts/alertsActions";
 
 export function createActions(resource) {
   return {

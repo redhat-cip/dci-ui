@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { TextContent, Text } from "@patternfly/react-core";
-import { ConfirmDeleteButton } from "../ui";
+import { ConfirmDeleteButton } from "ui";
 import { removeTopicFromTeam } from "./teamsTopicsActions";
 
 export class TeamsListPermissions extends Component {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput, FormModal } from "../form";
+import { Input, Select, HiddenInput, FormModal } from "form";
 
 export default class UserForm extends Component {
   state = {

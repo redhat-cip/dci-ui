@@ -7,7 +7,7 @@ import {
   Bullseye,
   Text
 } from "@patternfly/react-core";
-import { BlinkLogo } from "../ui";
+import { BlinkLogo } from "ui";
 import MainContent from "./MainContent";
 
 export default class Page extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
-import { EmptyState } from "../../ui";
+import { EmptyState } from "ui";
 import Issue from "./Issue";
 import NewIssueButton from "./NewIssueButton";
 import { ThumbsUpIcon } from "@patternfly/react-icons";

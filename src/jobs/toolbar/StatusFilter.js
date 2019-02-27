@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Filter } from "../../ui";
+import { Filter } from "ui";
 import { getCurrentFilters, removeFilter } from "./filters";
 
 export default class StatusFilter extends Component {
