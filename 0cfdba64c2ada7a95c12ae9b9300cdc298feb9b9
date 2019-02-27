@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b576a49_7aa44849",
+        "filename": "src/teams/TeamRow.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 56
+      },
+      "writtenOn": "2019-02-27T14:46:34Z",
+      "side": 1,
+      "message": "still needed ?",
+      "range": {
+        "startLine": 3,
+        "startChar": 28,
+        "endLine": 3,
+        "endChar": 30
+      },
+      "revId": "0cfdba64c2ada7a95c12ae9b9300cdc298feb9b9",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb044c33_fd96b7b8",
+        "filename": "src/teams/TeamsContainer.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 56
+      },
+      "writtenOn": "2019-02-27T14:46:34Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 10,
+        "startChar": 21,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "0cfdba64c2ada7a95c12ae9b9300cdc298feb9b9",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
