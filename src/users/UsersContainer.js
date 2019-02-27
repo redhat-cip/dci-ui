@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Formsy from "formsy-react";
 import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
+import queryString from "query-string";
 import { Page } from "../layout";
 import usersActions from "./usersActions";
 import rolesActions from "../roles/rolesActions";
@@ -16,23 +17,55 @@ import { getRoles } from "../roles/rolesSelectors";
 import UserRow from "./UserRow";
 
 export class UsersContainer extends Component {
-  state = {
-    search: ""
-  };
-  componentDidMount() {
-    const { fetchUsers } = this.props;
-    fetchUsers();
+  constructor(props) {
+    super(props);
+    const { location } = this.props;
+    const { page, perPage } = queryString.parse(location.search);
+    this.state = {
+      pagination: {
+        page: page ? parseInt(page, 10) : 1,
+        perPage: perPage ? parseInt(perPage, 10) : 30
+      },
+      search: ""
+    };
   }
+
+  componentDidMount() {
+    this._fetchUsersAndChangeUrl();
+  }
+
+  _fetchUsersAndChangeUrl = () => {
+    const { history, fetchUsers } = this.props;
+    const { pagination } = this.state;
+    history.push(
+      `/users?page=${pagination.page}&perPage=${pagination.perPage}`
+    );
+    fetchUsers({ pagination });
+  };
+
+  _setPageAndFetchUsers = page => {
+    this.setState(
+      prevState => ({
+        pagination: {
+          ...prevState.pagination,
+          page
+        }
+      }),
+      () => this._fetchUsersAndChangeUrl()
+    );
+  };
+
   render() {
     const {
       users,
+      count,
       teams,
       roles,
       isFetching,
       currentUser,
       deleteUser
     } = this.props;
-    const { search } = this.state;
+    const { search, pagination } = this.state;
     const filteredUsers = users.filter(user => {
       const lowerSearch = search.toLowerCase();
       return (
@@ -64,7 +97,7 @@ export class UsersContainer extends Component {
                     </ToolbarItem>
                     <ToolbarItem>
                       <Formsy
-                        onChange={({ search }) => this.setState({ search })}
+                        onSubmit={({ search }) => this.setState({ search })}
                         className="pf-c-form"
                       >
                         <Input name="search" placeholder="Search a user" />
@@ -72,16 +105,13 @@ export class UsersContainer extends Component {
                     </ToolbarItem>
                   </ToolbarGroup>
                   <ToolbarGroup>
-                    {/* <Pagination
-                      pagination={{
-                        page: 1,
-                        perPage: 20
-                      }}
-                      count={100}
-                      goTo={page => alert(page)}
+                    <Pagination
+                      pagination={pagination}
+                      count={count}
+                      goTo={page => this._setPageAndFetchUsers(page)}
                       items="users"
                       aria-label="Users pagination"
-                    /> */}
+                    />
                   </ToolbarGroup>
                 </Toolbar>
               </th>
@@ -107,6 +137,24 @@ export class UsersContainer extends Component {
               />
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={6}>
+                <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
+                  <ToolbarGroup />
+                  <ToolbarGroup>
+                    <Pagination
+                      pagination={pagination}
+                      count={count}
+                      goTo={page => this._setPageAndFetchUsers(page)}
+                      items="users"
+                      aria-label="Users pagination"
+                    />
+                  </ToolbarGroup>
+                </Toolbar>
+              </th>
+            </tr>
+          </tfoot>
         </table>
       </Page>
     );
@@ -116,6 +164,7 @@ export class UsersContainer extends Component {
 function mapStateToProps(state) {
   return {
     users: getUsers(state),
+    count: state.users.count,
     teams: getTeams(state),
     roles: getRoles(state),
     isFetching:
@@ -128,10 +177,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => {
-      dispatch(usersActions.all({ embed: "team,role" }));
+    fetchUsers: ({ pagination }) => {
+      const params = {
+        embed: "team,role",
+        limit: pagination.perPage,
+        offset: (pagination.page - 1) * pagination.perPage
+      };
+      dispatch(usersActions.clear());
       dispatch(teamsActions.all());
       dispatch(rolesActions.all());
+      return dispatch(usersActions.all(params));
     },
     deleteUser: user => dispatch(usersActions.delete(user))
   };
