@@ -124,7 +124,7 @@ export class UsersContainer extends Component {
               <th>Full name</th>
               <th>Email</th>
               <th>Created</th>
-              <th className="pf-u-text-align-right">Actions</th>
+              <th />
             </tr>
           </thead>
           <tbody>

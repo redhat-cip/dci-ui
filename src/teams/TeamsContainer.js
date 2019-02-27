@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
+import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { Page } from "layout";
 import actions from "teams/teamsActions";
-import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "ui";
+import { EmptyState } from "ui";
 import NewTeamButton from "teams/NewTeamButton";
-import EditTeamButton from "teams/EditTeamButton";
 import { getTeams } from "teams/teamsSelectors";
+import TeamRow from "./TeamRow";
 
 export class TeamsContainer extends Component {
   componentDidMount() {
@@ -20,7 +21,6 @@ export class TeamsContainer extends Component {
         title="Teams"
         loading={isFetching && isEmpty(teams)}
         empty={!isFetching && isEmpty(teams)}
-        HeaderButton={<NewTeamButton />}
         EmptyComponent={
           <EmptyState
             title="There is no teams"
@@ -31,39 +31,35 @@ export class TeamsContainer extends Component {
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
-              <th className="pf-u-text-align-center">ID</th>
+              <th colSpan={6}>
+                <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
+                  <ToolbarGroup>
+                    <ToolbarItem className="pf-u-mr-md">
+                      <NewTeamButton />
+                    </ToolbarItem>
+                  </ToolbarGroup>
+                  <ToolbarGroup />
+                </Toolbar>
+              </th>
+            </tr>
+          </thead>
+          <thead>
+            <tr>
+              <th>ID</th>
               <th>Name</th>
-              <th className="pf-u-text-align-center">Partner</th>
+              <th>Partner</th>
               <th>Parent Team</th>
               <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {teams.map(team => (
-              <tr key={`${team.id}.${team.etag}`}>
-                <td className="pf-u-text-align-center">
-                  <CopyButton text={team.id} />
-                </td>
-                <td>{team.name.toUpperCase()}</td>
-                <td className="pf-u-text-align-center">
-                  {team.external ? (
-                    <Labels.Success>partner</Labels.Success>
-                  ) : null}
-                </td>
-                <td>
-                  {team.parent_team ? team.parent_team.name.toUpperCase() : ""}
-                </td>
-                <td>{team.from_now}</td>
-                <td className="pf-u-text-align-center">
-                  <EditTeamButton className="pf-u-mr-xl" team={team} />
-                  <ConfirmDeleteButton
-                    title={`Delete team ${team.name}`}
-                    content={`Are you sure you want to delete ${team.name}?`}
-                    whenConfirmed={() => deleteTeam(team)}
-                  />
-                </td>
-              </tr>
+              <TeamRow
+                key={`${team.id}.${team.etag}`}
+                team={team}
+                deleteConfirmed={() => deleteTeam(team)}
+              />
             ))}
           </tbody>
         </table>
