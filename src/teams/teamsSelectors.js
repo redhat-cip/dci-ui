@@ -19,11 +19,7 @@ export const getTeams = createSelector(
           from_now: fromNow(team.created_at, timezone)
         };
       }),
-      [
-        e => {
-          return e.name.toLowerCase();
-        }
-      ]
+      [e => e.name.toLowerCase()]
     );
   }
 );

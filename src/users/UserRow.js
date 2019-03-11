@@ -2,7 +2,13 @@ import React from "react";
 import { CopyButton, ConfirmDeleteButton } from "ui";
 import EditUserButton from "./EditUserButton";
 
-export default function UserRow({ user, isDisabled, deleteConfirmed }) {
+export default function UserRow({
+  user,
+  teams,
+  roles,
+  isDisabled,
+  deleteConfirmed
+}) {
   return (
     <tr>
       <td>
@@ -16,6 +22,8 @@ export default function UserRow({ user, isDisabled, deleteConfirmed }) {
         <EditUserButton
           className="pf-u-mr-xs"
           user={user}
+          teams={teams}
+          roles={roles}
           isDisabled={isDisabled}
         />
         <ConfirmDeleteButton

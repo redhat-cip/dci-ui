@@ -132,6 +132,8 @@ export class UsersContainer extends Component {
               <UserRow
                 key={`${user.id}.${user.etag}`}
                 user={user}
+                teams={teams}
+                roles={roles}
                 isDisabled={currentUser.id === user.id}
                 deleteConfirmed={() => deleteUser(user)}
               />
