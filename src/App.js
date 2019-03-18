@@ -8,7 +8,7 @@ import store from "./store";
 import Pages from "./pages";
 import { PrivateRoute, Container404 } from "./router";
 import { getConfig } from "./config/configActions";
-import { getCurrentUser } from "./currentUser/currentUserActions";
+import { getIdentity } from "./currentUser/currentUserActions";
 import { configureSSO } from "./services/sso";
 import Alerts from "./alerts/Alerts";
 import { BackgroundImage } from "./ui";
@@ -22,7 +22,7 @@ class App extends Component {
     store
       .dispatch(getConfig())
       .then(config => configureSSO(config))
-      .then(() => store.dispatch(getCurrentUser()))
+      .then(() => store.dispatch(getIdentity()))
       .catch(error => console.error(error))
       .then(() => this.setState({ loading: false }));
   }

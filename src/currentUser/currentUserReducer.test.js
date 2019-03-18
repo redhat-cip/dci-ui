@@ -1,182 +1,224 @@
 import reducer from "./currentUserReducer";
 import * as types from "./currentUserActionsTypes";
 
-it("SET_CURRENT_USER", () => {
+it("SET_IDENTITY", () => {
   const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
-      email: "currentUser@example.org",
-      role: {
-        label: "USER"
+    type: types.SET_IDENTITY,
+    identity: {
+      id: "i1",
+      name: "identity",
+      email: "identity@example.org",
+      teams: {
+        t1: {
+          id: "t1",
+          parent_id: null,
+          role: "SUPER_ADMIN",
+          team_name: "admin"
+        }
       }
     }
   });
   expect(newState).toEqual({
-    email: "currentUser@example.org",
-    hasAdminRole: false,
-    hasProductOwnerRole: false,
-    hasReadOnlyRole: false,
+    hasProductOwnerRole: true,
+    hasReadOnlyRole: true,
+    id: "i1",
+    isReadOnly: false,
+    isSuperAdmin: true,
+    name: "identity",
+    email: "identity@example.org",
+    teams: {
+      t1: { id: "t1", parent_id: null, role: "SUPER_ADMIN", team_name: "admin" }
+    },
+    team: { id: "t1", parent_id: null, role: "SUPER_ADMIN", team_name: "admin" }
+  });
+});
+
+it("SET_ACTIVE_TEAM", () => {
+  const newState = reducer(
+    {
+      hasProductOwnerRole: true,
+      hasReadOnlyRole: true,
+      id: "i1",
+      isReadOnly: false,
+      isSuperAdmin: true,
+      name: "identity",
+      teams: {
+        t1: {
+          id: "t1",
+          parent_id: null,
+          role: "SUPER_ADMIN",
+          team_name: "admin"
+        },
+        t2: {
+          id: "t2",
+          parent_id: "t1",
+          role: "PRODUCT_OWNER",
+          team_name: "OpenStack"
+        }
+      },
+      team: {
+        id: "t1",
+        parent_id: null,
+        role: "SUPER_ADMIN",
+        team_name: "admin"
+      }
+    },
+    {
+      type: types.SET_ACTIVE_TEAM,
+      team: {
+        id: "t2",
+        parent_id: "t1",
+        role: "PRODUCT_OWNER",
+        team_name: "OpenStack"
+      }
+    }
+  );
+  expect(newState).toEqual({
+    hasProductOwnerRole: true,
+    hasReadOnlyRole: true,
+    id: "i1",
     isReadOnly: false,
     isSuperAdmin: false,
-    role: {
-      label: "USER"
+    name: "identity",
+    teams: {
+      t1: {
+        id: "t1",
+        parent_id: null,
+        role: "SUPER_ADMIN",
+        team_name: "admin"
+      },
+      t2: {
+        id: "t2",
+        parent_id: "t1",
+        role: "PRODUCT_OWNER",
+        team_name: "OpenStack"
+      }
+    },
+    team: {
+      id: "t2",
+      parent_id: "t1",
+      role: "PRODUCT_OWNER",
+      team_name: "OpenStack"
     }
   });
 });
 
 it("set SUPER_ADMIN role shortcut", () => {
   const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
+    type: types.SET_IDENTITY,
+    identity: {
+      id: "i1",
       email: "currentUser@example.org",
-      role: {
-        label: "SUPER_ADMIN"
+      teams: {
+        t1: {
+          parent_id: null,
+          role: "SUPER_ADMIN",
+          team_name: "admin"
+        }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasProductOwnerRole).toBe(true);
-  expect(newState.hasAdminRole).toBe(true);
   expect(newState.hasReadOnlyRole).toBe(true);
+  expect(newState.isSuperAdmin).toBe(true);
+  expect(newState.isReadOnly).toBe(false);
 });
 
 it("set PRODUCT_OWNER role shortcut", () => {
   const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
+    type: types.SET_IDENTITY,
+    identity: {
+      id: "i1",
       email: "currentUser@example.org",
-      role: {
-        label: "PRODUCT_OWNER"
+      teams: {
+        t2: {
+          parent_id: "t1",
+          role: "PRODUCT_OWNER",
+          team_name: "OpenStack"
+        }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasProductOwnerRole).toBe(true);
-  expect(newState.hasAdminRole).toBe(true);
   expect(newState.hasReadOnlyRole).toBe(true);
-});
-
-it("set ADMIN role shortcut", () => {
-  const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
-      email: "currentUser@example.org",
-      role: {
-        label: "ADMIN"
-      }
-    }
-  });
-  expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(false);
-  expect(newState.hasAdminRole).toBe(true);
-  expect(newState.hasReadOnlyRole).toBe(false);
+  expect(newState.isSuperAdmin).toBe(false);
+  expect(newState.isReadOnly).toBe(false);
 });
 
 it("set READ_ONLY_USER role shortcut", () => {
   const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
+    type: types.SET_IDENTITY,
+    identity: {
+      id: "i1",
       email: "currentUser@example.org",
-      role: {
-        label: "READ_ONLY_USER"
+      teams: {
+        t2: {
+          parent_id: "t1",
+          role: "READ_ONLY_USER",
+          team_name: "Red Hat"
+        }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasProductOwnerRole).toBe(false);
-  expect(newState.hasAdminRole).toBe(false);
   expect(newState.hasReadOnlyRole).toBe(true);
+  expect(newState.isSuperAdmin).toBe(false);
+  expect(newState.isReadOnly).toBe(true);
 });
 
-it("SET_CURRENT_USER unset role shortcut", () => {
+it("SET_IDENTITY unset role shortcut", () => {
   const newState = reducer(
     {
       hasProductOwnerRole: true,
-      hasAdminRole: true,
-      hasReadOnlyRole: true
+      hasReadOnlyRole: true,
+      isSuperAdmin: true,
+      isReadOnly: false
     },
     {
-      type: types.SET_CURRENT_USER,
-      currentUser: {
+      type: types.SET_IDENTITY,
+      identity: {
+        id: "i1",
         email: "currentUser@example.org",
-        role: {
-          label: "READ_ONLY_USER"
+        teams: {
+          t2: {
+            parent_id: "t1",
+            role: "READ_ONLY_USER",
+            team_name: "Red Hat"
+          }
         }
       }
     }
   );
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasProductOwnerRole).toBe(false);
-  expect(newState.hasAdminRole).toBe(false);
   expect(newState.hasReadOnlyRole).toBe(true);
-});
-
-it("SET_CURRENT_USER SUPER_ADMIN shortcut", () => {
-  const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
-      email: "currentUser@example.org",
-      role: {
-        label: "SUPER_ADMIN"
-      }
-    }
-  });
-  expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.isSuperAdmin).toBe(true);
-  expect(newState.isReadOnly).toBe(false);
-});
-
-it("SET_CURRENT_USER READ_ONLY_USER shortcut", () => {
-  const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
-      email: "currentUser@example.org",
-      role: {
-        label: "READ_ONLY_USER"
-      }
-    }
-  });
-  expect(newState.email).toBe("currentUser@example.org");
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(true);
 });
 
-it("SET_CURRENT_USER USER shortcut", () => {
+it("SET_IDENTITY USER shortcut", () => {
   const newState = reducer(undefined, {
-    type: types.SET_CURRENT_USER,
-    currentUser: {
+    type: types.SET_IDENTITY,
+    identity: {
+      id: "i1",
       email: "currentUser@example.org",
-      role: {
-        label: "USER"
+      teams: {
+        t2: {
+          parent_id: null,
+          role: "USER",
+          team_name: null
+        }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
+  expect(newState.hasProductOwnerRole).toBe(false);
+  expect(newState.hasReadOnlyRole).toBe(false);
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(false);
-});
-
-it("UPDATE_CURRENT_USER keep role", () => {
-  const newState = reducer(
-    {
-      email: "currentUser@example.org",
-      role: {
-        label: "SUPER_ADMIN"
-      }
-    },
-    {
-      type: types.UPDATE_CURRENT_USER,
-      currentUser: {
-        email: "newEmail@example.org"
-      }
-    }
-  );
-  expect(newState).toEqual({
-    email: "newEmail@example.org",
-    role: {
-      label: "SUPER_ADMIN"
-    }
-  });
 });
 
 it("deleteCurrentUser", () => {

@@ -2,30 +2,34 @@ import * as types from "./currentUserActionsTypes";
 
 const initialState = {};
 
+function buildShortcut(role) {
+  return {
+    isSuperAdmin: role === "SUPER_ADMIN",
+    hasProductOwnerRole: role === "SUPER_ADMIN" || role === "PRODUCT_OWNER",
+    hasReadOnlyRole:
+      role === "SUPER_ADMIN" ||
+      role === "PRODUCT_OWNER" ||
+      role === "READ_ONLY_USER",
+    isReadOnly: role === "READ_ONLY_USER"
+  };
+}
+
 export default function(state = initialState, action) {
-  const currentUser = action.currentUser;
   switch (action.type) {
-    case types.SET_CURRENT_USER:
-      const role = currentUser.role || "USER";
-      const shortcuts = {
-        isSuperAdmin: role.label === "SUPER_ADMIN",
-        hasProductOwnerRole:
-          role.label === "SUPER_ADMIN" || role.label === "PRODUCT_OWNER",
-        hasAdminRole:
-          role.label === "SUPER_ADMIN" ||
-          role.label === "PRODUCT_OWNER" ||
-          role.label === "ADMIN",
-        hasReadOnlyRole:
-          role.label === "SUPER_ADMIN" ||
-          role.label === "PRODUCT_OWNER" ||
-          role.label === "READ_ONLY_USER",
-        isReadOnly: role.label === "READ_ONLY_USER"
+    case types.SET_IDENTITY:
+      const identity = action.identity;
+      const firstTeam = Object.values(identity.teams)[0];
+      return { ...state, ...identity, ...buildShortcut(firstTeam.role), team: firstTeam };
+    case types.SET_ACTIVE_TEAM:
+      return {
+        ...state,
+        team: action.team,
+        ...buildShortcut(action.team.role)
       };
-      return { ...state, ...currentUser, ...shortcuts };
     case types.UPDATE_CURRENT_USER:
       return {
         ...state,
-        ...currentUser
+        ...action.currentUser
       };
     case types.DELETE_CURRENT_USER:
       return {
