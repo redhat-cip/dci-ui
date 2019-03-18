@@ -12,22 +12,22 @@ const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new axiosMockAdapter(axios);
 
-it("getCurrentUser", () => {
-  const currentUser = {
-    id: "u1"
+it("getIdentity", () => {
+  const identity = {
+    id: "i1"
   };
   axiosMock
-    .onGet("https://api.example.org/api/v1/users/me")
-    .reply(200, { user: currentUser });
+    .onGet("https://api.example.org/api/v1/identity")
+    .reply(200, { identity });
   const expectedActions = [
     {
-      type: types.SET_CURRENT_USER,
-      currentUser
+      type: types.SET_IDENTITY,
+      identity
     }
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(currentUserActions.getCurrentUser()).then(newUser => {
-    expect(newUser).toEqual(currentUser);
+  return store.dispatch(currentUserActions.getIdentity()).then(response => {
+    expect(response.data.identity).toEqual(identity);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -145,4 +145,15 @@ it("unsubscribeFromARemoteci error", () => {
         "Cannot unsubscribe to remoteci remoteci 4"
       );
     });
+});
+
+it("setCurrentTeam", () => {
+  const team = {
+    id: "t1"
+  };
+  const expectedAction = {
+    type: types.SET_ACTIVE_TEAM,
+    team
+  };
+  expect(currentUserActions.setCurrentTeam(team)).toEqual(expectedAction);
 });

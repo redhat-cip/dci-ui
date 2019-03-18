@@ -9,22 +9,24 @@ import {
 } from "alerts/alertsActions";
 import { removeToken, getToken } from "services/localStorage";
 
-export function getCurrentUser() {
+export function getIdentity() {
   return (dispatch, getState) => {
     const state = getState();
-    const params = {
-      embed: "team,role,remotecis"
-    };
-    return http
-      .get(`${state.config.apiURL}/api/v1/users/me`, { params })
-      .then(response => {
-        const currentUser = response.data.user;
-        dispatch({
-          type: types.SET_CURRENT_USER,
-          currentUser
-        });
-        return currentUser;
+    return http.get(`${state.config.apiURL}/api/v1/identity`).then(response => {
+      const identity = response.data.identity;
+      dispatch({
+        type: types.SET_IDENTITY,
+        identity
       });
+      return response;
+    });
+  };
+}
+
+export function setCurrentTeam(team) {
+  return {
+    type: types.SET_ACTIVE_TEAM,
+    team
   };
 }
 

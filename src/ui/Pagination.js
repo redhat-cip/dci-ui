@@ -16,14 +16,14 @@ export default class Pagination extends Component {
     const itemsStart = (page - 1) * perPage + 1;
     const itemsEnd = page * perPage > count ? count : page * perPage;
     return (
-      <div class="pf-c-pagination" {...rest}>
-        <div class="pf-c-pagination__total-items">{`${count} ${items}`}</div>
-        <div class="pf-c-options-menu">
+      <div className="pf-c-pagination" {...rest}>
+        <div className="pf-c-pagination__total-items">{`${count} ${items}`}</div>
+        <div className="pf-c-options-menu">
           <span id="pagination-options-menu-top-example-label" hidden>
             {`${items} per page`}
           </span>
-          <div class="pf-c-options-menu__toggle pf-m-text pf-m-plain">
-            <span class="pf-c-options-menu__toggle-text">
+          <div className="pf-c-options-menu__toggle pf-m-text pf-m-plain">
+            <span className="pf-c-options-menu__toggle-text">
               <b>
                 {itemsStart} - {itemsEnd}
               </b>{" "}
@@ -31,7 +31,7 @@ export default class Pagination extends Component {
             </span>
           </div>
         </div>
-        <nav class="pf-c-pagination__nav" aria-label="pagination">
+        <nav className="pf-c-pagination__nav" aria-label="pagination">
           <Button
             variant="plain"
             aria-label="Go to first page"
@@ -49,7 +49,7 @@ export default class Pagination extends Component {
             <AngleLeftIcon />
           </Button>
           <div
-            class="pf-c-pagination__nav-page-select"
+            className="pf-c-pagination__nav-page-select"
             aria-label={`Current page ${page} of ${nbPages}`}
           >
             <span>{`${page} of ${nbPages}`}</span>

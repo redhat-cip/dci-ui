@@ -22,8 +22,46 @@ import {
 import accessibleStyles from "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 import { css } from "@patternfly/react-styles";
 import Logo from "logo.svg";
-import { logout } from "currentUser/currentUserActions";
+import { logout, setCurrentTeam } from "currentUser/currentUserActions";
+import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import avatarImg from "./img_avatar.svg";
+
+class MenuDropdown extends React.Component {
+  state = {
+    isDropdownOpen: false
+  };
+
+  onDropdownToggle = isDropdownOpen => {
+    this.setState({
+      isDropdownOpen
+    });
+  };
+
+  onDropdownSelect = () => {
+    this.setState(prevState => ({
+      isDropdownOpen: !prevState.isDropdownOpen
+    }));
+  };
+
+  render() {
+    const { isDropdownOpen } = this.state;
+    const { title, position, dropdownItems } = this.props;
+    return (
+      <Dropdown
+        isPlain
+        position={position}
+        onSelect={this.onDropdownSelect}
+        isOpen={isDropdownOpen}
+        toggle={
+          <DropdownToggle onToggle={this.onDropdownToggle}>
+            {title}
+          </DropdownToggle>
+        }
+        dropdownItems={dropdownItems}
+      />
+    );
+  }
+}
 
 function DCINavItem({ children, to, exact = true }) {
   return (
@@ -40,35 +78,17 @@ function DCINavItem({ children, to, exact = true }) {
 }
 
 class MainContent extends Component {
-  state = {
-    isDropdownOpen: false,
-    activeItem: "grp-1_itm-1"
-  };
-
-  onDropdownToggle = isDropdownOpen => {
-    this.setState({
-      isDropdownOpen
-    });
-  };
-
-  onDropdownSelect = event => {
-    this.setState({
-      isDropdownOpen: !this.state.isDropdownOpen
-    });
-  };
-
-  onNavSelect = result => {
-    this.setState({
-      activeItem: result.itemId
-    });
-  };
-
   render() {
-    const { children, currentUser, logout, history } = this.props;
-    const { isDropdownOpen } = this.state;
-
+    const {
+      children,
+      currentUser,
+      currentUserTeams,
+      setCurrentTeam,
+      logout,
+      history
+    } = this.props;
     const PageNav = (
-      <Nav onSelect={this.onNavSelect} aria-label="Nav">
+      <Nav aria-label="Nav">
         <NavGroup title="DCI">
           <DCINavItem to="/jobs" exact={false}>
             Jobs
@@ -79,10 +99,7 @@ class MainContent extends Component {
           <DCINavItem to="/topics">Topics</DCINavItem>
 
           <DCINavItem to="/components">Components</DCINavItem>
-
-          {currentUser.hasAdminRole && (
-            <DCINavItem to="/remotecis">Remotecis</DCINavItem>
-          )}
+          <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         </NavGroup>
         {currentUser.hasReadOnlyRole && (
           <NavGroup title="Stats">
@@ -90,7 +107,7 @@ class MainContent extends Component {
             <DCINavItem to="/trends">Trends</DCINavItem>
           </NavGroup>
         )}
-        {currentUser.hasAdminRole && (
+        {currentUser.hasProductOwnerRole && (
           <NavGroup title="Admin">
             <DCINavItem to="/teams">Teams</DCINavItem>
             <DCINavItem to="/users">Users</DCINavItem>
@@ -105,7 +122,6 @@ class MainContent extends Component {
         </NavGroup>
       </Nav>
     );
-
     const PageToolbar = (
       <Toolbar>
         <ToolbarGroup>
@@ -115,15 +131,13 @@ class MainContent extends Component {
               accessibleStyles.visibleOnMd
             )}
           >
-            <Dropdown
-              isPlain
+            <MenuDropdown
               position="right"
-              onSelect={this.onDropdownSelect}
-              isOpen={isDropdownOpen}
-              toggle={
-                <DropdownToggle onToggle={this.onDropdownToggle}>
+              title={
+                <span>
+                  <UserIcon className="pf-u-mr-md" />
                   {currentUser.fullname || currentUser.name}
-                </DropdownToggle>
+                </span>
               }
               dropdownItems={[
                 <DropdownItem
@@ -140,6 +154,40 @@ class MainContent extends Component {
             />
           </ToolbarItem>
         </ToolbarGroup>
+        {currentUserTeams.length > 1 && (
+          <ToolbarGroup
+            className={css(
+              accessibleStyles.screenReader,
+              accessibleStyles.visibleOnLg
+            )}
+          >
+            <ToolbarItem
+              className={css(
+                accessibleStyles.srOnly,
+                accessibleStyles.visibleOnMd
+              )}
+            >
+              <MenuDropdown
+                position="right"
+                title={
+                  <span>
+                    <UsersIcon className="pf-u-mr-md" />
+                    {currentUser.team.team_name}
+                  </span>
+                }
+                dropdownItems={currentUserTeams.map(team => (
+                  <DropdownItem
+                    key={team.team_name}
+                    component="button"
+                    onClick={() => setCurrentTeam(team)}
+                  >
+                    {team.team_name}
+                  </DropdownItem>
+                ))}
+              />
+            </ToolbarItem>
+          </ToolbarGroup>
+        )}
       </Toolbar>
     );
 
@@ -164,12 +212,14 @@ class MainContent extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    currentUserTeams: Object.values(state.currentUser.teams)
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    setCurrentTeam: team => dispatch(setCurrentTeam(team)),
     logout: () => dispatch(logout())
   };
 }
