@@ -235,7 +235,7 @@ export class JobSummary extends Component {
           </div>
         )}
         <div className="pf-c-data-list__action">
-          {currentUser.hasAdminRole ? (
+          {currentUser.hasProductOwnerRole ? (
             <KebabDropdown
               position={DropdownPosition.right}
               items={[

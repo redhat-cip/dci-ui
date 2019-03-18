@@ -5,7 +5,7 @@ import { Button } from "@patternfly/react-core";
 
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
-import { getCurrentUser } from "currentUser/currentUserActions";
+import { getIdentity } from "currentUser/currentUserActions";
 import { setBasicToken } from "services/localStorage";
 import Logo from "logo.svg";
 import { showError } from "alerts/alertsActions";
@@ -19,8 +19,8 @@ export class LoginContainer extends Component {
   submit = user => {
     const token = window.btoa(user.username.concat(":", user.password));
     setBasicToken(token);
-    const { getCurrentUser, showError } = this.props;
-    getCurrentUser()
+    const { getIdentity, showError } = this.props;
+    getIdentity()
       .then(() => {
         this.setState({ redirectToReferrer: true });
       })
@@ -114,7 +114,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getCurrentUser: () => dispatch(getCurrentUser()),
+    getIdentity: () => dispatch(getIdentity()),
     showError: message => dispatch(showError(message))
   };
 }
