@@ -9,7 +9,7 @@ To run the app in development mode follow those steps:
 
  * clone this repository
  * ensure DCI api is listening on localhost:5000. See `dci-dev-env`.
-   An alternative is to change `apiURL` to `https://api.distributed-ci.io` in [src/config.json](src/config.json) file.
+   An alternative is to change `apiURL` to `https://api.distributed-ci.io` in [public/config.json](public/config.json) file.
  * install node dependencies: `npm install`
  * run the development server : `npm start`
 

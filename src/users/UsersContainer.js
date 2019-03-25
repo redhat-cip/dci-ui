@@ -101,11 +101,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(usersActions.clear());
       dispatch(teamsActions.all());
       dispatch(rolesActions.all());
-      return dispatch(
-        usersActions.all({
-          embed: "team,role"
-        })
-      );
+      return dispatch(usersActions.all());
     },
     deleteUser: user => dispatch(usersActions.delete(user))
   };
