@@ -6,7 +6,7 @@ import ProfileForm from "./ProfileForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { Page } from "layout";
 
-export class ProfileContainer extends Component {
+export class ProfilePage extends Component {
   render() {
     const { currentUser, updateCurrentUser } = this.props;
     return (
@@ -51,4 +51,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfileContainer);
+)(ProfilePage);

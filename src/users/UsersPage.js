@@ -13,7 +13,7 @@ import { getTeams } from "teams/teamsSelectors";
 import { getRoles } from "roles/rolesSelectors";
 import UserRow from "./UserRow";
 
-export class UsersContainer extends Component {
+export class UsersPage extends Component {
   componentDidMount() {
     const { fetchUsers } = this.props;
     fetchUsers();
@@ -110,4 +110,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UsersContainer);
+)(UsersPage);

@@ -22,7 +22,7 @@ const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
 `;
 
-export class JobContainer extends Component {
+export class JobPage extends Component {
   state = {
     job: {
       tests: [],
@@ -174,4 +174,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   null,
   mapDispatchToProps
-)(JobContainer);
+)(JobPage);

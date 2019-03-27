@@ -9,7 +9,7 @@ import { Page } from "layout";
 import { EmptyState } from "ui";
 import Toolbar from "./toolbar/Toolbar";
 
-export class JobsContainer extends Component {
+export class JobsPage extends Component {
   constructor(props) {
     super(props);
     const { location } = this.props;
@@ -135,4 +135,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(JobsContainer);
+)(JobsPage);

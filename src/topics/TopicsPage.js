@@ -9,7 +9,7 @@ import NewTopicButton from "./NewTopicButton";
 import EditTopicButton from "./EditTopicButton";
 import { getTopics } from "./topicsSelectors";
 
-export class TopicsContainer extends Component {
+export class TopicsPage extends Component {
   componentDidMount() {
     const { fetchTopics } = this.props;
     fetchTopics();
@@ -100,4 +100,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TopicsContainer);
+)(TopicsPage);

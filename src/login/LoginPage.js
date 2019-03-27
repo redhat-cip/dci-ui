@@ -10,7 +10,7 @@ import { setBasicToken } from "services/localStorage";
 import Logo from "logo.svg";
 import { showError } from "alerts/alertsActions";
 
-export class LoginContainer extends Component {
+export class LoginPage extends Component {
   state = {
     redirectToReferrer: false,
     seeSSOForm: true
@@ -122,4 +122,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginContainer);
+)(LoginPage);

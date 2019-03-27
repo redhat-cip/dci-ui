@@ -6,7 +6,7 @@ import componentsActions from "./componentsActions";
 import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
 import { getComponents } from "./componentSelectors";
 
-export class ComponentsContainer extends Component {
+export class ComponentsPage extends Component {
   componentDidMount() {
     const { fetchComponents } = this.props;
     fetchComponents();
@@ -82,4 +82,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ComponentsContainer);
+)(ComponentsPage);

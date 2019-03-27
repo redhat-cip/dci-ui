@@ -37,7 +37,7 @@ const GlobalStatusItemBody = styled.div`
   font-size: 1.3em;
 `;
 
-export class GlobalStatusContainer extends Component {
+export class GlobalStatusPage extends Component {
   state = {
     filter: null,
     seeDetails: false,
@@ -145,4 +145,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(GlobalStatusContainer);
+)(GlobalStatusPage);

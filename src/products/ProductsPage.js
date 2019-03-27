@@ -10,7 +10,7 @@ import EditProductButton from "./EditProductButton";
 import { getProducts } from "./productSelectors";
 import { getTeams } from "teams/teamsSelectors";
 
-export class ProductsContainer extends Component {
+export class ProductsPage extends Component {
   componentDidMount() {
     const { fetchProducts } = this.props;
     fetchProducts();
@@ -92,4 +92,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsContainer);
+)(ProductsPage);

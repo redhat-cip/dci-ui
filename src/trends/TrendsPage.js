@@ -10,7 +10,7 @@ import { EmptyState } from "ui";
 import { Filter } from "ui";
 import { MessagesIcon } from "@patternfly/react-icons";
 
-export class TrendsContainer extends Component {
+export class TrendsPage extends Component {
   state = {
     topic: null,
     isFetching: false
@@ -78,4 +78,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TrendsContainer);
+)(TrendsPage);

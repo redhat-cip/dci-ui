@@ -13,7 +13,7 @@ import { getTeams } from "teams/teamsSelectors";
 import { downloadRCFile } from "services/runcom";
 import { DownloadIcon } from "@patternfly/react-icons";
 
-export class RemotecisContainer extends Component {
+export class RemotecisPage extends Component {
   componentDidMount() {
     const { fetchRemotecis } = this.props;
     fetchRemotecis();
@@ -116,4 +116,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RemotecisContainer);
+)(RemotecisPage);

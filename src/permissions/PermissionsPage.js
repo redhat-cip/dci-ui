@@ -17,7 +17,7 @@ import { EmptyState, Filter } from "ui";
 import TeamsTopicsListPermissions from "./TeamsTopicsListPermissions";
 import { associateTopicToTeam } from "./teamsTopicsActions";
 
-export class PermissionsContainer extends Component {
+export class PermissionsPage extends Component {
   state = {
     topic: null,
     team: null
@@ -109,4 +109,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PermissionsContainer);
+)(PermissionsPage);

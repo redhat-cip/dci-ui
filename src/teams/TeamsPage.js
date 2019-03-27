@@ -9,7 +9,7 @@ import NewTeamButton from "teams/NewTeamButton";
 import { getTeams } from "teams/teamsSelectors";
 import TeamRow from "./TeamRow";
 
-export class TeamsContainer extends Component {
+export class TeamsPage extends Component {
   componentDidMount() {
     const { fetchTeams } = this.props;
     fetchTeams();
@@ -85,4 +85,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TeamsContainer);
+)(TeamsPage);

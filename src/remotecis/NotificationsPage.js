@@ -9,7 +9,7 @@ import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
 import { EmptyState } from "ui";
 
-export class NotificationsContainer extends Component {
+export class NotificationsPage extends Component {
   componentDidMount() {
     const { fetchRemotecis } = this.props;
     fetchRemotecis();
@@ -72,4 +72,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NotificationsContainer);
+)(NotificationsPage);

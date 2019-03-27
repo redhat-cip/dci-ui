@@ -8,7 +8,7 @@ import {
   Text
 } from "@patternfly/react-core";
 
-export default class Container404 extends Component {
+export default class Page404 extends Component {
   render() {
     return (
       <React.Fragment>

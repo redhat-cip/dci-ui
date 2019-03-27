@@ -7,7 +7,7 @@ const FullHeightDiv = styled.div`
   height: 100vh;
 `;
 
-export default class LoadingContainer extends Component {
+export default class LoadingPage extends Component {
   render() {
     return (
       <FullHeightDiv>

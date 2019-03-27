@@ -6,7 +6,7 @@ import "./App.css";
 import "./ui/styles";
 import store from "./store";
 import Pages from "./pages";
-import { PrivateRoute, Container404 } from "./router";
+import { PrivateRoute, Page404 } from "./router";
 import { getConfig } from "./config/configActions";
 import { getIdentity } from "./currentUser/currentUserActions";
 import { configureSSO } from "./services/sso";
@@ -30,7 +30,7 @@ class App extends Component {
   render() {
     const { loading } = this.state;
     if (loading) {
-      return <Pages.LoadingContainer />;
+      return <Pages.LoadingPage />;
     }
     return (
       <Provider store={store}>
@@ -43,46 +43,46 @@ class App extends Component {
               <PrivateRoute
                 path="/jobs"
                 exact
-                component={Pages.JobsContainer}
+                component={Pages.JobsPage}
               />
               <PrivateRoute
                 path="/jobs/:id/:tab"
-                component={Pages.JobContainer}
+                component={Pages.JobPage}
               />
               <PrivateRoute
                 path="/globalStatus"
-                component={Pages.GlobalStatusContainer}
+                component={Pages.GlobalStatusPage}
               />
-              <PrivateRoute path="/trends" component={Pages.TrendsContainer} />
-              <PrivateRoute path="/topics" component={Pages.TopicsContainer} />
+              <PrivateRoute path="/trends" component={Pages.TrendsPage} />
+              <PrivateRoute path="/topics" component={Pages.TopicsPage} />
               <PrivateRoute
                 path="/components"
-                component={Pages.ComponentsContainer}
+                component={Pages.ComponentsPage}
               />
               <PrivateRoute
                 path="/remotecis"
-                component={Pages.RemotecisContainer}
+                component={Pages.RemotecisPage}
               />
               <PrivateRoute
                 path="/products"
-                component={Pages.ProductsContainer}
+                component={Pages.ProductsPage}
               />
-              <PrivateRoute path="/teams" component={Pages.TeamsContainer} />
-              <PrivateRoute path="/users" component={Pages.UsersContainer} />
+              <PrivateRoute path="/teams" component={Pages.TeamsPage} />
+              <PrivateRoute path="/users" component={Pages.UsersPage} />
               <PrivateRoute
                 path="/profile"
-                component={Pages.ProfileContainer}
+                component={Pages.ProfilePage}
               />
               <PrivateRoute
                 path="/notifications"
-                component={Pages.NotificationsContainer}
+                component={Pages.NotificationsPage}
               />
               <PrivateRoute
                 path="/permissions"
-                component={Pages.PermissionsContainer}
+                component={Pages.PermissionsPage}
               />
-              <Route path="/login" component={Pages.LoginContainer} />
-              <Route component={Container404} />
+              <Route path="/login" component={Pages.LoginPage} />
+              <Route component={Page404} />
             </Switch>
           </BrowserRouter>
         </React.Fragment>

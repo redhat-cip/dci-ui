@@ -1,2 +1,2 @@
 export { default as PrivateRoute } from "./PrivateRoute";
-export { default as Container404 } from "./Container404";
+export { default as Page404 } from "./Page404";
