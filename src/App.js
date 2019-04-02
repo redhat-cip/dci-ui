@@ -12,6 +12,7 @@ import { getIdentity } from "./currentUser/currentUserActions";
 import { configureSSO } from "./services/sso";
 import Alerts from "./alerts/Alerts";
 import { BackgroundImage } from "./ui";
+import LoadingBar from "./loading/LoadingBar";
 
 class App extends Component {
   state = {
@@ -35,20 +36,14 @@ class App extends Component {
     return (
       <Provider store={store}>
         <React.Fragment>
+          <LoadingBar />
           <Alerts />
           <BackgroundImage />
           <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
               <Redirect from="/" exact to="/jobs" />
-              <PrivateRoute
-                path="/jobs"
-                exact
-                component={Pages.JobsPage}
-              />
-              <PrivateRoute
-                path="/jobs/:id/:tab"
-                component={Pages.JobPage}
-              />
+              <PrivateRoute path="/jobs" exact component={Pages.JobsPage} />
+              <PrivateRoute path="/jobs/:id/:tab" component={Pages.JobPage} />
               <PrivateRoute
                 path="/globalStatus"
                 component={Pages.GlobalStatusPage}
@@ -59,20 +54,11 @@ class App extends Component {
                 path="/components"
                 component={Pages.ComponentsPage}
               />
-              <PrivateRoute
-                path="/remotecis"
-                component={Pages.RemotecisPage}
-              />
-              <PrivateRoute
-                path="/products"
-                component={Pages.ProductsPage}
-              />
+              <PrivateRoute path="/remotecis" component={Pages.RemotecisPage} />
+              <PrivateRoute path="/products" component={Pages.ProductsPage} />
               <PrivateRoute path="/teams" component={Pages.TeamsPage} />
               <PrivateRoute path="/users" component={Pages.UsersPage} />
-              <PrivateRoute
-                path="/profile"
-                component={Pages.ProfilePage}
-              />
+              <PrivateRoute path="/profile" component={Pages.ProfilePage} />
               <PrivateRoute
                 path="/notifications"
                 component={Pages.NotificationsPage}
