@@ -161,7 +161,10 @@ it("create one user", () => {
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.create(user)).then(() => {
-    expect(store.getActions()).toEqual(expectedActions);
+    const actions = store.getActions();
+    expect(actions[0]).toEqual(expectedActions[0]);
+    expect(actions[1]).toEqual(expectedActions[1]);
+    expect(actions.length).toBe(3);
   });
 });
 
@@ -185,7 +188,10 @@ it("update one user", () => {
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.update(user)).then(() => {
-    expect(store.getActions()).toEqual(expectedActions);
+    const actions = store.getActions();
+    expect(actions[0]).toEqual(expectedActions[0]);
+    expect(actions[1]).toEqual(expectedActions[1]);
+    expect(actions.length).toBe(3);
   });
 });
 
