@@ -9,6 +9,8 @@ import NotificationsPage from "./remotecis/NotificationsPage";
 import ProductsPage from "./products/ProductsPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
+import EditUserPage from "./users/EditUserPage";
+import CreateUserPage from "./users/CreateUserPage";
 import ProfilePage from "./profile/ProfilePage";
 import PermissionsPage from "./permissions/PermissionsPage";
 import LoadingPage from "./loading/LoadingPage";
@@ -24,6 +26,8 @@ export default {
   ProductsPage,
   TeamsPage,
   UsersPage,
+  EditUserPage,
+  CreateUserPage,
   PermissionsPage,
   ProfilePage,
   NotificationsPage,

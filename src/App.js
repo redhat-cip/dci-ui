@@ -40,15 +40,8 @@ class App extends Component {
           <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
               <Redirect from="/" exact to="/jobs" />
-              <PrivateRoute
-                path="/jobs"
-                exact
-                component={Pages.JobsPage}
-              />
-              <PrivateRoute
-                path="/jobs/:id/:tab"
-                component={Pages.JobPage}
-              />
+              <PrivateRoute path="/jobs" exact component={Pages.JobsPage} />
+              <PrivateRoute path="/jobs/:id/:tab" component={Pages.JobPage} />
               <PrivateRoute
                 path="/globalStatus"
                 component={Pages.GlobalStatusPage}
@@ -59,20 +52,13 @@ class App extends Component {
                 path="/components"
                 component={Pages.ComponentsPage}
               />
-              <PrivateRoute
-                path="/remotecis"
-                component={Pages.RemotecisPage}
-              />
-              <PrivateRoute
-                path="/products"
-                component={Pages.ProductsPage}
-              />
+              <PrivateRoute path="/remotecis" component={Pages.RemotecisPage} />
+              <PrivateRoute path="/products" component={Pages.ProductsPage} />
               <PrivateRoute path="/teams" component={Pages.TeamsPage} />
-              <PrivateRoute path="/users" component={Pages.UsersPage} />
-              <PrivateRoute
-                path="/profile"
-                component={Pages.ProfilePage}
-              />
+              <PrivateRoute path="/users" exact component={Pages.UsersPage} />
+              <PrivateRoute path="/users/create" exact component={Pages.CreateUserPage} />
+              <PrivateRoute path="/users/:id" component={Pages.EditUserPage} />
+              <PrivateRoute path="/profile" component={Pages.ProfilePage} />
               <PrivateRoute
                 path="/notifications"
                 component={Pages.NotificationsPage}

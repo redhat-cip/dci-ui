@@ -1,17 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
+import {
+  Button,
+  Toolbar,
+  ToolbarGroup,
+  ToolbarItem,
+  DropdownItem,
+  DropdownPosition
+} from "@patternfly/react-core";
+import { WarningTriangleIcon, EditAltIcon } from "@patternfly/react-icons";
+import { global_danger_color_100 } from "@patternfly/react-tokens";
+import styled from "styled-components";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import usersActions from "./usersActions";
-import rolesActions from "roles/rolesActions";
-import teamsActions from "teams/teamsActions";
-import { EmptyState } from "ui";
-import NewUserButton from "./NewUserButton";
+import { EmptyState, KebabDropdown } from "ui";
 import { getUsers } from "./usersSelectors";
-import { getTeams } from "teams/teamsSelectors";
-import { getRoles } from "roles/rolesSelectors";
-import UserRow from "./UserRow";
+
+const TextRed = styled.span`
+  color: ${global_danger_color_100.value};
+`;
 
 export class UsersPage extends Component {
   componentDidMount() {
@@ -20,14 +28,7 @@ export class UsersPage extends Component {
   }
 
   render() {
-    const {
-      users,
-      teams,
-      roles,
-      isFetching,
-      currentUser,
-      deleteUser
-    } = this.props;
+    const { users, deleteUser, isFetching, history } = this.props;
     return (
       <Page
         title="Users"
@@ -47,7 +48,12 @@ export class UsersPage extends Component {
                 <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
                   <ToolbarGroup>
                     <ToolbarItem className="pf-u-mr-md">
-                      <NewUserButton teams={teams} roles={roles} />
+                      <Button
+                        variant="primary"
+                        onClick={() => history.push(`/users/create`)}
+                      >
+                        Create a new user
+                      </Button>
                     </ToolbarItem>
                   </ToolbarGroup>
                 </Toolbar>
@@ -66,14 +72,36 @@ export class UsersPage extends Component {
           </thead>
           <tbody>
             {users.map(user => (
-              <UserRow
-                key={`${user.id}.${user.etag}`}
-                user={user}
-                teams={teams}
-                roles={roles}
-                isDisabled={currentUser.id === user.id}
-                deleteConfirmed={() => deleteUser(user)}
-              />
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.fullname}</td>
+                <td>{user.email}</td>
+                <td>{user.from_now}</td>
+                <td className="pf-c-table__action">
+                  <KebabDropdown
+                    position={DropdownPosition.right}
+                    items={[
+                      <DropdownItem
+                        component="button"
+                        onClick={() => history.push(`/users/${user.id}`)}
+                      >
+                        <EditAltIcon className="pf-u-mr-xs" /> Edit a user
+                      </DropdownItem>,
+                      <DropdownItem
+                        component="button"
+                        onClick={() => deleteUser(user)}
+                      >
+                        <WarningTriangleIcon
+                          color={global_danger_color_100.value}
+                          className="pf-u-mr-xs"
+                        />
+                        <TextRed>delete a user</TextRed>
+                      </DropdownItem>
+                    ]}
+                  />
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -85,24 +113,14 @@ export class UsersPage extends Component {
 function mapStateToProps(state) {
   return {
     users: getUsers(state),
-    teams: getTeams(state),
-    roles: getRoles(state),
-    isFetching:
-      state.teams.isFetching ||
-      state.users.isFetching ||
-      state.roles.isFetching,
+    isFetching: state.users.isFetching,
     currentUser: state.currentUser
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => {
-      dispatch(usersActions.clear());
-      dispatch(teamsActions.all());
-      dispatch(rolesActions.all());
-      return dispatch(usersActions.all());
-    },
+    fetchUsers: () => dispatch(usersActions.all()),
     deleteUser: user => dispatch(usersActions.delete(user))
   };
 }
