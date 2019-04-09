@@ -43,7 +43,7 @@ it("fetch jobs", () => {
 });
 
 it("fetch users params", () => {
-  const params = { embed: "team,role" };
+  const params = { embed: "team" };
   axiosMock
     .onGet("https://api.example.org/api/v1/users", { params })
     .reply(200, { users: [], _meta: { count: 0 } });
@@ -119,7 +119,7 @@ it("fetch job", () => {
 });
 
 it("fetch job with params", () => {
-  const params = { embed: "team,role" };
+  const params = { embed: "team" };
   axiosMock
     .onGet("https://api.example.org/api/v1/jobs/j2", { params })
     .reply(200, { job: { id: "j2" } });

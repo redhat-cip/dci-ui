@@ -4,10 +4,8 @@ import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import { LoadingPage, Page } from "layout";
 import usersActions from "./usersActions";
-import rolesActions from "roles/rolesActions";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
-import { getRoles } from "roles/rolesSelectors";
 import UserForm from "./UserForm";
 
 export class EditUserPage extends Component {
@@ -25,9 +23,9 @@ export class EditUserPage extends Component {
   }
 
   render() {
-    const { teams, roles, updateUser, history } = this.props;
+    const { teams,  updateUser, history } = this.props;
     const { user } = this.state;
-    const isFetching = isEmpty(user) || isEmpty(teams) || isEmpty(roles);
+    const isFetching = isEmpty(user) || isEmpty(teams) ;
     if (isFetching) return <LoadingPage title="Edit user ..." />;
     return (
       <Page title={`Edit user ${user.fullname}`}>
@@ -45,7 +43,6 @@ export class EditUserPage extends Component {
                     }).then(() => history.push("/users"));
                   }}
                   teams={teams}
-                  roles={roles}
                 />
               </CardBody>
             </Card>
@@ -59,7 +56,6 @@ export class EditUserPage extends Component {
 function mapStateToProps(state) {
   return {
     teams: getTeams(state),
-    roles: getRoles(state),
     currentUser: state.currentUser
   };
 }
@@ -68,7 +64,6 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchUser: user => dispatch(usersActions.one(user, { embed: "team" })),
     fetchTeams: () => dispatch(teamsActions.all()),
-    fetchRoles: () => dispatch(rolesActions.all()),
     updateUser: user => dispatch(usersActions.update(user))
   };
 }
