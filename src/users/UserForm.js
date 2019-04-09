@@ -17,7 +17,7 @@ export default class UserForm extends Component {
   };
 
   render() {
-    const { buttonText, submit, teams, roles, user } = this.props;
+    const { buttonText, submit, teams, user } = this.props;
     const { canSubmit } = this.state;
     return (
       <React.Fragment>
@@ -71,14 +71,7 @@ export default class UserForm extends Component {
             value={user.team_id || teams[0].id}
             required
           />
-          <Select
-            id="user-form-role-field"
-            label="Role"
-            name="role_id"
-            options={roles}
-            value={user.role_id || roles[0].id}
-            required
-          />
+          
           <Button
             id="user-form-submit-button"
             variant="primary"
