@@ -1,9 +1,5 @@
 import http from "services/http";
-import {
-  showAPIError,
-  showSuccess,
-  showWarning
-} from "alerts/alertsActions";
+import { showAPIError, showSuccess, showWarning } from "alerts/alertsActions";
 import topicsActions from "topics/topicsActions";
 
 export function associateTopicToTeam(topic, team) {

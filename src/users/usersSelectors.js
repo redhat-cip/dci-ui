@@ -24,4 +24,3 @@ export const getUsers = createSelector(
       [e => e.name.toLowerCase()]
     )
 );
-

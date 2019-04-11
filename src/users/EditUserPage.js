@@ -23,9 +23,9 @@ export class EditUserPage extends Component {
   }
 
   render() {
-    const { teams,  updateUser, history } = this.props;
+    const { teams, updateUser, history } = this.props;
     const { user } = this.state;
-    const isFetching = isEmpty(user) || isEmpty(teams) ;
+    const isFetching = isEmpty(user) || isEmpty(teams);
     if (isFetching) return <LoadingPage title="Edit user ..." />;
     return (
       <Page title={`Edit user ${user.fullname}`}>

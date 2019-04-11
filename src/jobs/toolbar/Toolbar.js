@@ -11,7 +11,7 @@ import TopicsFilter from "./TopicsFilter";
 import StatusFilter from "./StatusFilter";
 import RemoteciInTeamFilter from "./RemoteciInTeamFilter";
 import { removeFilter } from "./filters";
-import {Pagination} from "ui";
+import { Pagination } from "ui";
 
 export default class DCIToolbar extends Component {
   _removeFilterAndFilterJobs = filter => {

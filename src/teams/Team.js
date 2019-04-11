@@ -8,8 +8,7 @@ import {
   DataListToggle,
   DataListContent,
   Text,
-  TextVariants,
-  DataListAction
+  TextVariants
 } from "@patternfly/react-core";
 import { CopyButton, Labels, ConfirmDeleteButton } from "ui";
 import { getUsers } from "./teamsActions";

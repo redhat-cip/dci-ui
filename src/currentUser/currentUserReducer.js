@@ -19,7 +19,12 @@ export default function(state = initialState, action) {
     case types.SET_IDENTITY:
       const identity = action.identity;
       const firstTeam = Object.values(identity.teams)[0];
-      return { ...state, ...identity, ...buildShortcut(firstTeam.role), team: firstTeam };
+      return {
+        ...state,
+        ...identity,
+        ...buildShortcut(firstTeam.role),
+        team: firstTeam
+      };
     case types.SET_ACTIVE_TEAM:
       return {
         ...state,

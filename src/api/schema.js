@@ -6,7 +6,6 @@ export const components = [component];
 export const jobstate = new schema.Entity("jobstates");
 export const jobstates = [jobstate];
 
-
 export const team = new schema.Entity("teams");
 export const teams = [team];
 

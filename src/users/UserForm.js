@@ -71,7 +71,7 @@ export default class UserForm extends Component {
             value={user.team_id || teams[0].id}
             required
           />
-          
+
           <Button
             id="user-form-submit-button"
             variant="primary"

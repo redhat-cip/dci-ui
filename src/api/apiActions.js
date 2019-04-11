@@ -87,7 +87,9 @@ export function createActions(resource) {
               type: createActionsTypes(resource).CREATE_SUCCESS,
               ...normalize(response.data[resource], schema[resource])
             });
-            dispatch(showSuccess(`${resource} ${data.name} created successfully!`));
+            dispatch(
+              showSuccess(`${resource} ${data.name} created successfully!`)
+            );
             return response;
           })
           .catch(error => {
@@ -115,7 +117,9 @@ export function createActions(resource) {
               type: createActionsTypes(resource).UPDATE_SUCCESS,
               ...normalize(response.data[resource], schema[resource])
             });
-            dispatch(showSuccess(`${resource} ${data.name} updated successfully!`));
+            dispatch(
+              showSuccess(`${resource} ${data.name} updated successfully!`)
+            );
             return response;
           })
           .catch(error => {
