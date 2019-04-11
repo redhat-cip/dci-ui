@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput } from "form";
+import { Input, HiddenInput } from "form";
 
 export default class UserForm extends Component {
   state = {
@@ -17,7 +17,7 @@ export default class UserForm extends Component {
   };
 
   render() {
-    const { buttonText, submit, teams, user } = this.props;
+    const { buttonText, submit, user } = this.props;
     const { canSubmit } = this.state;
     return (
       <React.Fragment>
@@ -63,15 +63,6 @@ export default class UserForm extends Component {
             name="password"
             type="password"
           />
-          <Select
-            id="user-form-team-field"
-            label="Team"
-            name="team_id"
-            options={teams}
-            value={user.team_id || teams[0].id}
-            required
-          />
-
           <Button
             id="user-form-submit-button"
             variant="primary"
