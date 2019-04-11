@@ -11,7 +11,7 @@ import MainContent from "./MainContent";
 
 export default class LoadingPage extends Component {
   render() {
-    const { title, description, isLoading, ...props } = this.props;
+    const { title, description, ...props } = this.props;
     return (
       <MainContent {...props}>
         <PageSection variant={PageSectionVariants.light}>

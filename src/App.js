@@ -30,7 +30,7 @@ class App extends Component {
   render() {
     const { loading } = this.state;
     if (loading) {
-      return <Pages.LoadingPage />;
+      return <Pages.NotAuthenticatedLoadingPage />;
     }
     return (
       <Provider store={store}>
