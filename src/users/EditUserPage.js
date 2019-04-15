@@ -10,7 +10,7 @@ import {
   addUserToTeam,
   deleteUserFromTeam
 } from "./usersActions";
-import { CopyButton, ConfirmDeleteButton } from "ui";
+import { ConfirmDeleteButton } from "ui";
 import AddUserToTeamForm from "./AddUserToTeamsForm";
 
 export class EditUserPage extends Component {
@@ -79,7 +79,6 @@ export class EditUserPage extends Component {
                 <table className="pf-c-table pf-m-compact pf-m-grid-md">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Team name</th>
                       <th>Role</th>
                       <th />
@@ -88,9 +87,6 @@ export class EditUserPage extends Component {
                   <tbody>
                     {user_teams.map(team => (
                       <tr key={team.id}>
-                        <td>
-                          <CopyButton text={team.id} />
-                        </td>
                         <td>{team.name}</td>
                         <td>{team.role}</td>
                         <td className="pf-c-table__action">
@@ -104,7 +100,6 @@ export class EditUserPage extends Component {
                                 this.fetchUserTeams
                               );
                             }}
-                            isDisabled={team.role === "SUPER_ADMIN"}
                           />
                         </td>
                       </tr>

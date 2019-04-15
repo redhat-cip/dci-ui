@@ -27,9 +27,17 @@ export class AddUserToTeamForm extends Component {
   };
 
   render() {
-    const { teams, onSubmit } = this.props;
+    const { currentUser, teams, onSubmit } = this.props;
     const { team, role } = this.state;
     if (isEmpty(teams)) return null;
+    const userRoles = [{ name: "USER" }];
+    const superAdminRoles = [
+      { name: "SUPER_ADMIN" },
+      { name: "READ_ONLY_USER" }
+    ];
+    const roles = currentUser.isSuperAdmin
+      ? superAdminRoles.concat(userRoles)
+      : userRoles;
     return (
       <div>
         Add user in{" "}
@@ -43,7 +51,7 @@ export class AddUserToTeamForm extends Component {
         <Filter
           placeholder={isEmpty(role) ? "..." : role}
           filter={role}
-          filters={[{ name: "READ_ONLY_USER" }, { name: "USER" }]}
+          filters={roles}
           onFilterValueSelected={role => this.setState({ role: role })}
         />{" "}
         <Button
@@ -61,6 +69,7 @@ export class AddUserToTeamForm extends Component {
 
 function mapStateToProps(state) {
   return {
+    currentUser: state.currentUser,
     teams: getTeams(state)
   };
 }
