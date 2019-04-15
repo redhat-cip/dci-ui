@@ -87,6 +87,7 @@ class MainContent extends Component {
       logout,
       history
     } = this.props;
+    console.log(currentUserTeams)
     const PageNav = (
       <Nav aria-label="Nav">
         <NavGroup title="DCI">
@@ -171,16 +172,16 @@ class MainContent extends Component {
                 title={
                   <span>
                     <UsersIcon className="pf-u-mr-md" />
-                    {currentUser.team.team_name}
+                    {currentUser.team.name}
                   </span>
                 }
                 dropdownItems={currentUserTeams.map(team => (
                   <DropdownItem
-                    key={team.team_name}
+                    key={team.name}
                     component="button"
                     onClick={() => setCurrentTeam(team)}
                   >
-                    {team.team_name}
+                    {team.name}
                   </DropdownItem>
                 ))}
               />
