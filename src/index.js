@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+import "core-js/features/object/values";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
