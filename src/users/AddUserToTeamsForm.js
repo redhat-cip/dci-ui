@@ -50,7 +50,7 @@ export class AddUserToTeamForm extends Component {
           variant="primary"
           className="pf-u-ml-xl"
           isDisabled={isEmpty(role) || isEmpty(team)}
-          onClick={() => onSubmit(team,role)}
+          onClick={() => onSubmit(team, role)}
         >
           Add
         </Button>

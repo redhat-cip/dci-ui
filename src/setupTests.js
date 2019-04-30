@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+import "core-js/features/object";
 
 const localStorageMock = (function() {
   let store = {};
