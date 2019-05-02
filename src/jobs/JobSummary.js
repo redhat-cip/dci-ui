@@ -50,7 +50,6 @@ function getBackground(status, backgroundColor = global_Color_light_100.value) {
 }
 
 const Job = styled.li`
-  align-items: center;
   background: ${props => getBackground(props.status)};
 `;
 
@@ -149,106 +148,119 @@ export class JobSummary extends Component {
     const status = job.status;
     return (
       <Job status={status} className="pf-c-data-list__item">
-        <div className="pf-c-data-list__check">{getIcon(status)}</div>
-        <div className="pf-c-data-list__cell pf-m-flex-2">
-          <b>{job.topic.name}</b>
-          {isEmpty(job.team) ? null : (
-            <p>
-              <UsersIcon className="pf-u-mr-xs" />
-              {job.team.name}
-            </p>
-          )}
-          <p>
-            <ServerIcon className="pf-u-mr-xs" />
-            {getRemoteciInfo(job)}
-          </p>
-        </div>
-        <div className="pf-c-data-list__cell pf-m-flex-4">
-          <CubesIcon />
-          {job.components.map(component => (
-            <p key={component.id}>
-              <small>{component.name}</small>
-            </p>
-          ))}
-        </div>
-        <div className="pf-c-data-list__cell pf-m-flex-4">
-          <JobTests key={`${job.id}.tests`}>
-            {orderBy(job.results, [test => test.name.toLowerCase()]).map(
-              test => (
-                <JobTest key={test.id}>
-                  <Labels.Success
-                    title={`${test.success} tests in success`}
-                    className="pf-u-mr-xs"
-                  >
-                    {test.success}
-                  </Labels.Success>
-                  <Labels.Warning
-                    title={`${test.skips} skipped tests`}
-                    className="pf-u-mr-xs"
-                  >
-                    {test.skips}
-                  </Labels.Warning>
-                  <Labels.Error
-                    title={`${test.errors +
-                      test.failures} errors and failures tests`}
-                    className="pf-u-mr-xs"
-                  >
-                    {test.errors + test.failures}
-                  </Labels.Error>
-                  <small>
-                    {test.name}
-                    {test.successfixes ? (
-                      <Successfixes successfixes={test.successfixes} />
-                    ) : null}
-                    {test.regressions ? (
-                      <Regressions regressions={test.regressions} />
-                    ) : null}
-                  </small>
-                </JobTest>
-              )
-            )}
-          </JobTests>
-        </div>
-        <div className="pf-c-data-list__cell pf-m-flex-2">
-          <p>
-            <small>
-              <CalendarAltIcon className="pf-u-mr-xs" />
-              {job.datetime}
-            </small>
-          </p>
-          <p>
-            <small>
-              {job.status !== "new" && job.status !== "running" ? (
-                <span title={`From ${job.created_at} to ${job.updated_at}`}>
-                  <ClockIcon className="pf-u-mr-xs" />
-                  Ran for {job.duration}
-                </span>
-              ) : null}
-            </small>
-          </p>
-        </div>
-        {seeDetailsButton && (
-          <div className="pf-c-data-list__cell">
-            <Button onClick={() => history.push(`/jobs/${job.id}/jobStates`)}>
-              See details
-            </Button>
+        <div class="pf-c-data-list__item-row">
+          <div class="pf-c-data-list__item-control">
+            <div className="pf-c-data-list__check">{getIcon(status)}</div>
           </div>
-        )}
-        <div className="pf-c-data-list__action">
-          {currentUser.hasProductOwnerRole ? (
-            <KebabDropdown
-              position={DropdownPosition.right}
-              items={[
-                <DropdownItem component="button" onClick={() => deleteJob(job)}>
-                  <WarningTriangleIcon
-                    color={global_danger_color_100.value}
-                    className="pf-u-mr-xs"
-                  />
-                  <TextRed>delete job</TextRed>
-                </DropdownItem>
-              ]}
-            />
-          ) : null}
+          <div class="pf-c-data-list__item-content">
+            <div className="pf-c-data-list__cell pf-m-flex-2">
+              <b>{job.topic.name}</b>
+              {isEmpty(job.team) ? null : (
+                <p>
+                  <UsersIcon className="pf-u-mr-xs" />
+                  {job.team.name}
+                </p>
+              )}
+              <p>
+                <ServerIcon className="pf-u-mr-xs" />
+                {getRemoteciInfo(job)}
+              </p>
+            </div>
+            <div className="pf-c-data-list__cell pf-m-flex-4">
+              <CubesIcon />
+              {job.components.map(component => (
+                <p key={component.id}>
+                  <small>{component.name}</small>
+                </p>
+              ))}
+            </div>
+            <div className="pf-c-data-list__cell pf-m-flex-4">
+              <JobTests key={`${job.id}.tests`}>
+                {orderBy(job.results, [test => test.name.toLowerCase()]).map(
+                  test => (
+                    <JobTest key={test.id}>
+                      <Labels.Success
+                        title={`${test.success} tests in success`}
+                        className="pf-u-mr-xs"
+                      >
+                        {test.success}
+                      </Labels.Success>
+                      <Labels.Warning
+                        title={`${test.skips} skipped tests`}
+                        className="pf-u-mr-xs"
+                      >
+                        {test.skips}
+                      </Labels.Warning>
+                      <Labels.Error
+                        title={`${test.errors +
+                          test.failures} errors and failures tests`}
+                        className="pf-u-mr-xs"
+                      >
+                        {test.errors + test.failures}
+                      </Labels.Error>
+                      <small>
+                        {test.name}
+                        {test.successfixes ? (
+                          <Successfixes successfixes={test.successfixes} />
+                        ) : null}
+                        {test.regressions ? (
+                          <Regressions regressions={test.regressions} />
+                        ) : null}
+                      </small>
+                    </JobTest>
+                  )
+                )}
+              </JobTests>
+            </div>
+            <div className="pf-c-data-list__cell pf-m-flex-2">
+              <p>
+                <small>
+                  <CalendarAltIcon className="pf-u-mr-xs" />
+                  {job.datetime}
+                </small>
+              </p>
+              <p>
+                <small>
+                  {job.status !== "new" && job.status !== "running" ? (
+                    <span title={`From ${job.created_at} to ${job.updated_at}`}>
+                      <ClockIcon className="pf-u-mr-xs" />
+                      Ran for {job.duration}
+                    </span>
+                  ) : null}
+                </small>
+              </p>
+            </div>
+            {seeDetailsButton && (
+              <div className="pf-c-data-list__cell">
+                <Button
+                  onClick={() => history.push(`/jobs/${job.id}/jobStates`)}
+                >
+                  See details
+                </Button>
+              </div>
+            )}
+          </div>
+          <div class="pf-c-data-list__item-action">
+            <div className="pf-c-data-list__action">
+              {currentUser.hasProductOwnerRole ? (
+                <KebabDropdown
+                  position={DropdownPosition.right}
+                  items={[
+                    <DropdownItem
+                      component="button"
+                      onClick={() => deleteJob(job)}
+                    >
+                      <WarningTriangleIcon
+                        color={global_danger_color_100.value}
+                        className="pf-u-mr-xs"
+                      />
+                      <TextRed>delete job</TextRed>
+                    </DropdownItem>
+                  ]}
+                />
+              ) : null}
+            </div>
+          </div>
         </div>
       </Job>
     );

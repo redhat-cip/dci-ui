@@ -6,7 +6,6 @@ import "@patternfly/patternfly/patternfly-base.css";
 //    print('import \"{}\";'.format(filename.replace('./node_modules/', '')))"""
 // import "@patternfly/patternfly/layouts/Split/split.css";
 // import "@patternfly/patternfly/layouts/Flex/flex.css";
-// import "@patternfly/patternfly/layouts/Flex/flex-ba.css";
 // import "@patternfly/patternfly/layouts/Level/level.css";
 // import "@patternfly/patternfly/layouts/Bullseye/bullseye.css";
 // import "@patternfly/patternfly/layouts/Gallery/gallery.css";
@@ -18,6 +17,7 @@ import "@patternfly/patternfly/utilities/Alignment/alignment.css";
 // import "@patternfly/patternfly/utilities/Display/display.css";
 // import "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 import "@patternfly/patternfly/utilities/Spacing/spacing.css";
+// import "@patternfly/patternfly/utilities/Float/float.css";
 // import "@patternfly/patternfly/utilities/BoxShadow/box-shadow.css";
 import "@patternfly/patternfly/components/Table/table.css";
 // import "@patternfly/patternfly/components/Table/table-grid.css";
