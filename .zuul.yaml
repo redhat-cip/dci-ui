@@ -1,0 +1,26 @@
+---
+- job:
+    name: dci-ui-test
+    parent: base
+    description: Run unit tests
+    tasks:
+      - shell: yarn install && yarn test
+
+- project:
+    name: dci-ui
+    check:
+      jobs:
+        - dci-ui-test
+        - dci-ui-demo:
+            voting: false
+        - dci-rpm-build
+    gate:
+      queue: dci
+      jobs:
+        - dci-ui-test
+        - dci-rpm-build
+        - dci-rpm-publish
+    post:
+      queue: dci
+      jobs:
+        - dci-deploy
