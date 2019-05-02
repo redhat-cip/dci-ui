@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 242.80319 68.315344"
+   version="1.1"
+   id="svg40"
+   sodipodi:docname="logo-no-icon.svg"
+   inkscape:version="0.92.4 (unknown)"
+   width="242.80319"
+   height="68.315346">
+  <metadata
+     id="metadata44">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Logo-Red_Hat-Certification-A-Standard-RGB</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     id="namedview42"
+     showgrid="false"
+     inkscape:zoom="0.64629907"
+     inkscape:cx="436.30628"
+     inkscape:cy="-92.481636"
+     inkscape:window-x="1920"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg40"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.a{fill:#e00;}</style>
+  </defs>
+  <title
+     id="title6">Logo-Red_Hat-Certification-A-Standard-RGB</title>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:39.49323654px;line-height:1.25;font-family:'Red Hat Display';-inkscape-font-specification:'Red Hat Display';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffffff;stroke-width:0.70523643"
+     x="-2.8040197"
+     y="67.88092"
+     id="text853"><tspan
+       sodipodi:role="line"
+       id="tspan851"
+       x="-2.8040197"
+       y="67.88092"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:'Red Hat Display';-inkscape-font-specification:'Red Hat Display Medium';fill:#ffffff;stroke-width:0.70523643">Distributed CI</tspan></text>
+  <path
+     d="m 130.12961,22.081536 c 0,4.349725 2.61569,6.464224 7.38612,6.464224 a 19.063433,19.063433 0 0 0 4.34972,-0.614593 v -5.041144 a 9.0872323,9.0872323 0 0 1 -2.80958,0.424359 c -1.96451,0 -2.69251,-0.614593 -2.69251,-2.462038 v -7.733663 h 5.69233 V 7.92389 h -5.69233 V 1.33894 l -6.21912,1.346252 V 7.92389 h -4.12657 v 5.194791 h 4.1156 z m -19.38903,0.11706 c 0,-1.346252 1.34992,-2.001092 3.38759,-2.001092 a 15.774616,15.774616 0 0 1 3.69489,0.460946 v 2.615692 a 7.8690169,7.8690169 0 0 1 -3.8778,0.962133 c -1.99744,0 -3.19371,-0.768246 -3.19371,-2.037679 m 1.90232,6.42399 c 2.19499,0 3.96561,-0.460946 5.61917,-1.576732 v 1.232853 h 6.15327 V 15.233186 c 0,-4.960664 -3.34369,-7.682443 -8.92261,-7.682443 -3.11688,0 -6.19717,0.73166 -9.5116,2.231566 l 2.23157,4.580198 c 2.38521,-1.002373 4.38996,-1.616973 6.15693,-1.616973 2.56081,0 3.88512,0.99872 3.88512,3.040052 v 0.998719 a 18.119591,18.119591 0 0 0 -4.61679,-0.578013 c -5.23503,0 -8.38849,2.194986 -8.38849,6.120351 0,3.577818 2.84616,6.306917 7.38612,6.306917 M 78.829176,28.28968 h 6.61787 V 17.735465 h 11.08101 v 10.543242 h 6.617884 V 1.346253 h -6.603254 v 10.349348 h -11.081 V 1.346253 h -6.61788 z M 53.627106,18.083005 c 0,-2.926645 2.30838,-5.158211 5.34844,-5.158211 a 6.2996032,6.2996032 0 0 1 4.30949,1.580386 v 7.100777 a 5.9849889,5.9849889 0 0 1 -4.30949,1.616965 c -2.99981,0 -5.34844,-2.231565 -5.34844,-5.15455 m 9.73475,10.195701 h 6.15693 V 0 l -6.21912,1.346253 v 7.656836 a 10.353006,10.353006 0 0 0 -5.1948,-1.346259 c -5.92279,0 -10.57982,4.576544 -10.57982,10.426175 a 10.334715,10.334715 0 0 0 10.37496,10.473728 9.1896649,9.1896649 0 0 0 5.46185,-1.766959 z M 35.123386,12.643101 c 1.96085,0 3.61441,1.269433 4.26925,3.230285 h -8.49093 c 0.6146,-2.037672 2.15474,-3.230285 4.23266,-3.230285 m -10.513974,5.476484 c 0,5.926457 4.847254,10.543241 11.077354,10.543241 3.42417,0 5.92645,-0.925552 8.50556,-3.080291 l -4.11925,-3.658305 c -0.96214,1.002373 -2.38522,1.540146 -4.07536,1.540146 a 5.2643026,5.2643026 0 0 1 -5.00456,-3.230285 h 14.50519 v -1.536493 c 0,-6.464224 -4.34608,-11.117588 -10.27253,-11.117588 A 10.451781,10.451781 0 0 0 24.627712,18.119585 M 13.886924,7.001997 c 2.194979,0 3.424172,1.382839 3.424172,3.040052 0,1.657212 -1.232846,3.040052 -3.424172,3.040052 H 7.3458743 V 7.001997 Z M 0.71701733,28.278707 H 7.3348943 v -9.811582 h 5.0374907 l 5.081384,9.811582 h 7.386123 L 18.913435,17.504992 a 8.1470481,8.1470481 0 0 0 5.077731,-7.58001 c 0,-4.847258 -3.808298,-8.578729 -9.511596,-8.578729 H 0.72799733 Z"
+     id="path38"
+     inkscape:connector-curvature="0"
+     style="fill:#ffffff;stroke-width:0.3658306" />
+</svg>
