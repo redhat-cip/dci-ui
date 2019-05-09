@@ -128,13 +128,6 @@ const Successfixes = ({ successfixes }) => (
   </TextGreen>
 );
 
-function getRemoteciInfo(job) {
-  if (job.rconfiguration && job.rconfiguration.name) {
-    return `${job.remoteci.name} (${job.rconfiguration.name})`;
-  }
-  return `${job.remoteci.name}`;
-}
-
 export class JobSummary extends Component {
   render() {
     const {
@@ -163,7 +156,7 @@ export class JobSummary extends Component {
               )}
               <p>
                 <ServerIcon className="pf-u-mr-xs" />
-                {getRemoteciInfo(job)}
+                {job.remoteci.name}
               </p>
             </div>
             <div className="pf-c-data-list__cell pf-m-flex-4">

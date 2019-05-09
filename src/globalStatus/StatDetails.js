@@ -29,9 +29,6 @@ export default class StatDetails extends Component {
                   <td>{job.team_name}</td>
                   <td>
                     {job.remoteci_name}
-                    {job.rconfiguration_name
-                      ? `(${job.rconfiguration_name})`
-                      : null}
                   </td>
                   <td className="pf-u-text-align-center">
                     <Link to={`/jobs/${job.id}/jobStates`}>{job.status}</Link>
