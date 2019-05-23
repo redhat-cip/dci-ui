@@ -47,14 +47,10 @@ export function getJobStatesWithFiles(job) {
 export function getContent(file, params = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    const request = Object.assign(
-      {},
-      {
-        method: "get",
-        url: `${state.config.apiURL}/api/v1/files/${file.id}/content`
-      },
+    return http({
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/files/${file.id}/content`,
       params
-    );
-    return http(request);
+    });
   };
 }

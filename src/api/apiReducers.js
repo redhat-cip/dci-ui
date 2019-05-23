@@ -1,4 +1,4 @@
-import { omitBy, merge, isEmpty } from "lodash";
+import { omitBy, merge, isEmpty, keys } from "lodash";
 import { createActionsTypes } from "./apiActionsTypes";
 
 const initialState = {
@@ -14,7 +14,7 @@ function mergeEntities(state, resources) {
   return {
     ...state,
     byId,
-    allIds: Object.keys(byId)
+    allIds: keys(byId)
   };
 }
 
@@ -48,7 +48,7 @@ export function createReducer(resource) {
         delete newState.byId[action.id];
         return {
           ...newState,
-          allIds: Object.keys(newState.byId)
+          allIds: keys(newState.byId)
         };
       case actionType.SET_COUNT:
         return {
