@@ -6,14 +6,14 @@ LABEL maintainer="DCI Team <distributed-ci@redhat.com>"
 
 ENV LANG en_US.UTF-8
 
-WORKDIR /opt/dci-ui
-COPY package.json /opt/dci-ui/
-
 RUN yum install -y epel-release && \
     yum install -y nodejs npm && \
-    yum clean all && \
-    npm install && \
-    npm cache clean
+    yum clean all
+
+WORKDIR /opt/dci-ui
+COPY package.json package-lock.json /opt/dci-ui/
+RUN npm install
+COPY . /opt/dci-ui/
 
 EXPOSE 8000
 

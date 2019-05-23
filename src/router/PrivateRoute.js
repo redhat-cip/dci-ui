@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
+import { keys } from "lodash";
 
 class PrivateRoute extends Component {
   render() {
@@ -27,7 +28,7 @@ class PrivateRoute extends Component {
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: Object.keys(state.currentUser).length !== 0
+    isAuthenticated: keys(state.currentUser).length !== 0
   };
 }
 
