@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { Button } from "@patternfly/react-core";
+import { keys } from "lodash";
 
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
@@ -108,7 +109,7 @@ export class LoginPage extends Component {
 function mapStateToProps(state) {
   return {
     config: state.config,
-    isAuthenticated: Object.keys(state.currentUser).length !== 0
+    isAuthenticated: keys(state.currentUser).length !== 0
   };
 }
 
