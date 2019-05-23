@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { values } from "lodash";
 import styled from "styled-components";
 import { Alert, Button } from "@patternfly/react-core";
 import { TimesIcon } from "@patternfly/react-icons";
@@ -21,7 +22,7 @@ export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
       <ul className="pf-c-alert-group" role="status">
-        {Object.values(alerts).map(alert => (
+        {values(alerts).map(alert => (
           <Alert
             key={alert.id}
             variant={alert.type}
