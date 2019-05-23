@@ -1,0 +1,9 @@
+- hosts: all
+  roles:
+    - role: install-nodejs
+      vars:
+         node_version: 10
+    - role: install-yarn
+    - role: yarn
+      vars:
+         yarn_command: install

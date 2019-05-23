@@ -1,0 +1,14 @@
+---
+- job:
+    name: dci-ui-test2
+    parent: base
+    description: Run unit tests
+    pre-run: zuul-playbooks/install.yaml
+    run: zuul-playbooks/test.yaml
+
+- project:
+    name: dci-ui
+    check:
+      jobs:
+        - dci-ui-test2
+
