@@ -1,0 +1,15 @@
+---
+- job:
+    name: dci-ui-test2
+    parent: nodejs-npm
+    description: Run unit tests
+    vars:
+      node_version: 10
+      npm_command: test
+
+- project:
+    name: dci-ui
+    check:
+      jobs:
+        - dci-ui-test2
+
