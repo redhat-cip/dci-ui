@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { isEmpty } from "lodash";
+import { isEmpty, values } from "lodash";
 import { withRouter, Route, Link } from "react-router-dom";
 import {
   Brand,
@@ -212,7 +212,7 @@ class MainContent extends Component {
 function mapStateToProps(state) {
   return {
     currentUser: state.currentUser,
-    currentUserTeams: Object.values(state.currentUser.teams)
+    currentUserTeams: values(state.currentUser.teams)
   };
 }
 

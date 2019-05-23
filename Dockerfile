@@ -6,15 +6,17 @@ LABEL maintainer="DCI Team <distributed-ci@redhat.com>"
 
 ENV LANG en_US.UTF-8
 
-WORKDIR /opt/dci-ui
-COPY package.json /opt/dci-ui/
+RUN curl --silent --location https://rpm.nodesource.com/setup_10.x | bash - 
+RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
 
-RUN yum install -y epel-release && \
-    yum install -y nodejs npm && \
-    yum clean all && \
-    npm install && \
-    npm cache clean
+RUN yum install -y nodejs yarn && \
+    yum clean all
+
+WORKDIR /opt/dci-ui
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

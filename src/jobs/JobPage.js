@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { values } from "lodash";
 import { Page } from "layout";
 import { connect } from "react-redux";
 import {
@@ -99,7 +100,7 @@ export class JobPage extends Component {
     const { history } = this.props;
     const { job, isFetching, tabIndex } = this.state;
     const tabs = { 0: "Logs", 1: "Tests", 2: "Issues", 3: "Files" };
-    const tabItems = Object.values(tabs).map((tab, i) => (
+    const tabItems = values(tabs).map((tab, i) => (
       <li className={`pf-c-tabs__item ${tabIndex === i ? "pf-m-current" : ""}`}>
         <button
           className="pf-c-tabs__button"
