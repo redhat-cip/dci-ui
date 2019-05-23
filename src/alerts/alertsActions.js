@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { isEmpty, keys } from "lodash";
 import * as types from "./alertsActionsTypes";
 
 export function showAlert(alert) {
@@ -77,7 +77,7 @@ export function createAlert(response) {
     const payload = response.data.payload;
     if (payload) {
       const error = payload.error || payload.errors || {};
-      alert.message = Object.keys(error)
+      alert.message = keys(error)
         .map(k => `${k}: ${error[k]}`)
         .join("\n");
     }
