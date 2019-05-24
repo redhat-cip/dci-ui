@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { values } from "lodash";
+import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { connect } from "react-redux";
 import {
@@ -25,19 +25,14 @@ const HeaderSection = styled(PageSection)`
 
 export class JobPage extends Component {
   state = {
-    job: {
-      tests: [],
-      jobstates: [],
-      issues: [],
-      files: []
-    },
+    job: {},
     isFetching: true,
-    tabIndex: 0
+    currentEndpoint: "jobStates"
   };
 
   componentDidMount() {
     const { match, fetchJob, getResults, getJobStates, getIssues } = this.props;
-    const { id, tab } = match.params;
+    const { id, endpoint } = match.params;
     fetchJob(id)
       .then(response => {
         const job = response.data.job;
@@ -45,15 +40,15 @@ export class JobPage extends Component {
           getResults(job),
           getJobStates(job),
           getIssues(job)
-        ]).then(values => {
+        ]).then(results => {
           this.setState({
             job: {
               ...job,
-              tests: values[0].data.results,
-              jobstates: values[1].data.jobstates,
-              issues: values[2].data.issues
+              tests: results[0].data.results,
+              jobstates: results[1].data.jobstates,
+              issues: results[2].data.issues
             },
-            tab
+            currentEndpoint: endpoint
           });
         });
       })
@@ -98,33 +93,52 @@ export class JobPage extends Component {
 
   render() {
     const { history } = this.props;
-    const { job, isFetching, tabIndex } = this.state;
-    const tabs = { 0: "Logs", 1: "Tests", 2: "Issues", 3: "Files" };
-    const tabItems = values(tabs).map((tab, i) => (
-      <li className={`pf-c-tabs__item ${tabIndex === i ? "pf-m-current" : ""}`}>
+    const { job, isFetching, currentEndpoint } = this.state;
+    const endpoints = ["jobStates", "tests", "issues", "files"];
+    const endpointsTitles = {
+      jobStates: "Logs",
+      tests: "Tests",
+      issues: "Issues",
+      files: "Files"
+    };
+    const Menu = endpoints.map(endpoint => (
+      <li
+        className={`pf-c-tabs__item ${
+          endpoint === currentEndpoint ? "pf-m-current" : ""
+        }`}
+      >
         <button
           className="pf-c-tabs__button"
-          id={`job-details-nav-${tab}`}
-          aria-controls={`${tab}-section`}
-          onClick={() => this.setState({ tabIndex: i })}
+          id={`job-details-nav-${endpoint}`}
+          aria-controls={`${endpoint}-section`}
+          onClick={() =>
+            this.setState(
+              { currentEndpoint: endpoint },
+              history.push(`/jobs/${job.id}/${endpoint}`)
+            )
+          }
         >
-          {tab}
+          {endpointsTitles[endpoint]}
         </button>
       </li>
     ));
+    const currentEndpointIndex = endpoints.indexOf(currentEndpoint);
+    const loading = isFetching && isEmpty(job);
     return (
       <Page
         HeaderSection={
-          <HeaderSection variant={PageSectionVariants.light}>
-            <TextContent>
-              <Text component="h1">{tabs[tabIndex]}</Text>
-            </TextContent>
-            <div className="pf-c-tabs" aria-label="Job details navigation">
-              <ul className="pf-c-tabs__list">{tabItems}</ul>
-            </div>
-          </HeaderSection>
+          !loading && (
+            <HeaderSection variant={PageSectionVariants.light}>
+              <TextContent>
+                <Text component="h1">{endpointsTitles[currentEndpoint]}</Text>
+              </TextContent>
+              <div className="pf-c-tabs" aria-label="Job details navigation">
+                <ul className="pf-c-tabs__list">{Menu}</ul>
+              </div>
+            </HeaderSection>
+          )
         }
-        loading={isFetching}
+        loading={loading}
       >
         <div className="pf-l-stack pf-m-gutter">
           <div className="pf-l-stack__item">
@@ -136,16 +150,18 @@ export class JobPage extends Component {
             </ul>
           </div>
           <div className="pf-l-stack__item pf-m-main">
-            {tabIndex === 0 && <JobStatesList jobstates={job.jobstates} />}
-            {tabIndex === 1 && <TestsList tests={job.tests} />}
-            {tabIndex === 2 && (
+            {currentEndpointIndex === 0 && (
+              <JobStatesList jobstates={job.jobstates} />
+            )}
+            {currentEndpointIndex === 1 && <TestsList tests={job.tests} />}
+            {currentEndpointIndex === 2 && (
               <IssuesList
                 issues={job.issues}
                 createIssue={this.createIssue}
                 deleteIssue={this.deleteIssue}
               />
             )}
-            {tabIndex === 3 && <FilesList files={job.files} />}
+            {currentEndpointIndex === 3 && <FilesList files={job.files} />}
           </div>
         </div>
       </Page>

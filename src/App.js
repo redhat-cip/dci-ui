@@ -41,7 +41,7 @@ class App extends Component {
             <Switch>
               <Redirect from="/" exact to="/jobs" />
               <PrivateRoute path="/jobs" exact component={Pages.JobsPage} />
-              <PrivateRoute path="/jobs/:id/:tab" component={Pages.JobPage} />
+              <PrivateRoute path="/jobs/:id/:endpoint" component={Pages.JobPage} />
               <PrivateRoute
                 path="/globalStatus"
                 component={Pages.GlobalStatusPage}
