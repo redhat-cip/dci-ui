@@ -9,11 +9,29 @@ import {
   SuccessLabel,
   FailureLabel,
   ErrorLabel,
-  DurationLabel
+  LabelBox
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
 
 export default class JobStatesList extends Component {
+  state = {
+    hash: null
+  };
+
+  componentDidMount() {
+    const { location } = this.props;
+    const { hash } = location;
+    this.setState({ hash });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+    const hash = location.hash;
+    if (hash !== prevProps.location.hash) {
+      this.setState({ hash });
+    }
+  }
+
   getLabel = jobstate => {
     switch (jobstate.status) {
       case "success":
@@ -28,7 +46,8 @@ export default class JobStatesList extends Component {
   };
 
   render() {
-    const { jobstates } = this.props;
+    const { hash } = this.state;
+    const { jobstates, location } = this.props;
     if (isEmpty(jobstates))
       return (
         <EmptyState title="No logs" info="There is no logs for this job" />
@@ -39,13 +58,24 @@ export default class JobStatesList extends Component {
           <div key={i}>
             {jobstate.files.length === 0 ? null : (
               <JobStateRow>
-                {this.getLabel(jobstate)}
-                <DurationLabel duration={jobstate.duration} />
+                <LabelBox>{this.getLabel(jobstate)}</LabelBox>
+                <LabelBox>
+                  <Label>{`${jobstate.duration}s`}</Label>
+                </LabelBox>
               </JobStateRow>
             )}
-            {jobstate.files.map((file, i) => (
-              <JobStateFile key={i} file={file} />
-            ))}
+            {jobstate.files.map((file, j) => {
+              const h = `${jobstate.id}:file${j}`;
+              return (
+                <JobStateFile
+                  id={h}
+                  key={j}
+                  file={file}
+                  isSelected={hash === `#${h}`}
+                  link={`${location.pathname}#${h}`}
+                />
+              );
+            })}
           </div>
         ))}
       </JobStates>

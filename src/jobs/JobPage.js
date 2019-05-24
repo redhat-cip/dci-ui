@@ -27,7 +27,8 @@ export class JobPage extends Component {
   state = {
     job: {},
     isFetching: true,
-    currentEndpoint: "jobStates"
+    currentEndpoint: "jobStates",
+    fileIndex: 0
   };
 
   componentDidMount() {
@@ -92,7 +93,7 @@ export class JobPage extends Component {
   };
 
   render() {
-    const { history } = this.props;
+    const { history, location } = this.props;
     const { job, isFetching, currentEndpoint } = this.state;
     const endpoints = ["jobStates", "tests", "issues", "files"];
     const endpointsTitles = {
@@ -103,6 +104,7 @@ export class JobPage extends Component {
     };
     const Menu = endpoints.map(endpoint => (
       <li
+        key={endpoint}
         className={`pf-c-tabs__item ${
           endpoint === currentEndpoint ? "pf-m-current" : ""
         }`}
@@ -151,7 +153,7 @@ export class JobPage extends Component {
           </div>
           <div className="pf-l-stack__item pf-m-main">
             {currentEndpointIndex === 0 && (
-              <JobStatesList jobstates={job.jobstates} />
+              <JobStatesList jobstates={job.jobstates} location={location} />
             )}
             {currentEndpointIndex === 1 && <TestsList tests={job.tests} />}
             {currentEndpointIndex === 2 && (

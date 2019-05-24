@@ -148,11 +148,11 @@ export class JobSummary extends Component {
     const status = job.status;
     return (
       <Job status={status} className="pf-c-data-list__item">
-        <div class="pf-c-data-list__item-row">
-          <div class="pf-c-data-list__item-control">
+        <div className="pf-c-data-list__item-row">
+          <div className="pf-c-data-list__item-control">
             <div className="pf-c-data-list__check">{getIcon(status)}</div>
           </div>
-          <div class="pf-c-data-list__item-content">
+          <div className="pf-c-data-list__item-content">
             <div className="pf-c-data-list__cell pf-m-flex-2">
               <b>{job.topic.name}</b>
               {isEmpty(job.team) ? null : (
@@ -240,7 +240,7 @@ export class JobSummary extends Component {
               </div>
             )}
           </div>
-          <div class="pf-c-data-list__item-action">
+          <div className="pf-c-data-list__item-action">
             <div className="pf-c-data-list__action">
               {currentUser.hasProductOwnerRole ? (
                 <KebabDropdown

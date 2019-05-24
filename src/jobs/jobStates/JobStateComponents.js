@@ -1,5 +1,4 @@
-import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Colors } from "ui";
 
 export const JobStates = styled.div`
@@ -8,21 +7,28 @@ export const JobStates = styled.div`
 `;
 
 export const JobStateRow = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   margin: 0;
   min-height: 20px;
   padding-top: 1px;
 `;
 
+export const LabelBox = styled.div`
+  min-width: 60px;
+  align-self: right;
+  margin: 0 1em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
 export const Label = styled.span`
   z-index: 10;
-  display: block;
-  right: 80px;
-  position: absolute;
-  top: 4px;
-  padding: 1px 7px 2px;
-  line-height: 0.8em;
-  font-size: 0.8em;
+  padding: 2px 5px;
+  line-height: 12px;
+  font-size: 12px;
   background-color: ${Colors.black600};
   border-radius: 6px;
   color: ${Colors.black300};
@@ -48,46 +54,52 @@ export const FileRow = styled(JobStateRow)`
   background-color: ${Colors.black800};
   margin-bottom: 1px;
   cursor: pointer;
-
+  display: flex;
+  align-items: center;
   &:hover {
     background-color: ${Colors.black700};
   }
 `;
 
-export const FileName = styled.span`
-  line-height: 1.2em;
-  font-size: 0.9em;
-  display: block;
-  left: 3em;
-  position: absolute;
+export const ShareLink = styled.a`
+  margin-left: 10px;
+  font-size: 11px;
+  color: ${Colors.black600};
+  &:hover {
+    color: ${Colors.black200};
+  }
+  ${props =>
+    props.isSelected &&
+    css`
+      color: ${Colors.black200};
+    `};
 `;
-export const Arrow = styled.span`
-  display: block;
-  left: 1em;
-  position: absolute;
+
+export const CaretIcon = styled.div`
+  margin-left: 10px;
+  font-size: 13px;
+  color: ${Colors.black600};
+`;
+
+export const FileName = styled.div`
+  margin-left: 10px;
+  font-size: 14px;
+  flex: 1;
+`;
+
+export const FileContent = styled.div`
+  background-color: ${Colors.black800};
+  padding: 1em 0;
 `;
 
 export const Pre = styled.pre`
   font-family: monospace;
-  font-size: 0.9em;
-  line-height: 1.2em;
+  font-size: 11px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  padding: 0 2em 0 3em;
-  background-color: ${Colors.black800};
+  padding: 0 20px 0 35px;
   color: ${Colors.black200};
   border: none;
   margin: 0;
   margin-bottom: 1px;
 `;
-
-export const LabelPositionedOnTheRight = styled(Label)`
-  right: 1em;
-`;
-
-export function DurationLabel({ duration }) {
-  if (duration === null) return null;
-  return (
-    <LabelPositionedOnTheRight>{`${duration}s`}</LabelPositionedOnTheRight>
-  );
-}

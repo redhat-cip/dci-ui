@@ -1,21 +1,37 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {
+  CaretDownIcon,
+  CaretRightIcon,
+  LinkIcon
+} from "@patternfly/react-icons";
 import { getFileContent } from "jobs/files/filesActions";
 import {
   FileRow,
   FileName,
-  Arrow,
+  FileContent,
+  CaretIcon,
+  ShareLink,
   Pre,
-  DurationLabel
+  Label,
+  LabelBox
 } from "./JobStateComponents";
-import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 
 export class JobStateFile extends Component {
   state = {
     file: this.props.file,
     seeDetails: false,
-    loading: false
+    loading: true
   };
+
+  componentDidUpdate(prevProps) {
+    const { id, isSelected } = this.props;
+    if (isSelected && isSelected !== prevProps.isSelected) {
+      this.loadFileContent();
+      this.setState({ seeDetails: true });
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  }
 
   loadFileContent = () => {
     if (!this.state.file.content) this.setState({ loading: true });
@@ -37,30 +53,43 @@ export class JobStateFile extends Component {
   };
 
   render() {
+    const { seeDetails, file, loading } = this.state;
+    const { id, link, isSelected } = this.props;
     return (
-      <React.Fragment>
-        <FileRow
-          onClick={() => {
-            this.loadFileContent();
-            this.setState(prevState => ({ seeDetails: !prevState.seeDetails }));
-          }}
-        >
-          <Arrow>
-            {this.state.seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
-          </Arrow>
-          <FileName>{this.state.file.name}</FileName>
-          <DurationLabel duration={this.state.file.duration} />
+      <div id={id}>
+        <FileRow>
+          <ShareLink href={link} isSelected={isSelected}>
+            <LinkIcon />
+          </ShareLink>
+          <CaretIcon>
+            {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
+          </CaretIcon>
+          <FileName
+            onClick={() => {
+              this.loadFileContent();
+              this.setState(prevState => ({
+                seeDetails: !prevState.seeDetails
+              }));
+            }}
+          >
+            {file.name}
+          </FileName>
+          <LabelBox>
+            <Label>{`${file.duration}s`}</Label>
+          </LabelBox>
         </FileRow>
-        {this.state.seeDetails ? (
-          <Pre>
-            {this.state.loading
-              ? "loading"
-              : this.state.file.content
-              ? this.state.file.content
-              : `"${this.state.file.name}" file is empty`}
-          </Pre>
+        {seeDetails ? (
+          <FileContent>
+            <Pre>
+              {loading
+                ? "loading"
+                : file.content
+                ? file.content
+                : `"${file.name}" file is empty`}
+            </Pre>
+          </FileContent>
         ) : null}
-      </React.Fragment>
+      </div>
     );
   }
 }
