@@ -4,6 +4,7 @@ export { default as EmptyState } from "./EmptyState";
 export { default as Labels } from "./Labels";
 export { default as CopyButton } from "./CopyButton";
 export { default as Filter } from "./Filter";
+export { default as FilterWithSearch } from "./FilterWithSearch";
 export { default as LoadingFilter } from "./LoadingFilter";
 export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
 export { default as KebabDropdown } from "./KebabDropdown";
