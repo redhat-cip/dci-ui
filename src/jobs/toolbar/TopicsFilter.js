@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import topicsActions from "topics/topicsActions";
 import { getTopics } from "topics/topicsSelectors";
-import { Filter, LoadingFilter } from "ui";
+import { FilterWithSearch, LoadingFilter } from "ui";
 import { createTopicsFilter, getCurrentFilters, removeFilter } from "./filters";
 
 export class TopicsFilter extends Component {
@@ -22,20 +22,20 @@ export class TopicsFilter extends Component {
     const { topics, isFetching, activeFilters } = this.props;
     if (isFetching && isEmpty(topics)) {
       return (
-        <LoadingFilter placeholder="Filter by Topic" className="pf-u-mr-lg" />
+        <LoadingFilter placeholder="Filter by Topic" className="pf-u-mr-xl" />
       );
     }
     const topicsFilter = createTopicsFilter(topics);
     const topicFilter = getCurrentFilters(activeFilters, topicsFilter).topic_id;
     return (
-      <Filter
+      <FilterWithSearch
         placeholder="Filter by Topic"
         filter={topicFilter}
         filters={topicsFilter}
         onFilterValueSelected={newTopicFilter =>
           this._cleanFiltersAndFilterJobs([newTopicFilter])
         }
-        className="pf-u-mr-lg"
+        className="pf-u-mr-xl"
       />
     );
   }

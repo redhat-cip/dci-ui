@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Filter } from "ui";
+import { FilterWithSearch } from "ui";
 import { getCurrentFilters, removeFilter } from "./filters";
 
 export default class StatusFilter extends Component {
@@ -55,7 +55,7 @@ export default class StatusFilter extends Component {
     const { activeFilters } = this.props;
     const { status: statusFilter } = getCurrentFilters(activeFilters, filters);
     return (
-      <Filter
+      <FilterWithSearch
         placeholder="Filter by Status"
         filter={statusFilter}
         filters={filters}

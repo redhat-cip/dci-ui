@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
-import { Filter, LoadingFilter } from "ui";
+import { FilterWithSearch, LoadingFilter } from "ui";
 import { createTeamsFilter, getCurrentFilters, removeFilters } from "./filters";
 
 export class RemoteciInTeamFilter extends Component {
@@ -36,7 +36,7 @@ export class RemoteciInTeamFilter extends Component {
     const remoteciFilters = isEmpty(teamFilter) ? [] : teamFilter.filterValues;
     return (
       <React.Fragment>
-        <Filter
+        <FilterWithSearch
           placeholder="Filter by Team"
           filter={teamFilter}
           filters={teamsFilter}
@@ -46,7 +46,7 @@ export class RemoteciInTeamFilter extends Component {
           className="pf-u-mr-lg"
         />
         {isEmpty(remoteciFilters) ? null : (
-          <Filter
+          <FilterWithSearch
             placeholder="Filter by Remoteci"
             filter={remoteciFilter}
             filters={remoteciFilters}
