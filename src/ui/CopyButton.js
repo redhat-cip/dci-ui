@@ -1,35 +1,55 @@
 import React, { Component } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { ClipboardIcon } from "@patternfly/react-icons";
-import { Tooltip, TooltipPosition } from "@patternfly/react-core";
+import CopyButton from "@patternfly/react-core/dist/js/components/ClipboardCopy/CopyButton";
+import { TooltipPosition } from "@patternfly/react-core";
 
-export default class CopyButton extends Component {
-  state = {
-    tooltipText: this.props.tooltipTextBefore || "Click to copy"
-  };
+function copyToClipboard(event, text) {
+  const clipboard = event.currentTarget.parentElement;
+  const el = document.createElement("input");
+  el.value = text;
+  clipboard.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  clipboard.removeChild(el);
+}
 
-  textCopied = () => {
-    const { tooltipTextAfter = "Copied!" } = this.props;
-    const { tooltipText } = this.state;
-    this.setState({ tooltipText: tooltipTextAfter });
-    setTimeout(() => this.setState({ tooltipText }), 2000);
-  };
+export default class DCICopyButton extends Component {
+  constructor(props) {
+    super(props);
+    this.timer = null;
+    this.state = {
+      text: this.props.text,
+      copied: false
+    };
+  }
 
   render() {
-    const { position = TooltipPosition.right, text } = this.props;
-    const { tooltipText } = this.state;
+    const { position = TooltipPosition.right } = this.props;
+    const { copied, text } = this.state;
     return (
-      <CopyToClipboard text={text} onCopy={() => this.textCopied()}>
-        <div>
-          <Tooltip
-            position={position}
-            enableFlip
-            content={<div>{tooltipText}</div>}
-          >
-            <ClipboardIcon />
-          </Tooltip>
-        </div>
-      </CopyToClipboard>
+      <CopyButton
+        exitDelay={1600}
+        entryDelay={100}
+        maxWidth="150px"
+        position={position}
+        id={`copy-button-${text}`}
+        textId={`text-input-${text}`}
+        aria-label="Copy to clipboard"
+        onClick={event => {
+          if (this.timer) {
+            clearTimeout(this.timer);
+            this.setState({ copied: false });
+          }
+          copyToClipboard(event, text);
+          this.setState({ copied: true }, () => {
+            this.timer = setTimeout(() => {
+              this.setState({ copied: false });
+              this.timer = null;
+            }, 2000);
+          });
+        }}
+      >
+        {copied ? "Successfully copied to clipboard!" : "Copy to clipboard"}
+      </CopyButton>
     );
   }
 }

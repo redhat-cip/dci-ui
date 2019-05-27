@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import usersActions from "./usersActions";
-import { EmptyState, KebabDropdown } from "ui";
+import { CopyButton, EmptyState, KebabDropdown } from "ui";
 import { getUsers } from "./usersSelectors";
 
 const TextRed = styled.span`
@@ -73,7 +73,9 @@ export class UsersPage extends Component {
           <tbody>
             {users.map(user => (
               <tr key={user.id}>
-                <td>{user.id}</td>
+                <td>
+                  <CopyButton text={user.id} />
+                </td>
                 <td>{user.name}</td>
                 <td>{user.fullname}</td>
                 <td>{user.email}</td>
