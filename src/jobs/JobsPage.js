@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import jobsActions from "./jobsActions";
 import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
@@ -76,31 +77,54 @@ export class JobsPage extends Component {
             info="There is no job at the moment. Edit your filters to restart a search."
           />
         }
-        Toolbar={
-          <Toolbar
-            count={count}
-            pagination={pagination}
-            activeFilters={filters}
-            goTo={page => this._setPageAndFetchJobs(page)}
-            filterJobs={filters =>
-              this.setState({ filters }, () => this._setPageAndFetchJobs(1))
-            }
-            clearFilters={() =>
-              this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
-            }
-          />
-        }
       >
-        <ul className="pf-c-data-list pf-u-box-shadow-md" aria-label="job list">
-          {jobs.map(job => (
-            <JobSummary
-              seeDetailsButton
-              key={`${job.id}.${job.etag}`}
-              job={job}
-              history={history}
+        <React.Fragment>
+          <PageSection variant={PageSectionVariants.light}>
+            <Toolbar
+              count={count}
+              pagination={pagination}
+              activeFilters={filters}
+              goTo={page => this._setPageAndFetchJobs(page)}
+              filterJobs={filters =>
+                this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+              }
+              clearFilters={() =>
+                this.setState({ filters: [] }, () =>
+                  this._setPageAndFetchJobs(1)
+                )
+              }
             />
-          ))}
-        </ul>
+          </PageSection>
+          <ul
+            className="pf-c-data-list pf-u-box-shadow-md"
+            aria-label="job list"
+          >
+            {jobs.map(job => (
+              <JobSummary
+                seeDetailsButton
+                key={`${job.id}.${job.etag}`}
+                job={job}
+                history={history}
+              />
+            ))}
+          </ul>
+          <PageSection variant={PageSectionVariants.light}>
+            <Toolbar
+              count={count}
+              pagination={pagination}
+              activeFilters={filters}
+              goTo={page => this._setPageAndFetchJobs(page)}
+              filterJobs={filters =>
+                this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+              }
+              clearFilters={() =>
+                this.setState({ filters: [] }, () =>
+                  this._setPageAndFetchJobs(1)
+                )
+              }
+            />
+          </PageSection>
+        </React.Fragment>
       </Page>
     );
   }
