@@ -1,63 +1,42 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
 import { connect } from "react-redux";
+import { isEmpty } from "lodash";
 import { Page } from "layout";
-import componentsActions from "./componentsActions";
-import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
-import { getComponents } from "./componentSelectors";
+import productsActions from "products/producstActions";
+import topicsActions from "../topics/topicsActions";
+import { EmptyState } from "ui";
+import { getTopics } from "../topics/topicsSelectors";
+import ComponentsPerTopic from "./ComponentsPerTopic";
 
 export class ComponentsPage extends Component {
   componentDidMount() {
-    const { fetchComponents } = this.props;
-    fetchComponents();
+    const { fetchTopics } = this.props;
+    fetchTopics();
   }
   render() {
-    const { components, isFetching, deleteComponent } = this.props;
+    const { topics, isFetching } = this.props;
     return (
       <Page
         title="Components"
-        loading={isFetching && isEmpty(components)}
-        empty={!isFetching && isEmpty(components)}
+        loading={isFetching && isEmpty(topics)}
+        empty={!isFetching && isEmpty(topics)}
         EmptyComponent={
-          <EmptyState
-            title="There is no components"
-            info="Components are created by the feeder automatically for you. Contact your administrator."
-          />
+          <EmptyState title="There is no topics" info="See documentation" />
         }
       >
-        <table className="pf-c-table pf-m-compact pf-m-grid-md">
+        <table className="pf-c-table pf-m-expandable pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
+              <th />
               <th className="pf-u-text-align-center">ID</th>
-              <th>Name</th>
-              <th>Product</th>
               <th>Topic</th>
+              <th>Product</th>
               <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {components.map((component, i) => (
-              <tr key={i}>
-                <td className="pf-u-text-align-center">
-                  <CopyButton text={component.id} />
-                </td>
-                <td>{component.name.substring(0, 42)}</td>
-                <td>{component.product_name}</td>
-                <td>{component.topic_name}</td>
-                <td>{component.from_now}</td>
-                <td className="pf-u-text-align-center">
-                  <ConfirmDeleteButton
-                    title={`Delete component ${component.name}`}
-                    content={`Are you sure you want to delete ${
-                      component.name
-                    }?`}
-                    whenConfirmed={() => deleteComponent(component)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          {topics.map(topic => (
+            <ComponentsPerTopic key={topic.id} topic={topic} />
+          ))}
         </table>
       </Page>
     );
@@ -66,16 +45,17 @@ export class ComponentsPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    components: getComponents(state),
-    isFetching: state.components.isFetching
+    topics: getTopics(state),
+    isFetching: state.topics.isFetching || state.products.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchComponents: () =>
-      dispatch(componentsActions.all({ endpoint: "components/latest" })),
-    deleteComponent: component => dispatch(componentsActions.delete(component))
+    fetchTopics: () => {
+      dispatch(topicsActions.all({ embed: "product" }));
+      dispatch(productsActions.all());
+    }
   };
 }
 
