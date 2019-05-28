@@ -6,7 +6,6 @@ import currentUserReducer from "./currentUser/currentUserReducer";
 import remotecisReducer from "./remotecis/remotecisReducer";
 import productsReducer from "./products/productsReducer";
 import topicsReducer from "./topics/topicsReducer";
-import componentsReducer from "./components/componentsReducer";
 import teamsReducer from "./teams/teamsReducer";
 import usersReducer from "./users/usersReducer";
 import jobsReducer from "./jobs/jobsReducer";
@@ -23,7 +22,6 @@ const store = createStore(
     jobs: jobsReducer,
     products: productsReducer,
     topics: topicsReducer,
-    components: componentsReducer,
     teams: teamsReducer,
     users: usersReducer,
     trends: trendsReducer

@@ -23,14 +23,14 @@ it("jobs normalize", () => {
     entities: {
       jobs: {
         job1: {
-          components: ["component1"],
+          components: [{ id: "component1" }],
           id: "job1",
           jobstates: ["jobstate1"],
           remoteci: "remoteci1",
           topic: "topic1"
         },
         job2: {
-          components: ["component1"],
+          components: [{ id: "component1" }],
           id: "job2",
           jobstates: ["jobstate2"],
           remoteci: "remoteci1",
@@ -54,11 +54,6 @@ it("jobs normalize", () => {
         jobstate2: {
           id: "jobstate2"
         }
-      },
-      components: {
-        component1: {
-          id: "component1"
-        }
       }
     }
   };
@@ -69,14 +64,12 @@ it("jobs denormalize", () => {
   const entities = {
     jobs: {
       job1: {
-        components: ["component1"],
         id: "job1",
         jobstates: ["jobstate1"],
         remoteci: "remoteci1",
         topic: "topic1"
       },
       job2: {
-        components: ["component1"],
         id: "job2",
         jobstates: ["jobstate2"],
         remoteci: "remoteci1",
@@ -100,23 +93,16 @@ it("jobs denormalize", () => {
       jobstate2: {
         id: "jobstate2"
       }
-    },
-    components: {
-      component1: {
-        id: "component1"
-      }
     }
   };
   const denormalizedJobs = [
     {
-      components: [{ id: "component1" }],
       id: "job1",
       jobstates: [{ id: "jobstate1" }],
       remoteci: { id: "remoteci1" },
       topic: { id: "topic1" }
     },
     {
-      components: [{ id: "component1" }],
       id: "job2",
       jobstates: [{ id: "jobstate2" }],
       remoteci: { id: "remoteci1" },

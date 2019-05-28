@@ -1,8 +1,5 @@
 import { schema } from "normalizr";
 
-export const component = new schema.Entity("components");
-export const components = [component];
-
 export const jobstate = new schema.Entity("jobstates");
 export const jobstates = [jobstate];
 
@@ -31,7 +28,6 @@ export const topic = new schema.Entity("topics", {
 export const topics = [topic];
 
 export const job = new schema.Entity("jobs", {
-  components: [component],
   jobstates: [jobstate],
   remoteci: remoteci,
   topic: topic
