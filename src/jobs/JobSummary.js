@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
+import {
+  Button,
+  DropdownItem,
+  DropdownPosition,
+  Label
+} from "@patternfly/react-core";
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
@@ -164,6 +169,13 @@ export class JobSummary extends Component {
               <p>
                 <ServerIcon className="pf-u-mr-xs" />
                 {getRemoteciInfo(job)}
+              </p>
+              <p>
+                {job.tags.map(tag => (
+                  <Label isCompact className="pf-u-mr-xs">
+                    {tag.name}
+                  </Label>
+                ))}
               </p>
             </div>
             <div className="pf-c-data-list__cell pf-m-flex-4">
