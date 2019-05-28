@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, GridItem } from "@patternfly/react-core";
-import { updateCurrentUser } from "currentUser/currentUserActions";
-import ProfileForm from "./ProfileForm";
+import { updateCurrentUser } from "../currentUserActions";
+import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { Page } from "layout";
 
-export class ProfilePage extends Component {
+export class SettingsPage extends Component {
   render() {
     const { currentUser, updateCurrentUser } = this.props;
     return (
       <Page title="User preferences">
         <Grid gutter="md">
           <GridItem span={6}>
-            <ProfileForm
-              key={`ProfileForm.${currentUser.id}.${currentUser.etag}`}
+            <SettingsForm
+              key={`SettingsForm.${currentUser.id}.${currentUser.etag}`}
               currentUser={currentUser}
               submit={newCurrentUser => updateCurrentUser(newCurrentUser)}
             />
@@ -51,4 +51,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfilePage);
+)(SettingsPage);

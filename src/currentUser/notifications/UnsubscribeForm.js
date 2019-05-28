@@ -49,6 +49,7 @@ export class UnsubscribeForm extends Component {
             <Button
               id="unsubscription-form__submitButton"
               type="submit"
+              variant="secondary"
               disabled={!canSubmit}
             >
               Unsubscribe

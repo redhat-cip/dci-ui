@@ -117,7 +117,8 @@ class MainContent extends Component {
           </NavGroup>
         )}
         <NavGroup title="User Preferences">
-          <DCINavItem to="/profile">Profile</DCINavItem>
+          <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
+          <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
         </NavGroup>
       </Nav>
     );
@@ -141,9 +142,9 @@ class MainContent extends Component {
               dropdownItems={[
                 <DropdownItem
                   component="button"
-                  onClick={() => history.push("/profile")}
+                  onClick={() => history.push("/currentUser/settings")}
                 >
-                  User preferences
+                  Settings
                 </DropdownItem>,
                 <DropdownSeparator />,
                 <DropdownItem component="button" onClick={() => logout()}>

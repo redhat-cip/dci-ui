@@ -6,13 +6,13 @@ import GlobalStatusPage from "./globalStatus/GlobalStatusPage";
 import TopicsPage from "./topics/TopicsPage";
 import ComponentsPage from "./components/ComponentsPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
-import NotificationsPage from "./remotecis/NotificationsPage";
 import ProductsPage from "./products/ProductsPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/EditUserPage";
 import CreateUserPage from "./users/CreateUserPage";
-import ProfilePage from "./profile/ProfilePage";
+import SettingsPage from "./currentUser/settings/SettingsPage";
+import NotificationsPage from "./currentUser/notifications/NotificationsPage";
 import PermissionsPage from "./permissions/PermissionsPage";
 import LoadingPage from "./layout/LoadingPage";
 import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
@@ -36,7 +36,7 @@ export default {
   EditUserPage,
   CreateUserPage,
   PermissionsPage,
-  ProfilePage,
+  SettingsPage,
   NotificationsPage,
   NotAuthenticatedLoadingPage,
   LoginPage,

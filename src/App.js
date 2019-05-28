@@ -42,7 +42,10 @@ class App extends Component {
               <Redirect from="/" exact to="/jobs" />
               <PrivateRoute path="/jobs" exact component={Pages.JobsPage} />
               <Redirect from="/jobs/:id" exact to="/jobs/:id/jobStates" />
-              <PrivateRoute path="/jobs/:id/:endpoint" component={Pages.JobPage} />
+              <PrivateRoute
+                path="/jobs/:id/:endpoint"
+                component={Pages.JobPage}
+              />
               <PrivateRoute
                 path="/globalStatus"
                 component={Pages.GlobalStatusPage}
@@ -63,9 +66,12 @@ class App extends Component {
                 component={Pages.CreateUserPage}
               />
               <PrivateRoute path="/users/:id" component={Pages.EditUserPage} />
-              <PrivateRoute path="/profile" component={Pages.ProfilePage} />
               <PrivateRoute
-                path="/notifications"
+                path="/currentUser/settings"
+                component={Pages.SettingsPage}
+              />
+              <PrivateRoute
+                path="/currentUser/notifications"
                 component={Pages.NotificationsPage}
               />
               <PrivateRoute

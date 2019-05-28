@@ -39,6 +39,27 @@ it("deleteCurrentUser", () => {
   expect(currentUserActions.deleteCurrentUser()).toEqual(expectedAction);
 });
 
+it("getSubscribedRemotecis", () => {
+  axiosMock
+    .onGet("https://api.example.org/api/v1/users/u1/remotecis")
+    .reply(200, { remotecis: [{ id: "r1" }, { id: "r2" }] });
+  const expectedActions = [
+    {
+      type: types.SET_IDENTITY,
+      identity: {
+        id: "u1",
+        remotecis: [{ id: "r1" }, { id: "r2" }]
+      }
+    }
+  ];
+  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
+  return store
+    .dispatch(currentUserActions.getSubscribedRemotecis({ id: "u1" }))
+    .then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+});
+
 it("subscribeToARemoteci", () => {
   const currentUser = { id: "u1" };
   const remoteci = { id: "r1", name: "remoteci 1" };

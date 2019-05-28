@@ -47,7 +47,7 @@ export default class ChangePasswordForm extends Component {
             onInvalid={this.disableButton}
           >
             <HiddenInput
-              id="profile-form__etag"
+              id="current-user-form__etag"
               name="etag"
               value={currentUser.etag}
             />

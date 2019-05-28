@@ -12,7 +12,7 @@ import {
   CardBody
 } from "@patternfly/react-core";
 
-export default class ProfileForm extends Component {
+export default class SettingsForm extends Component {
   state = {
     canSubmit: false,
     currentUser: this.props.currentUser,
@@ -37,33 +37,33 @@ export default class ProfileForm extends Component {
         <CardHeader>Personal information</CardHeader>
         <CardBody>
           <Formsy
-            id="profile-form"
+            id="current-user-form"
             className="pf-c-form"
             onValidSubmit={currentUser => submit(currentUser)}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
             <HiddenInput
-              id="profile-form__etag"
+              id="current-user-form__etag"
               name="etag"
               value={currentUser.etag}
             />
             <Input
-              id="profile-form__email"
+              id="current-user-form__email"
               label="Email"
               name="email"
               value={currentUser.email}
               required
             />
             <Input
-              id="profile-form__fullname"
+              id="current-user-form__fullname"
               label="Full name"
               name="fullname"
               value={currentUser.fullname}
               required
             />
             <Select
-              id="profile-form__currentUser"
+              id="current-user-form__currentUser"
               label="Time zone"
               name="timezone"
               options={timezones}
@@ -71,7 +71,7 @@ export default class ProfileForm extends Component {
               required
             />
             <Input
-              id="profile-form__current_password"
+              id="current-user-form__current_password"
               label="Current password"
               name="current_password"
               type="password"
@@ -79,7 +79,7 @@ export default class ProfileForm extends Component {
               required
             />
             <HiddenInput
-              id="profile-form__new_password"
+              id="current-user-form__new_password"
               label="Current password"
               name="new_password"
               type="password"

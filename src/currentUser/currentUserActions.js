@@ -71,6 +71,33 @@ export function logout() {
   };
 }
 
+
+export function getSubscribedRemotecis(identity) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const request = {
+      method: "get",
+      url: `${state.config.apiURL}/api/v1/users/${identity.id}/remotecis`,
+    };
+    return http(request)
+      .then(response => {
+        dispatch({
+          type: types.SET_IDENTITY,
+          identity:{
+            ...identity,
+            remotecis: response.data.remotecis
+          }
+        });
+        return response;
+      })
+      .catch(error => {
+        dispatch(showError(`Cannot get subscribed remotecis`));
+        return Promise.resolve(error);
+      });
+  };
+}
+
+
 export function subscribeToARemoteci(remoteci) {
   return (dispatch, getState) => {
     const state = getState();
