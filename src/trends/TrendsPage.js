@@ -7,7 +7,7 @@ import { getTrends } from "./trendsActions";
 import { Page } from "layout";
 import TrendGraph from "./TrendGraph";
 import { EmptyState } from "ui";
-import { Filter } from "ui";
+import { FilterWithSearch } from "ui";
 import { MessagesIcon } from "@patternfly/react-icons";
 
 export class TrendsPage extends Component {
@@ -37,7 +37,7 @@ export class TrendsPage extends Component {
           />
         }
         Toolbar={
-          <Filter
+          <FilterWithSearch
             placeholder={isEmpty(topic) ? "Select a topic" : topic.name}
             filter={topic}
             filters={topics}
