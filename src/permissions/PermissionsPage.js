@@ -13,7 +13,7 @@ import topicsActions from "topics/topicsActions";
 import { getTopics } from "topics/topicsSelectors";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
-import { EmptyState, Filter } from "ui";
+import { EmptyState, FilterWithSearch } from "ui";
 import TeamsTopicsListPermissions from "./TeamsTopicsListPermissions";
 import { associateTopicToTeam } from "./teamsTopicsActions";
 
@@ -53,17 +53,17 @@ export class PermissionsPage extends Component {
             </TextContent>
             <div className="pf-u-mb-3xl">
               Allow{" "}
-              <Filter
+              <FilterWithSearch
                 placeholder={isEmpty(team) ? "..." : team.name}
                 filter={team}
                 filters={teams}
                 onFilterValueSelected={team => this.setState({ team: team })}
               />{" "}
               to download every components from{" "}
-              <Filter
+              <FilterWithSearch
                 placeholder={isEmpty(topic) ? "..." : topic.name}
                 filter={topic}
-                filters={isEmpty(team) ? [] : topicsNoExportControl}
+                filters={topicsNoExportControl}
                 onFilterValueSelected={topic => this.setState({ topic: topic })}
               />{" "}
               topic
