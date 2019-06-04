@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import jobsActions from "./jobsActions";
 import { getJobs } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
@@ -71,6 +70,21 @@ export class JobsPage extends Component {
         title="Jobs"
         loading={isFetching && isEmpty(jobs)}
         empty={!isFetching && isEmpty(jobs)}
+        Toolbar={
+          <Toolbar
+            count={count}
+            pagination={pagination}
+            activeFilters={filters}
+            goTo={page => this._setPageAndFetchJobs(page)}
+            filterJobs={filters =>
+              this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+            }
+            clearFilters={() =>
+              this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
+            }
+          />
+        }
+        seeSecondToolbar
         EmptyComponent={
           <EmptyState
             title="No job"
@@ -78,53 +92,16 @@ export class JobsPage extends Component {
           />
         }
       >
-        <React.Fragment>
-          <PageSection variant={PageSectionVariants.light}>
-            <Toolbar
-              count={count}
-              pagination={pagination}
-              activeFilters={filters}
-              goTo={page => this._setPageAndFetchJobs(page)}
-              filterJobs={filters =>
-                this.setState({ filters }, () => this._setPageAndFetchJobs(1))
-              }
-              clearFilters={() =>
-                this.setState({ filters: [] }, () =>
-                  this._setPageAndFetchJobs(1)
-                )
-              }
+        <ul className="pf-c-data-list pf-u-box-shadow-md" aria-label="job list">
+          {jobs.map(job => (
+            <JobSummary
+              seeDetailsButton
+              key={`${job.id}.${job.etag}`}
+              job={job}
+              history={history}
             />
-          </PageSection>
-          <ul
-            className="pf-c-data-list pf-u-box-shadow-md"
-            aria-label="job list"
-          >
-            {jobs.map(job => (
-              <JobSummary
-                seeDetailsButton
-                key={`${job.id}.${job.etag}`}
-                job={job}
-                history={history}
-              />
-            ))}
-          </ul>
-          <PageSection variant={PageSectionVariants.light}>
-            <Toolbar
-              count={count}
-              pagination={pagination}
-              activeFilters={filters}
-              goTo={page => this._setPageAndFetchJobs(page)}
-              filterJobs={filters =>
-                this.setState({ filters }, () => this._setPageAndFetchJobs(1))
-              }
-              clearFilters={() =>
-                this.setState({ filters: [] }, () =>
-                  this._setPageAndFetchJobs(1)
-                )
-              }
-            />
-          </PageSection>
-        </React.Fragment>
+          ))}
+        </ul>
       </Page>
     );
   }

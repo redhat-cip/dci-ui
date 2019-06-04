@@ -22,6 +22,7 @@ export default class Page extends Component {
       empty,
       EmptyComponent,
       children,
+      seeSecondToolbar = false,
       ...props
     } = this.props;
     return (
@@ -33,19 +34,34 @@ export default class Page extends Component {
               {HeaderButton}
               {description ? <Text component="p">{description}</Text> : null}
             </TextContent>
-            {!isEmpty(Toolbar) && Toolbar}
           </PageSection>
         ) : (
           HeaderSection
         )}
-        <PageSection>
+        <PageSection variant={PageSectionVariants.default}>
+          {!isEmpty(Toolbar) && (
+            <PageSection variant={PageSectionVariants.light}>
+              {Toolbar}
+            </PageSection>
+          )}
           {loading ? (
-            <Bullseye>
-              <BlinkLogo />
-            </Bullseye>
+            <PageSection variant={PageSectionVariants.light}>
+              <Bullseye>
+                <BlinkLogo />
+              </Bullseye>
+            </PageSection>
           ) : null}
-          {!loading && empty ? <Bullseye>{EmptyComponent}</Bullseye> : null}
+          {!loading && empty ? (
+            <PageSection variant={PageSectionVariants.light}>
+              <Bullseye>{EmptyComponent}</Bullseye>
+            </PageSection>
+          ) : null}
           {!loading && !empty ? children : null}
+          {!loading && !empty && !isEmpty(Toolbar) && seeSecondToolbar && (
+            <PageSection variant={PageSectionVariants.light}>
+              {Toolbar}
+            </PageSection>
+          )}
         </PageSection>
       </MainContent>
     );

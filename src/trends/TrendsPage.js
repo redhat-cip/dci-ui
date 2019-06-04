@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
+import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import topicsActions from "topics/topicsActions";
 import { getTopics } from "topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
@@ -45,11 +46,13 @@ export class TrendsPage extends Component {
         }
       >
         {isEmpty(topic) ? (
-          <EmptyState
-            icon={<MessagesIcon size="lg" />}
-            title="Select a topic"
-            info="Select a topic in the top left corner to see its trend."
-          />
+          <PageSection variant={PageSectionVariants.light}>
+            <EmptyState
+              icon={<MessagesIcon size="lg" />}
+              title="Select a topic"
+              info="Select a topic in the top left corner to see its trend."
+            />
+          </PageSection>
         ) : (
           <TrendGraph trend={trends[topic.id]} topic={topic} />
         )}
