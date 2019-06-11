@@ -29,9 +29,6 @@ export class PermissionsPage extends Component {
 
   render() {
     const { isFetching, teams, topics, associateTopicToTeam } = this.props;
-    const topicsNoExportControl = topics.filter(
-      topic => topic.export_control === false
-    );
     const { topic, team } = this.state;
     return (
       <Page
@@ -63,7 +60,7 @@ export class PermissionsPage extends Component {
               <FilterWithSearch
                 placeholder={isEmpty(topic) ? "..." : topic.name}
                 filter={topic}
-                filters={topicsNoExportControl}
+                filters={topics}
                 onFilterValueSelected={topic => this.setState({ topic: topic })}
               />{" "}
               topic
@@ -79,7 +76,7 @@ export class PermissionsPage extends Component {
               </Button>
             </div>
 
-            <TeamsTopicsListPermissions topics={topicsNoExportControl} />
+            <TeamsTopicsListPermissions topics={topics} />
           </CardBody>
         </Card>
       </Page>
