@@ -1,16 +1,8 @@
 import React, { Component } from "react";
 import CopyButton from "@patternfly/react-core/dist/js/components/ClipboardCopy/CopyButton";
 import { TooltipPosition } from "@patternfly/react-core";
+import copyToClipboard from "../services/copyToClipboard";
 
-function copyToClipboard(event, text) {
-  const clipboard = event.currentTarget.parentElement;
-  const el = document.createElement("input");
-  el.value = text;
-  clipboard.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  clipboard.removeChild(el);
-}
 
 export default class DCICopyButton extends Component {
   constructor(props) {

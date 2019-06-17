@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
@@ -10,8 +9,7 @@ import NewRemoteciButton from "./NewRemoteciButton";
 import EditRemoteciButton from "./EditRemoteciButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "teams/teamsSelectors";
-import { downloadRCFile } from "services/runcom";
-import { DownloadIcon } from "@patternfly/react-icons";
+import SeeCredentialsModal from "./SeeCredentialsModal";
 
 export class RemotecisPage extends Component {
   componentDidMount() {
@@ -41,11 +39,8 @@ export class RemotecisPage extends Component {
               <th className="pf-u-text-align-center">ID</th>
               <th>Name</th>
               <th className="pf-u-text-align-center">Status</th>
-              <th
-                className="pf-u-text-align-center"
-                title="Download run commands file"
-              >
-                Download rc file
+              <th className="pf-u-text-align-center" title="Authentication">
+                Authentication
               </th>
               <th className="pf-u-text-align-center">Team</th>
               <th>Created</th>
@@ -67,9 +62,7 @@ export class RemotecisPage extends Component {
                   )}
                 </td>
                 <td className="pf-u-text-align-center">
-                  <Button onClick={() => downloadRCFile(remoteci, "remoteci")}>
-                    <DownloadIcon /> remotecirc.sh
-                  </Button>
+                  <SeeCredentialsModal remoteci={remoteci} />
                 </td>
                 <td className="pf-u-text-align-center">
                   {remoteci.team ? remoteci.team.name.toUpperCase() : null}
