@@ -158,7 +158,7 @@ export class JobSummary extends Component {
             <div className="pf-c-data-list__check">{getIcon(status)}</div>
           </div>
           <div className="pf-c-data-list__item-content">
-            <div className="pf-c-data-list__cell pf-m-flex-2">
+            <div className="pf-c-data-list__cell pf-m-flex-3">
               <b>{job.topic.name}</b>
               {isEmpty(job.team) ? null : (
                 <p>
@@ -170,19 +170,20 @@ export class JobSummary extends Component {
                 <ServerIcon className="pf-u-mr-xs" />
                 {getRemoteciInfo(job)}
               </p>
-              <p>
-                {job.tags.map(tag => (
-                  <Label isCompact className="pf-u-mr-xs">
-                    {tag.name}
-                  </Label>
-                ))}
-              </p>
+              {isEmpty(job.tags) ? null : (
+                <p>
+                  {job.tags.map(tag => (
+                    <Label isCompact className="pf-u-mr-xs pf-u-mt-xs">
+                      {tag.name}
+                    </Label>
+                  ))}
+                </p>
+              )}
             </div>
-            <div className="pf-c-data-list__cell pf-m-flex-4">
-              <CubesIcon />
+            <div className="pf-c-data-list__cell pf-m-flex-3">
               {job.components.map(component => (
                 <p key={component.id}>
-                  <small>{component.name}</small>
+                  <CubesIcon /> {component.name}
                 </p>
               ))}
             </div>
