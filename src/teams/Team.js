@@ -112,7 +112,6 @@ export class Team extends Component {
                 <th scope="col">Login</th>
                 <th scope="col">Full name</th>
                 <th scope="col">Email</th>
-                <th scope="col">Role</th>
                 <th scope="col">Created</th>
                 <th />
               </tr>
@@ -126,7 +125,6 @@ export class Team extends Component {
                   <td data-label="User name">{user.name}</td>
                   <td data-label="User fullname">{user.fullname}</td>
                   <td data-label="User email">{user.email}</td>
-                  <td data-label="User email">{user.role}</td>
                   <td data-label="User created">{user.created_at}</td>
                 </tr>
               ))}

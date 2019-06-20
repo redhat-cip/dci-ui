@@ -68,8 +68,8 @@ export class EditUserPage extends Component {
             <Card className="pf-u-mb-md">
               <CardBody>
                 <AddUserToTeamForm
-                  onSubmit={(team, role) => {
-                    addUserToTeam(user, team, role).then(this.fetchUserTeams);
+                  onSubmit={team => {
+                    addUserToTeam(user, team).then(this.fetchUserTeams);
                   }}
                 />
               </CardBody>
@@ -80,7 +80,6 @@ export class EditUserPage extends Component {
                   <thead>
                     <tr>
                       <th>Team name</th>
-                      <th>Role</th>
                       <th />
                     </tr>
                   </thead>
@@ -88,7 +87,6 @@ export class EditUserPage extends Component {
                     {user_teams.map(team => (
                       <tr key={team.id}>
                         <td>{team.name}</td>
-                        <td>{team.role}</td>
                         <td className="pf-c-table__action">
                           <ConfirmDeleteButton
                             title={`Delete ${user.name} from ${team.name}`}
@@ -122,8 +120,7 @@ function mapDispatchToProps(dispatch) {
     updateUser: user => dispatch(usersActions.update(user)),
     deleteUserFromTeam: (user, team) =>
       dispatch(deleteUserFromTeam(user, team)),
-    addUserToTeam: (user, team, role) =>
-      dispatch(addUserToTeam(user, team, role))
+    addUserToTeam: (user, team) => dispatch(addUserToTeam(user, team))
   };
 }
 

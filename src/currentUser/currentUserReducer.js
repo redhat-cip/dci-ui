@@ -3,15 +3,18 @@ import * as types from "./currentUserActionsTypes";
 
 const initialState = {};
 
-function buildShortcut(role) {
+function buildShortcut(team) {
+  const adminTeamName = "admin";
+  const EPMTeamName = "EPM";
+  const RedHatTeamName = "Red Hat";
   return {
-    isSuperAdmin: role === "SUPER_ADMIN",
-    hasProductOwnerRole: role === "SUPER_ADMIN" || role === "PRODUCT_OWNER",
+    isSuperAdmin: team.name === adminTeamName,
+    hasEPMRole: team.name === adminTeamName || team.name === EPMTeamName,
     hasReadOnlyRole:
-      role === "SUPER_ADMIN" ||
-      role === "PRODUCT_OWNER" ||
-      role === "READ_ONLY_USER",
-    isReadOnly: role === "READ_ONLY_USER"
+      team.name === adminTeamName ||
+      team.name === EPMTeamName ||
+      team.name === RedHatTeamName,
+    isReadOnly: team.name === RedHatTeamName
   };
 }
 
@@ -23,14 +26,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         ...identity,
-        ...buildShortcut(firstTeam.role),
+        ...buildShortcut(firstTeam),
         team: firstTeam
       };
     case types.SET_ACTIVE_TEAM:
       return {
         ...state,
         team: action.team,
-        ...buildShortcut(action.team.role)
+        ...buildShortcut(action.team)
       };
     case types.UPDATE_CURRENT_USER:
       return {

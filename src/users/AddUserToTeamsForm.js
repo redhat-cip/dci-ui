@@ -9,8 +9,7 @@ import { Filter } from "ui";
 export class AddUserToTeamForm extends Component {
   state = {
     canSubmit: false,
-    team: null,
-    role: null
+    team: null
   };
 
   componentDidMount() {
@@ -27,17 +26,10 @@ export class AddUserToTeamForm extends Component {
   };
 
   render() {
-    const { currentUser, teams, onSubmit } = this.props;
-    const { team, role } = this.state;
+    const { teams, onSubmit } = this.props;
+    const { team } = this.state;
     if (isEmpty(teams)) return null;
-    const userRoles = [{ name: "USER" }];
-    const superAdminRoles = [
-      { name: "SUPER_ADMIN" },
-      { name: "READ_ONLY_USER" }
-    ];
-    const roles = currentUser.isSuperAdmin
-      ? superAdminRoles.concat(userRoles)
-      : userRoles;
+
     return (
       <div>
         Add user in{" "}
@@ -47,18 +39,12 @@ export class AddUserToTeamForm extends Component {
           filters={teams}
           onFilterValueSelected={team => this.setState({ team: team })}
         />{" "}
-        team with role{" "}
-        <Filter
-          placeholder={isEmpty(role) ? "..." : role}
-          filter={role}
-          filters={roles}
-          onFilterValueSelected={role => this.setState({ role: role })}
-        />{" "}
+        team{" "}
         <Button
           variant="primary"
           className="pf-u-ml-xl"
-          isDisabled={isEmpty(role) || isEmpty(team)}
-          onClick={() => onSubmit(team,role)}
+          isDisabled={isEmpty(team)}
+          onClick={() => onSubmit(team)}
         >
           Add
         </Button>
@@ -69,7 +55,6 @@ export class AddUserToTeamForm extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.currentUser,
     teams: getTeams(state)
   };
 }

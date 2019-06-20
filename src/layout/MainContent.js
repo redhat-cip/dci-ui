@@ -107,11 +107,11 @@ class MainContent extends Component {
             <DCINavItem to="/trends">Trends</DCINavItem>
           </NavGroup>
         )}
-        {currentUser.hasProductOwnerRole && (
+        {currentUser.hasEPMRole && (
           <NavGroup title="Admin">
             <DCINavItem to="/teams">Teams</DCINavItem>
             <DCINavItem to="/users">Users</DCINavItem>
-            {currentUser.hasProductOwnerRole && (
+            {currentUser.hasEPMRole && (
               <DCINavItem to="/permissions">Permissions</DCINavItem>
             )}
           </NavGroup>

@@ -16,7 +16,7 @@ axiosMock.onGet("/config.json").reply(200, {
   }
 });
 
-axiosMock.onGet("http://localhost:5000/api/v1/users/me").reply(200, {
+axiosMock.onGet("http://localhost:5000/api/v1/identity").reply(200, {
   user: {
     created_at: "2017-02-20T10:43:25.326282",
     email: "u1@redhat.com",
@@ -25,17 +25,6 @@ axiosMock.onGet("http://localhost:5000/api/v1/users/me").reply(200, {
     id: "a48ecab4-01d0-97d9-4f45-f7b938808e23",
     name: "u1",
     remotecis: [],
-    role: {
-      created_at: "2017-06-07T18:20:40.198943",
-      description: "Admin of a team",
-      etag: "44cf808a03564aecafc11b01a5901cc7",
-      id: "47c9361c-cff2-447a-9447-38472e4b0d37",
-      label: "ADMIN",
-      name: "Admin",
-      state: "active",
-      updated_at: "2017-06-07T18:20:40.198948"
-    },
-    role_id: "47c9361c-cff2-447a-9447-38472e4b0d37",
     sso_username: null,
     state: "active",
     team: {
