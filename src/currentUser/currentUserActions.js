@@ -71,19 +71,18 @@ export function logout() {
   };
 }
 
-
 export function getSubscribedRemotecis(identity) {
   return (dispatch, getState) => {
     const state = getState();
     const request = {
       method: "get",
-      url: `${state.config.apiURL}/api/v1/users/${identity.id}/remotecis`,
+      url: `${state.config.apiURL}/api/v1/users/${identity.id}/remotecis`
     };
     return http(request)
       .then(response => {
         dispatch({
           type: types.SET_IDENTITY,
-          identity:{
+          identity: {
             ...identity,
             remotecis: response.data.remotecis
           }
@@ -96,7 +95,6 @@ export function getSubscribedRemotecis(identity) {
       });
   };
 }
-
 
 export function subscribeToARemoteci(remoteci) {
   return (dispatch, getState) => {

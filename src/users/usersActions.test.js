@@ -23,16 +23,13 @@ it("fetchUserTeams", () => {
 
 it("addUserToTeam", () => {
   axiosMock
-    .onPost("https://api.example.org/api/v1/teams/def/users/abc", {
-      role: "USER"
-    })
+    .onPost("https://api.example.org/api/v1/teams/def/users/abc", {})
     .reply(201);
 
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   const user = { id: "abc" };
   const team = { id: "def" };
-  const role = { name: "USER" };
-  return store.dispatch(addUserToTeam(user, team, role));
+  return store.dispatch(addUserToTeam(user, team));
 });
 
 it("deleteUserFromTeam", () => {

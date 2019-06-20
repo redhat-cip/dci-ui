@@ -12,14 +12,13 @@ it("SET_IDENTITY", () => {
         t1: {
           id: "t1",
           parent_id: null,
-          role: "SUPER_ADMIN",
-          team_name: "admin"
+          name: "admin"
         }
       }
     }
   });
   expect(newState).toEqual({
-    hasProductOwnerRole: true,
+    hasEPMRole: true,
     hasReadOnlyRole: true,
     id: "i1",
     isReadOnly: false,
@@ -27,16 +26,16 @@ it("SET_IDENTITY", () => {
     name: "identity",
     email: "identity@example.org",
     teams: {
-      t1: { id: "t1", parent_id: null, role: "SUPER_ADMIN", team_name: "admin" }
+      t1: { id: "t1", parent_id: null, name: "admin" }
     },
-    team: { id: "t1", parent_id: null, role: "SUPER_ADMIN", team_name: "admin" }
+    team: { id: "t1", parent_id: null, name: "admin" }
   });
 });
 
 it("SET_ACTIVE_TEAM", () => {
   const newState = reducer(
     {
-      hasProductOwnerRole: true,
+      hasEPMRole: true,
       hasReadOnlyRole: true,
       id: "i1",
       isReadOnly: false,
@@ -46,21 +45,18 @@ it("SET_ACTIVE_TEAM", () => {
         t1: {
           id: "t1",
           parent_id: null,
-          role: "SUPER_ADMIN",
-          team_name: "admin"
+          name: "admin"
         },
         t2: {
           id: "t2",
           parent_id: "t1",
-          role: "PRODUCT_OWNER",
-          team_name: "OpenStack"
+          name: "EPM"
         }
       },
       team: {
         id: "t1",
         parent_id: null,
-        role: "SUPER_ADMIN",
-        team_name: "admin"
+        name: "admin"
       }
     },
     {
@@ -68,13 +64,12 @@ it("SET_ACTIVE_TEAM", () => {
       team: {
         id: "t2",
         parent_id: "t1",
-        role: "PRODUCT_OWNER",
-        team_name: "OpenStack"
+        name: "EPM"
       }
     }
   );
   expect(newState).toEqual({
-    hasProductOwnerRole: true,
+    hasEPMRole: true,
     hasReadOnlyRole: true,
     id: "i1",
     isReadOnly: false,
@@ -84,26 +79,23 @@ it("SET_ACTIVE_TEAM", () => {
       t1: {
         id: "t1",
         parent_id: null,
-        role: "SUPER_ADMIN",
-        team_name: "admin"
+        name: "admin"
       },
       t2: {
         id: "t2",
         parent_id: "t1",
-        role: "PRODUCT_OWNER",
-        team_name: "OpenStack"
+        name: "EPM"
       }
     },
     team: {
       id: "t2",
       parent_id: "t1",
-      role: "PRODUCT_OWNER",
-      team_name: "OpenStack"
+      name: "EPM"
     }
   });
 });
 
-it("set SUPER_ADMIN role shortcut", () => {
+it("set SUPER_ADMIN shortcut", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,
     identity: {
@@ -112,20 +104,19 @@ it("set SUPER_ADMIN role shortcut", () => {
       teams: {
         t1: {
           parent_id: null,
-          role: "SUPER_ADMIN",
-          team_name: "admin"
+          name: "admin"
         }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(true);
+  expect(newState.hasEPMRole).toBe(true);
   expect(newState.hasReadOnlyRole).toBe(true);
   expect(newState.isSuperAdmin).toBe(true);
   expect(newState.isReadOnly).toBe(false);
 });
 
-it("set PRODUCT_OWNER role shortcut", () => {
+it("set PRODUCT_OWNER shortcut", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,
     identity: {
@@ -134,20 +125,19 @@ it("set PRODUCT_OWNER role shortcut", () => {
       teams: {
         t2: {
           parent_id: "t1",
-          role: "PRODUCT_OWNER",
-          team_name: "OpenStack"
+          name: "EPM"
         }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(true);
+  expect(newState.hasEPMRole).toBe(true);
   expect(newState.hasReadOnlyRole).toBe(true);
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(false);
 });
 
-it("set READ_ONLY_USER role shortcut", () => {
+it("set READ_ONLY_USER shortcut", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,
     identity: {
@@ -156,23 +146,22 @@ it("set READ_ONLY_USER role shortcut", () => {
       teams: {
         t2: {
           parent_id: "t1",
-          role: "READ_ONLY_USER",
-          team_name: "Red Hat"
+          name: "Red Hat"
         }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(false);
+  expect(newState.hasEPMRole).toBe(false);
   expect(newState.hasReadOnlyRole).toBe(true);
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(true);
 });
 
-it("SET_IDENTITY unset role shortcut", () => {
+it("SET_IDENTITY unset shortcut", () => {
   const newState = reducer(
     {
-      hasProductOwnerRole: true,
+      hasEPMRole: true,
       hasReadOnlyRole: true,
       isSuperAdmin: true,
       isReadOnly: false
@@ -185,15 +174,14 @@ it("SET_IDENTITY unset role shortcut", () => {
         teams: {
           t2: {
             parent_id: "t1",
-            role: "READ_ONLY_USER",
-            team_name: "Red Hat"
+            name: "Red Hat"
           }
         }
       }
     }
   );
   expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(false);
+  expect(newState.hasEPMRole).toBe(false);
   expect(newState.hasReadOnlyRole).toBe(true);
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(true);
@@ -208,14 +196,13 @@ it("SET_IDENTITY USER shortcut", () => {
       teams: {
         t2: {
           parent_id: null,
-          role: "USER",
-          team_name: null
+          name: null
         }
       }
     }
   });
   expect(newState.email).toBe("currentUser@example.org");
-  expect(newState.hasProductOwnerRole).toBe(false);
+  expect(newState.hasEPMRole).toBe(false);
   expect(newState.hasReadOnlyRole).toBe(false);
   expect(newState.isSuperAdmin).toBe(false);
   expect(newState.isReadOnly).toBe(false);

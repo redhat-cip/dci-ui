@@ -3,7 +3,6 @@ import CopyButton from "@patternfly/react-core/dist/js/components/ClipboardCopy/
 import { TooltipPosition } from "@patternfly/react-core";
 import copyToClipboard from "../services/copyToClipboard";
 
-
 export default class DCICopyButton extends Component {
   constructor(props) {
     super(props);

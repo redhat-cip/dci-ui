@@ -10,12 +10,12 @@ export function fetchUserTeams(user) {
   };
 }
 
-export function addUserToTeam(user, team, role) {
+export function addUserToTeam(user, team) {
   return (dispatch, getState) => {
     const state = getState();
     return http.post(
       `${state.config.apiURL}/api/v1/teams/${team.id}/users/${user.id}`,
-      { role: role.name }
+      {}
     );
   };
 }
