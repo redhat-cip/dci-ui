@@ -15,13 +15,13 @@ export class TopicsPage extends Component {
     fetchTopics();
   }
   render() {
-    const { topics, isFetching, deleteTopic } = this.props;
+    const { currentUser, topics, isFetching, deleteTopic } = this.props;
     return (
       <Page
         title="Topics"
         loading={isFetching && isEmpty(topics)}
         empty={!isFetching && isEmpty(topics)}
-        HeaderButton={<NewTopicButton />}
+        HeaderButton={currentUser.isSuperAdmin ? <NewTopicButton /> : null}
         EmptyComponent={
           <EmptyState
             title="There is no topics"
@@ -82,6 +82,7 @@ export class TopicsPage extends Component {
 
 function mapStateToProps(state) {
   return {
+    currentUser: state.currentUser,
     topics: getTopics(state),
     isFetching: state.topics.isFetching || state.products.isFetching
   };
