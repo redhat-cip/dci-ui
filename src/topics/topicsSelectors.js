@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { sortBy } from "lodash";
 import { getTimezone } from "currentUser/currentUserSelectors";
-import { getProductsById } from "products/productSelectors";
+import { getProductsById } from "products/productsSelectors";
 import { fromNow } from "services/date";
 
 export const getTopicsById = state => state.topics.byId;

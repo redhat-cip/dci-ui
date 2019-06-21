@@ -7,6 +7,7 @@ import {
   ToolbarItem,
   Button
 } from "@patternfly/react-core";
+import ProductsFilter from "./ProductsFilter";
 import TopicsFilter from "./TopicsFilter";
 import StatusFilter from "./StatusFilter";
 import RemoteciInTeamFilter from "./RemoteciInTeamFilter";
@@ -38,6 +39,12 @@ export default class DCIToolbar extends Component {
           <ToolbarGroup>
             <ToolbarItem>
               <RemoteciInTeamFilter
+                activeFilters={activeFilters}
+                filterJobs={filterJobs}
+              />
+            </ToolbarItem>
+            <ToolbarItem>
+              <ProductsFilter
                 activeFilters={activeFilters}
                 filterJobs={filterJobs}
               />

@@ -24,6 +24,15 @@ export function createTopicsFilter(topics) {
   }));
 }
 
+export function createProductsFilter(products) {
+  return products.map(product => ({
+    id: product.id,
+    key: "product_id",
+    name: product.name,
+    value: product.id
+  }));
+}
+
 export function getCurrentFilters(activeFilters, filters) {
   return activeFilters.reduce((acc, filter) => {
     const keyFilter = find(filters, { key: filter.key, value: filter.value });
