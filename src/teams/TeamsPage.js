@@ -25,7 +25,7 @@ export class TeamsPage extends Component {
     fetchTeams();
   }
   render() {
-    const { teams, isFetching, deleteTeam } = this.props;
+    const { teams, currentUser, isFetching, deleteTeam } = this.props;
     return (
       <Page
         title="Teams"
@@ -38,21 +38,24 @@ export class TeamsPage extends Component {
           />
         }
       >
-        <ToolbarWrapper className="pf-u-p-xl">
-          <Toolbar className="pf-u-justify-content-space-between">
-            <ToolbarGroup>
-              <ToolbarItem className="pf-u-mr-md">
-                <NewTeamButton />
-              </ToolbarItem>
-            </ToolbarGroup>
-            <ToolbarGroup />
-          </Toolbar>
-        </ToolbarWrapper>
+        {currentUser.isSuperAdmin && (
+          <ToolbarWrapper className="pf-u-p-xl">
+            <Toolbar className="pf-u-justify-content-space-between">
+              <ToolbarGroup>
+                <ToolbarItem className="pf-u-mr-md">
+                  <NewTeamButton />
+                </ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup />
+            </Toolbar>
+          </ToolbarWrapper>
+        )}
         <DataList aria-label="Expandable teams list">
           {teams.map(team => (
             <Team
               key={`${team.id}.${team.etag}`}
               team={team}
+              currentUser={currentUser}
               deleteConfirmed={() => deleteTeam(team)}
             />
           ))}
@@ -65,7 +68,8 @@ export class TeamsPage extends Component {
 function mapStateToProps(state) {
   return {
     teams: getTeams(state),
-    isFetching: state.teams.isFetching
+    isFetching: state.teams.isFetching,
+    currentUser: state.currentUser
   };
 }
 

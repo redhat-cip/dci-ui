@@ -27,8 +27,32 @@ export class UsersPage extends Component {
     fetchUsers();
   }
 
+  getDropdownItems = user => {
+    const { currentUser, deleteUser, history } = this.props;
+    const dropdownItems = [
+      <DropdownItem
+        component="button"
+        onClick={() => history.push(`/users/${user.id}`)}
+      >
+        <EditAltIcon className="pf-u-mr-xs" /> Edit a user
+      </DropdownItem>
+    ];
+    if (currentUser.isSuperAdmin) {
+      dropdownItems.push(
+        <DropdownItem component="button" onClick={() => deleteUser(user)}>
+          <WarningTriangleIcon
+            color={global_danger_color_100.value}
+            className="pf-u-mr-xs"
+          />
+          <TextRed>delete a user</TextRed>
+        </DropdownItem>
+      );
+    }
+    return dropdownItems;
+  };
+
   render() {
-    const { users, deleteUser, isFetching, history } = this.props;
+    const { currentUser, users, isFetching, history } = this.props;
     return (
       <Page
         title="Users"
@@ -42,24 +66,26 @@ export class UsersPage extends Component {
         }
       >
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
-          <thead>
-            <tr>
-              <th colSpan={6}>
-                <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
-                  <ToolbarGroup>
-                    <ToolbarItem className="pf-u-mr-md">
-                      <Button
-                        variant="primary"
-                        onClick={() => history.push(`/users/create`)}
-                      >
-                        Create a new user
-                      </Button>
-                    </ToolbarItem>
-                  </ToolbarGroup>
-                </Toolbar>
-              </th>
-            </tr>
-          </thead>
+          {currentUser.isSuperAdmin && (
+            <thead>
+              <tr>
+                <th colSpan={6}>
+                  <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
+                    <ToolbarGroup>
+                      <ToolbarItem className="pf-u-mr-md">
+                        <Button
+                          variant="primary"
+                          onClick={() => history.push(`/users/create`)}
+                        >
+                          Create a new user
+                        </Button>
+                      </ToolbarItem>
+                    </ToolbarGroup>
+                  </Toolbar>
+                </th>
+              </tr>
+            </thead>
+          )}
           <thead>
             <tr>
               <th>ID</th>
@@ -83,24 +109,7 @@ export class UsersPage extends Component {
                 <td className="pf-c-table__action">
                   <KebabDropdown
                     position={DropdownPosition.right}
-                    items={[
-                      <DropdownItem
-                        component="button"
-                        onClick={() => history.push(`/users/${user.id}`)}
-                      >
-                        <EditAltIcon className="pf-u-mr-xs" /> Edit a user
-                      </DropdownItem>,
-                      <DropdownItem
-                        component="button"
-                        onClick={() => deleteUser(user)}
-                      >
-                        <WarningTriangleIcon
-                          color={global_danger_color_100.value}
-                          className="pf-u-mr-xs"
-                        />
-                        <TextRed>delete a user</TextRed>
-                      </DropdownItem>
-                    ]}
+                    items={this.getDropdownItems(user)}
                   />
                 </td>
               </tr>

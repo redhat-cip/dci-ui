@@ -15,13 +15,13 @@ export class TopicsPage extends Component {
     fetchTopics();
   }
   render() {
-    const { topics, isFetching, deleteTopic } = this.props;
+    const { currentUser, topics, isFetching, deleteTopic } = this.props;
     return (
       <Page
         title="Topics"
         loading={isFetching && isEmpty(topics)}
         empty={!isFetching && isEmpty(topics)}
-        HeaderButton={<NewTopicButton />}
+        HeaderButton={currentUser.isSuperAdmin ? <NewTopicButton /> : null}
         EmptyComponent={
           <EmptyState
             title="There is no topics"
@@ -43,7 +43,9 @@ export class TopicsPage extends Component {
               <th>Next Topic</th>
               <th>Product</th>
               <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              {currentUser.isSuperAdmin && (
+                <th className="pf-u-text-align-center">Actions</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -63,14 +65,16 @@ export class TopicsPage extends Component {
                 <td>{topic.next_topic ? topic.next_topic.name : null}</td>
                 <td>{topic.product ? topic.product.name : null}</td>
                 <td>{topic.from_now}</td>
-                <td className="pf-u-text-align-center">
-                  <EditTopicButton className="pf-u-mr-xl" topic={topic} />
-                  <ConfirmDeleteButton
-                    title={`Delete topic ${topic.name}`}
-                    content={`Are you sure you want to delete ${topic.name}?`}
-                    whenConfirmed={() => deleteTopic(topic)}
-                  />
-                </td>
+                {currentUser.isSuperAdmin && (
+                  <td className="pf-u-text-align-center">
+                    <EditTopicButton className="pf-u-mr-xl" topic={topic} />
+                    <ConfirmDeleteButton
+                      title={`Delete topic ${topic.name}`}
+                      content={`Are you sure you want to delete ${topic.name}?`}
+                      whenConfirmed={() => deleteTopic(topic)}
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -82,6 +86,7 @@ export class TopicsPage extends Component {
 
 function mapStateToProps(state) {
   return {
+    currentUser: state.currentUser,
     topics: getTopics(state),
     isFetching: state.topics.isFetching || state.products.isFetching
   };

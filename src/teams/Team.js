@@ -42,8 +42,41 @@ export class Team extends Component {
   };
 
   render() {
-    const { team, deleteConfirmed } = this.props;
+    const { currentUser, team, deleteConfirmed } = this.props;
     const { isExpanded, isLoading, users } = this.state;
+    const dataListCells = [
+      <DataListCell>
+        <CopyButton text={team.id} />
+      </DataListCell>,
+      <DataListCell width={2}>
+        <div id="name">{team.name}</div>
+      </DataListCell>,
+      <DataListCell width={1}>
+        <div id="partner">
+          {team.external ? <Labels.Success>partner</Labels.Success> : null}
+        </div>
+      </DataListCell>,
+      <DataListCell width={2}>
+        <UsersDataListCell id="users" onClick={this.getUsersAndToggle}>
+          <UsersIcon /> users
+        </UsersDataListCell>
+      </DataListCell>,
+      <DataListCell width={1}>
+        <div id="created">{team.from_now}</div>
+      </DataListCell>
+    ];
+    if (currentUser.isSuperAdmin) {
+      dataListCells.push(
+        <DataListCell width={1}>
+          <EditTeamButton className="pf-u-mr-xs" team={team} />
+          <ConfirmDeleteButton
+            title={`Delete team ${team.name}`}
+            content={`Are you sure you want to delete ${team.name}?`}
+            whenConfirmed={deleteConfirmed}
+          />
+        </DataListCell>
+      );
+    }
     return (
       <DataListItem
         aria-labelledby={`data list item for ${team.name}`}
@@ -56,39 +89,7 @@ export class Team extends Component {
             id={`${team.name} toggle`}
             aria-controls={`${team.name} expand`}
           />
-          <DataListItemCells
-            dataListCells={[
-              <DataListCell>
-                <CopyButton text={team.id} />
-              </DataListCell>,
-              <DataListCell width={2}>
-                <div id="name">{team.name}</div>
-              </DataListCell>,
-              <DataListCell width={1}>
-                <div id="partner">
-                  {team.external ? (
-                    <Labels.Success>partner</Labels.Success>
-                  ) : null}
-                </div>
-              </DataListCell>,
-              <DataListCell width={2}>
-                <UsersDataListCell id="users" onClick={this.getUsersAndToggle}>
-                  <UsersIcon /> users
-                </UsersDataListCell>
-              </DataListCell>,
-              <DataListCell width={1}>
-                <div id="created">{team.from_now}</div>
-              </DataListCell>,
-              <DataListCell width={1}>
-                <EditTeamButton className="pf-u-mr-xs" team={team} />
-                <ConfirmDeleteButton
-                  title={`Delete team ${team.name}`}
-                  content={`Are you sure you want to delete ${team.name}?`}
-                  whenConfirmed={deleteConfirmed}
-                />
-              </DataListCell>
-            ]}
-          />
+          <DataListItemCells dataListCells={dataListCells} />
         </DataListItemRow>
         <DataListContent isHidden={!isExpanded || !isLoading}>
           <p>loading...</p>
