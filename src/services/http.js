@@ -1,5 +1,5 @@
 import axios from "axios";
-import { removeToken, setJWT, getToken } from "./localStorage";
+import { setJWT, getToken } from "./localStorage";
 
 axios.interceptors.request.use(config => {
   const token = getToken();
@@ -25,9 +25,7 @@ axios.interceptors.response.use(
             setJWT(sso.token);
             return axios.request(error.config);
           })
-          .catch(() => removeToken());
-      } else {
-        removeToken();
+          .catch(e => console.log(e));
       }
     }
     return Promise.reject(error);
