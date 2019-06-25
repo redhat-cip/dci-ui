@@ -38,7 +38,7 @@ export class TeamsPage extends Component {
           />
         }
       >
-        {currentUser.isSuperAdmin && (
+        {currentUser.hasEPMRole && (
           <ToolbarWrapper className="pf-u-p-xl">
             <Toolbar className="pf-u-justify-content-space-between">
               <ToolbarGroup>
