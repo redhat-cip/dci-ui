@@ -35,7 +35,7 @@ export function updateCurrentUser(currentUser) {
     const state = getState();
     const request = {
       method: "put",
-      url: `${state.config.apiURL}/api/v1/users/me`,
+      url: `${state.config.apiURL}/api/v1/identity`,
       data: currentUser,
       headers: { "If-Match": currentUser.etag }
     };
@@ -45,7 +45,13 @@ export function updateCurrentUser(currentUser) {
           type: types.UPDATE_CURRENT_USER,
           currentUser: response.data.user
         });
-        dispatch(showSuccess("Your settings has been updated"));
+        dispatch(
+          showSuccess(
+            "Your information has been updated successfully. Log in again."
+          )
+        );
+        dispatch(deleteCurrentUser());
+        return response;
       })
       .catch(error => {
         dispatch(showAPIError(error.response));

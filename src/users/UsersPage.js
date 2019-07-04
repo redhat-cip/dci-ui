@@ -75,7 +75,7 @@ export class UsersPage extends Component {
                       <ToolbarItem className="pf-u-mr-md">
                         <Button
                           variant="primary"
-                          onClick={() => history.push(`/users/create`)}
+                          onClick={() => history.push("/users/create")}
                         >
                           Create a new user
                         </Button>
