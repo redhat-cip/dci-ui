@@ -65,15 +65,17 @@ export class Team extends Component {
         <div id="created">{team.from_now}</div>
       </DataListCell>
     ];
-    if (currentUser.isSuperAdmin) {
+    if (currentUser.hasEPMRole) {
       dataListCells.push(
         <DataListCell width={1}>
           <EditTeamButton className="pf-u-mr-xs" team={team} />
-          <ConfirmDeleteButton
-            title={`Delete team ${team.name}`}
-            content={`Are you sure you want to delete ${team.name}?`}
-            whenConfirmed={deleteConfirmed}
-          />
+          {currentUser.isSuperAdmin && (
+            <ConfirmDeleteButton
+              title={`Delete team ${team.name}`}
+              content={`Are you sure you want to delete ${team.name}?`}
+              whenConfirmed={deleteConfirmed}
+            />
+          )}
         </DataListCell>
       );
     }
