@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import CopyButton from "@patternfly/react-core/dist/js/components/ClipboardCopy/CopyButton";
+import { ClipboardCopyButton } from "@patternfly/react-core/dist/js/components/ClipboardCopy/ClipboardCopyButton";
 import { TooltipPosition } from "@patternfly/react-core";
 import copyToClipboard from "../services/copyToClipboard";
 
-export default class DCICopyButton extends Component {
+export default class CopyButton extends Component {
   constructor(props) {
     super(props);
     this.timer = null;
@@ -17,7 +17,7 @@ export default class DCICopyButton extends Component {
     const { position = TooltipPosition.right } = this.props;
     const { copied, text } = this.state;
     return (
-      <CopyButton
+      <ClipboardCopyButton
         exitDelay={1600}
         entryDelay={100}
         maxWidth="150px"
@@ -40,7 +40,7 @@ export default class DCICopyButton extends Component {
         }}
       >
         {copied ? "Successfully copied to clipboard!" : "Copy to clipboard"}
-      </CopyButton>
+      </ClipboardCopyButton>
     );
   }
 }

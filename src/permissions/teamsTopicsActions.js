@@ -14,9 +14,7 @@ export function associateTopicToTeam(topic, team) {
       .then(response => {
         dispatch(
           showSuccess(
-            `team ${team.name} can now download all components from ${
-              topic.name
-            }`
+            `team ${team.name} can now download all components from ${topic.name}`
           )
         );
         dispatch(topicsActions.one(topic, { embed: "teams" }));
@@ -40,9 +38,7 @@ export function removeTopicFromTeam(topic, team) {
       .then(response => {
         dispatch(
           showWarning(
-            `team ${team.name} can't download components from ${
-              topic.name
-            } anymore`
+            `team ${team.name} can't download components from ${topic.name} anymore`
           )
         );
         dispatch(topicsActions.one(topic, { embed: "teams" }));

@@ -90,9 +90,7 @@ export class EditUserPage extends Component {
                         <td className="pf-c-table__action">
                           <ConfirmDeleteButton
                             title={`Delete ${user.name} from ${team.name}`}
-                            content={`Are you sure you want to remove user ${
-                              user.name
-                            } from team ${team.name}?`}
+                            content={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
                             whenConfirmed={() => {
                               deleteUserFromTeam(user, team).then(
                                 this.fetchUserTeams

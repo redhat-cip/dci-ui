@@ -32,9 +32,7 @@ export default class SSOForm extends Component {
               <Button
                 variant="danger"
                 onClick={() => {
-                  const redirectUri = `${window.location.origin}${
-                    from.pathname
-                  }`;
+                  const redirectUri = `${window.location.origin}${from.pathname}`;
                   window._sso.login({ redirectUri });
                 }}
               >

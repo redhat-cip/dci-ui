@@ -35,22 +35,14 @@ import jobsActions from "./jobsActions";
 function getBackground(status, backgroundColor = global_Color_light_100.value) {
   switch (status) {
     case "success":
-      return `linear-gradient(to right,${global_success_color_100.value} 0,${
-        global_success_color_100.value
-      } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
+      return `linear-gradient(to right,${global_success_color_100.value} 0,${global_success_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     case "failure":
     case "error":
-      return `linear-gradient(to right,${global_danger_color_100.value} 0,${
-        global_danger_color_100.value
-      } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
+      return `linear-gradient(to right,${global_danger_color_100.value} 0,${global_danger_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     case "killed":
-      return `linear-gradient(to right,${global_warning_color_100.value} 0,${
-        global_warning_color_100.value
-      } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
+      return `linear-gradient(to right,${global_warning_color_100.value} 0,${global_warning_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
     default:
-      return `linear-gradient(to right,${global_active_color_100.value} 0,${
-        global_active_color_100.value
-      } 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
+      return `linear-gradient(to right,${global_active_color_100.value} 0,${global_active_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
   }
 }
 

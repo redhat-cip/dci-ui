@@ -133,9 +133,7 @@ export function unsubscribeFromARemoteci(remoteci) {
     const state = getState();
     const request = {
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${
-        state.currentUser.id
-      }`
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${state.currentUser.id}`
     };
     return http(request)
       .then(response => {
@@ -145,9 +143,7 @@ export function unsubscribeFromARemoteci(remoteci) {
         });
         dispatch(
           showWarning(
-            `You will no longer receive notification for the remoteci ${
-              remoteci.name
-            }`
+            `You will no longer receive notification for the remoteci ${remoteci.name}`
           )
         );
         return response;

@@ -16,9 +16,7 @@ export class TeamsListPermissions extends Component {
         <td className="pf-u-text-align-center">
           <ConfirmDeleteButton
             title="Delete permission"
-            content={`Are you sure you want to remove the permissions on ${
-              topic.name
-            } for ${team.name}?`}
+            content={`Are you sure you want to remove the permissions on ${topic.name} for ${team.name}?`}
             whenConfirmed={() => removeTopicFromTeam(topic, team)}
           />
         </td>
