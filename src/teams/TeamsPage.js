@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarItem,
-  DataList
-} from "@patternfly/react-core";
+import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { Page } from "layout";
 import actions from "teams/teamsActions";
 import { EmptyState } from "ui";
@@ -25,7 +20,7 @@ export class TeamsPage extends Component {
     fetchTeams();
   }
   render() {
-    const { teams, currentUser, isFetching, deleteTeam } = this.props;
+    const { teams, currentUser, isFetching, deleteTeam, history } = this.props;
     return (
       <Page
         title="Teams"
@@ -50,16 +45,33 @@ export class TeamsPage extends Component {
             </Toolbar>
           </ToolbarWrapper>
         )}
-        <DataList aria-label="Expandable teams list">
+        <table
+          className="pf-c-table pf-m-expandable pf-m-grid-lg"
+          role="grid"
+          aria-label="Teams table"
+          id="teams-table"
+        >
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col">Id</th>
+              <th scope="col">Team Name</th>
+              <th scope="col">Partner</th>
+              <th scope="col">Active</th>
+              <th scope="col">Created at</th>
+              <td></td>
+            </tr>
+          </thead>
           {teams.map(team => (
             <Team
               key={`${team.id}.${team.etag}`}
               team={team}
               currentUser={currentUser}
-              deleteConfirmed={() => deleteTeam(team)}
+              deleteTeam={() => deleteTeam(team)}
+              history={history}
             />
           ))}
-        </DataList>
+        </table>
       </Page>
     );
   }

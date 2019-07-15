@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal } from "@patternfly/react-core";
 
-export default class ModalForm extends Component {
+export default class FormModal extends Component {
   render() {
     const {
       title,
