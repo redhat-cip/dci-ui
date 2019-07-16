@@ -9,5 +9,6 @@ export { default as LoadingFilter } from "./LoadingFilter";
 export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
 export { default as KebabDropdown } from "./KebabDropdown";
 export { default as BackgroundImage } from "./BackgroundImage";
+export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
 export { default as ConfirmDeleteButton } from "./ConfirmDeleteButton";
 export { default as Pagination } from "./Pagination";
