@@ -54,7 +54,7 @@ export class Team extends Component {
   };
 
   getUserDropdownItems = (user, team) => {
-    const { currentUser, deleteUserFromTeam, history } = this.props;
+    const { deleteUserFromTeam, history } = this.props;
 
     const userDropdownItems = [
       <DropdownItem
@@ -62,22 +62,18 @@ export class Team extends Component {
         onClick={() => history.push(`/users/${user.id}`)}
       >
         <EditAltIcon className="pf-u-mr-xs" /> Edit {user.name} user
+      </DropdownItem>,
+      <DropdownItem
+        component="button"
+        onClick={() => {
+          deleteUserFromTeam(user, team);
+          this.fetchUsersForTeam();
+        }}
+      >
+        <WarningTriangleIcon className="pf-u-mr-xs" /> delete {user.name} user
+        from {team.name} team
       </DropdownItem>
     ];
-    if (currentUser.isSuperAdmin) {
-      userDropdownItems.push(
-        <DropdownItem
-          component="button"
-          onClick={() => {
-            deleteUserFromTeam(user, team);
-            this.fetchUsersForTeam();
-          }}
-        >
-          <WarningTriangleIcon className="pf-u-mr-xs" /> delete {user.name} user
-          from {team.name} team
-        </DropdownItem>
-      );
-    }
     return userDropdownItems;
   };
 
