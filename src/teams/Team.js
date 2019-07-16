@@ -14,8 +14,7 @@ import {
   KebabDropdown
 } from "ui";
 import teamsActions, { fetchUsersForTeam } from "./teamsActions";
-import usersActions, { deleteUserFromTeam } from "users/usersActions";
-import { getUsers } from "users/usersSelectors";
+import { deleteUserFromTeam } from "users/usersActions";
 import AddUserToTeamModal from "./AddUserToTeamModal";
 import EditTeamModal from "./EditTeamModal";
 
@@ -28,11 +27,6 @@ export class Team extends Component {
     isDeleteTeamModalOpen: false,
     teamUsers: []
   };
-
-  componentDidMount() {
-    const { fetchUsers } = this.props;
-    fetchUsers();
-  }
 
   fetchUsersForTeam = () => {
     const { team, fetchUsersForTeam } = this.props;
@@ -58,12 +52,14 @@ export class Team extends Component {
 
     const userDropdownItems = [
       <DropdownItem
+        key={`edit_user_${user.id}_dropdown`}
         component="button"
         onClick={() => history.push(`/users/${user.id}`)}
       >
         <EditAltIcon className="pf-u-mr-xs" /> Edit {user.name} user
       </DropdownItem>,
       <DropdownItem
+        key={`remove_user_from_team_${user.id}_dropdown`}
         component="button"
         onClick={() => {
           deleteUserFromTeam(user, team);
@@ -113,17 +109,29 @@ export class Team extends Component {
     } = this.state;
 
     const teamDropdownItems = [
-      <DropdownItem component="button" onClick={this.openAddUserToTeamModal}>
+      <DropdownItem
+        key="add_user_to_team_dropdown"
+        component="button"
+        onClick={this.openAddUserToTeamModal}
+      >
         <PlusCircleIcon className="pf-u-mr-xs" />
         Add a user to {team.name} team
       </DropdownItem>,
-      <DropdownItem component="button" onClick={this.openEditTeamModal}>
+      <DropdownItem
+        key="edit_team_dropdown"
+        component="button"
+        onClick={this.openEditTeamModal}
+      >
         <EditAltIcon className="pf-u-mr-xs" /> Edit {team.name} team
       </DropdownItem>
     ];
     if (currentUser.isSuperAdmin) {
       teamDropdownItems.push(
-        <DropdownItem component="button" onClick={this.openDeleteTeamModal}>
+        <DropdownItem
+          key="delete_team_dropdown"
+          component="button"
+          onClick={this.openDeleteTeamModal}
+        >
           <WarningTriangleIcon className="pf-u-mr-xs" /> delete {team.name} team
         </DropdownItem>
       );
@@ -235,7 +243,7 @@ export class Team extends Component {
                     </tr>
                   )}
                   {teamUsers.map(user => (
-                    <tr key={user.id}>
+                    <tr key={`${user.id}.${user.etag}`}>
                       <td data-label="Id">
                         <CopyButton text={user.id} />
                       </td>
@@ -263,15 +271,8 @@ export class Team extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    users: getUsers(state)
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => dispatch(usersActions.all()),
     fetchUsersForTeam: team => dispatch(fetchUsersForTeam(team)),
     deleteUserFromTeam: (user, team) =>
       dispatch(deleteUserFromTeam(user, team)),
@@ -280,6 +281,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Team);

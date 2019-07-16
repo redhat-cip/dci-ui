@@ -25,7 +25,7 @@ axios.interceptors.response.use(
             setJWT(sso.token);
             return axios.request(error.config);
           })
-          .catch(e => console.log(e));
+          .catch(error => console.log(error));
       }
     }
     return Promise.reject(error);

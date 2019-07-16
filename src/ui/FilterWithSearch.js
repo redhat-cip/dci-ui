@@ -9,7 +9,7 @@ export default class FilterWithSearch extends Component {
     filteredItems: this.props.filters
   };
 
-  onToggle = isOpen => {
+  onToggle = (event, isOpen) => {
     this.setState({
       isOpen
     });

@@ -10,11 +10,13 @@ import {
 } from "@patternfly/react-core";
 import { PlusCircleIcon } from "@patternfly/react-icons";
 import { Page } from "layout";
-import actions from "./teamsActions";
+import teamsActions from "./teamsActions";
+import usersActions from "users/usersActions";
 import { EmptyState } from "ui";
 import { getTeams } from "./teamsSelectors";
 import Team from "./Team";
 import NewTeamModal from "./NewTeamModal";
+import { getUsers } from "users/usersSelectors";
 
 const ToolbarWrapper = styled.div`
   background-color: white;
@@ -34,11 +36,19 @@ export class TeamsPage extends Component {
   };
 
   componentDidMount() {
-    const { fetchTeams } = this.props;
+    const { fetchTeams, fetchUsers } = this.props;
     fetchTeams();
+    fetchUsers();
   }
   render() {
-    const { teams, currentUser, isFetching, deleteTeam, history } = this.props;
+    const {
+      teams,
+      users,
+      currentUser,
+      isFetching,
+      deleteTeam,
+      history
+    } = this.props;
     const { isNewTeamModalOpen } = this.state;
     return (
       <Page
@@ -93,6 +103,7 @@ export class TeamsPage extends Component {
             <Team
               key={`${team.id}.${team.etag}`}
               team={team}
+              users={users}
               currentUser={currentUser}
               deleteTeam={() => deleteTeam(team)}
               history={history}
@@ -107,15 +118,17 @@ export class TeamsPage extends Component {
 function mapStateToProps(state) {
   return {
     teams: getTeams(state),
-    isFetching: state.teams.isFetching,
+    users: getUsers(state),
+    isFetching: state.teams.isFetching && state.users.isFetching,
     currentUser: state.currentUser
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTeams: () => dispatch(actions.all()),
-    deleteTeam: team => dispatch(actions.delete(team))
+    fetchTeams: () => dispatch(teamsActions.all()),
+    fetchUsers: () => dispatch(usersActions.all()),
+    deleteTeam: team => dispatch(teamsActions.delete(team))
   };
 }
 
