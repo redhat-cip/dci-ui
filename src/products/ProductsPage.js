@@ -58,9 +58,10 @@ export class ProductsPage extends Component {
                   <EditProductButton className="pf-u-mr-xs" product={product} />
                   <ConfirmDeleteButton
                     title={`Delete product ${product.name}`}
-                    content={`Are you sure you want to delete ${product.name}?`}
-                    whenConfirmed={() => deleteProduct(product)}
-                  />
+                    onOk={() => deleteProduct(product)}
+                  >
+                    {`Are you sure you want to delete ${product.name}?`}
+                  </ConfirmDeleteButton>
                 </td>
               </tr>
             ))}

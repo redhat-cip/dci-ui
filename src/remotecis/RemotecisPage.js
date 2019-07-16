@@ -76,8 +76,10 @@ export class RemotecisPage extends Component {
                   />
                   <ConfirmDeleteButton
                     title={`Delete remoteci ${remoteci.name} ?`}
-                    whenConfirmed={() => deleteRemoteci(remoteci)}
-                  />
+                    onOk={() => deleteRemoteci(remoteci)}
+                  >
+                    {`Are you sure you want to delete ${remoteci.name}?`}
+                  </ConfirmDeleteButton>
                 </td>
               </tr>
             ))}

@@ -7,7 +7,12 @@ import {
   PlusCircleIcon
 } from "@patternfly/react-icons";
 import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
-import { CopyButton, Labels, KebabDropdown } from "ui";
+import {
+  ConfirmDeleteModal as DeleteTeamModal,
+  CopyButton,
+  Labels,
+  KebabDropdown
+} from "ui";
 import teamsActions, { fetchUsersForTeam } from "./teamsActions";
 import usersActions, { deleteUserFromTeam } from "users/usersActions";
 import { getUsers } from "users/usersSelectors";
@@ -20,6 +25,7 @@ export class Team extends Component {
     isLoading: true,
     isAddUserToTeamModalOpen: false,
     isEditTeamModalOpen: false,
+    isDeleteTeamModalOpen: false,
     teamUsers: []
   };
 
@@ -91,6 +97,14 @@ export class Team extends Component {
     this.setState({ isEditTeamModalOpen: false });
   };
 
+  openDeleteTeamModal = () => {
+    this.setState({ isDeleteTeamModalOpen: true });
+  };
+
+  closeDeleteTeamModal = () => {
+    this.setState({ isDeleteTeamModalOpen: false });
+  };
+
   render() {
     const { currentUser, team, users, deleteTeam } = this.props;
     const {
@@ -98,7 +112,8 @@ export class Team extends Component {
       isLoading,
       teamUsers,
       isAddUserToTeamModalOpen,
-      isEditTeamModalOpen
+      isEditTeamModalOpen,
+      isDeleteTeamModalOpen
     } = this.state;
 
     const teamDropdownItems = [
@@ -112,7 +127,7 @@ export class Team extends Component {
     ];
     if (currentUser.isSuperAdmin) {
       teamDropdownItems.push(
-        <DropdownItem component="button" onClick={() => deleteTeam(team)}>
+        <DropdownItem component="button" onClick={this.openDeleteTeamModal}>
           <WarningTriangleIcon className="pf-u-mr-xs" /> delete {team.name} team
         </DropdownItem>
       );
@@ -132,13 +147,22 @@ export class Team extends Component {
             this.closeAddUserToTeamModal();
           }}
         />
+        <DeleteTeamModal
+          title={`Delete team ${team.name}`}
+          isOpen={isDeleteTeamModalOpen}
+          close={this.closeDeleteTeamModal}
+          onOk={() => {
+            deleteTeam(team).then(this.closeDeleteTeamModal);
+          }}
+          isSmall
+        >
+          {`Are you sure you want to delete ${team.name} team?`}
+        </DeleteTeamModal>
         <EditTeamModal
           isOpen={isEditTeamModalOpen}
           team={team}
           close={this.closeEditTeamModal}
-          onOk={() => {
-            this.closeEditTeamModal();
-          }}
+          onOk={this.closeEditTeamModal}
         />
         <tbody className={isExpanded ? "pf-m-expanded" : ""}>
           <tr>

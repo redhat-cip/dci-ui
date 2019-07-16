@@ -1,61 +1,45 @@
 import React, { Component } from "react";
-import { Button, Modal } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 export default class ConfirmDeleteButton extends Component {
   state = {
-    show: false
+    isOpen: false
   };
 
-  showModal = () => {
-    this.setState({ show: true });
+  openModal = () => {
+    this.setState({ isOpen: true });
   };
 
   closeModal = () => {
-    this.setState({ show: false });
+    this.setState({ isOpen: false });
   };
 
   render() {
     const {
       title,
-      content,
+      children,
       okButton = "yes",
       cancelButton = "oups no!",
-      whenConfirmed,
+      onOk,
       ...props
     } = this.props;
-    const { show } = this.state;
+    const { isOpen } = this.state;
     return (
       <React.Fragment>
-        <Modal
+        <ConfirmDeleteModal
           title={title}
-          isOpen={show}
-          onClose={this.closeModal}
-          isLarge
-          actions={[
-            <Button
-              key="cancel"
-              variant="secondary"
-              className="btn-cancel"
-              onClick={this.closeModal}
-            >
-              {cancelButton}
-            </Button>,
-            <Button
-              key="ok"
-              variant="danger"
-              onClick={() => {
-                this.closeModal();
-                whenConfirmed();
-              }}
-            >
-              {okButton}
-            </Button>
-          ]}
+          okButton={okButton}
+          cancelButton={cancelButton}
+          isOpen={isOpen}
+          onOk={onOk}
+          close={this.closeModal}
+          isSmall
         >
-          {content ? content : ""}
-        </Modal>
-        <Button variant="danger" onClick={this.showModal} {...props}>
+          {children}
+        </ConfirmDeleteModal>
+        <Button variant="danger" onClick={this.openModal} {...props}>
           <TrashIcon />
         </Button>
       </React.Fragment>

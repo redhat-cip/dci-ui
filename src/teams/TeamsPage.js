@@ -2,25 +2,44 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Toolbar, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
+import {
+  Button,
+  Toolbar,
+  ToolbarGroup,
+  ToolbarItem
+} from "@patternfly/react-core";
+import { PlusCircleIcon } from "@patternfly/react-icons";
 import { Page } from "layout";
-import actions from "teams/teamsActions";
+import actions from "./teamsActions";
 import { EmptyState } from "ui";
-import NewTeamButton from "teams/NewTeamButton";
-import { getTeams } from "teams/teamsSelectors";
+import { getTeams } from "./teamsSelectors";
 import Team from "./Team";
+import NewTeamModal from "./NewTeamModal";
 
 const ToolbarWrapper = styled.div`
   background-color: white;
 `;
 
 export class TeamsPage extends Component {
+  state = {
+    isNewTeamModalOpen: false
+  };
+
+  openNewTeamModal = () => {
+    this.setState({ isNewTeamModalOpen: true });
+  };
+
+  closeNewTeamModal = () => {
+    this.setState({ isNewTeamModalOpen: false });
+  };
+
   componentDidMount() {
     const { fetchTeams } = this.props;
     fetchTeams();
   }
   render() {
     const { teams, currentUser, isFetching, deleteTeam, history } = this.props;
+    const { isNewTeamModalOpen } = this.state;
     return (
       <Page
         title="Teams"
@@ -38,13 +57,21 @@ export class TeamsPage extends Component {
             <Toolbar className="pf-u-justify-content-space-between">
               <ToolbarGroup>
                 <ToolbarItem className="pf-u-mr-md">
-                  <NewTeamButton />
+                  <Button onClick={this.openNewTeamModal}>
+                    <PlusCircleIcon className="pf-u-mr-xs" />
+                    Create a new team
+                  </Button>
                 </ToolbarItem>
               </ToolbarGroup>
               <ToolbarGroup />
             </Toolbar>
           </ToolbarWrapper>
         )}
+        <NewTeamModal
+          isOpen={isNewTeamModalOpen}
+          close={this.closeNewTeamModal}
+          onOk={this.closeNewTeamModal}
+        />
         <table
           className="pf-c-table pf-m-expandable pf-m-grid-lg"
           role="grid"

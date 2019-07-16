@@ -70,9 +70,10 @@ export class TopicsPage extends Component {
                     <EditTopicButton className="pf-u-mr-xl" topic={topic} />
                     <ConfirmDeleteButton
                       title={`Delete topic ${topic.name}`}
-                      content={`Are you sure you want to delete ${topic.name}?`}
-                      whenConfirmed={() => deleteTopic(topic)}
-                    />
+                      onOk={() => deleteTopic(topic)}
+                    >
+                      {`Are you sure you want to delete ${topic.name}?`}
+                    </ConfirmDeleteButton>
                   </td>
                 )}
               </tr>

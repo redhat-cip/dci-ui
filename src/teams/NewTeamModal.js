@@ -4,14 +4,13 @@ import { connect } from "react-redux";
 import teamsActions from "./teamsActions";
 import TeamForm from "./TeamForm";
 
-export class EditTeamModal extends Component {
+export class NewTeamModal extends Component {
   state = {
     canSubmit: false,
     team: {
       name: "",
       external: true,
-      state: "active",
-      ...this.props.team
+      state: "active"
     }
   };
 
@@ -24,11 +23,11 @@ export class EditTeamModal extends Component {
   };
 
   render() {
-    const { isOpen, close, editTeam, onOk } = this.props;
+    const { isOpen, close, createTeam, onOk } = this.props;
     const { team, canSubmit } = this.state;
     return (
       <Modal
-        title={`Edit ${team.name} team`}
+        title={`Create a new team`}
         isOpen={isOpen}
         onClose={close}
         isSmall
@@ -37,12 +36,12 @@ export class EditTeamModal extends Component {
             Cancel
           </Button>,
           <Button
-            key="edit"
+            key="create"
             type="submit"
             disabled={!canSubmit}
             form="team-form"
           >
-            Edit
+            Create
           </Button>
         ]}
       >
@@ -51,10 +50,7 @@ export class EditTeamModal extends Component {
           className="pf-c-form"
           team={team}
           onValidSubmit={newTeam => {
-            editTeam({
-              id: team.id,
-              ...newTeam
-            });
+            createTeam(newTeam);
             onOk();
           }}
           onValid={this.enableButton}
@@ -67,11 +63,11 @@ export class EditTeamModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editTeam: team => dispatch(teamsActions.update(team))
+    createTeam: team => dispatch(teamsActions.create(team))
   };
 }
 
 export default connect(
   null,
   mapDispatchToProps
-)(EditTeamModal);
+)(NewTeamModal);

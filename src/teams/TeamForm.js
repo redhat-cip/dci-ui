@@ -1,105 +1,54 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
-import { connect } from "react-redux";
-import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, Checkbox, HiddenInput, FormModal } from "form";
-import { getTeams } from "./teamsSelectors";
+import { Input, Checkbox, HiddenInput } from "form";
 
-export class TeamForm extends Component {
-  state = {
-    canSubmit: false,
-    show: false,
-    team: {
-      name: "",
-      external: true,
-      ...this.props.team
-    }
-  };
-
-  disableButton = () => {
-    this.setState({ canSubmit: false });
-  };
-
-  enableButton = () => {
-    this.setState({ canSubmit: true });
-  };
-
-  showModal = () => {
-    this.setState({ show: true });
-  };
-
-  closeModal = () => {
-    this.setState({ show: false });
-  };
-
+export default class TeamForm extends Component {
   render() {
     const {
-      title,
-      okButton,
-      submit,
-      teams,
-      className,
-      showModalButton
+      id = "team-form",
+      team,
+      onValidSubmit,
+      onValid,
+      onInvalid,
+      ...props
     } = this.props;
-    const { canSubmit, show, team } = this.state;
     return (
-      <React.Fragment>
-        <FormModal
-          title={title}
-          okButton={okButton}
-          formRef="team-form"
-          canSubmit={canSubmit}
-          show={show}
-          close={this.closeModal}
-        >
-          <Formsy
-            id="team-form"
-            className="pf-c-form"
-            onValidSubmit={team => {
-              this.closeModal();
-              submit(team);
-            }}
-            onValid={this.enableButton}
-            onInvalid={this.disableButton}
-          >
-            <HiddenInput id="team-form__etag" name="etag" value={team.etag} />
-            <Input
-              id="team-form__name"
-              label="Name"
-              name="name"
-              value={team.name}
-              required
-            />
-            {isEmpty(teams) ? null : (
-              <Select
-                id="team-form__team"
-                label="Parent team"
-                name="parent_id"
-                options={teams}
-                value={team.parent_id || teams[0].id}
-                required
-              />
-            )}
-            <Checkbox label="Partner" name="external" value={team.external} />
-          </Formsy>
-        </FormModal>
-        <Button
-          variant="primary"
-          className={className}
-          onClick={this.showModal}
-        >
-          {showModalButton}
-        </Button>
-      </React.Fragment>
+      <Formsy
+        id={id}
+        className="pf-c-form"
+        onValidSubmit={newTeam =>
+          onValidSubmit({
+            ...newTeam,
+            state: newTeam.state ? "active" : "inactive"
+          })
+        }
+        onValid={onValid}
+        onInvalid={onInvalid}
+        {...props}
+      >
+        {team.etag && (
+          <HiddenInput id={`${id}__etag`} name="etag" value={team.etag} />
+        )}
+        <Input
+          id={`${id}__name`}
+          label="Name"
+          name="name"
+          value={team.name}
+          required
+        />
+        <Checkbox
+          id={`${id}__state`}
+          label="Active"
+          name="state"
+          value={team.state === "active"}
+        />
+        <Checkbox
+          id={`${id}__external`}
+          label="Partner"
+          name="external"
+          value={team.external}
+        />
+      </Formsy>
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    teams: getTeams(state)
-  };
-}
-
-export default connect(mapStateToProps)(TeamForm);
