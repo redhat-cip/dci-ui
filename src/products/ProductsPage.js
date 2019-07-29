@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
-import productsActions from "./producstActions";
+import productsActions from "./productsActions";
 import teamsActions from "teams/teamsActions";
 import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
 import NewProductButton from "./NewProductButton";
