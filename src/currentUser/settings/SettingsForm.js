@@ -88,7 +88,7 @@ export default class SettingsForm extends Component {
             <ActionGroup>
               <Toolbar>
                 <ToolbarGroup>
-                  <Button type="submit" disabled={!canSubmit}>
+                  <Button type="submit" isDisabled={!canSubmit}>
                     Update your settings
                   </Button>
                 </ToolbarGroup>

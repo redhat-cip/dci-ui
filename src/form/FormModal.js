@@ -34,7 +34,7 @@ export default class FormModal extends Component {
             variant="primary"
             type="submit"
             form={formRef}
-            disabled={!canSubmit}
+            isDisabled={!canSubmit}
           >
             {okButton}
           </Button>

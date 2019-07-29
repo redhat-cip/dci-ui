@@ -31,7 +31,7 @@ export class AddUserToTeamModal extends Component {
           </Button>,
           <Button
             key="add"
-            disabled={isEmpty(user)}
+            isDisabled={isEmpty(user)}
             onClick={() => {
               addUserToTeam(user, team).then(onOk);
             }}
