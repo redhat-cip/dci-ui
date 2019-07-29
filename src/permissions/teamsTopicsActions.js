@@ -20,7 +20,7 @@ export function associateTopicToTeam(topic, team) {
         dispatch(topicsActions.one(topic, { embed: "teams" }));
       })
       .catch(error => {
-        dispatch(showAPIError(error.response));
+        dispatch(showAPIError(error));
         throw error;
       });
   };
@@ -44,7 +44,7 @@ export function removeTopicFromTeam(topic, team) {
         dispatch(topicsActions.one(topic, { embed: "teams" }));
       })
       .catch(error => {
-        dispatch(showAPIError(error.response));
+        dispatch(showAPIError(error));
         throw error;
       });
   };

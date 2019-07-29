@@ -72,6 +72,21 @@ it("createAlert with multiple errors", () => {
   );
 });
 
+it("createAlert with new error", () => {
+  const data = {
+    message: "Request malformed",
+    payload: {
+      error: "'team_id' is a required property",
+      errors: ["'team_id' is a required property"]
+    },
+    status_code: 400
+  };
+  const alert = actions.createAlert({ data, status: 400 });
+  expect(alert.title).toBe("Request malformed");
+  expect(alert.type).toBe("danger");
+  expect(alert.message).toBe("'team_id' is a required property");
+});
+
 it("createAlert with empty payload", () => {
   const data = {
     message: "Request malformed",

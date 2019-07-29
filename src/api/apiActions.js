@@ -39,7 +39,7 @@ export function createActions(resource) {
             return response;
           })
           .catch(error => {
-            dispatch(showAPIError(error.response));
+            dispatch(showAPIError(error));
             return error;
           });
       };
@@ -64,7 +64,7 @@ export function createActions(resource) {
             return response;
           })
           .catch(error => {
-            dispatch(showAPIError(error.response));
+            dispatch(showAPIError(error));
             return error;
           });
       };
@@ -93,7 +93,7 @@ export function createActions(resource) {
             return response;
           })
           .catch(error => {
-            dispatch(showAPIError(error.response));
+            dispatch(showAPIError(error));
             return error;
           });
       };
@@ -123,7 +123,7 @@ export function createActions(resource) {
             return response;
           })
           .catch(error => {
-            dispatch(showAPIError(error.response));
+            dispatch(showAPIError(error));
             return error;
           });
       };
@@ -155,7 +155,7 @@ export function createActions(resource) {
             return response;
           })
           .catch(error => {
-            dispatch(showAPIError(error.response));
+            dispatch(showAPIError(error));
             return error;
           });
       };
