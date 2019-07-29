@@ -50,7 +50,7 @@ export class SubscribeForm extends Component {
               id="subscription-form__submitButton"
               type="submit"
               variant="primary"
-              disabled={!canSubmit}
+              isDisabled={!canSubmit}
             >
               Subscribe
             </Button>
