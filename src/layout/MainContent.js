@@ -197,7 +197,7 @@ class MainContent extends Component {
       <PageHeader
         logo={<Brand src={Logo} alt="DCI Logo" />}
         toolbar={PageToolbar}
-        avatar={<Avatar src={avatarImg} alt="Avatar image" />}
+        avatar={<Avatar src={avatarImg} alt="Avatar" />}
         showNavToggle
       />
     );

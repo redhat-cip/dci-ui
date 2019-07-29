@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
-import productsActions from "products/producstActions";
+import productsActions from "products/productsActions";
 import topicsActions from "../topics/topicsActions";
 import { EmptyState } from "ui";
 import { getTopics } from "../topics/topicsSelectors";
