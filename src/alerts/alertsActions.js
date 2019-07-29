@@ -51,8 +51,9 @@ export function showError(message) {
   return showAndHideAfter10s(alert);
 }
 
-export function showAPIError(response) {
-  return showAndHideAfter10s(createAlert(response));
+export function showAPIError(error) {
+  console.error(error);
+  return showAndHideAfter10s(createAlert(error.response));
 }
 
 export function createAlert(response) {
@@ -66,21 +67,19 @@ export function createAlert(response) {
     };
   const alert = {
     id: Date.now(),
-    title: "Request malformed",
+    title: response.data.message || "Request malformed",
     message: "",
     type: "danger"
   };
-  if (response && response.data) {
-    if (response.data.message) {
-      alert.title = response.data.message;
-    }
-    const payload = response.data.payload;
-    if (payload) {
-      const error = payload.error || payload.errors || {};
-      alert.message = keys(error)
-        .map(k => `${k}: ${error[k]}`)
-        .join("\n");
-    }
+  const payload = response.data.payload;
+  if (isEmpty(payload)) return alert;
+  if (Array.isArray(payload.errors)) {
+    alert.message = payload.errors.join("\n");
+    return alert;
   }
+  const error = payload.error || payload.errors || {};
+  alert.message = keys(error)
+    .map(k => `${k}: ${error[k]}`)
+    .join("\n");
   return alert;
 }

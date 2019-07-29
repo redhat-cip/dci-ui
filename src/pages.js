@@ -3,10 +3,10 @@ import Loadable from "react-loadable";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
 import GlobalStatusPage from "./globalStatus/GlobalStatusPage";
+import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import ComponentsPage from "./components/ComponentsPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
-import ProductsPage from "./products/ProductsPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/EditUserPage";
@@ -27,10 +27,10 @@ export default {
   JobsPage,
   JobPage,
   GlobalStatusPage,
+  ProductsPage,
   TopicsPage,
   ComponentsPage,
   RemotecisPage,
-  ProductsPage,
   TeamsPage,
   UsersPage,
   EditUserPage,

@@ -54,7 +54,7 @@ export function updateCurrentUser(currentUser) {
         return response;
       })
       .catch(error => {
-        dispatch(showAPIError(error.response));
+        dispatch(showAPIError(error));
         throw error;
       });
   };
