@@ -38,7 +38,7 @@ export class NewTeamModal extends Component {
           <Button
             key="create"
             type="submit"
-            disabled={!canSubmit}
+            isDisabled={!canSubmit}
             form="team-form"
           >
             Create

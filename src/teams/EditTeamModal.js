@@ -39,7 +39,7 @@ export class EditTeamModal extends Component {
           <Button
             key="edit"
             type="submit"
-            disabled={!canSubmit}
+            isDisabled={!canSubmit}
             form="team-form"
           >
             Edit
