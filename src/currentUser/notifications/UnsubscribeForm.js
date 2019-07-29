@@ -50,7 +50,7 @@ export class UnsubscribeForm extends Component {
               id="unsubscription-form__submitButton"
               type="submit"
               variant="secondary"
-              disabled={!canSubmit}
+              isDisabled={!canSubmit}
             >
               Unsubscribe
             </Button>

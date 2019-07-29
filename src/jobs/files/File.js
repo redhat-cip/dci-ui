@@ -37,7 +37,7 @@ export class File extends Component {
           <Button
             variant="primary"
             onClick={() => this.downloadFile(file)}
-            disabled={downloading}
+            isDisabled={downloading}
           >
             {downloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
             download

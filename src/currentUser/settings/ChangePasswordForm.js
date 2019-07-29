@@ -70,7 +70,7 @@ export default class ChangePasswordForm extends Component {
             <ActionGroup>
               <Toolbar>
                 <ToolbarGroup>
-                  <Button type="submit" variant="primary" disabled={!canSubmit}>
+                  <Button type="submit" variant="primary" isDisabled={!canSubmit}>
                     Change your password
                   </Button>
                 </ToolbarGroup>
