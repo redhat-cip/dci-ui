@@ -3,9 +3,9 @@ import thunk from "redux-thunk";
 import alertsReducer from "./alerts/alertsReducer";
 import configReducer from "./config/configReducer";
 import currentUserReducer from "./currentUser/currentUserReducer";
-import remotecisReducer from "./remotecis/remotecisReducer";
 import productsReducer from "./products/productsReducer";
 import topicsReducer from "./topics/topicsReducer";
+import remotecisReducer from "./remotecis/remotecisReducer";
 import teamsReducer from "./teams/teamsReducer";
 import usersReducer from "./users/usersReducer";
 import jobsReducer from "./jobs/jobsReducer";
@@ -18,10 +18,10 @@ const store = createStore(
     config: configReducer,
     globalStatus: globalStatusReducer,
     currentUser: currentUserReducer,
-    remotecis: remotecisReducer,
     jobs: jobsReducer,
     products: productsReducer,
     topics: topicsReducer,
+    remotecis: remotecisReducer,
     teams: teamsReducer,
     users: usersReducer,
     trends: trendsReducer
