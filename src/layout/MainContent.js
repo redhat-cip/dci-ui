@@ -94,10 +94,12 @@ class MainContent extends Component {
             Jobs
           </DCINavItem>
           {currentUser.isSuperAdmin && (
-            <DCINavItem to="/products">Products</DCINavItem>
+            <React.Fragment>
+              <DCINavItem to="/feeders">Feeders</DCINavItem>
+              <DCINavItem to="/products">Products</DCINavItem>
+            </React.Fragment>
           )}
           <DCINavItem to="/topics">Topics</DCINavItem>
-
           <DCINavItem to="/components">Components</DCINavItem>
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         </NavGroup>

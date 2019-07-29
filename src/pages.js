@@ -7,6 +7,7 @@ import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import ComponentsPage from "./components/ComponentsPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
+import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/EditUserPage";
@@ -31,6 +32,7 @@ export default {
   TopicsPage,
   ComponentsPage,
   RemotecisPage,
+  FeedersPage,
   TeamsPage,
   UsersPage,
   EditUserPage,
