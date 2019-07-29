@@ -3,12 +3,10 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import productsActions from "./producstActions";
-import teamsActions from "teams/teamsActions";
 import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
 import NewProductButton from "./NewProductButton";
 import EditProductButton from "./EditProductButton";
 import { getProducts } from "./productSelectors";
-import { getTeams } from "teams/teamsSelectors";
 
 export class ProductsPage extends Component {
   componentDidMount() {
@@ -37,8 +35,7 @@ export class ProductsPage extends Component {
               <th className="pf-u-text-align-center pf-m-width-5">ID</th>
               <th className="pf-m-width-10">Name</th>
               <th className="pf-m-width-10">Label</th>
-              <th className="pf-m-width-10">Team Owner</th>
-              <th className="pf-m-width-35">Description</th>
+              <th className="pf-m-width-45">Description</th>
               <th className="pf-m-width-10 pf-u-text-align-center">Created</th>
               <th className="pf-u-text-align-center pf-m-width-20">Actions</th>
             </tr>
@@ -51,7 +48,6 @@ export class ProductsPage extends Component {
                 </td>
                 <td>{product.name}</td>
                 <td>{product.label}</td>
-                <td>{product.team ? product.team.name.toUpperCase() : null}</td>
                 <td>{product.description}</td>
                 <td className="pf-u-text-align-center">{product.from_now}</td>
                 <td className="pf-u-text-align-center">
@@ -75,16 +71,14 @@ export class ProductsPage extends Component {
 function mapStateToProps(state) {
   return {
     products: getProducts(state),
-    teams: getTeams(state),
-    isFetching: state.products.isFetching || state.teams.isFetching
+    isFetching: state.products.isFetching
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchProducts: () => {
-      dispatch(productsActions.all({ embed: "team" }));
-      dispatch(teamsActions.all());
+      dispatch(productsActions.all());
     },
     deleteProduct: product => dispatch(productsActions.delete(product))
   };

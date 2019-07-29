@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput, FormModal } from "form";
-import { getProducts } from "./productSelectors";
-import { getTeams } from "teams/teamsSelectors";
-import { isEmpty } from "lodash";
+import { Input, HiddenInput, FormModal } from "form";
 
-export class ProductForm extends Component {
+export default class ProductForm extends Component {
   state = {
     canSubmit: false,
     show: false,
@@ -34,14 +30,7 @@ export class ProductForm extends Component {
   };
 
   render() {
-    const {
-      title,
-      okButton,
-      submit,
-      className,
-      showModalButton,
-      teams
-    } = this.props;
+    const { title, okButton, submit, className, showModalButton } = this.props;
     const { canSubmit, show, product } = this.state;
     return (
       <React.Fragment>
@@ -81,16 +70,6 @@ export class ProductForm extends Component {
               name="description"
               value={product.description}
             />
-            {isEmpty(teams) ? null : (
-              <Select
-                id="product-form__team"
-                label="Team Owner"
-                name="team_id"
-                options={teams}
-                value={product.team_id || teams[0].id}
-                required
-              />
-            )}
           </Formsy>
         </FormModal>
         <Button
@@ -104,12 +83,3 @@ export class ProductForm extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    products: getProducts(state),
-    teams: getTeams(state)
-  };
-}
-
-export default connect(mapStateToProps)(ProductForm);
