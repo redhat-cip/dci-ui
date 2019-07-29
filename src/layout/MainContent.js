@@ -94,10 +94,12 @@ class MainContent extends Component {
             Jobs
           </DCINavItem>
           {currentUser.isSuperAdmin && (
-            <DCINavItem to="/products">Products</DCINavItem>
+            <React.Fragment>
+              <DCINavItem to="/feeders">Feeders</DCINavItem>
+              <DCINavItem to="/products">Products</DCINavItem>
+            </React.Fragment>
           )}
           <DCINavItem to="/topics">Topics</DCINavItem>
-
           <DCINavItem to="/components">Components</DCINavItem>
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         </NavGroup>
@@ -195,7 +197,7 @@ class MainContent extends Component {
       <PageHeader
         logo={<Brand src={Logo} alt="DCI Logo" />}
         toolbar={PageToolbar}
-        avatar={<Avatar src={avatarImg} alt="Avatar image" />}
+        avatar={<Avatar src={avatarImg} alt="Avatar" />}
         showNavToggle
       />
     );
