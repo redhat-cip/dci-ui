@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import ProductForm from "./ProductForm";
-import actions from "./producstActions";
+import actions from "./productsActions";
 
 export class NewProductButton extends Component {
   render() {
