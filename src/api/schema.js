@@ -27,6 +27,11 @@ export const topic = new schema.Entity("topics", {
 });
 export const topics = [topic];
 
+export const feeder = new schema.Entity("feeders", {
+  team: team
+});
+export const feeders = [feeder];
+
 export const job = new schema.Entity("jobs", {
   jobstates: [jobstate],
   remoteci: remoteci,
