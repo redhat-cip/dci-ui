@@ -28,7 +28,6 @@ import {
   global_Color_light_100
 } from "@patternfly/react-tokens";
 import { Labels, KebabDropdown } from "ui";
-import { formatDate, duration } from "services/date";
 import { isEmpty, orderBy } from "lodash";
 import jobsActions from "./jobsActions";
 
@@ -128,7 +127,7 @@ const Successfixes = ({ successfixes }) => (
 export class JobSummary extends Component {
   render() {
     const {
-      enhancedJob: job,
+      job,
       deleteJob,
       currentUser,
       history,
@@ -213,20 +212,25 @@ export class JobSummary extends Component {
             <div className="pf-c-data-list__cell pf-m-flex-2">
               <p>
                 <small>
-                  <CalendarAltIcon className="pf-u-mr-xs" />
-                  {job.datetime}
+                  <span title={`Created at ${job.created_at}`}>
+                    <CalendarAltIcon className="pf-u-mr-xs" />
+                    {job.datetime}
+                  </span>
                 </small>
               </p>
-              <p>
-                <small>
-                  {job.status !== "new" && job.status !== "running" ? (
-                    <span title={`From ${job.created_at} to ${job.updated_at}`}>
-                      <ClockIcon className="pf-u-mr-xs" />
-                      Ran for {job.duration}
-                    </span>
-                  ) : null}
-                </small>
-              </p>
+              {job.duration &&
+                job.status !== "new" &&
+                job.status !== "pre-run" &&
+                job.status !== "running" && (
+                  <p>
+                    <small>
+                      <span title={`Duration in seconds ${job.duration}`}>
+                        <ClockIcon className="pf-u-mr-xs" />
+                        Ran for {job.humanizedDuration}
+                      </span>
+                    </small>
+                  </p>
+                )}
             </div>
             {seeDetailsButton && (
               <div className="pf-c-data-list__cell">
@@ -265,15 +269,9 @@ export class JobSummary extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const { job } = ownProps;
+function mapStateToProps(state) {
   return {
-    currentUser: state.currentUser,
-    enhancedJob: {
-      ...job,
-      datetime: formatDate(job.created_at, state.currentUser.timezone),
-      duration: duration(job.created_at, job.updated_at)
-    }
+    currentUser: state.currentUser
   };
 }
 

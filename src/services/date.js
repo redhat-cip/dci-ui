@@ -13,6 +13,10 @@ export function duration(dateString1, dateString2) {
   return moment.duration(date2.diff(date1)).humanize();
 }
 
+export function humanizeDuration(durationInSeconds) {
+  return moment.duration(durationInSeconds, "seconds").humanize();
+}
+
 export function formatDate(datetime, timezone) {
   return moment
     .utc(datetime)
