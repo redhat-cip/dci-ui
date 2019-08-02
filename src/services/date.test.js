@@ -15,6 +15,7 @@ it("duration", () => {
 });
 
 it("humanizeDuration", () => {
+  expect(date.humanizeDuration(0)).toBe("a few seconds");
   expect(date.humanizeDuration(60)).toBe("a minute");
   expect(date.humanizeDuration(61)).toBe("a minute");
   expect(date.humanizeDuration(null)).toBe("a few seconds");
