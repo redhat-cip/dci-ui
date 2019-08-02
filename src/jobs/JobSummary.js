@@ -156,8 +156,12 @@ export class JobSummary extends Component {
               </p>
               {isEmpty(job.tags) ? null : (
                 <p>
-                  {job.tags.map(tag => (
-                    <Label isCompact className="pf-u-mr-xs pf-u-mt-xs">
+                  {job.tags.map((tag, index) => (
+                    <Label
+                      key={index}
+                      isCompact
+                      className="pf-u-mr-xs pf-u-mt-xs"
+                    >
                       {tag.name}
                     </Label>
                   ))}
@@ -218,7 +222,7 @@ export class JobSummary extends Component {
                   </span>
                 </small>
               </p>
-              {job.duration &&
+              {isEmpty(job.duration) &&
                 job.status !== "new" &&
                 job.status !== "pre-run" &&
                 job.status !== "running" && (

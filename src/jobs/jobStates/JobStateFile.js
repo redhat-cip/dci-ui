@@ -85,7 +85,7 @@ export class JobStateFile extends Component {
                 ? "loading"
                 : file.content
                 ? file.content
-                : `"${file.name}" file is empty`}
+                : `no log for "${file.name}"`}
             </Pre>
           </FileContent>
         ) : null}
