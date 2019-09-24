@@ -16,6 +16,8 @@ import JobStatesList from "./jobStates/JobStatesList";
 import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
+import { enhanceJob } from "./jobsSelectors";
+import { getTimezone } from "currentUser/currentUserSelectors";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
 
@@ -32,7 +34,14 @@ export class JobPage extends Component {
   };
 
   componentDidMount() {
-    const { match, fetchJob, getResults, getJobStates, getIssues } = this.props;
+    const {
+      match,
+      fetchJob,
+      getResults,
+      getJobStates,
+      getIssues,
+      timezone
+    } = this.props;
     const { id, endpoint } = match.params;
     fetchJob(id)
       .then(response => {
@@ -42,13 +51,17 @@ export class JobPage extends Component {
           getJobStates(job),
           getIssues(job)
         ]).then(results => {
-          this.setState({
-            job: {
+          const enhancedJob = enhanceJob(
+            {
               ...job,
               tests: results[0].data.results,
               jobstates: results[1].data.jobstates,
               issues: results[2].data.issues
             },
+            timezone
+          );
+          this.setState({
+            job: enhancedJob,
             currentEndpoint: endpoint
           });
         });
@@ -171,6 +184,12 @@ export class JobPage extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    timezone: getTimezone(state)
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     fetchJob: id =>
@@ -178,8 +197,7 @@ function mapDispatchToProps(dispatch) {
         jobsActions.one(
           { id },
           {
-            embed:
-              "results,team,remoteci,components,topic,files,tags"
+            embed: "results,team,remoteci,components,topic,files,tags"
           }
         )
       ),
@@ -192,6 +210,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(JobPage);

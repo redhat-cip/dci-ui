@@ -222,7 +222,7 @@ export class JobSummary extends Component {
                   </span>
                 </small>
               </p>
-              {isEmpty(job.duration) &&
+              {isEmpty(job.humanizedDuration) &&
                 job.status !== "new" &&
                 job.status !== "pre-run" &&
                 job.status !== "running" && (

@@ -24,7 +24,6 @@ export class ComponentsPerTopic extends Component {
   render() {
     const { isOpen, loading, components } = this.state;
     const { topic } = this.props;
-    console.log(loading);
     return (
       <tbody className={isOpen ? "pf-m-expanded" : ""}>
         <tr key={`${topic.id}.${topic.etag}`} onClick={() => this.toggleRow()}>
