@@ -88,7 +88,7 @@ class MainContent extends Component {
       history
     } = this.props;
     const PageNav = (
-      <Nav aria-label="Nav">
+      <Nav aria-label="Nav" theme="dark">
         <NavGroup title="DCI">
           <DCINavItem to="/jobs" exact={false}>
             Jobs
@@ -201,7 +201,7 @@ class MainContent extends Component {
         showNavToggle
       />
     );
-    const Sidebar = <PageSidebar nav={PageNav} />;
+    const Sidebar = <PageSidebar nav={PageNav} theme="dark" />;
     return (
       <React.Fragment>
         <Page header={Header} sidebar={Sidebar} isManagedSidebar>
