@@ -118,16 +118,12 @@ export class PermissionsPage extends Component {
 
   render() {
     const {
-      currentUser,
       grantTeamProductPermission,
       grantTeamTopicPermission,
       removeTeamProductPermission,
       removeTeamTopicPermission
     } = this.props;
     const { isLoading, teams, topics, products } = this.state;
-    const topicsNotExportControlReady = currentUser.isSuperAdmin
-      ? topics
-      : topics.filter(topic => !topic.export_control);
     return (
       <Page
         loading={isLoading}
@@ -179,51 +175,54 @@ export class PermissionsPage extends Component {
                     );
                   }}
                 />
-                {products.map(product => (
-                  <TextContent
-                    key={`${product.id}.${product.etag}`}
-                    className="pf-u-mt-lg"
-                  >
-                    <Text component="h1">{product.name}</Text>
-                    <Text component="p">
-                      List of teams that have access to {product.name}
-                    </Text>
-                    <table
-                      class="pf-c-table pf-m-grid-md pf-m-compact"
-                      role="grid"
+                {products.map(product => {
+                  if (isEmpty(product.teams)) return null;
+                  return (
+                    <TextContent
+                      key={`${product.id}.${product.etag}`}
+                      className="pf-u-mt-lg"
                     >
-                      <tbody>
-                        {product.teams.map(team => (
-                          <tr key={`${team.id}.${team.etag}`}>
-                            <td className="pf-u-pl-0 pf-m-width-30">
-                              {team.name}
-                            </td>
-                            <td className="pf-m-width-70">
-                              <Button
-                                variant="danger"
-                                icon={<TrashIcon />}
-                                onClick={() =>
-                                  removeTeamProductPermission(
-                                    team,
-                                    product
-                                  ).then(() =>
-                                    this.removeTeamFromResource(
-                                      "products",
+                      <Text component="h1">{product.name}</Text>
+                      <Text component="p">
+                        List of teams that have access to {product.name}
+                      </Text>
+                      <table
+                        class="pf-c-table pf-m-grid-md pf-m-compact"
+                        role="grid"
+                      >
+                        <tbody>
+                          {product.teams.map(team => (
+                            <tr key={`${team.id}.${team.etag}`}>
+                              <td className="pf-u-pl-0 pf-m-width-30">
+                                {team.name}
+                              </td>
+                              <td className="pf-m-width-70">
+                                <Button
+                                  variant="danger"
+                                  icon={<TrashIcon />}
+                                  onClick={() =>
+                                    removeTeamProductPermission(
                                       team,
                                       product
+                                    ).then(() =>
+                                      this.removeTeamFromResource(
+                                        "products",
+                                        team,
+                                        product
+                                      )
                                     )
-                                  )
-                                }
-                              >
-                                remove {team.name} permission
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </TextContent>
-                ))}
+                                  }
+                                >
+                                  remove {team.name} permission
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </TextContent>
+                  );
+                })}
               </Tab>
               <Tab eventKey={1} title="Topics Teams Permissions">
                 <TextContent className="pf-u-mt-lg">
@@ -237,7 +236,7 @@ export class PermissionsPage extends Component {
                 </TextContent>
                 <AllowTeamToDownloadResource
                   teams={teams}
-                  resources={topicsNotExportControlReady}
+                  resources={topics}
                   resource_name="topic"
                   onClick={(team, topic) => {
                     grantTeamTopicPermission(team, topic).then(() =>
@@ -245,49 +244,52 @@ export class PermissionsPage extends Component {
                     );
                   }}
                 />
-                {topicsNotExportControlReady.map(topic => (
-                  <TextContent
-                    key={`${topic.id}.${topic.etag}`}
-                    className="pf-u-mt-lg"
-                  >
-                    <Text component="h1">{topic.name}</Text>
-                    <Text component="p">
-                      List of teams that have access to {topic.name}
-                    </Text>
-                    <table
-                      class="pf-c-table pf-m-grid-md pf-m-compact"
-                      role="grid"
+                {topics.map(topic => {
+                  if (isEmpty(topic.teams)) return null;
+                  return (
+                    <TextContent
+                      key={`${topic.id}.${topic.etag}`}
+                      className="pf-u-mt-lg"
                     >
-                      <tbody>
-                        {topic.teams.map(team => (
-                          <tr key={`${team.id}.${team.etag}`}>
-                            <td className="pf-u-pl-0 pf-m-width-30">
-                              {team.name}
-                            </td>
-                            <td className="pf-m-width-70">
-                              <Button
-                                variant="danger"
-                                icon={<TrashIcon />}
-                                onClick={() => {
-                                  removeTeamTopicPermission(team, topic).then(
-                                    () =>
-                                      this.removeTeamFromResource(
-                                        "topics",
-                                        team,
-                                        topic
-                                      )
-                                  );
-                                }}
-                              >
-                                remove {team.name} permission
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </TextContent>
-                ))}
+                      <Text component="h1">{topic.name}</Text>
+                      <Text component="p">
+                        List of teams that have access to {topic.name}
+                      </Text>
+                      <table
+                        class="pf-c-table pf-m-grid-md pf-m-compact"
+                        role="grid"
+                      >
+                        <tbody>
+                          {topic.teams.map(team => (
+                            <tr key={`${team.id}.${team.etag}`}>
+                              <td className="pf-u-pl-0 pf-m-width-30">
+                                {team.name}
+                              </td>
+                              <td className="pf-m-width-70">
+                                <Button
+                                  variant="danger"
+                                  icon={<TrashIcon />}
+                                  onClick={() => {
+                                    removeTeamTopicPermission(team, topic).then(
+                                      () =>
+                                        this.removeTeamFromResource(
+                                          "topics",
+                                          team,
+                                          topic
+                                        )
+                                    );
+                                  }}
+                                >
+                                  remove {team.name} permission
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </TextContent>
+                  );
+                })}
               </Tab>
             </Tabs>
           </CardBody>
@@ -295,12 +297,6 @@ export class PermissionsPage extends Component {
       </Page>
     );
   }
-}
-
-function mapStateToProps(state) {
-  return {
-    currentUser: state.currentUser
-  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -320,6 +316,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(PermissionsPage);
