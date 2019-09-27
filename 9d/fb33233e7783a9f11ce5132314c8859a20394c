@@ -1,0 +1,8 @@
+Code-Review+2: Haïkel Guémar <hguemar@fedoraproject.org>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-by: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-at: Fri, 27 Sep 2019 09:22:58 +0000
+Reviewed-on: https://softwarefactory-project.io/r/16675
+Project: dci-ui
+Branch: refs/heads/master
