@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { sortBy } from "lodash";
+import { sortByName } from "services/sort";
 import { getTeamsById } from "teams/teamsSelectors";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { fromNow } from "services/date";
@@ -12,7 +12,7 @@ export const getRemotecis = createSelector(
   getRemotecisById,
   getRemotecisAllIds,
   (timezone, teams, remotecis, remotecisAllIds) =>
-    sortBy(
+    sortByName(
       remotecisAllIds.map(id => {
         const remoteci = remotecis[id];
         return {
@@ -20,7 +20,6 @@ export const getRemotecis = createSelector(
           team: teams[remoteci.team_id],
           from_now: fromNow(remoteci.created_at, timezone)
         };
-      }),
-      [e => e.name.toLowerCase()]
+      })
     )
 );

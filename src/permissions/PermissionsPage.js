@@ -162,7 +162,7 @@ export class PermissionsPage extends Component {
                     topics.
                     <br />
                     If you want to give access to a non-GA topic, you can use
-                    the Products Topics Permissions tab.
+                    the Topics Teams Permissions tab.
                   </Text>
                 </TextContent>
                 <AllowTeamToDownloadResource

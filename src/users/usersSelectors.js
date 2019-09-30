@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { sortBy } from "lodash";
+import { sortByName } from "services/sort";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { fromNow } from "services/date";
 
@@ -10,14 +10,13 @@ export const getUsers = createSelector(
   getUsersById,
   getUsersAllIds,
   (timezone, users, usersAllIds) =>
-    sortBy(
+    sortByName(
       usersAllIds.map(id => {
         const user = users[id];
         return {
           ...user,
           from_now: fromNow(user.created_at, timezone)
         };
-      }),
-      [e => e.name.toLowerCase()]
+      })
     )
 );

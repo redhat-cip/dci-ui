@@ -17,23 +17,29 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("getProductsWithTeams", () => {
   axiosMock.onGet("https://api.example.org/api/v1/products").reply(200, {
-    products: [{ id: "p1" }, { id: "p2" }],
+    products: [{ id: "p1", name: "RHEL" }, { id: "p2", name: "OpenStack" }],
     _meta: { count: 2 }
   });
   axiosMock
     .onGet("https://api.example.org/api/v1/products/p1/teams")
-    .reply(200, { teams: [{ id: "t1" }], _meta: { count: 1 } });
+    .reply(200, { teams: [{ id: "t1", name: "Team 1" }], _meta: { count: 1 } });
   axiosMock
     .onGet("https://api.example.org/api/v1/products/p2/teams")
-    .reply(200, { teams: [{ id: "t1" }, { id: "t2" }], _meta: { count: 2 } });
+    .reply(200, {
+      teams: [{ id: "t2", name: "Team 2" }, { id: "t1", name: "Team 1" }],
+      _meta: { count: 2 }
+    });
   const store = mockStore({
     config: {
       apiURL: "https://api.example.org"
     }
   });
   return store.dispatch(getProductsWithTeams()).then(products => {
-    expect(products[0].teams).toEqual([{ id: "t1" }]);
-    expect(products[1].teams).toEqual([{ id: "t1" }, { id: "t2" }]);
+    expect(products[0].teams).toEqual([
+      { id: "t1", name: "Team 1" },
+      { id: "t2", name: "Team 2" }
+    ]);
+    expect(products[1].teams).toEqual([{ id: "t1", name: "Team 1" }]);
   });
 });
 
@@ -42,8 +48,12 @@ it("getTopicsWithTeams", () => {
     .onGet("https://api.example.org/api/v1/topics", { embed: "teams" })
     .reply(200, {
       topics: [
-        { id: "to1", teams: [{ id: "t1" }] },
-        { id: "to2", teams: [{ id: "t1" }, { id: "t2" }] }
+        { id: "to1", name: "Topic 1", teams: [{ id: "t1", name: "Team 1" }] },
+        {
+          id: "to2",
+          name: "Topic 2",
+          teams: [{ id: "t1", name: "Team 1" }, { id: "t2", name: "Team 2" }]
+        }
       ],
       _meta: { count: 2 }
     });
@@ -53,15 +63,19 @@ it("getTopicsWithTeams", () => {
     }
   });
   return store.dispatch(getTopicsWithTeams()).then(topics => {
-    expect(topics[0].teams).toEqual([{ id: "t1" }]);
-    expect(topics[1].teams).toEqual([{ id: "t1" }, { id: "t2" }]);
+    expect(topics[0].teams).toEqual([{ id: "t1", name: "Team 1" }]);
+    expect(topics[1].teams).toEqual([
+      { id: "t1", name: "Team 1" },
+      { id: "t2", name: "Team 2" }
+    ]);
   });
 });
 
 it("getTeams", () => {
-  axiosMock
-    .onGet("https://api.example.org/api/v1/teams")
-    .reply(200, { teams: [{ id: "t1" }, { id: "t2" }], _meta: { count: 2 } });
+  axiosMock.onGet("https://api.example.org/api/v1/teams").reply(200, {
+    teams: [{ id: "t1", name: "Team 1" }, { id: "t2", name: "Team 2" }],
+    _meta: { count: 2 }
+  });
   const store = mockStore({
     config: {
       apiURL: "https://api.example.org"
@@ -83,7 +97,7 @@ it("grantTeamProductPermission", () => {
       apiURL: "https://api.example.org"
     }
   });
-  const team = { id: "t1" };
+  const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1" };
   return store
     .dispatch(grantTeamProductPermission(team, product))
@@ -99,7 +113,7 @@ it("removeTeamProductPermission", () => {
       apiURL: "https://api.example.org"
     }
   });
-  const team = { id: "t1" };
+  const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1", etag: "ep1" };
   return store
     .dispatch(removeTeamProductPermission(team, product))
@@ -116,7 +130,7 @@ it("grantTeamTopicPermission", () => {
       apiURL: "https://api.example.org"
     }
   });
-  const team = { id: "t1" };
+  const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1" };
   return store
     .dispatch(grantTeamTopicPermission(team, topic))
@@ -132,7 +146,7 @@ it("removeTeamTopicPermission", () => {
       apiURL: "https://api.example.org"
     }
   });
-  const team = { id: "t1" };
+  const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1", etag: "eto1" };
   return store
     .dispatch(removeTeamTopicPermission(team, topic))

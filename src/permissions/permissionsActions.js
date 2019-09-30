@@ -4,6 +4,7 @@ import topicsActions from "topics/topicsActions";
 
 import http from "services/http";
 import { showAPIError, showSuccess } from "alerts/alertsActions";
+import { sortByName } from "services/sort";
 
 export function getProductsWithTeams() {
   return (dispatch, getState) => {
@@ -18,9 +19,9 @@ export function getProductsWithTeams() {
       );
       return Promise.all(promises).then(responses => {
         responses.forEach((response, index) => {
-          products[index].teams = response.data.teams;
+          products[index].teams = sortByName(response.data.teams);
         });
-        return Promise.resolve(products);
+        return Promise.resolve(sortByName(products));
       });
     });
   };
@@ -29,7 +30,7 @@ export function getProductsWithTeams() {
 export function getTopicsWithTeams() {
   return dispatch => {
     return dispatch(topicsActions.all({ embed: "teams" })).then(response => {
-      return Promise.resolve(response.data.topics);
+      return Promise.resolve(sortByName(response.data.topics));
     });
   };
 }
@@ -37,7 +38,7 @@ export function getTopicsWithTeams() {
 export function getTeams() {
   return dispatch => {
     return dispatch(teamsActions.all()).then(response => {
-      return Promise.resolve(response.data.teams);
+      return Promise.resolve(sortByName(response.data.teams));
     });
   };
 }

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { sortBy } from "lodash";
+import { sortByName } from "services/sort";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { getTeamsById } from "teams/teamsSelectors";
 import { fromNow } from "services/date";
@@ -12,7 +12,7 @@ export const getFeeders = createSelector(
   getFeedersById,
   getFeedersAllIds,
   (timezone, teams, feeders, feedersAllIds) =>
-    sortBy(
+    sortByName(
       feedersAllIds.map(id => {
         const feeder = feeders[id];
         return {
@@ -20,7 +20,6 @@ export const getFeeders = createSelector(
           team: teams[feeder.team_id],
           from_now: fromNow(feeder.created_at, timezone)
         };
-      }),
-      [e => e.name.toLowerCase()]
+      })
     )
 );

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { sortBy } from "lodash";
+import { sortByName } from "services/sort";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { getProductsById } from "products/productSelectors";
 import { fromNow } from "services/date";
@@ -12,7 +12,7 @@ export const getTopics = createSelector(
   getTopicsById,
   getTopicsAllIds,
   (timezone, products, topics, topicsAllIds) =>
-    sortBy(
+    sortByName(
       topicsAllIds.map(id => {
         const topic = topics[id];
         return {
@@ -21,7 +21,6 @@ export const getTopics = createSelector(
           next_topic: topic.next_topic_id ? topics[topic.next_topic_id] : null,
           from_now: fromNow(topic.created_at, timezone)
         };
-      }),
-      [e => e.name.toLowerCase()]
+      })
     )
 );
