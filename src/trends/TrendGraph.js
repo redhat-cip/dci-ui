@@ -48,6 +48,9 @@ export default class TrendGraph extends Component {
                 failures: "#a30000"
               }
             }}
+            interpolation={{
+              type: "monotone"
+            }}
             point={{
               show: false
             }}
