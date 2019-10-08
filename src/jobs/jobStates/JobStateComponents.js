@@ -98,7 +98,7 @@ export const Pre = styled.pre`
   white-space: pre-wrap;
   word-wrap: break-word;
   padding: 0 20px 0 35px;
-  color: ${Colors.black200};
+  color: ${Colors.black600};
   border: none;
   margin: 0;
   margin-bottom: 1px;
