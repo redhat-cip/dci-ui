@@ -12,7 +12,7 @@ import {
   FileContent,
   CaretIcon,
   ShareLink,
-  Pre,
+  JobStatePre,
   Label,
   LabelBox
 } from "./JobStateComponents";
@@ -80,13 +80,13 @@ export class JobStateFile extends Component {
         </FileRow>
         {seeDetails ? (
           <FileContent>
-            <Pre>
+            <JobStatePre>
               {loading
                 ? "loading"
                 : file.content
                 ? file.content
                 : `no log for "${file.name}"`}
-            </Pre>
+            </JobStatePre>
           </FileContent>
         ) : null}
       </div>

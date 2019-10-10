@@ -97,9 +97,13 @@ export const Pre = styled.pre`
   font-size: 11px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  padding: 0 20px 0 35px;
-  color: ${Colors.black200};
-  border: none;
+  padding: 0;
   margin: 0;
+  border: none;
+`;
+
+export const JobStatePre = styled(Pre)`
+  color: ${Colors.black200};
+  padding: 0 20px 0 35px;
   margin-bottom: 1px;
 `;
