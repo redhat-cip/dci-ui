@@ -2,7 +2,7 @@ import React from "react";
 import Loadable from "react-loadable";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
-import GlobalStatusPage from "./globalStatus/GlobalStatusPage";
+import GlobalStatusPage from "./stats/globalStatus/GlobalStatusPage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import ComponentsPage from "./components/ComponentsPage";
@@ -20,7 +20,7 @@ import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
 import LoginPage from "./login/LoginPage";
 
 const TrendsPage = Loadable({
-  loader: () => import("./trends/TrendsPage"),
+  loader: () => import("./stats/trends/TrendsPage"),
   loading: () => <LoadingPage title="Trend" />
 });
 

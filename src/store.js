@@ -10,8 +10,8 @@ import feedersReducer from "./feeders/feedersReducer";
 import teamsReducer from "./teams/teamsReducer";
 import usersReducer from "./users/usersReducer";
 import jobsReducer from "./jobs/jobsReducer";
-import globalStatusReducer from "./globalStatus/globalStatusReducer";
-import trendsReducer from "./trends/trendsReducer";
+import globalStatusReducer from "./stats/globalStatus/globalStatusReducer";
+import trendsReducer from "./stats/trends/trendsReducer";
 
 const store = createStore(
   combineReducers({
