@@ -51,6 +51,7 @@ class App extends Component {
                 component={Pages.GlobalStatusPage}
               />
               <PrivateRoute path="/trends" component={Pages.TrendsPage} />
+              <PrivateRoute path="/performance" component={Pages.PerformancePage} />
               <PrivateRoute path="/products" component={Pages.ProductsPage} />
               <PrivateRoute path="/topics" component={Pages.TopicsPage} />
               <PrivateRoute

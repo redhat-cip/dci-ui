@@ -107,6 +107,7 @@ class MainContent extends Component {
           <NavGroup title="Stats">
             <DCINavItem to="/globalStatus">Global Status</DCINavItem>
             <DCINavItem to="/trends">Trends</DCINavItem>
+            <DCINavItem to="/performance">Performance</DCINavItem>
           </NavGroup>
         )}
         {currentUser.hasEPMRole && (

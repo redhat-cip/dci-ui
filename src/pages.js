@@ -24,10 +24,16 @@ const TrendsPage = Loadable({
   loading: () => <LoadingPage title="Trend" />
 });
 
+const PerformancePage = Loadable({
+  loader: () => import("./stats/performance/PerformancePage"),
+  loading: () => <LoadingPage title="Performance" />
+});
+
 export default {
   JobsPage,
   JobPage,
   GlobalStatusPage,
+  PerformancePage,
   ProductsPage,
   TopicsPage,
   ComponentsPage,
