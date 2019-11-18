@@ -31,7 +31,7 @@ export default class PerformanceCard extends Component {
     const numberTestcasesToShow = 6;
     const orderedTestscases = secondJob.testscases
       .slice()
-      .sort((t1, t2) => t1.delta > t2.delta);
+      .sort((t1, t2) => t1.delta < t2.delta);
     const displayedTestscases = seeMore
       ? orderedTestscases
       : orderedTestscases.slice(0, numberTestcasesToShow);

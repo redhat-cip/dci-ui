@@ -48,7 +48,7 @@ export default class HeatMap extends Component {
     );
     const colorScale = d3
       .scaleLinear()
-      .domain([-scale, scale])
+      .domain([scale, -scale])
       .range([0, 1]);
 
     const tooltip = graph
