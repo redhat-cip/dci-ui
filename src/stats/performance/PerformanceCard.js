@@ -3,6 +3,7 @@ import { isEmpty } from "lodash";
 import { Card, CardBody, CardHeader } from "@patternfly/react-core";
 import HeatMap from "./HeatMap";
 import styled from "styled-components";
+import { round } from "lodash";
 
 const PerformanceBox = styled.div`
   display: flex;
@@ -14,6 +15,10 @@ const HeatMapBox = styled.div`
 const TestCasesTableBox = styled.div`
   flex: 0 0 50%;
 `;
+
+function deltaToString(delta){
+  return `${delta >= 0 ? "+" : "-"}${round(delta, 2)} %`
+}
 
 export default class PerformanceCard extends Component {
   state = {
@@ -57,9 +62,9 @@ export default class PerformanceCard extends Component {
                   <br />
                   Name: {testcase.name}
                   <br />
-                  Time: {testcase.time}
+                  Time: {testcase.time}s
                   <br />
-                  Delta: {testcase.delta}
+                  Delta: {deltaToString(testcase.delta)}
                 </div>
               )}
             </TestCasesTableBox>
@@ -79,8 +84,8 @@ export default class PerformanceCard extends Component {
                   <tr key={i}>
                     <td>{tc.classname}</td>
                     <td>{tc.name}</td>
-                    <td>{tc.time}</td>
-                    <td>{tc.delta}</td>
+                    <td>{tc.time}s</td>
+                    <td>{deltaToString(tc.delta)}</td>
                   </tr>
                 ))}
                 {!seeMore &&
@@ -88,6 +93,7 @@ export default class PerformanceCard extends Component {
                     <tr>
                       <td
                         colSpan={4}
+                        style={{ cursor: "pointer" }}
                         onClick={() => this.setState({ seeMore: true })}
                       >
                         ...see more
