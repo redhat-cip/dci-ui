@@ -16,8 +16,8 @@ const TestCasesTableBox = styled.div`
   flex: 0 0 50%;
 `;
 
-function deltaToString(delta){
-  return `${delta >= 0 ? "+" : "-"}${round(delta, 2)} %`
+function deltaToString(delta) {
+  return `${delta >= 0 ? "+" : "-"}${round(delta, 2)} %`;
 }
 
 export default class PerformanceCard extends Component {

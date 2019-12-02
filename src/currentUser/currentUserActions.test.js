@@ -178,3 +178,14 @@ it("setCurrentTeam", () => {
   };
   expect(currentUserActions.setCurrentTeam(team)).toEqual(expectedAction);
 });
+
+it("setIdentity", () => {
+  const identity = {
+    id: "i1"
+  };
+  const expectedAction = {
+    type: types.SET_IDENTITY,
+    identity
+  };
+  expect(currentUserActions.setIdentity(identity)).toEqual(expectedAction);
+});

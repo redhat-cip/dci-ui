@@ -1,7 +1,7 @@
 import { values } from "lodash";
 import * as types from "./currentUserActionsTypes";
 
-const initialState = {};
+const initialState = null;
 
 function buildShortcut(team) {
   const adminTeamName = "admin";
@@ -22,6 +22,7 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case types.SET_IDENTITY:
       const identity = action.identity;
+      if (identity === null) return initialState;
       const firstTeam = values(identity.teams)[0];
       return {
         ...state,

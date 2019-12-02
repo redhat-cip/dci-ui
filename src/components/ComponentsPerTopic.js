@@ -18,7 +18,7 @@ export class ComponentsPerTopic extends Component {
         this.setState({ components: response.data.components });
         return response;
       })
-      .catch(error => console.error(error))
+      .catch(() => undefined)
       .then(() => this.setState({ loading: false }));
   };
   render() {

@@ -18,7 +18,7 @@ export const getTeams = createSelector(
           parent_team: teams[team.parent_id],
           from_now: fromNow(team.created_at, timezone)
         };
-      }),
+      })
     );
   }
 );

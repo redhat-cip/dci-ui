@@ -10,13 +10,13 @@ export const getProducts = createSelector(
   getProductsById,
   getProductsAllIds,
   (timezone, products, productsAllIds) =>
-  sortByName(
+    sortByName(
       productsAllIds.map(id => {
         const product = products[id];
         return {
           ...product,
           from_now: fromNow(product.created_at, timezone)
         };
-      }),
+      })
     )
 );
