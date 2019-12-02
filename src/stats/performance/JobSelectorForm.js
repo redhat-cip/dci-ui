@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Flex } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input } from "form";
+import { Input } from "ui/form";
 
 export default class JobSelectorForm extends Component {
   constructor(props) {

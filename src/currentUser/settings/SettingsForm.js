@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput } from "form";
+import { Input, Select, HiddenInput } from "ui/form";
 import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
 import {
   Button,

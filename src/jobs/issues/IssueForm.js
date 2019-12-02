@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, FormModal } from "form";
+import { Input, FormModal } from "ui/form";
 
 export default class IssueForm extends Component {
   state = {

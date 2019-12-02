@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
-import { Input } from "form";
+import { Input } from "ui/form";
 import {
   Button,
   ActionGroup,

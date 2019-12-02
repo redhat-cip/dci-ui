@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, HiddenInput } from "form";
+import { Input, HiddenInput } from "ui/form";
 
 export default class UserForm extends Component {
   state = {
