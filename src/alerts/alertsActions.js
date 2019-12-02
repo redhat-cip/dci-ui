@@ -52,7 +52,6 @@ export function showError(message) {
 }
 
 export function showAPIError(error) {
-  console.error(error);
   return showAndHideAfter10s(createAlert(error.response));
 }
 

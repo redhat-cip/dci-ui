@@ -17,7 +17,10 @@ import NotificationsPage from "./currentUser/notifications/NotificationsPage";
 import PermissionsPage from "./permissions/PermissionsPage";
 import LoadingPage from "./layout/LoadingPage";
 import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
-import LoginPage from "./login/LoginPage";
+import LoginPage from "./auth/LoginPage";
+import LoginCallbackPage from "./auth/LoginCallbackPage";
+import LogoutPage from "./auth/LogoutPage";
+import Page404 from "./Page404";
 
 const TrendsPage = Loadable({
   loader: () => import("./stats/trends/TrendsPage"),
@@ -48,5 +51,8 @@ export default {
   NotificationsPage,
   NotAuthenticatedLoadingPage,
   LoginPage,
-  TrendsPage
+  LoginCallbackPage,
+  LogoutPage,
+  TrendsPage,
+  Page404
 };

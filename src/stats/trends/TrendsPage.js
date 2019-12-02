@@ -14,7 +14,7 @@ import {
   CardHeader,
   Gallery,
   GalleryItem,
-  PageSection,
+  PageSection
 } from "@patternfly/react-core";
 
 export class TrendsPage extends Component {
@@ -27,7 +27,7 @@ export class TrendsPage extends Component {
   componentDidMount() {
     const { fetchTrends, fetchTopics } = this.props;
     Promise.all([fetchTopics(), fetchTrends()])
-      .catch(error => console.error(error))
+      .catch(() => undefined)
       .then(() => {
         this.setState({ isFetching: false });
       });

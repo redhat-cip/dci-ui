@@ -1,4 +1,3 @@
-import { isFunction } from "lodash";
 import http from "services/http";
 import * as types from "./currentUserActionsTypes";
 import {
@@ -7,17 +6,20 @@ import {
   showSuccess,
   showWarning
 } from "alerts/alertsActions";
-import { removeToken, getToken } from "services/localStorage";
+
+export function setIdentity(identity) {
+  return {
+    type: types.SET_IDENTITY,
+    identity
+  };
+}
 
 export function getIdentity() {
   return (dispatch, getState) => {
     const state = getState();
     return http.get(`${state.config.apiURL}/api/v1/identity`).then(response => {
       const identity = response.data.identity;
-      dispatch({
-        type: types.SET_IDENTITY,
-        identity
-      });
+      dispatch(setIdentity(identity));
       return response;
     });
   };
@@ -63,17 +65,6 @@ export function updateCurrentUser(currentUser) {
 export function deleteCurrentUser() {
   return {
     type: types.DELETE_CURRENT_USER
-  };
-}
-
-export function logout() {
-  return dispatch => {
-    dispatch(deleteCurrentUser());
-    const token = getToken();
-    if (token && token.type === "Bearer" && isFunction(window._sso.logout)) {
-      window._sso.logout();
-    }
-    removeToken();
   };
 }
 
