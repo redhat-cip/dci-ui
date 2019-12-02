@@ -22,7 +22,7 @@ import {
 import accessibleStyles from "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 import { css } from "@patternfly/react-styles";
 import Logo from "logo-no-icon.svg";
-import { logout, setCurrentTeam } from "currentUser/currentUserActions";
+import { setCurrentTeam } from "currentUser/currentUserActions";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import avatarImg from "./img_avatar.svg";
 
@@ -84,7 +84,6 @@ class MainContent extends Component {
       currentUser,
       currentUserTeams,
       setCurrentTeam,
-      logout,
       history
     } = this.props;
     const PageNav = (
@@ -144,13 +143,18 @@ class MainContent extends Component {
               }
               dropdownItems={[
                 <DropdownItem
+                  key="dropdown_user_settings"
                   component="button"
                   onClick={() => history.push("/currentUser/settings")}
                 >
                   Settings
                 </DropdownItem>,
-                <DropdownSeparator />,
-                <DropdownItem component="button" onClick={() => logout()}>
+                <DropdownSeparator key="dropdown_user_separator" />,
+                <DropdownItem
+                  key="dropdown_user_logout"
+                  component="button"
+                  onClick={() => history.push("/logout")}
+                >
                   Logout
                 </DropdownItem>
               ]}
@@ -223,7 +227,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setCurrentTeam: team => dispatch(setCurrentTeam(team)),
-    logout: () => dispatch(logout())
   };
 }
 

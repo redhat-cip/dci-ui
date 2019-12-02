@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   ActionGroup,
@@ -11,19 +12,9 @@ const LoginBox = styled.div`
   min-height: 260px;
 `;
 
-export default class SSOForm extends Component {
-  state = { canSubmit: false };
-
-  disableButton = () => {
-    this.setState({ canSubmit: false });
-  };
-
-  enableButton = () => {
-    this.setState({ canSubmit: true });
-  };
-
+export class SSOForm extends Component {
   render() {
-    const { from } = this.props;
+    const { auth } = this.props;
     return (
       <LoginBox>
         <ActionGroup>
@@ -32,8 +23,7 @@ export default class SSOForm extends Component {
               <Button
                 variant="danger"
                 onClick={() => {
-                  const redirectUri = `${window.location.origin}${from.pathname}`;
-                  window._sso.login({ redirectUri });
+                  auth.signinRedirect();
                 }}
               >
                 Red Hat SSO
@@ -45,3 +35,11 @@ export default class SSOForm extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth
+  };
+}
+
+export default connect(mapStateToProps)(SSOForm);

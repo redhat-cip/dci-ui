@@ -264,3 +264,11 @@ it("unsubscribe from a remoteci", () => {
   );
   expect(newState.remotecis).toEqual([{ id: "r1" }, { id: "r3" }]);
 });
+
+it("SET_IDENTITY null", () => {
+  const newState = reducer(undefined, {
+    type: types.SET_IDENTITY,
+    identity: null
+  });
+  expect(newState).toBe(null);
+});
