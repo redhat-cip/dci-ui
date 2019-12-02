@@ -32,8 +32,8 @@ it("set stats order topic", () => {
       }
     ]
   });
-  expect(newState[0].name).toBe("RH7-RHOS-12.0 2018-02-02.1");
-  expect(newState[1].name).toBe("RH7-RHOS-10.0 2018-02-02.1");
+  expect(newState[0].name).toBe("RH7-RHOS-10.0 2018-02-02.1");
+  expect(newState[1].name).toBe("RH7-RHOS-12.0 2018-02-02.1");
 });
 
 it("order stats order topic also by name", () => {
@@ -43,7 +43,7 @@ it("order stats order topic also by name", () => {
     { topic_name: "Ansible-2.4" }
   ]);
 
-  expect(orderedStats[0].topic_name).toBe("OSP12");
-  expect(orderedStats[1].topic_name).toBe("Ansible-2.4");
-  expect(orderedStats[2].topic_name).toBe("Ansible-devel");
+  expect(orderedStats[0].topic_name).toBe("Ansible-2.4");
+  expect(orderedStats[1].topic_name).toBe("Ansible-devel");
+  expect(orderedStats[2].topic_name).toBe("OSP12");
 });
