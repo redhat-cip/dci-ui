@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, HiddenInput, FormModal } from "form";
+import { Input, HiddenInput, FormModal } from "ui/form";
 
 export default class ProductForm extends Component {
   state = {

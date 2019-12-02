@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
-import { Input, Checkbox, HiddenInput } from "form";
+import { Input, Checkbox, HiddenInput } from "ui/form";
 
 export default class TeamForm extends Component {
   render() {

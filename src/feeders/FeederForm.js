@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button } from "@patternfly/react-core";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput, FormModal } from "form";
+import { Input, Select, HiddenInput, FormModal } from "ui/form";
 import { getFeeders } from "./feedersSelectors";
 import { getTeams } from "teams/teamsSelectors";
 import { isEmpty } from "lodash";

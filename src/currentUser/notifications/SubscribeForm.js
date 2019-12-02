@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import Formsy from "formsy-react";
 import { Button, Card, CardBody } from "@patternfly/react-core";
-import { Select } from "form";
+import { Select } from "ui/form";
 import { subscribeToARemoteci } from "currentUser/currentUserActions";
 
 export class SubscribeForm extends Component {
