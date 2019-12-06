@@ -1,18 +1,14 @@
 import React, { Component } from "react";
-import { Button, Flex } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { map, trim } from "lodash";
 import Formsy from "formsy-react";
-import { Input } from "ui/form";
+import { Textarea } from "ui/form";
 
 export default class JobSelectorForm extends Component {
   constructor(props) {
     super(props);
-    const { initialData } = this.props;
-    const { base_job_id = null, job_id = null } = initialData;
-
     this.state = {
-      canSubmit: false,
-      base_job_id,
-      job_id
+      canSubmit: false
     };
   }
 
@@ -25,44 +21,36 @@ export default class JobSelectorForm extends Component {
   };
 
   render() {
-    const { submit } = this.props;
-    const { base_job_id, job_id, canSubmit } = this.state;
+    const { submit, initialData } = this.props;
+    const { canSubmit } = this.state;
+    const { jobs_ids = [] } = initialData;
     return (
       <Formsy
         id="performance-job-selector-form"
         className="pf-c-form"
-        onValidSubmit={submit}
+        onValidSubmit={v => {
+          const trimedLines = map(v.jobs_ids.split("\n"), trim);
+          submit({ jobs_ids: trimedLines });
+        }}
         onValid={this.enableButton}
         onInvalid={this.disableButton}
       >
-        <Flex>
-          <Input
-            id="performance-job-selector-form__base_job_id"
-            label="First job id"
-            name="base_job_id"
-            type="text"
-            value={base_job_id}
-            required
-          />
-          <Input
-            id="performance-job-selector-form__job_id"
-            label="Second job id"
-            name="job_id"
-            type="text"
-            value={job_id}
-            required
-          />
-          <Flex breakpointMods={[{ modifier: "align-self-flex-end" }]}>
-            <Button
-              type="submit"
-              variant="primary"
-              isDisabled={!canSubmit}
-              className="pf-u-mb-xs"
-            >
-              See performance results
-            </Button>
-          </Flex>
-        </Flex>
+        <Textarea
+          id="performance-job-selector-form__jobs_ids"
+          label="Jobs ids"
+          name="jobs_ids"
+          placeholder="List of jobs you want to compare. One job per line. First job id is used as a base."
+          required
+          value={jobs_ids.join("\n")}
+        />
+        <Button
+          type="submit"
+          variant="primary"
+          isDisabled={!canSubmit}
+          className="pf-u-mb-xs"
+        >
+          See performance results
+        </Button>
       </Formsy>
     );
   }
