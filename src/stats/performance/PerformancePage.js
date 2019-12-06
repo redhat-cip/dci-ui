@@ -5,30 +5,35 @@ import queryString from "query-string";
 import { calcPerformance } from "./performanceActions";
 import { Page } from "layout";
 import JobSelectorForm from "./JobSelectorForm";
-import { Card, CardBody, PageSection } from "@patternfly/react-core";
+import {
+  Card,
+  CardBody,
+  Grid,
+  GridItem,
+  PageSection
+} from "@patternfly/react-core";
 import PerformanceCard from "./PerformanceCard";
 
 export class PerformancePage extends Component {
   state = {
     performance: [],
     isFetching: false,
-    base_job_id: null,
-    job_id: null
+    jobs_ids: []
   };
 
   componentDidMount() {
     const { location } = this.props;
-    const { base_job_id, job_id } = queryString.parse(location.search);
-    if (!(isEmpty(base_job_id) || isEmpty(job_id))) {
-      this._calcPerformance(base_job_id, job_id);
+    const { jobs_ids } = queryString.parse(location.search);
+    if (!isEmpty(jobs_ids)) {
+      this._calcPerformance(jobs_ids.split(","));
     }
   }
 
-  _calcPerformance = (base_job_id, job_id) => {
+  _calcPerformance = jobs_ids => {
     const { calcPerformance, history } = this.props;
-    this.setState({ isFetching: true, base_job_id, job_id });
-    history.push(`/performance?base_job_id=${base_job_id}&job_id=${job_id}`);
-    calcPerformance(base_job_id, job_id)
+    this.setState({ isFetching: true, jobs_ids });
+    history.push(`/performance?jobs_ids=${jobs_ids.join(",")}`);
+    calcPerformance(jobs_ids)
       .then(r =>
         this.setState({ performance: r.data.performance, isFetching: false })
       )
@@ -36,23 +41,26 @@ export class PerformancePage extends Component {
   };
 
   render() {
-    const { performance, isFetching, base_job_id, job_id } = this.state;
+    const { performance, isFetching, jobs_ids } = this.state;
     return (
       <Page
         title="Performance"
-        description="Compare two jobs to find out which tests have a performance problem"
+        description="Observe the evolution of the performance of your tests."
         loading={isFetching}
       >
         <PageSection>
           <Card>
             <CardBody>
-              <JobSelectorForm
-                initialData={{
-                  base_job_id,
-                  job_id
-                }}
-                submit={v => this._calcPerformance(v.base_job_id, v.job_id)}
-              />
+              <Grid gutter="md">
+                <GridItem span={6}>
+                  <JobSelectorForm
+                    initialData={{
+                      jobs_ids
+                    }}
+                    submit={v => this._calcPerformance(v.jobs_ids)}
+                  />
+                </GridItem>
+              </Grid>
             </CardBody>
           </Card>
           {isEmpty(performance)
@@ -68,8 +76,7 @@ export class PerformancePage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    calcPerformance: (base_job_id, job_id) =>
-      dispatch(calcPerformance(base_job_id, job_id))
+    calcPerformance: jobs_ids => dispatch(calcPerformance(jobs_ids))
   };
 }
 
