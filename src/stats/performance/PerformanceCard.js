@@ -1,108 +1,51 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { Card, CardBody, CardHeader } from "@patternfly/react-core";
-import HeatMap from "./HeatMap";
-import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { round } from "lodash";
-
-const PerformanceBox = styled.div`
-  display: flex;
-`;
-const HeatMapBox = styled.div`
-  flex: 0 0 50%;
-`;
-
-const TestCasesTableBox = styled.div`
-  flex: 0 0 50%;
-`;
+import { transposePerformance } from "./performanceActions";
 
 function deltaToString(delta) {
-  return `${delta >= 0 ? "+" : "-"}${round(delta, 2)} %`;
+  if (delta === 0) {
+    return "0 %";
+  }
+  return `${delta > 0 ? "+" : ""}${round(delta, 2)} %`;
 }
 
 export default class PerformanceCard extends Component {
-  state = {
-    testcase: null,
-    seeMore: false
-  };
-
   render() {
     const { performance } = this.props;
-    const { testcase, seeMore } = this.state;
     if (isEmpty(performance)) return null;
     const [testName, data] = Object.entries(performance)[0];
-    const firstJob = data[0];
-    const secondJob = data[1];
-    const numberTestcasesToShow = 6;
-    const orderedTestscases = secondJob.testscases
-      .slice()
-      .sort((t1, t2) => t1.delta < t2.delta);
-    const displayedTestscases = seeMore
-      ? orderedTestscases
-      : orderedTestscases.slice(0, numberTestcasesToShow);
+    const { headers, rows } = transposePerformance(data);
     return (
       <Card className="pf-u-mt-md">
-        <CardHeader>
-          {testName}
-          <br />
-          {`Compare job ${firstJob.job_id} with ${secondJob.job_id}`}
-        </CardHeader>
+        <CardHeader>{testName}</CardHeader>
         <CardBody>
-          <PerformanceBox>
-            <HeatMapBox>
-              <HeatMap
-                data={secondJob.testscases}
-                testCaseSelected={testcase => this.setState({ testcase })}
-              />
-            </HeatMapBox>
-            <TestCasesTableBox>
-              {isEmpty(testcase) ? null : (
-                <div>
-                  Class name: {testcase.classname}
-                  <br />
-                  Name: {testcase.name}
-                  <br />
-                  Time: {testcase.time}s
-                  <br />
-                  Delta: {deltaToString(testcase.delta)}
-                </div>
-              )}
-            </TestCasesTableBox>
-          </PerformanceBox>
-          <div>
-            <table className="pf-c-table pf-m-compact pf-m-grid-md">
-              <thead>
-                <tr>
-                  <th>class</th>
-                  <th>name</th>
-                  <th>time</th>
-                  <th>delta</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedTestscases.map((tc, i) => (
-                  <tr key={i}>
-                    <td>{tc.classname}</td>
-                    <td>{tc.name}</td>
-                    <td>{tc.time}s</td>
-                    <td>{deltaToString(tc.delta)}</td>
-                  </tr>
+          <table className="pf-c-table pf-m-compact pf-m-grid-md">
+            <thead>
+              <tr>
+                {headers.map((h, i) => (
+                  <th key={i}>
+                    {isEmpty(h) ? null : (
+                      <Link to={`/jobs/${h.job_id}`}>{h.title}</Link>
+                    )}
+                  </th>
                 ))}
-                {!seeMore &&
-                  displayedTestscases.length === numberTestcasesToShow && (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => this.setState({ seeMore: true })}
-                      >
-                        ...see more
-                      </td>
-                    </tr>
-                  )}
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr key={i}>
+                  {row.map((column, j) => (
+                    <td key={j}>
+                      {j === 0 || j === 1 ? column : deltaToString(column)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </CardBody>
       </Card>
     );
