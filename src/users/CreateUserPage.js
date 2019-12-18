@@ -36,7 +36,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(CreateUserPage);
+export default connect(null, mapDispatchToProps)(CreateUserPage);

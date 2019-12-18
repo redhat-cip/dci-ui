@@ -54,7 +54,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(File);
+export default connect(null, mapDispatchToProps)(File);

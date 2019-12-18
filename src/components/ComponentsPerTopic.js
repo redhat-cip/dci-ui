@@ -97,7 +97,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ComponentsPerTopic);
+export default connect(null, mapDispatchToProps)(ComponentsPerTopic);

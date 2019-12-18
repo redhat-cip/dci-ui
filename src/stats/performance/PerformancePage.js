@@ -80,7 +80,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(PerformancePage);
+export default connect(null, mapDispatchToProps)(PerformancePage);

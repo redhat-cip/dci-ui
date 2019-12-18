@@ -71,7 +71,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(EditTeamModal);
+export default connect(null, mapDispatchToProps)(EditTeamModal);

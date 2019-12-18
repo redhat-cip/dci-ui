@@ -65,7 +65,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddUserToTeamForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUserToTeamForm);

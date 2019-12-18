@@ -24,7 +24,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(NewFeederButton);
+export default connect(null, mapDispatchToProps)(NewFeederButton);

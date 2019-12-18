@@ -132,7 +132,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TeamsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TeamsPage);

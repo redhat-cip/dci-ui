@@ -32,7 +32,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(EditRemoteciButton);
+export default connect(null, mapDispatchToProps)(EditRemoteciButton);

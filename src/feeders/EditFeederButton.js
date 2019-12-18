@@ -31,7 +31,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(EditFeederButton);
+export default connect(null, mapDispatchToProps)(EditFeederButton);

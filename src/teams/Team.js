@@ -280,7 +280,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Team);
+export default connect(null, mapDispatchToProps)(Team);

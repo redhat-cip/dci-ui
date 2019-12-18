@@ -270,13 +270,15 @@ export class PermissionsPage extends Component {
                                   variant="danger"
                                   icon={<TrashIcon />}
                                   onClick={() => {
-                                    removeTeamTopicPermission(team, topic).then(
-                                      () =>
-                                        this.removeTeamFromResource(
-                                          "topics",
-                                          team,
-                                          topic
-                                        )
+                                    removeTeamTopicPermission(
+                                      team,
+                                      topic
+                                    ).then(() =>
+                                      this.removeTeamFromResource(
+                                        "topics",
+                                        team,
+                                        topic
+                                      )
                                     );
                                   }}
                                 >
@@ -315,7 +317,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(PermissionsPage);
+export default connect(null, mapDispatchToProps)(PermissionsPage);

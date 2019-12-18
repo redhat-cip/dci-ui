@@ -25,7 +25,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(NewRemoteciButton);
+export default connect(null, mapDispatchToProps)(NewRemoteciButton);

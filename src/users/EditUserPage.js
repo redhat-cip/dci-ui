@@ -123,7 +123,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(EditUserPage);
+export default connect(null, mapDispatchToProps)(EditUserPage);

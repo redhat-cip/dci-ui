@@ -142,7 +142,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GlobalStatusPage);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalStatusPage);

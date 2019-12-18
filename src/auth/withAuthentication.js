@@ -36,10 +36,7 @@ const withAuthentication = Component => {
     getIdentity: () => dispatch(getIdentity())
   });
 
-  return connect(
-    null,
-    mapDispatchToProps
-  )(WithAuthentication);
+  return connect(null, mapDispatchToProps)(WithAuthentication);
 };
 
 export default withAuthentication;

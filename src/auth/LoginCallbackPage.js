@@ -43,7 +43,4 @@ const mapDispatchToProps = dispatch => ({
   getIdentity: () => dispatch(getIdentity())
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginCallbackPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginCallbackPage);

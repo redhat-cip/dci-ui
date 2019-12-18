@@ -27,7 +27,4 @@ const mapDispatchToProps = dispatch => ({
   deleteCurrentUser: () => dispatch(deleteCurrentUser())
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LogoutPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LogoutPage);

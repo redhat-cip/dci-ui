@@ -133,7 +133,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(JobsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(JobsPage);

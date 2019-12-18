@@ -132,7 +132,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TrendsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TrendsPage);

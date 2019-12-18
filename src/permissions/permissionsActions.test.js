@@ -17,7 +17,10 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("getProductsWithTeams", () => {
   axiosMock.onGet("https://api.example.org/api/v1/products").reply(200, {
-    products: [{ id: "p1", name: "RHEL" }, { id: "p2", name: "OpenStack" }],
+    products: [
+      { id: "p1", name: "RHEL" },
+      { id: "p2", name: "OpenStack" }
+    ],
     _meta: { count: 2 }
   });
   axiosMock
@@ -26,7 +29,10 @@ it("getProductsWithTeams", () => {
   axiosMock
     .onGet("https://api.example.org/api/v1/products/p2/teams")
     .reply(200, {
-      teams: [{ id: "t2", name: "Team 2" }, { id: "t1", name: "Team 1" }],
+      teams: [
+        { id: "t2", name: "Team 2" },
+        { id: "t1", name: "Team 1" }
+      ],
       _meta: { count: 2 }
     });
   const store = mockStore({
@@ -52,7 +58,10 @@ it("getTopicsWithTeams", () => {
         {
           id: "to2",
           name: "Topic 2",
-          teams: [{ id: "t1", name: "Team 1" }, { id: "t2", name: "Team 2" }]
+          teams: [
+            { id: "t1", name: "Team 1" },
+            { id: "t2", name: "Team 2" }
+          ]
         }
       ],
       _meta: { count: 2 }
@@ -73,7 +82,10 @@ it("getTopicsWithTeams", () => {
 
 it("getTeams", () => {
   axiosMock.onGet("https://api.example.org/api/v1/teams").reply(200, {
-    teams: [{ id: "t1", name: "Team 1" }, { id: "t2", name: "Team 2" }],
+    teams: [
+      { id: "t1", name: "Team 1" },
+      { id: "t2", name: "Team 2" }
+    ],
     _meta: { count: 2 }
   });
   const store = mockStore({

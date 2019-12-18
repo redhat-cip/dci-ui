@@ -100,7 +100,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(JobStateFile);
+export default connect(null, mapDispatchToProps)(JobStateFile);

@@ -68,7 +68,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(UnsubscribeForm);
+export default connect(null, mapDispatchToProps)(UnsubscribeForm);

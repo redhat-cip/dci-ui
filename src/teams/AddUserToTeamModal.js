@@ -58,7 +58,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(AddUserToTeamModal);
+export default connect(null, mapDispatchToProps)(AddUserToTeamModal);

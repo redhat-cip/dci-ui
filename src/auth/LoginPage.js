@@ -94,7 +94,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(LoginPage);
+export default connect(null, mapDispatchToProps)(LoginPage);
