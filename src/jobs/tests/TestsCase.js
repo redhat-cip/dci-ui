@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Labels } from "ui";
+import { Button } from "@patternfly/react-core";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { Pre } from "jobs/jobStates/JobStateComponents";
 
@@ -22,8 +23,10 @@ export default class Testcases extends Component {
     return (
       <React.Fragment>
         <tr>
-          <td onClick={this.toggleDetails} className="pf-u-text-align-center">
-            {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
+          <td className="pf-u-text-align-center">
+            <Button variant="link" onClick={this.toggleDetails}>
+              {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
+            </Button>
           </td>
           <td>
             {testscase.action === "skipped" && (

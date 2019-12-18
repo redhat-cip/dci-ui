@@ -26,6 +26,7 @@ class Select extends Component {
           id={id || name}
           name={name}
           value={getValue() || ""}
+          onBlur={this.changeValue}
           onChange={this.changeValue}
           className="pf-c-form-control"
         >

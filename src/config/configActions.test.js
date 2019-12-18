@@ -2,10 +2,10 @@ import axios from "axios";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
-jest.mock("axios");
-
 import * as actions from "./configActions";
 import * as types from "./configActionsTypes";
+
+jest.mock("axios");
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
