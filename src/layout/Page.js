@@ -31,8 +31,8 @@ export default class Page extends Component {
           <PageSection variant={PageSectionVariants.light}>
             <TextContent>
               <Text component="h1">{title}</Text>
-              {HeaderButton}
               {description ? <Text component="p">{description}</Text> : null}
+              {HeaderButton}
             </TextContent>
           </PageSection>
         ) : (
@@ -45,11 +45,9 @@ export default class Page extends Component {
             </PageSection>
           )}
           {loading ? (
-            <PageSection variant={PageSectionVariants.light}>
-              <Bullseye>
-                <BlinkLogo />
-              </Bullseye>
-            </PageSection>
+            <Bullseye>
+              <BlinkLogo />
+            </Bullseye>
           ) : null}
           {!loading && empty ? (
             <PageSection variant={PageSectionVariants.light}>
