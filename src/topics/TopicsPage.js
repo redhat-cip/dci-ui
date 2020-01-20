@@ -1,92 +1,126 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { isEmpty } from "lodash";
+import { isEmpty, get } from "lodash";
 import { Page } from "layout";
+import {
+  Card,
+  Gallery,
+  GalleryItem,
+  PageSection,
+  CardBody,
+  Title
+} from "@patternfly/react-core";
+import {
+  global_danger_color_100,
+  global_success_color_100,
+  global_Color_light_100
+} from "@patternfly/react-tokens";
 import productsActions from "products/productsActions";
-import topicsActions from "./topicsActions";
-import { CopyButton, EmptyState, Labels, ConfirmDeleteModal } from "ui";
+import topicsActions from "../topics/topicsActions";
+import { EmptyState } from "ui";
+import { getTopics } from "../topics/topicsSelectors";
 import NewTopicButton from "./NewTopicButton";
-import EditTopicButton from "./EditTopicButton";
-import { getTopics } from "./topicsSelectors";
-import { Button } from "@patternfly/react-core";
-import { TrashIcon } from "@patternfly/react-icons";
+import {
+  RedhatIcon,
+  OpenshiftIcon,
+  OpenstackIcon,
+  BoxIcon
+} from "@patternfly/react-icons";
+import styled from "styled-components";
+
+const ProductTitle = styled.h3`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+`;
+
+const TopicId = styled.p`
+  font-size: 0.8em;
+  overflow-wrap: break-word;
+`;
+
+function getBackground(export_control) {
+  if (export_control) {
+    return `linear-gradient(to right,${global_success_color_100.value} 0,${global_success_color_100.value} 5px,${global_Color_light_100.value} 5px,${global_Color_light_100.value} 100%) no-repeat`;
+  }
+  return `linear-gradient(to right,${global_danger_color_100.value} 0,${global_danger_color_100.value} 5px,${global_Color_light_100.value} 5px,${global_Color_light_100.value} 100%) no-repeat`;
+}
+
+const Topic = styled(Card)`
+  background: ${props => getBackground(props.export_control)};
+  height: 110px;
+  display: flex;
+`;
 
 export class TopicsPage extends Component {
+  state = {
+    topic: null,
+    components: []
+  };
   componentDidMount() {
     const { fetchTopics } = this.props;
     fetchTopics();
   }
   render() {
-    const { currentUser, topics, isFetching, deleteTopic } = this.props;
+    const { currentUser, topics, isFetching, history } = this.props;
+    const icons = {
+      openshift: OpenshiftIcon,
+      openstack: OpenstackIcon,
+      rhel: RedhatIcon
+    };
+    const products = topics.reduce((acc, topic) => {
+      const product = topic.product;
+      const productName = product ? product.name.toLowerCase() : null;
+      const Icon = get(icons, productName, BoxIcon);
+      const currentProduct = get(acc, product.name, {
+        ...product,
+        topics: [],
+        icon: <Icon size="md" />
+      });
+      currentProduct.topics.push(topic);
+      acc[product.name] = currentProduct;
+      return acc;
+    }, {});
     return (
       <Page
         title="Topics"
-        loading={isFetching && isEmpty(topics)}
-        empty={!isFetching && isEmpty(topics)}
+        description="Click on the topic that interests you to see its components."
+        loading={isFetching && isEmpty(products)}
+        empty={!isFetching && isEmpty(products)}
         HeaderButton={currentUser.isSuperAdmin ? <NewTopicButton /> : null}
         EmptyComponent={
-          <EmptyState
-            title="There is no topics"
-            info="Do you want to create one?"
-          />
+          <EmptyState title="There is no topics" info="See documentation" />
         }
       >
-        <table className="pf-c-table pf-m-compact pf-m-grid-md">
-          <thead>
-            <tr>
-              <th className="pf-u-text-align-center">ID</th>
-              <th
-                className="pf-u-text-align-center"
-                title="This column indicates whether export control was performed on the topic"
-              >
-                Export control
-              </th>
-              <th>Name</th>
-              <th>Next Topic</th>
-              <th>Product</th>
-              <th>Created</th>
-              {currentUser.isSuperAdmin && (
-                <th className="pf-u-text-align-center">Actions</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {topics.map(topic => (
-              <tr key={`${topic.id}.${topic.etag}`}>
-                <td className="pf-u-text-align-center">
-                  <CopyButton text={topic.id} />
-                </td>
-                <th className="pf-u-text-align-center">
-                  {topic.export_control ? (
-                    <Labels.Success>yes</Labels.Success>
-                  ) : (
-                    <Labels.Warning>no</Labels.Warning>
-                  )}
-                </th>
-                <td>{topic.name}</td>
-                <td>{topic.next_topic ? topic.next_topic.name : null}</td>
-                <td>{topic.product ? topic.product.name : null}</td>
-                <td>{topic.from_now}</td>
-                {currentUser.isSuperAdmin && (
-                  <td className="pf-u-text-align-center">
-                    <EditTopicButton className="pf-u-mr-xl" topic={topic} />
-                    <ConfirmDeleteModal
-                      title={`Delete topic ${topic.name}`}
-                      message={`Are you sure you want to delete ${topic.name}?`}
-                      onOk={() => deleteTopic(topic)}
-                    >
-                      {openModal => (
-                        <Button variant="danger" onClick={openModal}>
-                          <TrashIcon />
-                        </Button>
-                      )}
-                    </ConfirmDeleteModal>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {Object.values(products).map(product => (
+          <PageSection>
+            <ProductTitle>
+              <span className="pf-u-mr-xs">{product.icon}</span>
+              {product.name}
+            </ProductTitle>
+            <Gallery gutter="md" key={product.id}>
+              {product.topics.map(topic => (
+                <GalleryItem key={topic.id}>
+                  <Topic
+                    onClick={() =>
+                      history.push(`/topics/${topic.id}/components`)
+                    }
+                    title="Click to see components"
+                    style={{ cursor: "pointer" }}
+                    export_control={topic.export_control}
+                  >
+                    <CardBody>
+                      <Title headingLevel="h6" size="md">
+                        {topic.name}
+                      </Title>
+                      <TopicId>{topic.id}</TopicId>
+                    </CardBody>
+                  </Topic>
+                </GalleryItem>
+              ))}
+            </Gallery>
+          </PageSection>
+        ))}
       </Page>
     );
   }
@@ -103,10 +137,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchTopics: () => {
-      dispatch(topicsActions.all({ embed: "next_topic,product" }));
+      dispatch(topicsActions.all({ embed: "product" }));
       dispatch(productsActions.all());
-    },
-    deleteTopic: topic => dispatch(topicsActions.delete(topic))
+    }
   };
 }
 
