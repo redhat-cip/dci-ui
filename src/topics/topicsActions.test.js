@@ -2,7 +2,7 @@ import axios from "axios";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import axiosMockAdapter from "axios-mock-adapter";
-import { fetchLatestComponents } from "./componentsActions";
+import { fetchLatestComponents } from "./topicsActions";
 
 const mockStore = configureMockStore([thunk]);
 
@@ -13,22 +13,22 @@ it("fetchLatestComponents", () => {
     .onGet("https://api.example.org/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
-        limit: 3,
+        limit: 1,
         offset: 0,
         where: "type:Compose,state:active"
       }
     })
-    .reply(200, { components: [{ id: "c11" }, { id: "c21" }, { id: "c31" }] });
+    .reply(200, { components: [{ id: "c11" }] });
   axiosMock
     .onGet("https://api.example.org/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
-        limit: 3,
+        limit: 1,
         offset: 0,
         where: "type:Harness,state:active"
       }
     })
-    .reply(200, { components: [{ id: "c12" }, { id: "c22" }, { id: "c32" }] });
+    .reply(200, { components: [{ id: "c12" }] });
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store
     .dispatch(
@@ -41,11 +41,7 @@ it("fetchLatestComponents", () => {
       expect(r.data).toEqual({
         components: [
           { id: "c11" },
-          { id: "c21" },
-          { id: "c31" },
-          { id: "c12" },
-          { id: "c22" },
-          { id: "c32" }
+          { id: "c12" }
         ]
       });
     });

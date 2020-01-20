@@ -5,7 +5,7 @@ import JobPage from "./jobs/JobPage";
 import GlobalStatusPage from "./stats/globalStatus/GlobalStatusPage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
-import ComponentsPage from "./components/ComponentsPage";
+import TopicPage from "./topics/TopicPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
 import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
@@ -39,7 +39,7 @@ export default {
   PerformancePage,
   ProductsPage,
   TopicsPage,
-  ComponentsPage,
+  TopicPage,
   RemotecisPage,
   FeedersPage,
   TeamsPage,
