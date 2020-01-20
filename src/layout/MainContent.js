@@ -99,7 +99,6 @@ class MainContent extends Component {
             </React.Fragment>
           )}
           <DCINavItem to="/topics">Topics</DCINavItem>
-          <DCINavItem to="/components">Components</DCINavItem>
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         </NavGroup>
         {currentUser.hasReadOnlyRole && (

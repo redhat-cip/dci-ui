@@ -35,8 +35,11 @@ class App extends Component {
               component={Pages.PerformancePage}
             />
             <PrivateRoute path="/products" component={Pages.ProductsPage} />
-            <PrivateRoute path="/topics" component={Pages.TopicsPage} />
-            <PrivateRoute path="/components" component={Pages.ComponentsPage} />
+            <PrivateRoute path="/topics" component={Pages.TopicsPage} exact />
+            <PrivateRoute
+              path="/topics/:id/components"
+              component={Pages.TopicPage}
+            />
             <PrivateRoute path="/remotecis" component={Pages.RemotecisPage} />
             <PrivateRoute path="/feeders" component={Pages.FeedersPage} />
             <PrivateRoute path="/teams" component={Pages.TeamsPage} />

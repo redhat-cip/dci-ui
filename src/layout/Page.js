@@ -45,11 +45,9 @@ export default class Page extends Component {
             </PageSection>
           )}
           {loading ? (
-            <PageSection variant={PageSectionVariants.light}>
-              <Bullseye>
-                <BlinkLogo />
-              </Bullseye>
-            </PageSection>
+            <Bullseye>
+              <BlinkLogo />
+            </Bullseye>
           ) : null}
           {!loading && empty ? (
             <PageSection variant={PageSectionVariants.light}>

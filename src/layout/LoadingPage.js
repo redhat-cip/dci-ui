@@ -20,11 +20,9 @@ export default class LoadingPage extends Component {
             {description ? <Text component="p">{description}</Text> : null}
           </TextContent>
         </PageSection>
-        <PageSection>
-          <Bullseye>
-            <BlinkLogo />
-          </Bullseye>
-        </PageSection>
+        <Bullseye>
+          <BlinkLogo />
+        </Bullseye>
       </MainContent>
     );
   }
