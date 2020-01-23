@@ -79,9 +79,6 @@ export class JobsPage extends Component {
             filterJobs={filters =>
               this.setState({ filters }, () => this._setPageAndFetchJobs(1))
             }
-            clearFilters={() =>
-              this.setState({ filters: [] }, () => this._setPageAndFetchJobs(1))
-            }
           />
         }
         seeSecondToolbar

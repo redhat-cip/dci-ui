@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "@patternfly/react-core";
+import { Button, Title } from "@patternfly/react-core";
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
 import { getIdentity } from "currentUser/currentUserActions";
@@ -46,9 +46,9 @@ export class LoginPage extends Component {
           </header>
           <div className="pf-c-login__main">
             <header className="pf-c-login__main-header">
-              <h1 className="pf-c-title pf-m-3xl">
+              <Title headingLevel="h1" size="4xl">
                 {seeSSOForm ? "SSO Login" : "DCI Login"}
-              </h1>
+              </Title>
             </header>
             <div className="pf-c-login__main-body">
               {seeSSOForm ? <SSOForm /> : <LoginForm submit={this.submit} />}
