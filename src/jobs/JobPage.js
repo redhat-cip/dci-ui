@@ -6,7 +6,11 @@ import {
   PageSection,
   PageSectionVariants,
   TextContent,
-  Text
+  Text,
+  Tabs,
+  Tab,
+  Stack,
+  StackItem
 } from "@patternfly/react-core";
 import styled from "styled-components";
 import FilesList from "./files/FilesList";
@@ -29,8 +33,14 @@ export class JobPage extends Component {
   state = {
     job: {},
     isFetching: true,
-    currentEndpoint: "jobStates",
-    fileIndex: 0
+    activeTabKey: 0,
+    fileIndex: 0,
+    endpoints: [
+      { title: "Logs", value: "jobStates" },
+      { title: "Tests", value: "tests" },
+      { title: "Issues", value: "issues" },
+      { title: "Files", value: "files" }
+    ]
   };
 
   componentDidMount() {
@@ -42,7 +52,9 @@ export class JobPage extends Component {
       getIssues,
       timezone
     } = this.props;
+    const { endpoints } = this.state;
     const { id, endpoint } = match.params;
+    const activeTabKey = endpoints.findIndex(e => e.value === endpoint);
     fetchJob(id)
       .then(response => {
         const job = response.data.job;
@@ -62,7 +74,7 @@ export class JobPage extends Component {
           );
           this.setState({
             job: enhancedJob,
-            currentEndpoint: endpoint
+            activeTabKey
           });
         });
       })
@@ -107,37 +119,7 @@ export class JobPage extends Component {
 
   render() {
     const { history, location } = this.props;
-    const { job, isFetching, currentEndpoint } = this.state;
-    const endpoints = ["jobStates", "tests", "issues", "files"];
-    const endpointsTitles = {
-      jobStates: "Logs",
-      tests: "Tests",
-      issues: "Issues",
-      files: "Files"
-    };
-    const Menu = endpoints.map(endpoint => (
-      <li
-        key={endpoint}
-        className={`pf-c-tabs__item ${
-          endpoint === currentEndpoint ? "pf-m-current" : ""
-        }`}
-      >
-        <button
-          className="pf-c-tabs__button"
-          id={`job-details-nav-${endpoint}`}
-          aria-controls={`${endpoint}-section`}
-          onClick={() =>
-            this.setState(
-              { currentEndpoint: endpoint },
-              history.push(`/jobs/${job.id}/${endpoint}`)
-            )
-          }
-        >
-          {endpointsTitles[endpoint]}
-        </button>
-      </li>
-    ));
-    const currentEndpointIndex = endpoints.indexOf(currentEndpoint);
+    const { job, isFetching, activeTabKey, endpoints } = this.state;
     const loading = isFetching && isEmpty(job);
     return (
       <Page
@@ -145,40 +127,58 @@ export class JobPage extends Component {
           !loading && (
             <HeaderSection variant={PageSectionVariants.light}>
               <TextContent>
-                <Text component="h1">{endpointsTitles[currentEndpoint]}</Text>
+                <Text component="h1">{endpoints[activeTabKey].title}</Text>
               </TextContent>
               <div className="pf-c-tabs" aria-label="Job details navigation">
-                <ul className="pf-c-tabs__list">{Menu}</ul>
+                <Tabs
+                  activeKey={activeTabKey}
+                  onSelect={(event, tabIndex) => {
+                    this.setState(
+                      { activeTabKey: tabIndex },
+                      history.push(
+                        `/jobs/${job.id}/${endpoints[tabIndex].value}`
+                      )
+                    );
+                  }}
+                >
+                  {endpoints.map((endpoint, i) => (
+                    <Tab
+                      key={endpoint.value}
+                      eventKey={i}
+                      title={endpoints[i].title}
+                    ></Tab>
+                  ))}
+                </Tabs>
               </div>
             </HeaderSection>
           )
         }
         loading={loading}
       >
-        <div className="pf-l-stack pf-m-gutter">
-          <div className="pf-l-stack__item">
+        <Stack gutter="md">
+          <StackItem>
             <ul
               className="pf-c-data-list pf-u-box-shadow-md"
               aria-label="job detail"
             >
               <JobSummary job={job} history={history} />
             </ul>
-          </div>
-          <div className="pf-l-stack__item pf-m-main">
-            {currentEndpointIndex === 0 && (
+          </StackItem>
+          <StackItem className="pf-m-main">
+            {activeTabKey === 0 && (
               <JobStatesList jobstates={job.jobstates} location={location} />
             )}
-            {currentEndpointIndex === 1 && <TestsList tests={job.tests} />}
-            {currentEndpointIndex === 2 && (
+            {activeTabKey === 1 && <TestsList tests={job.tests} />}
+            {activeTabKey === 2 && (
               <IssuesList
                 issues={job.issues}
                 createIssue={this.createIssue}
                 deleteIssue={this.deleteIssue}
               />
             )}
-            {currentEndpointIndex === 3 && <FilesList files={job.files} />}
-          </div>
-        </div>
+            {activeTabKey === 3 && <FilesList files={job.files} />}
+          </StackItem>
+        </Stack>
       </Page>
     );
   }

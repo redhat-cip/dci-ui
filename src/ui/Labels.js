@@ -1,16 +1,10 @@
-import React from "react";
 import styled from "styled-components";
 import {
   global_danger_color_100,
   global_success_color_100,
   global_warning_color_100
 } from "@patternfly/react-tokens";
-
-const Label = ({ children, className, ...props }) => (
-  <span {...props} className={`pf-c-label ${className}`}>
-    {children}
-  </span>
-);
+import { Label } from "@patternfly/react-core";
 
 const RegressionLabel = styled(Label)`
   background-color: ${global_danger_color_100.value};

@@ -21,7 +21,7 @@ const AlertsContainer = styled.div`
 export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
-      <ul className="pf-c-alert-group" role="status">
+      <React.Fragment>
         {values(alerts).map(alert => (
           <Alert
             key={alert.id}
@@ -42,7 +42,7 @@ export function Alerts({ alerts, hide }) {
               : null}
           </Alert>
         ))}
-      </ul>
+      </React.Fragment>
     </AlertsContainer>
   );
 }

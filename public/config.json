@@ -1,5 +1,5 @@
 {
-  "apiURL": "https://api.distributed-ci.io",
+  "apiURL": "http://localhost:5000",
   "sso": {
     "url": "http://localhost:8180",
     "realm": "dci-test",
