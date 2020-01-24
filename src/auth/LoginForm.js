@@ -19,10 +19,10 @@ export default class DCILoginForm extends Component {
     const { canSubmit } = this.state;
     return (
       <Formsy
+        className="pf-c-form"
         onValidSubmit={submit}
         onValid={this.enableButton}
         onInvalid={this.disableButton}
-        className="pf-c-form"
       >
         <Input label="Username" name="username" required />
         <Input label="Password" name="password" type="password" required />

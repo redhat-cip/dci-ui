@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { withFormsy } from "formsy-react";
 
 class HiddenInput extends Component {
@@ -15,10 +14,5 @@ class HiddenInput extends Component {
     );
   }
 }
-
-HiddenInput.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string.isRequired
-};
 
 export default withFormsy(HiddenInput);

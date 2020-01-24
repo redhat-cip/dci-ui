@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withFormsy } from "formsy-react";
+import {
+  FormGroup,
+  FormSelect,
+  FormSelectOption
+} from "@patternfly/react-core";
 
 class Select extends Component {
-  changeValue = event => {
-    this.props.setValue(event.currentTarget.value || null);
+  handleSelectChange = value => {
+    const { setValue } = this.props;
+    setValue(value);
   };
 
   render() {
@@ -14,33 +20,35 @@ class Select extends Component {
       name,
       required,
       options,
+      helperText,
       getErrorMessage,
+      isValid,
       getValue
     } = this.props;
-    const errorMessage = getErrorMessage();
-
     return (
-      <div className="pf-c-form__group">
-        <label htmlFor={name}>{label}</label>
-        <select
+      <FormGroup
+        label={label}
+        isRequired={required}
+        fieldId={id || name}
+        helperText={helperText}
+        helperTextInvalid={getErrorMessage()}
+        isValid={isValid()}
+      >
+        <FormSelect
+          value={getValue() || ""}
+          onChange={this.handleSelectChange}
           id={id || name}
           name={name}
-          value={getValue() || ""}
-          onBlur={this.changeValue}
-          onChange={this.changeValue}
-          className="pf-c-form-control"
         >
-          {required ? null : <option value="" />}
-          {options.map((option, i) => (
-            <option key={i} value={option.id} name={option.name}>
-              {option.name}
-            </option>
+          {options.map((option, index) => (
+            <FormSelectOption
+              key={index}
+              value={option.id}
+              label={option.name}
+            />
           ))}
-        </select>
-        <span className="pf-c-form__helper-text pf-m-error">
-          {errorMessage}
-        </span>
-      </div>
+        </FormSelect>
+      </FormGroup>
     );
   }
 }

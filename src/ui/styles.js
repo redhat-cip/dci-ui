@@ -51,7 +51,7 @@ import "@patternfly/patternfly/components/DataList/data-list.css";
 // import "@patternfly/patternfly/components/Progress/progress.css";
 // import "@patternfly/patternfly/components/Radio/radio.css";
 // import "@patternfly/patternfly/components/TabContent/tab-content.css";
-import "@patternfly/patternfly/components/Form/form.css";
+// import "@patternfly/patternfly/components/Form/form.css";
 // import "@patternfly/patternfly/components/Content/content.css";
 // import "@patternfly/patternfly/components/Check/check.css";
 // import "@patternfly/patternfly/components/Tooltip/tooltip.css";
