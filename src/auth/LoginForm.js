@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
 import { Input } from "ui/form";
-import {
-  Button,
-  ActionGroup,
-  Toolbar,
-  ToolbarGroup
-} from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
 
-export default class LoginForm extends Component {
+export default class DCILoginForm extends Component {
   state = { canSubmit: false };
 
   disableButton = () => {
@@ -31,15 +26,9 @@ export default class LoginForm extends Component {
       >
         <Input label="Username" name="username" required />
         <Input label="Password" name="password" type="password" required />
-        <ActionGroup>
-          <Toolbar>
-            <ToolbarGroup>
-              <Button variant="primary" isDisabled={!canSubmit} type="submit">
-                Log In
-              </Button>
-            </ToolbarGroup>
-          </Toolbar>
-        </ActionGroup>
+        <Button variant="primary" isDisabled={!canSubmit} type="submit">
+          Log in
+        </Button>
       </Formsy>
     );
   }

@@ -6,32 +6,28 @@ import {
   Toolbar,
   ToolbarGroup
 } from "@patternfly/react-core";
-import styled from "styled-components";
-
-const LoginBox = styled.div`
-  min-height: 260px;
-`;
 
 export class SSOForm extends Component {
   render() {
     const { auth } = this.props;
     return (
-      <LoginBox>
+      <div>
         <ActionGroup>
           <Toolbar>
             <ToolbarGroup>
               <Button
                 variant="danger"
+                className="pf-u-mt-md"
                 onClick={() => {
                   auth.signinRedirect();
                 }}
               >
-                Red Hat SSO
+                Log in
               </Button>
             </ToolbarGroup>
           </Toolbar>
         </ActionGroup>
-      </LoginBox>
+      </div>
     );
   }
 }
