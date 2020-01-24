@@ -47,7 +47,6 @@ export class NewTeamModal extends Component {
       >
         <TeamForm
           id="team-form"
-          className="pf-c-form"
           team={team}
           onValidSubmit={newTeam => {
             createTeam(newTeam);

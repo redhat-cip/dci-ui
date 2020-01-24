@@ -5,7 +5,7 @@ import Formsy from "formsy-react";
 import {
   Input,
   Select,
-  TextareaJSON,
+  TextAreaJSON,
   HiddenInput,
   Checkbox,
   FormModal
@@ -105,7 +105,7 @@ export class TopicForm extends Component {
                 required
               />
             )}
-            <TextareaJSON
+            <TextAreaJSON
               id="topic-form__component_types"
               label="Component types"
               name="component_types"

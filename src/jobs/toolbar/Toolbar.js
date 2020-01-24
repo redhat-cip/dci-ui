@@ -22,13 +22,7 @@ export default class DCIToolbar extends Component {
   };
 
   render() {
-    const {
-      filterJobs,
-      activeFilters,
-      pagination,
-      count,
-      goTo
-    } = this.props;
+    const { filterJobs, activeFilters, pagination, count, goTo } = this.props;
     return (
       <Toolbar>
         <ToolbarSection
