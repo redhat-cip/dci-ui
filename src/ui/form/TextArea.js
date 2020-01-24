@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withFormsy } from "formsy-react";
-import { FormGroup, TextInput } from "@patternfly/react-core";
+import { FormGroup, TextArea } from "@patternfly/react-core";
 
-class Input extends Component {
-  handleTextInputChange = value => {
+class DCITextArea extends Component {
+  handleTextAreaChange = value => {
     const { setValue } = this.props;
     setValue(value);
   };
@@ -30,13 +30,13 @@ class Input extends Component {
         helperTextInvalid={getErrorMessage()}
         isValid={isValid()}
       >
-        <TextInput
+        <TextArea
           isRequired={required}
           type={type}
           id={id || name}
           name={name}
           value={getValue() || ""}
-          onChange={this.handleTextInputChange}
+          onChange={this.handleTextAreaChange}
           placeholder={placeholder}
         />
       </FormGroup>
@@ -44,4 +44,4 @@ class Input extends Component {
   }
 }
 
-export default withFormsy(Input);
+export default withFormsy(DCITextArea);

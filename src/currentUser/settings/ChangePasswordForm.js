@@ -6,7 +6,8 @@ import {
   ToolbarGroup,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
+  Form
 } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, HiddenInput } from "ui/form";
@@ -41,45 +42,46 @@ export default class ChangePasswordForm extends Component {
         <CardBody>
           <Formsy
             id="change-password-form"
-            className="pf-c-form"
             onValidSubmit={currentUser => submit(currentUser)}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="current-user-form__etag"
-              name="etag"
-              value={currentUser.etag}
-            />
-            <Input
-              id="change-password-form__current_password"
-              label="Current password"
-              name="current_password"
-              type="password"
-              value={current_password}
-              required
-            />
-            <Input
-              id="change-password-form__new_password"
-              label="New password"
-              name="new_password"
-              type="password"
-              value={new_password}
-              required
-            />
-            <ActionGroup>
-              <Toolbar>
-                <ToolbarGroup>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    isDisabled={!canSubmit}
-                  >
-                    Change your password
-                  </Button>
-                </ToolbarGroup>
-              </Toolbar>
-            </ActionGroup>
+            <Form>
+              <HiddenInput
+                id="current-user-form__etag"
+                name="etag"
+                value={currentUser.etag}
+              />
+              <Input
+                id="change-password-form__current_password"
+                label="Current password"
+                name="current_password"
+                type="password"
+                value={current_password}
+                required
+              />
+              <Input
+                id="change-password-form__new_password"
+                label="New password"
+                name="new_password"
+                type="password"
+                value={new_password}
+                required
+              />
+              <ActionGroup>
+                <Toolbar>
+                  <ToolbarGroup>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      isDisabled={!canSubmit}
+                    >
+                      Change your password
+                    </Button>
+                  </ToolbarGroup>
+                </Toolbar>
+              </ActionGroup>
+            </Form>
           </Formsy>
         </CardBody>
       </Card>

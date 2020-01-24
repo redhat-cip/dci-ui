@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "@patternfly/react-core";
+import { Button, Form } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import {
   Input,
   Select,
-  TextareaJSON,
+  TextAreaJSON,
   HiddenInput,
   Checkbox,
   FormModal
@@ -65,7 +65,6 @@ export class TopicForm extends Component {
         >
           <Formsy
             id="topic-form"
-            className="pf-c-form"
             onValidSubmit={topic => {
               this.closeModal();
               submit(topic);
@@ -73,47 +72,53 @@ export class TopicForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput id="topic-form__etag" name="etag" value={topic.etag} />
-            <Input
-              id="topic-form__name"
-              label="Name"
-              name="name"
-              value={topic.name}
-              required
-            />
-            {currentUser.isSuperAdmin ? (
-              <Checkbox
-                label="Export Control"
-                name="export_control"
-                value={topic.export_control}
+            <Form>
+              <HiddenInput
+                id="topic-form__etag"
+                name="etag"
+                value={topic.etag}
               />
-            ) : null}
-            <Select
-              id="topic-form__next_topic"
-              label="Next topic"
-              name="next_topic_id"
-              options={topics}
-              value={topic.next_topic_id}
-            />
-            {isEmpty(products) ? null : (
-              <Select
-                id="topic-form__product_id"
-                label="Product"
-                name="product_id"
-                options={products}
-                value={topic.product_id || products[0].id}
+              <Input
+                id="topic-form__name"
+                label="Name"
+                name="name"
+                value={topic.name}
                 required
               />
-            )}
-            <TextareaJSON
-              id="topic-form__component_types"
-              label="Component types"
-              name="component_types"
-              required
-              validations="isJSON"
-              validationError="Component types should be a valid JSON"
-              value={topic.component_types || []}
-            />
+              {currentUser.isSuperAdmin ? (
+                <Checkbox
+                  label="Export Control"
+                  name="export_control"
+                  value={topic.export_control}
+                />
+              ) : null}
+              <Select
+                id="topic-form__next_topic"
+                label="Next topic"
+                name="next_topic_id"
+                options={topics}
+                value={topic.next_topic_id}
+              />
+              {isEmpty(products) ? null : (
+                <Select
+                  id="topic-form__product_id"
+                  label="Product"
+                  name="product_id"
+                  options={products}
+                  value={topic.product_id || products[0].id}
+                  required
+                />
+              )}
+              <TextAreaJSON
+                id="topic-form__component_types"
+                label="Component types"
+                name="component_types"
+                required
+                validations="isJSON"
+                validationError="Component types should be a valid JSON"
+                value={topic.component_types || []}
+              />
+            </Form>
           </Formsy>
         </FormModal>
         <Button

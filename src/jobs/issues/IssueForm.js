@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "@patternfly/react-core";
+import { Button, Form } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, FormModal } from "ui/form";
 
@@ -44,7 +44,6 @@ export default class IssueForm extends Component {
         >
           <Formsy
             id="issue-form"
-            className="pf-c-form"
             onValidSubmit={issue => {
               this.closeModal();
               submit(issue);
@@ -52,15 +51,17 @@ export default class IssueForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <Input
-              id="issue-form__url"
-              label="Url"
-              name="url"
-              value={issue.url}
-              validations="isUrl"
-              validationError="This is not a valid url"
-              required
-            />
+            <Form>
+              <Input
+                id="issue-form__url"
+                label="Url"
+                name="url"
+                value={issue.url}
+                validations="isUrl"
+                validationError="This is not a valid url"
+                required
+              />
+            </Form>
           </Formsy>
         </FormModal>
         <Button variant="primary" onClick={this.showModal}>

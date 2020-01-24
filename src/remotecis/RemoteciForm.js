@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "@patternfly/react-core";
+import { Button, Form } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput, FormModal } from "ui/form";
 import { isEmpty } from "lodash";
@@ -52,7 +52,6 @@ export default class RemoteciForm extends Component {
         >
           <Formsy
             id="remoteci-form"
-            className="pf-c-form"
             onValidSubmit={remoteci => {
               this.closeModal();
               submit(remoteci);
@@ -60,28 +59,30 @@ export default class RemoteciForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="remoteci-form__etag"
-              name="etag"
-              value={remoteci.etag}
-            />
-            <Input
-              id="remoteci-form__name"
-              label="Name"
-              name="name"
-              value={remoteci.name}
-              required
-            />
-            {isEmpty(teams) ? null : (
-              <Select
-                id="remoteci-form__team"
-                label="Team Owner"
-                name="team_id"
-                options={teams}
-                value={remoteci.team_id || teams[0].id}
+            <Form>
+              <HiddenInput
+                id="remoteci-form__etag"
+                name="etag"
+                value={remoteci.etag}
+              />
+              <Input
+                id="remoteci-form__name"
+                label="Name"
+                name="name"
+                value={remoteci.name}
                 required
               />
-            )}
+              {isEmpty(teams) ? null : (
+                <Select
+                  id="remoteci-form__team"
+                  label="Team Owner"
+                  name="team_id"
+                  options={teams}
+                  value={remoteci.team_id || teams[0].id}
+                  required
+                />
+              )}
+            </Form>
           </Formsy>
         </FormModal>
         <Button

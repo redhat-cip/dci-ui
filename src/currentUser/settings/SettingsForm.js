@@ -9,7 +9,8 @@ import {
   ToolbarGroup,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
+  Form
 } from "@patternfly/react-core";
 
 export default class SettingsForm extends Component {
@@ -38,62 +39,63 @@ export default class SettingsForm extends Component {
         <CardBody>
           <Formsy
             id="current-user-form"
-            className="pf-c-form"
             onValidSubmit={currentUser => submit(currentUser)}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="current-user-form__etag"
-              name="etag"
-              value={currentUser.etag}
-            />
-            <Input
-              id="current-user-form__email"
-              label="Email"
-              name="email"
-              value={currentUser.email}
-              required
-            />
-            <Input
-              id="current-user-form__fullname"
-              label="Full name"
-              name="fullname"
-              value={currentUser.fullname}
-              required
-            />
-            <Select
-              id="current-user-form__currentUser"
-              label="Time zone"
-              name="timezone"
-              options={timezones}
-              value={currentUser.timezone}
-              required
-            />
-            <Input
-              id="current-user-form__current_password"
-              label="Current password"
-              name="current_password"
-              type="password"
-              value={currentUser.current_password}
-              required
-            />
-            <HiddenInput
-              id="current-user-form__new_password"
-              label="Current password"
-              name="new_password"
-              type="password"
-              value=""
-            />
-            <ActionGroup>
-              <Toolbar>
-                <ToolbarGroup>
-                  <Button type="submit" isDisabled={!canSubmit}>
-                    Update your settings
-                  </Button>
-                </ToolbarGroup>
-              </Toolbar>
-            </ActionGroup>
+            <Form>
+              <HiddenInput
+                id="current-user-form__etag"
+                name="etag"
+                value={currentUser.etag}
+              />
+              <Input
+                id="current-user-form__email"
+                label="Email"
+                name="email"
+                value={currentUser.email}
+                required
+              />
+              <Input
+                id="current-user-form__fullname"
+                label="Full name"
+                name="fullname"
+                value={currentUser.fullname}
+                required
+              />
+              <Select
+                id="current-user-form__currentUser"
+                label="Time zone"
+                name="timezone"
+                options={timezones}
+                value={currentUser.timezone}
+                required
+              />
+              <Input
+                id="current-user-form__current_password"
+                label="Current password"
+                name="current_password"
+                type="password"
+                value={currentUser.current_password}
+                required
+              />
+              <HiddenInput
+                id="current-user-form__new_password"
+                label="Current password"
+                name="new_password"
+                type="password"
+                value=""
+              />
+              <ActionGroup>
+                <Toolbar>
+                  <ToolbarGroup>
+                    <Button type="submit" isDisabled={!canSubmit}>
+                      Update your settings
+                    </Button>
+                  </ToolbarGroup>
+                </Toolbar>
+              </ActionGroup>
+            </Form>
           </Formsy>
         </CardBody>
       </Card>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
 import { Input } from "ui/form";
-import { Button } from "@patternfly/react-core";
+import { Button, Form } from "@patternfly/react-core";
 
 export default class DCILoginForm extends Component {
   state = { canSubmit: false };
@@ -22,13 +22,14 @@ export default class DCILoginForm extends Component {
         onValidSubmit={submit}
         onValid={this.enableButton}
         onInvalid={this.disableButton}
-        className="pf-c-form"
       >
-        <Input label="Username" name="username" required />
-        <Input label="Password" name="password" type="password" required />
-        <Button variant="primary" isDisabled={!canSubmit} type="submit">
-          Log in
-        </Button>
+        <Form>
+          <Input label="Username" name="username" required />
+          <Input label="Password" name="password" type="password" required />
+          <Button variant="primary" isDisabled={!canSubmit} type="submit">
+            Log in
+          </Button>
+        </Form>
       </Formsy>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "@patternfly/react-core";
+import { Button, Form } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, Select, HiddenInput, FormModal } from "ui/form";
 import { getFeeders } from "./feedersSelectors";
@@ -55,7 +55,6 @@ export class FeederForm extends Component {
         >
           <Formsy
             id="feeder-form"
-            className="pf-c-form"
             onValidSubmit={feeder => {
               this.closeModal();
               submit(feeder);
@@ -63,28 +62,30 @@ export class FeederForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >
-            <HiddenInput
-              id="feeder-form__etag"
-              name="etag"
-              value={feeder.etag}
-            />
-            <Input
-              id="feeder-form__name"
-              label="Name"
-              name="name"
-              value={feeder.name}
-              required
-            />
-            {isEmpty(teams) ? null : (
-              <Select
-                id="feeder-form__team"
-                label="Team Owner"
-                name="team_id"
-                options={teams}
-                value={feeder.team_id || teams[0].id}
+            <Form>
+              <HiddenInput
+                id="feeder-form__etag"
+                name="etag"
+                value={feeder.etag}
+              />
+              <Input
+                id="feeder-form__name"
+                label="Name"
+                name="name"
+                value={feeder.name}
                 required
               />
-            )}
+              {isEmpty(teams) ? null : (
+                <Select
+                  id="feeder-form__team"
+                  label="Team Owner"
+                  name="team_id"
+                  options={teams}
+                  value={feeder.team_id || teams[0].id}
+                  required
+                />
+              )}
+            </Form>
           </Formsy>
         </FormModal>
         <Button

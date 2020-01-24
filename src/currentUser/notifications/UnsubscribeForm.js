@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import Formsy from "formsy-react";
-import { Button, Card, CardBody } from "@patternfly/react-core";
+import { Button, Card, CardBody, Form } from "@patternfly/react-core";
 import { Select } from "ui/form";
 import { unsubscribeFromARemoteci } from "currentUser/currentUserActions";
 
@@ -31,29 +31,30 @@ export class UnsubscribeForm extends Component {
         <CardBody>
           <Formsy
             id="unsubscription-form"
-            className="pf-c-form"
             onValid={this.enableButton}
             onInvalid={this.disableButton}
             onValidSubmit={remoteci =>
               unsubscribeFromARemoteci(remoteciIds[remoteci.id])
             }
           >
-            <Select
-              id="unsubscription-form__unsubscribeSelect"
-              label="Subscribed RemoteCI"
-              name="id"
-              value={isEmpty(remotecis) ? null : remotecis[0].id}
-              options={remotecis}
-              required
-            />
-            <Button
-              id="unsubscription-form__submitButton"
-              type="submit"
-              variant="secondary"
-              isDisabled={!canSubmit}
-            >
-              Unsubscribe
-            </Button>
+            <Form>
+              <Select
+                id="unsubscription-form__unsubscribeSelect"
+                label="Subscribed RemoteCI"
+                name="id"
+                value={isEmpty(remotecis) ? null : remotecis[0].id}
+                options={remotecis}
+                required
+              />
+              <Button
+                id="unsubscription-form__submitButton"
+                type="submit"
+                variant="secondary"
+                isDisabled={!canSubmit}
+              >
+                Unsubscribe
+              </Button>
+            </Form>
           </Formsy>
         </CardBody>
       </Card>
