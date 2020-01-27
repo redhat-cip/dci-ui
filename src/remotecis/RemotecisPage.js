@@ -4,12 +4,14 @@ import { isEmpty } from "lodash";
 import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
 import teamsActions from "teams/teamsActions";
-import { CopyButton, Labels, EmptyState, ConfirmDeleteButton } from "ui";
+import { CopyButton, Labels, EmptyState, ConfirmDeleteModal } from "ui";
 import NewRemoteciButton from "./NewRemoteciButton";
 import EditRemoteciButton from "./EditRemoteciButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "teams/teamsSelectors";
 import SeeCredentialsModal from "./SeeCredentialsModal";
+import { Button } from "@patternfly/react-core";
+import { TrashIcon } from "@patternfly/react-icons";
 
 export class RemotecisPage extends Component {
   componentDidMount() {
@@ -74,12 +76,17 @@ export class RemotecisPage extends Component {
                     remoteci={remoteci}
                     teams={teams}
                   />
-                  <ConfirmDeleteButton
+                  <ConfirmDeleteModal
                     title={`Delete remoteci ${remoteci.name} ?`}
+                    message={`Are you sure you want to delete ${remoteci.name}?`}
                     onOk={() => deleteRemoteci(remoteci)}
                   >
-                    {`Are you sure you want to delete ${remoteci.name}?`}
-                  </ConfirmDeleteButton>
+                    {openModal => (
+                      <Button variant="danger" onClick={openModal}>
+                        <TrashIcon />
+                      </Button>
+                    )}
+                  </ConfirmDeleteModal>
                 </td>
               </tr>
             ))}

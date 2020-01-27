@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import productsActions from "./productsActions";
-import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
 import NewProductButton from "./NewProductButton";
 import EditProductButton from "./EditProductButton";
 import { getProducts } from "./productSelectors";
+import { Button } from "@patternfly/react-core";
+import { TrashIcon } from "@patternfly/react-icons";
 
 export class ProductsPage extends Component {
   componentDidMount() {
@@ -52,12 +54,17 @@ export class ProductsPage extends Component {
                 <td className="pf-u-text-align-center">{product.from_now}</td>
                 <td className="pf-u-text-align-center">
                   <EditProductButton className="pf-u-mr-xs" product={product} />
-                  <ConfirmDeleteButton
+                  <ConfirmDeleteModal
                     title={`Delete product ${product.name}`}
+                    message={`Are you sure you want to delete ${product.name}?`}
                     onOk={() => deleteProduct(product)}
                   >
-                    {`Are you sure you want to delete ${product.name}?`}
-                  </ConfirmDeleteButton>
+                    {openModal => (
+                      <Button variant="danger" onClick={openModal}>
+                        <TrashIcon />
+                      </Button>
+                    )}
+                  </ConfirmDeleteModal>
                 </td>
               </tr>
             ))}

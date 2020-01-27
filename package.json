@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.5",
+    "@types/styled-components": "^4.4.2",
     "acorn": "^7.1.0",
     "axios-mock-adapter": "^1.17.0",
     "prettier": "^1.19.1",

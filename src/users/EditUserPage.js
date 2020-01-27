@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
+import { Grid, GridItem, Card, CardBody, Button } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import { LoadingPage, Page } from "layout";
 import usersActions from "./usersActions";
@@ -10,8 +10,9 @@ import {
   addUserToTeam,
   deleteUserFromTeam
 } from "./usersActions";
-import { ConfirmDeleteButton } from "ui";
 import AddUserToTeamForm from "./AddUserToTeamsForm";
+import { TrashIcon } from "@patternfly/react-icons";
+import { ConfirmDeleteModal } from "ui";
 
 export class EditUserPage extends Component {
   state = {
@@ -88,16 +89,21 @@ export class EditUserPage extends Component {
                       <tr key={team.id}>
                         <td>{team.name}</td>
                         <td className="pf-c-table__action">
-                          <ConfirmDeleteButton
+                          <ConfirmDeleteModal
                             title={`Delete ${user.name} from ${team.name}`}
+                            message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
                             onOk={() => {
                               deleteUserFromTeam(user, team).then(
                                 this.fetchUserTeams
                               );
                             }}
                           >
-                            {`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
-                          </ConfirmDeleteButton>
+                            {openModal => (
+                              <Button variant="danger" onClick={openModal}>
+                                <TrashIcon />
+                              </Button>
+                            )}
+                          </ConfirmDeleteModal>
                         </td>
                       </tr>
                     ))}
