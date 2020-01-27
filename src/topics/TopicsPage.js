@@ -4,10 +4,12 @@ import { isEmpty } from "lodash";
 import { Page } from "layout";
 import productsActions from "products/productsActions";
 import topicsActions from "./topicsActions";
-import { CopyButton, EmptyState, Labels, ConfirmDeleteButton } from "ui";
+import { CopyButton, EmptyState, Labels, ConfirmDeleteModal } from "ui";
 import NewTopicButton from "./NewTopicButton";
 import EditTopicButton from "./EditTopicButton";
 import { getTopics } from "./topicsSelectors";
+import { Button } from "@patternfly/react-core";
+import { TrashIcon } from "@patternfly/react-icons";
 
 export class TopicsPage extends Component {
   componentDidMount() {
@@ -68,12 +70,17 @@ export class TopicsPage extends Component {
                 {currentUser.isSuperAdmin && (
                   <td className="pf-u-text-align-center">
                     <EditTopicButton className="pf-u-mr-xl" topic={topic} />
-                    <ConfirmDeleteButton
+                    <ConfirmDeleteModal
                       title={`Delete topic ${topic.name}`}
+                      message={`Are you sure you want to delete ${topic.name}?`}
                       onOk={() => deleteTopic(topic)}
                     >
-                      {`Are you sure you want to delete ${topic.name}?`}
-                    </ConfirmDeleteButton>
+                      {openModal => (
+                        <Button variant="danger" onClick={openModal}>
+                          <TrashIcon />
+                        </Button>
+                      )}
+                    </ConfirmDeleteModal>
                   </td>
                 )}
               </tr>

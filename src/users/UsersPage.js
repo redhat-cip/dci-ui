@@ -10,16 +10,11 @@ import {
 } from "@patternfly/react-core";
 import { WarningTriangleIcon, EditAltIcon } from "@patternfly/react-icons";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
-import styled from "styled-components";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import usersActions from "./usersActions";
-import { CopyButton, EmptyState, KebabDropdown } from "ui";
+import { CopyButton, EmptyState, KebabDropdown, TextRed } from "ui";
 import { getUsers } from "./usersSelectors";
-
-const TextRed = styled.span`
-  color: ${global_danger_color_100.value};
-`;
 
 export class UsersPage extends Component {
   componentDidMount() {

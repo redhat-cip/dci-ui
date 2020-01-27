@@ -27,7 +27,7 @@ import {
   global_warning_color_100,
   global_Color_light_100
 } from "@patternfly/react-tokens";
-import { Labels, KebabDropdown } from "ui";
+import { Labels, KebabDropdown, TextRed, TextGreen } from "ui";
 import { isEmpty, orderBy } from "lodash";
 import jobsActions from "./jobsActions";
 
@@ -95,14 +95,6 @@ function getIcon(status) {
       );
   }
 }
-
-const TextRed = styled.span`
-  color: ${global_danger_color_100.value};
-`;
-
-const TextGreen = styled.span`
-  color: ${global_success_color_100.value};
-`;
 
 const Regressions = ({ regressions }) => (
   <TextRed className="pf-u-ml-md">

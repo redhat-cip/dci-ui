@@ -4,11 +4,13 @@ import { isEmpty } from "lodash";
 import { Page } from "layout";
 import feedersActions from "./feedersActions";
 import teamsActions from "teams/teamsActions";
-import { CopyButton, EmptyState, ConfirmDeleteButton } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
 import NewFeederButton from "./NewFeederButton";
 import EditFeederButton from "./EditFeederButton";
 import { getFeeders } from "./feedersSelectors";
 import { getTeams } from "teams/teamsSelectors";
+import { TrashIcon } from "@patternfly/react-icons";
+import { Button } from "@patternfly/react-core";
 
 export class FeedersPage extends Component {
   componentDidMount() {
@@ -52,12 +54,17 @@ export class FeedersPage extends Component {
                 <td className="pf-u-text-align-center">{feeder.from_now}</td>
                 <td className="pf-u-text-align-center">
                   <EditFeederButton className="pf-u-mr-xs" feeder={feeder} />
-                  <ConfirmDeleteButton
+                  <ConfirmDeleteModal
                     title={`Delete feeder ${feeder.name}`}
+                    message={`Are you sure you want to delete ${feeder.name}?`}
                     onOk={() => deleteFeeder(feeder)}
                   >
-                    {`Are you sure you want to delete ${feeder.name}?`}
-                  </ConfirmDeleteButton>
+                    {openModal => (
+                      <Button variant="danger" onClick={openModal}>
+                        <TrashIcon />
+                      </Button>
+                    )}
+                  </ConfirmDeleteModal>
                 </td>
               </tr>
             ))}
