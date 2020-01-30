@@ -55,7 +55,7 @@ import "@patternfly/patternfly/components/DataList/data-list.css";
 // import "@patternfly/patternfly/components/Content/content.css";
 // import "@patternfly/patternfly/components/Check/check.css";
 // import "@patternfly/patternfly/components/Tooltip/tooltip.css";
-// import "@patternfly/patternfly/components/Pagination/pagination.css";
+import "@patternfly/patternfly/components/Pagination/pagination.css";
 // import "@patternfly/patternfly/components/Accordion/accordion.css";
 // import "@patternfly/patternfly/components/Select/select.css";
 // import "@patternfly/patternfly/components/Card/card.css";
