@@ -114,6 +114,15 @@ export class TopicForm extends Component {
               validationError="Component types should be a valid JSON"
               value={topic.component_types || []}
             />
+            <TextAreaJSON
+              id="topic-form__data"
+              label="Data"
+              name="data"
+              required
+              validations="isJSON"
+              validationError="Component data field should be a valid JSON"
+              value={topic.data || {}}
+            />
           </Formsy>
         </FormModal>
         <Button

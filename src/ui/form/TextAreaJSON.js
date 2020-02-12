@@ -14,7 +14,7 @@ addValidationRule("isJSON", function(values, value) {
   return true;
 });
 
-class DCITextArea extends Component {
+class TextAreaJSON extends Component {
   state = {
     value: "{}"
   };
@@ -71,4 +71,4 @@ class DCITextArea extends Component {
   }
 }
 
-export default withFormsy(DCITextArea);
+export default withFormsy(TextAreaJSON);
