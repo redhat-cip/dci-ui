@@ -1,30 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { removeToken } from "services/localStorage";
+import React, { useEffect } from "react";
 import pages from "pages";
-import { deleteCurrentUser } from "currentUser/currentUserActions";
+import { useAuth } from "./authContext";
 
-export class LogoutPage extends Component {
-  componentDidMount() {
-    const { auth, deleteCurrentUser } = this.props;
-    deleteCurrentUser();
-    removeToken();
-    auth.signoutRedirect();
-  }
+const LogoutPage = () => {
+  const { logout } = useAuth();
 
-  render() {
-    return <pages.NotAuthenticatedLoadingPage />;
-  }
-}
+  useEffect(() => {
+    logout();
+  }, [logout]);
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth
-  };
-}
+  return <pages.NotAuthenticatedLoadingPage />;
+};
 
-const mapDispatchToProps = dispatch => ({
-  deleteCurrentUser: () => dispatch(deleteCurrentUser())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LogoutPage);
+export default LogoutPage;

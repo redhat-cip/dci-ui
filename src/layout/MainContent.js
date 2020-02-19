@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { Route, Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { isEmpty, values } from "lodash";
-import { withRouter, Route, Link } from "react-router-dom";
 import {
   Brand,
   Dropdown,
@@ -25,6 +25,7 @@ import Logo from "logo.min.svg";
 import { setCurrentTeam } from "currentUser/currentUserActions";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import avatarImg from "./img_avatar.svg";
+import { useAuth } from "auth/authContext";
 
 class MenuDropdown extends React.Component {
   state = {
@@ -77,56 +78,90 @@ function DCINavItem({ children, to, exact = true }) {
   );
 }
 
-class MainContent extends Component {
-  render() {
-    const {
-      children,
-      currentUser,
-      currentUserTeams,
-      setCurrentTeam,
-      history
-    } = this.props;
-    const PageNav = (
-      <Nav aria-label="Nav" theme="dark">
-        <NavGroup title="DCI">
-          <DCINavItem to="/jobs" exact={false}>
-            Jobs
-          </DCINavItem>
-          {currentUser.isSuperAdmin && (
-            <React.Fragment>
-              <DCINavItem to="/feeders">Feeders</DCINavItem>
-              <DCINavItem to="/products">Products</DCINavItem>
-            </React.Fragment>
+const MainContent = ({ children }) => {
+  const { identity, logout } = useAuth();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const PageNav = (
+    <Nav aria-label="Nav" theme="dark">
+      <NavGroup title="DCI">
+        <DCINavItem to="/jobs" exact={false}>
+          Jobs
+        </DCINavItem>
+        {identity.isSuperAdmin && (
+          <React.Fragment>
+            <DCINavItem to="/feeders">Feeders</DCINavItem>
+            <DCINavItem to="/products">Products</DCINavItem>
+          </React.Fragment>
+        )}
+        <DCINavItem to="/topics">Topics</DCINavItem>
+        <DCINavItem to="/components">Components</DCINavItem>
+        <DCINavItem to="/remotecis">Remotecis</DCINavItem>
+      </NavGroup>
+      {identity.hasReadOnlyRole && (
+        <NavGroup title="Stats">
+          <DCINavItem to="/globalStatus">Global Status</DCINavItem>
+          <DCINavItem to="/trends">Trends</DCINavItem>
+          <DCINavItem to="/performance">Performance</DCINavItem>
+        </NavGroup>
+      )}
+      {identity.hasEPMRole && (
+        <NavGroup title="Admin">
+          <DCINavItem to="/teams">Teams</DCINavItem>
+          <DCINavItem to="/users">Users</DCINavItem>
+          {identity.hasEPMRole && (
+            <DCINavItem to="/permissions">Permissions</DCINavItem>
           )}
-          <DCINavItem to="/topics">Topics</DCINavItem>
-          <DCINavItem to="/components">Components</DCINavItem>
-          <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         </NavGroup>
-        {currentUser.hasReadOnlyRole && (
-          <NavGroup title="Stats">
-            <DCINavItem to="/globalStatus">Global Status</DCINavItem>
-            <DCINavItem to="/trends">Trends</DCINavItem>
-            <DCINavItem to="/performance">Performance</DCINavItem>
-          </NavGroup>
-        )}
-        {currentUser.hasEPMRole && (
-          <NavGroup title="Admin">
-            <DCINavItem to="/teams">Teams</DCINavItem>
-            <DCINavItem to="/users">Users</DCINavItem>
-            {currentUser.hasEPMRole && (
-              <DCINavItem to="/permissions">Permissions</DCINavItem>
-            )}
-          </NavGroup>
-        )}
-        <NavGroup title="User Preferences">
-          <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
-          <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
-        </NavGroup>
-      </Nav>
-    );
-    const PageToolbar = (
-      <Toolbar>
-        <ToolbarGroup>
+      )}
+      <NavGroup title="User Preferences">
+        <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
+        <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
+      </NavGroup>
+    </Nav>
+  );
+  const identityTeams = values(identity.teams);
+  const PageToolbar = (
+    <Toolbar>
+      <ToolbarGroup>
+        <ToolbarItem
+          className={css(accessibleStyles.srOnly, accessibleStyles.visibleOnMd)}
+        >
+          <MenuDropdown
+            position="right"
+            title={
+              <span>
+                <UserIcon className="pf-u-mr-md" />
+                {identity.fullname || identity.name}
+              </span>
+            }
+            dropdownItems={[
+              <DropdownItem
+                key="dropdown_user_settings"
+                component="button"
+                onClick={() => history.push("/currentUser/settings")}
+              >
+                Settings
+              </DropdownItem>,
+              <DropdownSeparator key="dropdown_user_separator" />,
+              <DropdownItem
+                key="dropdown_user_logout"
+                component="button"
+                onClick={logout}
+              >
+                Logout
+              </DropdownItem>
+            ]}
+          />
+        </ToolbarItem>
+      </ToolbarGroup>
+      {identityTeams.length > 1 && (
+        <ToolbarGroup
+          className={css(
+            accessibleStyles.screenReader,
+            accessibleStyles.visibleOnLg
+          )}
+        >
           <ToolbarItem
             className={css(
               accessibleStyles.srOnly,
@@ -137,99 +172,42 @@ class MainContent extends Component {
               position="right"
               title={
                 <span>
-                  <UserIcon className="pf-u-mr-md" />
-                  {currentUser.fullname || currentUser.name}
+                  <UsersIcon className="pf-u-mr-md" />
+                  {identity.team.name}
                 </span>
               }
-              dropdownItems={[
+              dropdownItems={identityTeams.map(team => (
                 <DropdownItem
-                  key="dropdown_user_settings"
+                  key={team.name}
                   component="button"
-                  onClick={() => history.push("/currentUser/settings")}
+                  onClick={() => dispatch(setCurrentTeam(team))}
                 >
-                  Settings
-                </DropdownItem>,
-                <DropdownSeparator key="dropdown_user_separator" />,
-                <DropdownItem
-                  key="dropdown_user_logout"
-                  component="button"
-                  onClick={() => history.push("/logout")}
-                >
-                  Logout
+                  {team.name}
                 </DropdownItem>
-              ]}
+              ))}
             />
           </ToolbarItem>
         </ToolbarGroup>
-        {currentUserTeams.length > 1 && (
-          <ToolbarGroup
-            className={css(
-              accessibleStyles.screenReader,
-              accessibleStyles.visibleOnLg
-            )}
-          >
-            <ToolbarItem
-              className={css(
-                accessibleStyles.srOnly,
-                accessibleStyles.visibleOnMd
-              )}
-            >
-              <MenuDropdown
-                position="right"
-                title={
-                  <span>
-                    <UsersIcon className="pf-u-mr-md" />
-                    {currentUser.team.name}
-                  </span>
-                }
-                dropdownItems={currentUserTeams.map(team => (
-                  <DropdownItem
-                    key={team.name}
-                    component="button"
-                    onClick={() => setCurrentTeam(team)}
-                  >
-                    {team.name}
-                  </DropdownItem>
-                ))}
-              />
-            </ToolbarItem>
-          </ToolbarGroup>
-        )}
-      </Toolbar>
-    );
+      )}
+    </Toolbar>
+  );
 
-    const Header = (
-      <PageHeader
-        logo={<Brand src={Logo} alt="DCI Logo" />}
-        toolbar={PageToolbar}
-        avatar={<Avatar src={avatarImg} alt="Avatar" />}
-        showNavToggle
-      />
-    );
-    const Sidebar = <PageSidebar nav={PageNav} theme="dark" />;
-    return (
-      <React.Fragment>
-        <Page header={Header} sidebar={Sidebar} isManagedSidebar>
-          {children}
-        </Page>
-      </React.Fragment>
-    );
-  }
-}
+  const Header = (
+    <PageHeader
+      logo={<Brand src={Logo} alt="DCI Logo" />}
+      toolbar={PageToolbar}
+      avatar={<Avatar src={avatarImg} alt="Avatar" />}
+      showNavToggle
+    />
+  );
+  const Sidebar = <PageSidebar nav={PageNav} theme="dark" />;
+  return (
+    <React.Fragment>
+      <Page header={Header} sidebar={Sidebar} isManagedSidebar>
+        {children}
+      </Page>
+    </React.Fragment>
+  );
+};
 
-function mapStateToProps(state) {
-  return {
-    currentUser: state.currentUser,
-    currentUserTeams: values(state.currentUser.teams)
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    setCurrentTeam: team => dispatch(setCurrentTeam(team))
-  };
-}
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(MainContent)
-);
+export default MainContent;

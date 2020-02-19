@@ -5,6 +5,8 @@ import axiosMockAdapter from "axios-mock-adapter";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
+import { ConfigProvider } from "auth/configContext";
+import { AuthProvider } from "auth/authContext";
 
 const axiosMock = new axiosMockAdapter(axios);
 
@@ -49,7 +51,11 @@ it("renders without crashing", () => {
   const div = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <ConfigProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ConfigProvider>
     </Provider>,
     div
   );

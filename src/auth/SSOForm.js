@@ -1,41 +1,35 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import {
   Button,
   ActionGroup,
   Toolbar,
   ToolbarGroup
 } from "@patternfly/react-core";
+import { useAuth } from "./authContext";
+import { useLocation } from "react-router-dom";
 
-export class SSOForm extends Component {
-  render() {
-    const { auth } = this.props;
-    return (
-      <div>
-        <ActionGroup>
-          <Toolbar>
-            <ToolbarGroup>
-              <Button
-                variant="danger"
-                className="pf-u-mt-md"
-                onClick={() => {
-                  auth.signinRedirect();
-                }}
-              >
-                Log in
-              </Button>
-            </ToolbarGroup>
-          </Toolbar>
-        </ActionGroup>
-      </div>
-    );
-  }
-}
+const SSOForm = () => {
+  const { sso } = useAuth();
+  const location = useLocation();
+  return (
+    <div>
+      <ActionGroup>
+        <Toolbar>
+          <ToolbarGroup>
+            <Button
+              variant="danger"
+              className="pf-u-mt-md"
+              onClick={() => {
+                sso.signinRedirect({ state: location.state });
+              }}
+            >
+              Log in
+            </Button>
+          </ToolbarGroup>
+        </Toolbar>
+      </ActionGroup>
+    </div>
+  );
+};
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth
-  };
-}
-
-export default connect(mapStateToProps)(SSOForm);
+export default SSOForm;
