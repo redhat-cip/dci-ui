@@ -6,9 +6,9 @@ import "./ui/styles";
 import Pages from "./pages";
 import Alerts from "./alerts/Alerts";
 import { BackgroundImage } from "./ui";
-import { withAuthentication, withAuthorization } from "auth";
+import withAuthentication from "./auth/withAuthentication";
 
-const PrivateRoute = withAuthorization(Route);
+const PrivateRoute = withAuthentication(Route);
 
 class App extends Component {
   render() {
@@ -70,4 +70,4 @@ class App extends Component {
   }
 }
 
-export default withAuthentication(App);
+export default App;

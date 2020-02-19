@@ -112,19 +112,19 @@ export class Team extends Component {
     ];
     if (currentUser.isSuperAdmin) {
       teamDropdownItems.push(
-<ConfirmDeleteModal
-  key="delete_team_dropdown"
-  title={`Delete team ${team.name}`}
-  message={`Are you sure you want to delete ${team.name} team?`}
-  onOk={() => deleteTeam(team)}
->
-  {openModal => (
-    <DropdownItem component="button" onClick={openModal}>
-      <WarningTriangleIcon className="pf-u-mr-xs" />
-      {`delete ${team.name} team`}
-    </DropdownItem>
-  )}
-</ConfirmDeleteModal>
+        <ConfirmDeleteModal
+          key="delete_team_dropdown"
+          title={`Delete team ${team.name}`}
+          message={`Are you sure you want to delete ${team.name} team?`}
+          onOk={() => deleteTeam(team)}
+        >
+          {openModal => (
+            <DropdownItem component="button" onClick={openModal}>
+              <WarningTriangleIcon className="pf-u-mr-xs" />
+              {`delete ${team.name} team`}
+            </DropdownItem>
+          )}
+        </ConfirmDeleteModal>
       );
     }
 

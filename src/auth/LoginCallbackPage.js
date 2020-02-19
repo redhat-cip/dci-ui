@@ -1,46 +1,33 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { setJWT } from "services/localStorage";
 import pages from "pages";
-import { getIdentity } from "currentUser/currentUserActions";
+import { useAuth } from "./authContext";
 
-export class LoginCallbackPage extends Component {
-  state = {
-    redirectionLoaded: false
-  };
+const LoginCallbackPage = () => {
+  const { sso, refreshIdentity } = useAuth();
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const [location, setLocation] = useState({ from: { pathname: "/jobs" } });
 
-  componentDidMount() {
-    const { auth, getIdentity } = this.props;
-    auth
+  useEffect(() => {
+    sso
       .signinRedirectCallback()
       .then(user => {
         if (user) {
+          setLocation(user.state);
           setJWT(user.access_token);
-          return getIdentity();
         }
+        return refreshIdentity();
       })
       .catch(() => undefined)
-      .then(() => this.setState({ redirectionLoaded: true }));
-  }
+      .then(() => setIsLoadingUser(false));
+  }, [refreshIdentity, sso]);
 
-  render() {
-    const { redirectionLoaded } = this.state;
-    if (redirectionLoaded) {
-      return <Redirect to="/jobs" />;
-    }
-    return <pages.NotAuthenticatedLoadingPage />;
-  }
-}
+  return isLoadingUser ? (
+    <pages.NotAuthenticatedLoadingPage />
+  ) : (
+    <Redirect to={location.from} />
+  );
+};
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  getIdentity: () => dispatch(getIdentity())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginCallbackPage);
+export default LoginCallbackPage;
