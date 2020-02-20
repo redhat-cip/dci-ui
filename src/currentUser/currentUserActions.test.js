@@ -12,26 +12,6 @@ const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new axiosMockAdapter(axios);
 
-it("getIdentity", () => {
-  const identity = {
-    id: "i1"
-  };
-  axiosMock
-    .onGet("https://api.example.org/api/v1/identity")
-    .reply(200, { identity });
-  const expectedActions = [
-    {
-      type: types.SET_IDENTITY,
-      identity
-    }
-  ];
-  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(currentUserActions.getIdentity()).then(response => {
-    expect(response.data.identity).toEqual(identity);
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-});
-
 it("deleteCurrentUser", () => {
   const expectedAction = {
     type: types.DELETE_CURRENT_USER

@@ -128,9 +128,13 @@ function AuthProvider({ children }: AuthProviderProps) {
           });
         },
         logout: () => {
-          setState({ ...state, identity: null });
-          dispatch(deleteCurrentUser());
-          removeToken();
+          try {
+            setState({ ...state, identity: null });
+            removeToken();
+            dispatch(deleteCurrentUser());
+          } catch (error) {
+            console.error(error);
+          }
         }
       }}
     >
