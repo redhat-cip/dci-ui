@@ -14,17 +14,6 @@ export function setIdentity(identity) {
   };
 }
 
-export function getIdentity() {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http.get(`${state.config.apiURL}/api/v1/identity`).then(response => {
-      const identity = response.data.identity;
-      dispatch(setIdentity(identity));
-      return response;
-    });
-  };
-}
-
 export function setCurrentTeam(team) {
   return {
     type: types.SET_ACTIVE_TEAM,
