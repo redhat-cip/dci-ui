@@ -16,9 +16,9 @@ import {
 } from "@patternfly/react-core";
 import { EmptyState, Labels } from "ui";
 import styled from "styled-components";
-import { CubesIcon } from "@patternfly/react-icons";
 import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
+import Component from "./Component";
 
 const Padding = styled.div`
   padding: 1em;
@@ -68,6 +68,11 @@ const Line = ({ field, value }) => {
   );
 };
 
+const ComponentsContainer = styled.div`
+  border: 1px solid #d2d2d2;
+  border-radius: 0.5em;
+`;
+
 const Components = ({ topic }) => {
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(true);
@@ -96,13 +101,15 @@ const Components = ({ topic }) => {
   }
 
   return (
-    <div>
-      {components.map(component => (
-        <p key={component.id}>
-          <CubesIcon /> {component.name}
-        </p>
+    <ComponentsContainer>
+      {components.map((component, i, arr) => (
+        <Component
+          key={component.id}
+          component={component}
+          isLast={arr.length - 1 === i}
+        />
       ))}
-    </div>
+    </ComponentsContainer>
   );
 };
 
