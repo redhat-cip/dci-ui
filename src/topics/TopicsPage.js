@@ -70,15 +70,18 @@ export class TopicsPage extends Component {
     };
     const products = topics.reduce((acc, topic) => {
       const product = topic.product;
-      const productName = product ? product.name.toLowerCase() : null;
+      if (!product) {
+        return acc;
+      }
+      const productName = product.name.toLowerCase();
       const Icon = get(icons, productName, BoxIcon);
-      const currentProduct = get(acc, product.name, {
+      const currentProduct = get(acc, productName, {
         ...product,
         topics: [],
         icon: <Icon size="md" />
       });
       currentProduct.topics.push(topic);
-      acc[product.name] = currentProduct;
+      acc[productName] = currentProduct;
       return acc;
     }, {});
     return (
