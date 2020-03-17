@@ -53,15 +53,19 @@ const Component = ({
         isEmpty(channel) &&
         isEmpty(tags) ? null : (
           <div>
-            <Badge className="pf-u-mr-sm pf-u-mb-sm">{version}</Badge>
-            <Badge className="pf-u-mr-sm pf-u-mb-sm">{channel}</Badge>
+            <Badge className="pf-u-mr-sm pf-u-mb-sm">version: {version}</Badge>
+            {channel && (
+              <Badge className="pf-u-mr-sm pf-u-mb-sm">
+                channel: {channel}
+              </Badge>
+            )}
             {arches.map((arch, i) => (
-              <Badge key={i} className="pf-u-mr-sm pf-u-mb-sm" isRead>
+              <Badge key={i} className="pf-u-mr-sm pf-u-mb-sm">
                 {arch}
               </Badge>
             ))}
             {tags.map((tag, i) => (
-              <Badge key={i} className="pf-u-mr-sm pf-u-mb-sm" isRead>
+              <Badge key={i} className="pf-u-mr-sm pf-u-mb-sm">
                 {tag}
               </Badge>
             ))}

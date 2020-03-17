@@ -29,6 +29,10 @@ const Field = styled.span`
   font-weight: bold;
 `;
 
+const Description = styled.span`
+  color: #72767b;
+`;
+
 const ExportControl = ({ export_control }) => {
   return export_control ? (
     <Labels.Success>yes</Labels.Success>
@@ -57,13 +61,16 @@ const SeeContent = ({ content }) => {
   );
 };
 
-const Line = ({ field, value }) => {
+const Line = ({ field, description, value }) => {
   return (
     <Grid gutter="md">
-      <GridItem span={3}>
-        <Field>{field}</Field>
+      <GridItem span={4}>
+        <div>
+          <Field>{field}</Field>
+        </div>
+        {description && <Description>{description}</Description>}
       </GridItem>
-      <GridItem span={9}>{value}</GridItem>
+      <GridItem span={8}>{value}</GridItem>
     </Grid>
   );
 };
@@ -153,7 +160,7 @@ const TopicPage = ({ match }) => {
                   </Padding>
                   <Divider />
                   <Padding>
-                    <Line field="Id" value={topic.id} />
+                    <Line field="ID" value={topic.id} />
                   </Padding>
                   <Divider />
                   <Padding>
@@ -163,6 +170,7 @@ const TopicPage = ({ match }) => {
                   <Padding>
                     <Line
                       field="Export control"
+                      description="are components approved for export outside the U.S.A ?"
                       value={
                         <ExportControl export_control={topic.export_control} />
                       }
@@ -177,9 +185,13 @@ const TopicPage = ({ match }) => {
                     <Line
                       field="Data"
                       value={
-                        <SeeContent
-                          content={JSON.stringify(topic.data, null, 2)}
-                        />
+                        isEmpty(topic.data) ? (
+                          "{}"
+                        ) : (
+                          <SeeContent
+                            content={JSON.stringify(topic.data, null, 2)}
+                          />
+                        )
                       }
                     />
                   </Padding>
