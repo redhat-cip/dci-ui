@@ -1,94 +1,94 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { isEmpty } from "lodash";
-import { Page } from "layout";
-import productsActions from "./productsActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
+import React from "react";
+import { MainContent } from "layout";
 import NewProductButton from "./NewProductButton";
+import {
+  Button,
+  PageSection,
+  PageSectionVariants,
+  TextContent,
+  Text
+} from "@patternfly/react-core";
+import { CopyButton, ConfirmDeleteModal } from "ui";
 import EditProductButton from "./EditProductButton";
-import { getProducts } from "./productSelectors";
-import { Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
+import api from "../services/api";
 
-export class ProductsPage extends Component {
-  componentDidMount() {
-    const { fetchProducts } = this.props;
-    fetchProducts();
-  }
-
-  render() {
-    const { products, isFetching, deleteProduct } = this.props;
-    return (
-      <Page
-        title="Products"
-        loading={isFetching && isEmpty(products)}
-        empty={!isFetching && isEmpty(products)}
-        HeaderButton={<NewProductButton />}
-        EmptyComponent={
-          <EmptyState
-            title="There is no products"
-            info="Do you want to create one?"
-          />
-        }
-      >
+const ProductsPage = () => {
+  const { products, status, error, create, update, remove } = api("product");
+  return (
+    <MainContent>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">Products</Text>
+          <NewProductButton onSubmit={create} />
+        </TextContent>
+      </PageSection>
+      <PageSection variant={PageSectionVariants.default}>
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
               <th className="pf-u-text-align-center pf-m-width-5">ID</th>
               <th className="pf-m-width-10">Name</th>
               <th className="pf-m-width-10">Label</th>
-              <th className="pf-m-width-45">Description</th>
-              <th className="pf-m-width-10 pf-u-text-align-center">Created</th>
-              <th className="pf-u-text-align-center pf-m-width-20">Actions</th>
+              <th className="pf-m-width-50">Description</th>
+              <th className="pf-u-text-align-center pf-m-width-25">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
-              <tr key={`${product.id}.${product.etag}`}>
-                <td className="pf-u-text-align-center">
-                  <CopyButton text={product.id} />
-                </td>
-                <td>{product.name}</td>
-                <td>{product.label}</td>
-                <td>{product.description}</td>
-                <td className="pf-u-text-align-center">{product.from_now}</td>
-                <td className="pf-u-text-align-center">
-                  <EditProductButton className="pf-u-mr-xs" product={product} />
-                  <ConfirmDeleteModal
-                    title={`Delete product ${product.name}`}
-                    message={`Are you sure you want to delete ${product.name}?`}
-                    onOk={() => deleteProduct(product)}
-                  >
-                    {openModal => (
-                      <Button variant="danger" onClick={openModal}>
-                        <TrashIcon />
-                      </Button>
-                    )}
-                  </ConfirmDeleteModal>
+            {status === "loading" ? (
+              <tr>
+                <td colSpan={5}>loading...</td>
+              </tr>
+            ) : status === "error" ? (
+              <tr>
+                <td colSpan={5}>
+                  Something went wrong when trying to get products
+                  <br />
+                  {error.message}
                 </td>
               </tr>
-            ))}
+            ) : (
+              <>
+                {products.length === 0 ? (
+                  <tr>
+                    <td colSpan={5}>There is no product</td>
+                  </tr>
+                ) : null}
+                {products.map(product => (
+                  <tr key={`${product.id}.${product.etag}`}>
+                    <td className="pf-u-text-align-center">
+                      <CopyButton text={product.id} />
+                    </td>
+                    <td>{product.name}</td>
+                    <td>{product.label}</td>
+                    <td>{product.description}</td>
+                    <td className="pf-u-text-align-center">
+                      <EditProductButton
+                        className="pf-u-mr-xs"
+                        product={product}
+                        onSubmit={update}
+                      />
+                      <ConfirmDeleteModal
+                        title={`Delete product ${product.name}`}
+                        message={`Are you sure you want to delete ${product.name}?`}
+                        onOk={() => remove(product)}
+                      >
+                        {openModal => (
+                          <Button variant="danger" onClick={openModal}>
+                            <TrashIcon />
+                          </Button>
+                        )}
+                      </ConfirmDeleteModal>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </table>
-      </Page>
-    );
-  }
-}
+      </PageSection>
+    </MainContent>
+  );
+};
 
-function mapStateToProps(state) {
-  return {
-    products: getProducts(state),
-    isFetching: state.products.isFetching
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchProducts: () => {
-      dispatch(productsActions.all());
-    },
-    deleteProduct: product => dispatch(productsActions.delete(product))
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductsPage);
+export default ProductsPage;

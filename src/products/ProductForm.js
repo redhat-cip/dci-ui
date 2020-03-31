@@ -68,7 +68,7 @@ export default class ProductForm extends Component {
               id="product-form__description"
               label="Description"
               name="description"
-              value={product.description}
+              value={product.description || ""}
             />
           </Formsy>
         </FormModal>
