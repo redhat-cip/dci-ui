@@ -1,27 +1,24 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import FeederForm from "./FeederForm";
+import React from "react";
+import { useDispatch } from "react-redux";
+import FeederFormModal from "./FeederFormModal";
 import actions from "./feedersActions";
+import { Button } from "@patternfly/react-core";
 
-export class NewFeederButton extends Component {
-  render() {
-    const { createFeeder, className } = this.props;
-    return (
-      <FeederForm
-        title="Create a new feeder"
-        showModalButton="Create a new feeder"
-        okButton="Create"
-        submit={createFeeder}
-        className={className}
-      />
-    );
-  }
-}
+const NewFeederButton = ({ className }) => {
+  const dispatch = useDispatch();
+  return (
+    <FeederFormModal
+      title="Create a new feeder"
+      submitButton="Create"
+      onSubmit={feeder => dispatch(actions.create(feeder))}
+    >
+      {show => (
+        <Button variant="primary" className={className} onClick={show}>
+          Create a new feeder
+        </Button>
+      )}
+    </FeederFormModal>
+  );
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    createFeeder: feeder => dispatch(actions.create(feeder))
-  };
-}
-
-export default connect(null, mapDispatchToProps)(NewFeederButton);
+export default NewFeederButton;

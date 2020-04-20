@@ -1,3 +1,6 @@
+import "@testing-library/jest-dom/extend-expect";
+import "mutationobserver-shim";
+
 const localStorageMock = (function() {
   let store = {};
   return {

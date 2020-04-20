@@ -1,34 +1,25 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import FeederForm from "./FeederForm";
+import React from "react";
+import { useDispatch } from "react-redux";
+import FeederFormModal from "./FeederFormModal";
 import actions from "./feedersActions";
-import { EditAltIcon } from "@patternfly/react-icons";
+import { Button } from "@patternfly/react-core";
 
-export class EditFeederButton extends Component {
-  render() {
-    const { feeder, editFeeder, ...props } = this.props;
-    return (
-      <FeederForm
-        {...props}
-        title="Edit feeder"
-        feeder={feeder}
-        showModalButton={<EditAltIcon />}
-        okButton="Edit"
-        submit={newFeeder => {
-          editFeeder({
-            id: feeder.id,
-            ...newFeeder
-          });
-        }}
-      />
-    );
-  }
-}
+const EditFeederButton = ({ feeder, ...props }) => {
+  const dispatch = useDispatch();
+  return (
+    <FeederFormModal
+      title="Create a new feeder"
+      submitButton="Create"
+      feeder={feeder}
+      onSubmit={newFeeder => dispatch(actions.update(newFeeder))}
+    >
+      {show => (
+        <Button variant="primary" onClick={show} {...props}>
+          Edit feeder
+        </Button>
+      )}
+    </FeederFormModal>
+  );
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    editFeeder: feeder => dispatch(actions.update(feeder))
-  };
-}
-
-export default connect(null, mapDispatchToProps)(EditFeederButton);
+export default EditFeederButton;
