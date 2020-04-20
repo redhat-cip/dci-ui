@@ -23,7 +23,7 @@ export default class Testcases extends Component {
     return (
       <React.Fragment>
         <tr>
-          <td className="pf-u-text-align-center">
+          <td className="text-center">
             <Button variant="link" onClick={this.toggleDetails}>
               {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
             </Button>
@@ -50,7 +50,7 @@ export default class Testcases extends Component {
           </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>
-          <td className="pf-u-text-align-right col-xs-1">
+          <td className="text-right col-xs-1">
             {testscase.time}
             &nbsp;ms
           </td>

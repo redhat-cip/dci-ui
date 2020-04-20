@@ -15,20 +15,20 @@ export class JobsPage extends Component {
     const { location } = this.props;
     const { page, perPage, where } = queryString.parse(location.search);
     const filters = where
-      ? where.split(",").map(f => {
+      ? where.split(",").map((f) => {
           const keyvalue = f.split(":");
           return {
             key: keyvalue[0],
-            value: keyvalue[1]
+            value: keyvalue[1],
           };
         })
       : [];
     this.state = {
       pagination: {
         page: page ? parseInt(page, 10) : 1,
-        perPage: perPage ? parseInt(perPage, 10) : 20
+        perPage: perPage ? parseInt(perPage, 10) : 20,
       },
-      filters
+      filters,
     };
   }
 
@@ -40,7 +40,7 @@ export class JobsPage extends Component {
     const { history, fetchJobs } = this.props;
     const { pagination, filters } = this.state;
     let url = `/jobs?page=${pagination.page}&perPage=${pagination.perPage}`;
-    const where = filters.map(f => `${f.key}:${f.value}`).join(",");
+    const where = filters.map((f) => `${f.key}:${f.value}`).join(",");
     if (where) {
       url += `&where=${where}`;
     }
@@ -48,15 +48,15 @@ export class JobsPage extends Component {
     fetchJobs({ pagination, filters });
   };
 
-  _setPageAndFetchJobs = page => {
+  _setPageAndFetchJobs = (
+    pagination = {
+      page: 1,
+      perPage: 20,
+    }
+  ) => {
     this.setState(
-      prevState => {
-        return {
-          pagination: {
-            ...prevState.pagination,
-            page
-          }
-        };
+      {
+        pagination,
       },
       () => this._fetchJobsAndChangeUrl()
     );
@@ -75,9 +75,9 @@ export class JobsPage extends Component {
             count={count}
             pagination={pagination}
             activeFilters={filters}
-            goTo={page => this._setPageAndFetchJobs(page)}
-            filterJobs={filters =>
-              this.setState({ filters }, () => this._setPageAndFetchJobs(1))
+            goTo={(pagination) => this._setPageAndFetchJobs(pagination)}
+            filterJobs={(filters) =>
+              this.setState({ filters }, () => this._setPageAndFetchJobs())
             }
           />
         }
@@ -90,7 +90,7 @@ export class JobsPage extends Component {
         }
       >
         <ul className="pf-c-data-list pf-u-box-shadow-md" aria-label="job list">
-          {jobs.map(job => (
+          {jobs.map((job) => (
             <JobSummary
               seeDetailsButton
               key={`${job.id}.${job.etag}`}
@@ -108,7 +108,7 @@ function mapStateToProps(state) {
   return {
     jobs: getJobs(state),
     count: state.jobs.count,
-    isFetching: state.jobs.isFetching
+    isFetching: state.jobs.isFetching,
   };
 }
 
@@ -118,15 +118,15 @@ function mapDispatchToProps(dispatch) {
       const params = {
         embed: "results,team,remoteci,components,topic,tags",
         limit: pagination.perPage,
-        offset: (pagination.page - 1) * pagination.perPage
+        offset: (pagination.page - 1) * pagination.perPage,
       };
-      const where = filters.map(f => `${f.key}:${f.value}`).join(",");
+      const where = filters.map((f) => `${f.key}:${f.value}`).join(",");
       if (where) {
         params.where = where;
       }
       dispatch(jobsActions.clear());
       return dispatch(jobsActions.all(params));
-    }
+    },
   };
 }
 

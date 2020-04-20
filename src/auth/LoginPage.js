@@ -29,10 +29,14 @@ const DCILoginPage = () => {
       loginTitle="Log in to your account"
       loginSubtitle={loginSubtitle}
     >
-      {seeSSOForm ? <SSOForm /> : <LoginForm />}
-      <Button variant="link" className="pf-u-p-0 pf-u-mt-2xl" onClick={toggle}>
-        toggle login form
-      </Button>
+      <div>
+        {seeSSOForm ? <SSOForm /> : <LoginForm />}
+        <div>
+          <Button variant="link" className="p-0 mt-xl" onClick={toggle}>
+            toggle login form
+          </Button>
+        </div>
+      </div>
     </LoginPage>
   );
 };

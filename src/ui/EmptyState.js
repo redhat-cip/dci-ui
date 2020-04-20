@@ -12,7 +12,7 @@ export default class EmptyState extends Component {
     const { title, info, icon } = this.props;
     return (
       <Bullseye>
-        <TextContent className="pf-u-text-align-center">
+        <TextContent className="text-center">
           {icon ? icon : <SadTearIcon size="lg" />}
           <Text component={TextVariants.h1}>{title}</Text>
           <Text component={TextVariants.h3}>{info}</Text>

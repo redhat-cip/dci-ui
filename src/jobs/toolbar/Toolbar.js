@@ -6,16 +6,16 @@ import {
   ToolbarItem,
   Chip,
   ChipGroup,
-  ChipGroupToolbarItem
+  ChipGroupToolbarItem,
+  Pagination,
 } from "@patternfly/react-core";
 import TopicsFilter from "./TopicsFilter";
 import StatusFilter from "./StatusFilter";
 import RemoteciInTeamFilter from "./RemoteciInTeamFilter";
 import { removeFilter } from "./filters";
-import { Pagination } from "ui";
 
 export default class DCIToolbar extends Component {
-  _removeFilterAndFilterJobs = filter => {
+  _removeFilterAndFilterJobs = (filter) => {
     const { filterJobs, activeFilters } = this.props;
     const newFilters = removeFilter(activeFilters, filter.key);
     filterJobs(newFilters);
@@ -51,13 +51,25 @@ export default class DCIToolbar extends Component {
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarItem>
-              <Pagination
-                pagination={pagination}
-                count={count}
-                goTo={goTo}
-                items="jobs"
-                aria-label="Jobs pagination"
-              />
+              {count === 0 ? null : (
+                <Pagination
+                  perPage={pagination.perPage}
+                  page={pagination.page}
+                  itemCount={count}
+                  onSetPage={(e, page) =>
+                    goTo({
+                      ...pagination,
+                      page,
+                    })
+                  }
+                  onPerPageSelect={(e, perPage) =>
+                    goTo({
+                      ...pagination,
+                      perPage,
+                    })
+                  }
+                />
+              )}
             </ToolbarItem>
           </ToolbarGroup>
         </ToolbarSection>
