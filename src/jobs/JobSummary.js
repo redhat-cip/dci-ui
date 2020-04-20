@@ -97,20 +97,20 @@ function getIcon(status) {
 }
 
 const Regressions = ({ regressions }) => (
-  <TextRed className="pf-u-ml-md">
+  <TextRed>
     <WarningTriangleIcon
       color={global_danger_color_100.value}
-      className="pf-u-mr-xs"
+      className="mr-xs"
     />
     <span>{`${regressions} regression${regressions > 1 ? "s" : ""}`}</span>
   </TextRed>
 );
 
 const Successfixes = ({ successfixes }) => (
-  <TextGreen className="pf-u-ml-md">
+  <TextGreen>
     <ThumbsUpIcon
       color={global_success_color_100.value}
-      className="pf-u-mr-xs"
+      className="mr-xs"
     />
     <span>{`${successfixes} fix${successfixes > 1 ? "es" : ""}`}</span>
   </TextGreen>
@@ -138,12 +138,12 @@ export class JobSummary extends Component {
               <b>{job.topic.name}</b>
               {isEmpty(job.team) ? null : (
                 <p>
-                  <UsersIcon className="pf-u-mr-xs" />
+                  <UsersIcon className="mr-xs" />
                   {job.team.name}
                 </p>
               )}
               <p>
-                <ServerIcon className="pf-u-mr-xs" />
+                <ServerIcon className="mr-xs" />
                 {job.remoteci.name}
               </p>
               {isEmpty(job.tags) ? null : (
@@ -152,7 +152,7 @@ export class JobSummary extends Component {
                     <Label
                       key={index}
                       isCompact
-                      className="pf-u-mr-xs pf-u-mt-xs"
+                      className="mr-xs mt--xs"
                     >
                       {tag.name}
                     </Label>
@@ -174,20 +174,20 @@ export class JobSummary extends Component {
                     <JobTest key={test.id}>
                       <Labels.Success
                         title={`${test.success} tests in success`}
-                        className="pf-u-mr-xs"
+                        className="mr-xs"
                       >
                         {test.success}
                       </Labels.Success>
                       <Labels.Warning
                         title={`${test.skips} skipped tests`}
-                        className="pf-u-mr-xs"
+                        className="mr-xs"
                       >
                         {test.skips}
                       </Labels.Warning>
                       <Labels.Error
                         title={`${test.errors +
                           test.failures} errors and failures tests`}
-                        className="pf-u-mr-xs"
+                        className="mr-xs"
                       >
                         {test.errors + test.failures}
                       </Labels.Error>
@@ -209,7 +209,7 @@ export class JobSummary extends Component {
               <p>
                 <small>
                   <span title={`Created at ${job.created_at}`}>
-                    <CalendarAltIcon className="pf-u-mr-xs" />
+                    <CalendarAltIcon className="mr-xs" />
                     {job.datetime}
                   </span>
                 </small>
@@ -221,7 +221,7 @@ export class JobSummary extends Component {
                   <p>
                     <small>
                       <span title={`Duration in seconds ${job.duration}`}>
-                        <ClockIcon className="pf-u-mr-xs" />
+                        <ClockIcon className="mr-xs" />
                         Ran for {job.humanizedDuration}
                       </span>
                     </small>
@@ -250,7 +250,7 @@ export class JobSummary extends Component {
                     >
                       <WarningTriangleIcon
                         color={global_danger_color_100.value}
-                        className="pf-u-mr-xs"
+                        className="mr-xs"
                       />
                       <TextRed>delete job</TextRed>
                     </DropdownItem>

@@ -28,8 +28,8 @@ const ConfirmDeleteModal = ({
         <div>
           <TextRed>{message}</TextRed>
         </div>
-        <div className="pf-u-mt-xl">
-          <Button variant="secondary" className="pf-u-mr-xs" onClick={hide}>
+        <div className="mt--xl">
+          <Button variant="secondary" className="mr-xs" onClick={hide}>
             {cancelButton}
           </Button>
           <Button

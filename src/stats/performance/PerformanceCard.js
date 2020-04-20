@@ -19,7 +19,7 @@ export default class PerformanceCard extends Component {
     const [testName, data] = Object.entries(performance)[0];
     const { headers, rows } = transposePerformance(data);
     return (
-      <Card className="pf-u-mt-md">
+      <Card className="mt-md">
         <CardHeader>{testName}</CardHeader>
         <CardBody>
           <table className="pf-c-table pf-m-compact pf-m-grid-md">

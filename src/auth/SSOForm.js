@@ -18,7 +18,7 @@ const SSOForm = () => {
           <ToolbarGroup>
             <Button
               variant="danger"
-              className="pf-u-mt-md"
+              className="mt-md"
               onClick={() => {
                 sso.signinRedirect({ state: location.state });
               }}

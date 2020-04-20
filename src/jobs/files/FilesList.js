@@ -27,7 +27,7 @@ export default class FilesList extends Component {
               <th>Filename</th>
               <th>Size</th>
               <th>mime-type</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>

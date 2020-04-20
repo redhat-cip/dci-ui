@@ -19,8 +19,8 @@ export default class StatDetails extends Component {
               <tr>
                 <th>Team</th>
                 <th>Remote CI (Configuration)</th>
-                <th className="pf-u-text-align-center">Status</th>
-                <th className="pf-u-text-align-right">Last run</th>
+                <th className="text-center">Status</th>
+                <th className="text-right">Last run</th>
               </tr>
             </thead>
             <tbody>
@@ -28,10 +28,10 @@ export default class StatDetails extends Component {
                 <tr key={i}>
                   <td>{job.team_name}</td>
                   <td>{job.remoteci_name}</td>
-                  <td className="pf-u-text-align-center">
+                  <td className="text-center">
                     <Link to={`/jobs/${job.id}/jobStates`}>{job.status}</Link>
                   </td>
-                  <td className="pf-u-text-align-right">{job.created_at}</td>
+                  <td className="text-right">{job.created_at}</td>
                 </tr>
               ))}
             </tbody>

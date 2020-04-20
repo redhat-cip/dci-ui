@@ -54,7 +54,6 @@ class AllowTeamToDownloadResource extends Component {
         {` ${resource_name}`}
         <Button
           variant="primary"
-          className="pf-u-ml-xl"
           isDisabled={isEmpty(resource) || isEmpty(team)}
           onClick={() => onClick(team, resource)}
         >
@@ -156,7 +155,7 @@ export class PermissionsPage extends Component {
               onSelect={this.handleTabClick}
             >
               <Tab eventKey={0} title="Products Teams Permissions">
-                <TextContent className="pf-u-mt-lg">
+                <TextContent className="mt--lg">
                   <Text component="p">
                     By giving access to a product, a team can download all GA
                     topics.
@@ -180,7 +179,7 @@ export class PermissionsPage extends Component {
                   return (
                     <TextContent
                       key={`${product.id}.${product.etag}`}
-                      className="pf-u-mt-lg"
+                      className="mt--lg"
                     >
                       <Text component="h1">{product.name}</Text>
                       <Text component="p">
@@ -225,7 +224,7 @@ export class PermissionsPage extends Component {
                 })}
               </Tab>
               <Tab eventKey={1} title="Topics Teams Permissions">
-                <TextContent className="pf-u-mt-lg">
+                <TextContent className="mt--lg">
                   <Text component="p">
                     By giving access to a topic not export control ready, a team
                     can download all components from this topic.
@@ -249,7 +248,7 @@ export class PermissionsPage extends Component {
                   return (
                     <TextContent
                       key={`${topic.id}.${topic.etag}`}
-                      className="pf-u-mt-lg"
+                      className="mt--lg"
                     >
                       <Text component="h1">{topic.name}</Text>
                       <Text component="p">

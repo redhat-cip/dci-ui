@@ -33,7 +33,7 @@ export class File extends Component {
         <td>{file.name}</td>
         <td>{humanFileSize(file.size)}</td>
         <td>{file.mime}</td>
-        <td className="pf-u-text-align-center">
+        <td className="text-center">
           <Button
             variant="primary"
             onClick={() => this.downloadFile(file)}

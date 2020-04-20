@@ -47,7 +47,6 @@ export default class JobSelectorForm extends Component {
           type="submit"
           variant="primary"
           isDisabled={!canSubmit}
-          className="pf-u-mb-xs"
         >
           See performance results
         </Button>
