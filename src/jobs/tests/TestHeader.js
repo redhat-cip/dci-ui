@@ -6,37 +6,37 @@ export default class TestHeader extends Component {
   render() {
     const { test, toggleDetails } = this.props;
     return (
-      <div className="pf-c-data-list__item pf-u-mb-sm">
+      <div className="pf-c-data-list__item">
         <div className="pf-c-data-list__cell">
           {test.name || "Test"} (Duration: {test.time} msec)
         </div>
         <div className="pf-c-data-list__cell">
           <small>
-            <Labels.Default className="pf-u-mr-xs">
+            <Labels.Default className="mr-xs">
               {test.total} tests
             </Labels.Default>
             {test.successfixes ? (
-              <Labels.Success className="pf-u-mr-xs">
+              <Labels.Success className="mr-xs">
                 {test.successfixes} fixes
               </Labels.Success>
             ) : null}
             {test.success ? (
-              <Labels.Success className="pf-u-mr-xs">
+              <Labels.Success className="mr-xs">
                 {test.success} success
               </Labels.Success>
             ) : null}
             {test.skips ? (
-              <Labels.Warning className="pf-u-mr-xs">
+              <Labels.Warning className="mr-xs">
                 {test.skips} skipped
               </Labels.Warning>
             ) : null}
             {test.errors ? (
-              <Labels.Error className="pf-u-mr-xs">
+              <Labels.Error className="mr-xs">
                 {test.errors} errors
               </Labels.Error>
             ) : null}
             {test.failures ? (
-              <Labels.Failure className="pf-u-mr-xs">
+              <Labels.Failure className="mr-xs">
                 {test.failures} failures
               </Labels.Failure>
             ) : null}
@@ -49,7 +49,7 @@ export default class TestHeader extends Component {
             ) : null}
           </small>
         </div>
-        <div className="pf-c-data-list__cell pf-u-text-align-right">
+        <div className="pf-c-data-list__cell text-right">
           <Button
             type="button"
             variant="tertiary"

@@ -98,7 +98,7 @@ export class TopicsPage extends Component {
         {Object.values(products).map(product => (
           <PageSection>
             <ProductTitle>
-              <span className="pf-u-mr-xs">{product.icon}</span>
+              <span className="mr-xs">{product.icon}</span>
               {product.name}
             </ProductTitle>
             <Gallery gutter="md" key={product.id}>

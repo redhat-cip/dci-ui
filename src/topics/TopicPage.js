@@ -48,7 +48,6 @@ const SeeContent = ({ content }) => {
       <Button
         onClick={() => setSeeContent(false)}
         type="button"
-        className="pf-u-mb-md"
       >
         hide content
       </Button>

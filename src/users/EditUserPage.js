@@ -66,7 +66,7 @@ export class EditUserPage extends Component {
             </Card>
           </GridItem>
           <GridItem span={6}>
-            <Card className="pf-u-mb-md">
+            <Card>
               <CardBody>
                 <AddUserToTeamForm
                   onSubmit={team => {

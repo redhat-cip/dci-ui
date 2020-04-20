@@ -130,7 +130,7 @@ const MainContent = ({ children }) => {
             position="right"
             title={
               <span>
-                <UserIcon className="pf-u-mr-md" />
+                <UserIcon className="mr-md" />
                 {identity.fullname || identity.name}
               </span>
             }
@@ -171,7 +171,7 @@ const MainContent = ({ children }) => {
               position="right"
               title={
                 <span>
-                  <UsersIcon className="pf-u-mr-md" />
+                  <UsersIcon className="mr-md" />
                   {identity.team.name}
                 </span>
               }

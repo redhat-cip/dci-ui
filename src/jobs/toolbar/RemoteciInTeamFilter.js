@@ -25,7 +25,7 @@ export class RemoteciInTeamFilter extends Component {
     const { teams, isFetching, activeFilters } = this.props;
     if (isFetching && isEmpty(teams)) {
       return (
-        <LoadingFilter placeholder="Filter by Team" className="pf-u-mr-lg" />
+        <LoadingFilter placeholder="Filter by Team" className="mr-lg" />
       );
     }
     const teamsFilter = createTeamsFilter(teams);
@@ -43,7 +43,7 @@ export class RemoteciInTeamFilter extends Component {
           onFilterValueSelected={newTeamFilter =>
             this._cleanFiltersAndFilterJobs([newTeamFilter])
           }
-          className="pf-u-mr-lg"
+          className="mr-lg"
         />
         {isEmpty(remoteciFilters) ? null : (
           <FilterWithSearch
@@ -53,7 +53,7 @@ export class RemoteciInTeamFilter extends Component {
             onFilterValueSelected={newRemoteciFilter =>
               this._cleanFiltersAndFilterJobs([teamFilter, newRemoteciFilter])
             }
-            className="pf-u-mr-lg"
+            className="mr-lg"
           />
         )}
       </React.Fragment>

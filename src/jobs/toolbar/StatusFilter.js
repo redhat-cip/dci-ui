@@ -62,7 +62,7 @@ export default class StatusFilter extends Component {
         onFilterValueSelected={newStatusFilter =>
           this._cleanFiltersAndFilterJobs([newStatusFilter])
         }
-        className="pf-u-mr-lg"
+        className="mr-lg"
       />
     );
   }
