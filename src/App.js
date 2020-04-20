@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "./App.css";
 import "./ui/styles";
+import "./ui/spacing.css";
 import Pages from "./pages";
 import Alerts from "./alerts/Alerts";
 import { BackgroundImage } from "./ui";

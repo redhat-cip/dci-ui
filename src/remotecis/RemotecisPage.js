@@ -38,41 +38,41 @@ export class RemotecisPage extends Component {
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
           <thead>
             <tr>
-              <th className="pf-u-text-align-center">ID</th>
+              <th className="text-center">ID</th>
               <th>Name</th>
-              <th className="pf-u-text-align-center">Status</th>
-              <th className="pf-u-text-align-center" title="Authentication">
+              <th className="text-center">Status</th>
+              <th className="text-center" title="Authentication">
                 Authentication
               </th>
-              <th className="pf-u-text-align-center">Team</th>
+              <th className="text-center">Team</th>
               <th>Created</th>
-              <th className="pf-u-text-align-center">Actions</th>
+              <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {remotecis.map(remoteci => (
               <tr key={`${remoteci.id}.${remoteci.etag}`}>
-                <td className="pf-u-text-align-center">
+                <td className="text-center">
                   <CopyButton text={remoteci.id} />
                 </td>
                 <td>{remoteci.name}</td>
-                <td className="pf-u-text-align-center">
+                <td className="text-center">
                   {remoteci.state === "active" ? (
                     <Labels.Success>active</Labels.Success>
                   ) : (
                     <Labels.Error>inactive</Labels.Error>
                   )}
                 </td>
-                <td className="pf-u-text-align-center">
+                <td className="text-center">
                   <SeeCredentialsModal remoteci={remoteci} />
                 </td>
-                <td className="pf-u-text-align-center">
+                <td className="text-center">
                   {remoteci.team ? remoteci.team.name.toUpperCase() : null}
                 </td>
                 <td>{remoteci.from_now}</td>
-                <td className="pf-u-text-align-center">
+                <td className="text-center">
                   <EditRemoteciButton
-                    className="pf-u-mr-xl"
+                    className="mr-xl"
                     remoteci={remoteci}
                     teams={teams}
                   />

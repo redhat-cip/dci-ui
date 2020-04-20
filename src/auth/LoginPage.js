@@ -30,7 +30,7 @@ const DCILoginPage = () => {
       loginSubtitle={loginSubtitle}
     >
       {seeSSOForm ? <SSOForm /> : <LoginForm />}
-      <Button variant="link" className="pf-u-p-0 pf-u-mt-2xl" onClick={toggle}>
+      <Button variant="link" onClick={toggle}>
         toggle login form
       </Button>
     </LoginPage>

@@ -29,7 +29,7 @@ export class UsersPage extends Component {
         component="button"
         onClick={() => history.push(`/users/${user.id}`)}
       >
-        <EditAltIcon className="pf-u-mr-xs" /> Edit a user
+        <EditAltIcon className="mr-xs" /> Edit a user
       </DropdownItem>
     ];
     if (currentUser.isSuperAdmin) {
@@ -37,7 +37,7 @@ export class UsersPage extends Component {
         <DropdownItem component="button" onClick={() => deleteUser(user)}>
           <WarningTriangleIcon
             color={global_danger_color_100.value}
-            className="pf-u-mr-xs"
+            className="mr-xs"
           />
           <TextRed>delete a user</TextRed>
         </DropdownItem>
@@ -67,7 +67,7 @@ export class UsersPage extends Component {
                 <th colSpan={6}>
                   <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
                     <ToolbarGroup>
-                      <ToolbarItem className="pf-u-mr-md">
+                      <ToolbarItem className="mr-md">
                         <Button
                           variant="primary"
                           onClick={() => history.push("/users/create")}

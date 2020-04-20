@@ -42,7 +42,6 @@ export class AddUserToTeamForm extends Component {
         team{" "}
         <Button
           variant="primary"
-          className="pf-u-ml-xl"
           isDisabled={isEmpty(team)}
           onClick={() => onSubmit(team)}
         >

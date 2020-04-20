@@ -50,7 +50,7 @@ export class Team extends Component {
         component="button"
         onClick={() => history.push(`/users/${user.id}`)}
       >
-        <EditAltIcon className="pf-u-mr-xs" /> Edit {user.name} user
+        <EditAltIcon className="mr-xs" /> Edit {user.name} user
       </DropdownItem>,
       <DropdownItem
         key={`remove_user_from_team_${user.id}_dropdown`}
@@ -60,7 +60,7 @@ export class Team extends Component {
           this.fetchUsersForTeam();
         }}
       >
-        <WarningTriangleIcon className="pf-u-mr-xs" /> delete {user.name} user
+        <WarningTriangleIcon className="mr-xs" /> delete {user.name} user
         from {team.name} team
       </DropdownItem>
     ];
@@ -99,7 +99,7 @@ export class Team extends Component {
         component="button"
         onClick={this.openAddUserToTeamModal}
       >
-        <PlusCircleIcon className="pf-u-mr-xs" />
+        <PlusCircleIcon className="mr-xs" />
         Add a user to {team.name} team
       </DropdownItem>,
       <DropdownItem
@@ -107,7 +107,7 @@ export class Team extends Component {
         component="button"
         onClick={this.openEditTeamModal}
       >
-        <EditAltIcon className="pf-u-mr-xs" /> Edit {team.name} team
+        <EditAltIcon className="mr-xs" /> Edit {team.name} team
       </DropdownItem>
     ];
     if (currentUser.isSuperAdmin) {
@@ -120,7 +120,7 @@ export class Team extends Component {
         >
           {openModal => (
             <DropdownItem component="button" onClick={openModal}>
-              <WarningTriangleIcon className="pf-u-mr-xs" />
+              <WarningTriangleIcon className="mr-xs" />
               {`delete ${team.name} team`}
             </DropdownItem>
           )}
@@ -216,7 +216,7 @@ export class Team extends Component {
                           variant="secondary"
                           onClick={this.openAddUserToTeamModal}
                         >
-                          <PlusCircleIcon className="pf-u-mr-xs" />
+                          <PlusCircleIcon className="mr-xs" />
                           Add a user to {team.name} team
                         </Button>
                       </td>
