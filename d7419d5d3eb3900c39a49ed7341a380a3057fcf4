@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8312852e_8622ff27",
+        "filename": "src/ui/ConfirmDeleteModal.tsx",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 166
+      },
+      "writtenOn": "2020-04-28T17:44:56Z",
+      "side": 1,
+      "message": "isn\u0027t it \"mt-xl\" ?",
+      "revId": "d7419d5d3eb3900c39a49ed7341a380a3057fcf4",
+      "serverId": "6c1dc8ef-8b94-40e4-bd83-c2359d45ecc0",
+      "unresolved": false
+    }
+  ]
+}
