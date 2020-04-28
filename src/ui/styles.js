@@ -12,7 +12,7 @@ import "@patternfly/patternfly/patternfly-base.css";
 // import "@patternfly/patternfly/layouts/Grid/grid.css";
 // import "@patternfly/patternfly/layouts/Stack/stack.css";
 // import "@patternfly/patternfly/utilities/Sizing/sizing.css";
-import "@patternfly/patternfly/utilities/Flex/flex.css";
+// import "@patternfly/patternfly/utilities/Flex/flex.css";
 // import "@patternfly/patternfly/utilities/Alignment/alignment.css";
 // import "@patternfly/patternfly/utilities/Display/display.css";
 // import "@patternfly/patternfly/utilities/Accessibility/accessibility.css";

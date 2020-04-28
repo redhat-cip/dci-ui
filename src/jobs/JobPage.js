@@ -10,7 +10,7 @@ import {
   Tabs,
   Tab,
   Stack,
-  StackItem
+  StackItem,
 } from "@patternfly/react-core";
 import styled from "styled-components";
 import FilesList from "./files/FilesList";
@@ -23,10 +23,26 @@ import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { enhanceJob } from "./jobsSelectors";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
-import JobSummary from "./JobSummary";
+import { JobSummary } from "./JobsList";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
+`;
+
+const JobDetails = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  @media (min-width: 640px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  background-color: white;
 `;
 
 export class JobPage extends Component {
@@ -39,8 +55,8 @@ export class JobPage extends Component {
       { title: "Logs", value: "jobStates" },
       { title: "Tests", value: "tests" },
       { title: "Issues", value: "issues" },
-      { title: "Files", value: "files" }
-    ]
+      { title: "Files", value: "files" },
+    ],
   };
 
   componentDidMount() {
@@ -50,43 +66,43 @@ export class JobPage extends Component {
       getResults,
       getJobStates,
       getIssues,
-      timezone
+      timezone,
     } = this.props;
     const { endpoints } = this.state;
     const { id, endpoint } = match.params;
-    const activeTabKey = endpoints.findIndex(e => e.value === endpoint);
+    const activeTabKey = endpoints.findIndex((e) => e.value === endpoint);
     fetchJob(id)
-      .then(response => {
+      .then((response) => {
         const job = response.data.job;
         return Promise.all([
           getResults(job),
           getJobStates(job),
-          getIssues(job)
-        ]).then(results => {
+          getIssues(job),
+        ]).then((results) => {
           const enhancedJob = enhanceJob(
             {
               ...job,
               tests: results[0].data.results,
               jobstates: results[1].data.jobstates,
-              issues: results[2].data.issues
+              issues: results[2].data.issues,
             },
             timezone
           );
           this.setState({
             job: enhancedJob,
-            activeTabKey
+            activeTabKey,
           });
         });
       })
-      .catch(error => console.log(error))
+      .catch((error) => console.log(error))
       .then(() => this.setState({ isFetching: false }));
   }
 
-  createIssue = issue => {
+  createIssue = (issue) => {
     const { createIssue } = this.props;
-    createIssue(this.state.job, issue).then(response => {
+    createIssue(this.state.job, issue).then((response) => {
       const newIssue = response.data.issue;
-      this.setState(prevState => {
+      this.setState((prevState) => {
         return {
           job: {
             ...prevState.job,
@@ -96,22 +112,22 @@ export class JobPage extends Component {
                 return accumulator;
               },
               [newIssue]
-            )
-          }
+            ),
+          },
         };
       });
     });
   };
 
-  deleteIssue = issue => {
+  deleteIssue = (issue) => {
     const { deleteIssue } = this.props;
     deleteIssue(this.state.job, issue).then(() =>
-      this.setState(prevState => {
+      this.setState((prevState) => {
         return {
           job: {
             ...prevState.job,
-            issues: prevState.job.issues.filter(i => i.id !== issue.id)
-          }
+            issues: prevState.job.issues.filter((i) => i.id !== issue.id),
+          },
         };
       })
     );
@@ -155,16 +171,13 @@ export class JobPage extends Component {
         }
         loading={loading}
       >
-        <Stack gutter="md">
+        <Stack>
           <StackItem>
-            <ul
-              className="pf-c-data-list pf-u-box-shadow-md"
-              aria-label="job detail"
-            >
-              <JobSummary job={job} history={history} />
-            </ul>
+            <JobDetails>
+              <JobSummary job={job} />
+            </JobDetails>
           </StackItem>
-          <StackItem className="pf-m-main">
+          <StackItem>
             {activeTabKey === 0 && (
               <JobStatesList jobstates={job.jobstates} location={location} />
             )}
@@ -186,26 +199,26 @@ export class JobPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    timezone: getTimezone(state)
+    timezone: getTimezone(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchJob: id =>
+    fetchJob: (id) =>
       dispatch(
         jobsActions.one(
           { id },
           {
-            embed: "results,team,remoteci,components,topic,files,tags"
+            embed: "results,team,remoteci,components,topic,files,tags",
           }
         )
       ),
-    getResults: job => dispatch(getResults(job)),
-    getJobStates: job => dispatch(getJobStatesWithFiles(job)),
-    getIssues: job => dispatch(getIssues(job)),
+    getResults: (job) => dispatch(getResults(job)),
+    getJobStates: (job) => dispatch(getJobStatesWithFiles(job)),
+    getIssues: (job) => dispatch(getIssues(job)),
     createIssue: (job, issue) => dispatch(createIssue(job, issue)),
-    deleteIssue: (job, issue) => dispatch(deleteIssue(job, issue))
+    deleteIssue: (job, issue) => dispatch(deleteIssue(job, issue)),
   };
 }
 

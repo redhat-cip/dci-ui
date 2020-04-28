@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import jobsActions from "./jobsActions";
 import { getJobs } from "./jobsSelectors";
-import JobSummary from "./JobSummary";
 import queryString from "query-string";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState } from "ui";
 import Toolbar from "./toolbar/Toolbar";
+import JobsList from "./JobsList";
 
 export class JobsPage extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ export class JobsPage extends Component {
   };
 
   render() {
-    const { jobs, isFetching, count, history } = this.props;
+    const { jobs, isFetching, count } = this.props;
     const { filters, pagination } = this.state;
     return (
       <Page
@@ -89,16 +89,7 @@ export class JobsPage extends Component {
           />
         }
       >
-        <ul className="pf-c-data-list pf-u-box-shadow-md" aria-label="job list">
-          {jobs.map((job) => (
-            <JobSummary
-              seeDetailsButton
-              key={`${job.id}.${job.etag}`}
-              job={job}
-              history={history}
-            />
-          ))}
-        </ul>
+        <JobsList jobs={jobs} />
       </Page>
     );
   }
