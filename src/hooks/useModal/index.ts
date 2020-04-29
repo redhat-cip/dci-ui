@@ -2,7 +2,6 @@ import { useState } from "react";
 
 const useModal = (defaultValue = false) => {
   const [isOpen, setIsOpen] = useState(defaultValue);
-  console.log('isOpen in hook',isOpen)
   return {
     isOpen,
     toggle: () => setIsOpen(!isOpen),

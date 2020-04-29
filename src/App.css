@@ -1,3 +1,7 @@
 #root {
   height: 100%;
 }
+
+.pf-c-page__main {
+  background-color: whitesmoke!important;
+}
