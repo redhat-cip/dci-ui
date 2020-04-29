@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isEmpty, values } from "lodash";
@@ -8,6 +8,7 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownSeparator,
+  DropdownPosition,
   Nav,
   NavGroup,
   NavItem,
@@ -17,71 +18,66 @@ import {
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
-  Avatar
+  Avatar,
 } from "@patternfly/react-core";
-import accessibleStyles from "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
-import { css } from "@patternfly/react-styles";
 import Logo from "logo.min.svg";
 import { setCurrentTeam } from "currentUser/currentUserActions";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import avatarImg from "./img_avatar.svg";
-import { useAuth } from "auth/authContext";
+import { useAuth, Identity } from "auth/authContext";
 
-class MenuDropdown extends React.Component {
-  state = {
-    isDropdownOpen: false
-  };
-
-  onDropdownToggle = isDropdownOpen => {
-    this.setState({
-      isDropdownOpen
-    });
-  };
-
-  onDropdownSelect = () => {
-    this.setState(prevState => ({
-      isDropdownOpen: !prevState.isDropdownOpen
-    }));
-  };
-
-  render() {
-    const { isDropdownOpen } = this.state;
-    const { title, position, dropdownItems } = this.props;
-    return (
-      <Dropdown
-        isPlain
-        position={position}
-        onSelect={this.onDropdownSelect}
-        isOpen={isDropdownOpen}
-        toggle={
-          <DropdownToggle onToggle={this.onDropdownToggle}>
-            {title}
-          </DropdownToggle>
-        }
-        dropdownItems={dropdownItems}
-      />
-    );
-  }
-}
-
-function DCINavItem({ children, to, exact = true }) {
+const MenuDropdown = ({
+  title,
+  position,
+  dropdownItems,
+}: {
+  title: React.ReactNode;
+  position: DropdownPosition;
+  dropdownItems: any[];
+}) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   return (
-    <Route
-      path={to}
-      exact={exact}
-      children={({ match }) => (
-        <NavItem isActive={!isEmpty(match)}>
-          <Link to={to}>{children}</Link>
-        </NavItem>
-      )}
+    <Dropdown
+      isPlain
+      position={position}
+      onSelect={() => setIsDropdownOpen(!isDropdownOpen)}
+      isOpen={isDropdownOpen}
+      toggle={
+        <DropdownToggle onToggle={setIsDropdownOpen}>{title}</DropdownToggle>
+      }
+      dropdownItems={dropdownItems}
     />
   );
-}
+};
 
-const MainContent = ({ children }) => {
-  const { identity, logout } = useAuth();
+const DCINavItem = ({
+  children,
+  to,
+  exact = true,
+}: {
+  children: React.ReactNode;
+  to: string;
+  exact?: boolean;
+}) => (
+  <Route
+    path={to}
+    exact={exact}
+    children={({ match }) => (
+      <NavItem isActive={!isEmpty(match)}>
+        <Link to={to}>{children}</Link>
+      </NavItem>
+    )}
+  />
+);
+
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const {
+    identity,
+    logout,
+  }: { identity: Identity; logout: () => void } = useAuth();
   const dispatch = useDispatch();
   const history = useHistory();
+  if (identity === null) return null;
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
       <NavGroup title="DCI">
@@ -123,11 +119,9 @@ const MainContent = ({ children }) => {
   const PageToolbar = (
     <Toolbar>
       <ToolbarGroup>
-        <ToolbarItem
-          className={css(accessibleStyles.srOnly, accessibleStyles.visibleOnMd)}
-        >
+        <ToolbarItem>
           <MenuDropdown
-            position="right"
+            position={DropdownPosition.right}
             title={
               <span>
                 <UserIcon className="mr-md" />
@@ -149,33 +143,23 @@ const MainContent = ({ children }) => {
                 onClick={logout}
               >
                 Logout
-              </DropdownItem>
+              </DropdownItem>,
             ]}
           />
         </ToolbarItem>
       </ToolbarGroup>
       {identityTeams.length > 1 && (
-        <ToolbarGroup
-          className={css(
-            accessibleStyles.screenReader,
-            accessibleStyles.visibleOnLg
-          )}
-        >
-          <ToolbarItem
-            className={css(
-              accessibleStyles.srOnly,
-              accessibleStyles.visibleOnMd
-            )}
-          >
+        <ToolbarGroup>
+          <ToolbarItem>
             <MenuDropdown
-              position="right"
+              position={DropdownPosition.right}
               title={
                 <span>
                   <UsersIcon className="mr-md" />
-                  {identity.team.name}
+                  {identity.team && identity.team.name}
                 </span>
               }
-              dropdownItems={identityTeams.map(team => (
+              dropdownItems={identityTeams.map((team) => (
                 <DropdownItem
                   key={team.name}
                   component="button"
@@ -209,4 +193,4 @@ const MainContent = ({ children }) => {
   );
 };
 
-export default MainContent;
+export default AppLayout;
