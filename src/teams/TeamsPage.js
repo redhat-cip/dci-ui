@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import {
-  Button,
-  Toolbar,
-  ToolbarGroup,
-  ToolbarItem
-} from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
 import { PlusCircleIcon } from "@patternfly/react-icons";
 import { Page } from "layout";
 import teamsActions from "./teamsActions";
@@ -18,13 +12,9 @@ import Team from "./Team";
 import NewTeamModal from "./NewTeamModal";
 import { getUsers } from "users/usersSelectors";
 
-const ToolbarWrapper = styled.div`
-  background-color: white;
-`;
-
 export class TeamsPage extends Component {
   state = {
-    isNewTeamModalOpen: false
+    isNewTeamModalOpen: false,
   };
 
   openNewTeamModal = () => {
@@ -47,7 +37,7 @@ export class TeamsPage extends Component {
       currentUser,
       isFetching,
       deleteTeam,
-      history
+      history,
     } = this.props;
     const { isNewTeamModalOpen } = this.state;
     return (
@@ -55,6 +45,14 @@ export class TeamsPage extends Component {
         title="Teams"
         loading={isFetching && isEmpty(teams)}
         empty={!isFetching && isEmpty(teams)}
+        HeaderButton={
+          currentUser.hasEPMRole ? (
+            <Button onClick={this.openNewTeamModal}>
+              <PlusCircleIcon className="mr-xs" />
+              Create a new team
+            </Button>
+          ) : null
+        }
         EmptyComponent={
           <EmptyState
             title="There is no teams"
@@ -62,21 +60,6 @@ export class TeamsPage extends Component {
           />
         }
       >
-        {currentUser.hasEPMRole && (
-          <ToolbarWrapper className="pf-u-p-xl">
-            <Toolbar className="pf-u-justify-content-space-between">
-              <ToolbarGroup>
-                <ToolbarItem className="mr-md">
-                  <Button onClick={this.openNewTeamModal}>
-                    <PlusCircleIcon className="mr-xs" />
-                    Create a new team
-                  </Button>
-                </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup />
-            </Toolbar>
-          </ToolbarWrapper>
-        )}
         <NewTeamModal
           isOpen={isNewTeamModalOpen}
           close={this.closeNewTeamModal}
@@ -99,7 +82,7 @@ export class TeamsPage extends Component {
               <td></td>
             </tr>
           </thead>
-          {teams.map(team => (
+          {teams.map((team) => (
             <Team
               key={`${team.id}.${team.etag}`}
               team={team}
@@ -120,7 +103,7 @@ function mapStateToProps(state) {
     teams: getTeams(state),
     users: getUsers(state),
     isFetching: state.teams.isFetching && state.users.isFetching,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
   };
 }
 
@@ -128,7 +111,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchTeams: () => dispatch(teamsActions.all()),
     fetchUsers: () => dispatch(usersActions.all()),
-    deleteTeam: team => dispatch(teamsActions.delete(team))
+    deleteTeam: (team) => dispatch(teamsActions.delete(team)),
   };
 }
 

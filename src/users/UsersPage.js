@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
 import {
-  Button,
-  Toolbar,
-  ToolbarGroup,
-  ToolbarItem,
-  DropdownItem,
-  DropdownPosition
-} from "@patternfly/react-core";
-import { WarningTriangleIcon, EditAltIcon } from "@patternfly/react-icons";
+  WarningTriangleIcon,
+  EditAltIcon,
+  PlusCircleIcon,
+} from "@patternfly/react-icons";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
@@ -22,7 +19,7 @@ export class UsersPage extends Component {
     fetchUsers();
   }
 
-  getDropdownItems = user => {
+  getDropdownItems = (user) => {
     const { currentUser, deleteUser, history } = this.props;
     const dropdownItems = [
       <DropdownItem
@@ -30,7 +27,7 @@ export class UsersPage extends Component {
         onClick={() => history.push(`/users/${user.id}`)}
       >
         <EditAltIcon className="mr-xs" /> Edit a user
-      </DropdownItem>
+      </DropdownItem>,
     ];
     if (currentUser.isSuperAdmin) {
       dropdownItems.push(
@@ -53,6 +50,17 @@ export class UsersPage extends Component {
         title="Users"
         loading={isFetching && isEmpty(users)}
         empty={!isFetching && isEmpty(users)}
+        HeaderButton={
+          currentUser.isSuperAdmin ? (
+            <Button
+              variant="primary"
+              onClick={() => history.push("/users/create")}
+            >
+              <PlusCircleIcon className="mr-xs" />
+              Create a new user
+            </Button>
+          ) : null
+        }
         EmptyComponent={
           <EmptyState
             title="There is no users"
@@ -61,26 +69,6 @@ export class UsersPage extends Component {
         }
       >
         <table className="pf-c-table pf-m-compact pf-m-grid-md">
-          {currentUser.isSuperAdmin && (
-            <thead>
-              <tr>
-                <th colSpan={6}>
-                  <Toolbar className="pf-u-justify-content-space-between pf-u-mv-md">
-                    <ToolbarGroup>
-                      <ToolbarItem className="mr-md">
-                        <Button
-                          variant="primary"
-                          onClick={() => history.push("/users/create")}
-                        >
-                          Create a new user
-                        </Button>
-                      </ToolbarItem>
-                    </ToolbarGroup>
-                  </Toolbar>
-                </th>
-              </tr>
-            </thead>
-          )}
           <thead>
             <tr>
               <th>ID</th>
@@ -92,7 +80,7 @@ export class UsersPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users.map((user) => (
               <tr key={user.id}>
                 <td>
                   <CopyButton text={user.id} />
@@ -120,14 +108,14 @@ function mapStateToProps(state) {
   return {
     users: getUsers(state),
     isFetching: state.users.isFetching,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchUsers: () => dispatch(usersActions.all()),
-    deleteUser: user => dispatch(usersActions.delete(user))
+    deleteUser: (user) => dispatch(usersActions.delete(user)),
   };
 }
 
