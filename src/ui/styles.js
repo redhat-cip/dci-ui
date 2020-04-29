@@ -68,7 +68,7 @@ import "@patternfly/patternfly/components/DataList/data-list.css";
 // import "@patternfly/patternfly/components/Divider/divider.css";
 // import "@patternfly/patternfly/components/Switch/switch.css";
 // import "@patternfly/patternfly/components/Login/login.css";
-import "@patternfly/patternfly/components/FormControl/form-control.css";
+// import "@patternfly/patternfly/components/FormControl/form-control.css";
 // import "@patternfly/patternfly/components/Badge/badge.css";
 // import "@patternfly/patternfly/components/Title/title.css";
 // import "@patternfly/patternfly/components/ChipGroup/chip-group.css";

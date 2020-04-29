@@ -7,13 +7,13 @@ import {
   Text
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
-import MainContent from "./MainContent";
+import AppLayout from "./AppLayout";
 
 export default class LoadingPage extends Component {
   render() {
     const { title, description, ...props } = this.props;
     return (
-      <MainContent {...props}>
+      <AppLayout {...props}>
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1">{title}</Text>
@@ -23,7 +23,7 @@ export default class LoadingPage extends Component {
         <Bullseye>
           <BlinkLogo />
         </Bullseye>
-      </MainContent>
+      </AppLayout>
     );
   }
 }

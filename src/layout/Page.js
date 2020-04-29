@@ -8,7 +8,7 @@ import {
   Text
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
-import MainContent from "./MainContent";
+import AppLayout from "./AppLayout";
 
 export default class Page extends Component {
   render() {
@@ -26,7 +26,7 @@ export default class Page extends Component {
       ...props
     } = this.props;
     return (
-      <MainContent {...props}>
+      <AppLayout {...props}>
         {isEmpty(HeaderSection) ? (
           <PageSection variant={PageSectionVariants.light}>
             <TextContent>
@@ -61,7 +61,7 @@ export default class Page extends Component {
             </PageSection>
           )}
         </PageSection>
-      </MainContent>
+      </AppLayout>
     );
   }
 }

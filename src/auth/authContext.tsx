@@ -13,7 +13,7 @@ type Team = {
   name: string;
 };
 
-type IdentityProps = {
+export type Identity = {
   email: string;
   etag: string;
   fullname: string;
@@ -23,12 +23,17 @@ type IdentityProps = {
     [id: string]: Team;
   };
   timezone: string;
+  isSuperAdmin?: boolean;
+  hasEPMRole?: boolean;
+  hasReadOnlyRole?: boolean;
+  isReadOnly?: boolean;
+  team?: Team;
 } | null;
 
 type AuthContextProps = {
   isLoadingIdentity: boolean;
-  identity: IdentityProps;
-  refreshIdentity: () => Promise<IdentityProps>;
+  identity: Identity;
+  refreshIdentity: () => Promise<Identity>;
   sso: UserManager | null;
   logout: () => void;
 };
@@ -46,20 +51,18 @@ function buildShortcut(team: Team) {
       team.name === adminTeamName ||
       team.name === EPMTeamName ||
       team.name === RedHatTeamName,
-    isReadOnly: team.name === RedHatTeamName
+    isReadOnly: team.name === RedHatTeamName,
   };
 }
 
-const getCurrentUser: (
-  config: configProps
-) => Promise<IdentityProps> = config => {
-  return http.get(`${config.apiURL}/api/v1/identity`).then(response => {
+const getCurrentUser: (config: configProps) => Promise<Identity> = (config) => {
+  return http.get(`${config.apiURL}/api/v1/identity`).then((response) => {
     const identity = response.data.identity;
     const firstTeam = values(identity.teams)[0];
     return {
       ...identity,
       ...buildShortcut(firstTeam),
-      team: firstTeam
+      team: firstTeam,
     };
   });
 };
@@ -73,11 +76,11 @@ export function getSSOUserManager(config: configProps) {
     client_id: config.sso.clientId,
     redirect_uri,
     post_logout_redirect_uri,
-    response_type: "id_token token"
+    response_type: "id_token token",
   };
   const manager = new UserManager(settings);
   manager.events.addAccessTokenExpiring(() => {
-    manager.signinSilent().then(user => {
+    manager.signinSilent().then((user) => {
       if (user) {
         setJWT(user.access_token);
       }
@@ -95,12 +98,12 @@ function AuthProvider({ children }: AuthProviderProps) {
   const dispatch = useDispatch();
   const [state, setState] = React.useState<{
     isLoadingIdentity: boolean;
-    identity: IdentityProps;
+    identity: Identity;
     sso: UserManager | null;
   }>({
     isLoadingIdentity: true,
     identity: null,
-    sso: null
+    sso: null,
   });
 
   useEffect(() => {
@@ -121,7 +124,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       value={{
         ...state,
         refreshIdentity: () => {
-          return getCurrentUser(config).then(identity => {
+          return getCurrentUser(config).then((identity) => {
             setState({ ...state, identity });
             dispatch(setIdentity(identity));
             return identity;
@@ -135,7 +138,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           } catch (error) {
             console.error(error);
           }
-        }
+        },
       }}
     >
       {state.isLoadingIdentity ? (
