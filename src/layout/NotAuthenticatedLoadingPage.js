@@ -1,21 +1,14 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import { Bullseye } from "@patternfly/react-core";
+import React from "react";
+import { Bullseye, Page } from "@patternfly/react-core";
 import { BlinkLogo, BackgroundImage } from "ui";
 
-const FullHeightDiv = styled.div`
-  height: 100vh;
-`;
+const NotAuthenticatedLoadingPage = () => (
+  <Page header={null} sidebar={null}>
+    <BackgroundImage />
+    <Bullseye>
+      <BlinkLogo />
+    </Bullseye>
+  </Page>
+);
 
-export default class NotAuthenticatedLoadingPage extends Component {
-  render() {
-    return (
-      <FullHeightDiv>
-        <BackgroundImage />
-        <Bullseye>
-          <BlinkLogo />
-        </Bullseye>
-      </FullHeightDiv>
-    );
-  }
-}
+export default NotAuthenticatedLoadingPage;

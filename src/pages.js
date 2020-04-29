@@ -20,7 +20,7 @@ import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
 import LoginPage from "./auth/LoginPage";
 import LoginCallbackPage from "./auth/LoginCallbackPage";
 import LogoutPage from "./auth/LogoutPage";
-import Page404 from "./Page404";
+import Page404 from "./layout/Page404";
 
 const TrendsPage = Loadable({
   loader: () => import("./stats/trends/TrendsPage"),
