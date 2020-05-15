@@ -30,10 +30,11 @@ export type Identity = {
   team?: Team;
 } | null;
 
-type AuthContextProps = {
+export type AuthContextProps = {
   isLoadingIdentity: boolean;
   identity: Identity;
   refreshIdentity: () => Promise<Identity>;
+  changeCurrentTeam: (team: Team) => void;
   sso: UserManager | null;
   logout: () => void;
 };
@@ -55,17 +56,21 @@ function buildShortcut(team: Team) {
   };
 }
 
-const getCurrentUser: (config: configProps) => Promise<Identity> = (config) => {
+function buildIdentity(identity: Identity, team: Team): Identity {
+  return {
+    ...identity,
+    ...buildShortcut(team),
+    team: team,
+  } as Identity;
+}
+
+function getCurrentUser(config: configProps): Promise<Identity> {
   return http.get(`${config.apiURL}/api/v1/identity`).then((response) => {
     const identity = response.data.identity;
     const firstTeam = values(identity.teams)[0];
-    return {
-      ...identity,
-      ...buildShortcut(firstTeam),
-      team: firstTeam,
-    };
+    return buildIdentity(identity, firstTeam);
   });
-};
+}
 
 export function getSSOUserManager(config: configProps) {
   const origin = window.location.origin;
@@ -123,6 +128,14 @@ function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         ...state,
+        changeCurrentTeam: (team: Team) => {
+          const identity = buildIdentity(state.identity, team);
+          setState({
+            ...state,
+            identity,
+          });
+          dispatch(setIdentity(identity));
+        },
         refreshIdentity: () => {
           return getCurrentUser(config).then((identity) => {
             setState({ ...state, identity });

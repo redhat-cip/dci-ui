@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { isEmpty, values } from "lodash";
 import {
   Brand,
@@ -21,10 +20,9 @@ import {
   Avatar,
 } from "@patternfly/react-core";
 import Logo from "logo.min.svg";
-import { setCurrentTeam } from "currentUser/currentUserActions";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import avatarImg from "./img_avatar.svg";
-import { useAuth, Identity } from "auth/authContext";
+import { useAuth, AuthContextProps } from "auth/authContext";
 
 const MenuDropdown = ({
   title,
@@ -71,11 +69,7 @@ const DCINavItem = ({
 );
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const {
-    identity,
-    logout,
-  }: { identity: Identity; logout: () => void } = useAuth();
-  const dispatch = useDispatch();
+  const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
   const history = useHistory();
   if (identity === null) return null;
   const PageNav = (
@@ -163,7 +157,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 <DropdownItem
                   key={team.name}
                   component="button"
-                  onClick={() => dispatch(setCurrentTeam(team))}
+                  onClick={() => changeCurrentTeam(team)}
                 >
                   {team.name}
                 </DropdownItem>
