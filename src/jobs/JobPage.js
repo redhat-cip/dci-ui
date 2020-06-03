@@ -210,7 +210,7 @@ function mapDispatchToProps(dispatch) {
         jobsActions.one(
           { id },
           {
-            embed: "results,team,remoteci,components,topic,files,tags",
+            embed: "results,team,remoteci,components,topic,files",
           }
         )
       ),

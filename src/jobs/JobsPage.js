@@ -107,7 +107,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: ({ pagination, filters }) => {
       const params = {
-        embed: "results,team,remoteci,components,topic,tags",
+        embed: "results,team,remoteci,components,topic",
         limit: pagination.perPage,
         offset: (pagination.page - 1) * pagination.perPage,
       };

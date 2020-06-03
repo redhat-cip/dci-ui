@@ -225,7 +225,16 @@ export const JobSummary = ({ job }) => (
           <p>
             {job.tags.map((tag, index) => (
               <Label key={index} isCompact className="mr-xs mt-xs">
-                {tag.name}
+                {tag}
+              </Label>
+            ))}
+          </p>
+        )}
+        {isEmpty(job.tag) ? null : (
+          <p>
+            {job.tag.map((tag, index) => (
+              <Label key={index} isCompact className="mr-xs mt-xs">
+                {tag}
               </Label>
             ))}
           </p>
