@@ -74,14 +74,14 @@ function getCurrentUser(config: configProps): Promise<Identity> {
 
 export function getSSOUserManager(config: configProps) {
   const origin = window.location.origin;
-  const redirect_uri = `${origin}/login_callback`;
-  const post_logout_redirect_uri = `${origin}/login`;
   const settings = {
     authority: `${config.sso.url}/auth/realms/${config.sso.realm}`,
     client_id: config.sso.clientId,
-    redirect_uri,
-    post_logout_redirect_uri,
+    redirect_uri: `${origin}/login_callback`,
+    post_logout_redirect_uri: `${origin}/login`,
+    silent_redirect_uri: `${origin}/silent_redirect`,
     response_type: "id_token token",
+    automaticSilentRenew: true,
   };
   const manager = new UserManager(settings);
   manager.events.addAccessTokenExpiring(() => {
