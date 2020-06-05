@@ -1,0 +1,9 @@
+Code-Review+1: Bill Peck <bill@pecknet.com>
+Code-Review+2: Guillaume Vincent <gvincent@redhat.com>
+Workflow+1: Guillaume Vincent <gvincent@redhat.com>
+Verified+2: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-by: Zuul CI <zuul@softwarefactory-project.io>
+Submitted-at: Fri, 05 Jun 2020 06:46:53 +0000
+Reviewed-on: https://softwarefactory-project.io/r/18537
+Project: dci-ui
+Branch: refs/heads/master
