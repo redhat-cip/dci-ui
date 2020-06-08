@@ -32,7 +32,7 @@ class Select extends Component {
         fieldId={id || name}
         helperText={helperText}
         helperTextInvalid={getErrorMessage()}
-        isValid={isValid()}
+        validated={isValid() ? "success" : "error"}
       >
         <FormSelect
           value={getValue() || ""}

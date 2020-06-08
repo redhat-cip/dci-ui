@@ -2,8 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { values } from "lodash";
 import styled from "styled-components";
-import { Alert, Button } from "@patternfly/react-core";
-import { TimesIcon } from "@patternfly/react-icons";
+import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
 import { hideAlert } from "./alertsActions";
 
 const AlertsContainer = styled.div`
@@ -27,15 +26,7 @@ export function Alerts({ alerts, hide }) {
             key={alert.id}
             variant={alert.type}
             title={alert.title}
-            action={
-              <Button
-                variant="plain"
-                aria-label="close alert"
-                onClick={() => hide(alert)}
-              >
-                <TimesIcon />
-              </Button>
-            }
+            actionClose={<AlertActionCloseButton onClose={() => hide(alert)} />}
           >
             {alert.message
               ? alert.message.split("\n").map((m, i) => <p key={i}>{m}</p>)

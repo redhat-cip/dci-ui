@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Labels } from "ui";
-import { Button } from "@patternfly/react-core";
+import { Button, Label } from "@patternfly/react-core";
 
 export default class TestHeader extends Component {
   render() {
@@ -12,40 +11,40 @@ export default class TestHeader extends Component {
         </div>
         <div className="pf-c-data-list__cell">
           <small>
-            <Labels.Default className="mr-xs">
+            <Label color="blue" className="mr-xs">
               {test.total} tests
-            </Labels.Default>
+            </Label>
             {test.successfixes ? (
-              <Labels.Success className="mr-xs">
+              <Label color="green" className="mr-xs">
                 {test.successfixes} fixes
-              </Labels.Success>
+              </Label>
             ) : null}
             {test.success ? (
-              <Labels.Success className="mr-xs">
+              <Label color="green" className="mr-xs">
                 {test.success} success
-              </Labels.Success>
+              </Label>
             ) : null}
             {test.skips ? (
-              <Labels.Warning className="mr-xs">
+              <Label color="orange" className="mr-xs">
                 {test.skips} skipped
-              </Labels.Warning>
+              </Label>
             ) : null}
             {test.errors ? (
-              <Labels.Error className="mr-xs">
+              <Label color="red" className="mr-xs">
                 {test.errors} errors
-              </Labels.Error>
+              </Label>
             ) : null}
             {test.failures ? (
-              <Labels.Failure className="mr-xs">
+              <Label color="red" className="mr-xs">
                 {test.failures} failures
-              </Labels.Failure>
+              </Label>
             ) : null}
             {test.regressions ? (
-              <Labels.Regression>
+              <Label color="red">
                 {`${test.regressions} regression${
                   test.regressions > 1 ? "s" : ""
                 }`}
-              </Labels.Regression>
+              </Label>
             ) : null}
           </small>
         </div>
