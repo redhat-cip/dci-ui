@@ -21,7 +21,7 @@ export class TopicsFilter extends Component {
   render() {
     const { topics, isFetching, activeFilters } = this.props;
     if (isFetching && isEmpty(topics)) {
-      return <LoadingFilter placeholder="Filter by Topic" className="mr-xl" />;
+      return <LoadingFilter placeholder="Filter by Topic" className="mr-xs" />;
     }
     const topicsFilter = createTopicsFilter(topics);
     const topicFilter = getCurrentFilters(activeFilters, topicsFilter).topic_id;
@@ -33,7 +33,7 @@ export class TopicsFilter extends Component {
         onFilterValueSelected={(newTopicFilter) =>
           this._cleanFiltersAndFilterJobs([newTopicFilter])
         }
-        className="mr-xl"
+        className="mr-xs"
       />
     );
   }

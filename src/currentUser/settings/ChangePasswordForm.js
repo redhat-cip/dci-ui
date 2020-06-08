@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import {
   Button,
   ActionGroup,
-  Toolbar,
-  ToolbarGroup,
   Card,
-  CardHeader,
+  CardTitle,
   CardBody,
 } from "@patternfly/react-core";
 import Formsy from "formsy-react";
@@ -37,7 +35,7 @@ export default class ChangePasswordForm extends Component {
     } = this.state;
     return (
       <Card>
-        <CardHeader>Change your password</CardHeader>
+        <CardTitle>Change your password</CardTitle>
         <CardBody>
           <Formsy
             id="change-password-form"
@@ -68,17 +66,9 @@ export default class ChangePasswordForm extends Component {
               required
             />
             <ActionGroup>
-              <Toolbar>
-                <ToolbarGroup>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    isDisabled={!canSubmit}
-                  >
-                    Change your password
-                  </Button>
-                </ToolbarGroup>
-              </Toolbar>
+              <Button type="submit" variant="primary" isDisabled={!canSubmit}>
+                Change your password
+              </Button>
             </ActionGroup>
           </Formsy>
         </CardBody>

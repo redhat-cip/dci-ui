@@ -30,7 +30,7 @@ export class NewTeamModal extends Component {
         title={`Create a new team`}
         isOpen={isOpen}
         onClose={close}
-        isSmall
+        variant="small"
         actions={[
           <Button key="cancel" variant="secondary" onClick={close}>
             Cancel

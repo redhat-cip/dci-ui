@@ -9,6 +9,7 @@ import {
   Text,
   Tabs,
   Tab,
+  TabTitleText,
   Stack,
   StackItem,
 } from "@patternfly/react-core";
@@ -23,26 +24,10 @@ import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { enhanceJob } from "./jobsSelectors";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
-import { JobSummary } from "./JobsList";
+import JobSummary from "./JobSummary";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
-`;
-
-const JobDetails = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-
-  @media (min-width: 640px) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  background-color: white;
 `;
 
 export class JobPage extends Component {
@@ -161,7 +146,7 @@ export class JobPage extends Component {
                     <Tab
                       key={endpoint.value}
                       eventKey={i}
-                      title={endpoints[i].title}
+                      title={<TabTitleText>{endpoints[i].title}</TabTitleText>}
                     ></Tab>
                   ))}
                 </Tabs>
@@ -173,9 +158,7 @@ export class JobPage extends Component {
       >
         <Stack>
           <StackItem>
-            <JobDetails>
-              <JobSummary job={job} />
-            </JobDetails>
+            <JobSummary job={job} />
           </StackItem>
           <StackItem>
             {activeTabKey === 0 && (

@@ -14,14 +14,12 @@ import {
   Page,
   PageHeader,
   PageSidebar,
-  Toolbar,
-  ToolbarGroup,
-  ToolbarItem,
-  Avatar,
+  PageHeaderTools,
+  PageHeaderToolsGroup,
+  PageHeaderToolsItem,
 } from "@patternfly/react-core";
 import Logo from "logo.min.svg";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
-import avatarImg from "./img_avatar.svg";
 import { useAuth, AuthContextProps } from "auth/authContext";
 
 const MenuDropdown = ({
@@ -110,10 +108,10 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     </Nav>
   );
   const identityTeams = values(identity.teams);
-  const PageToolbar = (
-    <Toolbar>
-      <ToolbarGroup>
-        <ToolbarItem>
+  const headerTools = (
+    <PageHeaderTools>
+      <PageHeaderToolsGroup>
+        <PageHeaderToolsItem>
           <MenuDropdown
             position={DropdownPosition.right}
             title={
@@ -140,11 +138,11 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               </DropdownItem>,
             ]}
           />
-        </ToolbarItem>
-      </ToolbarGroup>
+        </PageHeaderToolsItem>
+      </PageHeaderToolsGroup>
       {identityTeams.length > 1 && (
-        <ToolbarGroup>
-          <ToolbarItem>
+        <PageHeaderToolsGroup>
+          <PageHeaderToolsItem>
             <MenuDropdown
               position={DropdownPosition.right}
               title={
@@ -163,17 +161,16 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 </DropdownItem>
               ))}
             />
-          </ToolbarItem>
-        </ToolbarGroup>
+          </PageHeaderToolsItem>
+        </PageHeaderToolsGroup>
       )}
-    </Toolbar>
+    </PageHeaderTools>
   );
 
   const Header = (
     <PageHeader
       logo={<Brand src={Logo} alt="DCI Logo" />}
-      toolbar={PageToolbar}
-      avatar={<Avatar src={avatarImg} alt="Avatar" />}
+      headerTools={headerTools}
       showNavToggle
     />
   );

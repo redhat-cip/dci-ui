@@ -4,13 +4,13 @@ import { isEmpty } from "lodash";
 import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
 import teamsActions from "teams/teamsActions";
-import { CopyButton, Labels, EmptyState, ConfirmDeleteModal } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
 import NewRemoteciButton from "./NewRemoteciButton";
 import EditRemoteciButton from "./EditRemoteciButton";
 import { getRemotecis } from "./remotecisSelectors";
 import { getTeams } from "teams/teamsSelectors";
 import SeeCredentialsModal from "./SeeCredentialsModal";
-import { Button } from "@patternfly/react-core";
+import { Button, Label } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
 export class RemotecisPage extends Component {
@@ -58,9 +58,9 @@ export class RemotecisPage extends Component {
                 <td>{remoteci.name}</td>
                 <td className="text-center">
                   {remoteci.state === "active" ? (
-                    <Labels.Success>active</Labels.Success>
+                    <Label color="green">active</Label>
                   ) : (
-                    <Labels.Error>inactive</Labels.Error>
+                    <Label color="red">inactive</Label>
                   )}
                 </td>
                 <td className="text-center">
@@ -72,7 +72,7 @@ export class RemotecisPage extends Component {
                 <td>{remoteci.from_now}</td>
                 <td className="text-center">
                   <EditRemoteciButton
-                    className="mr-xl"
+                    className="mr-xs"
                     remoteci={remoteci}
                     teams={teams}
                   />

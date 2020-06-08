@@ -20,7 +20,6 @@ export default class CopyButton extends Component {
       <ClipboardCopyButton
         exitDelay={1600}
         entryDelay={100}
-        maxWidth="150px"
         position={position}
         id={`copy-button-${text}`}
         textId={`text-input-${text}`}

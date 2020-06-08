@@ -1,9 +1,19 @@
 import styled, { css } from "styled-components";
-import { Colors } from "ui";
+import {
+  global_palette_gold_300,
+  global_palette_red_100,
+  global_palette_green_400,
+  global_palette_black_200,
+  global_palette_black_300,
+  global_palette_black_600,
+  global_palette_black_700,
+  global_palette_black_800,
+  global_palette_white,
+} from "@patternfly/react-tokens";
 
 export const JobStates = styled.div`
   padding: 1em 0;
-  background-color: ${Colors.black900};
+  background-color: ${global_palette_black_800.value};
 `;
 
 export const JobStateRow = styled.div`
@@ -29,56 +39,56 @@ export const Label = styled.span`
   padding: 2px 5px;
   line-height: 12px;
   font-size: 12px;
-  background-color: ${Colors.black600};
+  background-color: ${global_palette_black_600.value};
   border-radius: 6px;
-  color: ${Colors.black300};
+  color: ${global_palette_black_300.value};
 `;
 
 export const SuccessLabel = styled(Label)`
-  background-color: ${Colors.green400};
-  color: ${Colors.white};
+  background-color: ${global_palette_green_400.value};
+  color: ${global_palette_white.value};
 `;
 
 export const FailureLabel = styled(Label)`
-  background-color: ${Colors.red100};
-  color: ${Colors.white};
+  background-color: ${global_palette_red_100.value};
+  color: ${global_palette_white.value};
 `;
 
 export const ErrorLabel = styled(Label)`
-  background-color: ${Colors.red100};
-  color: ${Colors.white};
+  background-color: ${global_palette_red_100.value};
+  color: ${global_palette_white.value};
 `;
 
 export const FileRow = styled(JobStateRow)`
-  color: ${Colors.gold200};
-  background-color: ${Colors.black800};
+  color: ${global_palette_gold_300.value};
+  background-color: ${global_palette_black_700.value};
   margin-bottom: 1px;
   cursor: pointer;
   display: flex;
   align-items: center;
   &:hover {
-    background-color: ${Colors.black700};
+    background-color: ${global_palette_black_600.value};
   }
 `;
 
 export const ShareLink = styled.a`
   margin-left: 10px;
   font-size: 11px;
-  color: ${Colors.black600};
+  color: ${global_palette_black_600.value};
   &:hover {
-    color: ${Colors.black200};
+    color: ${global_palette_black_200.value};
   }
   ${(props) =>
     props.isSelected &&
     css`
-      color: ${Colors.black200};
+      color: ${global_palette_black_200.value};
     `};
 `;
 
 export const CaretIcon = styled.div`
   margin-left: 10px;
   font-size: 13px;
-  color: ${Colors.black600};
+  color: ${global_palette_black_600.value};
 `;
 
 export const FileName = styled.div`
@@ -88,7 +98,7 @@ export const FileName = styled.div`
 `;
 
 export const FileContent = styled.div`
-  background-color: ${Colors.black800};
+  background-color: ${global_palette_black_800.value};
   padding: 1em 0;
 `;
 
@@ -103,7 +113,7 @@ export const Pre = styled.pre`
 `;
 
 export const JobStatePre = styled(Pre)`
-  color: ${Colors.black200};
+  color: ${global_palette_black_200.value};
   padding: 0 20px 0 35px;
   margin-bottom: 1px;
 `;
