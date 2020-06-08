@@ -101,7 +101,7 @@ export class TopicsPage extends Component {
               <span className="mr-xs">{product.icon}</span>
               {product.name}
             </ProductTitle>
-            <Gallery gutter="md" key={product.id}>
+            <Gallery hasGutter key={product.id}>
               {product.topics.map((topic) => (
                 <GalleryItem key={topic.id}>
                   <Topic

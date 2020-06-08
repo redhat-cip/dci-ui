@@ -10,7 +10,7 @@ export class CreateUserPage extends Component {
     const { createUser, history } = this.props;
     return (
       <Page title="Create a user">
-        <Grid gutter="md">
+        <Grid hasGutter>
           <GridItem span={6}>
             <Card>
               <CardBody>

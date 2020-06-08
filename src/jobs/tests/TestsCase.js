@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Labels } from "ui";
-import { Button } from "@patternfly/react-core";
+import { Button, Label } from "@patternfly/react-core";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { Pre } from "jobs/jobStates/JobStateComponents";
 
@@ -30,23 +29,17 @@ export default class Testcases extends Component {
           </td>
           <td>
             {testscase.action === "skipped" && (
-              <Labels.Warning>Skip</Labels.Warning>
+              <Label color="orange">Skip</Label>
             )}
             {testscase.action === "failure" && (
-              <Labels.Failure>Failure</Labels.Failure>
+              <Label color="red">Failure</Label>
             )}
-            {testscase.action === "error" && <Labels.Error>Error</Labels.Error>}
-            {testscase.action === "passed" && (
-              <Labels.Success>Pass</Labels.Success>
-            )}
+            {testscase.action === "error" && <Label color="red">Error</Label>}
+            {testscase.action === "passed" && <Label color="green">Pass</Label>}
           </td>
           <td>
-            {testscase.regression && (
-              <Labels.Failure>Regression</Labels.Failure>
-            )}
-            {testscase.successfix && (
-              <Labels.Success>Success fix</Labels.Success>
-            )}
+            {testscase.regression && <Label color="red">Regression</Label>}
+            {testscase.successfix && <Label color="green">Success fix</Label>}
           </td>
           <td>{testscase.classname || testscase.name}</td>
           <td>{testscase.name}</td>

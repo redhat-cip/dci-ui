@@ -23,7 +23,7 @@ import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { enhanceJob } from "./jobsSelectors";
 import { getTimezone } from "currentUser/currentUserSelectors";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
-import { JobSummary } from "./JobsList";
+import { JobSummary } from "./JobSummary";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;

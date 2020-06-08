@@ -1,25 +1,34 @@
 import React, { Component } from "react";
-import { isNull, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import { getGlobalStatus } from "./globalStatusActions";
 import styled from "styled-components";
-import { Colors, Filter } from "ui";
+import {
+  global_palette_red_100,
+  global_palette_green_400,
+  global_palette_black_500,
+  global_palette_white,
+} from "@patternfly/react-tokens";
 import { Page } from "layout";
-import { getGlobalStatusFilters } from "./globalStatusGetters";
-import StatDetails from "./StatDetails";
-import { Grid, GridItem, Button } from "@patternfly/react-core";
-
-import { LongArrowAltLeftIcon } from "@patternfly/react-icons";
+import {
+  PageSection,
+  Gallery,
+  Card,
+  GalleryItem,
+  CardHeader,
+  CardBody,
+} from "@patternfly/react-core";
+import { Link } from "react-router-dom";
 
 const GlobalStatusItem = styled.div`
   text-align: center;
   background: ${(props) =>
     isEmpty(props.stat.jobs)
-      ? Colors.black500
+      ? global_palette_black_500.value
       : props.stat.percentageOfSuccess > 30
-      ? Colors.green400
-      : Colors.red100};
-  color: ${Colors.white};
+      ? global_palette_green_400.value
+      : global_palette_red_100.value};
+  color: ${global_palette_white.value};
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -39,7 +48,6 @@ const GlobalStatusItemBody = styled.div`
 
 export class GlobalStatusPage extends Component {
   state = {
-    filter: null,
     seeDetails: false,
     stat: null,
   };
@@ -58,7 +66,6 @@ export class GlobalStatusPage extends Component {
         };
       }
       return {
-        seeDetails: true,
         stat,
       };
     });
@@ -66,65 +73,80 @@ export class GlobalStatusPage extends Component {
 
   render() {
     const { globalStatus: stats } = this.props;
-    const { filter, seeDetails, stat } = this.state;
-    const filters = getGlobalStatusFilters(stats);
-    const defaultFilter = { name: "All" };
+    const { stat } = this.state;
+
     return (
       <Page
         title="Global Status"
+        description="The percentage of jobs in success for all partners using DCI. Click on a topic to see more details"
         loading={isEmpty(stats)}
-        Toolbar={
-          <Filter
-            placeholder={isNull(filter) ? defaultFilter.name : filter.name}
-            filter={filter || defaultFilter}
-            filters={[defaultFilter, ...filters]}
-            onFilterValueSelected={(newFilter) =>
-              this.setState({ filter: newFilter })
-            }
-          />
-        }
       >
-        {seeDetails ? (
-          <Grid gutter="md">
-            <GridItem>
-              <Button
-                variant="plain"
-                aria-label="Back button hide details"
-                onClick={() =>
-                  this.setState((prevState) => ({
-                    seeDetails: !prevState.seeDetails,
-                  }))
-                }
-              >
-                <LongArrowAltLeftIcon size="lg" />
-              </Button>
-              <StatDetails stat={stat} />
-            </GridItem>
-          </Grid>
-        ) : (
-          <Grid gutter="md" sm={3} md={2}>
-            {stats
-              .filter((stat) => {
-                if (isNull(filter) || filter.name === "All") return true;
-                return stat.product_name === filter.name;
-              })
-              .map((stat) => (
-                <GridItem
-                  key={stat.id}
-                  onClick={() => this.seeStatDetails(stat)}
-                >
-                  <GlobalStatusItem stat={stat}>
-                    <GlobalStatusItemTitle>
-                      {stat.topic_name}
-                    </GlobalStatusItemTitle>
-                    <GlobalStatusItemBody>
-                      {stat.percentageOfSuccess}% success
-                    </GlobalStatusItemBody>
-                  </GlobalStatusItem>
-                </GridItem>
+        <PageSection>
+          {isEmpty(stat) ? (
+            <Gallery hasGutter>
+              {stats.map((stat) => (
+                <GalleryItem key={stat.id}>
+                  <Card
+                    onClick={() => this.setState({ stat })}
+                    title="Click to enlarge"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <CardBody>
+                      <div>
+                        <GlobalStatusItem stat={stat}>
+                          <GlobalStatusItemTitle>
+                            {stat.topic_name}
+                          </GlobalStatusItemTitle>
+                          <GlobalStatusItemBody>
+                            {stat.percentageOfSuccess}% success
+                          </GlobalStatusItemBody>
+                        </GlobalStatusItem>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </GalleryItem>
               ))}
-          </Grid>
-        )}
+            </Gallery>
+          ) : (
+            <Card
+              onClick={() => this.setState({ stat: null })}
+              title="Click to hide"
+              style={{ cursor: "pointer" }}
+            >
+              <CardHeader>Stat details for {stat.name}</CardHeader>
+              <CardBody>
+                {isEmpty(stat.jobs) ? (
+                  "There are no job for this component"
+                ) : (
+                  <table className="pf-c-table pf-m-compact pf-m-grid-md">
+                    <thead>
+                      <tr>
+                        <th>Team</th>
+                        <th>Remote CI (Configuration)</th>
+                        <th className="text-center">Status</th>
+                        <th className="text-right">Last run</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {stat.jobs.map((job, i) => (
+                        <tr key={i}>
+                          <td>{job.team_name}</td>
+                          <td>{job.remoteci_name}</td>
+                          <td className="text-center">
+                            <Link to={`/jobs/${job.id}/jobStates`}>
+                              {job.status}
+                            </Link>
+                          </td>
+                          <td className="text-right">{job.created_at}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </CardBody>
+            </Card>
+          )}
+        </PageSection>
       </Page>
     );
   }

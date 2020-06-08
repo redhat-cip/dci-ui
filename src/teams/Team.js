@@ -6,8 +6,13 @@ import {
   EditAltIcon,
   PlusCircleIcon,
 } from "@patternfly/react-icons";
-import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
-import { ConfirmDeleteModal, CopyButton, Labels, KebabDropdown } from "ui";
+import {
+  Button,
+  Label,
+  DropdownItem,
+  DropdownPosition,
+} from "@patternfly/react-core";
+import { ConfirmDeleteModal, CopyButton, KebabDropdown } from "ui";
 import teamsActions, { fetchUsersForTeam } from "./teamsActions";
 import { deleteUserFromTeam } from "users/usersActions";
 import AddUserToTeamModal from "./AddUserToTeamModal";
@@ -167,13 +172,13 @@ export class Team extends Component {
             </th>
             <th>{team.name}</th>
             <td>
-              {team.external ? <Labels.Default>partner</Labels.Default> : null}
+              {team.external ? <Label color="blue">partner</Label> : null}
             </td>
             <td>
               {team.state === "active" ? (
-                <Labels.Success>active</Labels.Success>
+                <Label color="green">active</Label>
               ) : (
-                <Labels.Error>inactive</Labels.Error>
+                <Label color="red">inactive</Label>
               )}
             </td>
             <td>{team.from_now}</td>

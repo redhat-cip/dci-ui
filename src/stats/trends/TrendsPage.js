@@ -60,7 +60,7 @@ export class TrendsPage extends Component {
       >
         <PageSection>
           {isEmpty(selectedTopic) ? (
-            <Gallery gutter="md">
+            <Gallery hasGutter>
               {topics.map((topic) => {
                 const filteredTrends = this.filterTrends(
                   trends[topic.id],
