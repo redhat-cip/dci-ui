@@ -41,7 +41,7 @@ export class EditUserPage extends Component {
     if (isEmpty(user)) return <LoadingPage title="Edit user ..." />;
     return (
       <Page title={`Edit user ${user.fullname}`}>
-        <Grid gutter="md">
+        <Grid hasGutter>
           <GridItem span={6}>
             <Card>
               <CardBody>

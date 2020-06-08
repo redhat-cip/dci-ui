@@ -51,7 +51,7 @@ export class PerformancePage extends Component {
         <PageSection>
           <Card>
             <CardBody>
-              <Grid gutter="md">
+              <Grid hasGutter>
                 <GridItem span={6}>
                   <JobSelectorForm
                     initialData={{

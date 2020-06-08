@@ -5,10 +5,8 @@ import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
 import {
   Button,
   ActionGroup,
-  Toolbar,
-  ToolbarGroup,
   Card,
-  CardHeader,
+  CardTitle,
   CardBody,
 } from "@patternfly/react-core";
 
@@ -34,7 +32,7 @@ export default class SettingsForm extends Component {
     const { currentUser, timezones, canSubmit } = this.state;
     return (
       <Card>
-        <CardHeader>Personal information</CardHeader>
+        <CardTitle>Personal information</CardTitle>
         <CardBody>
           <Formsy
             id="current-user-form"
@@ -86,13 +84,9 @@ export default class SettingsForm extends Component {
               value=""
             />
             <ActionGroup>
-              <Toolbar>
-                <ToolbarGroup>
-                  <Button type="submit" isDisabled={!canSubmit}>
-                    Update your settings
-                  </Button>
-                </ToolbarGroup>
-              </Toolbar>
+              <Button type="submit" isDisabled={!canSubmit}>
+                Update your settings
+              </Button>
             </ActionGroup>
           </Formsy>
         </CardBody>

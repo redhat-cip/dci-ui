@@ -28,7 +28,7 @@ class Input extends Component {
         fieldId={id || name}
         helperText={helperText}
         helperTextInvalid={getErrorMessage()}
-        isValid={isValid()}
+        validated={isValid() ? "success" : "error"}
       >
         <TextInput
           isRequired={required}

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Button,
-  ActionGroup,
-  Toolbar,
-  ToolbarGroup,
-} from "@patternfly/react-core";
+import { Button, ActionGroup } from "@patternfly/react-core";
 import { useAuth } from "./authContext";
 import { useLocation } from "react-router-dom";
 
@@ -14,19 +9,15 @@ const SSOForm = () => {
   return (
     <div>
       <ActionGroup>
-        <Toolbar>
-          <ToolbarGroup>
-            <Button
-              variant="danger"
-              className="mt-md"
-              onClick={() => {
-                sso.signinRedirect({ state: location.state });
-              }}
-            >
-              Log in
-            </Button>
-          </ToolbarGroup>
-        </Toolbar>
+        <Button
+          variant="danger"
+          className="mt-md"
+          onClick={() => {
+            sso.signinRedirect({ state: location.state });
+          }}
+        >
+          Log in
+        </Button>
       </ActionGroup>
     </div>
   );

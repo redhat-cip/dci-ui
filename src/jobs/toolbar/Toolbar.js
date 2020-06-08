@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import {
   Toolbar,
-  ToolbarSection,
+  ToolbarContent,
   ToolbarGroup,
   ToolbarItem,
   Chip,
   ChipGroup,
-  ChipGroupToolbarItem,
   Pagination,
 } from "@patternfly/react-core";
 import TopicsFilter from "./TopicsFilter";
@@ -25,7 +24,7 @@ export default class DCIToolbar extends Component {
     const { filterJobs, activeFilters, pagination, count, goTo } = this.props;
     return (
       <Toolbar>
-        <ToolbarSection
+        <ToolbarContent
           className="pf-u-justify-content-space-between"
           aria-label="jobs filters"
         >
@@ -72,25 +71,23 @@ export default class DCIToolbar extends Component {
               )}
             </ToolbarItem>
           </ToolbarGroup>
-        </ToolbarSection>
-        <ToolbarSection aria-label="jobs active filters">
+        </ToolbarContent>
+        <ToolbarContent aria-label="jobs active filters">
           {activeFilters && activeFilters.length > 0 && (
-            <ChipGroup withToolbar>
-              <ChipGroupToolbarItem categoryName="Active Filters">
-                {activeFilters.map((filter, i) => {
-                  return (
-                    <Chip
-                      key={i}
-                      onClick={() => this._removeFilterAndFilterJobs(filter)}
-                    >
-                      {`${filter.key} ${filter.value}`}
-                    </Chip>
-                  );
-                })}
-              </ChipGroupToolbarItem>
+            <ChipGroup>
+              {activeFilters.map((filter, i) => {
+                return (
+                  <Chip
+                    key={i}
+                    onClick={() => this._removeFilterAndFilterJobs(filter)}
+                  >
+                    {`${filter.key} ${filter.value}`}
+                  </Chip>
+                );
+              })}
             </ChipGroup>
           )}
-        </ToolbarSection>
+        </ToolbarContent>
       </Toolbar>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isEmpty } from "lodash";
-import { Card, CardBody, CardHeader } from "@patternfly/react-core";
+import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import { round } from "lodash";
 import { transposePerformance } from "./performanceActions";
@@ -20,7 +20,7 @@ export default class PerformanceCard extends Component {
     const { headers, rows } = transposePerformance(data);
     return (
       <Card className="mt-md">
-        <CardHeader>{testName}</CardHeader>
+        <CardTitle>{testName}</CardTitle>
         <CardBody>
           <table className="pf-c-table pf-m-compact pf-m-grid-md">
             <thead>
