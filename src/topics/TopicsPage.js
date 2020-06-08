@@ -8,12 +8,12 @@ import {
   GalleryItem,
   PageSection,
   CardBody,
-  Title
+  Title,
 } from "@patternfly/react-core";
 import {
   global_danger_color_100,
   global_success_color_100,
-  global_Color_light_100
+  global_Color_light_100,
 } from "@patternfly/react-tokens";
 import productsActions from "products/productsActions";
 import topicsActions from "../topics/topicsActions";
@@ -24,7 +24,7 @@ import {
   RedhatIcon,
   OpenshiftIcon,
   OpenstackIcon,
-  BoxIcon
+  BoxIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
 
@@ -47,7 +47,7 @@ function getBackground(export_control) {
 }
 
 const Topic = styled(Card)`
-  background: ${props => getBackground(props.export_control)};
+  background: ${(props) => getBackground(props.export_control)};
   height: 110px;
   display: flex;
 `;
@@ -55,7 +55,7 @@ const Topic = styled(Card)`
 export class TopicsPage extends Component {
   state = {
     topic: null,
-    components: []
+    components: [],
   };
   componentDidMount() {
     const { fetchTopics } = this.props;
@@ -66,7 +66,7 @@ export class TopicsPage extends Component {
     const icons = {
       openshift: OpenshiftIcon,
       openstack: OpenstackIcon,
-      rhel: RedhatIcon
+      rhel: RedhatIcon,
     };
     const products = topics.reduce((acc, topic) => {
       const product = topic.product;
@@ -78,7 +78,7 @@ export class TopicsPage extends Component {
       const currentProduct = get(acc, productName, {
         ...product,
         topics: [],
-        icon: <Icon size="md" />
+        icon: <Icon size="md" />,
       });
       currentProduct.topics.push(topic);
       acc[productName] = currentProduct;
@@ -95,14 +95,14 @@ export class TopicsPage extends Component {
           <EmptyState title="There is no topics" info="See documentation" />
         }
       >
-        {Object.values(products).map(product => (
+        {Object.values(products).map((product) => (
           <PageSection>
             <ProductTitle>
               <span className="mr-xs">{product.icon}</span>
               {product.name}
             </ProductTitle>
             <Gallery gutter="md" key={product.id}>
-              {product.topics.map(topic => (
+              {product.topics.map((topic) => (
                 <GalleryItem key={topic.id}>
                   <Topic
                     onClick={() =>
@@ -133,7 +133,7 @@ function mapStateToProps(state) {
   return {
     currentUser: state.currentUser,
     topics: getTopics(state),
-    isFetching: state.topics.isFetching || state.products.isFetching
+    isFetching: state.topics.isFetching || state.products.isFetching,
   };
 }
 
@@ -142,7 +142,7 @@ function mapDispatchToProps(dispatch) {
     fetchTopics: () => {
       dispatch(topicsActions.all({ embed: "product" }));
       dispatch(productsActions.all());
-    }
+    },
   };
 }
 

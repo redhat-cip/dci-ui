@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {
   global_danger_color_100,
   global_success_color_100,
-  global_warning_color_100
+  global_warning_color_100,
 } from "@patternfly/react-tokens";
 import { Label } from "@patternfly/react-core";
 
@@ -47,5 +47,5 @@ export default {
   Error: ErrorLabel,
   Failure: FailureLabel,
   Warning: WarningLabel,
-  Regression: RegressionLabel
+  Regression: RegressionLabel,
 };

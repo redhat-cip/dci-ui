@@ -20,7 +20,7 @@ export class NewTopicButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTopic: topic => dispatch(actions.create(topic))
+    createTopic: (topic) => dispatch(actions.create(topic)),
   };
 }
 

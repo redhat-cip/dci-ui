@@ -50,7 +50,7 @@ export class RemotecisPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {remotecis.map(remoteci => (
+            {remotecis.map((remoteci) => (
               <tr key={`${remoteci.id}.${remoteci.etag}`}>
                 <td className="text-center">
                   <CopyButton text={remoteci.id} />
@@ -81,7 +81,7 @@ export class RemotecisPage extends Component {
                     message={`Are you sure you want to delete ${remoteci.name}?`}
                     onOk={() => deleteRemoteci(remoteci)}
                   >
-                    {openModal => (
+                    {(openModal) => (
                       <Button variant="danger" onClick={openModal}>
                         <TrashIcon />
                       </Button>
@@ -101,7 +101,7 @@ function mapStateToProps(state) {
   return {
     remotecis: getRemotecis(state),
     teams: getTeams(state),
-    isFetching: state.remotecis.isFetching || state.teams.isFetching
+    isFetching: state.remotecis.isFetching || state.teams.isFetching,
   };
 }
 
@@ -111,7 +111,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(remotecisActions.all({ embed: "team" }));
       dispatch(teamsActions.all());
     },
-    deleteRemoteci: remoteci => dispatch(remotecisActions.delete(remoteci))
+    deleteRemoteci: (remoteci) => dispatch(remotecisActions.delete(remoteci)),
   };
 }
 

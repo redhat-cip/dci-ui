@@ -7,7 +7,7 @@ import { getTestsCases } from "./testsActions";
 export class Test extends Component {
   state = {
     testscases: [],
-    seeDetails: false
+    seeDetails: false,
   };
 
   toggleDetails = () => {
@@ -15,13 +15,13 @@ export class Test extends Component {
     const { seeDetails } = this.state;
     if (seeDetails) {
       this.setState({
-        seeDetails: false
+        seeDetails: false,
       });
     } else {
-      getTestsCases({ id: test.file_id }).then(response =>
+      getTestsCases({ id: test.file_id }).then((response) =>
         this.setState({
           seeDetails: true,
-          testscases: response.data.testscases
+          testscases: response.data.testscases,
         })
       );
     }
@@ -41,7 +41,7 @@ export class Test extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getTestsCases: file => dispatch(getTestsCases(file))
+    getTestsCases: (file) => dispatch(getTestsCases(file)),
   };
 }
 

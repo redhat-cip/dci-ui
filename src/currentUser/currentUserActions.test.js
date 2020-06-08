@@ -14,7 +14,7 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("deleteCurrentUser", () => {
   const expectedAction = {
-    type: types.DELETE_CURRENT_USER
+    type: types.DELETE_CURRENT_USER,
   };
   expect(currentUserActions.deleteCurrentUser()).toEqual(expectedAction);
 });
@@ -28,9 +28,9 @@ it("getSubscribedRemotecis", () => {
       type: types.SET_IDENTITY,
       identity: {
         id: "u1",
-        remotecis: [{ id: "r1" }, { id: "r2" }]
-      }
-    }
+        remotecis: [{ id: "r1" }, { id: "r2" }],
+      },
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store
@@ -49,7 +49,7 @@ it("subscribeToARemoteci", () => {
 
   const store = mockStore({
     config: { apiURL: "https://api.example.org" },
-    currentUser
+    currentUser,
   });
   return store
     .dispatch(currentUserActions.subscribeToARemoteci(remoteci))
@@ -57,7 +57,7 @@ it("subscribeToARemoteci", () => {
       const actions = store.getActions();
       expect(actions[0]).toEqual({
         type: types.SUBSCRIBED_TO_A_REMOTECI,
-        remoteci
+        remoteci,
       });
       expect(actions[1].type).toBe(alertaActionsTypes.SHOW_ALERT);
       expect(actions[1].alert.type).toBe("success");
@@ -73,12 +73,12 @@ it("subscribeToARemoteci error", () => {
     .onPost("https://api.example.org/api/v1/remotecis/r3/users", currentUser)
     .reply(500, {
       message: "Unknown error",
-      status_code: 500
+      status_code: 500,
     });
 
   const store = mockStore({
     config: { apiURL: "https://api.example.org" },
-    currentUser
+    currentUser,
   });
   return store
     .dispatch(
@@ -101,7 +101,7 @@ it("unsubscribeFromARemoteci", () => {
   const remoteci = { id: "r2", name: "remoteci 2" };
   const store = mockStore({
     config: { apiURL: "https://api.example.org" },
-    currentUser: { id: "u2" }
+    currentUser: { id: "u2" },
   });
   return store
     .dispatch(currentUserActions.unsubscribeFromARemoteci(remoteci))
@@ -109,7 +109,7 @@ it("unsubscribeFromARemoteci", () => {
       const actions = store.getActions();
       expect(actions[0]).toEqual({
         type: types.UNSUBSCRIBED_FROM_A_REMOTECI,
-        remoteci
+        remoteci,
       });
       expect(actions[1].type).toBe(alertaActionsTypes.SHOW_ALERT);
       expect(actions[1].alert.type).toBe("warning");
@@ -124,18 +124,18 @@ it("unsubscribeFromARemoteci error", () => {
     .onDelete("https://api.example.org/api/v1/remotecis/r2/users/u4")
     .reply(500, {
       message: "Unknown error",
-      status_code: 500
+      status_code: 500,
     });
 
   const store = mockStore({
     config: { apiURL: "https://api.example.org" },
-    currentUser: { id: "u4" }
+    currentUser: { id: "u4" },
   });
   return store
     .dispatch(
       currentUserActions.unsubscribeFromARemoteci({
         id: "r4",
-        name: "remoteci 4"
+        name: "remoteci 4",
       })
     )
     .then(() => {
@@ -150,22 +150,22 @@ it("unsubscribeFromARemoteci error", () => {
 
 it("setCurrentTeam", () => {
   const team = {
-    id: "t1"
+    id: "t1",
   };
   const expectedAction = {
     type: types.SET_ACTIVE_TEAM,
-    team
+    team,
   };
   expect(currentUserActions.setCurrentTeam(team)).toEqual(expectedAction);
 });
 
 it("setIdentity", () => {
   const identity = {
-    id: "i1"
+    id: "i1",
   };
   const expectedAction = {
     type: types.SET_IDENTITY,
-    identity
+    identity,
   };
   expect(currentUserActions.setIdentity(identity)).toEqual(expectedAction);
 });

@@ -8,7 +8,7 @@ import { unsubscribeFromARemoteci } from "currentUser/currentUserActions";
 
 export class UnsubscribeForm extends Component {
   state = {
-    canSubmit: false
+    canSubmit: false,
   };
 
   disableButton = () => {
@@ -34,7 +34,7 @@ export class UnsubscribeForm extends Component {
             className="pf-c-form"
             onValid={this.enableButton}
             onInvalid={this.disableButton}
-            onValidSubmit={remoteci =>
+            onValidSubmit={(remoteci) =>
               unsubscribeFromARemoteci(remoteciIds[remoteci.id])
             }
           >
@@ -63,8 +63,8 @@ export class UnsubscribeForm extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    unsubscribeFromARemoteci: remoteci =>
-      dispatch(unsubscribeFromARemoteci(remoteci))
+    unsubscribeFromARemoteci: (remoteci) =>
+      dispatch(unsubscribeFromARemoteci(remoteci)),
   };
 }
 

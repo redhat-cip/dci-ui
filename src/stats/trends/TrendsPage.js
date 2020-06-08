@@ -14,14 +14,14 @@ import {
   CardHeader,
   Gallery,
   GalleryItem,
-  PageSection
+  PageSection,
 } from "@patternfly/react-core";
 
 export class TrendsPage extends Component {
   state = {
     nbMonth: 6,
     topic: null,
-    isFetching: true
+    isFetching: true,
   };
 
   componentDidMount() {
@@ -37,15 +37,13 @@ export class TrendsPage extends Component {
     if (isEmpty(trend)) return [];
     return trend
       .sort((t1, t2) => t1[0] - t2[0])
-      .filter(d => moment().diff(moment.unix(d[0]), "months") < nbMonth);
+      .filter((d) => moment().diff(moment.unix(d[0]), "months") < nbMonth);
   };
 
   render() {
     const { trends, topics } = this.props;
     const { topic: selectedTopic, isFetching, nbMonth } = this.state;
-    const xMin = moment()
-      .subtract(nbMonth, "months")
-      .toDate();
+    const xMin = moment().subtract(nbMonth, "months").toDate();
     const xMax = moment().toDate();
     return (
       <Page
@@ -63,7 +61,7 @@ export class TrendsPage extends Component {
         <PageSection>
           {isEmpty(selectedTopic) ? (
             <Gallery gutter="md">
-              {topics.map(topic => {
+              {topics.map((topic) => {
                 const filteredTrends = this.filterTrends(
                   trends[topic.id],
                   nbMonth
@@ -116,14 +114,14 @@ export class TrendsPage extends Component {
 function mapStateToProps(state) {
   return {
     topics: getTopics(state),
-    trends: state.trends
+    trends: state.trends,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchTrends: () => dispatch(getTrends()),
-    fetchTopics: () => dispatch(topicsActions.all())
+    fetchTopics: () => dispatch(topicsActions.all()),
   };
 }
 

@@ -1,1 +1,1 @@
-export const getTimezone = state => state.currentUser.timezone;
+export const getTimezone = (state) => state.currentUser.timezone;

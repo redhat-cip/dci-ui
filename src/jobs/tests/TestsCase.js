@@ -6,13 +6,13 @@ import { Pre } from "jobs/jobStates/JobStateComponents";
 
 export default class Testcases extends Component {
   state = {
-    seeDetails: false
+    seeDetails: false,
   };
 
   toggleDetails = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
-        seeDetails: !prevState.seeDetails
+        seeDetails: !prevState.seeDetails,
       };
     });
   };

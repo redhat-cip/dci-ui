@@ -3,7 +3,7 @@ import { withFormsy } from "formsy-react";
 import { FormGroup, TextInput } from "@patternfly/react-core";
 
 class Input extends Component {
-  handleTextInputChange = value => {
+  handleTextInputChange = (value) => {
     const { setValue } = this.props;
     setValue(value);
   };
@@ -19,7 +19,7 @@ class Input extends Component {
       isValid,
       getValue,
       placeholder,
-      helperText = ""
+      helperText = "",
     } = this.props;
     return (
       <FormGroup

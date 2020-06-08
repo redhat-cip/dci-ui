@@ -9,8 +9,8 @@ export default class ProductForm extends Component {
     show: false,
     product: {
       name: "",
-      ...this.props.product
-    }
+      ...this.props.product,
+    },
   };
 
   disableButton = () => {
@@ -45,7 +45,7 @@ export default class ProductForm extends Component {
           <Formsy
             id="product-form"
             className="pf-c-form"
-            onValidSubmit={product => {
+            onValidSubmit={(product) => {
               this.closeModal();
               submit(product);
             }}

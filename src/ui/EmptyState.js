@@ -4,7 +4,7 @@ import {
   TextContent,
   Text,
   TextVariants,
-  Bullseye
+  Bullseye,
 } from "@patternfly/react-core";
 
 export default class EmptyState extends Component {

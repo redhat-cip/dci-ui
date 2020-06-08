@@ -5,7 +5,7 @@ import { Input, HiddenInput } from "ui/form";
 
 export default class UserForm extends Component {
   state = {
-    canSubmit: false
+    canSubmit: false,
   };
 
   disableButton = () => {

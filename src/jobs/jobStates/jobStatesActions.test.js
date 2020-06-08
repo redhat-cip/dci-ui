@@ -7,18 +7,18 @@ it("addDuration in seconds", () => {
       files: [
         {
           created_at: "2018-07-30T04:38:10.000000",
-          updated_at: "2018-07-30T04:38:10.000000"
+          updated_at: "2018-07-30T04:38:10.000000",
         },
         {
           created_at: "2018-07-30T04:38:30.000000",
-          updated_at: "2018-07-30T04:38:30.000000"
+          updated_at: "2018-07-30T04:38:30.000000",
         },
         {
           created_at: "2018-07-30T04:38:32.000000",
-          updated_at: "2018-07-30T04:38:32.000000"
-        }
-      ]
-    }
+          updated_at: "2018-07-30T04:38:32.000000",
+        },
+      ],
+    },
   ];
   const expectedJobStates = [
     {
@@ -28,20 +28,20 @@ it("addDuration in seconds", () => {
         {
           created_at: "2018-07-30T04:38:10.000000",
           updated_at: "2018-07-30T04:38:10.000000",
-          duration: 0
+          duration: 0,
         },
         {
           created_at: "2018-07-30T04:38:30.000000",
           updated_at: "2018-07-30T04:38:30.000000",
-          duration: 20
+          duration: 20,
         },
         {
           created_at: "2018-07-30T04:38:32.000000",
           updated_at: "2018-07-30T04:38:32.000000",
-          duration: 2
-        }
-      ]
-    }
+          duration: 2,
+        },
+      ],
+    },
   ];
   expect(addDuration(jobStates)).toEqual(expectedJobStates);
 });
@@ -53,19 +53,19 @@ it("addDuration get previous updated_at from previous file", () => {
       files: [
         {
           created_at: "2018-07-30T04:38:08.000000",
-          updated_at: "2018-07-30T04:38:10.000000"
-        }
-      ]
+          updated_at: "2018-07-30T04:38:10.000000",
+        },
+      ],
     },
     {
       created_at: "2018-07-30T04:38:30.000000",
       files: [
         {
           created_at: "2018-07-30T04:38:30.000000",
-          updated_at: "2018-07-30T04:38:30.000000"
-        }
-      ]
-    }
+          updated_at: "2018-07-30T04:38:30.000000",
+        },
+      ],
+    },
   ];
   const expectedJobStates = [
     {
@@ -75,9 +75,9 @@ it("addDuration get previous updated_at from previous file", () => {
         {
           created_at: "2018-07-30T04:38:08.000000",
           updated_at: "2018-07-30T04:38:10.000000",
-          duration: 0
-        }
-      ]
+          duration: 0,
+        },
+      ],
     },
     {
       created_at: "2018-07-30T04:38:30.000000",
@@ -86,10 +86,10 @@ it("addDuration get previous updated_at from previous file", () => {
         {
           created_at: "2018-07-30T04:38:30.000000",
           updated_at: "2018-07-30T04:38:30.000000",
-          duration: 20
-        }
-      ]
-    }
+          duration: 20,
+        },
+      ],
+    },
   ];
   expect(addDuration(jobStates)).toEqual(expectedJobStates);
 });
@@ -101,23 +101,23 @@ it("addDuration order jobStates and files per date", () => {
       files: [
         {
           created_at: "2018-07-30T04:40:30.000000",
-          updated_at: "2018-07-30T04:40:30.000000"
+          updated_at: "2018-07-30T04:40:30.000000",
         },
         {
           created_at: "2018-07-30T04:38:30.000000",
-          updated_at: "2018-07-30T04:38:30.000000"
-        }
-      ]
+          updated_at: "2018-07-30T04:38:30.000000",
+        },
+      ],
     },
     {
       created_at: "2018-07-30T04:38:08.000000",
       files: [
         {
           created_at: "2018-07-30T04:38:08.000000",
-          updated_at: "2018-07-30T04:38:10.000000"
-        }
-      ]
-    }
+          updated_at: "2018-07-30T04:38:10.000000",
+        },
+      ],
+    },
   ];
   const expectedJobStates = [
     {
@@ -127,9 +127,9 @@ it("addDuration order jobStates and files per date", () => {
         {
           created_at: "2018-07-30T04:38:08.000000",
           updated_at: "2018-07-30T04:38:10.000000",
-          duration: 0
-        }
-      ]
+          duration: 0,
+        },
+      ],
     },
     {
       created_at: "2018-07-30T04:38:30.000000",
@@ -138,15 +138,15 @@ it("addDuration order jobStates and files per date", () => {
         {
           created_at: "2018-07-30T04:38:30.000000",
           updated_at: "2018-07-30T04:38:30.000000",
-          duration: 20
+          duration: 20,
         },
         {
           created_at: "2018-07-30T04:40:30.000000",
           updated_at: "2018-07-30T04:40:30.000000",
-          duration: 120
-        }
-      ]
-    }
+          duration: 120,
+        },
+      ],
+    },
   ];
   expect(addDuration(jobStates)).toEqual(expectedJobStates);
 });

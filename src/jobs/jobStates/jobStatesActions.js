@@ -38,8 +38,8 @@ export function getJobStatesWithFiles(job) {
       method: "get",
       url: `${state.config.apiURL}/api/v1/jobs/${job.id}/jobstates`,
       params: {
-        embed: "files"
-      }
+        embed: "files",
+      },
     });
   };
 }
@@ -50,7 +50,7 @@ export function getContent(file, params = {}) {
     return http({
       method: "get",
       url: `${state.config.apiURL}/api/v1/files/${file.id}/content`,
-      params
+      params,
     });
   };
 }

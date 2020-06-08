@@ -4,16 +4,16 @@ import { Dropdown, DropdownToggle, DropdownItem } from "@patternfly/react-core";
 
 export default class Filter extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
   };
-  onToggle = isOpen => {
+  onToggle = (isOpen) => {
     this.setState({
-      isOpen
+      isOpen,
     });
   };
 
   onSelect = () => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
   render() {

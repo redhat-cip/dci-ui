@@ -44,7 +44,7 @@ export class FeedersPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {feeders.map(feeder => (
+            {feeders.map((feeder) => (
               <tr key={`${feeder.id}.${feeder.etag}`}>
                 <td className="text-center">
                   <CopyButton text={feeder.id} />
@@ -59,7 +59,7 @@ export class FeedersPage extends Component {
                     message={`Are you sure you want to delete ${feeder.name}?`}
                     onOk={() => deleteFeeder(feeder)}
                   >
-                    {openModal => (
+                    {(openModal) => (
                       <Button variant="danger" onClick={openModal}>
                         <TrashIcon />
                       </Button>
@@ -79,7 +79,7 @@ function mapStateToProps(state) {
   return {
     feeders: getFeeders(state),
     teams: getTeams(state),
-    isFetching: state.feeders.isFetching || state.teams.isFetching
+    isFetching: state.feeders.isFetching || state.teams.isFetching,
   };
 }
 
@@ -89,7 +89,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(feedersActions.all({ embed: "team" }));
       dispatch(teamsActions.all());
     },
-    deleteFeeder: feeder => dispatch(feedersActions.delete(feeder))
+    deleteFeeder: (feeder) => dispatch(feedersActions.delete(feeder)),
   };
 }
 

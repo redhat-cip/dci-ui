@@ -12,7 +12,7 @@ const LoginCallbackPage = () => {
   useEffect(() => {
     sso
       .signinRedirectCallback()
-      .then(user => {
+      .then((user) => {
         if (user) {
           setLocation(user.state);
           setJWT(user.access_token);

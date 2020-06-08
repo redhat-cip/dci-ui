@@ -4,11 +4,11 @@ import { withFormsy } from "formsy-react";
 import {
   FormGroup,
   FormSelect,
-  FormSelectOption
+  FormSelectOption,
 } from "@patternfly/react-core";
 
 class Select extends Component {
-  handleSelectChange = value => {
+  handleSelectChange = (value) => {
     const { setValue } = this.props;
     setValue(value);
   };
@@ -23,7 +23,7 @@ class Select extends Component {
       helperText,
       getErrorMessage,
       isValid,
-      getValue
+      getValue,
     } = this.props;
     return (
       <FormGroup
@@ -57,7 +57,7 @@ Select.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired
+  options: PropTypes.array.isRequired,
 };
 
 export default withFormsy(Select);

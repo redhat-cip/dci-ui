@@ -9,17 +9,17 @@ import {
   ToolbarGroup,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
 } from "@patternfly/react-core";
 
 export default class SettingsForm extends Component {
   state = {
     canSubmit: false,
     currentUser: this.props.currentUser,
-    timezones: moment.tz.names().map(timezone => ({
+    timezones: moment.tz.names().map((timezone) => ({
       id: timezone,
-      name: timezone
-    }))
+      name: timezone,
+    })),
   };
   disableButton = () => {
     this.setState({ canSubmit: false });
@@ -39,7 +39,7 @@ export default class SettingsForm extends Component {
           <Formsy
             id="current-user-form"
             className="pf-c-form"
-            onValidSubmit={currentUser => submit(currentUser)}
+            onValidSubmit={(currentUser) => submit(currentUser)}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >

@@ -9,7 +9,7 @@ import {
   grantTeamProductPermission,
   removeTeamProductPermission,
   grantTeamTopicPermission,
-  removeTeamTopicPermission
+  removeTeamTopicPermission,
 } from "./permissionsActions";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -19,9 +19,9 @@ it("getProductsWithTeams", () => {
   axiosMock.onGet("https://api.example.org/api/v1/products").reply(200, {
     products: [
       { id: "p1", name: "RHEL" },
-      { id: "p2", name: "OpenStack" }
+      { id: "p2", name: "OpenStack" },
     ],
-    _meta: { count: 2 }
+    _meta: { count: 2 },
   });
   axiosMock
     .onGet("https://api.example.org/api/v1/products/p1/teams")
@@ -31,19 +31,19 @@ it("getProductsWithTeams", () => {
     .reply(200, {
       teams: [
         { id: "t2", name: "Team 2" },
-        { id: "t1", name: "Team 1" }
+        { id: "t1", name: "Team 1" },
       ],
-      _meta: { count: 2 }
+      _meta: { count: 2 },
     });
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
-  return store.dispatch(getProductsWithTeams()).then(products => {
+  return store.dispatch(getProductsWithTeams()).then((products) => {
     expect(products[0].teams).toEqual([
       { id: "t1", name: "Team 1" },
-      { id: "t2", name: "Team 2" }
+      { id: "t2", name: "Team 2" },
     ]);
     expect(products[1].teams).toEqual([{ id: "t1", name: "Team 1" }]);
   });
@@ -60,22 +60,22 @@ it("getTopicsWithTeams", () => {
           name: "Topic 2",
           teams: [
             { id: "t1", name: "Team 1" },
-            { id: "t2", name: "Team 2" }
-          ]
-        }
+            { id: "t2", name: "Team 2" },
+          ],
+        },
       ],
-      _meta: { count: 2 }
+      _meta: { count: 2 },
     });
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
-  return store.dispatch(getTopicsWithTeams()).then(topics => {
+  return store.dispatch(getTopicsWithTeams()).then((topics) => {
     expect(topics[0].teams).toEqual([{ id: "t1", name: "Team 1" }]);
     expect(topics[1].teams).toEqual([
       { id: "t1", name: "Team 1" },
-      { id: "t2", name: "Team 2" }
+      { id: "t2", name: "Team 2" },
     ]);
   });
 });
@@ -84,16 +84,16 @@ it("getTeams", () => {
   axiosMock.onGet("https://api.example.org/api/v1/teams").reply(200, {
     teams: [
       { id: "t1", name: "Team 1" },
-      { id: "t2", name: "Team 2" }
+      { id: "t2", name: "Team 2" },
     ],
-    _meta: { count: 2 }
+    _meta: { count: 2 },
   });
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
-  return store.dispatch(getTeams()).then(teams => {
+  return store.dispatch(getTeams()).then((teams) => {
     expect(teams[0].id).toBe("t1");
     expect(teams[1].id).toBe("t2");
   });
@@ -106,14 +106,14 @@ it("grantTeamProductPermission", () => {
     .reply(201);
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
   const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1" };
   return store
     .dispatch(grantTeamProductPermission(team, product))
-    .then(response => expect(response.status).toBe(201));
+    .then((response) => expect(response.status).toBe(201));
 });
 
 it("removeTeamProductPermission", () => {
@@ -122,14 +122,14 @@ it("removeTeamProductPermission", () => {
     .reply(204);
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
   const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1", etag: "ep1" };
   return store
     .dispatch(removeTeamProductPermission(team, product))
-    .then(response => expect(response.status).toBe(204));
+    .then((response) => expect(response.status).toBe(204));
 });
 
 it("grantTeamTopicPermission", () => {
@@ -139,14 +139,14 @@ it("grantTeamTopicPermission", () => {
     .reply(201);
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
   const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1" };
   return store
     .dispatch(grantTeamTopicPermission(team, topic))
-    .then(response => expect(response.status).toBe(201));
+    .then((response) => expect(response.status).toBe(201));
 });
 
 it("removeTeamTopicPermission", () => {
@@ -155,12 +155,12 @@ it("removeTeamTopicPermission", () => {
     .reply(204);
   const store = mockStore({
     config: {
-      apiURL: "https://api.example.org"
-    }
+      apiURL: "https://api.example.org",
+    },
   });
   const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1", etag: "eto1" };
   return store
     .dispatch(removeTeamTopicPermission(team, topic))
-    .then(response => expect(response.status).toBe(204));
+    .then((response) => expect(response.status).toBe(204));
 });

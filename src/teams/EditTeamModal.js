@@ -11,8 +11,8 @@ export class EditTeamModal extends Component {
       name: "",
       external: true,
       state: "active",
-      ...this.props.team
-    }
+      ...this.props.team,
+    },
   };
 
   disableButton = () => {
@@ -43,16 +43,16 @@ export class EditTeamModal extends Component {
             form="team-form"
           >
             Edit
-          </Button>
+          </Button>,
         ]}
       >
         <TeamForm
           id="team-form"
           team={team}
-          onValidSubmit={newTeam => {
+          onValidSubmit={(newTeam) => {
             editTeam({
               id: team.id,
-              ...newTeam
+              ...newTeam,
             });
             onOk();
           }}
@@ -66,7 +66,7 @@ export class EditTeamModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editTeam: team => dispatch(teamsActions.update(team))
+    editTeam: (team) => dispatch(teamsActions.update(team)),
   };
 }
 

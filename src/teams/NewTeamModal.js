@@ -10,8 +10,8 @@ export class NewTeamModal extends Component {
     team: {
       name: "",
       external: true,
-      state: "active"
-    }
+      state: "active",
+    },
   };
 
   disableButton = () => {
@@ -42,13 +42,13 @@ export class NewTeamModal extends Component {
             form="team-form"
           >
             Create
-          </Button>
+          </Button>,
         ]}
       >
         <TeamForm
           id="team-form"
           team={team}
-          onValidSubmit={newTeam => {
+          onValidSubmit={(newTeam) => {
             createTeam(newTeam);
             onOk();
           }}
@@ -62,7 +62,7 @@ export class NewTeamModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTeam: team => dispatch(teamsActions.create(team))
+    createTeam: (team) => dispatch(teamsActions.create(team)),
   };
 }
 

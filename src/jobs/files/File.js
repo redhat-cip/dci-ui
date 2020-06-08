@@ -9,19 +9,19 @@ import { RotatingSpinnerIcon } from "ui";
 
 export class File extends Component {
   state = {
-    downloading: false
+    downloading: false,
   };
 
-  downloadFile = file => {
+  downloadFile = (file) => {
     this.setState({ downloading: true });
     this.props
       .getFileContent(file, { responseType: "blob" })
-      .then(response => {
+      .then((response) => {
         const blob = new Blob([response.data], { type: file.mime });
         FileSaver.saveAs(blob, `${file.name}`);
         return response;
       })
-      .catch(error => console.log(error))
+      .catch((error) => console.log(error))
       .then(() => this.setState({ downloading: false }));
   };
 
@@ -50,7 +50,7 @@ export class File extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getFileContent: (file, params) => dispatch(getFileContent(file, params))
+    getFileContent: (file, params) => dispatch(getFileContent(file, params)),
   };
 }
 

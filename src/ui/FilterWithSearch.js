@@ -6,36 +6,37 @@ export default class FilterWithSearch extends Component {
   state = {
     isOpen: false,
     searchValue: "",
-    filteredItems: this.props.filters
+    filteredItems: this.props.filters,
   };
 
   onToggle = (event, isOpen) => {
     this.setState({
-      isOpen
+      isOpen,
     });
   };
 
   onSelect = (event, value) => {
     const { onFilterValueSelected, filters } = this.props;
-    const selectedItem = filters.find(f => f.name === value);
+    const selectedItem = filters.find((f) => f.name === value);
     this.setState(
-      prevState => ({ isOpen: !prevState.isOpen }),
+      (prevState) => ({ isOpen: !prevState.isOpen }),
       () => onFilterValueSelected(selectedItem)
     );
   };
 
-  onSearchInputChange = value => {
+  onSearchInputChange = (value) => {
     this.setState({ searchValue: value });
   };
 
-  onSearchButtonClick = event => {
+  onSearchButtonClick = (event) => {
     const { searchValue } = this.state;
     const { filters } = this.props;
     const filteredItems =
       searchValue === ""
         ? filters
         : filters.filter(
-            f => f.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1
+            (f) =>
+              f.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1
           );
 
     this.setState({ filteredItems: filteredItems || [] });

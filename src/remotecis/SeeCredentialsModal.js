@@ -6,7 +6,7 @@ import copyToClipboard from "../services/copyToClipboard";
 export default class SeeCredentialsModal extends Component {
   state = {
     show: false,
-    copied: false
+    copied: false,
   };
 
   showModal = () => {
@@ -43,13 +43,13 @@ export DCI_CS_URL
             </Button>,
             <Button
               key="copy"
-              onClick={event => {
+              onClick={(event) => {
                 copyToClipboard(event, credentials);
                 this.setState({ copied: true });
               }}
             >
               {copied ? "Copied!" : "Copy to clipboard"}
-            </Button>
+            </Button>,
           ]}
         >
           <pre>{credentials}</pre>

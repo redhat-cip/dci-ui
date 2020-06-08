@@ -6,7 +6,7 @@ import {
   ToolbarGroup,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
 } from "@patternfly/react-core";
 import Formsy from "formsy-react";
 import { Input, HiddenInput } from "ui/form";
@@ -16,7 +16,7 @@ export default class ChangePasswordForm extends Component {
     canSubmit: false,
     currentUser: this.props.currentUser,
     current_password: "",
-    new_password: ""
+    new_password: "",
   };
 
   disableButton = () => {
@@ -33,7 +33,7 @@ export default class ChangePasswordForm extends Component {
       currentUser,
       current_password,
       new_password,
-      canSubmit
+      canSubmit,
     } = this.state;
     return (
       <Card>
@@ -42,7 +42,7 @@ export default class ChangePasswordForm extends Component {
           <Formsy
             id="change-password-form"
             className="pf-c-form"
-            onValidSubmit={currentUser => submit(currentUser)}
+            onValidSubmit={(currentUser) => submit(currentUser)}
             onValid={this.enableButton}
             onInvalid={this.disableButton}
           >

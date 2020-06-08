@@ -14,11 +14,11 @@ const EditTopicButton = ({ topic, ...props }) => {
       topic={topic}
       showModalButton="Edit"
       okButton="Edit"
-      submit={newTopic =>
+      submit={(newTopic) =>
         dispatch(
           actions.update({
             id: topic.id,
-            ...newTopic
+            ...newTopic,
           })
         )
       }

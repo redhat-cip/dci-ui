@@ -4,19 +4,19 @@ import * as types from "./alertsActionsTypes";
 export function showAlert(alert) {
   return {
     type: types.SHOW_ALERT,
-    alert
+    alert,
   };
 }
 
 export function hideAlert(alert) {
   return {
     type: types.HIDE_ALERT,
-    alert
+    alert,
   };
 }
 
 function showAndHideAfter10s(alert) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(showAlert(alert));
     setTimeout(() => dispatch(hideAlert(alert)), 10000);
   };
@@ -26,7 +26,7 @@ export function showSuccess(message) {
   const alert = {
     id: Date.now(),
     title: message,
-    type: "success"
+    type: "success",
   };
   return showAndHideAfter10s(alert);
 }
@@ -36,7 +36,7 @@ export function showWarning(message) {
     id: Date.now(),
     title: message,
     message: "",
-    type: "warning"
+    type: "warning",
   };
   return showAndHideAfter10s(alert);
 }
@@ -46,7 +46,7 @@ export function showError(message) {
     id: Date.now(),
     title: message,
     message: "",
-    type: "danger"
+    type: "danger",
   };
   return showAndHideAfter10s(alert);
 }
@@ -62,13 +62,13 @@ export function createAlert(response) {
       title: "Unknown error",
       message:
         "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
-      type: "danger"
+      type: "danger",
     };
   const alert = {
     id: Date.now(),
     title: response.data.message || "Request malformed",
     message: "",
-    type: "danger"
+    type: "danger",
   };
   const payload = response.data.payload;
   if (isEmpty(payload)) return alert;
@@ -78,7 +78,7 @@ export function createAlert(response) {
   }
   const error = payload.error || payload.errors || {};
   alert.message = keys(error)
-    .map(k => `${k}: ${error[k]}`)
+    .map((k) => `${k}: ${error[k]}`)
     .join("\n");
   return alert;
 }

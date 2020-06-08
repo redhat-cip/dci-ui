@@ -18,7 +18,7 @@ const LoginForm = () => {
   return (
     <Formsy
       className="pf-c-form"
-      onValidSubmit={user => {
+      onValidSubmit={(user) => {
         const token = window.btoa(user.username.concat(":", user.password));
         setBasicToken(token);
         refreshIdentity()
@@ -26,7 +26,7 @@ const LoginForm = () => {
             const { from } = location.state || { from: { pathname: "/jobs" } };
             history.replace(from);
           })
-          .catch(error => {
+          .catch((error) => {
             if (error.response && error.response.status) {
               dispatch(showError("Invalid username or password"));
             } else {

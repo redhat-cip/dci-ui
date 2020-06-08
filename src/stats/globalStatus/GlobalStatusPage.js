@@ -13,7 +13,7 @@ import { LongArrowAltLeftIcon } from "@patternfly/react-icons";
 
 const GlobalStatusItem = styled.div`
   text-align: center;
-  background: ${props =>
+  background: ${(props) =>
     isEmpty(props.stat.jobs)
       ? Colors.black500
       : props.stat.percentageOfSuccess > 30
@@ -41,7 +41,7 @@ export class GlobalStatusPage extends Component {
   state = {
     filter: null,
     seeDetails: false,
-    stat: null
+    stat: null,
   };
 
   componentDidMount() {
@@ -49,17 +49,17 @@ export class GlobalStatusPage extends Component {
     getGlobalStatus();
   }
 
-  seeStatDetails = stat => {
-    this.setState(prevState => {
+  seeStatDetails = (stat) => {
+    this.setState((prevState) => {
       if (prevState.stat && prevState.stat.id === stat.id) {
         return {
           seeDetails: false,
-          stat: null
+          stat: null,
         };
       }
       return {
         seeDetails: true,
-        stat
+        stat,
       };
     });
   };
@@ -78,7 +78,7 @@ export class GlobalStatusPage extends Component {
             placeholder={isNull(filter) ? defaultFilter.name : filter.name}
             filter={filter || defaultFilter}
             filters={[defaultFilter, ...filters]}
-            onFilterValueSelected={newFilter =>
+            onFilterValueSelected={(newFilter) =>
               this.setState({ filter: newFilter })
             }
           />
@@ -91,8 +91,8 @@ export class GlobalStatusPage extends Component {
                 variant="plain"
                 aria-label="Back button hide details"
                 onClick={() =>
-                  this.setState(prevState => ({
-                    seeDetails: !prevState.seeDetails
+                  this.setState((prevState) => ({
+                    seeDetails: !prevState.seeDetails,
                   }))
                 }
               >
@@ -104,11 +104,11 @@ export class GlobalStatusPage extends Component {
         ) : (
           <Grid gutter="md" sm={3} md={2}>
             {stats
-              .filter(stat => {
+              .filter((stat) => {
                 if (isNull(filter) || filter.name === "All") return true;
                 return stat.product_name === filter.name;
               })
-              .map(stat => (
+              .map((stat) => (
                 <GridItem
                   key={stat.id}
                   onClick={() => this.seeStatDetails(stat)}
@@ -132,13 +132,13 @@ export class GlobalStatusPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    globalStatus: state.globalStatus
+    globalStatus: state.globalStatus,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    getGlobalStatus: () => dispatch(getGlobalStatus())
+    getGlobalStatus: () => dispatch(getGlobalStatus()),
   };
 }
 

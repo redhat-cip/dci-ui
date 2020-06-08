@@ -1,26 +1,26 @@
 import { isEmpty, find, differenceWith } from "lodash";
 
 export function createTeamsFilter(teams) {
-  const teamsWithRemotecis = teams.filter(team => !isEmpty(team.remotecis));
-  return teamsWithRemotecis.map(team => ({
+  const teamsWithRemotecis = teams.filter((team) => !isEmpty(team.remotecis));
+  return teamsWithRemotecis.map((team) => ({
     id: team.id,
     key: "team_id",
     name: team.name,
     value: team.id,
-    filterValues: team.remotecis.map(remoteci => ({
+    filterValues: team.remotecis.map((remoteci) => ({
       key: "remoteci_id",
       name: remoteci.name,
-      value: remoteci.id
-    }))
+      value: remoteci.id,
+    })),
   }));
 }
 
 export function createTopicsFilter(topics) {
-  return topics.map(topic => ({
+  return topics.map((topic) => ({
     id: topic.id,
     key: "topic_id",
     name: topic.name,
-    value: topic.id
+    value: topic.id,
   }));
 }
 

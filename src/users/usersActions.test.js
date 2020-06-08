@@ -6,7 +6,7 @@ import axiosMockAdapter from "axios-mock-adapter";
 import {
   fetchUserTeams,
   addUserToTeam,
-  deleteUserFromTeam
+  deleteUserFromTeam,
 } from "./usersActions";
 
 const middlewares = [thunk];

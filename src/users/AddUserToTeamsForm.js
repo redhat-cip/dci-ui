@@ -9,7 +9,7 @@ import { Filter } from "ui";
 export class AddUserToTeamForm extends Component {
   state = {
     canSubmit: false,
-    team: null
+    team: null,
   };
 
   componentDidMount() {
@@ -37,7 +37,7 @@ export class AddUserToTeamForm extends Component {
           placeholder={isEmpty(team) ? "..." : team.name}
           filter={team}
           filters={teams}
-          onFilterValueSelected={team => this.setState({ team: team })}
+          onFilterValueSelected={(team) => this.setState({ team: team })}
         />{" "}
         team{" "}
         <Button
@@ -54,13 +54,13 @@ export class AddUserToTeamForm extends Component {
 
 function mapStateToProps(state) {
   return {
-    teams: getTeams(state)
+    teams: getTeams(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTeams: () => dispatch(teamsActions.all())
+    fetchTeams: () => dispatch(teamsActions.all()),
   };
 }
 

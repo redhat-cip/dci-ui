@@ -15,10 +15,10 @@ export class EditRemoteciButton extends Component {
         showModalButton={<EditAltIcon />}
         okButton="Edit"
         teams={teams}
-        submit={newRemoteci => {
+        submit={(newRemoteci) => {
           editRemoteci({
             id: remoteci.id,
-            ...newRemoteci
+            ...newRemoteci,
           });
         }}
       />
@@ -28,7 +28,7 @@ export class EditRemoteciButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editRemoteci: remoteci => dispatch(actions.update(remoteci))
+    editRemoteci: (remoteci) => dispatch(actions.update(remoteci)),
   };
 }
 

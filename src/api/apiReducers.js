@@ -6,7 +6,7 @@ const initialState = {
   allIds: [],
   errorMessage: null,
   isFetching: false,
-  count: 0
+  count: 0,
 };
 
 function mergeEntities(state, resources) {
@@ -14,7 +14,7 @@ function mergeEntities(state, resources) {
   return {
     ...state,
     byId,
-    allIds: keys(byId)
+    allIds: keys(byId),
   };
 }
 
@@ -26,34 +26,34 @@ export function createReducer(resource) {
       case actionType.FETCH_ALL_REQUEST:
         return {
           ...state,
-          isFetching: true
+          isFetching: true,
         };
       case actionType.FETCH_ALL_SUCCESS:
         return {
           ...mergeEntities(state, action.entities[resources]),
-          isFetching: false
+          isFetching: false,
         };
       case actionType.FETCH_ALL_FAILURE:
         return {
           ...state,
           isFetching: false,
-          errorMessage: action.message
+          errorMessage: action.message,
         };
       case actionType.CLEAR_CACHE:
         return {
-          ...initialState
+          ...initialState,
         };
       case actionType.DELETE_SUCCESS:
         const newState = { ...state, isFetching: false };
         delete newState.byId[action.id];
         return {
           ...newState,
-          allIds: keys(newState.byId)
+          allIds: keys(newState.byId),
         };
       case actionType.SET_COUNT:
         return {
           ...state,
-          count: action.count
+          count: action.count,
         };
       default:
         if (action.entities && action.entities[resources]) {

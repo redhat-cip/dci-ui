@@ -3,7 +3,7 @@ import { FilterWithSearch } from "ui";
 import { getCurrentFilters, removeFilter } from "./filters";
 
 export default class StatusFilter extends Component {
-  _cleanFiltersAndFilterJobs = filters => {
+  _cleanFiltersAndFilterJobs = (filters) => {
     const { filterJobs, activeFilters } = this.props;
     const otherFilters = removeFilter(activeFilters, "status");
     filterJobs(otherFilters.concat(filters));
@@ -14,43 +14,43 @@ export default class StatusFilter extends Component {
       {
         name: "Success",
         key: "status",
-        value: "success"
+        value: "success",
       },
       {
         name: "Failure",
         key: "status",
-        value: "failure"
+        value: "failure",
       },
       {
         name: "Error",
         key: "status",
-        value: "error"
+        value: "error",
       },
       {
         name: "Killed",
         key: "status",
-        value: "killed"
+        value: "killed",
       },
       {
         name: "New",
         key: "status",
-        value: "new"
+        value: "new",
       },
       {
         name: "Running",
         key: "status",
-        value: "running"
+        value: "running",
       },
       {
         name: "Pre run",
         key: "status",
-        value: "pre-run"
+        value: "pre-run",
       },
       {
         name: "Post run",
         key: "status",
-        value: "post-run"
-      }
+        value: "post-run",
+      },
     ];
     const { activeFilters } = this.props;
     const { status: statusFilter } = getCurrentFilters(activeFilters, filters);
@@ -59,7 +59,7 @@ export default class StatusFilter extends Component {
         placeholder="Filter by Status"
         filter={statusFilter}
         filters={filters}
-        onFilterValueSelected={newStatusFilter =>
+        onFilterValueSelected={(newStatusFilter) =>
           this._cleanFiltersAndFilterJobs([newStatusFilter])
         }
         className="mr-lg"

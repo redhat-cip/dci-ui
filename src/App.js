@@ -68,7 +68,10 @@ class App extends Component {
             <Route path="/login" component={Pages.LoginPage} />
             <Route path="/logout" component={Pages.LogoutPage} />
             <Route path="/login_callback" component={Pages.LoginCallbackPage} />
-            <Route path="/silent_redirect" component={Pages.SilentRedirectPage} />
+            <Route
+              path="/silent_redirect"
+              component={Pages.SilentRedirectPage}
+            />
             <Route component={Pages.Page404} />
           </Switch>
         </BrowserRouter>

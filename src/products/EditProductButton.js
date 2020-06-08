@@ -14,10 +14,10 @@ export class EditProductButton extends Component {
         product={product}
         showModalButton={<EditAltIcon />}
         okButton="Edit"
-        submit={newProduct => {
+        submit={(newProduct) => {
           editProduct({
             id: product.id,
-            ...newProduct
+            ...newProduct,
           });
         }}
       />
@@ -27,7 +27,7 @@ export class EditProductButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editProduct: product => dispatch(actions.update(product))
+    editProduct: (product) => dispatch(actions.update(product)),
   };
 }
 

@@ -13,8 +13,8 @@ export class FeederForm extends Component {
     show: false,
     feeder: {
       name: "",
-      ...this.props.feeder
-    }
+      ...this.props.feeder,
+    },
   };
 
   disableButton = () => {
@@ -40,7 +40,7 @@ export class FeederForm extends Component {
       submit,
       className,
       showModalButton,
-      teams
+      teams,
     } = this.props;
     const { canSubmit, show, feeder } = this.state;
     return (
@@ -56,7 +56,7 @@ export class FeederForm extends Component {
           <Formsy
             id="feeder-form"
             className="pf-c-form"
-            onValidSubmit={feeder => {
+            onValidSubmit={(feeder) => {
               this.closeModal();
               submit(feeder);
             }}
@@ -102,7 +102,7 @@ export class FeederForm extends Component {
 function mapStateToProps(state) {
   return {
     feeders: getFeeders(state),
-    teams: getTeams(state)
+    teams: getTeams(state),
   };
 }
 

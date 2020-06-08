@@ -15,8 +15,8 @@ it("fetchLatestComponents", () => {
         sort: "-created_at",
         limit: 1,
         offset: 0,
-        where: "type:Compose,state:active"
-      }
+        where: "type:Compose,state:active",
+      },
     })
     .reply(200, { components: [{ id: "c11" }] });
   axiosMock
@@ -25,8 +25,8 @@ it("fetchLatestComponents", () => {
         sort: "-created_at",
         limit: 1,
         offset: 0,
-        where: "type:Harness,state:active"
-      }
+        where: "type:Harness,state:active",
+      },
     })
     .reply(200, { components: [{ id: "c12" }] });
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
@@ -34,12 +34,12 @@ it("fetchLatestComponents", () => {
     .dispatch(
       fetchLatestComponents({
         id: "t1",
-        component_types: ["Compose", "Harness"]
+        component_types: ["Compose", "Harness"],
       })
     )
-    .then(r => {
+    .then((r) => {
       expect(r.data).toEqual({
-        components: [{ id: "c11" }, { id: "c12" }]
+        components: [{ id: "c11" }, { id: "c12" }],
       });
     });
 });

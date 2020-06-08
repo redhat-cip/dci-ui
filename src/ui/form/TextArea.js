@@ -3,7 +3,7 @@ import { withFormsy } from "formsy-react";
 import { FormGroup, TextArea } from "@patternfly/react-core";
 
 class DCITextArea extends Component {
-  handleTextAreaChange = value => {
+  handleTextAreaChange = (value) => {
     const { setValue } = this.props;
     setValue(value);
   };
@@ -19,7 +19,7 @@ class DCITextArea extends Component {
       isValid,
       getValue,
       placeholder,
-      helperText = ""
+      helperText = "",
     } = this.props;
     return (
       <FormGroup

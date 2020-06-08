@@ -18,8 +18,5 @@ export function humanizeDuration(durationInSeconds) {
 }
 
 export function formatDate(datetime, timezone) {
-  return moment
-    .utc(datetime)
-    .tz(timezone)
-    .format("lll");
+  return moment.utc(datetime).tz(timezone).format("lll");
 }

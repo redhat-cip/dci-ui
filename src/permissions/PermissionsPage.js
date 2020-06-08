@@ -11,7 +11,7 @@ import {
   PageSectionVariants,
   Text,
   Tabs,
-  Tab
+  Tab,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { EmptyState, FilterWithSearch } from "ui";
@@ -22,13 +22,13 @@ import {
   grantTeamProductPermission,
   grantTeamTopicPermission,
   removeTeamProductPermission,
-  removeTeamTopicPermission
+  removeTeamTopicPermission,
 } from "./permissionsActions";
 
 class AllowTeamToDownloadResource extends Component {
   state = {
     resource: null,
-    team: null
+    team: null,
   };
   render() {
     const { teams, resources, resource_name, onClick } = this.props;
@@ -40,14 +40,14 @@ class AllowTeamToDownloadResource extends Component {
           placeholder={isEmpty(team) ? "..." : team.name}
           filter={team}
           filters={teams}
-          onFilterValueSelected={team => this.setState({ team: team })}
+          onFilterValueSelected={(team) => this.setState({ team: team })}
         />{" "}
         to download every components from{" "}
         <FilterWithSearch
           placeholder={isEmpty(resource) ? "..." : resource.name}
           filter={resource}
           filters={resources}
-          onFilterValueSelected={resource =>
+          onFilterValueSelected={(resource) =>
             this.setState({ resource: resource })
           }
         />
@@ -70,48 +70,48 @@ export class PermissionsPage extends Component {
     isLoading: true,
     products: [],
     topics: [],
-    teams: []
+    teams: [],
   };
   componentDidMount() {
     const { getTopicsWithTeams, getProductsWithTeams, getTeams } = this.props;
     Promise.all([
       getTopicsWithTeams(),
       getProductsWithTeams(),
-      getTeams()
-    ]).then(values =>
+      getTeams(),
+    ]).then((values) =>
       this.setState({
         topics: values[0],
         products: values[1],
         teams: values[2],
-        isLoading: false
+        isLoading: false,
       })
     );
   }
   handleTabClick = (event, tabIndex) => {
     this.setState({
-      activeTabKey: tabIndex
+      activeTabKey: tabIndex,
     });
   };
 
   addTeamToResource = (resources_name, team, resource) => {
-    this.setState(prevState => ({
-      [resources_name]: prevState[resources_name].map(r => {
+    this.setState((prevState) => ({
+      [resources_name]: prevState[resources_name].map((r) => {
         if (r.id === resource.id) {
           r.teams = uniqBy([...r.teams, team], "id");
         }
         return r;
-      })
+      }),
     }));
   };
 
   removeTeamFromResource = (resources_name, team, resource) => {
-    this.setState(prevState => ({
-      [resources_name]: prevState[resources_name].map(r => {
+    this.setState((prevState) => ({
+      [resources_name]: prevState[resources_name].map((r) => {
         if (r.id === resource.id) {
-          r.teams = r.teams.filter(t => t.id !== team.id);
+          r.teams = r.teams.filter((t) => t.id !== team.id);
         }
         return r;
-      })
+      }),
     }));
   };
 
@@ -120,7 +120,7 @@ export class PermissionsPage extends Component {
       grantTeamProductPermission,
       grantTeamTopicPermission,
       removeTeamProductPermission,
-      removeTeamTopicPermission
+      removeTeamTopicPermission,
     } = this.props;
     const { isLoading, teams, topics, products } = this.state;
     return (
@@ -174,7 +174,7 @@ export class PermissionsPage extends Component {
                     );
                   }}
                 />
-                {products.map(product => {
+                {products.map((product) => {
                   if (isEmpty(product.teams)) return null;
                   return (
                     <TextContent
@@ -190,7 +190,7 @@ export class PermissionsPage extends Component {
                         role="grid"
                       >
                         <tbody>
-                          {product.teams.map(team => (
+                          {product.teams.map((team) => (
                             <tr key={`${team.id}.${team.etag}`}>
                               <td className="pf-u-pl-0 pf-m-width-30">
                                 {team.name}
@@ -243,7 +243,7 @@ export class PermissionsPage extends Component {
                     );
                   }}
                 />
-                {topics.map(topic => {
+                {topics.map((topic) => {
                   if (isEmpty(topic.teams)) return null;
                   return (
                     <TextContent
@@ -259,7 +259,7 @@ export class PermissionsPage extends Component {
                         role="grid"
                       >
                         <tbody>
-                          {topic.teams.map(team => (
+                          {topic.teams.map((team) => (
                             <tr key={`${team.id}.${team.etag}`}>
                               <td className="pf-u-pl-0 pf-m-width-30">
                                 {team.name}
@@ -312,7 +312,7 @@ function mapDispatchToProps(dispatch) {
     removeTeamProductPermission: (team, topic) =>
       dispatch(removeTeamProductPermission(team, topic)),
     removeTeamTopicPermission: (team, topic) =>
-      dispatch(removeTeamTopicPermission(team, topic))
+      dispatch(removeTeamTopicPermission(team, topic)),
   };
 }
 

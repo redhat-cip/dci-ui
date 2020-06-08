@@ -21,7 +21,7 @@ export class NewRemoteciButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createRemoteci: remoteci => dispatch(actions.create(remoteci))
+    createRemoteci: (remoteci) => dispatch(actions.create(remoteci)),
   };
 }
 

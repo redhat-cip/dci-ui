@@ -28,13 +28,13 @@ it("fetch jobs", () => {
       type: jobActionsTypes.FETCH_ALL_SUCCESS,
       result: ["j1"],
       entities: {
-        jobs: { j1: { id: "j1" } }
-      }
+        jobs: { j1: { id: "j1" } },
+      },
     },
     {
       type: jobActionsTypes.SET_COUNT,
-      count: 1
-    }
+      count: 1,
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.all()).then(() => {
@@ -52,12 +52,12 @@ it("fetch users params", () => {
     {
       type: userActionsTypes.FETCH_ALL_SUCCESS,
       result: [],
-      entities: {}
+      entities: {},
     },
     {
       type: userActionsTypes.SET_COUNT,
-      count: 0
-    }
+      count: 0,
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.all(params)).then(() => {
@@ -68,7 +68,7 @@ it("fetch users params", () => {
 it("fetch error", () => {
   axiosMock.onGet("https://api.example.org/api/v1/jobs").reply(401, {
     message: "Authorization header missing",
-    status_code: 401
+    status_code: 401,
   });
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.all()).then(() => {
@@ -92,7 +92,7 @@ it("fetch error no message", () => {
 
 it("jobs remove cache", () => {
   const expectedAction = {
-    type: jobActionsTypes.CLEAR_CACHE
+    type: jobActionsTypes.CLEAR_CACHE,
   };
   expect(jobsActions.clear()).toEqual(expectedAction);
 });
@@ -108,9 +108,9 @@ it("fetch job", () => {
       type: jobActionsTypes.FETCH_SUCCESS,
       result: "j1",
       entities: {
-        jobs: { j1: { id: "j1" } }
-      }
-    }
+        jobs: { j1: { id: "j1" } },
+      },
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.one({ id: "j1" })).then(() => {
@@ -130,9 +130,9 @@ it("fetch job with params", () => {
       type: jobActionsTypes.FETCH_SUCCESS,
       result: "j2",
       entities: {
-        jobs: { j2: { id: "j2" } }
-      }
-    }
+        jobs: { j2: { id: "j2" } },
+      },
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(jobsActions.one({ id: "j2" }, params)).then(() => {
@@ -154,10 +154,10 @@ it("create one user", () => {
       result: "u1",
       entities: {
         users: {
-          u1: { id: "u1", name: "user 1" }
-        }
-      }
-    }
+          u1: { id: "u1", name: "user 1" },
+        },
+      },
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.create(user)).then(() => {
@@ -181,10 +181,10 @@ it("update one user", () => {
       result: "u3",
       entities: {
         users: {
-          u3: { id: "u3", name: "user 1", etag: "etag2" }
-        }
-      }
-    }
+          u3: { id: "u3", name: "user 1", etag: "etag2" },
+        },
+      },
+    },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
   return store.dispatch(usersActions.update(user)).then(() => {
@@ -205,7 +205,7 @@ it("delete one user", () => {
     expect(actions[1].alert.title).toBe("user user 1 deleted successfully!");
     expect(actions[2]).toEqual({
       type: userActionsTypes.DELETE_SUCCESS,
-      id: "u4"
+      id: "u4",
     });
   });
 });

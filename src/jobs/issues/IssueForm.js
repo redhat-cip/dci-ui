@@ -9,8 +9,8 @@ export default class IssueForm extends Component {
     show: false,
     issue: {
       url: "",
-      ...this.props.issue
-    }
+      ...this.props.issue,
+    },
   };
 
   disableButton = () => {
@@ -45,7 +45,7 @@ export default class IssueForm extends Component {
           <Formsy
             id="issue-form"
             className="pf-c-form"
-            onValidSubmit={issue => {
+            onValidSubmit={(issue) => {
               this.closeModal();
               submit(issue);
             }}
