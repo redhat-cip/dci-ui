@@ -3,12 +3,12 @@ import { KebabToggle, Dropdown } from "@patternfly/react-core";
 
 export default class KebabDropdown extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
   };
 
-  onToggle = isOpen => {
+  onToggle = (isOpen) => {
     this.setState({
-      isOpen
+      isOpen,
     });
   };
 

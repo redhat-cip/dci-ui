@@ -12,7 +12,7 @@ export function createActionsTypes(resource) {
     },
     {
       SET_COUNT: `SET_${RESOURCE}S_COUNT`,
-      CLEAR_CACHE: `CLEAR_${RESOURCE}_CACHE`
+      CLEAR_CACHE: `CLEAR_${RESOURCE}_CACHE`,
     }
   );
 }

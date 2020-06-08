@@ -81,7 +81,7 @@ const Colors = {
   red300: "#8b0000",
   red400: "#470000",
   red500: "#2c0000",
-  white: "#ffffff"
+  white: "#ffffff",
 };
 
 export default Colors;

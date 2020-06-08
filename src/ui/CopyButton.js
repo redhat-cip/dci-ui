@@ -9,7 +9,7 @@ export default class CopyButton extends Component {
     this.timer = null;
     this.state = {
       text: this.props.text,
-      copied: false
+      copied: false,
     };
   }
 
@@ -25,7 +25,7 @@ export default class CopyButton extends Component {
         id={`copy-button-${text}`}
         textId={`text-input-${text}`}
         aria-label="Copy to clipboard"
-        onClick={event => {
+        onClick={(event) => {
           if (this.timer) {
             clearTimeout(this.timer);
             this.setState({ copied: false });

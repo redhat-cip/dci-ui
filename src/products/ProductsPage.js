@@ -43,7 +43,7 @@ export class ProductsPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
+            {products.map((product) => (
               <tr key={`${product.id}.${product.etag}`}>
                 <td className="text-center">
                   <CopyButton text={product.id} />
@@ -59,7 +59,7 @@ export class ProductsPage extends Component {
                     message={`Are you sure you want to delete ${product.name}?`}
                     onOk={() => deleteProduct(product)}
                   >
-                    {openModal => (
+                    {(openModal) => (
                       <Button variant="danger" onClick={openModal}>
                         <TrashIcon />
                       </Button>
@@ -78,7 +78,7 @@ export class ProductsPage extends Component {
 function mapStateToProps(state) {
   return {
     products: getProducts(state),
-    isFetching: state.products.isFetching
+    isFetching: state.products.isFetching,
   };
 }
 
@@ -87,7 +87,7 @@ function mapDispatchToProps(dispatch) {
     fetchProducts: () => {
       dispatch(productsActions.all());
     },
-    deleteProduct: product => dispatch(productsActions.delete(product))
+    deleteProduct: (product) => dispatch(productsActions.delete(product)),
   };
 }
 

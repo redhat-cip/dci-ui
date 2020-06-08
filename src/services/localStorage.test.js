@@ -3,7 +3,7 @@ import {
   getToken,
   removeToken,
   setJWT,
-  setBasicToken
+  setBasicToken,
 } from "./localStorage";
 
 it("localStorage getToken", () => {
@@ -13,7 +13,7 @@ it("localStorage getToken", () => {
 it("localStorage setToken getToken removeToken", () => {
   const token = {
     type: "Bearer",
-    value: "eyJhbGciOiJSUzI1NiIsInR5cC"
+    value: "eyJhbGciOiJSUzI1NiIsInR5cC",
   };
   setToken(token);
   expect(getToken()).toEqual(token);

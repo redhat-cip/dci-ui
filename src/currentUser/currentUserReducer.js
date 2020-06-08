@@ -14,11 +14,11 @@ function buildShortcut(team) {
       team.name === adminTeamName ||
       team.name === EPMTeamName ||
       team.name === RedHatTeamName,
-    isReadOnly: team.name === RedHatTeamName
+    isReadOnly: team.name === RedHatTeamName,
   };
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case types.SET_IDENTITY:
       const identity = action.identity;
@@ -28,34 +28,34 @@ export default function(state = initialState, action) {
         ...state,
         ...identity,
         ...buildShortcut(firstTeam),
-        team: firstTeam
+        team: firstTeam,
       };
     case types.SET_ACTIVE_TEAM:
       return {
         ...state,
         team: action.team,
-        ...buildShortcut(action.team)
+        ...buildShortcut(action.team),
       };
     case types.UPDATE_CURRENT_USER:
       return {
         ...state,
-        ...action.currentUser
+        ...action.currentUser,
       };
     case types.DELETE_CURRENT_USER:
       return {
-        ...initialState
+        ...initialState,
       };
     case types.SUBSCRIBED_TO_A_REMOTECI:
       return {
         ...state,
-        remotecis: [action.remoteci, ...state.remotecis.slice(0)]
+        remotecis: [action.remoteci, ...state.remotecis.slice(0)],
       };
     case types.UNSUBSCRIBED_FROM_A_REMOTECI:
       return {
         ...state,
         remotecis: state.remotecis.filter(
-          remoteci => remoteci.id !== action.remoteci.id
-        )
+          (remoteci) => remoteci.id !== action.remoteci.id
+        ),
       };
     default:
       return state;

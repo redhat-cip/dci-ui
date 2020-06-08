@@ -16,10 +16,10 @@ export default class TeamForm extends Component {
       <Formsy
         id={id}
         className="pf-c-form"
-        onValidSubmit={newTeam =>
+        onValidSubmit={(newTeam) =>
           onValidSubmit({
             ...newTeam,
-            state: newTeam.state ? "active" : "inactive"
+            state: newTeam.state ? "active" : "inactive",
           })
         }
         onValid={onValid}

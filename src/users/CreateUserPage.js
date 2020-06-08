@@ -17,7 +17,7 @@ export class CreateUserPage extends Component {
                 <UserForm
                   buttonText="Create user"
                   user={{ name: "" }}
-                  submit={user => {
+                  submit={(user) => {
                     createUser(user).then(() => history.push("/users"));
                   }}
                 />
@@ -32,7 +32,7 @@ export class CreateUserPage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createUser: user => dispatch(usersActions.create(user))
+    createUser: (user) => dispatch(usersActions.create(user)),
   };
 }
 

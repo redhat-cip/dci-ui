@@ -12,11 +12,11 @@ export class RemoteciInTeamFilter extends Component {
     fetchTeams();
   }
 
-  _cleanFiltersAndFilterJobs = filters => {
+  _cleanFiltersAndFilterJobs = (filters) => {
     const { filterJobs, activeFilters } = this.props;
     const otherFilters = removeFilters(activeFilters, [
       "team_id",
-      "remoteci_id"
+      "remoteci_id",
     ]);
     filterJobs(otherFilters.concat(filters));
   };
@@ -24,9 +24,7 @@ export class RemoteciInTeamFilter extends Component {
   render() {
     const { teams, isFetching, activeFilters } = this.props;
     if (isFetching && isEmpty(teams)) {
-      return (
-        <LoadingFilter placeholder="Filter by Team" className="mr-lg" />
-      );
+      return <LoadingFilter placeholder="Filter by Team" className="mr-lg" />;
     }
     const teamsFilter = createTeamsFilter(teams);
     const teamFilter = getCurrentFilters(activeFilters, teamsFilter).team_id;
@@ -40,7 +38,7 @@ export class RemoteciInTeamFilter extends Component {
           placeholder="Filter by Team"
           filter={teamFilter}
           filters={teamsFilter}
-          onFilterValueSelected={newTeamFilter =>
+          onFilterValueSelected={(newTeamFilter) =>
             this._cleanFiltersAndFilterJobs([newTeamFilter])
           }
           className="mr-lg"
@@ -50,7 +48,7 @@ export class RemoteciInTeamFilter extends Component {
             placeholder="Filter by Remoteci"
             filter={remoteciFilter}
             filters={remoteciFilters}
-            onFilterValueSelected={newRemoteciFilter =>
+            onFilterValueSelected={(newRemoteciFilter) =>
               this._cleanFiltersAndFilterJobs([teamFilter, newRemoteciFilter])
             }
             className="mr-lg"
@@ -64,13 +62,13 @@ export class RemoteciInTeamFilter extends Component {
 function mapStateToProps(state) {
   return {
     teams: getTeams(state),
-    isFetching: state.teams.isFetching
+    isFetching: state.teams.isFetching,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" }))
+    fetchTeams: () => dispatch(teamsActions.all({ embed: "remotecis" })),
   };
 }
 

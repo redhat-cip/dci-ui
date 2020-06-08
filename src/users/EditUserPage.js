@@ -8,7 +8,7 @@ import UserForm from "./UserForm";
 import {
   fetchUserTeams,
   addUserToTeam,
-  deleteUserFromTeam
+  deleteUserFromTeam,
 } from "./usersActions";
 import AddUserToTeamForm from "./AddUserToTeamsForm";
 import { TrashIcon } from "@patternfly/react-icons";
@@ -17,12 +17,12 @@ import { ConfirmDeleteModal } from "ui";
 export class EditUserPage extends Component {
   state = {
     user: null,
-    user_teams: []
+    user_teams: [],
   };
 
   componentDidMount() {
     const { match, fetchUser } = this.props;
-    fetchUser({ id: match.params.id }).then(response =>
+    fetchUser({ id: match.params.id }).then((response) =>
       this.setState({ user: response.data.user })
     );
     this.fetchUserTeams();
@@ -30,7 +30,7 @@ export class EditUserPage extends Component {
 
   fetchUserTeams = () => {
     const { match, fetchUserTeams } = this.props;
-    fetchUserTeams({ id: match.params.id }).then(response =>
+    fetchUserTeams({ id: match.params.id }).then((response) =>
       this.setState({ user_teams: response.data.teams })
     );
   };
@@ -48,16 +48,16 @@ export class EditUserPage extends Component {
                 <UserForm
                   user={user}
                   buttonText="Edit user"
-                  submit={newUser => {
+                  submit={(newUser) => {
                     updateUser({
                       id: user.id,
-                      ...newUser
-                    }).then(response =>
-                      this.setState(prevState => ({
+                      ...newUser,
+                    }).then((response) =>
+                      this.setState((prevState) => ({
                         user: {
                           ...prevState.user,
-                          ...response.data.user
-                        }
+                          ...response.data.user,
+                        },
                       }))
                     );
                   }}
@@ -69,7 +69,7 @@ export class EditUserPage extends Component {
             <Card>
               <CardBody>
                 <AddUserToTeamForm
-                  onSubmit={team => {
+                  onSubmit={(team) => {
                     addUserToTeam(user, team).then(this.fetchUserTeams);
                   }}
                 />
@@ -85,7 +85,7 @@ export class EditUserPage extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {user_teams.map(team => (
+                    {user_teams.map((team) => (
                       <tr key={team.id}>
                         <td>{team.name}</td>
                         <td className="pf-c-table__action">
@@ -98,7 +98,7 @@ export class EditUserPage extends Component {
                               );
                             }}
                           >
-                            {openModal => (
+                            {(openModal) => (
                               <Button variant="danger" onClick={openModal}>
                                 <TrashIcon />
                               </Button>
@@ -120,12 +120,12 @@ export class EditUserPage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUser: user => dispatch(usersActions.one(user)),
-    fetchUserTeams: user => dispatch(fetchUserTeams(user)),
-    updateUser: user => dispatch(usersActions.update(user)),
+    fetchUser: (user) => dispatch(usersActions.one(user)),
+    fetchUserTeams: (user) => dispatch(fetchUserTeams(user)),
+    updateUser: (user) => dispatch(usersActions.update(user)),
     deleteUserFromTeam: (user, team) =>
       dispatch(deleteUserFromTeam(user, team)),
-    addUserToTeam: (user, team) => dispatch(addUserToTeam(user, team))
+    addUserToTeam: (user, team) => dispatch(addUserToTeam(user, team)),
   };
 }
 

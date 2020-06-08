@@ -7,7 +7,7 @@ export function fetchLatestComponents(topic) {
   return (dispatch, getState) => {
     const state = getState();
     return Promise.all(
-      topic.component_types.map(componentType =>
+      topic.component_types.map((componentType) =>
         http({
           method: "get",
           url: `${state.config.apiURL}/api/v1/topics/${topic.id}/components`,
@@ -15,11 +15,11 @@ export function fetchLatestComponents(topic) {
             sort: "-created_at",
             limit: 1,
             offset: 0,
-            where: `type:${componentType},state:active`
-          }
+            where: `type:${componentType},state:active`,
+          },
         })
       )
-    ).then(results => {
+    ).then((results) => {
       const components = results.reduce(
         (acc, result) => acc.concat(result.data.components),
         []

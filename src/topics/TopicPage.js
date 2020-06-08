@@ -12,7 +12,7 @@ import {
   GridItem,
   Title,
   Divider,
-  Button
+  Button,
 } from "@patternfly/react-core";
 import { EmptyState, Labels } from "ui";
 import styled from "styled-components";
@@ -45,10 +45,7 @@ const SeeContent = ({ content }) => {
   const [seeContent, setSeeContent] = useState(false);
   return seeContent ? (
     <div>
-      <Button
-        onClick={() => setSeeContent(false)}
-        type="button"
-      >
+      <Button onClick={() => setSeeContent(false)} type="button">
         hide content
       </Button>
       <Pre>{content}</Pre>
@@ -86,8 +83,8 @@ const Components = ({ topic }) => {
 
   useEffect(() => {
     dispatch(fetchLatestComponents(topic))
-      .then(response => setComponents(response.data.components))
-      .catch(error => console.log(error))
+      .then((response) => setComponents(response.data.components))
+      .catch((error) => console.log(error))
       .then(() => setIsFetching(false));
   }, [dispatch, topic, setIsFetching]);
 
@@ -127,8 +124,8 @@ const TopicPage = ({ match }) => {
 
   useEffect(() => {
     dispatch(topicsActions.one({ id }, { embed: "next_topic,product" }))
-      .then(response => response.data.topic)
-      .catch(error => console.log(error))
+      .then((response) => response.data.topic)
+      .catch((error) => console.log(error))
       .then(() => setIsFetching(false));
   }, [dispatch, id, setIsFetching]);
 

@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import {
   WarningTriangleIcon,
   EditAltIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
 } from "@patternfly/react-icons";
 import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
 import { ConfirmDeleteModal, CopyButton, Labels, KebabDropdown } from "ui";
@@ -19,24 +19,24 @@ export class Team extends Component {
     isLoading: true,
     isAddUserToTeamModalOpen: false,
     isEditTeamModalOpen: false,
-    teamUsers: []
+    teamUsers: [],
   };
 
   fetchUsersForTeam = () => {
     const { team, fetchUsersForTeam } = this.props;
-    return fetchUsersForTeam(team).then(response => {
+    return fetchUsersForTeam(team).then((response) => {
       this.setState({
         teamUsers: response.data.users,
-        isLoading: false
+        isLoading: false,
       });
       return response;
     });
   };
 
   toggleAndFetchUsers = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isExpanded: !prevState.isExpanded,
-      isLoading: true
+      isLoading: true,
     }));
     this.fetchUsersForTeam();
   };
@@ -60,9 +60,9 @@ export class Team extends Component {
           this.fetchUsersForTeam();
         }}
       >
-        <WarningTriangleIcon className="mr-xs" /> delete {user.name} user
-        from {team.name} team
-      </DropdownItem>
+        <WarningTriangleIcon className="mr-xs" /> delete {user.name} user from{" "}
+        {team.name} team
+      </DropdownItem>,
     ];
     return userDropdownItems;
   };
@@ -90,7 +90,7 @@ export class Team extends Component {
       isLoading,
       teamUsers,
       isAddUserToTeamModalOpen,
-      isEditTeamModalOpen
+      isEditTeamModalOpen,
     } = this.state;
 
     const teamDropdownItems = [
@@ -108,7 +108,7 @@ export class Team extends Component {
         onClick={this.openEditTeamModal}
       >
         <EditAltIcon className="mr-xs" /> Edit {team.name} team
-      </DropdownItem>
+      </DropdownItem>,
     ];
     if (currentUser.isSuperAdmin) {
       teamDropdownItems.push(
@@ -118,7 +118,7 @@ export class Team extends Component {
           message={`Are you sure you want to delete ${team.name} team?`}
           onOk={() => deleteTeam(team)}
         >
-          {openModal => (
+          {(openModal) => (
             <DropdownItem component="button" onClick={openModal}>
               <WarningTriangleIcon className="mr-xs" />
               {`delete ${team.name} team`}
@@ -222,7 +222,7 @@ export class Team extends Component {
                       </td>
                     </tr>
                   )}
-                  {teamUsers.map(user => (
+                  {teamUsers.map((user) => (
                     <tr key={`${user.id}.${user.etag}`}>
                       <td data-label="Id">
                         <CopyButton text={user.id} />
@@ -253,10 +253,10 @@ export class Team extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsersForTeam: team => dispatch(fetchUsersForTeam(team)),
+    fetchUsersForTeam: (team) => dispatch(fetchUsersForTeam(team)),
     deleteUserFromTeam: (user, team) =>
       dispatch(deleteUserFromTeam(user, team)),
-    deleteTeam: team => dispatch(teamsActions.delete(team))
+    deleteTeam: (team) => dispatch(teamsActions.delete(team)),
   };
 }
 

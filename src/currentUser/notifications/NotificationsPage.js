@@ -55,16 +55,16 @@ function mapStateToProps(state) {
   return {
     remotecis: getRemotecis(state),
     isFetching: state.remotecis.isFetching,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchRemotecis: () => dispatch(remotecisActions.all({ embed: "team" })),
-    getSubscribedRemotecis: identity =>
+    getSubscribedRemotecis: (identity) =>
       dispatch(getSubscribedRemotecis(identity)),
-    deleteRemoteci: remoteci => dispatch(remotecisActions.delete(remoteci))
+    deleteRemoteci: (remoteci) => dispatch(remotecisActions.delete(remoteci)),
   };
 }
 

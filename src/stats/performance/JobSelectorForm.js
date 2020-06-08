@@ -8,7 +8,7 @@ export default class JobSelectorForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      canSubmit: false
+      canSubmit: false,
     };
   }
 
@@ -28,7 +28,7 @@ export default class JobSelectorForm extends Component {
       <Formsy
         id="performance-job-selector-form"
         className="pf-c-form"
-        onValidSubmit={v => {
+        onValidSubmit={(v) => {
           const trimedLines = map(v.jobs_ids.split("\n"), trim);
           submit({ jobs_ids: trimedLines });
         }}
@@ -43,11 +43,7 @@ export default class JobSelectorForm extends Component {
           required
           value={jobs_ids.join("\n")}
         />
-        <Button
-          type="submit"
-          variant="primary"
-          isDisabled={!canSubmit}
-        >
+        <Button type="submit" variant="primary" isDisabled={!canSubmit}>
           See performance results
         </Button>
       </Formsy>

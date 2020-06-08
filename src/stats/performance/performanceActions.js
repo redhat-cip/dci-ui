@@ -9,9 +9,9 @@ export function calcPerformance(jobs_ids) {
     const request = {
       method: "post",
       data: { base_job_id, jobs },
-      url: `${state.config.apiURL}/api/v1/performance`
+      url: `${state.config.apiURL}/api/v1/performance`,
     };
-    return http(request).catch(error => {
+    return http(request).catch((error) => {
       dispatch(
         showError("An error has occurred, make sure the job ids are correct.")
       );
@@ -27,7 +27,7 @@ export function transposePerformance(performance) {
     const job = performance[i];
     headers.push({
       job_id: job.job_id,
-      title: `j${i + 1}`
+      title: `j${i + 1}`,
     });
     const testscases = job.testscases;
     for (let j = 0; j < testscases.length; j++) {
@@ -38,9 +38,9 @@ export function transposePerformance(performance) {
       rows[j].push(testscase.delta);
     }
   }
-  const sortedRows = reverse(sortBy(rows, r => r[r.length - 1]));
+  const sortedRows = reverse(sortBy(rows, (r) => r[r.length - 1]));
   return {
     headers,
-    rows: sortedRows
+    rows: sortedRows,
   };
 }

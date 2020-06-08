@@ -9,35 +9,35 @@ export default class TestsCases extends Component {
     filter: {
       name: "All",
       key: "status",
-      value: null
+      value: null,
     },
     filters: [
       {
         name: "All",
         key: "status",
-        value: null
+        value: null,
       },
       {
         name: "Passed",
         key: "status",
-        value: "passed"
+        value: "passed",
       },
       {
         name: "Skipped",
         key: "status",
-        value: "skipped"
+        value: "skipped",
       },
       {
         name: "Failure",
         key: "status",
-        value: "failure"
+        value: "failure",
       },
       {
         name: "Error",
         key: "status",
-        value: "error"
-      }
-    ]
+        value: "error",
+      },
+    ],
   };
   render() {
     const { testscases } = this.props;
@@ -50,7 +50,7 @@ export default class TestsCases extends Component {
       );
 
     const { filter, filters } = this.state;
-    const filteredTestCases = testscases.filter(testcase => {
+    const filteredTestCases = testscases.filter((testcase) => {
       if (!filter.value) return true;
       return testcase.action === filter.value;
     });
@@ -64,7 +64,7 @@ export default class TestsCases extends Component {
                 placeholder="Filter by Status"
                 filter={filter}
                 filters={filters}
-                onFilterValueSelected={newFilter =>
+                onFilterValueSelected={(newFilter) =>
                   this.setState({ filter: newFilter })
                 }
               />

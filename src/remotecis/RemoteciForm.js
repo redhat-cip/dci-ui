@@ -10,8 +10,8 @@ export default class RemoteciForm extends Component {
     show: false,
     remoteci: {
       name: "",
-      ...this.props.remoteci
-    }
+      ...this.props.remoteci,
+    },
   };
 
   disableButton = () => {
@@ -37,7 +37,7 @@ export default class RemoteciForm extends Component {
       submit,
       className,
       showModalButton,
-      teams
+      teams,
     } = this.props;
     const { canSubmit, show, remoteci } = this.state;
     return (
@@ -53,7 +53,7 @@ export default class RemoteciForm extends Component {
           <Formsy
             id="remoteci-form"
             className="pf-c-form"
-            onValidSubmit={remoteci => {
+            onValidSubmit={(remoteci) => {
               this.closeModal();
               submit(remoteci);
             }}

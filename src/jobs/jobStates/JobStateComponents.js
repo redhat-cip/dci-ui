@@ -68,7 +68,7 @@ export const ShareLink = styled.a`
   &:hover {
     color: ${Colors.black200};
   }
-  ${props =>
+  ${(props) =>
     props.isSelected &&
     css`
       color: ${Colors.black200};

@@ -26,7 +26,7 @@ const store = createStore(
     remotecis: remotecisReducer,
     teams: teamsReducer,
     users: usersReducer,
-    trends: trendsReducer
+    trends: trendsReducer,
   }),
   applyMiddleware(thunk)
 );

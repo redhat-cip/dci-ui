@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   CaretDownIcon,
   CaretRightIcon,
-  LinkIcon
+  LinkIcon,
 } from "@patternfly/react-icons";
 import { getFileContent } from "jobs/files/filesActions";
 import {
@@ -14,14 +14,14 @@ import {
   ShareLink,
   JobStatePre,
   Label,
-  LabelBox
+  LabelBox,
 } from "./JobStateComponents";
 
 export class JobStateFile extends Component {
   state = {
     file: this.props.file,
     seeDetails: false,
-    loading: true
+    loading: true,
   };
 
   componentDidUpdate(prevProps) {
@@ -37,18 +37,18 @@ export class JobStateFile extends Component {
     if (!this.state.file.content) this.setState({ loading: true });
     this.props
       .getFileContent(this.state.file)
-      .then(response => {
-        this.setState(prevState => {
+      .then((response) => {
+        this.setState((prevState) => {
           return {
             file: {
               ...prevState.file,
-              content: response.data
-            }
+              content: response.data,
+            },
           };
         });
         return response;
       })
-      .catch(error => console.log(error))
+      .catch((error) => console.log(error))
       .then(() => this.setState({ loading: false }));
   };
 
@@ -67,8 +67,8 @@ export class JobStateFile extends Component {
           <FileName
             onClick={() => {
               this.loadFileContent();
-              this.setState(prevState => ({
-                seeDetails: !prevState.seeDetails
+              this.setState((prevState) => ({
+                seeDetails: !prevState.seeDetails,
               }));
             }}
           >
@@ -96,7 +96,7 @@ export class JobStateFile extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getFileContent: file => dispatch(getFileContent(file))
+    getFileContent: (file) => dispatch(getFileContent(file)),
   };
 }
 

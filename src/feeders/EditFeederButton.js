@@ -14,10 +14,10 @@ export class EditFeederButton extends Component {
         feeder={feeder}
         showModalButton={<EditAltIcon />}
         okButton="Edit"
-        submit={newFeeder => {
+        submit={(newFeeder) => {
           editFeeder({
             id: feeder.id,
-            ...newFeeder
+            ...newFeeder,
           });
         }}
       />
@@ -27,7 +27,7 @@ export class EditFeederButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    editFeeder: feeder => dispatch(actions.update(feeder))
+    editFeeder: (feeder) => dispatch(actions.update(feeder)),
   };
 }
 

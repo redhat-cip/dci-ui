@@ -25,12 +25,12 @@ import Page404 from "./layout/Page404";
 
 const TrendsPage = Loadable({
   loader: () => import("./stats/trends/TrendsPage"),
-  loading: () => <LoadingPage title="Trend" />
+  loading: () => <LoadingPage title="Trend" />,
 });
 
 const PerformancePage = Loadable({
   loader: () => import("./stats/performance/PerformancePage"),
-  loading: () => <LoadingPage title="Performance" />
+  loading: () => <LoadingPage title="Performance" />,
 });
 
 export default {
@@ -56,5 +56,5 @@ export default {
   LogoutPage,
   SilentRedirectPage,
   TrendsPage,
-  Page404
+  Page404,
 };

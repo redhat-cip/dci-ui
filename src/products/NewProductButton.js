@@ -20,7 +20,7 @@ export class NewProductButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createProduct: product => dispatch(actions.create(product))
+    createProduct: (product) => dispatch(actions.create(product)),
   };
 }
 

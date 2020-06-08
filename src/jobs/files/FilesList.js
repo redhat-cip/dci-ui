@@ -8,7 +8,7 @@ export default class FilesList extends Component {
   render() {
     const { files } = this.props;
     const filesNotAssociatedWithJobState = files.filter(
-      f => f.jobstate_id === null
+      (f) => f.jobstate_id === null
     );
     if (isEmpty(filesNotAssociatedWithJobState)) {
       return (
@@ -31,7 +31,7 @@ export default class FilesList extends Component {
             </tr>
           </thead>
           <tbody>
-            {filesNotAssociatedWithJobState.map(file => (
+            {filesNotAssociatedWithJobState.map((file) => (
               <File key={file.id} file={file} />
             ))}
           </tbody>

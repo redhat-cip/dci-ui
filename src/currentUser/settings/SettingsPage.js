@@ -16,7 +16,7 @@ export class SettingsPage extends Component {
             <SettingsForm
               key={`SettingsForm.${currentUser.id}.${currentUser.etag}`}
               currentUser={currentUser}
-              submit={newCurrentUser => updateCurrentUser(newCurrentUser)}
+              submit={(newCurrentUser) => updateCurrentUser(newCurrentUser)}
             />
           </GridItem>
           {currentUser.isReadOnly ? null : (
@@ -24,7 +24,7 @@ export class SettingsPage extends Component {
               <ChangePasswordForm
                 key={`ChangePasswordForm.${currentUser.id}.${currentUser.etag}`}
                 currentUser={currentUser}
-                submit={newCurrentUser => {
+                submit={(newCurrentUser) => {
                   updateCurrentUser(newCurrentUser);
                 }}
               />
@@ -38,13 +38,14 @@ export class SettingsPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateCurrentUser: currentUser => dispatch(updateCurrentUser(currentUser))
+    updateCurrentUser: (currentUser) =>
+      dispatch(updateCurrentUser(currentUser)),
   };
 }
 

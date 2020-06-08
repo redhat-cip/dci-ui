@@ -10,7 +10,7 @@ import {
   CardBody,
   Grid,
   GridItem,
-  PageSection
+  PageSection,
 } from "@patternfly/react-core";
 import PerformanceCard from "./PerformanceCard";
 
@@ -18,7 +18,7 @@ export class PerformancePage extends Component {
   state = {
     performance: [],
     isFetching: false,
-    jobs_ids: []
+    jobs_ids: [],
   };
 
   componentDidMount() {
@@ -29,12 +29,12 @@ export class PerformancePage extends Component {
     }
   }
 
-  _calcPerformance = jobs_ids => {
+  _calcPerformance = (jobs_ids) => {
     const { calcPerformance, history } = this.props;
     this.setState({ isFetching: true, jobs_ids });
     history.push(`/performance?jobs_ids=${jobs_ids.join(",")}`);
     calcPerformance(jobs_ids)
-      .then(r =>
+      .then((r) =>
         this.setState({ performance: r.data.performance, isFetching: false })
       )
       .catch(() => this.setState({ isFetching: false }));
@@ -55,9 +55,9 @@ export class PerformancePage extends Component {
                 <GridItem span={6}>
                   <JobSelectorForm
                     initialData={{
-                      jobs_ids
+                      jobs_ids,
                     }}
-                    submit={v => this._calcPerformance(v.jobs_ids)}
+                    submit={(v) => this._calcPerformance(v.jobs_ids)}
                   />
                 </GridItem>
               </Grid>
@@ -76,7 +76,7 @@ export class PerformancePage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    calcPerformance: jobs_ids => dispatch(calcPerformance(jobs_ids))
+    calcPerformance: (jobs_ids) => dispatch(calcPerformance(jobs_ids)),
   };
 }
 

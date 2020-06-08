@@ -12,7 +12,7 @@ export class TopicsFilter extends Component {
     fetchTopics();
   }
 
-  _cleanFiltersAndFilterJobs = filters => {
+  _cleanFiltersAndFilterJobs = (filters) => {
     const { filterJobs, activeFilters } = this.props;
     const otherFilters = removeFilter(activeFilters, "topic_id");
     filterJobs(otherFilters.concat(filters));
@@ -21,9 +21,7 @@ export class TopicsFilter extends Component {
   render() {
     const { topics, isFetching, activeFilters } = this.props;
     if (isFetching && isEmpty(topics)) {
-      return (
-        <LoadingFilter placeholder="Filter by Topic" className="mr-xl" />
-      );
+      return <LoadingFilter placeholder="Filter by Topic" className="mr-xl" />;
     }
     const topicsFilter = createTopicsFilter(topics);
     const topicFilter = getCurrentFilters(activeFilters, topicsFilter).topic_id;
@@ -32,7 +30,7 @@ export class TopicsFilter extends Component {
         placeholder="Filter by Topic"
         filter={topicFilter}
         filters={topicsFilter}
-        onFilterValueSelected={newTopicFilter =>
+        onFilterValueSelected={(newTopicFilter) =>
           this._cleanFiltersAndFilterJobs([newTopicFilter])
         }
         className="mr-xl"
@@ -44,13 +42,13 @@ export class TopicsFilter extends Component {
 function mapStateToProps(state) {
   return {
     topics: getTopics(state),
-    isFetching: state.topics.isFetching
+    isFetching: state.topics.isFetching,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchTopics: () => dispatch(topicsActions.all())
+    fetchTopics: () => dispatch(topicsActions.all()),
   };
 }
 

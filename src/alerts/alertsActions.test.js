@@ -3,22 +3,22 @@ import * as types from "./alertsActionsTypes";
 
 it("showAlert", () => {
   const alert = {
-    id: "a1"
+    id: "a1",
   };
   const expectedAction = {
     type: types.SHOW_ALERT,
-    alert
+    alert,
   };
   expect(actions.showAlert(alert)).toEqual(expectedAction);
 });
 
 it("hideAlert", () => {
   const alert = {
-    id: "a1"
+    id: "a1",
   };
   const expectedAction = {
     type: types.HIDE_ALERT,
-    alert
+    alert,
   };
   expect(actions.hideAlert(alert)).toEqual(expectedAction);
 });
@@ -27,7 +27,7 @@ it("createAlert", () => {
   const data = {
     _status: "Unauthorized",
     message:
-      "Could not verify your access level for that URL. Please login with proper credentials."
+      "Could not verify your access level for that URL. Please login with proper credentials.",
   };
   const alert = actions.createAlert({ data, status: 401 });
   expect(alert.title).toBe(
@@ -42,10 +42,10 @@ it("createAlert with one error", () => {
     message: "conflict on topics",
     payload: {
       error: {
-        name: "already_exists"
-      }
+        name: "already_exists",
+      },
     },
-    status_code: 409
+    status_code: 409,
   };
   const alert = actions.createAlert({ data, status: 409 });
   expect(alert.title).toBe("conflict on topics");
@@ -59,10 +59,10 @@ it("createAlert with multiple errors", () => {
     payload: {
       errors: {
         name: "already_exists",
-        team_id: "not a valid team id"
-      }
+        team_id: "not a valid team id",
+      },
     },
-    status_code: 400
+    status_code: 400,
   };
   const alert = actions.createAlert({ data, status: 400 });
   expect(alert.title).toBe("Request malformed");
@@ -77,9 +77,9 @@ it("createAlert with new error", () => {
     message: "Request malformed",
     payload: {
       error: "'team_id' is a required property",
-      errors: ["'team_id' is a required property"]
+      errors: ["'team_id' is a required property"],
     },
-    status_code: 400
+    status_code: 400,
   };
   const alert = actions.createAlert({ data, status: 400 });
   expect(alert.title).toBe("Request malformed");
@@ -91,7 +91,7 @@ it("createAlert with empty payload", () => {
   const data = {
     message: "Request malformed",
     payload: {},
-    status_code: 400
+    status_code: 400,
   };
   const alert = actions.createAlert({ data, status: 400 });
   expect(alert.title).toBe("Request malformed");
@@ -101,7 +101,7 @@ it("createAlert with empty payload", () => {
 
 it("createAlert with unknown format", () => {
   const data = {
-    error: "Request malformed"
+    error: "Request malformed",
   };
   const alert = actions.createAlert({ data, status: 400 });
   expect(alert.title).toBe("Request malformed");

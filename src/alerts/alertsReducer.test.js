@@ -10,13 +10,13 @@ it("SHOW_ALERT", () => {
     reducer(undefined, {
       type: types.SHOW_ALERT,
       alert: {
-        id: "a1"
-      }
+        id: "a1",
+      },
     })
   ).toEqual({
     a1: {
-      id: "a1"
-    }
+      id: "a1",
+    },
   });
 });
 
@@ -25,23 +25,23 @@ it("SHOW_ALERT keep existing alerts", () => {
     reducer(
       {
         a1: {
-          id: "a1"
-        }
+          id: "a1",
+        },
       },
       {
         type: types.SHOW_ALERT,
         alert: {
-          id: "a2"
-        }
+          id: "a2",
+        },
       }
     )
   ).toEqual({
     a1: {
-      id: "a1"
+      id: "a1",
     },
     a2: {
-      id: "a2"
-    }
+      id: "a2",
+    },
   });
 });
 
@@ -50,22 +50,22 @@ it("HIDE_ALERT", () => {
     reducer(
       {
         a1: {
-          id: "a1"
+          id: "a1",
         },
         a2: {
-          id: "a2"
-        }
+          id: "a2",
+        },
       },
       {
         type: types.HIDE_ALERT,
         alert: {
-          id: "a1"
-        }
+          id: "a1",
+        },
       }
     )
   ).toEqual({
     a2: {
-      id: "a2"
-    }
+      id: "a2",
+    },
   });
 });

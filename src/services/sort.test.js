@@ -5,21 +5,21 @@ it("sortByName", () => {
     sortByName([
       {
         id: "1",
-        name: "b"
+        name: "b",
       },
       {
         id: "2",
-        name: "A"
-      }
+        name: "A",
+      },
     ])
   ).toEqual([
     {
       id: "2",
-      name: "A"
+      name: "A",
     },
     {
       id: "1",
-      name: "b"
-    }
+      name: "b",
+    },
   ]);
 });

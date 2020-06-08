@@ -3,7 +3,7 @@ import {
   Button,
   ActionGroup,
   Toolbar,
-  ToolbarGroup
+  ToolbarGroup,
 } from "@patternfly/react-core";
 import { useAuth } from "./authContext";
 import { useLocation } from "react-router-dom";

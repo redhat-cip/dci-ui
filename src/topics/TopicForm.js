@@ -8,7 +8,7 @@ import {
   TextAreaJSON,
   HiddenInput,
   Checkbox,
-  FormModal
+  FormModal,
 } from "ui/form";
 import { getProducts } from "products/productSelectors";
 import { getTopics } from "./topicsSelectors";
@@ -21,8 +21,8 @@ export class TopicForm extends Component {
     topic: {
       name: "",
       export_control: false,
-      ...this.props.topic
-    }
+      ...this.props.topic,
+    },
   };
 
   disableButton = () => {
@@ -50,7 +50,7 @@ export class TopicForm extends Component {
       products,
       className,
       showModalButton,
-      currentUser
+      currentUser,
     } = this.props;
     const { canSubmit, show, topic } = this.state;
     return (
@@ -66,7 +66,7 @@ export class TopicForm extends Component {
           <Formsy
             id="topic-form"
             className="pf-c-form"
-            onValidSubmit={topic => {
+            onValidSubmit={(topic) => {
               this.closeModal();
               submit(topic);
             }}
@@ -142,7 +142,7 @@ function mapStateToProps(state) {
   return {
     products: getProducts(state),
     topics: getTopics(state),
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
   };
 }
 

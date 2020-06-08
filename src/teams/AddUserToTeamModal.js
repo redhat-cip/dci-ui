@@ -7,17 +7,17 @@ import { addUserToTeam } from "users/usersActions";
 
 export class AddUserToTeamModal extends Component {
   state = {
-    user: null
+    user: null,
   };
   render() {
     const { team, users, isOpen, close, addUserToTeam, onOk } = this.props;
     const { user } = this.state;
     if (isEmpty(users)) return null;
-    const usersFiltered = users.map(user => ({
+    const usersFiltered = users.map((user) => ({
       id: user.id,
       key: "user_id",
       name: user.email,
-      value: user.id
+      value: user.id,
     }));
     return (
       <Modal
@@ -37,7 +37,7 @@ export class AddUserToTeamModal extends Component {
             }}
           >
             Add
-          </Button>
+          </Button>,
         ]}
         style={{ minHeight: "300px" }}
       >
@@ -45,7 +45,7 @@ export class AddUserToTeamModal extends Component {
           placeholder={isEmpty(user) ? "Select a user" : user.email}
           filter={user}
           filters={usersFiltered}
-          onFilterValueSelected={newUser => this.setState({ user: newUser })}
+          onFilterValueSelected={(newUser) => this.setState({ user: newUser })}
         />
       </Modal>
     );
@@ -54,7 +54,7 @@ export class AddUserToTeamModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addUserToTeam: (user, team) => dispatch(addUserToTeam(user, team))
+    addUserToTeam: (user, team) => dispatch(addUserToTeam(user, team)),
   };
 }
 

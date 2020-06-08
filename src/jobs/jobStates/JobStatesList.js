@@ -9,13 +9,13 @@ import {
   SuccessLabel,
   FailureLabel,
   ErrorLabel,
-  LabelBox
+  LabelBox,
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
 
 export default class JobStatesList extends Component {
   state = {
-    hash: null
+    hash: null,
   };
 
   componentDidMount() {
@@ -32,7 +32,7 @@ export default class JobStatesList extends Component {
     }
   }
 
-  getLabel = jobstate => {
+  getLabel = (jobstate) => {
     switch (jobstate.status) {
       case "success":
         return <SuccessLabel>{jobstate.status}</SuccessLabel>;

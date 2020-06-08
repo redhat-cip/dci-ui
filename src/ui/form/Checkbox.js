@@ -3,7 +3,7 @@ import { withFormsy } from "formsy-react";
 import { FormGroup, Checkbox } from "@patternfly/react-core";
 
 class DCICheckbox extends Component {
-  handleCheckboxChange = value => {
+  handleCheckboxChange = (value) => {
     const { setValue } = this.props;
     setValue(value);
   };

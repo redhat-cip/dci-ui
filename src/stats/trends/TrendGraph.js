@@ -18,7 +18,7 @@ class TrendGraph extends Component {
       top: 15 * marginMultiplier,
       right: 15 * marginMultiplier,
       bottom: 15 * marginMultiplier,
-      left: 15 * marginMultiplier
+      left: 15 * marginMultiplier,
     };
     const width = graphWidth - margin.left - margin.right;
     const graphHeight = Math.round((width * 1) / 2);
@@ -34,12 +34,9 @@ class TrendGraph extends Component {
 
     if (!data) return;
 
-    const dataOrdered = data.map(d => [d3.timeParse("%s")(d[0]), d[1], d[2]]);
+    const dataOrdered = data.map((d) => [d3.timeParse("%s")(d[0]), d[1], d[2]]);
 
-    const x = d3
-      .scaleTime()
-      .domain([xMin, xMax])
-      .range([0, width]);
+    const x = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
     if (isWide) {
       svg
         .append("g")
@@ -47,16 +44,13 @@ class TrendGraph extends Component {
         .call(d3.axisBottom(x));
     }
     const yMin = 0;
-    const dataY1 = dataOrdered.map(d => d[1]);
+    const dataY1 = dataOrdered.map((d) => d[1]);
     const y1Max = d3.max(dataY1);
 
-    const y = d3
-      .scaleLinear()
-      .domain([yMin, y1Max])
-      .range([height, 0]);
+    const y = d3.scaleLinear().domain([yMin, y1Max]).range([height, 0]);
 
     if (isWide) {
-      const yAxisTicks = y.ticks().filter(tick => Number.isInteger(tick));
+      const yAxisTicks = y.ticks().filter((tick) => Number.isInteger(tick));
       const yAxis = d3
         .axisLeft(y)
         .tickValues(yAxisTicks)
@@ -74,9 +68,9 @@ class TrendGraph extends Component {
       .attr("fill", "#92D400")
       .attr("stroke", "#486B00")
       .attr("stroke-width", strokeWidth)
-      .attr("x", d => x(d[0]))
-      .attr("y", d => y(d[1]))
-      .attr("height", d => height - y(d[1]))
+      .attr("x", (d) => x(d[0]))
+      .attr("y", (d) => y(d[1]))
+      .attr("height", (d) => height - y(d[1]))
       .attr("width", barWidth);
   };
   render() {

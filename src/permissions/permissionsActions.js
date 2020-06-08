@@ -8,16 +8,16 @@ import { sortByName } from "services/sort";
 
 export function getProductsWithTeams() {
   return (dispatch, getState) => {
-    return dispatch(productsActions.all()).then(response => {
+    return dispatch(productsActions.all()).then((response) => {
       const products = response.data.products;
       const state = getState();
-      const promises = products.map(product =>
+      const promises = products.map((product) =>
         http({
           method: "get",
-          url: `${state.config.apiURL}/api/v1/products/${product.id}/teams`
+          url: `${state.config.apiURL}/api/v1/products/${product.id}/teams`,
         })
       );
-      return Promise.all(promises).then(responses => {
+      return Promise.all(promises).then((responses) => {
         responses.forEach((response, index) => {
           products[index].teams = sortByName(response.data.teams);
         });
@@ -28,16 +28,16 @@ export function getProductsWithTeams() {
 }
 
 export function getTopicsWithTeams() {
-  return dispatch => {
-    return dispatch(topicsActions.all({ embed: "teams" })).then(response => {
+  return (dispatch) => {
+    return dispatch(topicsActions.all({ embed: "teams" })).then((response) => {
       return Promise.resolve(sortByName(response.data.topics));
     });
   };
 }
 
 export function getTeams() {
-  return dispatch => {
-    return dispatch(teamsActions.all()).then(response => {
+  return (dispatch) => {
+    return dispatch(teamsActions.all()).then((response) => {
       return Promise.resolve(sortByName(response.data.teams));
     });
   };
@@ -49,9 +49,9 @@ function grantTeamPermission(resource_name, team, resource) {
     return http({
       method: "post",
       url: `${state.config.apiURL}/api/v1/${resource_name}s/${resource.id}/teams`,
-      data: { team_id: team.id }
+      data: { team_id: team.id },
     })
-      .then(response => {
+      .then((response) => {
         dispatch(
           showSuccess(
             `${team.name} can download components for the ${resource_name} ${resource.name}`
@@ -59,7 +59,7 @@ function grantTeamPermission(resource_name, team, resource) {
         );
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(showAPIError(error));
         throw error;
       });
@@ -71,9 +71,9 @@ function removeTeamPermission(resource_name, team, resource) {
     const state = getState();
     return http({
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/${resource_name}s/${resource.id}/teams/${team.id}`
+      url: `${state.config.apiURL}/api/v1/${resource_name}s/${resource.id}/teams/${team.id}`,
     })
-      .then(response => {
+      .then((response) => {
         dispatch(
           showSuccess(
             `${team.name} to ${resource.name} permission successfully removed`
@@ -81,7 +81,7 @@ function removeTeamPermission(resource_name, team, resource) {
         );
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(showAPIError(error));
         throw error;
       });

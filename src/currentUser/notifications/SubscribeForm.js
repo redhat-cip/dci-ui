@@ -8,7 +8,7 @@ import { subscribeToARemoteci } from "currentUser/currentUserActions";
 
 export class SubscribeForm extends Component {
   state = {
-    canSubmit: false
+    canSubmit: false,
   };
 
   disableButton = () => {
@@ -34,7 +34,7 @@ export class SubscribeForm extends Component {
             className="pf-c-form"
             onValid={this.enableButton}
             onInvalid={this.disableButton}
-            onValidSubmit={remoteci => {
+            onValidSubmit={(remoteci) => {
               subscribeToARemoteci(remoteciIds[remoteci.id]);
             }}
           >
@@ -63,7 +63,8 @@ export class SubscribeForm extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    subscribeToARemoteci: remoteci => dispatch(subscribeToARemoteci(remoteci))
+    subscribeToARemoteci: (remoteci) =>
+      dispatch(subscribeToARemoteci(remoteci)),
   };
 }
 

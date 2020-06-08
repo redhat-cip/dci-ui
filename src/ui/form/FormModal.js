@@ -11,7 +11,7 @@ export default class FormModal extends Component {
       formRef,
       canSubmit,
       okButton = "create",
-      children
+      children,
     } = this.props;
     return (
       <Modal
@@ -37,7 +37,7 @@ export default class FormModal extends Component {
             isDisabled={!canSubmit}
           >
             {okButton}
-          </Button>
+          </Button>,
         ]}
       >
         {children}

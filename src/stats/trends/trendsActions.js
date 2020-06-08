@@ -6,12 +6,12 @@ export function getTrends() {
     const state = getState();
     const request = {
       method: "get",
-      url: `${state.config.apiURL}/api/v1/trends/topics`
+      url: `${state.config.apiURL}/api/v1/trends/topics`,
     };
-    return http(request).then(response => {
+    return http(request).then((response) => {
       dispatch({
         type: types.SET_TRENDS,
-        trends: response.data.topics
+        trends: response.data.topics,
       });
       return response;
     });

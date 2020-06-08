@@ -12,10 +12,10 @@ it("SET_IDENTITY", () => {
         t1: {
           id: "t1",
           parent_id: null,
-          name: "admin"
-        }
-      }
-    }
+          name: "admin",
+        },
+      },
+    },
   });
   expect(newState).toEqual({
     hasEPMRole: true,
@@ -26,9 +26,9 @@ it("SET_IDENTITY", () => {
     name: "identity",
     email: "identity@example.org",
     teams: {
-      t1: { id: "t1", parent_id: null, name: "admin" }
+      t1: { id: "t1", parent_id: null, name: "admin" },
     },
-    team: { id: "t1", parent_id: null, name: "admin" }
+    team: { id: "t1", parent_id: null, name: "admin" },
   });
 });
 
@@ -45,27 +45,27 @@ it("SET_ACTIVE_TEAM", () => {
         t1: {
           id: "t1",
           parent_id: null,
-          name: "admin"
+          name: "admin",
         },
         t2: {
           id: "t2",
           parent_id: "t1",
-          name: "EPM"
-        }
+          name: "EPM",
+        },
       },
       team: {
         id: "t1",
         parent_id: null,
-        name: "admin"
-      }
+        name: "admin",
+      },
     },
     {
       type: types.SET_ACTIVE_TEAM,
       team: {
         id: "t2",
         parent_id: "t1",
-        name: "EPM"
-      }
+        name: "EPM",
+      },
     }
   );
   expect(newState).toEqual({
@@ -79,19 +79,19 @@ it("SET_ACTIVE_TEAM", () => {
       t1: {
         id: "t1",
         parent_id: null,
-        name: "admin"
+        name: "admin",
       },
       t2: {
         id: "t2",
         parent_id: "t1",
-        name: "EPM"
-      }
+        name: "EPM",
+      },
     },
     team: {
       id: "t2",
       parent_id: "t1",
-      name: "EPM"
-    }
+      name: "EPM",
+    },
   });
 });
 
@@ -104,10 +104,10 @@ it("set SUPER_ADMIN shortcut", () => {
       teams: {
         t1: {
           parent_id: null,
-          name: "admin"
-        }
-      }
-    }
+          name: "admin",
+        },
+      },
+    },
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasEPMRole).toBe(true);
@@ -125,10 +125,10 @@ it("set PRODUCT_OWNER shortcut", () => {
       teams: {
         t2: {
           parent_id: "t1",
-          name: "EPM"
-        }
-      }
-    }
+          name: "EPM",
+        },
+      },
+    },
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasEPMRole).toBe(true);
@@ -146,10 +146,10 @@ it("set READ_ONLY_USER shortcut", () => {
       teams: {
         t2: {
           parent_id: "t1",
-          name: "Red Hat"
-        }
-      }
-    }
+          name: "Red Hat",
+        },
+      },
+    },
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasEPMRole).toBe(false);
@@ -164,7 +164,7 @@ it("SET_IDENTITY unset shortcut", () => {
       hasEPMRole: true,
       hasReadOnlyRole: true,
       isSuperAdmin: true,
-      isReadOnly: false
+      isReadOnly: false,
     },
     {
       type: types.SET_IDENTITY,
@@ -174,10 +174,10 @@ it("SET_IDENTITY unset shortcut", () => {
         teams: {
           t2: {
             parent_id: "t1",
-            name: "Red Hat"
-          }
-        }
-      }
+            name: "Red Hat",
+          },
+        },
+      },
     }
   );
   expect(newState.email).toBe("currentUser@example.org");
@@ -196,10 +196,10 @@ it("SET_IDENTITY USER shortcut", () => {
       teams: {
         t2: {
           parent_id: null,
-          name: null
-        }
-      }
-    }
+          name: null,
+        },
+      },
+    },
   });
   expect(newState.email).toBe("currentUser@example.org");
   expect(newState.hasEPMRole).toBe(false);
@@ -211,10 +211,10 @@ it("SET_IDENTITY USER shortcut", () => {
 it("deleteCurrentUser", () => {
   const newState = reducer(
     {
-      id: "u1"
+      id: "u1",
     },
     {
-      type: types.DELETE_CURRENT_USER
+      type: types.DELETE_CURRENT_USER,
     }
   );
   expect(newState).toEqual({});
@@ -223,13 +223,13 @@ it("deleteCurrentUser", () => {
 it("subscribe to a remoteci", () => {
   const newState = reducer(
     {
-      remotecis: []
+      remotecis: [],
     },
     {
       type: types.SUBSCRIBED_TO_A_REMOTECI,
       remoteci: {
-        id: "r1"
-      }
+        id: "r1",
+      },
     }
   );
   expect(newState.remotecis[0].id).toBe("r1");
@@ -238,13 +238,13 @@ it("subscribe to a remoteci", () => {
 it("subscribe to a remoteci in remotecis", () => {
   const newState = reducer(
     {
-      remotecis: [{ id: "r2" }]
+      remotecis: [{ id: "r2" }],
     },
     {
       type: types.SUBSCRIBED_TO_A_REMOTECI,
       remoteci: {
-        id: "r1"
-      }
+        id: "r1",
+      },
     }
   );
   expect(newState.remotecis[0].id).toBe("r1");
@@ -253,13 +253,13 @@ it("subscribe to a remoteci in remotecis", () => {
 it("unsubscribe from a remoteci", () => {
   const newState = reducer(
     {
-      remotecis: [{ id: "r1" }, { id: "r2" }, { id: "r3" }]
+      remotecis: [{ id: "r1" }, { id: "r2" }, { id: "r3" }],
     },
     {
       type: types.UNSUBSCRIBED_FROM_A_REMOTECI,
       remoteci: {
-        id: "r2"
-      }
+        id: "r2",
+      },
     }
   );
   expect(newState.remotecis).toEqual([{ id: "r1" }, { id: "r3" }]);
@@ -268,7 +268,7 @@ it("unsubscribe from a remoteci", () => {
 it("SET_IDENTITY null", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,
-    identity: null
+    identity: null,
   });
   expect(newState).toBe(null);
 });

@@ -20,7 +20,7 @@ export class NewFeederButton extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createFeeder: feeder => dispatch(actions.create(feeder))
+    createFeeder: (feeder) => dispatch(actions.create(feeder)),
   };
 }
 

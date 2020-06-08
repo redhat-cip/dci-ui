@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withFormsy, addValidationRule } from "formsy-react";
 import { FormGroup, TextArea } from "@patternfly/react-core";
 
-addValidationRule("isJSON", function(values, value) {
+addValidationRule("isJSON", function (values, value) {
   if (typeof value === "string") {
     try {
       JSON.parse(value);
@@ -16,7 +16,7 @@ addValidationRule("isJSON", function(values, value) {
 
 class TextAreaJSON extends Component {
   state = {
-    value: "{}"
+    value: "{}",
   };
 
   componentDidMount() {
@@ -25,7 +25,7 @@ class TextAreaJSON extends Component {
     this.setState({ value: JSON.stringify(value) });
   }
 
-  handleTextAreaChange = value => {
+  handleTextAreaChange = (value) => {
     const { isValidValue, setValue } = this.props;
     if (isValidValue(value)) {
       setValue(JSON.parse(value));
@@ -45,7 +45,7 @@ class TextAreaJSON extends Component {
       getErrorMessage,
       isValid,
       placeholder,
-      helperText = ""
+      helperText = "",
     } = this.props;
     const { value } = this.state;
     return (

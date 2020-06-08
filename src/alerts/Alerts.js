@@ -22,7 +22,7 @@ export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
       <React.Fragment>
-        {values(alerts).map(alert => (
+        {values(alerts).map((alert) => (
           <Alert
             key={alert.id}
             variant={alert.type}
@@ -49,15 +49,15 @@ export function Alerts({ alerts, hide }) {
 
 function mapStateToProps(state) {
   return {
-    alerts: state.alerts
+    alerts: state.alerts,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    hide: alert => {
+    hide: (alert) => {
       dispatch(hideAlert(alert));
-    }
+    },
   };
 }
 

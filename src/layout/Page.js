@@ -5,7 +5,7 @@ import {
   PageSectionVariants,
   TextContent,
   Bullseye,
-  Text
+  Text,
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
 import AppLayout from "./AppLayout";

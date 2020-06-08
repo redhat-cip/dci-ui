@@ -6,7 +6,7 @@ const useSwitch = (defaultValue = false) => {
     isOn,
     on: () => setIsOn(true),
     off: () => setIsOn(false),
-    toggle: () => setIsOn(!isOn)
+    toggle: () => setIsOn(!isOn),
   };
 };
 

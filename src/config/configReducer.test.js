@@ -15,9 +15,9 @@ it("SET_CONFIG", () => {
         sso: {
           url: "https://sso.redhat.com",
           realm: "redhat-external",
-          clientId: "dci"
-        }
-      }
+          clientId: "dci",
+        },
+      },
     }
   );
   expect(state.apiURL).toBe("https://api.distributed-ci.io");
