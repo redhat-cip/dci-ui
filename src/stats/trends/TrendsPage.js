@@ -50,12 +50,7 @@ export class TrendsPage extends Component {
     return (
       <Page
         title="Trends"
-        description={
-          <div>
-            The number of jobs in success for all partners using DCI. Click on a
-            topic to see more details
-          </div>
-        }
+        description="The number of jobs in success for all partners using DCI. Click on a topic to see more details"
         loading={isFetching && isEmpty(trends)}
         empty={!isFetching && isEmpty(trends)}
         EmptyComponent={

@@ -85,7 +85,7 @@ export class GlobalStatusPage extends Component {
         }
       >
         {seeDetails ? (
-          <Grid gutter="xl">
+          <Grid gutter="md">
             <GridItem>
               <Button
                 variant="plain"
@@ -102,7 +102,7 @@ export class GlobalStatusPage extends Component {
             </GridItem>
           </Grid>
         ) : (
-          <Grid gutter="xl" sm={3} md={2}>
+          <Grid gutter="md" sm={3} md={2}>
             {stats
               .filter(stat => {
                 if (isNull(filter) || filter.name === "All") return true;
