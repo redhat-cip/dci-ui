@@ -1,22 +1,30 @@
-import moment from "moment";
 import http from "services/http";
+import { DateTime } from "luxon";
 
 export function addDuration(jobStates) {
   const { newJobStates } = jobStates
-    .sort((js1, js2) => moment(js1.created_at).diff(moment(js2.created_at)))
+    .sort(
+      (js1, js2) =>
+        DateTime.fromISO(js1.created_at) - DateTime.fromISO(js2.created_at)
+    )
     .reduce(
       (acc, jobState) => {
         const { newFiles, duration } = jobState.files
-          .sort((f1, f2) => moment(f1.created_at).diff(moment(f2.created_at)))
+          .sort(
+            (f1, f2) =>
+              DateTime.fromISO(f1.created_at) - DateTime.fromISO(f2.created_at)
+          )
           .reduce(
             (fileAcc, file) => {
               const duration = acc.currentDate
-                ? moment(file.created_at).diff(acc.currentDate, "seconds")
+                ? DateTime.fromISO(file.created_at)
+                    .diff(acc.currentDate)
+                    .as("seconds")
                 : 0;
               file.duration = duration;
               fileAcc.newFiles.push(file);
               fileAcc.duration += duration;
-              acc.currentDate = moment(file.updated_at);
+              acc.currentDate = DateTime.fromISO(file.updated_at);
               return fileAcc;
             },
             { newFiles: [], duration: 0 }

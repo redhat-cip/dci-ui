@@ -60,7 +60,7 @@ export default class JobStatesList extends Component {
               <JobStateRow>
                 <LabelBox>{this.getLabel(jobstate)}</LabelBox>
                 <LabelBox>
-                  <Label>{`${jobstate.duration}s`}</Label>
+                  <Label>{`${Math.round(jobstate.duration)}s`}</Label>
                 </LabelBox>
               </JobStateRow>
             )}
