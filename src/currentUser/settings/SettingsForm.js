@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Formsy from "formsy-react";
-import { Input, Select, HiddenInput } from "ui/form";
-import moment from "moment-timezone/builds/moment-timezone-with-data-2012-2022";
+import { Input, HiddenInput } from "ui/form";
 import {
   Button,
   ActionGroup,
@@ -14,10 +13,6 @@ export default class SettingsForm extends Component {
   state = {
     canSubmit: false,
     currentUser: this.props.currentUser,
-    timezones: moment.tz.names().map((timezone) => ({
-      id: timezone,
-      name: timezone,
-    })),
   };
   disableButton = () => {
     this.setState({ canSubmit: false });
@@ -29,7 +24,7 @@ export default class SettingsForm extends Component {
 
   render() {
     const { submit } = this.props;
-    const { currentUser, timezones, canSubmit } = this.state;
+    const { currentUser, canSubmit } = this.state;
     return (
       <Card>
         <CardTitle>Personal information</CardTitle>
@@ -58,14 +53,6 @@ export default class SettingsForm extends Component {
               label="Full name"
               name="fullname"
               value={currentUser.fullname}
-              required
-            />
-            <Select
-              id="current-user-form__currentUser"
-              label="Time zone"
-              name="timezone"
-              options={timezones}
-              value={currentUser.timezone}
               required
             />
             <Input

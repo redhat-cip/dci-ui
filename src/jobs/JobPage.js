@@ -22,7 +22,6 @@ import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { enhanceJob } from "./jobsSelectors";
-import { getTimezone } from "currentUser/currentUserSelectors";
 import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
 
@@ -45,14 +44,7 @@ export class JobPage extends Component {
   };
 
   componentDidMount() {
-    const {
-      match,
-      fetchJob,
-      getResults,
-      getJobStates,
-      getIssues,
-      timezone,
-    } = this.props;
+    const { match, fetchJob, getResults, getJobStates, getIssues } = this.props;
     const { endpoints } = this.state;
     const { id, endpoint } = match.params;
     const activeTabKey = endpoints.findIndex((e) => e.value === endpoint);
@@ -64,15 +56,12 @@ export class JobPage extends Component {
           getJobStates(job),
           getIssues(job),
         ]).then((results) => {
-          const enhancedJob = enhanceJob(
-            {
-              ...job,
-              tests: results[0].data.results,
-              jobstates: results[1].data.jobstates,
-              issues: results[2].data.issues,
-            },
-            timezone
-          );
+          const enhancedJob = enhanceJob({
+            ...job,
+            tests: results[0].data.results,
+            jobstates: results[1].data.jobstates,
+            issues: results[2].data.issues,
+          });
           this.setState({
             job: enhancedJob,
             activeTabKey,
@@ -180,12 +169,6 @@ export class JobPage extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    timezone: getTimezone(state),
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     fetchJob: (id) =>
@@ -205,4 +188,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JobPage);
+export default connect(null, mapDispatchToProps)(JobPage);

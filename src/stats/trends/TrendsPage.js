@@ -7,7 +7,7 @@ import { getTrends } from "./trendsActions";
 import { Page } from "layout";
 import TrendGraph from "./TrendGraph";
 import { EmptyState } from "ui";
-import moment from "moment";
+import { DateTime } from "luxon";
 import {
   Card,
   CardBody,
@@ -37,14 +37,18 @@ export class TrendsPage extends Component {
     if (isEmpty(trend)) return [];
     return trend
       .sort((t1, t2) => t1[0] - t2[0])
-      .filter((d) => moment().diff(moment.unix(d[0]), "months") < nbMonth);
+      .filter(
+        (d) =>
+          DateTime.local().diff(DateTime.fromSeconds(d[0])).as("months") <
+          nbMonth
+      );
   };
 
   render() {
     const { trends, topics } = this.props;
     const { topic: selectedTopic, isFetching, nbMonth } = this.state;
-    const xMin = moment().subtract(nbMonth, "months").toDate();
-    const xMax = moment().toDate();
+    const xMin = DateTime.local().minus({ months: nbMonth }).toJSDate();
+    const xMax = DateTime.local().toJSDate();
     return (
       <Page
         title="Trends"
