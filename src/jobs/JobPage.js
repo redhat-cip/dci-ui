@@ -15,14 +15,12 @@ import {
 } from "@patternfly/react-core";
 import styled from "styled-components";
 import FilesList from "./files/FilesList";
-import IssuesList from "./issues/IssuesList";
 import TestsList from "./tests/TestsList";
 import JobStatesList from "./jobStates/JobStatesList";
 import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import { enhanceJob } from "./jobsSelectors";
-import { getIssues, createIssue, deleteIssue } from "./issues/issuesActions";
 import JobSummary from "./JobSummary";
 
 const HeaderSection = styled(PageSection)`
@@ -38,13 +36,12 @@ export class JobPage extends Component {
     endpoints: [
       { title: "Logs", value: "jobStates" },
       { title: "Tests", value: "tests" },
-      { title: "Issues", value: "issues" },
       { title: "Files", value: "files" },
     ],
   };
 
   componentDidMount() {
-    const { match, fetchJob, getResults, getJobStates, getIssues } = this.props;
+    const { match, fetchJob, getResults, getJobStates } = this.props;
     const { endpoints } = this.state;
     const { id, endpoint } = match.params;
     const activeTabKey = endpoints.findIndex((e) => e.value === endpoint);
@@ -54,13 +51,11 @@ export class JobPage extends Component {
         return Promise.all([
           getResults(job),
           getJobStates(job),
-          getIssues(job),
         ]).then((results) => {
           const enhancedJob = enhanceJob({
             ...job,
             tests: results[0].data.results,
             jobstates: results[1].data.jobstates,
-            issues: results[2].data.issues,
           });
           this.setState({
             job: enhancedJob,
@@ -71,41 +66,6 @@ export class JobPage extends Component {
       .catch((error) => console.log(error))
       .then(() => this.setState({ isFetching: false }));
   }
-
-  createIssue = (issue) => {
-    const { createIssue } = this.props;
-    createIssue(this.state.job, issue).then((response) => {
-      const newIssue = response.data.issue;
-      this.setState((prevState) => {
-        return {
-          job: {
-            ...prevState.job,
-            issues: prevState.job.issues.reduce(
-              (accumulator, issue) => {
-                accumulator.push(issue);
-                return accumulator;
-              },
-              [newIssue]
-            ),
-          },
-        };
-      });
-    });
-  };
-
-  deleteIssue = (issue) => {
-    const { deleteIssue } = this.props;
-    deleteIssue(this.state.job, issue).then(() =>
-      this.setState((prevState) => {
-        return {
-          job: {
-            ...prevState.job,
-            issues: prevState.job.issues.filter((i) => i.id !== issue.id),
-          },
-        };
-      })
-    );
-  };
 
   render() {
     const { history, location } = this.props;
@@ -154,14 +114,7 @@ export class JobPage extends Component {
               <JobStatesList jobstates={job.jobstates} location={location} />
             )}
             {activeTabKey === 1 && <TestsList tests={job.tests} />}
-            {activeTabKey === 2 && (
-              <IssuesList
-                issues={job.issues}
-                createIssue={this.createIssue}
-                deleteIssue={this.deleteIssue}
-              />
-            )}
-            {activeTabKey === 3 && <FilesList files={job.files} />}
+            {activeTabKey === 2 && <FilesList files={job.files} />}
           </StackItem>
         </Stack>
       </Page>
@@ -182,9 +135,6 @@ function mapDispatchToProps(dispatch) {
       ),
     getResults: (job) => dispatch(getResults(job)),
     getJobStates: (job) => dispatch(getJobStatesWithFiles(job)),
-    getIssues: (job) => dispatch(getIssues(job)),
-    createIssue: (job, issue) => dispatch(createIssue(job, issue)),
-    deleteIssue: (job, issue) => dispatch(deleteIssue(job, issue)),
   };
 }
 
