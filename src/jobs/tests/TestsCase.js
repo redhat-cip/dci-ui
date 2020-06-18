@@ -45,7 +45,7 @@ export default class Testcases extends Component {
           <td>{testscase.name}</td>
           <td className="text-right col-xs-1">
             {testscase.time}
-            &nbsp;ms
+            &nbsp;s
           </td>
         </tr>
         {seeDetails ? (

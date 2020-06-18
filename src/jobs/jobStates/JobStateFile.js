@@ -75,7 +75,7 @@ export class JobStateFile extends Component {
             {file.name}
           </FileName>
           <LabelBox>
-            <Label>{`${file.duration}s`}</Label>
+            <Label>{`${Math.round(file.duration)}s`}</Label>
           </LabelBox>
         </FileRow>
         {seeDetails ? (

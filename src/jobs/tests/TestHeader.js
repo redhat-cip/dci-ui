@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Label } from "@patternfly/react-core";
+import { humanizeDuration } from "services/date";
 
 export default class TestHeader extends Component {
   render() {
@@ -7,7 +8,7 @@ export default class TestHeader extends Component {
     return (
       <div className="pf-c-data-list__item">
         <div className="pf-c-data-list__cell">
-          {test.name || "Test"} (Duration: {test.time} msec)
+          {test.name || "Test"} ({humanizeDuration(test.time)})
         </div>
         <div className="pf-c-data-list__cell">
           <small>
