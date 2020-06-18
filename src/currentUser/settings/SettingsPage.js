@@ -11,7 +11,7 @@ export class SettingsPage extends Component {
     const { currentUser, updateCurrentUser } = this.props;
     return (
       <Page title="User preferences">
-        <Grid gutter="md">
+        <Grid hasGutter>
           <GridItem span={6}>
             <SettingsForm
               key={`SettingsForm.${currentUser.id}.${currentUser.etag}`}

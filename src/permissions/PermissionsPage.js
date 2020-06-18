@@ -12,6 +12,7 @@ import {
   Text,
   Tabs,
   Tab,
+  TabTitleText,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { EmptyState, FilterWithSearch } from "ui";
@@ -34,7 +35,7 @@ class AllowTeamToDownloadResource extends Component {
     const { teams, resources, resource_name, onClick } = this.props;
     const { resource, team } = this.state;
     return (
-      <div className="pf-u-my-xl">
+      <div className="mt-xl">
         Allow{" "}
         <FilterWithSearch
           placeholder={isEmpty(team) ? "..." : team.name}
@@ -154,8 +155,11 @@ export class PermissionsPage extends Component {
               activeKey={this.state.activeTabKey}
               onSelect={this.handleTabClick}
             >
-              <Tab eventKey={0} title="Products Teams Permissions">
-                <TextContent className="mt--lg">
+              <Tab
+                eventKey={0}
+                title={<TabTitleText>Products Teams Permissions</TabTitleText>}
+              >
+                <TextContent className="mt-lg">
                   <Text component="p">
                     By giving access to a product, a team can download all GA
                     topics.
@@ -179,7 +183,7 @@ export class PermissionsPage extends Component {
                   return (
                     <TextContent
                       key={`${product.id}.${product.etag}`}
-                      className="mt--lg"
+                      className="mt-lg"
                     >
                       <Text component="h1">{product.name}</Text>
                       <Text component="p">
@@ -192,9 +196,7 @@ export class PermissionsPage extends Component {
                         <tbody>
                           {product.teams.map((team) => (
                             <tr key={`${team.id}.${team.etag}`}>
-                              <td className="pf-u-pl-0 pf-m-width-30">
-                                {team.name}
-                              </td>
+                              <td className="pf-m-width-30">{team.name}</td>
                               <td className="pf-m-width-70">
                                 <Button
                                   variant="danger"
@@ -223,8 +225,11 @@ export class PermissionsPage extends Component {
                   );
                 })}
               </Tab>
-              <Tab eventKey={1} title="Topics Teams Permissions">
-                <TextContent className="mt--lg">
+              <Tab
+                eventKey={1}
+                title={<TabTitleText>Topics Teams Permissions</TabTitleText>}
+              >
+                <TextContent className="mt-lg">
                   <Text component="p">
                     By giving access to a topic not export control ready, a team
                     can download all components from this topic.
@@ -248,7 +253,7 @@ export class PermissionsPage extends Component {
                   return (
                     <TextContent
                       key={`${topic.id}.${topic.etag}`}
-                      className="mt--lg"
+                      className="mt-lg"
                     >
                       <Text component="h1">{topic.name}</Text>
                       <Text component="p">
@@ -261,9 +266,7 @@ export class PermissionsPage extends Component {
                         <tbody>
                           {topic.teams.map((team) => (
                             <tr key={`${team.id}.${team.etag}`}>
-                              <td className="pf-u-pl-0 pf-m-width-30">
-                                {team.name}
-                              </td>
+                              <td className="pf-m-width-30">{team.name}</td>
                               <td className="pf-m-width-70">
                                 <Button
                                   variant="danger"

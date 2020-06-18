@@ -38,7 +38,7 @@ export class NotificationsPage extends Component {
           />
         }
       >
-        <Grid gutter="md">
+        <Grid hasGutter>
           <GridItem span={6}>
             <SubscribeForm remotecis={availableRemotecis} />
           </GridItem>

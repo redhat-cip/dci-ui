@@ -7,14 +7,15 @@ import { Pre } from "jobs/jobStates/JobStateComponents";
 import {
   PageSection,
   Card,
-  CardHeader,
+  CardBody,
   Grid,
   GridItem,
   Title,
   Divider,
   Button,
+  Label,
 } from "@patternfly/react-core";
-import { EmptyState, Labels } from "ui";
+import { EmptyState } from "ui";
 import styled from "styled-components";
 import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
@@ -35,9 +36,9 @@ const Description = styled.span`
 
 const ExportControl = ({ export_control }) => {
   return export_control ? (
-    <Labels.Success>yes</Labels.Success>
+    <Label color="green">yes</Label>
   ) : (
-    <Labels.Error>no</Labels.Error>
+    <Label color="red">no</Label>
   );
 };
 
@@ -59,7 +60,7 @@ const SeeContent = ({ content }) => {
 
 const Line = ({ field, description, value }) => {
   return (
-    <Grid gutter="md">
+    <Grid hasGutter>
       <GridItem span={4}>
         <div>
           <Field>{field}</Field>
@@ -94,7 +95,7 @@ const Components = ({ topic }) => {
 
   if (isEmpty(components)) {
     return (
-      <div className="pf-u-my-xl">
+      <div className="mt-xl">
         <EmptyState
           title="There is no component for this topic"
           info="We are certainly in the process of uploading components for this topic. Come back in a few hours."
@@ -145,75 +146,67 @@ const TopicPage = ({ match }) => {
     >
       <PageSection>
         {isEmpty(topic) ? null : (
-          <Grid gutter="md">
-            <GridItem>
-              <Card>
-                <CardHeader className="pf-u-p-0">
-                  <Padding>
-                    <Title headingLevel="h3" size="xl">
-                      Topic information
-                    </Title>
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line field="ID" value={topic.id} />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line field="Name" value={topic.name} />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line
-                      field="Export control"
-                      description="are components approved for export outside the U.S.A ?"
-                      value={
-                        <ExportControl export_control={topic.export_control} />
-                      }
-                    />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line field="Created" value={topic.from_now} />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line
-                      field="Data"
-                      value={
-                        isEmpty(topic.data) ? (
-                          "{}"
-                        ) : (
-                          <SeeContent
-                            content={JSON.stringify(topic.data, null, 2)}
-                          />
-                        )
-                      }
-                    />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line field="Product" value={topic.product.name} />
-                  </Padding>
-                  <Divider />
-                  <Padding>
-                    <Line
-                      field="Component types"
-                      value={topic.component_types.join(" - ")}
-                    />
-                  </Padding>
-
-                  <Divider />
-                  <Padding>
-                    <Line
-                      field="Components"
-                      value={<Components topic={topic} />}
-                    />
-                  </Padding>
-                </CardHeader>
-              </Card>
-            </GridItem>
-          </Grid>
+          <Card>
+            <CardBody>
+              <Padding>
+                <Title headingLevel="h3" size="xl">
+                  Topic information
+                </Title>
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="ID" value={topic.id} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Name" value={topic.name} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line
+                  field="Export control"
+                  description="are components approved for export outside the U.S.A ?"
+                  value={
+                    <ExportControl export_control={topic.export_control} />
+                  }
+                />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Created" value={topic.from_now} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line
+                  field="Data"
+                  value={
+                    isEmpty(topic.data) ? (
+                      "{}"
+                    ) : (
+                      <SeeContent
+                        content={JSON.stringify(topic.data, null, 2)}
+                      />
+                    )
+                  }
+                />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Product" value={topic.product.name} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line
+                  field="Component types"
+                  value={topic.component_types.join(" - ")}
+                />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Components" value={<Components topic={topic} />} />
+              </Padding>
+            </CardBody>
+          </Card>
         )}
       </PageSection>
     </Page>

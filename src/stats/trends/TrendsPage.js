@@ -11,7 +11,7 @@ import moment from "moment";
 import {
   Card,
   CardBody,
-  CardHeader,
+  CardTitle,
   Gallery,
   GalleryItem,
   PageSection,
@@ -60,7 +60,7 @@ export class TrendsPage extends Component {
       >
         <PageSection>
           {isEmpty(selectedTopic) ? (
-            <Gallery gutter="md">
+            <Gallery hasGutter>
               {topics.map((topic) => {
                 const filteredTrends = this.filterTrends(
                   trends[topic.id],
@@ -74,7 +74,7 @@ export class TrendsPage extends Component {
                       title="Click to enlarge"
                       style={{ cursor: "pointer" }}
                     >
-                      <CardHeader>{topic.name}</CardHeader>
+                      <CardTitle>{topic.name}</CardTitle>
                       <CardBody>
                         <TrendGraph
                           xMin={xMin}
@@ -93,9 +93,9 @@ export class TrendsPage extends Component {
               title="Click to hide"
               style={{ cursor: "pointer" }}
             >
-              <CardHeader>
+              <CardTitle>
                 {`Successful jobs per day for ${selectedTopic.name} during the last ${nbMonth} months`}
-              </CardHeader>
+              </CardTitle>
               <CardBody>
                 <TrendGraph
                   xMin={xMin}

@@ -36,7 +36,7 @@ export DCI_CS_URL
           title={`DCI credentials for ${remoteci.name}`}
           isOpen={show}
           onClose={this.closeModal}
-          isLarge
+          variant="large"
           actions={[
             <Button key="cancel" variant="secondary" onClick={this.closeModal}>
               close

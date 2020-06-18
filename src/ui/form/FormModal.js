@@ -18,7 +18,7 @@ export default class FormModal extends Component {
         title={title}
         isOpen={show}
         onClose={close}
-        isLarge
+        variant="large"
         actions={[
           <Button
             key="cancel"

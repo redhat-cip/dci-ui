@@ -31,7 +31,7 @@ export class EditTeamModal extends Component {
         title={`Edit ${team.name} team`}
         isOpen={isOpen}
         onClose={close}
-        isSmall
+        variant="small"
         actions={[
           <Button key="cancel" variant="secondary" onClick={close}>
             Cancel
