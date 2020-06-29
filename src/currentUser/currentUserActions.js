@@ -14,13 +14,6 @@ export function setIdentity(identity) {
   };
 }
 
-export function setCurrentTeam(team) {
-  return {
-    type: types.SET_ACTIVE_TEAM,
-    team,
-  };
-}
-
 export function updateCurrentUser(currentUser) {
   return (dispatch, getState) => {
     const state = getState();

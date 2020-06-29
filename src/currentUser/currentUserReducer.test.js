@@ -32,69 +32,6 @@ it("SET_IDENTITY", () => {
   });
 });
 
-it("SET_ACTIVE_TEAM", () => {
-  const newState = reducer(
-    {
-      hasEPMRole: true,
-      hasReadOnlyRole: true,
-      id: "i1",
-      isReadOnly: false,
-      isSuperAdmin: true,
-      name: "identity",
-      teams: {
-        t1: {
-          id: "t1",
-          parent_id: null,
-          name: "admin",
-        },
-        t2: {
-          id: "t2",
-          parent_id: "t1",
-          name: "EPM",
-        },
-      },
-      team: {
-        id: "t1",
-        parent_id: null,
-        name: "admin",
-      },
-    },
-    {
-      type: types.SET_ACTIVE_TEAM,
-      team: {
-        id: "t2",
-        parent_id: "t1",
-        name: "EPM",
-      },
-    }
-  );
-  expect(newState).toEqual({
-    hasEPMRole: true,
-    hasReadOnlyRole: true,
-    id: "i1",
-    isReadOnly: false,
-    isSuperAdmin: false,
-    name: "identity",
-    teams: {
-      t1: {
-        id: "t1",
-        parent_id: null,
-        name: "admin",
-      },
-      t2: {
-        id: "t2",
-        parent_id: "t1",
-        name: "EPM",
-      },
-    },
-    team: {
-      id: "t2",
-      parent_id: "t1",
-      name: "EPM",
-    },
-  });
-});
-
 it("set SUPER_ADMIN shortcut", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,

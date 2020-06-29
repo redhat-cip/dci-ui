@@ -21,20 +21,9 @@ function buildShortcut(team) {
 export default function (state = initialState, action) {
   switch (action.type) {
     case types.SET_IDENTITY:
-      const identity = action.identity;
-      if (identity === null) return initialState;
-      const firstTeam = values(identity.teams)[0];
       return {
         ...state,
-        ...identity,
-        ...buildShortcut(firstTeam),
-        team: firstTeam,
-      };
-    case types.SET_ACTIVE_TEAM:
-      return {
-        ...state,
-        team: action.team,
-        ...buildShortcut(action.team),
+        ...action.identity,
       };
     case types.UPDATE_CURRENT_USER:
       return {
