@@ -148,17 +148,6 @@ it("unsubscribeFromARemoteci error", () => {
     });
 });
 
-it("setCurrentTeam", () => {
-  const team = {
-    id: "t1",
-  };
-  const expectedAction = {
-    type: types.SET_ACTIVE_TEAM,
-    team,
-  };
-  expect(currentUserActions.setCurrentTeam(team)).toEqual(expectedAction);
-});
-
 it("setIdentity", () => {
   const identity = {
     id: "i1",
