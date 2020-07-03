@@ -1,0 +1,57 @@
+import React from "react";
+import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
+
+type ObjectWithIdAndName = {
+  id: string;
+  name: string;
+};
+
+type SelectWithSearchProps = {
+  option: ObjectWithIdAndName | null;
+  options: ObjectWithIdAndName[];
+  onClear: () => void;
+  onSelect: (selection: ObjectWithIdAndName) => void;
+  placeholder?: string;
+};
+
+const SelectWithSearch = ({
+  option,
+  options,
+  onClear,
+  onSelect,
+  placeholder = "...",
+}: SelectWithSearchProps) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  return (
+    <Select
+      variant={SelectVariant.typeahead}
+      typeAheadAriaLabel={placeholder}
+      onToggle={setIsOpen}
+      onSelect={(event, selection) => {
+        setIsOpen(false);
+        delete selection.toString;
+        onSelect(selection as ObjectWithIdAndName);
+      }}
+      onClear={onClear}
+      selections={
+        option
+          ? {
+              ...option,
+              toString: () => option.name,
+            }
+          : ""
+      }
+      isOpen={isOpen}
+      aria-labelledby="select"
+      placeholderText={placeholder}
+    >
+      {options
+        .map((o) => ({ ...o, toString: () => o.name }))
+        .map((option) => (
+          <SelectOption key={option.id} value={option} />
+        ))}
+    </Select>
+  );
+};
+
+export default SelectWithSearch;

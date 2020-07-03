@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { sortByName } from "services/sort";
-import { getProductsById } from "products/productSelectors";
+import { getProductsById } from "products/productsSelectors";
 import { fromNow } from "services/date";
 
 export const getTopicsById = (state) => state.topics.byId;
@@ -17,6 +17,7 @@ export const getTopicById = (id) => {
     };
   });
 };
+export const isFetchingTopics = (state) => state.topics.isFetching;
 export const getTopics = createSelector(
   getProductsById,
   getTopicsById,

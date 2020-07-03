@@ -10,7 +10,7 @@ import {
   Checkbox,
   FormModal,
 } from "ui/form";
-import { getProducts } from "products/productSelectors";
+import { getProducts } from "products/productsSelectors";
 import { getTopics } from "./topicsSelectors";
 import { isEmpty } from "lodash";
 
