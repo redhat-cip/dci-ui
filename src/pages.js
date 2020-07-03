@@ -1,6 +1,6 @@
 import React from "react";
 import Loadable from "react-loadable";
-import JobsPage from "./jobs/JobsPage";
+import JobsPage from "./jobs/JobsPage2";
 import JobPage from "./jobs/JobPage";
 import GlobalStatusPage from "./stats/globalStatus/GlobalStatusPage";
 import ProductsPage from "./products/ProductsPage";

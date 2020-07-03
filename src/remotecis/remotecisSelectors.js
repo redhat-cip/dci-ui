@@ -5,6 +5,7 @@ import { fromNow } from "services/date";
 
 export const getRemotecisById = (state) => state.remotecis.byId;
 export const getRemotecisAllIds = (state) => state.remotecis.allIds;
+export const isFetchingRemotecis = (state) => state.remotecis.isFetching;
 export const getRemotecis = createSelector(
   getTeamsById,
   getRemotecisById,
@@ -21,3 +22,8 @@ export const getRemotecis = createSelector(
       })
     )
 );
+export const getRemoteciById = (id) =>
+  createSelector(getRemotecisById, (remotecis) => {
+    if (id && id in remotecis) return remotecis[id];
+    return null;
+  });

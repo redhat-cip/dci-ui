@@ -15,6 +15,8 @@ export function enhanceJob(job) {
 
 export const getJobsById = (state) => state.jobs.byId;
 export const getJobsAllIds = (state) => state.jobs.allIds;
+export const isFetchingJobs = (state) => state.jobs.isFetching;
+export const getNbOfJobs = (state) => state.jobs.count;
 export const getJobs = createSelector(
   getRemotecisById,
   getTopicsById,

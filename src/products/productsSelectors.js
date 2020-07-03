@@ -4,6 +4,7 @@ import { fromNow } from "services/date";
 
 export const getProductsById = (state) => state.products.byId;
 export const getProductsAllIds = (state) => state.products.allIds;
+export const isFetchingProducts = (state) => state.products.isFetching;
 export const getProducts = createSelector(
   getProductsById,
   getProductsAllIds,
@@ -18,3 +19,8 @@ export const getProducts = createSelector(
       })
     )
 );
+export const getProductById = (id) =>
+  createSelector(getProductsById, (products) => {
+    if (id && id in products) return products[id];
+    return null;
+  });

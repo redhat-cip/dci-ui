@@ -6,7 +6,7 @@ import productsActions from "./productsActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
 import NewProductButton from "./NewProductButton";
 import EditProductButton from "./EditProductButton";
-import { getProducts } from "./productSelectors";
+import { getProducts } from "./productsSelectors";
 import { Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
