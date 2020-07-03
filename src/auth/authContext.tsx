@@ -7,28 +7,7 @@ import http from "../services/http";
 import { useDispatch } from "react-redux";
 import { setIdentity, deleteCurrentUser } from "currentUser/currentUserActions";
 import { removeToken, setJWT } from "services/localStorage";
-
-type Team = {
-  id: string;
-  name: string;
-};
-
-export type Identity = {
-  email: string;
-  etag: string;
-  fullname: string;
-  id: string;
-  name: string;
-  teams: {
-    [id: string]: Team;
-  };
-  timezone: string;
-  isSuperAdmin?: boolean;
-  hasEPMRole?: boolean;
-  hasReadOnlyRole?: boolean;
-  isReadOnly?: boolean;
-  team?: Team;
-} | null;
+import { Team, Identity } from "types";
 
 export type AuthContextProps = {
   isLoadingIdentity: boolean;
