@@ -4,6 +4,7 @@ import { fromNow } from "services/date";
 
 export const getTeamsById = (state) => state.teams.byId;
 export const getTeamsAllIds = (state) => state.teams.allIds;
+export const isFetchingTeams = (state) => state.teams.isFetching;
 export const getTeams = createSelector(
   getTeamsById,
   getTeamsAllIds,
@@ -20,3 +21,8 @@ export const getTeams = createSelector(
     );
   }
 );
+export const getTeamById = (id) =>
+  createSelector(getTeamsById, (teams) => {
+    if (id && id in teams) return teams[id];
+    return null;
+  });
