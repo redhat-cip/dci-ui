@@ -15,7 +15,7 @@ import {
   TabTitleText,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
-import { EmptyState, FilterWithSearch } from "ui";
+import { EmptyState, SelectWithSearch } from "ui";
 import {
   getProductsWithTeams,
   getTopicsWithTeams,
@@ -25,6 +25,7 @@ import {
   removeTeamProductPermission,
   removeTeamTopicPermission,
 } from "./permissionsActions";
+
 
 class AllowTeamToDownloadResource extends Component {
   state = {
@@ -37,20 +38,26 @@ class AllowTeamToDownloadResource extends Component {
     return (
       <div className="mt-xl">
         Allow{" "}
-        <FilterWithSearch
+        <SelectWithSearch
           placeholder={isEmpty(team) ? "..." : team.name}
-          filter={team}
-          filters={teams}
-          onFilterValueSelected={(team) => this.setState({ team: team })}
-        />{" "}
+          option={team}
+          options={teams}
+          onClear={() => {
+            this.setState({ team: null })
+          }}
+          onSelect={(team) => this.setState({ team: team })}
+        />
         to download every components from{" "}
-        <FilterWithSearch
+        <SelectWithSearch
           placeholder={isEmpty(resource) ? "..." : resource.name}
-          filter={resource}
-          filters={resources}
-          onFilterValueSelected={(resource) =>
+          option={resource}
+          options={resources}
+          onClear={() => {
+            this.setState({ resource: null })
+          }}
+          onSelect={(resource) => {
             this.setState({ resource: resource })
-          }
+          }}
         />
         {` ${resource_name}`}
         <Button

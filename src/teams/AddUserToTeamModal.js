@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Modal } from "@patternfly/react-core";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import { FilterWithSearch } from "ui";
+import { SelectWithSearch } from "ui";
 import { addUserToTeam } from "users/usersActions";
 
 export class AddUserToTeamModal extends Component {
@@ -41,11 +41,14 @@ export class AddUserToTeamModal extends Component {
         ]}
         style={{ minHeight: "300px" }}
       >
-        <FilterWithSearch
+        <SelectWithSearch
           placeholder={isEmpty(user) ? "Select a user" : user.email}
-          filter={user}
-          filters={usersFiltered}
-          onFilterValueSelected={(newUser) => this.setState({ user: newUser })}
+          option={user}
+          options={usersFiltered}
+          onSelect={(newUser) => this.setState({ user: newUser })}
+          onClear={() => {
+            this.setState({ user: null })
+          }}
         />
       </Modal>
     );

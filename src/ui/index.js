@@ -2,7 +2,6 @@ export { default as BlinkLogo } from "./blinkLogo/BlinkLogo";
 export { default as EmptyState } from "./EmptyState";
 export { default as CopyButton } from "./CopyButton";
 export { default as Filter } from "./Filter";
-export { default as FilterWithSearch } from "./FilterWithSearch";
 export { default as SelectWithSearch } from "./SelectWithSearch";
 export { default as LoadingFilter } from "./LoadingFilter";
 export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
