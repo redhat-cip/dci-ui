@@ -10,11 +10,6 @@ import {
   CardBody,
   Title,
 } from "@patternfly/react-core";
-import {
-  global_danger_color_100,
-  global_success_color_100,
-  global_Color_light_100,
-} from "@patternfly/react-tokens";
 import productsActions from "products/productsActions";
 import topicsActions from "../topics/topicsActions";
 import { EmptyState } from "ui";
@@ -35,20 +30,11 @@ const ProductTitle = styled.h3`
 `;
 
 const TopicId = styled.p`
-  font-size: 0.8em;
+  font-size: 0.7em;
   overflow-wrap: break-word;
 `;
 
-function getBackground(export_control) {
-  if (export_control) {
-    return `linear-gradient(to right,${global_success_color_100.value} 0,${global_success_color_100.value} 5px,${global_Color_light_100.value} 5px,${global_Color_light_100.value} 100%) no-repeat`;
-  }
-  return `linear-gradient(to right,${global_danger_color_100.value} 0,${global_danger_color_100.value} 5px,${global_Color_light_100.value} 5px,${global_Color_light_100.value} 100%) no-repeat`;
-}
-
 const Topic = styled(Card)`
-  background: ${(props) => getBackground(props.export_control)};
-  height: 110px;
   display: flex;
 `;
 
