@@ -44,7 +44,7 @@ const JobsPage = ({ location, history }: JobsStateProps) => {
   useEffect(() => {
     const filters = parseFiltersFromSearch(search);
     setFiltersUpdateUrlAndSearch(filters);
-  }, [search]);
+  }, []);
 
   return (
     <Page
