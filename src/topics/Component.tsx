@@ -25,13 +25,14 @@ const ComponentContainer = styled.div`
 `;
 
 const ComponentIcon = styled(CubesIcon)`
-  margin-right: 1em;
+  margin: 0 1em;
 `;
 
 const ComponentInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding: 0.5em
 `;
 
 const Component = ({
