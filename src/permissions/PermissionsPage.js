@@ -25,6 +25,7 @@ import {
   removeTeamProductPermission,
   removeTeamTopicPermission,
 } from "./permissionsActions";
+import { Flex, FlexItem } from '@patternfly/react-core';
 
 
 class AllowTeamToDownloadResource extends Component {
@@ -37,36 +38,44 @@ class AllowTeamToDownloadResource extends Component {
     const { resource, team } = this.state;
     return (
       <div className="mt-xl">
-        Allow{" "}
-        <SelectWithSearch
-          placeholder={isEmpty(team) ? "..." : team.name}
-          option={team}
-          options={teams}
-          onClear={() => {
-            this.setState({ team: null })
-          }}
-          onSelect={(team) => this.setState({ team: team })}
-        />
-        to download every components from{" "}
-        <SelectWithSearch
-          placeholder={isEmpty(resource) ? "..." : resource.name}
-          option={resource}
-          options={resources}
-          onClear={() => {
-            this.setState({ resource: null })
-          }}
-          onSelect={(resource) => {
-            this.setState({ resource: resource })
-          }}
-        />
-        {` ${resource_name}`}
-        <Button
-          variant="primary"
-          isDisabled={isEmpty(resource) || isEmpty(team)}
-          onClick={() => onClick(team, resource)}
-        >
-          Confirm
-        </Button>
+        <Flex>
+          <FlexItem>Allow</FlexItem>
+          <FlexItem>
+            <SelectWithSearch
+              placeholder={isEmpty(team) ? "..." : team.name}
+              option={team}
+              options={teams}
+              onClear={() => {
+                this.setState({ team: null })
+              }}
+              onSelect={(team) => this.setState({ team: team })}
+            />
+          </FlexItem>
+          <FlexItem>to download every components from</FlexItem>
+          <FlexItem>
+            <SelectWithSearch
+              placeholder={isEmpty(resource) ? "..." : resource.name}
+              option={resource}
+              options={resources}
+              onClear={() => {
+                this.setState({ resource: null })
+              }}
+              onSelect={(resource) => {
+                this.setState({ resource: resource })
+              }}
+            />
+          </FlexItem>
+          <FlexItem>{` ${resource_name}`}</FlexItem>
+          <FlexItem>
+            <Button
+              variant="primary"
+              isDisabled={isEmpty(resource) || isEmpty(team)}
+              onClick={() => onClick(team, resource)}
+            >
+              Confirm
+            </Button>
+          </FlexItem>
+        </Flex>
       </div>
     );
   }
