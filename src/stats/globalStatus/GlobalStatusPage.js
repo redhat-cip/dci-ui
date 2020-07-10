@@ -113,7 +113,7 @@ export class GlobalStatusPage extends Component {
               title="Click to hide"
               style={{ cursor: "pointer" }}
             >
-              <CardTitle>Stat details for {stat.name}</CardTitle>
+              <CardTitle>Stat details for {stat.topic_name}</CardTitle>
               <CardBody>
                 {isEmpty(stat.jobs) ? (
                   "There are no job for this component"
