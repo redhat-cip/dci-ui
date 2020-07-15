@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
-import { Button } from "@patternfly/react-core";
-import { Filter } from "ui";
+import { Button, Flex, FlexItem } from "@patternfly/react-core";
+import { SelectWithSearch } from "ui";
 
 export class AddUserToTeamForm extends Component {
   state = {
@@ -32,21 +32,30 @@ export class AddUserToTeamForm extends Component {
 
     return (
       <div>
-        Add user in{" "}
-        <Filter
-          placeholder={isEmpty(team) ? "..." : team.name}
-          filter={team}
-          filters={teams}
-          onFilterValueSelected={(team) => this.setState({ team: team })}
-        />{" "}
-        team{" "}
-        <Button
-          variant="primary"
-          isDisabled={isEmpty(team)}
-          onClick={() => onSubmit(team)}
-        >
-          Add
-        </Button>
+        <Flex>
+          <FlexItem>Add user in</FlexItem>
+          <FlexItem>
+            <SelectWithSearch
+              placeholder={isEmpty(team) ? "..." : team.name}
+              option={team}
+              options={teams}
+              onClear={() => {
+                this.setState({ team: null })
+              }}
+              onSelect={(team) => this.setState({ team: team })}
+            />
+          </FlexItem>
+          <FlexItem>team</FlexItem>
+          <FlexItem>
+            <Button
+              variant="primary"
+              isDisabled={isEmpty(team)}
+              onClick={() => onSubmit(team)}
+            >
+              Add
+            </Button>
+          </FlexItem>
+        </Flex>
       </div>
     );
   }
