@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
+import {
+  Button, DropdownItem, DropdownPosition, ToolbarGroup,
+  ToolbarContent, Pagination, ToolbarItem, Toolbar
+} from "@patternfly/react-core";
 import {
   WarningTriangleIcon,
   EditAltIcon,
@@ -12,12 +15,22 @@ import { Page } from "layout";
 import usersActions from "./usersActions";
 import { CopyButton, EmptyState, KebabDropdown, TextRed } from "ui";
 import { getUsers } from "./usersSelectors";
+import { getParamsFromFilters } from "jobs/toolbar/filters";
+
+
 
 export class UsersPage extends Component {
+  state = {
+    page: 1,
+    perPage: 20,
+  }
+
   componentDidMount() {
     const { fetchUsers } = this.props;
-    fetchUsers();
+    const { page, perPage } = this.state;
+    fetchUsers({ perPage, page });
   }
+
 
   getDropdownItems = (user) => {
     const { currentUser, deleteUser, history } = this.props;
@@ -44,7 +57,9 @@ export class UsersPage extends Component {
   };
 
   render() {
-    const { currentUser, users, isFetching, history } = this.props;
+    const { currentUser, users, isFetching, history, numOfUsers, fetchUsers } = this.props;
+    const { page, perPage } = this.state;
+
     return (
       <Page
         title="Users"
@@ -60,6 +75,41 @@ export class UsersPage extends Component {
               Create a new user
             </Button>
           ) : null
+        }
+        Toolbar={
+          <Toolbar
+            id="toolbar-users"
+            collapseListedFiltersBreakpoint="xl"
+          >
+            <ToolbarContent>
+              <ToolbarGroup>
+                <ToolbarItem>
+                </ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup style={{ flex: "1" }}>
+                <ToolbarItem
+                  variant="pagination"
+                  alignment={{ default: "alignRight" }}
+                >
+                  <Pagination
+                    perPage={perPage}
+                    page={page}
+                    itemCount={numOfUsers}
+                    onSetPage={(e, page) => {
+                      this.setState({ page })
+                      fetchUsers({ perPage, page })
+                    }
+                    }
+                    onPerPageSelect={(e, perPage) => {
+                      this.setState({ perPage })
+                      fetchUsers({ perPage, page })
+                    }
+                    }
+                  />
+                </ToolbarItem>
+              </ToolbarGroup>
+            </ToolbarContent>
+          </Toolbar>
         }
         EmptyComponent={
           <EmptyState
@@ -109,12 +159,17 @@ function mapStateToProps(state) {
     users: getUsers(state),
     isFetching: state.users.isFetching,
     currentUser: state.currentUser,
+    numOfUsers: state.users.count,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => dispatch(usersActions.all()),
+    fetchUsers: ({ perPage, page }) => {
+      dispatch(usersActions.clear())
+      const params = getParamsFromFilters({ perPage, page });
+      return dispatch(usersActions.all(params))
+    },
     deleteUser: (user) => dispatch(usersActions.delete(user)),
   };
 }
