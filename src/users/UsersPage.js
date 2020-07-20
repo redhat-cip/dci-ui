@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, DropdownItem, DropdownPosition } from "@patternfly/react-core";
+import {
+  Button, DropdownItem, DropdownPosition, ToolbarGroup,
+  ToolbarContent, Pagination, ToolbarItem, Toolbar,
+} from "@patternfly/react-core";
 import {
   WarningTriangleIcon,
   EditAltIcon,
@@ -11,12 +14,20 @@ import { isEmpty } from "lodash";
 import { Page } from "layout";
 import usersActions from "./usersActions";
 import { CopyButton, EmptyState, KebabDropdown, TextRed } from "ui";
-import { getUsers } from "./usersSelectors";
+import { getUsers, getNbOfUsers } from "./usersSelectors";
+import { getParamsFromFilters } from "jobs/toolbar/filters";
+import EmailsFilter from "./EmailsFilter";
+
 
 export class UsersPage extends Component {
+  state = {
+    page: 1,
+    perPage: 20
+  }
   componentDidMount() {
     const { fetchUsers } = this.props;
-    fetchUsers();
+    const { page, perPage, email } = this.state;
+    fetchUsers({ perPage, page, email });
   }
 
   getDropdownItems = (user) => {
@@ -44,7 +55,8 @@ export class UsersPage extends Component {
   };
 
   render() {
-    const { currentUser, users, isFetching, history } = this.props;
+    const { currentUser, users, numOfUsers, isFetching, history, fetchUsers } = this.props;
+    const { page, perPage } = this.state
     return (
       <Page
         title="Users"
@@ -60,6 +72,47 @@ export class UsersPage extends Component {
               Create a new user
             </Button>
           ) : null
+        }
+        Toolbar={
+          <Toolbar
+            id="toolbar-users"
+            collapseListedFiltersBreakpoint="xl"
+          >
+            <ToolbarContent>
+              <ToolbarGroup>
+                <ToolbarItem>
+                  <EmailsFilter
+                    onSearch={(email) => {
+                      this.setState({ page: 1 })
+                      fetchUsers({ perPage, page: 1, email })
+                    }}
+                  />
+                </ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup style={{ flex: "1" }}>
+                <ToolbarItem
+                  variant="pagination"
+                  alignment={{ default: "alignRight" }}
+                >
+                  <Pagination
+                    perPage={perPage}
+                    page={page}
+                    itemCount={numOfUsers}
+                    onSetPage={(e, page) => {
+                      this.setState({ page })
+                      fetchUsers({ perPage, page })
+                    }
+                    }
+                    onPerPageSelect={(e, perPage) => {
+                      this.setState({ perPage })
+                      fetchUsers({ perPage, page })
+                    }
+                    }
+                  />
+                </ToolbarItem>
+              </ToolbarGroup>
+            </ToolbarContent>
+          </Toolbar>
         }
         EmptyComponent={
           <EmptyState
@@ -106,6 +159,7 @@ export class UsersPage extends Component {
 
 function mapStateToProps(state) {
   return {
+    numOfUsers: getNbOfUsers(state),
     users: getUsers(state),
     isFetching: state.users.isFetching,
     currentUser: state.currentUser,
@@ -114,7 +168,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUsers: () => dispatch(usersActions.all()),
+    fetchUsers: ({ perPage, page, email }) => {
+      dispatch(usersActions.clear())
+      const params = getParamsFromFilters({ perPage, page });
+      if (email) {
+        params.where = `email:${email}`
+      }
+      return dispatch(usersActions.all(params))
+    },
     deleteUser: (user) => dispatch(usersActions.delete(user)),
   };
 }

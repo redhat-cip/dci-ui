@@ -4,6 +4,7 @@ import { fromNow } from "services/date";
 
 export const getUsersById = (state) => state.users.byId;
 export const getUsersAllIds = (state) => state.users.allIds;
+export const getNbOfUsers = (state) => state.users.count;
 export const getUsers = createSelector(
   getUsersById,
   getUsersAllIds,
