@@ -1,8 +1,9 @@
 import React from "react";
 import Loadable from "react-loadable";
+import DashboardPage from "./dashboard/DashboardPage";
+import DashboardDetailsPage from "./dashboard/DashboardDetailsPage";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
-import GlobalStatusPage from "./stats/globalStatus/GlobalStatusPage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import TopicPage from "./topics/TopicPage";
@@ -34,9 +35,10 @@ const PerformancePage = Loadable({
 });
 
 export default {
+  DashboardPage,
+  DashboardDetailsPage,
   JobsPage,
   JobPage,
-  GlobalStatusPage,
   PerformancePage,
   ProductsPage,
   TopicsPage,

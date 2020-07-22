@@ -21,16 +21,22 @@ class App extends Component {
         <BackgroundImage />
         <BrowserRouter basename={process.env.PUBLIC_URL}>
           <Switch>
+            <PrivateRoute
+              path="/dashboard"
+              exact
+              component={Pages.DashboardPage}
+            />
+            <PrivateRoute
+              path="/dashboard/:topic_name"
+              exact
+              component={Pages.DashboardDetailsPage}
+            />
             <Redirect from="/" exact to="/jobs" />
             <PrivateRoute path="/jobs" exact component={Pages.JobsPage} />
             <Redirect from="/jobs/:id" exact to="/jobs/:id/jobStates" />
             <PrivateRoute
               path="/jobs/:id/:endpoint"
               component={Pages.JobPage}
-            />
-            <PrivateRoute
-              path="/globalStatus"
-              component={Pages.GlobalStatusPage}
             />
             <PrivateRoute path="/trends" component={Pages.TrendsPage} />
             <PrivateRoute
