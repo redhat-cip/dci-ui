@@ -76,3 +76,31 @@ export type DCIListParams = {
   offset?: number;
   where?: string;
 };
+
+export type State = {
+  config: {
+    apiURL: string;
+    sso: {
+      url: string;
+      realm: string;
+      clientId: string;
+    };
+  };
+};
+
+type StatJob = {
+  created_at: string;
+  id: string;
+  remoteci_name: string;
+  status: string;
+  team_name: string;
+};
+
+export type Stat = {
+  jobs: StatJob[];
+  percentageOfSuccess: number;
+  nbOfSuccessfulJobs: number;
+  nbOfJobs: number;
+  product: Product;
+  topic: Topic;
+};

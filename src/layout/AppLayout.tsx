@@ -70,44 +70,46 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
   const history = useHistory();
   if (identity === null) return null;
+  const identityTeams = values(identity.teams);
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
       <NavGroup title="DCI">
+        <DCINavItem to="/dashboard" exact={false}>
+          Dashboard
+        </DCINavItem>
         <DCINavItem to="/jobs" exact={false}>
           Jobs
         </DCINavItem>
-        {identity.isSuperAdmin && (
-          <React.Fragment>
-            <DCINavItem to="/feeders">Feeders</DCINavItem>
-            <DCINavItem to="/products">Products</DCINavItem>
-          </React.Fragment>
-        )}
         <DCINavItem to="/topics">Topics</DCINavItem>
-        <DCINavItem to="/remotecis">Remotecis</DCINavItem>
+        {isEmpty(identityTeams) ? null : (
+          <DCINavItem to="/remotecis">Remotecis</DCINavItem>
+        )}
+      </NavGroup>
+      <NavGroup title="User Preferences">
+        <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
+        <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
       </NavGroup>
       {identity.hasReadOnlyRole && (
-        <NavGroup title="Stats">
-          <DCINavItem to="/globalStatus">Global Status</DCINavItem>
+        <NavGroup title="Red Hat">
           <DCINavItem to="/trends">Trends</DCINavItem>
           <DCINavItem to="/performance">Performance</DCINavItem>
         </NavGroup>
       )}
       {identity.hasEPMRole && (
-        <NavGroup title="Admin">
+        <NavGroup title="EPM">
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
-          {identity.hasEPMRole && (
-            <DCINavItem to="/permissions">Permissions</DCINavItem>
-          )}
+          <DCINavItem to="/permissions">Permissions</DCINavItem>
         </NavGroup>
       )}
-      <NavGroup title="User Preferences">
-        <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
-        <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
-      </NavGroup>
+      {identity.isSuperAdmin && (
+        <NavGroup title="Admin">
+          <DCINavItem to="/products">Products</DCINavItem>
+          <DCINavItem to="/feeders">Feeders</DCINavItem>
+        </NavGroup>
+      )}
     </Nav>
   );
-  const identityTeams = values(identity.teams);
   const headerTools = (
     <PageHeaderTools>
       <PageHeaderToolsGroup>
