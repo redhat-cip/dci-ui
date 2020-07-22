@@ -12,18 +12,12 @@ import {
 } from "@patternfly/react-core";
 import productsActions from "products/productsActions";
 import topicsActions from "../topics/topicsActions";
-import { EmptyState } from "ui";
+import { EmptyState, icons } from "ui";
 import { getTopics } from "../topics/topicsSelectors";
 import NewTopicButton from "./NewTopicButton";
-import {
-  RedhatIcon,
-  OpenshiftIcon,
-  OpenstackIcon,
-  BoxIcon,
-} from "@patternfly/react-icons";
 import styled from "styled-components";
 
-const ProductTitle = styled.h3`
+export const ProductTitle = styled.h3`
   display: flex;
   align-items: center;
   margin-bottom: 1em;
@@ -49,22 +43,15 @@ export class TopicsPage extends Component {
   }
   render() {
     const { currentUser, topics, isFetching, history } = this.props;
-    const icons = {
-      openshift: OpenshiftIcon,
-      openstack: OpenstackIcon,
-      rhel: RedhatIcon,
-    };
     const products = topics.reduce((acc, topic) => {
       const product = topic.product;
       if (!product) {
         return acc;
       }
       const productName = product.name.toLowerCase();
-      const Icon = get(icons, productName, BoxIcon);
       const currentProduct = get(acc, productName, {
         ...product,
         topics: [],
-        icon: <Icon size="md" />,
       });
       currentProduct.topics.push(topic);
       acc[productName] = currentProduct;
@@ -81,35 +68,40 @@ export class TopicsPage extends Component {
           <EmptyState title="There is no topics" info="See documentation" />
         }
       >
-        {Object.values(products).map((product) => (
-          <PageSection>
-            <ProductTitle>
-              <span className="mr-xs">{product.icon}</span>
-              {product.name}
-            </ProductTitle>
-            <Gallery hasGutter key={product.id}>
-              {product.topics.map((topic) => (
-                <GalleryItem key={topic.id}>
-                  <Topic
-                    onClick={() =>
-                      history.push(`/topics/${topic.id}/components`)
-                    }
-                    title="Click to see components"
-                    style={{ cursor: "pointer" }}
-                    export_control={topic.export_control}
-                  >
-                    <CardBody>
-                      <Title headingLevel="h6" size="md">
-                        {topic.name}
-                      </Title>
-                      <TopicId>{topic.id}</TopicId>
-                    </CardBody>
-                  </Topic>
-                </GalleryItem>
-              ))}
-            </Gallery>
-          </PageSection>
-        ))}
+        {Object.values(products).map((product) => {
+          const Icon = icons.getProductIcon(product.name);
+          return (
+            <PageSection>
+              <ProductTitle>
+                <span className="mr-xs">
+                  <Icon size="md" />
+                </span>
+                {product.name}
+              </ProductTitle>
+              <Gallery hasGutter key={product.id}>
+                {product.topics.map((topic) => (
+                  <GalleryItem key={topic.id}>
+                    <Topic
+                      onClick={() =>
+                        history.push(`/topics/${topic.id}/components`)
+                      }
+                      title="Click to see components"
+                      style={{ cursor: "pointer" }}
+                      export_control={topic.export_control}
+                    >
+                      <CardBody>
+                        <Title headingLevel="h6" size="md">
+                          {topic.name}
+                        </Title>
+                        <TopicId>{topic.id}</TopicId>
+                      </CardBody>
+                    </Topic>
+                  </GalleryItem>
+                ))}
+              </Gallery>
+            </PageSection>
+          );
+        })}
       </Page>
     );
   }

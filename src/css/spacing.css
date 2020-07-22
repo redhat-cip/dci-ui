@@ -41,3 +41,19 @@
 .p-0 {
   padding: 0 !important;
 }
+
+.mb-xs {
+  margin-bottom: 0.25rem;
+}
+.mb-sm {
+  margin-bottom: 0.5rem;
+}
+.mb-md {
+  margin-bottom: 1rem;
+}
+.mb-lg {
+  margin-bottom: 1.5rem;
+}
+.mb-xl {
+  margin-bottom: 2rem;
+}
