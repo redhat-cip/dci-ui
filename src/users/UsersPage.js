@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  Button, DropdownItem, DropdownPosition, ToolbarGroup,
-  ToolbarContent, Pagination, ToolbarItem, Toolbar,
+  Button,
+  DropdownItem,
+  DropdownPosition,
+  ToolbarGroup,
+  ToolbarContent,
+  Pagination,
+  ToolbarItem,
+  Toolbar,
 } from "@patternfly/react-core";
 import {
   WarningTriangleIcon,
@@ -18,12 +24,17 @@ import { getUsers, getNbOfUsers } from "./usersSelectors";
 import { getParamsFromFilters } from "jobs/toolbar/filters";
 import EmailsFilter from "./EmailsFilter";
 
+const initialUserFilter = {
+  page: 1,
+  perPage: 20,
+  email: null,
+};
 
 export class UsersPage extends Component {
   state = {
-    page: 1,
-    perPage: 20
-  }
+    ...initialUserFilter,
+  };
+
   componentDidMount() {
     const { fetchUsers } = this.props;
     const { page, perPage, email } = this.state;
@@ -36,13 +47,18 @@ export class UsersPage extends Component {
       <DropdownItem
         component="button"
         onClick={() => history.push(`/users/${user.id}`)}
+        key="edit user"
       >
         <EditAltIcon className="mr-xs" /> Edit a user
       </DropdownItem>,
     ];
     if (currentUser.isSuperAdmin) {
       dropdownItems.push(
-        <DropdownItem component="button" onClick={() => deleteUser(user)}>
+        <DropdownItem
+          component="button"
+          onClick={() => deleteUser(user)}
+          key="delete user"
+        >
           <WarningTriangleIcon
             color={global_danger_color_100.value}
             className="mr-xs"
@@ -55,8 +71,27 @@ export class UsersPage extends Component {
   };
 
   render() {
-    const { currentUser, users, numOfUsers, isFetching, history, fetchUsers } = this.props;
-    const { page, perPage } = this.state
+    const {
+      currentUser,
+      users,
+      numOfUsers,
+      isFetching,
+      history,
+      fetchUsers,
+    } = this.props;
+    const { email, page, perPage } = this.state;
+
+    const clear = () => {
+      const s = { ...initialUserFilter };
+      this.setState(s);
+      fetchUsers(s);
+    };
+
+    const search = (s) => {
+      this.setState(s);
+      fetchUsers(s);
+    };
+
     return (
       <Page
         title="Users"
@@ -76,15 +111,17 @@ export class UsersPage extends Component {
         Toolbar={
           <Toolbar
             id="toolbar-users"
+            clearAllFilters={clear}
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
               <ToolbarGroup>
                 <ToolbarItem>
                   <EmailsFilter
+                    search={email}
+                    onClear={clear}
                     onSearch={(email) => {
-                      this.setState({ page: 1 })
-                      fetchUsers({ perPage, page: 1, email })
+                      search({ ...initialUserFilter, email });
                     }}
                   />
                 </ToolbarItem>
@@ -94,21 +131,27 @@ export class UsersPage extends Component {
                   variant="pagination"
                   alignment={{ default: "alignRight" }}
                 >
-                  <Pagination
-                    perPage={perPage}
-                    page={page}
-                    itemCount={numOfUsers}
-                    onSetPage={(e, page) => {
-                      this.setState({ page })
-                      fetchUsers({ perPage, page })
-                    }
-                    }
-                    onPerPageSelect={(e, perPage) => {
-                      this.setState({ perPage })
-                      fetchUsers({ perPage, page })
-                    }
-                    }
-                  />
+                  {numOfUsers === 0 ? null : (
+                    <Pagination
+                      perPage={perPage}
+                      page={page}
+                      itemCount={numOfUsers}
+                      onSetPage={(e, newPage) => {
+                        search({
+                          ...initialUserFilter,
+                          perPage,
+                          page: newPage,
+                        });
+                      }}
+                      onPerPageSelect={(e, newPerPage) => {
+                        search({
+                          ...initialUserFilter,
+                          perPage: newPerPage,
+                          page,
+                        });
+                      }}
+                    />
+                  )}
                 </ToolbarItem>
               </ToolbarGroup>
             </ToolbarContent>
@@ -117,7 +160,7 @@ export class UsersPage extends Component {
         EmptyComponent={
           <EmptyState
             title="There is no users"
-            info="Do you want to create one?"
+            info="There is no user available for this search. Update your search and start over. Thank you"
           />
         }
       >
@@ -169,12 +212,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchUsers: ({ perPage, page, email }) => {
-      dispatch(usersActions.clear())
+      dispatch(usersActions.clear());
       const params = getParamsFromFilters({ perPage, page });
       if (email) {
-        params.where = `email:${email}`
+        params.where = `email:${email}`;
       }
-      return dispatch(usersActions.all(params))
+      return dispatch(usersActions.all(params));
     },
     deleteUser: (user) => dispatch(usersActions.delete(user)),
   };
