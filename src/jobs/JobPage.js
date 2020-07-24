@@ -48,20 +48,19 @@ export class JobPage extends Component {
     fetchJob(id)
       .then((response) => {
         const job = response.data.job;
-        return Promise.all([
-          getResults(job),
-          getJobStates(job),
-        ]).then((results) => {
-          const enhancedJob = enhanceJob({
-            ...job,
-            tests: results[0].data.results,
-            jobstates: results[1].data.jobstates,
-          });
-          this.setState({
-            job: enhancedJob,
-            activeTabKey,
-          });
-        });
+        return Promise.all([getResults(job), getJobStates(job)]).then(
+          (results) => {
+            const enhancedJob = enhanceJob({
+              ...job,
+              tests: results[0].data.results,
+              jobstates: results[1].data.jobstates,
+            });
+            this.setState({
+              job: enhancedJob,
+              activeTabKey,
+            });
+          }
+        );
       })
       .catch((error) => console.log(error))
       .then(() => this.setState({ isFetching: false }));

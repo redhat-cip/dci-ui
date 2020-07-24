@@ -47,7 +47,7 @@ export class AddUserToTeamModal extends Component {
           options={usersFiltered}
           onSelect={(newUser) => this.setState({ user: newUser })}
           onClear={() => {
-            this.setState({ user: null })
+            this.setState({ user: null });
           }}
         />
       </Modal>

@@ -40,7 +40,7 @@ export class AddUserToTeamForm extends Component {
               option={team}
               options={teams}
               onClear={() => {
-                this.setState({ team: null })
+                this.setState({ team: null });
               }}
               onSelect={(team) => this.setState({ team: team })}
             />
