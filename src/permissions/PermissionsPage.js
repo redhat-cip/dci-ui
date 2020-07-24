@@ -25,8 +25,7 @@ import {
   removeTeamProductPermission,
   removeTeamTopicPermission,
 } from "./permissionsActions";
-import { Flex, FlexItem } from '@patternfly/react-core';
-
+import { Flex, FlexItem } from "@patternfly/react-core";
 
 class AllowTeamToDownloadResource extends Component {
   state = {
@@ -46,7 +45,7 @@ class AllowTeamToDownloadResource extends Component {
               option={team}
               options={teams}
               onClear={() => {
-                this.setState({ team: null })
+                this.setState({ team: null });
               }}
               onSelect={(team) => this.setState({ team: team })}
             />
@@ -58,10 +57,10 @@ class AllowTeamToDownloadResource extends Component {
               option={resource}
               options={resources}
               onClear={() => {
-                this.setState({ resource: null })
+                this.setState({ resource: null });
               }}
               onSelect={(resource) => {
-                this.setState({ resource: resource })
+                this.setState({ resource: resource });
               }}
             />
           </FlexItem>
