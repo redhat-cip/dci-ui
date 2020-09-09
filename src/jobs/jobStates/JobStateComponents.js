@@ -5,11 +5,29 @@ import {
   global_palette_green_400,
   global_palette_black_200,
   global_palette_black_300,
+  global_palette_black_500,
   global_palette_black_600,
   global_palette_black_700,
   global_palette_black_800,
   global_palette_white,
 } from "@patternfly/react-tokens";
+import { Button } from "@patternfly/react-core";
+
+export const RawLogRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+  min-height: 25px;
+  padding: 0 2em 1em 0;
+`;
+
+export const RawLogButton = styled(Button)`
+  color: ${global_palette_black_200.value} !important;
+  &:after {
+    border-color: ${global_palette_black_200.value} !important;
+  }
+`;
 
 export const JobStates = styled.div`
   padding: 1em 0;
@@ -21,17 +39,16 @@ export const JobStateRow = styled.div`
   justify-content: flex-end;
   align-items: center;
   margin: 0;
-  min-height: 20px;
-  padding-top: 1px;
+  min-height: 25px;
 `;
 
 export const LabelBox = styled.div`
   min-width: 60px;
-  align-self: right;
-  margin: 0 1em;
+  margin: 0;
+  margin-right: 1em;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 `;
 
 export const Label = styled.span`
@@ -74,7 +91,7 @@ export const FileRow = styled(JobStateRow)`
 export const ShareLink = styled.a`
   margin-left: 10px;
   font-size: 11px;
-  color: ${global_palette_black_600.value};
+  color: ${global_palette_black_500.value};
   &:hover {
     color: ${global_palette_black_200.value};
   }
@@ -88,7 +105,10 @@ export const ShareLink = styled.a`
 export const CaretIcon = styled.div`
   margin-left: 10px;
   font-size: 13px;
-  color: ${global_palette_black_600.value};
+  color: ${global_palette_black_500.value};
+  &:hover {
+    color: ${global_palette_black_200.value};
+  }
 `;
 
 export const FileName = styled.div`

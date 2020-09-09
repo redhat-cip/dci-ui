@@ -57,23 +57,21 @@ export class JobStateFile extends Component {
     const { id, link, isSelected } = this.props;
     return (
       <div id={id}>
-        <FileRow>
+        <FileRow
+          onClick={() => {
+            this.loadFileContent();
+            this.setState((prevState) => ({
+              seeDetails: !prevState.seeDetails,
+            }));
+          }}
+        >
           <ShareLink href={link} isSelected={isSelected}>
             <LinkIcon />
           </ShareLink>
           <CaretIcon>
             {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
           </CaretIcon>
-          <FileName
-            onClick={() => {
-              this.loadFileContent();
-              this.setState((prevState) => ({
-                seeDetails: !prevState.seeDetails,
-              }));
-            }}
-          >
-            {file.name}
-          </FileName>
+          <FileName>{file.name}</FileName>
           <LabelBox>
             <Label>{`${Math.round(file.duration)}s`}</Label>
           </LabelBox>

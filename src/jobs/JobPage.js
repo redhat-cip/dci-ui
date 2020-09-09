@@ -110,7 +110,7 @@ export class JobPage extends Component {
           </StackItem>
           <StackItem>
             {activeTabKey === 0 && (
-              <JobStatesList jobstates={job.jobstates} location={location} />
+              <JobStatesList job={job} location={location} />
             )}
             {activeTabKey === 1 && <TestsList tests={job.tests} />}
             {activeTabKey === 2 && <FilesList files={job.files} />}
