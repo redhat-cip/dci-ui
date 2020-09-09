@@ -21,6 +21,7 @@ export class TopicForm extends Component {
     topic: {
       name: "",
       export_control: false,
+      state: "active",
       ...this.props.topic,
     },
   };
@@ -81,20 +82,34 @@ export class TopicForm extends Component {
               value={topic.name}
               required
             />
-            {currentUser.isSuperAdmin ? (
-              <Checkbox
-                label="Export Control"
-                name="export_control"
-                value={topic.export_control}
-              />
-            ) : null}
             <Select
               id="topic-form__next_topic"
               label="Next topic"
               name="next_topic_id"
-              options={topics}
+              options={[{ id: null, name: "" }, ...topics]}
               value={topic.next_topic_id}
             />
+            {currentUser.isSuperAdmin ? (
+              <>
+                <Select
+                  id="topic-form__state"
+                  label="State"
+                  name="state"
+                  options={[
+                    { id: "active", name: "active" },
+                    { id: "inactive", name: "inactive" },
+                    { id: "archived", name: "archived" },
+                  ]}
+                  value={topic.state}
+                />
+                <Checkbox
+                  label="Export Control"
+                  name="export_control"
+                  value={topic.export_control}
+                />
+              </>
+            ) : null}
+
             {isEmpty(products) ? null : (
               <Select
                 id="topic-form__product_id"

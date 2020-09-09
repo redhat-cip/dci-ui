@@ -34,8 +34,8 @@ const Description = styled.span`
   color: #72767b;
 `;
 
-const ExportControl = ({ export_control }) => {
-  return export_control ? (
+const YesNoLabel = ({ value }) => {
+  return value ? (
     <Label color="green">yes</Label>
   ) : (
     <Label color="red">no</Label>
@@ -128,6 +128,7 @@ const TopicPage = ({ match }) => {
       .then((response) => response.data.topic)
       .catch((error) => console.log(error))
       .then(() => setIsFetching(false));
+    dispatch(topicsActions.all())
   }, [dispatch, id, setIsFetching]);
 
   return (
@@ -167,9 +168,13 @@ const TopicPage = ({ match }) => {
                   field="Export control"
                   description="are components approved for export outside the U.S.A ?"
                   value={
-                    <ExportControl export_control={topic.export_control} />
+                    <YesNoLabel value={topic.export_control} />
                   }
                 />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="State" value={topic.state} />
               </Padding>
               <Divider />
               <Padding>
@@ -192,7 +197,7 @@ const TopicPage = ({ match }) => {
               </Padding>
               <Divider />
               <Padding>
-                <Line field="Product" value={topic.product.name} />
+                {topic.product && <Line field="Product" value={topic.product.name} />}
               </Padding>
               <Divider />
               <Padding>
