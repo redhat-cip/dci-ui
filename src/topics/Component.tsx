@@ -11,8 +11,8 @@ type ComponentDTO = {
     version: string;
     arches: string[];
     channel: string;
-    tags: string[];
   };
+  tags: string[];
 };
 
 const ComponentContainer = styled.div`
@@ -42,8 +42,8 @@ const Component = ({
   component: ComponentDTO;
   isLast: boolean;
 }) => {
-  const { name, data } = component;
-  const { version = null, arches = [], channel = null, tags = [] } = data;
+  const { name, data, tags = [] } = component;
+  const { version = null, arches = [], channel = null } = data;
   return (
     <ComponentContainer isLast={isLast}>
       <ComponentIcon />
