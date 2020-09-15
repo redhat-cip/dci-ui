@@ -8,11 +8,11 @@ type ComponentDTO = {
   name: string;
   type: string;
   data: {
-    version: string;
-    arches: string[];
-    channel: string;
+    version?: string;
+    arches?: string[];
+    channel?: string;
   };
-  tags: string[];
+  tags: string[] | null;
 };
 
 const ComponentContainer = styled.div`
@@ -32,12 +32,12 @@ const ComponentInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 0.5em
+  padding: 0.5em;
 `;
 
 const Component = ({
   component,
-  isLast
+  isLast,
 }: {
   component: ComponentDTO;
   isLast: boolean;
@@ -54,22 +54,20 @@ const Component = ({
         isEmpty(channel) &&
         isEmpty(tags) ? null : (
           <div>
-            <Badge className="mr-sm">version: {version}</Badge>
-            {channel && (
-              <Badge className="mr-sm">
-                channel: {channel}
-              </Badge>
-            )}
-            {arches.map((arch, i) => (
-              <Badge key={i} className="mr-sm">
-                {arch}
-              </Badge>
-            ))}
-            {tags.map((tag, i) => (
-              <Badge key={i} className="mr-sm">
-                {tag}
-              </Badge>
-            ))}
+            {version && <Badge className="mr-sm">version: {version}</Badge>}
+            {channel && <Badge className="mr-sm">channel: {channel}</Badge>}
+            {arches &&
+              arches.map((arch, i) => (
+                <Badge key={i} className="mr-sm">
+                  {arch}
+                </Badge>
+              ))}
+            {tags &&
+              tags.map((tag, i) => (
+                <Badge key={i} className="mr-sm">
+                  {tag}
+                </Badge>
+              ))}
           </div>
         )}
       </ComponentInfo>
