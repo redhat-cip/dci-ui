@@ -92,13 +92,13 @@ const ListOfJobsCard = ({ stat }: ListOfJobsCardProps) => {
                   {job.remoteci_name}
                 </td>
                 <td className="text-center" role="cell" data-label="Job status">
-                    <Label color={job.status === "success" ? "green" : "red"}>
-                      {job.status}
-                    </Label>
+                  <Label color={job.status === "success" ? "green" : "red"}>
+                    {job.status}
+                  </Label>
                 </td>
                 <td className="text-center" role="cell" data-label="Job status">
                   <Link to={`/jobs/${job.id}/jobStates`}>
-                    <LinkIcon/>
+                    <LinkIcon />
                   </Link>
                 </td>
                 <td
@@ -171,7 +171,7 @@ const DashboardDetailPage = () => {
           )}
         </GridItem>
         <GridItem span={4}>
-        {stat && (
+          {stat && (
             <StatHeaderCard
               title={`${stat.percentageOfSuccess}%`}
               subTitle="Percentage of successful jobs"
@@ -179,7 +179,7 @@ const DashboardDetailPage = () => {
           )}
         </GridItem>
         <GridItem span={4}>
-        {stat && (
+          {stat && (
             <StatHeaderCard
               title={fromNow(stat.jobs[0].created_at)}
               subTitle="Latest run"

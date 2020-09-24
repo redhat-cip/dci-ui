@@ -4,6 +4,7 @@ import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
 type ObjectWithIdAndName = {
   id: string;
   name: string;
+  toString?: () => string;
 };
 
 type SelectWithSearchProps = {
@@ -29,8 +30,9 @@ const SelectWithSearch = ({
       onToggle={setIsOpen}
       onSelect={(event, selection) => {
         setIsOpen(false);
-        delete selection.toString;
-        onSelect(selection as ObjectWithIdAndName);
+        const s = selection as ObjectWithIdAndName;
+        delete s.toString;
+        onSelect(s);
       }}
       onClear={onClear}
       selections={

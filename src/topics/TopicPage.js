@@ -128,7 +128,7 @@ const TopicPage = ({ match }) => {
       .then((response) => response.data.topic)
       .catch((error) => console.log(error))
       .then(() => setIsFetching(false));
-    dispatch(topicsActions.all())
+    dispatch(topicsActions.all());
   }, [dispatch, id, setIsFetching]);
 
   return (
@@ -167,9 +167,7 @@ const TopicPage = ({ match }) => {
                 <Line
                   field="Export control"
                   description="are components approved for export outside the U.S.A ?"
-                  value={
-                    <YesNoLabel value={topic.export_control} />
-                  }
+                  value={<YesNoLabel value={topic.export_control} />}
                 />
               </Padding>
               <Divider />
@@ -197,7 +195,9 @@ const TopicPage = ({ match }) => {
               </Padding>
               <Divider />
               <Padding>
-                {topic.product && <Line field="Product" value={topic.product.name} />}
+                {topic.product && (
+                  <Line field="Product" value={topic.product.name} />
+                )}
               </Padding>
               <Divider />
               <Padding>

@@ -42,7 +42,7 @@ class TextAreaJSON extends Component {
       name,
       type,
       required = false,
-      getErrorMessage,
+      errorMessage,
       isValid,
       placeholder,
       helperText = "",
@@ -54,8 +54,8 @@ class TextAreaJSON extends Component {
         isRequired={required}
         fieldId={id || name}
         helperText={helperText}
-        helperTextInvalid={getErrorMessage()}
-        validated={isValid() ? "success" : "error"}
+        helperTextInvalid={errorMessage}
+        validated={isValid ? "success" : "error"}
       >
         <TextArea
           isRequired={required}

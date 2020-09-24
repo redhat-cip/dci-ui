@@ -21,9 +21,9 @@ class Select extends Component {
       required,
       options,
       helperText,
-      getErrorMessage,
+      errorMessage,
       isValid,
-      getValue,
+      value,
     } = this.props;
     return (
       <FormGroup
@@ -31,11 +31,11 @@ class Select extends Component {
         isRequired={required}
         fieldId={id || name}
         helperText={helperText}
-        helperTextInvalid={getErrorMessage()}
-        validated={isValid() ? "success" : "error"}
+        helperTextInvalid={errorMessage}
+        validated={isValid ? "success" : "error"}
       >
         <FormSelect
-          value={getValue() || ""}
+          value={value || ""}
           onChange={this.handleSelectChange}
           id={id || name}
           name={name}

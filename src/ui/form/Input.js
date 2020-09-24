@@ -15,9 +15,9 @@ class Input extends Component {
       name,
       type,
       required = false,
-      getErrorMessage,
+      errorMessage,
       isValid,
-      getValue,
+      value,
       placeholder,
       helperText = "",
     } = this.props;
@@ -27,15 +27,15 @@ class Input extends Component {
         isRequired={required}
         fieldId={id || name}
         helperText={helperText}
-        helperTextInvalid={getErrorMessage()}
-        validated={isValid() ? "success" : "error"}
+        helperTextInvalid={errorMessage}
+        validated={isValid ? "success" : "error"}
       >
         <TextInput
           isRequired={required}
           type={type}
           id={id || name}
           name={name}
-          value={getValue() || ""}
+          value={value || ""}
           onChange={this.handleTextInputChange}
           placeholder={placeholder}
         />

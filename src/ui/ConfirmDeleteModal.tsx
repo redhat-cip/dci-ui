@@ -19,7 +19,7 @@ const ConfirmDeleteModal = ({
   okButton = "Yes",
   cancelButton = "No",
   onOk,
-  children
+  children,
 }: ConfirmDeleteModalProps) => {
   const { isOpen, show, hide } = useModal(false);
   return (

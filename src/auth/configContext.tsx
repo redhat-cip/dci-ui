@@ -23,7 +23,7 @@ const ConfigContext = React.createContext({} as ConfigContextProps);
 const getConfig: () => Promise<configProps> = async () => {
   return http
     .get(`${process.env.PUBLIC_URL}/config.json`)
-    .then(response => response.data);
+    .then((response) => response.data);
 };
 
 const fallbackConfig = {
@@ -31,8 +31,8 @@ const fallbackConfig = {
   sso: {
     url: "https://sso.redhat.com",
     realm: "redhat-external",
-    clientId: "dci"
-  }
+    clientId: "dci",
+  },
 };
 
 type ConfigProviderProps = {
@@ -43,7 +43,7 @@ function ConfigProvider({ children }: ConfigProviderProps) {
   const dispatch = useDispatch();
   const [state, setState] = React.useState<ConfigContextProps>({
     isLoadingConfig: true,
-    config: fallbackConfig
+    config: fallbackConfig,
   });
 
   useEffect(() => {

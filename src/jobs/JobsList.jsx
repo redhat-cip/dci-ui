@@ -1,11 +1,8 @@
 import React from "react";
-import {
-  global_Color_light_200
-} from "@patternfly/react-tokens";
+import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
 import JobSummary from "./JobSummary";
-
 
 const JobUl = styled.ul`
   border: 1px solid ${global_Color_light_200.value};

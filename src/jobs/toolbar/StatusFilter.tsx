@@ -21,7 +21,6 @@ const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
-          delete selection.toString;
           setFilters({ ...filters, status: selection as Status });
         }}
         onClear={clearStatus}

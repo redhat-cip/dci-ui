@@ -9,14 +9,14 @@ class DCICheckbox extends Component {
   };
 
   render() {
-    const { id, label, name, getValue } = this.props;
+    const { id, label, name, value } = this.props;
     return (
       <FormGroup fieldId={id || name}>
         <Checkbox
           id={id || name}
           name={name}
           label={label}
-          isChecked={getValue()}
+          isChecked={value}
           onChange={this.handleCheckboxChange}
         />
       </FormGroup>
