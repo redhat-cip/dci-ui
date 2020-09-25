@@ -88,7 +88,7 @@ export type State = {
   };
 };
 
-type StatJob = {
+export type StatJob = {
   created_at: string;
   id: string;
   remoteci_name: string;
@@ -104,3 +104,53 @@ export type Stat = {
   product: Product;
   topic: Topic;
 };
+
+export interface ITest {
+  errors: number;
+  failures: number;
+  file_id: string;
+  filename: string;
+  name: string;
+  regressions: number;
+  skips: number;
+  success: number;
+  successfixes: number;
+  time: number;
+  total: number;
+}
+
+export type TestCaseActionType = "passed" | "skipped" | "failure" | "error";
+
+export interface ITestsCase {
+  action: TestCaseActionType;
+  classname: string;
+  message: string;
+  name: string;
+  regression: boolean;
+  successfix: boolean;
+  time: number;
+  type: string;
+  value: string;
+}
+
+export type state = "active" | "inactive" | "archived";
+
+export interface IJob {
+  client_version: string;
+  comment: string | null;
+  created_at: string;
+  duration: number;
+  etag: string;
+  id: string;
+  previous_job_id: string | null;
+  product_id: string;
+  remoteci_id: string;
+  state: state;
+  status: Status;
+  tags: string[];
+  team_id: string;
+  topic_id: string;
+  update_previous_job_id: string | null;
+  updated_at: string;
+  user_agent: string;
+}
