@@ -21,7 +21,6 @@ import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
 import LoginPage from "./auth/LoginPage";
 import LoginCallbackPage from "./auth/LoginCallbackPage";
 import SilentRedirectPage from "./auth/SilentRedirectPage";
-import LogoutPage from "./auth/LogoutPage";
 import Page404 from "./layout/Page404";
 
 const TrendsPage = Loadable({
@@ -55,7 +54,6 @@ export default {
   NotAuthenticatedLoadingPage,
   LoginPage,
   LoginCallbackPage,
-  LogoutPage,
   SilentRedirectPage,
   TrendsPage,
   Page404,

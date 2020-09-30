@@ -72,7 +72,6 @@ class App extends Component {
               component={Pages.PermissionsPage}
             />
             <Route path="/login" component={Pages.LoginPage} />
-            <Route path="/logout" component={Pages.LogoutPage} />
             <Route path="/login_callback" component={Pages.LoginCallbackPage} />
             <Route
               path="/silent_redirect"
