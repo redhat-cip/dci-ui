@@ -14,7 +14,9 @@ const LoginCallbackPage = () => {
       .signinRedirectCallback()
       .then((user) => {
         if (user) {
-          setLocation(user.state);
+          if (user.state) {
+            setLocation(user.state);
+          }
           setJWT(user.access_token);
         }
         return refreshIdentity();
