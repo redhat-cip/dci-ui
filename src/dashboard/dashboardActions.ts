@@ -1,9 +1,8 @@
 import http from "services/http";
-import { ThunkAction } from "redux-thunk";
 import { AxiosRequestConfig } from "axios";
-import { Action } from "redux";
-import { State, Stat } from "types";
+import { Stat } from "types";
 import { get } from "lodash";
+import { AppThunk } from "store";
 
 export type ProductDashboard = {
   id: string;
@@ -15,12 +14,7 @@ export type Dashboard = {
   [key: string]: ProductDashboard;
 };
 
-export function getStats(): ThunkAction<
-  Promise<Dashboard>,
-  State,
-  unknown,
-  Action
-> {
+export function getStats(): AppThunk<Promise<Dashboard>> {
   return (dispatch, getState) => {
     const state = getState();
     const request = {

@@ -67,12 +67,7 @@ const DCINavItem = ({
 );
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const {
-    identity,
-    logout,
-    sso,
-    changeCurrentTeam,
-  }: AuthContextProps = useAuth();
+  const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
   const history = useHistory();
   if (identity === null) return null;
   const identityTeams = values(identity.teams);
@@ -140,11 +135,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 key="dropdown_user_logout"
                 component="button"
                 onClick={() => {
-                  if (sso) {
-                    sso.signoutRedirect().then(logout);
-                  } else {
-                    logout();
-                  }
+                  logout();
                 }}
               >
                 Logout

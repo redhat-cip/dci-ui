@@ -1,12 +1,12 @@
 import React from "react";
 import { Button, ActionGroup } from "@patternfly/react-core";
-import { useAuth } from "./authContext";
+import { useSSO } from "./ssoContext";
 import { useLocation } from "react-router-dom";
 import { showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 
 const SSOForm = () => {
-  const { sso } = useAuth();
+  const { sso } = useSSO();
   const location = useLocation();
   const dispatch = useDispatch();
   return (

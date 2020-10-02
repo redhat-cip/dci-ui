@@ -1,7 +1,16 @@
-export type Team = {
+export interface IConfig {
+  apiURL: string;
+  sso: {
+    url: string;
+    realm: string;
+    clientId: string;
+  };
+}
+
+export interface Team {
   id: string;
   name: string;
-};
+}
 
 export type Product = {
   id: string;
@@ -53,7 +62,7 @@ export type PatternflyFilters = {
   perPage: number;
 };
 
-export type Identity = {
+export interface Identity {
   email: string;
   etag: string;
   fullname: string;
@@ -68,24 +77,13 @@ export type Identity = {
   hasReadOnlyRole?: boolean;
   isReadOnly?: boolean;
   team?: Team;
-} | null;
+}
 
 export type DCIListParams = {
   embed?: string;
   limit?: number;
   offset?: number;
   where?: string;
-};
-
-export type State = {
-  config: {
-    apiURL: string;
-    sso: {
-      url: string;
-      realm: string;
-      clientId: string;
-    };
-  };
 };
 
 export type StatJob = {

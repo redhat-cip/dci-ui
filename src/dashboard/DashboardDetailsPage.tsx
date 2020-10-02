@@ -4,15 +4,14 @@ import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
 import { useLocation, useRouteMatch, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { useDispatch } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import { State, Stat } from "types";
-import { Action } from "redux";
+import { Stat } from "types";
 import { getStats } from "./dashboardActions";
 import { LocationState } from "history";
 import { EmptyState } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { LinkIcon } from "@patternfly/react-icons";
+import { AppDispatch } from "store";
 
 type StatHeaderCardProps = {
   title: string;
@@ -129,7 +128,7 @@ const DashboardDetailPage = () => {
   const { state } = location;
   const [stat, setStat] = useState<Stat | null>((state as Stat) || null);
   const match = useRouteMatch<MatchParams>();
-  const dispatch = useDispatch<ThunkDispatch<State, unknown, Action>>();
+  const dispatch = useDispatch<AppDispatch>();
   const { topic_name } = match.params;
 
   useEffect(() => {

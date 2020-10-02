@@ -31,8 +31,7 @@ export const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-
-export type ThunkResult<R> = ThunkAction<R, RootState, null, Action>;
+export type AppThunk<R = void> = ThunkAction<R, RootState, null, Action>;
 export type AppDispatch = ThunkDispatch<RootState, null, Action>;
 
 const middleware: ThunkMiddleware<RootState, Action> = thunk;

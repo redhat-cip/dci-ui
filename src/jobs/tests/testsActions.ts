@@ -1,13 +1,13 @@
 import { AxiosPromise } from "axios";
 import http from "services/http";
-import { ThunkResult } from "store";
+import { AppThunk } from "store";
 import { IJob, ITest, ITestsCase } from "types";
 
 interface ITests {
   results: ITest[];
 }
 
-export function getResults(job: IJob): ThunkResult<AxiosPromise<ITests>> {
+export function getResults(job: IJob): AppThunk<AxiosPromise<ITests>> {
   return (dispatch, getState) => {
     const state = getState();
     return http({
@@ -27,7 +27,7 @@ interface ITestsCases {
 
 export function getTestsCases(
   file: IFile
-): ThunkResult<AxiosPromise<ITestsCases>> {
+): AppThunk<AxiosPromise<ITestsCases>> {
   return (dispatch, getState) => {
     const state = getState();
     return http.request({

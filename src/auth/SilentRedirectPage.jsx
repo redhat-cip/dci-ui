@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useAuth } from "./authContext";
+import { useSSO } from "./ssoContext";
 
 const SilentRedirectPage = () => {
-  const { sso } = useAuth();
+  const { sso } = useSSO();
 
   useEffect(() => {
     sso.signinSilentCallback();

@@ -3,9 +3,11 @@ import { Redirect } from "react-router-dom";
 import { setJWT } from "services/localStorage";
 import pages from "pages";
 import { useAuth } from "./authContext";
+import { useSSO } from "./ssoContext";
 
 const LoginCallbackPage = () => {
-  const { sso, refreshIdentity } = useAuth();
+  const { sso } = useSSO();
+  const { refreshIdentity } = useAuth();
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [location, setLocation] = useState({ from: { pathname: "/jobs" } });
 
