@@ -41,7 +41,7 @@ export default class RemoteciForm extends Component {
     } = this.props;
     const { canSubmit, show, remoteci } = this.state;
     return (
-      <React.Fragment>
+      <>
         <FormModal
           title={title}
           okButton={okButton}
@@ -91,7 +91,7 @@ export default class RemoteciForm extends Component {
         >
           {showModalButton}
         </Button>
-      </React.Fragment>
+      </>
     );
   }
 }

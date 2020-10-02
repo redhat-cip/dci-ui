@@ -20,7 +20,7 @@ const AlertsContainer = styled.div`
 export function Alerts({ alerts, hide }) {
   return (
     <AlertsContainer>
-      <React.Fragment>
+      <>
         {values(alerts).map((alert) => (
           <Alert
             key={alert.id}
@@ -33,7 +33,7 @@ export function Alerts({ alerts, hide }) {
               : null}
           </Alert>
         ))}
-      </React.Fragment>
+      </>
     </AlertsContainer>
   );
 }

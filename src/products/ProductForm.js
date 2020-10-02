@@ -33,7 +33,7 @@ export default class ProductForm extends Component {
     const { title, okButton, submit, className, showModalButton } = this.props;
     const { canSubmit, show, product } = this.state;
     return (
-      <React.Fragment>
+      <>
         <FormModal
           title={title}
           okButton={okButton}
@@ -79,7 +79,7 @@ export default class ProductForm extends Component {
         >
           {showModalButton}
         </Button>
-      </React.Fragment>
+      </>
     );
   }
 }

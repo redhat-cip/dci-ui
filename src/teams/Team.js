@@ -134,7 +134,7 @@ export class Team extends Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         <AddUserToTeamModal
           team={team}
           users={users}
@@ -251,7 +251,7 @@ export class Team extends Component {
             </td>
           </tr>
         </tbody>
-      </React.Fragment>
+      </>
     );
   }
 }

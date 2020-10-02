@@ -32,7 +32,7 @@ const FilterDropdown = ({
   setFilters,
 }: FilterDropdownProps) => {
   return (
-    <React.Fragment>
+    <>
       <TeamsFilter
         showToolbarItem={currentCategory === "Team"}
         team_id={filters.team_id}
@@ -61,7 +61,7 @@ const FilterDropdown = ({
         onClear={() => setFilters({ ...filters, topic_id: null })}
         onSelect={(topic) => setFilters({ ...filters, topic_id: topic.id })}
       />
-    </React.Fragment>
+    </>
   );
 };
 

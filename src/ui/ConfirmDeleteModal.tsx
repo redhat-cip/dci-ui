@@ -23,7 +23,7 @@ const ConfirmDeleteModal = ({
 }: ConfirmDeleteModalProps) => {
   const { isOpen, show, hide } = useModal(false);
   return (
-    <React.Fragment>
+    <>
       <Modal isOpen={isOpen} title={title} close={hide}>
         <div>
           <TextRed>{message}</TextRed>
@@ -44,7 +44,7 @@ const ConfirmDeleteModal = ({
         </div>
       </Modal>
       {children(show)}
-    </React.Fragment>
+    </>
   );
 };
 

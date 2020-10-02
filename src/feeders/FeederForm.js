@@ -44,7 +44,7 @@ export class FeederForm extends Component {
     } = this.props;
     const { canSubmit, show, feeder } = this.state;
     return (
-      <React.Fragment>
+      <>
         <FormModal
           title={title}
           okButton={okButton}
@@ -94,7 +94,7 @@ export class FeederForm extends Component {
         >
           {showModalButton}
         </Button>
-      </React.Fragment>
+      </>
     );
   }
 }

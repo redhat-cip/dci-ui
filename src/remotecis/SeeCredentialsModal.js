@@ -31,7 +31,7 @@ export DCI_CS_URL
 `;
 
     return (
-      <React.Fragment>
+      <>
         <Modal
           title={`DCI credentials for ${remoteci.name}`}
           isOpen={show}
@@ -57,7 +57,7 @@ export DCI_CS_URL
         <Button onClick={this.showModal}>
           <UserSecretIcon />
         </Button>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -55,7 +55,7 @@ export class TopicForm extends Component {
     } = this.props;
     const { canSubmit, show, topic } = this.state;
     return (
-      <React.Fragment>
+      <>
         <FormModal
           title={title}
           okButton={okButton}
@@ -148,7 +148,7 @@ export class TopicForm extends Component {
         >
           {showModalButton}
         </Button>
-      </React.Fragment>
+      </>
     );
   }
 }

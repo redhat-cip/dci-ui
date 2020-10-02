@@ -20,7 +20,7 @@ export default class UserForm extends Component {
     const { buttonText, submit, user } = this.props;
     const { canSubmit } = this.state;
     return (
-      <React.Fragment>
+      <>
         <Formsy
           id="user-form"
           className="pf-c-form"
@@ -72,7 +72,7 @@ export default class UserForm extends Component {
             {buttonText}
           </Button>
         </Formsy>
-      </React.Fragment>
+      </>
     );
   }
 }
