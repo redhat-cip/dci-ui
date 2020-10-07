@@ -14,12 +14,14 @@ import {
   Divider,
   Button,
   Label,
+  Tooltip,
 } from "@patternfly/react-core";
 import { EmptyState } from "ui";
 import styled from "styled-components";
 import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
 import Component from "./Component";
+import { InfoCircleIcon } from "@patternfly/react-icons";
 
 const Padding = styled.div`
   padding: 1em;
@@ -30,15 +32,11 @@ const Field = styled.span`
   font-weight: bold;
 `;
 
-const Description = styled.span`
-  color: #72767b;
-`;
-
-const YesNoLabel = ({ value }) => {
+const YesNoLabelInverted = ({ value }) => {
   return value ? (
-    <Label color="green">yes</Label>
+    <Label color="red">yes</Label>
   ) : (
-    <Label color="red">no</Label>
+    <Label color="green">no</Label>
   );
 };
 
@@ -46,26 +44,43 @@ const SeeContent = ({ content }) => {
   const [seeContent, setSeeContent] = useState(false);
   return seeContent ? (
     <div>
-      <Button onClick={() => setSeeContent(false)} type="button">
+      <Button
+        onClick={() => setSeeContent(false)}
+        type="button"
+        variant="tertiary"
+        className="mb-md"
+      >
         hide content
       </Button>
       <Pre>{content}</Pre>
     </div>
   ) : (
-    <Button onClick={() => setSeeContent(true)} type="button">
+    <Button
+      onClick={() => setSeeContent(true)}
+      type="button"
+      variant="tertiary"
+    >
       see content
     </Button>
   );
 };
 
-const Line = ({ field, description, value }) => {
+const Line = ({ field, help, value }) => {
   return (
     <Grid hasGutter>
       <GridItem span={4}>
         <div>
-          <Field>{field}</Field>
+          <Field>
+            {field}
+            {help && (
+              <Tooltip position="right" content={<div>{help}</div>}>
+                <span className="ml-xs">
+                  <InfoCircleIcon />
+                </span>
+              </Tooltip>
+            )}
+          </Field>
         </div>
-        {description && <Description>{description}</Description>}
       </GridItem>
       <GridItem span={8}>{value}</GridItem>
     </Grid>
@@ -73,8 +88,7 @@ const Line = ({ field, description, value }) => {
 };
 
 const ComponentsContainer = styled.div`
-  border: 1px solid #d2d2d2;
-  border-radius: 0.5em;
+  padding-top: 1em;
 `;
 
 const Components = ({ topic }) => {
@@ -106,12 +120,8 @@ const Components = ({ topic }) => {
 
   return (
     <ComponentsContainer>
-      {components.map((component, i, arr) => (
-        <Component
-          key={component.id}
-          component={component}
-          isLast={arr.length - 1 === i}
-        />
+      {components.map((component) => (
+        <Component key={component.id} component={component} />
       ))}
     </ComponentsContainer>
   );
@@ -165,9 +175,9 @@ const TopicPage = ({ match }) => {
               <Divider />
               <Padding>
                 <Line
-                  field="Export control"
-                  description="are components approved for export outside the U.S.A ?"
-                  value={<YesNoLabel value={topic.export_control} />}
+                  field="Access restricted"
+                  help="This topic has not yet been validated by the legal team. All of these components are restricted."
+                  value={<YesNoLabelInverted value={!topic.export_control} />}
                 />
               </Padding>
               <Divider />
@@ -201,14 +211,14 @@ const TopicPage = ({ match }) => {
               </Padding>
               <Divider />
               <Padding>
+                <Line field="Components" value={<Components topic={topic} />} />
+              </Padding>
+              <Divider />
+              <Padding>
                 <Line
                   field="Component types"
                   value={topic.component_types.join(" - ")}
                 />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Components" value={<Components topic={topic} />} />
               </Padding>
             </CardBody>
           </Card>

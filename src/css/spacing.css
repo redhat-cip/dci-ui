@@ -57,3 +57,19 @@
 .mb-xl {
   margin-bottom: 2rem;
 }
+
+.ml-xs {
+  margin-left: 0.25rem;
+}
+.ml-sm {
+  margin-left: 0.5rem;
+}
+.ml-md {
+  margin-left: 1rem;
+}
+.ml-lg {
+  margin-left: 1.5rem;
+}
+.ml-xl {
+  margin-left: 2rem;
+}
