@@ -1,31 +1,21 @@
 import React from "react";
-import { isEmpty } from "lodash";
 import { CubesIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { Badge } from "@patternfly/react-core";
-
-type ComponentDTO = {
-  name: string;
-  type: string;
-  data: {
-    version?: string;
-    arches?: string[];
-    channel?: string;
-  };
-  tags: string[] | null;
-};
+import { Label } from "@patternfly/react-core";
+import { IComponent } from "types";
 
 const ComponentContainer = styled.div`
   width: 100%
   padding:1em;
   display:flex;
   align-items:center;
-  border-bottom: ${(props: { isLast: boolean }) =>
-    props.isLast ? "none" : "1px solid #d2d2d2"};
+  border: 1px solid #d2d2d2;
+  border-radius: 0.5em;
+  margin-bottom: 1em;
 `;
 
-const ComponentIcon = styled(CubesIcon)`
-  margin: 0 1em;
+const IconBox = styled.div`
+  padding: 0 1em;
 `;
 
 const ComponentInfo = styled.div`
@@ -35,44 +25,29 @@ const ComponentInfo = styled.div`
   padding: 0.5em;
 `;
 
-const Component = ({
-  component,
-  isLast,
-}: {
-  component: ComponentDTO;
-  isLast: boolean;
-}) => {
-  const { name, data, tags = [] } = component;
-  const { version = null, arches = [], channel = null } = data;
+interface ComponentProps {
+  component: IComponent;
+}
+
+export default function Component({ component }: ComponentProps) {
+  const { name, type, tags = [] } = component;
   return (
-    <ComponentContainer isLast={isLast}>
-      <ComponentIcon />
+    <ComponentContainer>
+      <IconBox>
+        <CubesIcon />
+      </IconBox>
       <ComponentInfo>
         <div>{name}</div>
-        {isEmpty(version) &&
-        isEmpty(arches) &&
-        isEmpty(channel) &&
-        isEmpty(tags) ? null : (
-          <div>
-            {version && <Badge className="mr-sm">version: {version}</Badge>}
-            {channel && <Badge className="mr-sm">channel: {channel}</Badge>}
-            {arches &&
-              arches.map((arch, i) => (
-                <Badge key={i} className="mr-sm">
-                  {arch}
-                </Badge>
-              ))}
-            {tags &&
-              tags.map((tag, i) => (
-                <Badge key={i} className="mr-sm">
-                  {tag}
-                </Badge>
-              ))}
-          </div>
-        )}
+        <div>{type}</div>
+        <div>
+          {tags &&
+            tags.map((tag, i) => (
+              <Label key={i} className="mt-xs mr-xs" color="blue">
+                {tag}
+              </Label>
+            ))}
+        </div>
       </ComponentInfo>
     </ComponentContainer>
   );
-};
-
-export default Component;
+}

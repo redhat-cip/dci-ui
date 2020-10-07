@@ -152,3 +152,11 @@ export interface IJob {
   updated_at: string;
   user_agent: string;
 }
+
+export interface IComponent {
+  id: string;
+  etag: string;
+  name: string;
+  type: string;
+  tags: string[] | null;
+}
