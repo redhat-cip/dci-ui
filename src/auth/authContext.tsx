@@ -29,7 +29,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     dispatch(authActions.getCurrentUser())
-      .then(console.log)
+      .then(setIdentity)
       .catch(console.error)
       .then(() => setIsLoadingIdentity(false));
   }, [dispatch]);

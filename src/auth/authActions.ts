@@ -35,8 +35,9 @@ export function getCurrentUser(): AppThunk<Promise<Identity>> {
       .then((response) => {
         const identity = response.data.identity;
         const firstTeam = values(identity.teams)[0];
-        dispatch(setIdentity(buildIdentity(identity, firstTeam)));
-        return identity;
+        const enhancedIdentity = buildIdentity(identity, firstTeam);
+        dispatch(setIdentity(enhancedIdentity));
+        return enhancedIdentity;
       });
   };
 }
