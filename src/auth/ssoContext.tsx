@@ -20,7 +20,7 @@ export function getSSOUserManager(config: IConfig) {
     redirect_uri: `${origin}/login_callback`,
     post_logout_redirect_uri: `${origin}/login`,
     silent_redirect_uri: `${origin}/silent_redirect`,
-    response_type: "id_token token",
+    response_type: "code",
     automaticSilentRenew: true,
   };
   const manager = new UserManager(settings);
