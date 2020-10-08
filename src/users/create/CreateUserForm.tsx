@@ -36,12 +36,41 @@ export default function CreateUserForm({ onSubmit }: CreateUserFormProps) {
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form className="pf-c-form">
-          <Input id="name" label="Login" name="name" isRequired />
-          <Input id="fullname" label="Full name" name="fullname" isRequired />
-          <Input id="email" label="Email" name="email" isRequired />
-          <Input id="password" label="Password" name="password" isRequired />
-          <Button variant="primary" type="submit" isDisabled={!(isValid && dirty)}>
+        <Form id="create_user_form" className="pf-c-form">
+          <Input
+            id="create_user_form__name"
+            data-testid="create_user_form__name"
+            label="Login"
+            name="name"
+            isRequired
+          />
+          <Input
+            id="create_user_form__fullname"
+            data-testid="create_user_form__fullname"
+            label="Full name"
+            name="fullname"
+            isRequired
+          />
+          <Input
+            id="create_user_form__email"
+            data-testid="create_user_form__email"
+            label="Email"
+            name="email"
+            isRequired
+          />
+          <Input
+            id="create_user_form__password"
+            data-testid="create_user_form__password"
+            label="Password"
+            name="password"
+            type="password"
+            isRequired
+          />
+          <Button
+            variant="primary"
+            type="submit"
+            isDisabled={!(isValid && dirty)}
+          >
             Create a user
           </Button>
         </Form>
