@@ -2,13 +2,13 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import CreateUserForm from "./CreateUserForm";
 
-test("test create user form submit the correct value", async () => {
+test("test create user form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
   const { container, getByRole, getByTestId } = render(
     <CreateUserForm onSubmit={mockOnSubmit} />
   );
-  const taskForm = container.querySelector("#create_user_form");
-  expect(taskForm).not.toBe(null);
+  const create_user_form = container.querySelector("#create_user_form");
+  expect(create_user_form).not.toBe(null);
 
   const name = getByTestId("create_user_form__name");
   fireEvent.change(name, {
@@ -24,7 +24,8 @@ test("test create user form submit the correct value", async () => {
     },
   });
 
-  const email = getByTestId("create_user_form__email");
+  const email = getByTestId("create_user_form__email") as HTMLInputElement;
+  expect(email.type).toBe("email");
   fireEvent.change(email, {
     target: {
       value: "test@example.org",

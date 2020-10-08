@@ -61,7 +61,6 @@ function grantTeamPermission(resource_name, team, resource) {
       })
       .catch((error) => {
         dispatch(showAPIError(error));
-        throw error;
       });
   };
 }
@@ -83,7 +82,6 @@ function removeTeamPermission(resource_name, team, resource) {
       })
       .catch((error) => {
         dispatch(showAPIError(error));
-        throw error;
       });
   };
 }

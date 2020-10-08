@@ -1,5 +1,5 @@
 import http from "services/http";
-import { Identity, Team } from "types";
+import { ICurrentUser, Team } from "types";
 import { values } from "lodash";
 import { setIdentity } from "currentUser/currentUserActions";
 import { AppThunk } from "store";
@@ -19,15 +19,15 @@ function buildShortcut(team: Team) {
   };
 }
 
-function buildIdentity(identity: Identity, team: Team): Identity {
+function buildIdentity(identity: ICurrentUser, team: Team): ICurrentUser {
   return {
     ...identity,
     ...buildShortcut(team),
     team: team,
-  } as Identity;
+  } as ICurrentUser;
 }
 
-export function getCurrentUser(): AppThunk<Promise<Identity>> {
+export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
   return (dispatch, getState) => {
     const state = getState();
     return http
@@ -42,7 +42,7 @@ export function getCurrentUser(): AppThunk<Promise<Identity>> {
   };
 }
 
-export function changeCurrentTeam(team: Team): AppThunk<Identity> {
+export function changeCurrentTeam(team: Team): AppThunk<ICurrentUser> {
   return (dispatch, getState) => {
     const state = getState();
     const identity = buildIdentity(state.currentUser, team);

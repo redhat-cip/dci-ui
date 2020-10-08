@@ -3,14 +3,14 @@ import pages from "../pages";
 import { useDispatch } from "react-redux";
 import { deleteCurrentUser } from "currentUser/currentUserActions";
 import { removeToken } from "services/localStorage";
-import { Team, Identity } from "types";
+import { Team, ICurrentUser } from "types";
 import { useSSO } from "./ssoContext";
 import * as authActions from "./authActions";
 import { AppDispatch } from "store";
 
 export interface AuthContextProps {
-  identity: Identity | null;
-  refreshIdentity: () => Promise<Identity>;
+  identity: ICurrentUser | null;
+  refreshIdentity: () => Promise<ICurrentUser>;
   changeCurrentTeam: (team: Team) => void;
   logout: () => void;
 }
@@ -25,7 +25,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [isLoadingIdentity, setIsLoadingIdentity] = useState(true);
   const { sso } = useSSO();
   const dispatch = useDispatch<AppDispatch>();
-  const [identity, setIdentity] = useState<Identity | null>(null);
+  const [identity, setIdentity] = useState<ICurrentUser | null>(null);
 
   useEffect(() => {
     dispatch(authActions.getCurrentUser())

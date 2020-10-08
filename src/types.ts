@@ -62,7 +62,7 @@ export type PatternflyFilters = {
   perPage: number;
 };
 
-export interface Identity {
+export interface ICurrentUser {
   email: string;
   etag: string;
   fullname: string;

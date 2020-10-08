@@ -29,17 +29,11 @@ export function updateCurrentUser(currentUser) {
           type: types.UPDATE_CURRENT_USER,
           currentUser: response.data.user,
         });
-        dispatch(
-          showSuccess(
-            "Your information has been updated successfully. Log in again."
-          )
-        );
-        dispatch(deleteCurrentUser());
+        dispatch(showSuccess("Your settings has been updated successfully"));
         return response;
       })
       .catch((error) => {
         dispatch(showAPIError(error));
-        throw error;
       });
   };
 }
@@ -68,10 +62,7 @@ export function getSubscribedRemotecis(identity) {
         });
         return response;
       })
-      .catch((error) => {
-        dispatch(showError(`Cannot get subscribed remotecis`));
-        return Promise.resolve(error);
-      });
+      .catch(() => dispatch(showError(`Cannot get subscribed remotecis`)));
   };
 }
 
@@ -94,10 +85,9 @@ export function subscribeToARemoteci(remoteci) {
         );
         return response;
       })
-      .catch((error) => {
-        dispatch(showError(`Cannot subscribe to remoteci ${remoteci.name}`));
-        return Promise.resolve(error);
-      });
+      .catch(() =>
+        dispatch(showError(`Cannot subscribe to remoteci ${remoteci.name}`))
+      );
   };
 }
 
@@ -121,9 +111,8 @@ export function unsubscribeFromARemoteci(remoteci) {
         );
         return response;
       })
-      .catch((error) => {
-        dispatch(showError(`Cannot unsubscribe to remoteci ${remoteci.name}`));
-        return Promise.resolve(error);
-      });
+      .catch(() =>
+        dispatch(showError(`Cannot unsubscribe to remoteci ${remoteci.name}`))
+      );
   };
 }

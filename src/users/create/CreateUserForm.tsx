@@ -56,6 +56,7 @@ export default function CreateUserForm({ onSubmit }: CreateUserFormProps) {
             data-testid="create_user_form__email"
             label="Email"
             name="email"
+            type="email"
             isRequired
           />
           <Input
