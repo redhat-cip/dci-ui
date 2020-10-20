@@ -7,7 +7,7 @@ import {
 
 interface KebabDropdownProps {
   items: React.ReactElement[];
-  position: DropdownPosition;
+  position?: DropdownPosition;
 }
 
 export default function KebabDropdown({ items, position }: KebabDropdownProps) {
@@ -19,7 +19,7 @@ export default function KebabDropdown({ items, position }: KebabDropdownProps) {
       isOpen={isOpen}
       isPlain
       dropdownItems={items}
-      position={position}
+      position={position || DropdownPosition.right}
     />
   );
 }
