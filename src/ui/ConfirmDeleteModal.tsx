@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-import { Button } from "@patternfly/react-core";
+import { Button, Modal } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
-import Modal from "./Modal";
 import TextRed from "./Text/TextRed";
 
 type ConfirmDeleteModalProps = {
@@ -24,7 +23,7 @@ const ConfirmDeleteModal = ({
   const { isOpen, show, hide } = useModal(false);
   return (
     <>
-      <Modal isOpen={isOpen} title={title} close={hide}>
+      <Modal isOpen={isOpen} title={title} onClose={hide}>
         <div>
           <TextRed>{message}</TextRed>
         </div>

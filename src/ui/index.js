@@ -8,7 +8,6 @@ export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
 export { default as KebabDropdown } from "./KebabDropdown";
 export { default as BackgroundImage } from "./BackgroundImage";
 export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
-export { default as Modal } from "./Modal";
 export { default as TextGreen } from "./Text/TextGreen";
 export { default as TextRed } from "./Text/TextRed";
 export { default as icons } from "./icons";
