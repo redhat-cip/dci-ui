@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Button } from "@patternfly/react-core";
-import { useModal } from "../hooks";
+import useModal from "hooks/useModal";
 import Modal from "./Modal";
 import TextRed from "./Text/TextRed";
 

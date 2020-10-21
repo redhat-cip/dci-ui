@@ -3,7 +3,7 @@ import { Button, LoginFooterItem, LoginPage } from "@patternfly/react-core";
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
 import Logo from "logo.svg";
-import { useSwitch } from "hooks";
+import useSwitch from "hooks/useSwitch";
 
 const DCILoginPage = () => {
   const { isOn: seeSSOForm, toggle } = useSwitch(true);
