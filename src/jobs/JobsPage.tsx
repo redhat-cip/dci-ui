@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Location, History } from "history";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState } from "ui";
@@ -14,23 +13,26 @@ import {
   createSearchFromFilters,
   defaultFilters,
 } from "./toolbar/filters";
-import { Filters } from "types";
+import { IJobFilters } from "types";
+import { useHistory, useLocation } from "react-router-dom";
+import { AppDispatch } from "store";
 
-type JobsStateProps = {
-  location: Location;
-  history: History;
-};
-
-const JobsPage = ({ location, history }: JobsStateProps) => {
-  const dispatch = useDispatch();
+export default function JobsPage() {
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
-  const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const [filters, setFilters] = useState<IJobFilters>(
+    parseFiltersFromSearch(location.search)
+  );
 
-  function setFiltersUpdateUrlAndSearch(filters: Filters) {
-    setFilters(filters);
+  useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     history.push(`/jobs${newSearch}`);
+  }, [history, filters]);
+
+  useEffect(() => {
     dispatch(jobsActions.clear());
     dispatch(
       jobsActions.all({
@@ -38,13 +40,7 @@ const JobsPage = ({ location, history }: JobsStateProps) => {
         ...getParamsFromFilters(filters),
       })
     );
-  }
-  const { search } = location;
-
-  useEffect(() => {
-    const filters = parseFiltersFromSearch(search);
-    setFiltersUpdateUrlAndSearch(filters);
-  }, []);
+  }, [dispatch, filters]);
 
   return (
     <Page
@@ -54,8 +50,8 @@ const JobsPage = ({ location, history }: JobsStateProps) => {
       Toolbar={
         <DCIToolbar
           filters={filters}
-          setFilters={setFiltersUpdateUrlAndSearch}
-          clearAllFilters={() => setFiltersUpdateUrlAndSearch(defaultFilters)}
+          setFilters={setFilters}
+          clearAllFilters={() => setFilters(defaultFilters)}
         />
       }
       seeSecondToolbar
@@ -69,6 +65,4 @@ const JobsPage = ({ location, history }: JobsStateProps) => {
       <JobsList jobs={jobs} />
     </Page>
   );
-};
-
-export default JobsPage;
+}

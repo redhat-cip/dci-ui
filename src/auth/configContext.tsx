@@ -4,6 +4,7 @@ import http from "../services/http";
 import { useDispatch } from "react-redux";
 import { setConfig as setConfigAction } from "../config/configActions";
 import { IConfig } from "types";
+import { AppDispatch } from "store";
 
 interface ConfigContextProps {
   config: IConfig;
@@ -31,7 +32,7 @@ function ConfigProvider({ children }: ConfigProviderProps) {
       clientId: "dci",
     },
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     getConfig()
       .then((config) => {

@@ -1,10 +1,10 @@
 import http from "services/http";
-import { ICurrentUser, Team } from "types";
+import { ICurrentUser, ITeam } from "types";
 import { values } from "lodash";
 import { setIdentity } from "currentUser/currentUserActions";
 import { AppThunk } from "store";
 
-function buildShortcut(team: Team) {
+function buildShortcut(team: ITeam) {
   const adminTeamName = "admin";
   const EPMTeamName = "EPM";
   const RedHatTeamName = "Red Hat";
@@ -19,7 +19,7 @@ function buildShortcut(team: Team) {
   };
 }
 
-function buildIdentity(identity: ICurrentUser, team: Team): ICurrentUser {
+function buildIdentity(identity: ICurrentUser, team: ITeam): ICurrentUser {
   return {
     ...identity,
     ...buildShortcut(team),
@@ -42,7 +42,7 @@ export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
   };
 }
 
-export function changeCurrentTeam(team: Team): AppThunk<ICurrentUser> {
+export function changeCurrentTeam(team: ITeam): AppThunk<ICurrentUser> {
   return (dispatch, getState) => {
     const state = getState();
     const identity = buildIdentity(state.currentUser, team);
