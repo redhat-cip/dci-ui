@@ -1,10 +1,10 @@
 import React from "react";
-import { Filters, Status, Statuses } from "types";
+import { IJobFilters, Status, Statuses } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
 type StatusFilterProps = {
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
+  filters: IJobFilters;
+  setFilters: (filters: IJobFilters) => void;
 };
 
 const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {

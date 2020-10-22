@@ -21,9 +21,15 @@ const ConfirmDeleteModal = ({
   children,
 }: ConfirmDeleteModalProps) => {
   const { isOpen, show, hide } = useModal(false);
+  console.log(isOpen);
+
   return (
     <>
-      <Modal isOpen={isOpen} title={title} onClose={hide}>
+      <Modal
+        isOpen={isOpen}
+        title={title}
+        onClose={hide}
+      >
         <div>
           <TextRed>{message}</TextRed>
         </div>

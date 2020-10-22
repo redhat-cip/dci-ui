@@ -37,7 +37,6 @@ axiosMock.onGet("http://localhost:5000/api/v1/identity").reply(200, {
       external: false,
       id: "03485867-d100-aab2-46a0-d4dd4d9ed18d",
       name: "First Team",
-      parent_id: "31c5b2cb-5ff0-4f1f-9356-133755712ba7",
       state: "active",
       updated_at: "2018-07-21T09:10:13.944221",
     },

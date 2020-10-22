@@ -1,5 +1,5 @@
 import React from "react";
-import { Filters } from "types";
+import { IJobFilters } from "types";
 import {
   ToolbarItem,
   Dropdown,
@@ -23,8 +23,8 @@ import TagsFilter from "./TagsFilter";
 
 type FilterDropdownProps = {
   currentCategory: Category;
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
+  filters: IJobFilters;
+  setFilters: (filters: IJobFilters) => void;
 };
 const FilterDropdown = ({
   currentCategory,
@@ -70,8 +70,8 @@ export const Categories = ["Team", "Remoteci", "Product", "Topic"] as const;
 export type Category = typeof Categories[number];
 
 type DCIToolbarProps = {
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
+  filters: IJobFilters;
+  setFilters: (filters: IJobFilters) => void;
   clearAllFilters: () => void;
 };
 

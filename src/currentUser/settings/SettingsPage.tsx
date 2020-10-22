@@ -5,13 +5,14 @@ import { updateCurrentUser } from "../currentUserActions";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { Page } from "layout";
-import { AppDispatch, RootState } from "store";
+import { AppDispatch } from "store";
 import { useAuth } from "auth/authContext";
+import { getCurrentUser } from "currentUser/currentUserSelectors";
 
 export default function SettingsPage() {
   const { refreshIdentity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  const currentUser = useSelector((state: RootState) => state.currentUser);
+  const currentUser = useSelector(getCurrentUser);
   return (
     <Page title="User preferences">
       <Grid hasGutter>

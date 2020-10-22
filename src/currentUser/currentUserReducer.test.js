@@ -11,7 +11,6 @@ it("SET_IDENTITY", () => {
       teams: {
         t1: {
           id: "t1",
-          parent_id: null,
           name: "admin",
         },
       },
@@ -22,7 +21,7 @@ it("SET_IDENTITY", () => {
     name: "identity",
     email: "identity@example.org",
     teams: {
-      t1: { id: "t1", parent_id: null, name: "admin" },
+      t1: { id: "t1", name: "admin" },
     },
   });
 });

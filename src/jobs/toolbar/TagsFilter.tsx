@@ -1,5 +1,5 @@
 import React from "react";
-import { Filters } from "types";
+import { IJobFilters } from "types";
 import {
   ToolbarFilter,
   InputGroup,
@@ -10,8 +10,8 @@ import {
 import { SearchIcon } from "@patternfly/react-icons";
 
 type TagsFilterProps = {
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
+  filters: IJobFilters;
+  setFilters: (filters: IJobFilters) => void;
 };
 
 const TagsFilter = ({ filters, setFilters }: TagsFilterProps) => {
@@ -23,7 +23,7 @@ const TagsFilter = ({ filters, setFilters }: TagsFilterProps) => {
         if (key) {
           setFilters({
             ...filters,
-            tags: filters.tags.filter((f) => f !== value),
+            tags: filters.tags?.filter((f) => f !== value),
           });
         }
       }}
@@ -33,7 +33,7 @@ const TagsFilter = ({ filters, setFilters }: TagsFilterProps) => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (filters.tags.indexOf(tag) === -1) {
+          if (filters.tags?.indexOf(tag) === -1) {
             setFilters({
               ...filters,
               tags: filters.tags.concat(tag),

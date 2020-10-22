@@ -113,7 +113,7 @@ it("fetch job", () => {
     },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(jobsActions.one({ id: "j1" })).then(() => {
+  return store.dispatch(jobsActions.one("j1")).then(() => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -135,7 +135,7 @@ it("fetch job with params", () => {
     },
   ];
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  return store.dispatch(jobsActions.one({ id: "j2" }, params)).then(() => {
+  return store.dispatch(jobsActions.one("j2", params)).then(() => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

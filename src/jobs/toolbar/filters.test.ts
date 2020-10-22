@@ -56,12 +56,12 @@ it("get params from default filters", () => {
 
 it("get params from complex filters", () => {
   const filters = {
-    team_id: "t1",
     product_id: "p1",
-    topic_id: "to1",
+    team_id: "t1",
     remoteci_id: "r1",
-    tags: ["tag_1", "tag_2"],
+    topic_id: "to1",
     status: "success" as Status,
+    tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
   };
@@ -77,16 +77,30 @@ it("get params from complex filters", () => {
 
 it("create search from filters", () => {
   const filters = {
-    team_id: "t1",
     product_id: "p1",
-    topic_id: "to1",
+    team_id: "t1",
     remoteci_id: "r1",
-    tags: ["tag_1", "tag_2"],
+    topic_id: "to1",
     status: "success" as Status,
+    tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
   };
   const expectedSearch =
     "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
+});
+
+it("get params from user filters", () => {
+  const filters = {
+    email: "test@example.org",
+    page: 1,
+    perPage: 20,
+  };
+  const expectedParams = {
+    where: "email:test@example.org",
+    limit: 20,
+    offset: 0,
+  };
+  expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });

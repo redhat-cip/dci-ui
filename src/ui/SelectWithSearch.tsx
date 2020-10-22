@@ -5,6 +5,7 @@ type ObjectWithIdAndName = {
   id: string;
   name: string;
   toString?: () => string;
+  [x:string]: any
 };
 
 type SelectWithSearchProps = {

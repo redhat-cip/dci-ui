@@ -15,10 +15,10 @@ type EmailsFilterProps = {
 };
 
 const EmailsFilter = ({ search, onSearch, onClear }: EmailsFilterProps) => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(search);
   return (
     <ToolbarFilter
-      chips={search ? [search] : []}
+      chips={email === "" ? [] : [email]}
       deleteChip={onClear}
       categoryName="Email"
       showToolbarItem

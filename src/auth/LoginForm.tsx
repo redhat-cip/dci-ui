@@ -9,6 +9,7 @@ import { showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
+import { AppDispatch } from "store";
 
 const LogInSchema = Yup.object().shape({
   username: Yup.string()
@@ -23,7 +24,7 @@ type LocationState = {
 
 export default function LoginForm() {
   const { refreshIdentity } = useAuth();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
   const location = useLocation<LocationState>();
   return (
