@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTopics, getTopicById } from "topics/topicsSelectors";
-import { ITopic } from "types";
+import { Topic } from "types";
 import topicsActions from "topics/topicsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
 
 type TopicsFilterProps = {
   topic_id: string | null;
-  onSelect: (topic: ITopic) => void;
+  onSelect: (topic: Topic) => void;
   onClear: () => void;
   showToolbarItem: boolean;
 };
@@ -35,7 +35,7 @@ const TopicsFilter = ({
       <SelectWithSearch
         placeholder="Filter by topic..."
         onClear={onClear}
-        onSelect={(t) => onSelect(t as ITopic)}
+        onSelect={onSelect}
         option={topic}
         options={topics}
       />

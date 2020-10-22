@@ -2,36 +2,28 @@ import React from "react";
 import { useField } from "formik";
 import { FormGroup, TextInput, TextInputProps } from "@patternfly/react-core";
 
-type InputProps = {
-  label?: string;
+type MyTextInputProps = {
+  label: string;
   id: string;
   name: string;
 } & TextInputProps;
 
-export default function Input({ label, id, name, ...props }: InputProps) {
+export default function Input({ label, id, name, ...props }: MyTextInputProps) {
   const [field, meta, helpers] = useField(name);
   const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
   return (
     <FormGroup
       label={label}
       isRequired={props.isRequired}
       fieldId={id}
       helperTextInvalid={meta.error}
-      validated={validated}
+      validated={meta.touched && meta.error ? "error" : "success"}
     >
       <TextInput
         id={id}
         {...field}
         {...props}
-        validated={validated}
-        onChange={(value, event) => {
-          if (typeof props.onChange === "undefined") {
-            setValue(value);
-          } else {
-            props.onChange(value, event);
-          }
-        }}
+        onChange={(value) => setValue(value)}
       />
     </FormGroup>
   );

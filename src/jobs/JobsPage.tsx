@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Location, History } from "history";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState } from "ui";
@@ -14,24 +15,22 @@ import {
   defaultFilters,
 } from "./toolbar/filters";
 import { Filters } from "types";
-import { useHistory, useLocation } from "react-router-dom";
 
-export default function JobsPage() {
-  const location = useLocation();
-  const history = useHistory();
+type JobsStateProps = {
+  location: Location;
+  history: History;
+};
+
+const JobsPage = ({ location, history }: JobsStateProps) => {
   const dispatch = useDispatch();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
-  const [filters, setFilters] = useState<Filters>(
-    parseFiltersFromSearch(location.search)
-  );
+  const [filters, setFilters] = useState<Filters>(defaultFilters);
 
-  useEffect(() => {
+  function setFiltersUpdateUrlAndSearch(filters: Filters) {
+    setFilters(filters);
     const newSearch = createSearchFromFilters(filters);
     history.push(`/jobs${newSearch}`);
-  }, [history, filters]);
-
-  useEffect(() => {
     dispatch(jobsActions.clear());
     dispatch(
       jobsActions.all({
@@ -39,7 +38,13 @@ export default function JobsPage() {
         ...getParamsFromFilters(filters),
       })
     );
-  }, [dispatch, filters]);
+  }
+  const { search } = location;
+
+  useEffect(() => {
+    const filters = parseFiltersFromSearch(search);
+    setFiltersUpdateUrlAndSearch(filters);
+  }, []);
 
   return (
     <Page
@@ -49,8 +54,8 @@ export default function JobsPage() {
       Toolbar={
         <DCIToolbar
           filters={filters}
-          setFilters={setFilters}
-          clearAllFilters={() => setFilters(defaultFilters)}
+          setFilters={setFiltersUpdateUrlAndSearch}
+          clearAllFilters={() => setFiltersUpdateUrlAndSearch(defaultFilters)}
         />
       }
       seeSecondToolbar
@@ -64,4 +69,6 @@ export default function JobsPage() {
       <JobsList jobs={jobs} />
     </Page>
   );
-}
+};
+
+export default JobsPage;

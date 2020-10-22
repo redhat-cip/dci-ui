@@ -120,7 +120,7 @@ export class EditUserPage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchUser: (user) => dispatch(usersActions.one(user.id)),
+    fetchUser: (user) => dispatch(usersActions.one(user)),
     fetchUserTeams: (user) => dispatch(fetchUserTeams(user)),
     updateUser: (user) => dispatch(usersActions.update(user)),
     deleteUserFromTeam: (user, team) =>

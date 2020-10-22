@@ -1,7 +1,7 @@
 import { Button, Label } from "@patternfly/react-core";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IFile, ITest, ITestsCase } from "types";
+import { ITest, ITestsCase } from "types";
 import { AppDispatch } from "store";
 import { isEmpty } from "lodash";
 import { humanizeDuration } from "services/date";
@@ -41,14 +41,13 @@ export default function Test({ test }: TestProps) {
   const [isLoadingTestsCases, setIsLoadingTestsCases] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
   const [testscases, setTestscases] = useState<ITestsCase[]>([]);
-  const dispatch: AppDispatch = useDispatch<AppDispatch>();
+  const dispatch: AppDispatch = useDispatch();
 
   const loadTestCases = useCallback(() => {
     setSeeDetails(true);
     if (isEmpty(testscases)) {
       setIsLoadingTestsCases(true);
-      const file = { id: test.file_id } as IFile;
-      dispatch(getTestsCases(file))
+      dispatch(getTestsCases({ id: test.file_id }))
         .then((r) => {
           setTestscases(r.data.testscases);
         })

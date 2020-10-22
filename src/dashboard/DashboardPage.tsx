@@ -48,7 +48,7 @@ const DashboardPage = () => {
         {Object.values(products).map((product) => {
           const Icon = icons.getProductIcon(product.name);
           return (
-            <GridItem key={product.id} span={12} className="mb-xl">
+            <GridItem span={12} className="mb-xl">
               <ProductTitle>
                 <span className="mr-xs">
                   <Icon size="md" />
@@ -62,6 +62,9 @@ const DashboardPage = () => {
                       onClick={() =>
                         history.push({
                           pathname: `/dashboard/${stat.topic.name}`,
+                          state: {
+                            ...stat,
+                          },
                         })
                       }
                       title="Click to see detailed stats for this topic"

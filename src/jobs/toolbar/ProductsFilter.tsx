@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts, getProductById } from "products/productsSelectors";
-import { IProduct } from "types";
+import { Product } from "types";
 import productsActions from "products/productsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
 
 type ProductsFilterProps = {
   product_id: string | null;
-  onSelect: (product: IProduct) => void;
+  onSelect: (product: Product) => void;
   onClear: () => void;
   showToolbarItem: boolean;
 };
@@ -35,7 +35,7 @@ const ProductsFilter = ({
       <SelectWithSearch
         placeholder="Filter by product..."
         onClear={onClear}
-        onSelect={(p) => onSelect(p as IProduct)}
+        onSelect={onSelect}
         option={product}
         options={products}
       />

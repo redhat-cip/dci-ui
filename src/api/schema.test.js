@@ -1,5 +1,5 @@
 import { normalize, denormalize } from "normalizr";
-import { getSchema } from "./schema";
+import * as schema from "./schema";
 
 it("jobs normalize", () => {
   const data = [
@@ -57,7 +57,7 @@ it("jobs normalize", () => {
       },
     },
   };
-  expect(normalize(data, getSchema("jobs"))).toEqual(dataNormalized);
+  expect(normalize(data, schema.jobs)).toEqual(dataNormalized);
 });
 it("jobs denormalize", () => {
   const allIds = ["job1", "job2"];
@@ -109,9 +109,7 @@ it("jobs denormalize", () => {
       topic: { id: "topic1" },
     },
   ];
-  expect(denormalize(allIds, getSchema("jobs"), entities)).toEqual(
-    denormalizedJobs
-  );
+  expect(denormalize(allIds, schema.jobs, entities)).toEqual(denormalizedJobs);
 });
 it("partial jobs normalize", () => {
   const data = [{ id: "job1" }];
@@ -125,7 +123,7 @@ it("partial jobs normalize", () => {
       },
     },
   };
-  expect(normalize(data, getSchema("jobs"))).toEqual(dataNormalized);
+  expect(normalize(data, schema.jobs)).toEqual(dataNormalized);
 });
 
 it("job normalize", () => {
@@ -140,7 +138,7 @@ it("job normalize", () => {
       },
     },
   };
-  expect(normalize(data, getSchema("job"))).toEqual(dataNormalized);
+  expect(normalize(data, schema.job)).toEqual(dataNormalized);
 });
 
 it("users normalize", () => {
@@ -156,5 +154,5 @@ it("users normalize", () => {
       },
     },
   };
-  expect(normalize(data, getSchema("users"))).toEqual(dataNormalized);
+  expect(normalize(data, schema.users)).toEqual(dataNormalized);
 });

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ITeam } from "types";
+import { Team } from "types";
 import { getTeams, getTeamById } from "teams/teamsSelectors";
 import teamsActions from "teams/teamsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
@@ -8,7 +8,7 @@ import { SelectWithSearch } from "ui";
 
 type TeamsFilterProps = {
   team_id: string | null;
-  onSelect: (team: ITeam) => void;
+  onSelect: (team: Team) => void;
   onClear: () => void;
   showToolbarItem: boolean;
 };
@@ -35,7 +35,7 @@ const TeamsFilter = ({
       <SelectWithSearch
         placeholder="Filter by team..."
         onClear={onClear}
-        onSelect={(t) => onSelect(t as ITeam)}
+        onSelect={onSelect}
         option={team}
         options={teams}
       />

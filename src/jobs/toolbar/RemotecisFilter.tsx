@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getRemotecis, getRemoteciById } from "remotecis/remotecisSelectors";
-import { IRemoteci } from "types";
+import { Remoteci } from "types";
 import remotecisActions from "remotecis/remotecisActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
 
 type RemotecisFilterProps = {
   remoteci_id: string | null;
-  onSelect: (remoteci: IRemoteci) => void;
+  onSelect: (remoteci: Remoteci) => void;
   onClear: () => void;
   showToolbarItem: boolean;
 };
@@ -35,7 +35,7 @@ const RemotecisFilter = ({
       <SelectWithSearch
         placeholder="Filter by remoteci..."
         onClear={onClear}
-        onSelect={(r) => onSelect(r as IRemoteci)}
+        onSelect={onSelect}
         option={remoteci}
         options={remotecis}
       />

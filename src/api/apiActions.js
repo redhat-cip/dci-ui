@@ -1,31 +1,36 @@
 import { normalize } from "normalizr";
 import http from "services/http";
 import { createActionsTypes } from "./apiActionsTypes";
-import { getSchema } from "./schema";
+import * as schema from "./schema";
 import { showAPIError, showSuccess } from "alerts/alertsActions";
-import { AppThunk } from "store";
-import { IResourceName, IResourcesName, Resource } from "types";
-import { AxiosPromise } from "axios";
 
-export function createActions(resource: IResourceName) {
+export function createActions(resource) {
   return {
-    all: (params = {}): AppThunk<AxiosPromise<any>> => {
-      let endpoint = `${resource}s` as IResourcesName;
+    all: (params = {}) => {
+      let endpoint = `${resource}s`;
+      if (params && params.endpoint) {
+        endpoint = params.endpoint;
+        delete params.endpoint;
+      }
       return (dispatch, getState) => {
         dispatch({
           type: createActionsTypes(resource).FETCH_ALL_REQUEST,
         });
         const { apiURL } = getState().config;
 
-        return http({
-          method: "get",
-          url: `${apiURL}/api/v1/${endpoint}`,
-          params,
-        })
+        return http
+          .request({
+            method: "get",
+            url: `${apiURL}/api/v1/${endpoint}`,
+            params,
+          })
           .then((response) => {
             dispatch({
               type: createActionsTypes(resource).FETCH_ALL_SUCCESS,
-              ...normalize(response.data[endpoint], getSchema(endpoint)),
+              ...normalize(
+                response.data[`${resource}s`],
+                schema[`${resource}s`]
+              ),
             });
             dispatch({
               type: createActionsTypes(resource).SET_COUNT,
@@ -39,21 +44,22 @@ export function createActions(resource: IResourceName) {
           });
       };
     },
-    one: (id: string, params = {}): AppThunk<AxiosPromise<any>> => {
+    one: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
           type: createActionsTypes(resource).FETCH_REQUEST,
         });
         const { apiURL } = getState().config;
-        return http({
-          method: "get",
-          url: `${apiURL}/api/v1/${resource}s/${id}`,
-          params,
-        })
+        return http
+          .request({
+            method: "get",
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+            params,
+          })
           .then((response) => {
             dispatch({
               type: createActionsTypes(resource).FETCH_SUCCESS,
-              ...normalize(response.data[resource], getSchema(resource)),
+              ...normalize(response.data[resource], schema[resource]),
             });
             return response;
           })
@@ -63,25 +69,23 @@ export function createActions(resource: IResourceName) {
           });
       };
     },
-    create: (
-      data: { name: string },
-      params = {}
-    ): AppThunk<AxiosPromise<any>> => {
+    create: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
           type: createActionsTypes(resource).CREATE_REQUEST,
         });
         const { apiURL } = getState().config;
-        return http({
-          method: "post",
-          url: `${apiURL}/api/v1/${resource}s`,
-          data,
-          params,
-        })
+        return http
+          .request({
+            method: "post",
+            url: `${apiURL}/api/v1/${resource}s`,
+            data,
+            params,
+          })
           .then((response) => {
             dispatch({
               type: createActionsTypes(resource).CREATE_SUCCESS,
-              ...normalize(response.data[resource], getSchema(resource)),
+              ...normalize(response.data[resource], schema[resource]),
             });
             dispatch(
               showSuccess(`${resource} ${data.name} created successfully!`)
@@ -94,23 +98,24 @@ export function createActions(resource: IResourceName) {
           });
       };
     },
-    update: (data: Resource, params = {}): AppThunk<AxiosPromise<any>> => {
+    update: (data, params = {}) => {
       return (dispatch, getState) => {
         dispatch({
           type: createActionsTypes(resource).UPDATE_REQUEST,
         });
         const { apiURL } = getState().config;
-        return http({
-          method: "put",
-          url: `${apiURL}/api/v1/${resource}s/${data.id}`,
-          headers: { "If-Match": data.etag },
-          data,
-          params,
-        })
+        return http
+          .request({
+            method: "put",
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+            headers: { "If-Match": data.etag },
+            data,
+            params,
+          })
           .then((response) => {
             dispatch({
               type: createActionsTypes(resource).UPDATE_SUCCESS,
-              ...normalize(response.data[resource], getSchema(resource)),
+              ...normalize(response.data[resource], schema[resource]),
             });
             dispatch(
               showSuccess(`${resource} ${data.name} updated successfully!`)
@@ -128,17 +133,18 @@ export function createActions(resource: IResourceName) {
         type: createActionsTypes(resource).CLEAR_CACHE,
       };
     },
-    delete: (data: Resource): AppThunk<AxiosPromise<any>> => {
+    delete: (data) => {
       return (dispatch, getState) => {
         dispatch({
           type: createActionsTypes(resource).DELETE_REQUEST,
         });
         const { apiURL } = getState().config;
-        return http({
-          method: "delete",
-          url: `${apiURL}/api/v1/${resource}s/${data.id}`,
-          headers: { "If-Match": data.etag },
-        })
+        return http
+          .request({
+            method: "delete",
+            url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+            headers: { "If-Match": data.etag },
+          })
           .then((response) => {
             const name = data.name ? data.name : data.id;
             dispatch(showSuccess(`${resource} ${name} deleted successfully!`));

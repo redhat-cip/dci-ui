@@ -4,10 +4,10 @@ import {
   global_success_color_100,
 } from "@patternfly/react-tokens";
 import { ChartDonut } from "@patternfly/react-charts";
-import { IStat } from "types";
+import { Stat } from "types";
 
 type NbOfJobsChartProps = {
-  stat: IStat | null;
+  stat: Stat | null;
 };
 
 const NbOfJobsChart = ({ stat }: NbOfJobsChartProps) => {

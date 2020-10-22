@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Page } from "layout";
 import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
-import { useRouteMatch, Link } from "react-router-dom";
+import { useLocation, useRouteMatch, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { useDispatch } from "react-redux";
-import { IStat } from "types";
-import { getStat } from "./dashboardActions";
+import { Stat } from "types";
+import { getStats } from "./dashboardActions";
+import { LocationState } from "history";
 import { EmptyState } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
@@ -44,7 +45,7 @@ const StatHeaderCard = ({ title, subTitle }: StatHeaderCardProps) => {
 };
 
 type ListOfJobsCardProps = {
-  stat: IStat | null;
+  stat: Stat | null;
 };
 
 const ListOfJobsCard = ({ stat }: ListOfJobsCardProps) => {
@@ -121,19 +122,31 @@ type MatchParams = {
   topic_name: string;
 };
 
-export default function DashboardDetailsPage() {
+const DashboardDetailPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [stat, setStat] = useState<IStat | null>(null);
+  const location = useLocation<LocationState>();
+  const { state } = location;
+  const [stat, setStat] = useState<Stat | null>((state as Stat) || null);
   const match = useRouteMatch<MatchParams>();
   const dispatch = useDispatch<AppDispatch>();
   const { topic_name } = match.params;
 
   useEffect(() => {
-    dispatch(getStat(topic_name))
-      .then(setStat)
-      .catch(console.error)
-      .then(() => setIsLoading(false));
-  }, [dispatch, topic_name]);
+    if (isEmpty(stat)) {
+      dispatch(getStats())
+        .then((response) => {
+          const stats = response.data.stats as Stat[];
+          const s = stats.find((s) => s.topic.name === topic_name);
+          if (s) {
+            setStat(s);
+          }
+        })
+        .catch(console.error)
+        .then(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <Page
@@ -167,7 +180,7 @@ export default function DashboardDetailsPage() {
         <GridItem span={4}>
           {stat && (
             <StatHeaderCard
-              title={fromNow(stat.jobs[0].created_at) || ""}
+              title={fromNow(stat.jobs[0].created_at)}
               subTitle="Latest run"
             />
           )}
@@ -178,4 +191,6 @@ export default function DashboardDetailsPage() {
       </Grid>
     </Page>
   );
-}
+};
+
+export default DashboardDetailPage;

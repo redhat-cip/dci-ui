@@ -1,30 +1,3 @@
-export type IResourceName =
-  | "jobstate"
-  | "team"
-  | "remoteci"
-  | "user"
-  | "product"
-  | "topic"
-  | "feeder"
-  | "job";
-
-export type IResourcesName =
-  | IResourceName
-  | "jobstates"
-  | "teams"
-  | "remotecis"
-  | "users"
-  | "products"
-  | "topics"
-  | "feeders"
-  | "jobs";
-
-export interface Resource {
-  id: string;
-  etag: string;
-  name: string;
-}
-
 export interface IConfig {
   apiURL: string;
   sso: {
@@ -34,13 +7,25 @@ export interface IConfig {
   };
 }
 
-export interface ITeam extends Resource {}
+export interface Team {
+  id: string;
+  name: string;
+}
 
-export interface IProduct extends Resource {}
+export type Product = {
+  id: string;
+  name: string;
+};
 
-export interface IRemoteci extends Resource {}
+export type Remoteci = {
+  id: string;
+  name: string;
+};
 
-export interface ITopic extends Resource {}
+export type Topic = {
+  id: string;
+  name: string;
+};
 
 export const Statuses = [
   "success",
@@ -84,14 +69,14 @@ export interface ICurrentUser {
   id: string;
   name: string;
   teams: {
-    [id: string]: ITeam;
+    [id: string]: Team;
   };
   timezone: string;
   isSuperAdmin?: boolean;
   hasEPMRole?: boolean;
   hasReadOnlyRole?: boolean;
   isReadOnly?: boolean;
-  team?: ITeam;
+  team?: Team;
 }
 
 export type DCIListParams = {
@@ -109,13 +94,13 @@ export type StatJob = {
   team_name: string;
 };
 
-export type IStat = {
+export type Stat = {
   jobs: StatJob[];
   percentageOfSuccess: number;
   nbOfSuccessfulJobs: number;
   nbOfJobs: number;
-  product: IProduct;
-  topic: ITopic;
+  product: Product;
+  topic: Topic;
 };
 
 export interface ITest {
@@ -132,10 +117,6 @@ export interface ITest {
   total: number;
 }
 
-export interface IGetTestsResults {
-  results: ITest[];
-}
-
 export type TestCaseActionType = "passed" | "skipped" | "failure" | "error";
 
 export interface ITestsCase {
@@ -150,49 +131,7 @@ export interface ITestsCase {
   value: string;
 }
 
-export interface IGetTestsCases {
-  testscases: ITestsCase[];
-}
-
 export type state = "active" | "inactive" | "archived";
-
-export interface IFile {
-  id: string;
-  etag: string;
-  created_at: string;
-  updated_at: string;
-  job_id: string;
-  jobstate_id: string | null;
-  md5: string | null;
-  mime: string | null;
-  name: string;
-  size: number;
-  state: state;
-  team_id: string;
-  test_id: string | null;
-}
-
-export interface IFileWithDuration extends IFile {
-  duration: number;
-}
-
-export interface IJobState {
-  id: string;
-  status: Status;
-  files: IFile[];
-  comment: string;
-  created_at: string;
-  job_id: string;
-}
-
-export interface IGetJobStates {
-  jobstates: IJobState[];
-}
-
-export interface IJobStateWithDuration extends IJobState {
-  duration: number;
-  files: IFileWithDuration[];
-}
 
 export interface IJob {
   client_version: string;
@@ -214,31 +153,10 @@ export interface IJob {
   user_agent: string;
 }
 
-export interface IEnhancedJob extends IJob {
-  jobstates: IJobState[];
-  tests: ITest[];
-  files: IFile[];
-}
-
-export interface IComponent extends Resource {
+export interface IComponent {
+  id: string;
+  etag: string;
+  name: string;
   type: string;
   tags: string[] | null;
 }
-
-export interface PerformanceTestsCases {
-  classname: string;
-  delta: number;
-  name: string;
-  time: number;
-}
-
-export interface PerformanceData {
-  job_id: string;
-  testscases: PerformanceTestsCases[];
-}
-
-export interface TestPerformance {
-  [testName: string]: PerformanceData[];
-}
-
-export type IPerformance = TestPerformance[];

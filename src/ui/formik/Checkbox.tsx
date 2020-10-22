@@ -3,7 +3,7 @@ import { useField } from "formik";
 import { Checkbox, FormGroup, CheckboxProps } from "@patternfly/react-core";
 
 type DCICheckboxProps = {
-  label?: string;
+  label: string;
   id: string;
   name: string;
 } & CheckboxProps;
@@ -15,26 +15,16 @@ export default function DCICheckbox({
   ref,
   ...props
 }: DCICheckboxProps) {
-  const [field, meta, helpers] = useField(name);
+  const [field, _, helpers] = useField(name);
   const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
   return (
-    <FormGroup
-      fieldId={id}
-      helperTextInvalid={meta.error}
-      validated={validated}
-    >
+    <FormGroup fieldId={id}>
       <Checkbox
         id={id}
         label={label}
         {...field}
         {...props}
-        onChange={(checked, event) => {
-          setValue(checked);
-          if (typeof props.onChange !== "undefined") {
-            props.onChange(checked, event);
-          }
-        }}
+        onChange={(value) => setValue(value)}
       />
     </FormGroup>
   );
