@@ -5,6 +5,7 @@ import { ITopic } from "types";
 import topicsActions from "topics/topicsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
+import { AppDispatch } from "store";
 
 type TopicsFilterProps = {
   topic_id: string | null;
@@ -21,7 +22,7 @@ const TopicsFilter = ({
 }: TopicsFilterProps) => {
   const topics = useSelector(getTopics);
   const topic = useSelector((state) => getTopicById(topic_id)(state));
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(topicsActions.all());
   }, [dispatch]);

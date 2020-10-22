@@ -1,10 +1,20 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "store";
+import { ITopic } from "types";
 import TopicForm from "./TopicForm";
 import actions from "./topicsActions";
 
-const EditTopicButton = ({ topic, ...props }) => {
-  const dispatch = useDispatch();
+interface EditTopicButtonProps {
+  topic: ITopic;
+  [x: string]: any;
+}
+
+export default function EditTopicButton({
+  topic,
+  ...props
+}: EditTopicButtonProps) {
+  const dispatch = useDispatch<AppDispatch>();
   if (!topic) return null;
 
   return (
@@ -14,16 +24,15 @@ const EditTopicButton = ({ topic, ...props }) => {
       topic={topic}
       showModalButton="Edit"
       okButton="Edit"
-      submit={(newTopic) =>
+      submit={(t: ITopic) => {
+        const { id, ...newTopic } = t;
         dispatch(
           actions.update({
             id: topic.id,
             ...newTopic,
           })
-        )
-      }
+        );
+      }}
     />
   );
-};
-
-export default EditTopicButton;
+}

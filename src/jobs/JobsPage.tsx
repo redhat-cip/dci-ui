@@ -15,11 +15,12 @@ import {
 } from "./toolbar/filters";
 import { Filters } from "types";
 import { useHistory, useLocation } from "react-router-dom";
+import { AppDispatch } from "store";
 
 export default function JobsPage() {
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
   const [filters, setFilters] = useState<Filters>(

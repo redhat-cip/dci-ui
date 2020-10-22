@@ -22,6 +22,9 @@ import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
 import Component from "./Component";
 import { InfoCircleIcon } from "@patternfly/react-icons";
+import { AppDispatch } from "store";
+import { IComponent, ITopic } from "types";
+import { useRouteMatch } from "react-router-dom";
 
 const Padding = styled.div`
   padding: 1em;
@@ -32,15 +35,23 @@ const Field = styled.span`
   font-weight: bold;
 `;
 
-const YesNoLabelInverted = ({ value }) => {
+interface YesNoLabelInvertedProps {
+  value: boolean;
+}
+
+function YesNoLabelInverted({ value }: YesNoLabelInvertedProps) {
   return value ? (
     <Label color="red">yes</Label>
   ) : (
     <Label color="green">no</Label>
   );
-};
+}
 
-const SeeContent = ({ content }) => {
+interface SeeContentProps {
+  content: string;
+}
+
+function SeeContent({ content }: SeeContentProps) {
   const [seeContent, setSeeContent] = useState(false);
   return seeContent ? (
     <div>
@@ -63,9 +74,15 @@ const SeeContent = ({ content }) => {
       see content
     </Button>
   );
-};
+}
 
-const Line = ({ field, help, value }) => {
+interface LineProps {
+  field: string;
+  help?: string;
+  value: React.ReactNode;
+}
+
+function Line({ field, help, value }: LineProps) {
   return (
     <Grid hasGutter>
       <GridItem span={4}>
@@ -85,16 +102,20 @@ const Line = ({ field, help, value }) => {
       <GridItem span={8}>{value}</GridItem>
     </Grid>
   );
-};
+}
 
 const ComponentsContainer = styled.div`
   padding-top: 1em;
 `;
 
-const Components = ({ topic }) => {
-  const dispatch = useDispatch();
+interface ComponentsProps {
+  topic: ITopic;
+}
+
+function Components({ topic }: ComponentsProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [isFetching, setIsFetching] = useState(true);
-  const [components, setComponents] = useState([]);
+  const [components, setComponents] = useState<IComponent[]>([]);
 
   useEffect(() => {
     dispatch(fetchLatestComponents(topic))
@@ -125,10 +146,15 @@ const Components = ({ topic }) => {
       ))}
     </ComponentsContainer>
   );
+}
+
+type MatchParams = {
+  id: string;
 };
 
-const TopicPage = ({ match }) => {
-  const dispatch = useDispatch();
+export default function TopicPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const match = useRouteMatch<MatchParams>();
   const { id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
   const topic = useSelector(getTopicById(id));
@@ -226,6 +252,4 @@ const TopicPage = ({ match }) => {
       </PageSection>
     </Page>
   );
-};
-
-export default TopicPage;
+}

@@ -5,6 +5,7 @@ import { getTeams, getTeamById } from "teams/teamsSelectors";
 import teamsActions from "teams/teamsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
+import { AppDispatch } from "store";
 
 type TeamsFilterProps = {
   team_id: string | null;
@@ -21,7 +22,7 @@ const TeamsFilter = ({
 }: TeamsFilterProps) => {
   const teams = useSelector(getTeams);
   const team = useSelector((state) => getTeamById(team_id)(state));
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(teamsActions.all());
   }, [dispatch]);

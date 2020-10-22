@@ -5,6 +5,7 @@ import { IProduct } from "types";
 import productsActions from "products/productsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
+import { AppDispatch } from "store";
 
 type ProductsFilterProps = {
   product_id: string | null;
@@ -21,7 +22,7 @@ const ProductsFilter = ({
 }: ProductsFilterProps) => {
   const products = useSelector(getProducts);
   const product = useSelector((state) => getProductById(product_id)(state));
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(productsActions.all());
   }, [dispatch]);

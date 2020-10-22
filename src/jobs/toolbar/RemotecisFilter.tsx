@@ -5,6 +5,7 @@ import { IRemoteci } from "types";
 import remotecisActions from "remotecis/remotecisActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui";
+import { AppDispatch } from "store";
 
 type RemotecisFilterProps = {
   remoteci_id: string | null;
@@ -21,7 +22,7 @@ const RemotecisFilter = ({
 }: RemotecisFilterProps) => {
   const remotecis = useSelector(getRemotecis);
   const remoteci = useSelector((state) => getRemoteciById(remoteci_id)(state));
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(remotecisActions.all());
   }, [dispatch]);
