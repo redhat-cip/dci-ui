@@ -1,11 +1,16 @@
 import React from "react";
-import { Button, LoginFooterItem, LoginPage } from "@patternfly/react-core";
+import {
+  Button,
+  ListVariant,
+  LoginFooterItem,
+  LoginPage,
+} from "@patternfly/react-core";
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
 import Logo from "logo.svg";
 import useSwitch from "hooks/useSwitch";
 
-const DCILoginPage = () => {
+export default function DCILoginPage() {
   const { isOn: seeSSOForm, toggle } = useSwitch(true);
   const loginSubtitle = seeSSOForm
     ? "To continue on DCI you need to log in using your Red Hat account. Click on the Log in button to be redirected to the Red Hat login page."
@@ -13,7 +18,7 @@ const DCILoginPage = () => {
 
   return (
     <LoginPage
-      footerListVariants="inline"
+      footerListVariants={ListVariant.inline}
       brandImgSrc={Logo}
       brandImgAlt="DCI logo"
       footerListItems={
@@ -39,6 +44,4 @@ const DCILoginPage = () => {
       </div>
     </LoginPage>
   );
-};
-
-export default DCILoginPage;
+}

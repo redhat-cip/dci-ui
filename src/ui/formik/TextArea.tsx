@@ -1,30 +1,34 @@
 import React from "react";
+import { FormGroup, TextArea, TextAreaProps } from "@patternfly/react-core";
 import { useField } from "formik";
-import { FormGroup, TextInput, TextInputProps } from "@patternfly/react-core";
 
-type InputProps = {
-  label?: string;
+type DCITextAreaProps = {
+  label: string;
   id: string;
   name: string;
-} & TextInputProps;
+} & TextAreaProps;
 
-export default function Input({ label, id, name, ...props }: InputProps) {
+export default function DCITextArea({
+  label,
+  id,
+  name,
+  ref,
+  ...props
+}: DCITextAreaProps) {
   const [field, meta, helpers] = useField(name);
   const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
   return (
     <FormGroup
       label={label}
       isRequired={props.isRequired}
       fieldId={id}
       helperTextInvalid={meta.error}
-      validated={validated}
+      validated={meta.touched && meta.error ? "error" : "success"}
     >
-      <TextInput
+      <TextArea
         id={id}
         {...field}
         {...props}
-        validated={validated}
         onChange={(value, event) => {
           if (typeof props.onChange === "undefined") {
             setValue(value);

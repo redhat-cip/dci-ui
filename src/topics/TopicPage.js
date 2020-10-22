@@ -134,7 +134,7 @@ const TopicPage = ({ match }) => {
   const topic = useSelector(getTopicById(id));
 
   useEffect(() => {
-    dispatch(topicsActions.one({ id }, { embed: "next_topic,product" }))
+    dispatch(topicsActions.one(id, { embed: "next_topic,product" }))
       .then((response) => response.data.topic)
       .catch((error) => console.log(error))
       .then(() => setIsFetching(false));
