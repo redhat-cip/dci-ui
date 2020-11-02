@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import DCIGeckoPawImage from "./dci-gecko-paw.svg";
 import styled, { keyframes } from "styled-components";
 
@@ -22,16 +22,17 @@ const BlinkImg = styled.img`
   margin: auto auto;
 `;
 
-export default class BlinkLogo extends Component {
-  render() {
-    const { className } = this.props;
-    return (
-      <BlinkImg
-        id="dci-blink-gecko-paw"
-        src={DCIGeckoPawImage}
-        alt="Distributed CI"
-        className={className}
-      />
-    );
-  }
+interface BlinkLogoProps {
+  className?: string;
+}
+
+export default function BlinkLogo({ className = "" }: BlinkLogoProps) {
+  return (
+    <BlinkImg
+      id="dci-blink-gecko-paw"
+      src={DCIGeckoPawImage}
+      alt="Distributed CI"
+      className={className}
+    />
+  );
 }

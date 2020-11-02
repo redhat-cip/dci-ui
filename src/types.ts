@@ -1,3 +1,7 @@
+export interface IItemWithName {
+  name: string;
+}
+
 export type IResourceName =
   | "jobstate"
   | "team"
