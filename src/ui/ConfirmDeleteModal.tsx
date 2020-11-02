@@ -25,11 +25,7 @@ const ConfirmDeleteModal = ({
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        title={title}
-        onClose={hide}
-      >
+      <Modal isOpen={isOpen} title={title} onClose={hide}>
         <div>
           <TextRed>{message}</TextRed>
         </div>

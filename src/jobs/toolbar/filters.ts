@@ -59,7 +59,8 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
         "topic_id",
         "status",
         "email",
-      ].includes(key) && value
+      ].includes(key) &&
+      value
     ) {
       keyValues.push(`${key}:${value}`);
     }

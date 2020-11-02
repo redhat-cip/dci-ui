@@ -4,9 +4,11 @@ import { fromNow } from "services/date";
 import { RootState } from "store";
 import { IEnhancedTeam, ITeamsById } from "types";
 
-export const getTeamsById = (state:RootState):ITeamsById => state.teams.byId;
-export const getTeamsAllIds = (state:RootState):string[] => state.teams.allIds;
-export const isFetchingTeams = (state:RootState):boolean => state.teams.isFetching;
+export const getTeamsById = (state: RootState): ITeamsById => state.teams.byId;
+export const getTeamsAllIds = (state: RootState): string[] =>
+  state.teams.allIds;
+export const isFetchingTeams = (state: RootState): boolean =>
+  state.teams.isFetching;
 export const getTeams = createSelector(
   getTeamsById,
   getTeamsAllIds,
@@ -22,7 +24,7 @@ export const getTeams = createSelector(
     );
   }
 );
-export const getTeamById = (id:string|null) =>
+export const getTeamById = (id: string | null) =>
   createSelector(getTeamsById, (teams) => {
     if (id && id in teams) return teams[id];
     return null;
