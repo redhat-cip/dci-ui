@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { isEmpty, get } from "lodash";
 import { Page } from "layout";
 import {
@@ -17,6 +17,9 @@ import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { IEnhancedTopic, IProduct } from "types";
 import { useHistory } from "react-router-dom";
+import topicsActions from "./topicsActions";
+import { AppDispatch } from "store";
+import productsActions from "products/productsActions";
 
 export const ProductTitle = styled.h3`
   display: flex;
@@ -42,6 +45,7 @@ export default function TopicsPage() {
   const topics = useSelector(getTopics);
   const isFetching = useSelector(isFetchingTopics);
   const history = useHistory();
+  const dispatch = useDispatch<AppDispatch>();
   const products = topics.reduce((acc, topic) => {
     const product = topic.product;
     if (!product) {
@@ -56,6 +60,12 @@ export default function TopicsPage() {
     acc[productName] = currentProduct;
     return acc;
   }, {} as { [productName: string]: IProductWithTopics });
+
+  useEffect(() => {
+    dispatch(topicsActions.all({ embed: "product" }));
+    dispatch(productsActions.all());
+  }, [dispatch]);
+
   return (
     <Page
       title="Topics"
