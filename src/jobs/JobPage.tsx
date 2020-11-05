@@ -20,11 +20,11 @@ import JobStatesList from "./jobStates/JobStatesList";
 import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
-import { enhanceJob } from "./jobsSelectors";
 import JobSummary from "./JobSummary";
 import { useHistory, useParams } from "react-router-dom";
-import { IEnhancedJob } from "types";
+import { IEnhancedJob, ITest } from "types";
 import { AppDispatch } from "store";
+import { sortByName } from "services/sort";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
@@ -61,11 +61,11 @@ export default function JobPage() {
         const job = response.data.job;
         const q1 = await dispatch(getResults(job));
         const q2 = await dispatch(getJobStatesWithFiles(job));
-        const enhancedJob = enhanceJob({
+        const enhancedJob = {
           ...job,
-          tests: q1.data.results,
+          tests: sortByName<ITest>(q1.data.results),
           jobstates: q2.data.jobstates,
-        });
+        };
         setJob(enhancedJob);
         return response;
       })

@@ -34,6 +34,8 @@ type data = {
   [x: string]: any;
 };
 
+type tags = string[];
+
 export interface IConfig {
   apiURL: string;
   sso: {
@@ -141,7 +143,7 @@ export interface IJobFilters extends IPaginationFilters {
   product_id: string | null;
   topic_id: string | null;
   remoteci_id: string | null;
-  tags: string[];
+  tags: tags;
   status: Status | null;
 }
 
@@ -154,7 +156,7 @@ export type PatternflyFilters = {
   products: string[];
   topics: string[];
   remotecis: string[];
-  tags: string[];
+  tags: tags;
   status: Status[];
   page: number;
   perPage: number;
@@ -277,20 +279,41 @@ export interface IJobStateWithDuration extends IJobState {
   files: IFileWithDuration[];
 }
 
-export interface IJob {
-  client_version: string;
+export interface IResult {
+  created_at: string;
+  id: string;
+  job_id: string;
+  updated_at: string;
+  errors: number;
+  failures: number;
+  file_id: string;
+  filename: string;
+  name: string;
+  regressions: number;
+  skips: number;
+  success: number;
+  successfixes: number;
+  time: number;
+  total: number;
+}
+
+export interface IJob extends Resource {
+  client_version: string | null;
   comment: string | null;
+  components: IComponent[];
   created_at: string;
   duration: number;
-  etag: string;
-  id: string;
   previous_job_id: string | null;
   product_id: string;
+  remoteci: IRemoteci;
   remoteci_id: string;
-  state: state;
-  status: Status;
-  tags: string[];
+  results: IResult[];
+  state: string;
+  status: string;
+  tags: tags;
+  team: ITeam;
   team_id: string;
+  topic: ITopic;
   topic_id: string;
   update_previous_job_id: string | null;
   updated_at: string;
@@ -303,9 +326,23 @@ export interface IEnhancedJob extends IJob {
   files: IFile[];
 }
 
+export interface IJobsById {
+  [id: string]: IJob;
+}
+
 export interface IComponent extends Resource {
+  canonical_project_name: string | null;
+  data: data;
+  message: string | null;
+  released_at: string;
+  state: string;
+  tags: tags;
+  team_id: string | null;
+  title: string | null;
+  topic_id: string;
   type: string;
-  tags: string[] | null;
+  updated_at: string;
+  url: null;
 }
 
 export interface PerformanceTestsCases {
