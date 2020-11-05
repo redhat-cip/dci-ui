@@ -3,7 +3,7 @@ import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
 import JobSummary from "./JobSummary";
-import { IJob } from "types";
+import { IEnhancedJob } from "types";
 
 const JobUl = styled.ul`
   border: 1px solid ${global_Color_light_200.value};
@@ -22,7 +22,7 @@ const JobLi = styled.li`
 `;
 
 interface JobsListProps {
-  jobs: IJob[];
+  jobs: IEnhancedJob[];
 }
 
 export default function JobsList({ jobs }: JobsListProps) {
