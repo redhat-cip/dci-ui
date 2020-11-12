@@ -31,7 +31,6 @@ export class RemotecisPage extends Component {
           <EmptyState
             title="There is no remotecis"
             info="Do you want to create one?"
-            button={<NewRemoteciButton teams={teams} />}
           />
         }
       >

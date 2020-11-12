@@ -13,7 +13,7 @@ export default class FilesList extends Component {
     if (isEmpty(filesNotAssociatedWithJobState)) {
       return (
         <EmptyState
-          icon={<FileArchiveIcon size="lg" />}
+          icon={FileArchiveIcon}
           title="No files"
           info="There are no files attached to this job"
         />
