@@ -120,7 +120,7 @@ function Components({ topic }: ComponentsProps) {
   useEffect(() => {
     dispatch(fetchLatestComponents(topic))
       .then((response) => setComponents(response.data.components))
-      .catch((error) => console.log(error))
+      .catch(console.log)
       .then(() => setIsFetching(false));
   }, [dispatch, topic, setIsFetching]);
 
@@ -162,7 +162,7 @@ export default function TopicPage() {
   useEffect(() => {
     dispatch(topicsActions.one(id, { embed: "next_topic,product" }))
       .then((response) => response.data.topic)
-      .catch((error) => console.log(error))
+      .catch(console.log)
       .then(() => setIsFetching(false));
     dispatch(topicsActions.all());
   }, [dispatch, id, setIsFetching]);

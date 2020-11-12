@@ -48,7 +48,7 @@ export class JobStateFile extends Component {
         });
         return response;
       })
-      .catch((error) => console.log(error))
+      .catch(console.log)
       .then(() => this.setState({ loading: false }));
   };
 

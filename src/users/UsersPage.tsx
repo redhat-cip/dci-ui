@@ -95,7 +95,6 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    console.log("useEffect");
     fetchUsers(filters);
   }, [fetchUsers, filters]);
 

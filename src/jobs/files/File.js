@@ -21,7 +21,7 @@ export class File extends Component {
         FileSaver.saveAs(blob, `${file.name}`);
         return response;
       })
-      .catch((error) => console.log(error))
+      .catch(console.log)
       .then(() => this.setState({ downloading: false }));
   };
 

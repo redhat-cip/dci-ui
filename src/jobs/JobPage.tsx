@@ -25,6 +25,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { IEnhancedJob, ITest } from "types";
 import { AppDispatch } from "store";
 import { sortByName } from "services/sort";
+import JobSettingsPage from "./settings/JobSettingsPage";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
@@ -42,6 +43,7 @@ export default function JobPage() {
     { title: "Logs", value: "jobStates" },
     { title: "Tests", value: "tests" },
     { title: "Files", value: "files" },
+    { title: "Settings", value: "settings" },
   ];
   const [activeTabKey, setActiveTabKey] = useState<number>(
     endpoints.findIndex((e) => e.value === endpoint)
@@ -108,15 +110,37 @@ export default function JobPage() {
       }
       loading={loading}
     >
-      {job && (
+      {activeTabKey === 0 && job && (
         <Stack>
           <StackItem>
             <JobSummary job={job} />
           </StackItem>
+          <JobStatesList job={job} />
+          <StackItem></StackItem>
+        </Stack>
+      )}
+      {activeTabKey === 1 && job && job.tests && (
+        <Stack>
           <StackItem>
-            {activeTabKey === 0 && <JobStatesList job={job} />}
-            {activeTabKey === 1 && job.tests && <TestsList tests={job.tests} />}
-            {activeTabKey === 2 && job.files && <FilesList files={job.files} />}
+            <JobSummary job={job} />
+          </StackItem>
+          <TestsList tests={job.tests} />
+          <StackItem></StackItem>
+        </Stack>
+      )}
+      {activeTabKey === 2 && job && job.files && (
+        <Stack>
+          <StackItem>
+            <JobSummary job={job} />
+          </StackItem>
+          <FilesList files={job.files} />
+          <StackItem></StackItem>
+        </Stack>
+      )}
+      {activeTabKey === 3 && job && (
+        <Stack>
+          <StackItem>
+            <JobSettingsPage job={job} />
           </StackItem>
         </Stack>
       )}

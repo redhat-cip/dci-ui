@@ -60,9 +60,7 @@ const DashboardPage = () => {
                   <GalleryItem key={index}>
                     <Card
                       onClick={() =>
-                        history.push({
-                          pathname: `/dashboard/${stat.topic.name}`,
-                        })
+                        history.push(`/dashboard/${stat.topic.name}`)
                       }
                       title="Click to see detailed stats for this topic"
                       style={{ cursor: "pointer" }}

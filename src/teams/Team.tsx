@@ -105,7 +105,6 @@ export default function Team({
         title={`Delete team ${team.name}`}
         message={`Are you sure you want to delete ${team.name} team?`}
         onOk={() => {
-          console.log("olé");
           deleteTeam();
         }}
       >

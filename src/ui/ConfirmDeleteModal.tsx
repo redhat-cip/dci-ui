@@ -1,5 +1,11 @@
 import React, { ReactNode } from "react";
-import { Button, Modal } from "@patternfly/react-core";
+import {
+  Button,
+  Modal,
+  ModalVariant,
+  Title,
+  TitleSizes,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TextRed from "./Text/TextRed";
 
@@ -21,15 +27,22 @@ const ConfirmDeleteModal = ({
   children,
 }: ConfirmDeleteModalProps) => {
   const { isOpen, show, hide } = useModal(false);
-  console.log(isOpen);
-
   return (
     <>
-      <Modal isOpen={isOpen} title={title} onClose={hide}>
+      <Modal
+        isOpen={isOpen}
+        header={
+          <Title headingLevel="h1" size={TitleSizes["2xl"]}>
+            <TextRed>{title}</TextRed>
+          </Title>
+        }
+        onClose={hide}
+        variant={ModalVariant.small}
+      >
         <div>
           <TextRed>{message}</TextRed>
         </div>
-        <div className="mt--xl">
+        <div className="mt-md">
           <Button variant="secondary" className="mr-xs" onClick={hide}>
             {cancelButton}
           </Button>
