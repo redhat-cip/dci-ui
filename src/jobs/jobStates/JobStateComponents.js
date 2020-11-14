@@ -114,12 +114,14 @@ export const CaretIcon = styled.div`
 export const FileName = styled.div`
   margin-left: 10px;
   font-size: 14px;
+  font-family: monospace;
   flex: 1;
 `;
 
 export const FileContent = styled.div`
   background-color: ${global_palette_black_800.value};
   padding: 1em 0;
+  font-family: monospace;
 `;
 
 export const Pre = styled.pre`
