@@ -246,6 +246,8 @@ interface JobSummaryProps {
 
 export default function JobSummary({ job }: JobSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
+  const fixedTypes = ["puddle_osp", "puddle_osp_devtools", "Compose", "hwcert"];
+  console.log(job.components);
   return (
     <Job status={job.status}>
       <JobIcon>{getIcon(job.status)}</JobIcon>
@@ -276,7 +278,7 @@ export default function JobSummary({ job }: JobSummaryProps) {
         <div>
           {job.components.map((component) => (
             <div key={component.id} className="mt-xs">
-              <CubesIcon /> {component.name}
+              <CubesIcon /> {fixedTypes.indexOf(component.type) >= 0 ? component.name : component.type + '=' + (component.name.length == 40 ? component.name.substring(0, 7) : component.name)}
             </div>
           ))}
         </div>
