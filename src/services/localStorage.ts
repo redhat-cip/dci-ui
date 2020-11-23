@@ -1,3 +1,5 @@
+import { IToken } from "types";
+
 const TOKEN = "DCI";
 
 export function getToken() {
@@ -6,15 +8,15 @@ export function getToken() {
   return JSON.parse(token);
 }
 
-export function setToken(token) {
+export function setToken(token: IToken) {
   localStorage.setItem(TOKEN, JSON.stringify(token));
 }
 
-export function setJWT(value) {
+export function setJWT(value: string) {
   return setToken({ type: "Bearer", value });
 }
 
-export function setBasicToken(value) {
+export function setBasicToken(value: string) {
   return setToken({ type: "Basic", value });
 }
 
