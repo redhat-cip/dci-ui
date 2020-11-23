@@ -13,8 +13,4 @@ interface IHideAlertAction {
   alert: IAlert;
 }
 
-export type AlertsActionTypes = IShowAlertAction | IHideAlertAction;
-
-export interface AlertsState {
-  [x: string]: IAlert;
-}
+export type IAlertsActionTypes = IShowAlertAction | IHideAlertAction;
