@@ -68,6 +68,7 @@ export interface IEnhancedProduct extends IProduct {
 
 export interface IRemoteci extends Resource {
   team_id: string;
+  api_secret: string
 }
 export interface IRemotecisById {
   [id: string]: IRemoteci;
