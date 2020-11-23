@@ -276,7 +276,7 @@ export default function JobSummary({ job }: JobSummaryProps) {
         <div>
           {job.components.map((component) => (
             <div key={component.id} className="mt-xs">
-              <CubesIcon /> {component.name}
+              <CubesIcon /> {component.canonical_project_name || component.name}
             </div>
           ))}
         </div>
