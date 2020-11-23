@@ -84,7 +84,10 @@ export function createActions(resource: IResourceName) {
               ...normalize(response.data[resource], getSchema(resource)),
             });
             dispatch(
-              showSuccess(`${resource} ${data.name} created successfully!`)
+              showSuccess(
+                "Success",
+                `${resource} ${data.name} created successfully!`
+              )
             );
             return response;
           })

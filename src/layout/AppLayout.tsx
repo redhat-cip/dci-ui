@@ -180,11 +180,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   );
   const Sidebar = <PageSidebar nav={PageNav} theme="dark" />;
   return (
-    <>
-      <Page header={Header} sidebar={Sidebar} isManagedSidebar>
-        {children}
-      </Page>
-    </>
+    <Page header={Header} sidebar={Sidebar} isManagedSidebar>
+      {children}
+    </Page>
   );
 };
 
