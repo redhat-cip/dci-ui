@@ -68,7 +68,7 @@ export interface IEnhancedProduct extends IProduct {
 
 export interface IRemoteci extends Resource {
   team_id: string;
-  api_secret: string
+  api_secret: string;
 }
 export interface IRemotecisById {
   [id: string]: IRemoteci;
@@ -372,6 +372,19 @@ export interface IAlert {
 }
 
 export interface IToken {
-  type: "Bearer" | "Basic"
-  value:string
+  type: "Bearer" | "Basic";
+  value: string;
+}
+
+export interface IAlertsState {
+  [x: string]: IAlert;
+}
+
+export interface IConfigState {
+  apiURL: string;
+  sso: {
+    url: string;
+    realm: string;
+    clientId: string;
+  };
 }

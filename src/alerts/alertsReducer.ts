@@ -1,10 +1,11 @@
+import { IAlertsState } from "types";
 import * as types from "./alertsActionsTypes";
 
-const initialState: types.AlertsState = {};
+const initialState: IAlertsState = {};
 
 export default function (
   state = initialState,
-  action: types.AlertsActionTypes
+  action: types.IAlertsActionTypes
 ) {
   switch (action.type) {
     case types.SHOW_ALERT:
