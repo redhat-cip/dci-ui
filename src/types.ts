@@ -363,10 +363,14 @@ export interface TestPerformance {
 
 export type IPerformance = TestPerformance[];
 
-
 export interface IAlert {
   id: string;
   title: string;
   message: string;
   type: "success" | "warning" | "danger";
+}
+
+export interface IToken {
+  type: "Bearer" | "Basic"
+  value:string
 }

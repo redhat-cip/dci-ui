@@ -14,6 +14,7 @@
     "@patternfly/react-core": "^4.50.2",
     "@patternfly/react-icons": "^4.7.6",
     "@patternfly/react-tokens": "^4.9.8",
+    "@types/humanize-duration": "^3.18.1",
     "@types/jest": "^26.0.14",
     "@types/lodash": "^4.14.161",
     "@types/luxon": "^1.25.0",
