@@ -77,6 +77,7 @@ export default function JobPage() {
   const loading = isFetching && isEmpty(job);
   return (
     <Page
+      title="Job"
       HeaderSection={
         !loading && (
           <HeaderSection variant={PageSectionVariants.light}>
