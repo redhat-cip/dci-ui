@@ -13,6 +13,7 @@ export default function SettingsPage() {
   const { refreshIdentity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(getCurrentUser);
+  if (currentUser === null) return null;
   return (
     <Page title="User preferences">
       <Grid hasGutter>
