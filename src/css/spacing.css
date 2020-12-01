@@ -38,10 +38,6 @@
   margin-right: 2rem;
 }
 
-.p-0 {
-  padding: 0 !important;
-}
-
 .mb-xs {
   margin-bottom: 0.25rem;
 }
@@ -72,4 +68,12 @@
 }
 .ml-xl {
   margin-left: 2rem;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.p-md {
+  padding: 1rem;
 }

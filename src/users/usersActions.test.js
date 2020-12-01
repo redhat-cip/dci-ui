@@ -27,9 +27,8 @@ it("addUserToTeam", () => {
     .reply(201);
 
   const store = mockStore({ config: { apiURL: "https://api.example.org" } });
-  const user = { id: "abc" };
   const team = { id: "def" };
-  return store.dispatch(addUserToTeam(user, team));
+  return store.dispatch(addUserToTeam("abc", team));
 });
 
 it("deleteUserFromTeam", () => {

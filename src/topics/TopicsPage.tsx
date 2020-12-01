@@ -66,6 +66,8 @@ export default function TopicsPage() {
     dispatch(productsActions.all());
   }, [dispatch]);
 
+  if (currentUser === null) return null;
+
   return (
     <Page
       title="Topics"

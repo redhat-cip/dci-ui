@@ -13,8 +13,8 @@ import {
   DropdownPosition,
 } from "@patternfly/react-core";
 import { ConfirmDeleteModal, CopyButton, KebabDropdown } from "ui";
-import { fetchUsersForTeam } from "./teamsActions";
-import { deleteUserFromTeam } from "users/usersActions";
+import teamsActions, { fetchUsersForTeam } from "./teamsActions";
+import { deleteUserFromTeam, addUserToTeam } from "users/usersActions";
 import AddUserToTeamModal from "./AddUserToTeamModal";
 import EditTeamModal from "./EditTeamModal";
 import { IEnhancedTeam, IEnhancedUser, ICurrentUser, IUser } from "types";
@@ -42,7 +42,6 @@ export default function Team({
   const [isAddUserToTeamModalOpen, setIsAddUserToTeamModalOpen] = useState(
     false
   );
-  const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
 
   const _fetchUsersForTeam = useCallback(
     (team) => {
@@ -56,6 +55,8 @@ export default function Team({
     },
     [dispatch]
   );
+
+  if (currentUser === null) return null;
 
   const getUserDropdownItems = (user: IUser, team: IEnhancedTeam) => {
     const userDropdownItems = [
@@ -90,12 +91,12 @@ export default function Team({
       <PlusCircleIcon className="mr-xs" />
       Add a user to {team.name} team
     </DropdownItem>,
-    <DropdownItem
-      key="edit_team_dropdown"
-      component="button"
-      onClick={() => setIsEditTeamModalOpen(true)}
-    >
-      <EditAltIcon className="mr-xs" /> Edit {team.name} team
+    <DropdownItem key="edit_team_dropdown">
+      <EditTeamModal
+        team={team}
+        onSubmit={(team) => dispatch(teamsActions.update(team))}
+        variante="plain"
+      />
     </DropdownItem>,
   ];
   if (currentUser.isSuperAdmin) {
@@ -125,16 +126,12 @@ export default function Team({
         users={users}
         isOpen={isAddUserToTeamModalOpen}
         close={() => setIsAddUserToTeamModalOpen(false)}
-        onOk={() => {
-          _fetchUsersForTeam(team).then(() => setIsExpanded(true));
+        onOk={({ user_id }) => {
+          dispatch(addUserToTeam(user_id, team))
+            .then(() => _fetchUsersForTeam(team))
+            .finally(() => setIsExpanded(true));
           setIsAddUserToTeamModalOpen(false);
         }}
-      />
-      <EditTeamModal
-        isOpen={isEditTeamModalOpen}
-        team={team}
-        close={() => setIsEditTeamModalOpen(false)}
-        onOk={() => setIsEditTeamModalOpen(false)}
       />
       <tbody className={isExpanded ? "pf-m-expanded" : ""}>
         <tr>
