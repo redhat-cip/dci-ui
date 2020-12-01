@@ -159,7 +159,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 <DropdownItem
                   key={team.name}
                   component="button"
-                  onClick={() => changeCurrentTeam(team)}
+                  onClick={() => changeCurrentTeam(team, identity)}
                 >
                   {team.name}
                 </DropdownItem>

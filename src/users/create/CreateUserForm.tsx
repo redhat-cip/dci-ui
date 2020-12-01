@@ -3,13 +3,7 @@ import { Button } from "@patternfly/react-core";
 import { Input } from "ui/formik";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-
-interface INewUser {
-  name: string;
-  fullname: string;
-  email: string;
-  password: string;
-}
+import { INewUser } from "types";
 
 const CreateUserSchema = Yup.object().shape({
   name: Yup.string()

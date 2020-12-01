@@ -8,12 +8,14 @@ import { IResourceName, IResourcesName, Resource } from "types";
 import { AxiosPromise } from "axios";
 
 export function createActions(resource: IResourceName) {
+  const actionsTypes = createActionsTypes(resource);
+
   return {
     all: (params = {}): AppThunk<AxiosPromise<any>> => {
       let endpoint = `${resource}s` as IResourcesName;
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(resource).FETCH_ALL_REQUEST,
+          type: actionsTypes.FETCH_ALL_REQUEST,
         });
         const { apiURL } = getState().config;
 
@@ -24,16 +26,17 @@ export function createActions(resource: IResourceName) {
         })
           .then((response) => {
             dispatch({
-              type: createActionsTypes(resource).FETCH_ALL_SUCCESS,
+              type: actionsTypes.FETCH_ALL_SUCCESS,
               ...normalize(response.data[endpoint], getSchema(endpoint)),
             });
             dispatch({
-              type: createActionsTypes(resource).SET_COUNT,
+              type: actionsTypes.SET_COUNT,
               count: response.data._meta.count,
             });
             return response;
           })
           .catch((error) => {
+            dispatch({ type: actionsTypes.FETCH_ALL_FAILURE });
             dispatch(showAPIError(error));
             return error;
           });
@@ -42,7 +45,7 @@ export function createActions(resource: IResourceName) {
     one: (id: string, params = {}): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(resource).FETCH_REQUEST,
+          type: actionsTypes.FETCH_REQUEST,
         });
         const { apiURL } = getState().config;
         return http({
@@ -52,12 +55,13 @@ export function createActions(resource: IResourceName) {
         })
           .then((response) => {
             dispatch({
-              type: createActionsTypes(resource).FETCH_SUCCESS,
+              type: actionsTypes.FETCH_SUCCESS,
               ...normalize(response.data[resource], getSchema(resource)),
             });
             return response;
           })
           .catch((error) => {
+            dispatch({ type: actionsTypes.FETCH_FAILURE });
             dispatch(showAPIError(error));
             return error;
           });
@@ -69,7 +73,7 @@ export function createActions(resource: IResourceName) {
     ): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(resource).CREATE_REQUEST,
+          type: actionsTypes.CREATE_REQUEST,
         });
         const { apiURL } = getState().config;
         return http({
@@ -80,7 +84,7 @@ export function createActions(resource: IResourceName) {
         })
           .then((response) => {
             dispatch({
-              type: createActionsTypes(resource).CREATE_SUCCESS,
+              type: actionsTypes.CREATE_SUCCESS,
               ...normalize(response.data[resource], getSchema(resource)),
             });
             dispatch(
@@ -92,6 +96,7 @@ export function createActions(resource: IResourceName) {
             return response;
           })
           .catch((error) => {
+            dispatch({ type: actionsTypes.CREATE_FAILURE });
             dispatch(showAPIError(error));
             return error;
           });
@@ -100,7 +105,7 @@ export function createActions(resource: IResourceName) {
     update: (data: Resource, params = {}): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(resource).UPDATE_REQUEST,
+          type: actionsTypes.UPDATE_REQUEST,
         });
         const { apiURL } = getState().config;
         return http({
@@ -112,7 +117,7 @@ export function createActions(resource: IResourceName) {
         })
           .then((response) => {
             dispatch({
-              type: createActionsTypes(resource).UPDATE_SUCCESS,
+              type: actionsTypes.UPDATE_SUCCESS,
               ...normalize(response.data[resource], getSchema(resource)),
             });
             dispatch(
@@ -121,6 +126,7 @@ export function createActions(resource: IResourceName) {
             return response;
           })
           .catch((error) => {
+            dispatch({ type: actionsTypes.UPDATE_FAILURE });
             dispatch(showAPIError(error));
             return error;
           });
@@ -128,13 +134,13 @@ export function createActions(resource: IResourceName) {
     },
     clear: () => {
       return {
-        type: createActionsTypes(resource).CLEAR_CACHE,
+        type: actionsTypes.CLEAR_CACHE,
       };
     },
     delete: (data: Resource): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({
-          type: createActionsTypes(resource).DELETE_REQUEST,
+          type: actionsTypes.DELETE_REQUEST,
         });
         const { apiURL } = getState().config;
         return http({
@@ -146,12 +152,13 @@ export function createActions(resource: IResourceName) {
             const name = data.name ? data.name : data.id;
             dispatch(showSuccess(`${resource} ${name} deleted successfully!`));
             dispatch({
-              type: createActionsTypes(resource).DELETE_SUCCESS,
+              type: actionsTypes.DELETE_SUCCESS,
               id: data.id,
             });
             return response;
           })
           .catch((error) => {
+            dispatch({ type: actionsTypes.DELETE_FAILURE });
             dispatch(showAPIError(error));
             return error;
           });

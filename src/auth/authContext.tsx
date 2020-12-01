@@ -11,7 +11,7 @@ import { AppDispatch } from "store";
 export interface AuthContextProps {
   identity: ICurrentUser | null;
   refreshIdentity: () => Promise<ICurrentUser>;
-  changeCurrentTeam: (team: ITeam) => void;
+  changeCurrentTeam: (team: ITeam, currentUser: ICurrentUser) => void;
   logout: () => void;
 }
 
@@ -42,9 +42,9 @@ function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         identity,
-        changeCurrentTeam: (team: ITeam) => {
-          const identity = dispatch(authActions.changeCurrentTeam(team));
-          setIdentity(identity);
+        changeCurrentTeam: (team: ITeam, currentUser: ICurrentUser) => {
+          dispatch(authActions.changeCurrentTeam(team, currentUser));
+          setIdentity(currentUser);
         },
         refreshIdentity: () => {
           return dispatch(authActions.getCurrentUser()).then((identity) => {

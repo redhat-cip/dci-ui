@@ -4,6 +4,7 @@ import DashboardPage from "./dashboard/DashboardPage";
 import DashboardDetailsPage from "./dashboard/DashboardDetailsPage";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
+import FilePage from "./files/FilePage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import TopicPage from "./topics/TopicPage";
@@ -11,8 +12,10 @@ import RemotecisPage from "./remotecis/RemotecisPage";
 import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
-import EditUserPage from "./users/EditUserPage";
+import EditUserPage from "./users/edit/EditUserPage";
 import CreateUserPage from "./users/create/CreateUserPage";
+import CreateFeederPage from "./feeders/create/CreateFeederPage";
+import EditFeederPage from "./feeders/edit/EditFeederPage";
 import SettingsPage from "./currentUser/settings/SettingsPage";
 import NotificationsPage from "./currentUser/notifications/NotificationsPage";
 import PermissionsPage from "./permissions/PermissionsPage";
@@ -38,12 +41,15 @@ export default {
   DashboardDetailsPage,
   JobsPage,
   JobPage,
+  FilePage,
   PerformancePage,
   ProductsPage,
   TopicsPage,
   TopicPage,
   RemotecisPage,
   FeedersPage,
+  CreateFeederPage,
+  EditFeederPage,
   TeamsPage,
   UsersPage,
   EditUserPage,
