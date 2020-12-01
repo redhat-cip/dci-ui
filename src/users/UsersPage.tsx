@@ -66,6 +66,12 @@ export default function UsersPage() {
     fetchUsers(s);
   };
 
+  useEffect(() => {
+    fetchUsers(filters);
+  }, [fetchUsers, filters]);
+
+  if (currentUser === null) return null;
+
   const getDropdownItems = (user: IUser) => {
     const dropdownItems = [
       <DropdownItem
@@ -93,10 +99,6 @@ export default function UsersPage() {
     }
     return dropdownItems;
   };
-
-  useEffect(() => {
-    fetchUsers(filters);
-  }, [fetchUsers, filters]);
 
   return (
     <Page

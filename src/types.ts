@@ -51,6 +51,13 @@ export interface ITeam extends Resource {
   state: state;
   updated_at: string;
 }
+
+export interface INewTeam {
+  name: string;
+  external: boolean;
+  state: string;
+}
+
 export interface ITeamsById {
   [id: string]: ITeam;
 }
@@ -58,7 +65,20 @@ export interface IEnhancedTeam extends ITeam {
   from_now: string | null;
 }
 
-export interface IProduct extends Resource {}
+export interface IProduct extends Resource {
+  label: string;
+  description: string;
+}
+
+export interface INewProduct {
+  name: string;
+  description: string;
+}
+
+export interface IProductWithTeams extends IProduct {
+  teams: ITeam[];
+}
+
 export interface IProductsById {
   [id: string]: IProduct;
 }
@@ -68,8 +88,15 @@ export interface IEnhancedProduct extends IProduct {
 
 export interface IRemoteci extends Resource {
   team_id: string;
+  state: string;
   api_secret: string;
 }
+
+export interface INewRemoteci {
+  name: string;
+  team_id: string;
+}
+
 export interface IRemotecisById {
   [id: string]: IRemoteci;
 }
@@ -87,6 +114,25 @@ export interface ITopic extends Resource {
   product_id: string;
   next_topic_id: string | null;
 }
+
+export interface INewTopic {
+  name: string;
+  export_control: boolean;
+  state: string;
+  product_id: string | null;
+  component_types: string[];
+  data: data;
+}
+
+export interface ITopicForm {
+  name: string;
+  export_control: boolean;
+  state: string;
+  product_id: string;
+  component_types: string;
+  data: string;
+}
+
 export interface ITopicsById {
   [id: string]: ITopic;
 }
@@ -96,6 +142,10 @@ export interface IEnhancedTopic extends ITopic {
   from_now: string | null;
 }
 
+export interface ITopicWithTeams extends ITopic {
+  teams: ITeam[];
+}
+
 export interface IUser extends Resource {
   email: string;
   fullname: string;
@@ -103,7 +153,16 @@ export interface IUser extends Resource {
   state: state;
   timezone: string;
   updated_at: string;
+  password: string;
 }
+
+export interface INewUser {
+  name: string;
+  fullname: string;
+  email: string;
+  password: string;
+}
+
 export interface IUsersById {
   [id: string]: IUser;
 }
@@ -118,6 +177,7 @@ export interface IFeedersById {
   [id: string]: IFeeder;
 }
 export interface IEnhancedFeeder extends IFeeder {
+  team: ITeam;
   from_now: string | null;
 }
 
@@ -387,4 +447,16 @@ export interface IConfigState {
     realm: string;
     clientId: string;
   };
+}
+
+export type ITrend = [number, number, number];
+export interface ITrends {
+  [topic_id: string]: ITrend[];
+}
+
+export interface IApiState {
+  byId: { [x: string]: any };
+  allIds: string[];
+  isFetching: boolean;
+  count: number;
 }

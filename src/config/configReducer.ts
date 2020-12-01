@@ -10,7 +10,10 @@ const initialState: IConfigState = {
   },
 };
 
-export default function (state = initialState, action:types.IConfigActionTypes) {
+export default function (
+  state = initialState,
+  action: types.IConfigActionTypes
+) {
   switch (action.type) {
     case types.SET_CONFIG:
       return {
