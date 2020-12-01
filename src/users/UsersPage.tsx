@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -9,15 +9,18 @@ import {
   Pagination,
   ToolbarItem,
   Toolbar,
+  PageSectionVariants,
+  Bullseye,
+  PageSection,
 } from "@patternfly/react-core";
 import {
   WarningTriangleIcon,
   EditAltIcon,
   PlusCircleIcon,
+  SearchIcon,
 } from "@patternfly/react-icons";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
-import { isEmpty } from "lodash";
-import { Page } from "layout";
+import { Page, LoadingPage } from "layout";
 import usersActions from "./usersActions";
 import { CopyButton, EmptyState, KebabDropdown, TextRed } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
@@ -45,26 +48,24 @@ export default function UsersPage() {
   });
   const dispatch = useDispatch<AppDispatch>();
 
-  const fetchUsers = useCallback(
-    (filters) => {
-      const params = getParamsFromFilters(filters);
-      return dispatch(usersActions.all(params));
-    },
-    [dispatch]
-  );
-
   const clear = () => {
     const s = { ...initialUserFilter };
     setFilters(s);
-    dispatch(usersActions.clear());
-    fetchUsers(s);
   };
 
   const search = (s: IUserFilters) => {
     setFilters(s);
-    dispatch(usersActions.clear());
-    fetchUsers(s);
   };
+
+  useEffect(() => {
+    const params = getParamsFromFilters(filters);
+    dispatch(usersActions.clear());
+    dispatch(usersActions.all(params));
+  }, [dispatch, filters]);
+
+  if (currentUser === null) return null;
+
+  if (isFetching) return <LoadingPage title="Users" />;
 
   const getDropdownItems = (user: IUser) => {
     const dropdownItems = [
@@ -94,15 +95,9 @@ export default function UsersPage() {
     return dropdownItems;
   };
 
-  useEffect(() => {
-    fetchUsers(filters);
-  }, [fetchUsers, filters]);
-
   return (
     <Page
       title="Users"
-      loading={isFetching && isEmpty(users)}
-      empty={!isFetching && isEmpty(users)}
       HeaderButton={
         currentUser.isSuperAdmin ? (
           <Button
@@ -161,44 +156,50 @@ export default function UsersPage() {
           </ToolbarContent>
         </Toolbar>
       }
-      EmptyComponent={
-        <EmptyState
-          title="There is no users"
-          info="There is no user available for this search. Update your search and start over. Thank you"
-        />
-      }
     >
-      <table className="pf-c-table pf-m-compact pf-m-grid-md">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Login</th>
-            <th>Full name</th>
-            <th>Email</th>
-            <th>Created</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <CopyButton text={user.id} />
-              </td>
-              <td>{user.name}</td>
-              <td>{user.fullname}</td>
-              <td>{user.email}</td>
-              <td>{user.from_now}</td>
-              <td className="pf-c-table__action">
-                <KebabDropdown
-                  position={DropdownPosition.right}
-                  items={getDropdownItems(user)}
-                />
-              </td>
+      {users.length === 0 ? (
+        <PageSection variant={PageSectionVariants.light}>
+          <Bullseye>
+            <EmptyState
+              title="No user matches this search"
+              info={`There are no users with the ${filters.email} email. Change your search and start over.`}
+              icon={SearchIcon}
+            />
+          </Bullseye>
+        </PageSection>
+      ) : (
+        <table className="pf-c-table pf-m-compact pf-m-grid-md">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Login</th>
+              <th>Full name</th>
+              <th>Email</th>
+              <th>Created</th>
+              <th />
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <CopyButton text={user.id} />
+                </td>
+                <td>{user.name}</td>
+                <td>{user.fullname}</td>
+                <td>{user.email}</td>
+                <td>{user.from_now}</td>
+                <td className="pf-c-table__action">
+                  <KebabDropdown
+                    position={DropdownPosition.right}
+                    items={getDropdownItems(user)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </Page>
   );
 }

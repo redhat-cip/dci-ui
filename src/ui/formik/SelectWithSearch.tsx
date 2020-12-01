@@ -12,23 +12,25 @@ type SelectOptionType = {
   value: string;
 };
 
-interface DCISelectProps2 {
+interface SelectWithSearchProps {
   id: string;
   label?: string;
   placeholder?: string;
   name: string;
   options: SelectOptionType[];
+  isRequired?: boolean;
   [x: string]: any;
 }
 
-export default function DCISelect({
+export default function SelectWithSearch({
   id,
   label,
   placeholder,
   name,
   options,
+  isRequired = false,
   ...props
-}: DCISelectProps2) {
+}: SelectWithSearchProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [field, meta, helpers] = useField(name);
   const { setValue } = helpers;
@@ -36,7 +38,7 @@ export default function DCISelect({
   return (
     <FormGroup
       label={label}
-      isRequired={props.isRequired}
+      isRequired={isRequired}
       fieldId={id}
       helperTextInvalid={meta.error}
       validated={validated}
@@ -57,13 +59,19 @@ export default function DCISelect({
           field.value ? options.find((o) => o.value === field.value)?.label : ""
         }
         isOpen={isOpen}
-        aria-labelledby="select"
+        aria-labelledby={id}
         placeholderText={placeholder}
+        menuAppendTo="parent"
       >
         {options
           .map((o) => ({ ...o, toString: () => o.label }))
           .map((option, i) => (
-            <SelectOption key={i} value={option} />
+            <SelectOption
+              key={i}
+              id={`${id}[${i}]`}
+              data-testid={`${id}[${i}]`}
+              value={option}
+            />
           ))}
       </Select>
     </FormGroup>

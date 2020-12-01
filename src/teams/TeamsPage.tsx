@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@patternfly/react-core";
-import { PlusCircleIcon } from "@patternfly/react-icons";
 import { Page } from "layout";
 import teamsActions from "./teamsActions";
 import usersActions from "users/usersActions";
 import { EmptyState } from "ui";
 import { getTeams, isFetchingTeams } from "./teamsSelectors";
 import Team from "./Team";
-import NewTeamModal from "./NewTeamModal";
 import { getUsers, isFetchingUsers } from "users/usersSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { AppDispatch } from "store";
+import CreateTeamModal from "./CreateTeamModal";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const [isNewTeamModalOpen, setIsNewTeamModalOpen] = useState(false);
   const teams = useSelector(getTeams);
   const users = useSelector(getUsers);
   const currentUser = useSelector(getCurrentUser);
@@ -32,6 +29,8 @@ export default function TeamsPage() {
     dispatch(usersActions.all());
   }, [dispatch]);
 
+  if (currentUser === null) return null;
+
   return (
     <Page
       title="Teams"
@@ -39,10 +38,9 @@ export default function TeamsPage() {
       empty={!isFetching && isEmpty(teams)}
       HeaderButton={
         currentUser.hasEPMRole ? (
-          <Button onClick={() => setIsNewTeamModalOpen(true)}>
-            <PlusCircleIcon className="mr-xs" />
-            Create a new team
-          </Button>
+          <CreateTeamModal
+            onSubmit={(team) => dispatch(teamsActions.create(team))}
+          />
         ) : null
       }
       EmptyComponent={
@@ -52,11 +50,6 @@ export default function TeamsPage() {
         />
       }
     >
-      <NewTeamModal
-        isOpen={isNewTeamModalOpen}
-        close={() => setIsNewTeamModalOpen(false)}
-        onOk={() => setIsNewTeamModalOpen(false)}
-      />
       <table
         className="pf-c-table pf-m-expandable pf-m-grid-lg"
         role="grid"

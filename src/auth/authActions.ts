@@ -42,10 +42,12 @@ export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
   };
 }
 
-export function changeCurrentTeam(team: ITeam): AppThunk<ICurrentUser> {
-  return (dispatch, getState) => {
-    const state = getState();
-    const identity = buildIdentity(state.currentUser, team);
+export function changeCurrentTeam(
+  team: ITeam,
+  currentUser: ICurrentUser
+): AppThunk<ICurrentUser> {
+  return (dispatch) => {
+    const identity = buildIdentity(currentUser, team);
     dispatch(setIdentity(identity));
     return identity;
   };
