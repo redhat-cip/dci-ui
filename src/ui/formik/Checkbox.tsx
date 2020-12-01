@@ -29,6 +29,7 @@ export default function DCICheckbox({
         label={label}
         {...field}
         {...props}
+        isChecked={field.value}
         onChange={(checked, event) => {
           setValue(checked);
           if (typeof props.onChange !== "undefined") {

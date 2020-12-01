@@ -25,17 +25,17 @@ function showAndHideAfter10s(alert: IAlert): AppThunk<void> {
   };
 }
 
-export function showSuccess(title: string, message: string="") {
+export function showSuccess(title: string, message: string = "") {
   const alert: IAlert = {
     id: Date.now().toString(),
     title,
     type: "success",
-    message
+    message,
   };
   return showAndHideAfter10s(alert);
 }
 
-export function showWarning(title: string, message: string="") {
+export function showWarning(title: string, message: string = "") {
   const alert: IAlert = {
     id: Date.now().toString(),
     title,
@@ -45,7 +45,7 @@ export function showWarning(title: string, message: string="") {
   return showAndHideAfter10s(alert);
 }
 
-export function showError(title: string, message: string="") {
+export function showError(title: string, message: string = "") {
   const alert: IAlert = {
     id: Date.now().toString(),
     title,
