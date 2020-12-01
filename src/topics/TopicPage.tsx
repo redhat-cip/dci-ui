@@ -18,13 +18,15 @@ import {
 } from "@patternfly/react-core";
 import { EmptyState } from "ui";
 import styled from "styled-components";
-import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
 import Component from "./Component";
 import { InfoCircleIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
 import { IComponent, ITopic } from "types";
 import { useRouteMatch } from "react-router-dom";
+import EditTopicModal from "./EditTopicModal";
+import productsActions from "products/productsActions";
+import { getProducts } from "products/productsSelectors";
 
 const Padding = styled.div`
   padding: 1em;
@@ -158,13 +160,13 @@ export default function TopicPage() {
   const { id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
   const topic = useSelector(getTopicById(id));
+  const products = useSelector(getProducts);
 
   useEffect(() => {
     dispatch(topicsActions.one(id, { embed: "next_topic,product" }))
       .then((response) => response.data.topic)
-      .catch(console.log)
-      .then(() => setIsFetching(false));
-    dispatch(topicsActions.all());
+      .finally(() => setIsFetching(false));
+    dispatch(productsActions.all());
   }, [dispatch, id, setIsFetching]);
 
   return (
@@ -173,7 +175,17 @@ export default function TopicPage() {
       loading={isFetching && topic === null}
       empty={!isFetching && topic === null}
       description={topic ? `Details page for topic ${topic.name}` : ""}
-      HeaderButton={topic ? <EditTopicButton topic={topic} /> : null}
+      HeaderButton={
+        topic ? (
+          <EditTopicModal
+            products={products}
+            topic={topic}
+            onSubmit={(editedProduct) => {
+              dispatch(topicsActions.update(editedProduct));
+            }}
+          />
+        ) : null
+      }
       EmptyComponent={
         <EmptyState
           title="There is no topic"

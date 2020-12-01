@@ -9,6 +9,8 @@ export const getFeedersById = (state: RootState): IFeedersById =>
   state.feeders.byId;
 export const getFeedersAllIds = (state: RootState): string[] =>
   state.feeders.allIds;
+export const isFetchingFeeders = (state: RootState): boolean =>
+  state.feeders.isFetching || state.teams.isFetching;
 export const getFeeders = createSelector(
   getTeamsById,
   getFeedersById,
