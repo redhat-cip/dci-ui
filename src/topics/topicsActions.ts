@@ -1,9 +1,19 @@
 import http from "services/http";
 import { createActions } from "api/apiActions";
+import { AppThunk } from "store";
+import { IComponent, ITopic } from "types";
 
 export default createActions("topic");
 
-export function fetchLatestComponents(topic) {
+interface IFetchLatestComponents {
+  data: {
+    components: IComponent[];
+  };
+}
+
+export function fetchLatestComponents(
+  topic: ITopic
+): AppThunk<Promise<IFetchLatestComponents>> {
   return (dispatch, getState) => {
     const state = getState();
     return Promise.all(
@@ -22,7 +32,7 @@ export function fetchLatestComponents(topic) {
     ).then((results) => {
       const components = results.reduce(
         (acc, result) => acc.concat(result.data.components),
-        []
+        [] as IComponent[]
       );
       return Promise.resolve({ data: { components } });
     });

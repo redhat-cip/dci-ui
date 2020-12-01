@@ -71,7 +71,7 @@ export class JobStateFile extends Component {
           <CaretIcon>
             {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
           </CaretIcon>
-          <FileName>{`TASK [${file.name}] `.padEnd(80, '*')}</FileName>
+          <FileName>{`TASK [${file.name}] `.padEnd(80, "*")}</FileName>
           <LabelBox>
             <Label>{`${Math.round(file.duration)}s`}</Label>
           </LabelBox>

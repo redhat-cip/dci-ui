@@ -20,7 +20,12 @@ export class UnsubscribeForm extends Component {
   };
 
   render() {
-    const { remotecis, unsubscribeFromARemoteci } = this.props;
+    const {
+      remotecis,
+      unsubscribeFromARemoteci,
+      currentUser,
+      onSubmit,
+    } = this.props;
     const { canSubmit } = this.state;
     const remoteciIds = remotecis.reduce((accumulator, remoteci) => {
       accumulator[remoteci.id] = remoteci;
@@ -34,9 +39,14 @@ export class UnsubscribeForm extends Component {
             className="pf-c-form"
             onValid={this.enableButton}
             onInvalid={this.disableButton}
-            onValidSubmit={(remoteci) =>
-              unsubscribeFromARemoteci(remoteciIds[remoteci.id])
-            }
+            onValidSubmit={(remoteci) => {
+              unsubscribeFromARemoteci(
+                remoteciIds[remoteci.id],
+                currentUser
+              ).then(() => {
+                onSubmit();
+              });
+            }}
           >
             <Select
               id="unsubscription-form__unsubscribeSelect"
@@ -63,8 +73,8 @@ export class UnsubscribeForm extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    unsubscribeFromARemoteci: (remoteci) =>
-      dispatch(unsubscribeFromARemoteci(remoteci)),
+    unsubscribeFromARemoteci: (remoteci, currentUser) =>
+      dispatch(unsubscribeFromARemoteci(remoteci, currentUser)),
   };
 }
 

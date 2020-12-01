@@ -20,7 +20,12 @@ export class SubscribeForm extends Component {
   };
 
   render() {
-    const { remotecis, subscribeToARemoteci } = this.props;
+    const {
+      remotecis,
+      subscribeToARemoteci,
+      currentUser,
+      onSubmit,
+    } = this.props;
     const { canSubmit } = this.state;
     const remoteciIds = remotecis.reduce((accumulator, remoteci) => {
       accumulator[remoteci.id] = remoteci;
@@ -35,7 +40,11 @@ export class SubscribeForm extends Component {
             onValid={this.enableButton}
             onInvalid={this.disableButton}
             onValidSubmit={(remoteci) => {
-              subscribeToARemoteci(remoteciIds[remoteci.id]);
+              subscribeToARemoteci(remoteciIds[remoteci.id], currentUser).then(
+                () => {
+                  onSubmit();
+                }
+              );
             }}
           >
             <Select
@@ -63,8 +72,8 @@ export class SubscribeForm extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    subscribeToARemoteci: (remoteci) =>
-      dispatch(subscribeToARemoteci(remoteci)),
+    subscribeToARemoteci: (remoteci, currentUser) =>
+      dispatch(subscribeToARemoteci(remoteci, currentUser)),
   };
 }
 

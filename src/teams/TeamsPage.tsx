@@ -32,6 +32,8 @@ export default function TeamsPage() {
     dispatch(usersActions.all());
   }, [dispatch]);
 
+  if (currentUser === null) return null;
+
   return (
     <Page
       title="Teams"

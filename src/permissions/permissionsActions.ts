@@ -1,15 +1,23 @@
 import productsActions from "products/productsActions";
 import teamsActions from "teams/teamsActions";
 import topicsActions from "topics/topicsActions";
-
 import http from "services/http";
 import { showAPIError, showSuccess } from "alerts/alertsActions";
 import { sortByName } from "services/sort";
+import {
+  IProduct,
+  IProductWithTeams,
+  ITeam,
+  ITopic,
+  ITopicWithTeams,
+} from "types";
+import { AxiosPromise } from "axios";
+import { AppThunk } from "store";
 
-export function getProductsWithTeams() {
+export function getProductsWithTeams(): AppThunk<Promise<IProductWithTeams[]>> {
   return (dispatch, getState) => {
     return dispatch(productsActions.all()).then((response) => {
-      const products = response.data.products;
+      const products = response.data.products as IProduct[];
       const state = getState();
       const promises = products.map((product) =>
         http({
@@ -17,17 +25,21 @@ export function getProductsWithTeams() {
           url: `${state.config.apiURL}/api/v1/products/${product.id}/teams`,
         })
       );
+      const productsWithTeams: IProductWithTeams[] = [];
       return Promise.all(promises).then((responses) => {
         responses.forEach((response, index) => {
-          products[index].teams = sortByName(response.data.teams);
+          productsWithTeams.push({
+            ...products[index],
+            teams: sortByName(response.data.teams),
+          });
         });
-        return Promise.resolve(sortByName(products));
+        return Promise.resolve(sortByName(productsWithTeams));
       });
     });
   };
 }
 
-export function getTopicsWithTeams() {
+export function getTopicsWithTeams(): AppThunk<Promise<ITopicWithTeams[]>> {
   return (dispatch) => {
     return dispatch(topicsActions.all({ embed: "teams" })).then((response) => {
       return Promise.resolve(sortByName(response.data.topics));
@@ -35,7 +47,7 @@ export function getTopicsWithTeams() {
   };
 }
 
-export function getTeams() {
+export function getTeams(): AppThunk<Promise<ITeam[]>> {
   return (dispatch) => {
     return dispatch(teamsActions.all()).then((response) => {
       return Promise.resolve(sortByName(response.data.teams));
@@ -43,7 +55,11 @@ export function getTeams() {
   };
 }
 
-function grantTeamPermission(resource_name, team, resource) {
+function grantTeamPermission(
+  resource_name: string,
+  team: ITeam,
+  resource: ITopic | IProduct
+): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
     return http({
@@ -61,11 +77,16 @@ function grantTeamPermission(resource_name, team, resource) {
       })
       .catch((error) => {
         dispatch(showAPIError(error));
+        return error;
       });
   };
 }
 
-function removeTeamPermission(resource_name, team, resource) {
+function removeTeamPermission(
+  resource_name: string,
+  team: ITeam,
+  resource: ITopic | IProduct
+): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
     return http({
@@ -82,22 +103,23 @@ function removeTeamPermission(resource_name, team, resource) {
       })
       .catch((error) => {
         dispatch(showAPIError(error));
+        return error;
       });
   };
 }
 
-export function grantTeamProductPermission(team, product) {
+export function grantTeamProductPermission(team: ITeam, product: IProduct) {
   return grantTeamPermission("product", team, product);
 }
 
-export function removeTeamProductPermission(team, product) {
+export function removeTeamProductPermission(team: ITeam, product: IProduct) {
   return removeTeamPermission("product", team, product);
 }
 
-export function grantTeamTopicPermission(team, topic) {
+export function grantTeamTopicPermission(team: ITeam, topic: ITopic) {
   return grantTeamPermission("topic", team, topic);
 }
 
-export function removeTeamTopicPermission(team, topic) {
+export function removeTeamTopicPermission(team: ITeam, topic: ITopic) {
   return removeTeamPermission("topic", team, topic);
 }

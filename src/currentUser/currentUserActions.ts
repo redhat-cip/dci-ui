@@ -6,24 +6,32 @@ import {
   showSuccess,
   showWarning,
 } from "alerts/alertsActions";
+import { ICurrentUser, IRemoteci, IUser } from "types";
+import { AppThunk } from "store";
+import { AxiosPromise } from "axios";
 
-export function setIdentity(identity) {
+export function setIdentity(identity: ICurrentUser) {
   return {
     type: types.SET_IDENTITY,
     identity,
   };
 }
 
-export function updateCurrentUser(currentUser) {
+interface IUpdateCurrentUser {
+  user: IUser;
+}
+
+export function updateCurrentUser(
+  currentUser: ICurrentUser
+): AppThunk<AxiosPromise<IUpdateCurrentUser>> {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
+    return http({
       method: "put",
       url: `${state.config.apiURL}/api/v1/identity`,
       data: currentUser,
       headers: { "If-Match": currentUser.etag },
-    };
-    return http(request)
+    })
       .then((response) => {
         dispatch({
           type: types.UPDATE_CURRENT_USER,
@@ -34,6 +42,7 @@ export function updateCurrentUser(currentUser) {
       })
       .catch((error) => {
         dispatch(showAPIError(error));
+        return error;
       });
   };
 }
@@ -44,66 +53,60 @@ export function deleteCurrentUser() {
   };
 }
 
-export function getSubscribedRemotecis(identity) {
+interface IGetSubscribedRemotecis {
+  remotecis: IRemoteci[];
+}
+
+export function getSubscribedRemotecis(
+  identity: ICurrentUser
+): AppThunk<AxiosPromise<IGetSubscribedRemotecis>> {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
+    return http({
       method: "get",
       url: `${state.config.apiURL}/api/v1/users/${identity.id}/remotecis`,
-    };
-    return http(request)
-      .then((response) => {
-        dispatch({
-          type: types.SET_IDENTITY,
-          identity: {
-            ...identity,
-            remotecis: response.data.remotecis,
-          },
-        });
-        return response;
-      })
-      .catch(() => dispatch(showError(`Cannot get subscribed remotecis`)));
+    }).catch((error) => {
+      dispatch(showError(`Cannot get subscribed remotecis`));
+      return error;
+    });
   };
 }
 
-export function subscribeToARemoteci(remoteci) {
+export function subscribeToARemoteci(
+  remoteci: IRemoteci,
+  currentUser: ICurrentUser
+): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
+    return http({
       method: "post",
       url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users`,
-      data: state.currentUser,
-    };
-    return http(request)
+      data: currentUser,
+    })
       .then((response) => {
-        dispatch({
-          type: types.SUBSCRIBED_TO_A_REMOTECI,
-          remoteci,
-        });
         dispatch(
           showSuccess(`You are subscribed to the remoteci ${remoteci.name}`)
         );
         return response;
       })
-      .catch(() =>
-        dispatch(showError(`Cannot subscribe to remoteci ${remoteci.name}`))
-      );
+      .catch((error) => {
+        dispatch(showError(`Cannot subscribe to remoteci ${remoteci.name}`));
+        return error;
+      });
   };
 }
 
-export function unsubscribeFromARemoteci(remoteci) {
+export function unsubscribeFromARemoteci(
+  remoteci: IRemoteci,
+  currentUser: ICurrentUser
+): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
-    const request = {
+    return http({
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${state.currentUser.id}`,
-    };
-    return http(request)
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${currentUser.id}`,
+    })
       .then((response) => {
-        dispatch({
-          type: types.UNSUBSCRIBED_FROM_A_REMOTECI,
-          remoteci,
-        });
         dispatch(
           showWarning(
             `You will no longer receive notification for the remoteci ${remoteci.name}`
@@ -111,8 +114,9 @@ export function unsubscribeFromARemoteci(remoteci) {
         );
         return response;
       })
-      .catch(() =>
-        dispatch(showError(`Cannot unsubscribe to remoteci ${remoteci.name}`))
-      );
+      .catch((error) => {
+        dispatch(showError(`Cannot unsubscribe to remoteci ${remoteci.name}`));
+        return error;
+      });
   };
 }

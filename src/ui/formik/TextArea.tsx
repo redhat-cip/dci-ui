@@ -12,7 +12,6 @@ export default function DCITextArea({
   label,
   id,
   name,
-  ref,
   ...props
 }: DCITextAreaProps) {
   const [field, meta, helpers] = useField(name);

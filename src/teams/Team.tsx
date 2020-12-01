@@ -57,6 +57,8 @@ export default function Team({
     [dispatch]
   );
 
+  if (currentUser === null) return null;
+
   const getUserDropdownItems = (user: IUser, team: IEnhancedTeam) => {
     const userDropdownItems = [
       <DropdownItem

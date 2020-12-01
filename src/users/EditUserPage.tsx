@@ -38,7 +38,7 @@ export default function EditUserPage() {
 
   const _fetchUserTeams = useCallback(
     (id) => {
-      dispatch(fetchUserTeams({ id: id })).then((response) => {
+      dispatch(fetchUserTeams({ id: id } as IUser)).then((response) => {
         setUserTeams(response.data.teams);
       });
     },

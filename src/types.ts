@@ -59,6 +59,11 @@ export interface IEnhancedTeam extends ITeam {
 }
 
 export interface IProduct extends Resource {}
+
+export interface IProductWithTeams extends IProduct {
+  teams: ITeam[];
+}
+
 export interface IProductsById {
   [id: string]: IProduct;
 }
@@ -94,6 +99,10 @@ export interface IEnhancedTopic extends ITopic {
   product: IProduct | null;
   next_topic: ITopic | null;
   from_now: string | null;
+}
+
+export interface ITopicWithTeams extends ITopic {
+  teams: ITeam[];
 }
 
 export interface IUser extends Resource {
@@ -387,4 +396,9 @@ export interface IConfigState {
     realm: string;
     clientId: string;
   };
+}
+
+export type ITrend = [number, number, number];
+export interface ITrends {
+  [topic_id: string]: ITrend[];
 }

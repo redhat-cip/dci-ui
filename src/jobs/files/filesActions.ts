@@ -1,6 +1,12 @@
+import { AxiosPromise } from "axios";
 import http from "services/http";
+import { AppThunk } from "store";
+import { IFile } from "types";
 
-export function getFileContent(file, params = {}) {
+export function getFileContent(
+  file: IFile,
+  params = {}
+): AppThunk<AxiosPromise<string>> {
   return (dispatch, getState) => {
     const state = getState();
     return http.request({
