@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import topicsActions, { fetchLatestComponents } from "./topicsActions";
 import { isEmpty } from "lodash";
@@ -18,13 +18,15 @@ import {
 } from "@patternfly/react-core";
 import { EmptyState } from "ui";
 import styled from "styled-components";
-import EditTopicButton from "./EditTopicButton";
 import { getTopicById } from "./topicsSelectors";
 import Component from "./Component";
 import { InfoCircleIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
-import { IComponent, ITopic } from "types";
+import { IComponent, ITopic, IEnhancedTopic } from "types";
 import { useRouteMatch } from "react-router-dom";
+import EditTopicModal from "./EditTopicModal";
+import productsActions from "products/productsActions";
+import { getProducts } from "products/productsSelectors";
 
 const Padding = styled.div`
   padding: 1em;
@@ -157,15 +159,19 @@ export default function TopicPage() {
   const match = useRouteMatch<MatchParams>();
   const { id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
-  const topic = useSelector(getTopicById(id));
+  const [topic, setTopic] = useState<IEnhancedTopic | null>(null);
+  const products = useSelector(getProducts);
+
+  const getTopicCallback = useCallback(() => {
+    dispatch(topicsActions.one(id, { embed: "product" }))
+      .then((response) => setTopic(response.data.topic))
+      .finally(() => setIsFetching(false));
+  }, [dispatch, id, setIsFetching]);
 
   useEffect(() => {
-    dispatch(topicsActions.one(id, { embed: "next_topic,product" }))
-      .then((response) => response.data.topic)
-      .catch(console.log)
-      .then(() => setIsFetching(false));
-    dispatch(topicsActions.all());
-  }, [dispatch, id, setIsFetching]);
+    getTopicCallback();
+    dispatch(productsActions.all());
+  }, [dispatch, getTopicCallback]);
 
   return (
     <Page
@@ -173,7 +179,20 @@ export default function TopicPage() {
       loading={isFetching && topic === null}
       empty={!isFetching && topic === null}
       description={topic ? `Details page for topic ${topic.name}` : ""}
-      HeaderButton={topic ? <EditTopicButton topic={topic} /> : null}
+      HeaderButton={
+        topic ? (
+          <EditTopicModal
+            key={`${topic.id}:${topic.etag}`}
+            products={products}
+            topic={topic}
+            onSubmit={(editedProduct) => {
+              dispatch(topicsActions.update(editedProduct)).then(
+                getTopicCallback
+              );
+            }}
+          />
+        ) : null
+      }
       EmptyComponent={
         <EmptyState
           title="There is no topic"

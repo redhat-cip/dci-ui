@@ -19,7 +19,6 @@ export const getTopicById = (id: string | null) => {
     return {
       ...topic,
       product: topic.product_id ? products[topic.product_id] : null,
-      next_topic: topic.next_topic_id ? topics[topic.next_topic_id] : null,
       from_now: fromNow(topic.created_at),
     };
   });
@@ -39,7 +38,6 @@ export const getTopics = createSelector(
         return {
           ...topic,
           product: topic.product_id ? products[topic.product_id] : null,
-          next_topic: topic.next_topic_id ? topics[topic.next_topic_id] : null,
           from_now: fromNow(topic.created_at),
         };
       })

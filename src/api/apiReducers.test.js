@@ -8,7 +8,6 @@ it("reducer initial state", () => {
   expect(createReducer("job")(undefined, {})).toEqual({
     byId: {},
     allIds: [],
-    errorMessage: null,
     isFetching: false,
     count: 0,
   });
@@ -26,7 +25,6 @@ it("FETCH_SUCCESS ignore undefined id", () => {
     {
       byId: {},
       allIds: [],
-      errorMessage: null,
       isFetching: true,
     },
     {
@@ -41,7 +39,6 @@ it("FETCH_SUCCESS ignore undefined id", () => {
   const expectedState = {
     byId: { j2: { id: "j2" } },
     allIds: ["j2"],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -52,7 +49,6 @@ it("FETCH_SUCCESS", () => {
     {
       byId: {},
       allIds: [],
-      errorMessage: null,
       isFetching: true,
     },
     {
@@ -66,7 +62,6 @@ it("FETCH_SUCCESS", () => {
   const expectedState = {
     byId: { j1: { id: "j1" } },
     allIds: ["j1"],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -77,7 +72,6 @@ it("CLEAR_CACHE", () => {
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
-      errorMessage: null,
       isFetching: false,
     },
     {
@@ -87,7 +81,6 @@ it("CLEAR_CACHE", () => {
   const expectedState = {
     byId: {},
     allIds: [],
-    errorMessage: null,
     isFetching: false,
     count: 0,
   };
@@ -99,7 +92,6 @@ it("SET_COUNT", () => {
     {
       byId: {},
       allIds: [],
-      errorMessage: null,
       isFetching: true,
       count: 0,
     },
@@ -116,18 +108,15 @@ it("FETCH_FAILURE", () => {
     {
       byId: {},
       allIds: [],
-      errorMessage: null,
       isFetching: true,
     },
     {
       type: jobActionsTypes.FETCH_ALL_FAILURE,
-      message: "Authorization header missing",
     }
   );
   const expectedState = {
     byId: {},
     allIds: [],
-    errorMessage: "Authorization header missing",
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -138,7 +127,6 @@ it("fetch another reducer with updated entity", () => {
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
-      errorMessage: null,
       isFetching: false,
     },
     {
@@ -153,7 +141,6 @@ it("fetch another reducer with updated entity", () => {
   const expectedState = {
     byId: { j1: { id: "j1" }, j2: { id: "j2" } },
     allIds: ["j1", "j2"],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -164,7 +151,6 @@ it("fetch one entity", () => {
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
-      errorMessage: null,
       isFetching: false,
     },
     {
@@ -178,7 +164,6 @@ it("fetch one entity", () => {
   const expectedState = {
     byId: { j1: { id: "j1" }, j2: { id: "j2" } },
     allIds: ["j1", "j2"],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -189,7 +174,6 @@ it("update one entity", () => {
     {
       byId: { j1: { id: "j1", etag: "e1" } },
       allIds: ["j1"],
-      errorMessage: null,
       isFetching: false,
     },
     {
@@ -203,7 +187,6 @@ it("update one entity", () => {
   const expectedState = {
     byId: { j1: { id: "j1", etag: "e2" } },
     allIds: ["j1"],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);
@@ -214,7 +197,6 @@ it("delete one entity", () => {
     {
       byId: { j1: { id: "j1" } },
       allIds: ["j1"],
-      errorMessage: null,
       isFetching: false,
     },
     {
@@ -225,7 +207,6 @@ it("delete one entity", () => {
   const expectedState = {
     byId: {},
     allIds: [],
-    errorMessage: null,
     isFetching: false,
   };
   expect(state).toEqual(expectedState);

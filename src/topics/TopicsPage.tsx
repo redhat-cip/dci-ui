@@ -12,7 +12,6 @@ import {
 } from "@patternfly/react-core";
 import { EmptyState, icons } from "ui";
 import { getTopics, isFetchingTopics } from "./topicsSelectors";
-import NewTopicButton from "./NewTopicButton";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { IEnhancedTopic, IProduct } from "types";
@@ -20,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import topicsActions from "./topicsActions";
 import { AppDispatch } from "store";
 import productsActions from "products/productsActions";
+import CreateTopicModal from "./CreateTopicModal";
+import { getProducts } from "products/productsSelectors";
 
 export const ProductTitle = styled.h3`
   display: flex;
@@ -43,10 +44,11 @@ interface IProductWithTopics extends IProduct {
 export default function TopicsPage() {
   const currentUser = useSelector(getCurrentUser);
   const topics = useSelector(getTopics);
+  const products = useSelector(getProducts);
   const isFetching = useSelector(isFetchingTopics);
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
-  const products = topics.reduce((acc, topic) => {
+  const topicsPerProduct = topics.reduce((acc, topic) => {
     const product = topic.product;
     if (!product) {
       return acc;
@@ -66,18 +68,29 @@ export default function TopicsPage() {
     dispatch(productsActions.all());
   }, [dispatch]);
 
+  if (currentUser === null) return null;
+
   return (
     <Page
       title="Topics"
       description="Click on the topic that interests you to see its components."
-      loading={isFetching && isEmpty(products)}
-      empty={!isFetching && isEmpty(products)}
-      HeaderButton={currentUser.isSuperAdmin ? <NewTopicButton /> : null}
+      loading={isFetching && isEmpty(topicsPerProduct)}
+      empty={!isFetching && isEmpty(topicsPerProduct)}
+      HeaderButton={
+        currentUser.isSuperAdmin ? (
+          <CreateTopicModal
+            products={products}
+            onSubmit={(newTopic) => {
+              dispatch(topicsActions.create(newTopic));
+            }}
+          />
+        ) : null
+      }
       EmptyComponent={
         <EmptyState title="There is no topics" info="See documentation" />
       }
     >
-      {Object.values(products).map((product) => {
+      {Object.values(topicsPerProduct).map((product) => {
         const Icon = icons.getProductIcon(product.name);
         return (
           <PageSection>
