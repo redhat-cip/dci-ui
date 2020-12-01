@@ -14,7 +14,6 @@ import feedersReducer from "./feeders/feedersReducer";
 import teamsReducer from "./teams/teamsReducer";
 import usersReducer from "./users/usersReducer";
 import jobsReducer from "./jobs/jobsReducer";
-import trendsReducer from "./stats/trends/trendsReducer";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
@@ -27,7 +26,6 @@ export const rootReducer = combineReducers({
   remotecis: remotecisReducer,
   teams: teamsReducer,
   users: usersReducer,
-  trends: trendsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

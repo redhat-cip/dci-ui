@@ -74,7 +74,7 @@ it("fetch error", () => {
   return store.dispatch(jobsActions.all()).then(() => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({ type: jobActionsTypes.FETCH_ALL_REQUEST });
-    expect(actions[1].alert.title).toBe("Authorization header missing");
+    expect(actions[2].alert.title).toBe("Authorization header missing");
   });
 });
 
@@ -84,7 +84,7 @@ it("fetch error no message", () => {
   return store.dispatch(jobsActions.all()).then(() => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({ type: jobActionsTypes.FETCH_ALL_REQUEST });
-    expect(actions[1].alert.message).toBe(
+    expect(actions[2].alert.message).toBe(
       "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
     );
   });
