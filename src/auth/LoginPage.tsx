@@ -9,6 +9,7 @@ import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
 import Logo from "logo.svg";
 import useSwitch from "hooks/useSwitch";
+import { BackgroundImage } from "ui";
 
 export default function DCILoginPage() {
   const { isOn: seeSSOForm, toggle } = useSwitch(true);
@@ -34,6 +35,7 @@ export default function DCILoginPage() {
       loginTitle="Log in to your account"
       loginSubtitle={loginSubtitle}
     >
+      <BackgroundImage />
       <div>
         {seeSSOForm ? <SSOForm /> : <LoginForm />}
         <div>

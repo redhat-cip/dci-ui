@@ -27,7 +27,6 @@ export interface Resource {
   id: string;
   etag: string;
   name: string;
-  created_at: string;
 }
 
 type data = {
@@ -49,8 +48,16 @@ export interface ITeam extends Resource {
   country: string | null;
   external: boolean;
   state: state;
+  created_at: string;
   updated_at: string;
 }
+
+export interface INewTeam {
+  name: string;
+  external: boolean;
+  state: string;
+}
+
 export interface ITeamsById {
   [id: string]: ITeam;
 }
@@ -58,7 +65,29 @@ export interface IEnhancedTeam extends ITeam {
   from_now: string | null;
 }
 
-export interface IProduct extends Resource {}
+export interface IProduct extends Resource {
+  label: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface INewProduct {
+  name: string;
+  description: string;
+}
+
+export interface IEditProduct {
+  id: string;
+  etag: string;
+  name: string;
+  description: string;
+}
+
+export interface IProductWithTeams extends IProduct {
+  teams: ITeam[];
+}
+
 export interface IProductsById {
   [id: string]: IProduct;
 }
@@ -68,8 +97,17 @@ export interface IEnhancedProduct extends IProduct {
 
 export interface IRemoteci extends Resource {
   team_id: string;
+  state: string;
   api_secret: string;
+  created_at: string;
+  updated_at: string;
 }
+
+export interface INewRemoteci {
+  name: string;
+  team_id: string;
+}
+
 export interface IRemotecisById {
   [id: string]: IRemoteci;
 }
@@ -82,11 +120,31 @@ export interface ITopic extends Resource {
   component_types: string[];
   data: data;
   state: string;
+  created_at: string;
   updated_at: string;
   export_control: boolean;
   product_id: string;
   next_topic_id: string | null;
 }
+
+export interface INewTopic {
+  name: string;
+  export_control: boolean;
+  state: string;
+  product_id: string | null;
+  component_types: string[];
+  data: data;
+}
+
+export interface ITopicForm {
+  name: string;
+  export_control: boolean;
+  state: string;
+  product_id: string;
+  component_types: string;
+  data: string;
+}
+
 export interface ITopicsById {
   [id: string]: ITopic;
 }
@@ -96,14 +154,28 @@ export interface IEnhancedTopic extends ITopic {
   from_now: string | null;
 }
 
+export interface ITopicWithTeams extends ITopic {
+  teams: ITeam[];
+}
+
 export interface IUser extends Resource {
   email: string;
   fullname: string;
   sso_username: string;
   state: state;
   timezone: string;
+  created_at: string;
   updated_at: string;
+  password: string;
 }
+
+export interface INewUser {
+  name: string;
+  fullname: string;
+  email: string;
+  password: string;
+}
+
 export interface IUsersById {
   [id: string]: IUser;
 }
@@ -113,11 +185,14 @@ export interface IEnhancedUser extends IUser {
 
 export interface IFeeder extends Resource {
   team_id: string;
+  created_at: string;
+  updated_at: string;
 }
 export interface IFeedersById {
   [id: string]: IFeeder;
 }
 export interface IEnhancedFeeder extends IFeeder {
+  team: ITeam;
   from_now: string | null;
 }
 
@@ -302,7 +377,6 @@ export interface IJob extends Resource {
   client_version: string | null;
   comment: string | null;
   components: IComponent[];
-  created_at: string;
   duration: number;
   previous_job_id: string | null;
   product_id: string;
@@ -317,6 +391,7 @@ export interface IJob extends Resource {
   topic: ITopic;
   topic_id: string;
   update_previous_job_id: string | null;
+  created_at: string;
   updated_at: string;
   user_agent: string;
 }
@@ -342,6 +417,7 @@ export interface IComponent extends Resource {
   title: string | null;
   topic_id: string;
   type: string;
+  created_at: string;
   updated_at: string;
   url: null;
 }
@@ -387,4 +463,16 @@ export interface IConfigState {
     realm: string;
     clientId: string;
   };
+}
+
+export type ITrend = [number, number, number];
+export interface ITrends {
+  [topic_id: string]: ITrend[];
+}
+
+export interface IApiState {
+  byId: { [x: string]: any };
+  allIds: string[];
+  isFetching: boolean;
+  count: number;
 }
