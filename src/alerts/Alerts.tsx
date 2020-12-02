@@ -16,8 +16,8 @@ export default function Alerts() {
       style={{
         width: "80%",
         maxWidth: "1024px",
-        zIndex: 100,
-        position: "fixed",
+        zIndex: 1000,
+        position: "absolute",
         top: 10,
         right: 10,
         backgroundColor: "transparent",
