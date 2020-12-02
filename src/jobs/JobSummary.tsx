@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
@@ -30,6 +30,11 @@ import styled from "styled-components";
 import { IEnhancedJob } from "types";
 import { formatDate, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
+import { TextAreaEditableOnHover } from "ui";
+import { Markup } from "interweave";
+import { updateJobComment } from "./jobsActions";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "store";
 
 function getBackground(
   status: string,
@@ -246,26 +251,29 @@ interface JobSummaryProps {
 
 export default function JobSummary({ job }: JobSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
+  const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
-    <Job status={job.status}>
-      <JobIcon>{getIcon(job.status)}</JobIcon>
+    <Job status={innerJob.status}>
+      <JobIcon>{getIcon(innerJob.status)}</JobIcon>
       <JobTitle>
-        <TopicName tabIndex={-1} to={`/jobs/${job.id}/jobStates`}>
-          {job.topic?.name}
+        <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
+          {innerJob.topic?.name}
         </TopicName>
-        <JobId>{job.id}</JobId>
+        <JobId>{innerJob.id}</JobId>
         <div className="mt-xs">
           <UsersIcon className="mr-xs" />
-          {job.team?.name}
+          {innerJob.team?.name}
         </div>
         <div>
           <ServerIcon className="mr-xs" />
-          {job.remoteci?.name}
+          {innerJob.remoteci?.name}
         </div>
       </JobTitle>
-      {isEmpty(job.tags) ? null : (
+      {isEmpty(innerJob.tags) ? null : (
         <JobTag>
-          {job.tags.map((tag, index) => (
+          {innerJob.tags.map((tag, index) => (
             <Label key={index} color="blue" className="mr-xs mt-xs">
               <small>{tag}</small>
             </Label>
@@ -274,7 +282,7 @@ export default function JobSummary({ job }: JobSummaryProps) {
       )}
       <JobComponents>
         <div>
-          {job.components.map((component) => (
+          {innerJob.components.map((component) => (
             <div key={component.id} className="mt-xs">
               <CubesIcon /> {component.canonical_project_name || component.name}
             </div>
@@ -284,16 +292,16 @@ export default function JobSummary({ job }: JobSummaryProps) {
       <JobDate>
         <div>
           <div>
-            <span title={`Created at ${job.created_at}`}>
+            <span title={`Created at ${innerJob.created_at}`}>
               <CalendarAltIcon className="mr-xs" />
-              {formatDate(job.created_at)}
+              {formatDate(innerJob.created_at)}
             </span>
           </div>
-          {job.status !== "new" &&
-            job.status !== "pre-run" &&
-            job.status !== "running" && (
+          {innerJob.status !== "new" &&
+            innerJob.status !== "pre-run" &&
+            innerJob.status !== "running" && (
               <div className="mt-xs">
-                <span title={`Duration in seconds ${job.duration}`}>
+                <span title={`Duration in seconds ${innerJob.duration}`}>
                   <ClockIcon className="mr-xs" />
                   Ran for {jobDuration}
                 </span>
@@ -302,13 +310,13 @@ export default function JobSummary({ job }: JobSummaryProps) {
         </div>
       </JobDate>
       <JobNav>
-        <JobLink to={`/jobs/${job.id}/jobStates`}>
+        <JobLink to={`/jobs/${innerJob.id}/jobStates`}>
           <CaretRightIcon />
         </JobLink>
       </JobNav>
-      {isEmpty(job.results) ? null : (
+      {isEmpty(innerJob.results) ? null : (
         <JobTests>
-          {job.results.map((result, i) => (
+          {innerJob.results.map((result, i) => (
             <div key={i} className="mr-xl">
               <Label
                 color="green"
@@ -349,9 +357,21 @@ export default function JobSummary({ job }: JobSummaryProps) {
           ))}
         </JobTests>
       )}
-      {isEmpty(job.comment) ? null : (
+      {isEmpty(innerJob.comment) ? null : (
         <JobComment>
-          <div>{job.comment}</div>
+          <TextAreaEditableOnHover
+            text={innerJob.comment || ""}
+            onSubmit={(comment) => {
+              dispatch(
+                updateJobComment({
+                  ...innerJob,
+                  comment,
+                })
+              ).then(setInnerJob);
+            }}
+          >
+            <Markup content={innerJob.comment} />
+          </TextAreaEditableOnHover>
         </JobComment>
       )}
     </Job>

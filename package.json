@@ -33,6 +33,7 @@
     "formik": "^2.1.7",
     "formsy-react": "^2.2.1",
     "humanize-duration": "^3.23.1",
+    "interweave": "^12.6.0",
     "lodash": "^4.17.20",
     "luxon": "^1.25.0",
     "normalizr": "^3.6.0",
