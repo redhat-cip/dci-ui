@@ -3,7 +3,7 @@ import { FormGroup, TextArea, TextAreaProps } from "@patternfly/react-core";
 import { useField } from "formik";
 
 type DCITextAreaProps = {
-  label: string;
+  label?: string;
   id: string;
   name: string;
 } & TextAreaProps;
