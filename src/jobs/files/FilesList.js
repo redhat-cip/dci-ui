@@ -3,13 +3,14 @@ import { isEmpty } from "lodash";
 import { EmptyState } from "ui";
 import File from "./File";
 import { FileArchiveIcon } from "@patternfly/react-icons";
+import { sortByName } from "services/sort";
 
 export default class FilesList extends Component {
   render() {
     const { files } = this.props;
-    const filesNotAssociatedWithJobState = files.filter(
+    const filesNotAssociatedWithJobState = sortByName(files.filter(
       (f) => f.jobstate_id === null
-    );
+    ));
     if (isEmpty(filesNotAssociatedWithJobState)) {
       return (
         <EmptyState
