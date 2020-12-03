@@ -79,7 +79,7 @@ export default function TrendGraph({ data, xMin, xMax }: TrendGraphProps) {
 
       svg.exit().remove();
     }
-  }, [graphRef.current, divRef.current, data, xMin, xMax]);
+  }, [data, xMin, xMax]);
 
   return (
     <div ref={divRef}>

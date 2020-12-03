@@ -4,6 +4,7 @@ import DashboardPage from "./dashboard/DashboardPage";
 import DashboardDetailsPage from "./dashboard/DashboardDetailsPage";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
+import FilePage from "./files/FilePage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import TopicPage from "./topics/TopicPage";
@@ -38,6 +39,7 @@ export default {
   DashboardDetailsPage,
   JobsPage,
   JobPage,
+  FilePage,
   PerformancePage,
   ProductsPage,
   TopicsPage,

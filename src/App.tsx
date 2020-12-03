@@ -7,14 +7,12 @@ import "./css/spacing.css";
 import "./css/flex.css";
 import Pages from "./pages";
 import Alerts from "./alerts/Alerts";
-import { BackgroundImage } from "./ui";
 import PrivateRoute from "auth/PrivateRoute";
 
 export default function App() {
   return (
     <>
       <Alerts />
-      <BackgroundImage />
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
           <PrivateRoute path="/dashboard" exact>
@@ -30,6 +28,9 @@ export default function App() {
           <Redirect from="/jobs/:id" exact to="/jobs/:id/jobStates" />
           <PrivateRoute path="/jobs/:id/:endpoint">
             <Pages.JobPage />
+          </PrivateRoute>
+          <PrivateRoute path="/files/:id">
+            <Pages.FilePage />
           </PrivateRoute>
           <PrivateRoute path="/trends">
             <Pages.TrendsPage />

@@ -30,7 +30,7 @@ export default function FilesList({ files }: FilesListProps) {
             <th>Filename</th>
             <th>Size</th>
             <th>mime-type</th>
-            <th className="text-center">Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
