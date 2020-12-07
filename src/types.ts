@@ -402,3 +402,10 @@ export type ITrend = [number, number, number];
 export interface ITrends {
   [topic_id: string]: ITrend[];
 }
+
+export interface IApiState {
+  byId: { [x: string]: any };
+  allIds: string[];
+  isFetching: boolean;
+  count: number;
+}

@@ -1,15 +1,15 @@
 import { omitBy, merge, isEmpty, keys } from "lodash";
 import { createActionsTypes } from "./apiActionsTypes";
+import { IApiState } from "types";
 
-const initialState = {
+const initialState: IApiState = {
   byId: {},
   allIds: [],
-  errorMessage: null,
   isFetching: false,
   count: 0,
 };
 
-function mergeEntities(state, resources) {
+function mergeEntities(state: IApiState, resources: IApiState["byId"]) {
   const byId = omitBy(merge({}, state.byId, resources), isEmpty);
   return {
     ...state,
@@ -18,9 +18,13 @@ function mergeEntities(state, resources) {
   };
 }
 
-export function createReducer(resource) {
+interface apiAction {
+  [x: string]: any;
+}
+
+export function createReducer(resource: string) {
   const resources = `${resource}s`;
-  return (state = initialState, action) => {
+  return (state = initialState, action: apiAction) => {
     const actionType = createActionsTypes(resource);
     switch (action.type) {
       case actionType.FETCH_ALL_REQUEST:
@@ -37,7 +41,6 @@ export function createReducer(resource) {
         return {
           ...state,
           isFetching: false,
-          errorMessage: action.message,
         };
       case actionType.CLEAR_CACHE:
         return {
