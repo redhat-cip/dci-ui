@@ -127,6 +127,7 @@ export interface IFeedersById {
   [id: string]: IFeeder;
 }
 export interface IEnhancedFeeder extends IFeeder {
+  team: ITeam;
   from_now: string | null;
 }
 

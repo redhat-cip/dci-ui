@@ -14,6 +14,8 @@ import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/EditUserPage";
 import CreateUserPage from "./users/create/CreateUserPage";
+import CreateFeederPage from "./feeders/create/CreateFeederPage";
+import EditFeederPage from "./feeders/edit/EditFeederPage";
 import SettingsPage from "./currentUser/settings/SettingsPage";
 import NotificationsPage from "./currentUser/notifications/NotificationsPage";
 import PermissionsPage from "./permissions/PermissionsPage";
@@ -46,6 +48,8 @@ export default {
   TopicPage,
   RemotecisPage,
   FeedersPage,
+  CreateFeederPage,
+  EditFeederPage,
   TeamsPage,
   UsersPage,
   EditUserPage,

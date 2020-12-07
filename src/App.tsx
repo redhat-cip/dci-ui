@@ -50,6 +50,12 @@ export default function App() {
           <PrivateRoute path="/remotecis">
             <Pages.RemotecisPage />
           </PrivateRoute>
+          <PrivateRoute path="/feeders/create" exact>
+            <Pages.CreateFeederPage />
+          </PrivateRoute>
+          <PrivateRoute path="/feeders/:id">
+            <Pages.EditFeederPage />
+          </PrivateRoute>
           <PrivateRoute path="/feeders">
             <Pages.FeedersPage />
           </PrivateRoute>

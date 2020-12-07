@@ -57,13 +57,18 @@ export default function DCISelect({
           field.value ? options.find((o) => o.value === field.value)?.label : ""
         }
         isOpen={isOpen}
-        aria-labelledby="select"
+        aria-labelledby={id}
         placeholderText={placeholder}
       >
         {options
           .map((o) => ({ ...o, toString: () => o.label }))
           .map((option, i) => (
-            <SelectOption key={i} value={option} />
+            <SelectOption
+              key={i}
+              id={`${id}[${i}]`}
+              data-testid={`${id}[${i}]`}
+              value={option}
+            />
           ))}
       </Select>
     </FormGroup>
