@@ -58,7 +58,15 @@ export interface IEnhancedTeam extends ITeam {
   from_now: string | null;
 }
 
-export interface IProduct extends Resource {}
+export interface IProduct extends Resource {
+  label:string
+  description: string
+}
+
+export interface INewProduct {
+  name: string;
+  description: string;
+}
 
 export interface IProductWithTeams extends IProduct {
   teams: ITeam[];

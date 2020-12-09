@@ -1,3 +1,5 @@
+import "@testing-library/jest-dom";
+
 export const localStorageMock = (function () {
   let store: { [x: string]: string } = {};
   return {
