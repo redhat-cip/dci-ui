@@ -1,6 +1,7 @@
 {
   "name": "dci-ui",
   "description": "DCI static web app",
+  "version": "0.1.2",
   "private": true,
   "author": "Guillaume Vincent <gvincent@redhat.com>",
   "license": "Apache-2.0",

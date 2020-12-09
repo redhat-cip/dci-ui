@@ -1,7 +1,7 @@
 FROM centos:7
 
 LABEL name="DCI APP"
-LABEL version="0.1.1"
+LABEL version="0.1.2"
 LABEL maintainer="DCI Team <distributed-ci@redhat.com>"
 
 ENV LANG en_US.UTF-8
