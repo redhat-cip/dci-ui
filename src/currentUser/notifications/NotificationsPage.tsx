@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty, differenceBy } from "lodash";
 import remotecisActions from "remotecis/remotecisActions";
-import { getSubscribedRemotecis } from "currentUser/currentUserActions";
+import {
+  getSubscribedRemotecis,
+  unsubscribeFromARemoteci,
+  subscribeToARemoteci,
+} from "currentUser/currentUserActions";
 import {
   getRemotecis,
   isFetchingRemotecis,
@@ -59,16 +63,22 @@ export default function NotificationsPage() {
       <Grid hasGutter>
         <GridItem span={6}>
           <SubscribeForm
-            currentUser={currentUser}
             remotecis={availableRemotecis}
-            onSubmit={getSubscribedRemotecisCallback}
+            onSubmit={({ remoteci_id }) => {
+              dispatch(subscribeToARemoteci(remoteci_id, currentUser)).then(
+                getSubscribedRemotecisCallback
+              );
+            }}
           />
         </GridItem>
         <GridItem span={6}>
           <UnsubscribeForm
-            currentUser={currentUser}
             remotecis={currentRemotecis}
-            onSubmit={getSubscribedRemotecisCallback}
+            onSubmit={({ remoteci_id }) => {
+              dispatch(unsubscribeFromARemoteci(remoteci_id, currentUser)).then(
+                getSubscribedRemotecisCallback
+              );
+            }}
           />
         </GridItem>
       </Grid>

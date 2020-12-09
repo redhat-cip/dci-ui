@@ -88,7 +88,11 @@ export const FileRow = styled(JobStateRow)`
   }
 `;
 
-export const ShareLink = styled.a`
+interface ShareLinkProps {
+  isSelected:boolean
+}
+
+export const ShareLink = styled.a<ShareLinkProps>`
   margin-left: 10px;
   font-size: 11px;
   color: ${global_palette_black_500.value};

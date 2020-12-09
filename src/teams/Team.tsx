@@ -14,7 +14,7 @@ import {
 } from "@patternfly/react-core";
 import { ConfirmDeleteModal, CopyButton, KebabDropdown } from "ui";
 import { fetchUsersForTeam } from "./teamsActions";
-import { deleteUserFromTeam } from "users/usersActions";
+import { deleteUserFromTeam, addUserToTeam } from "users/usersActions";
 import AddUserToTeamModal from "./AddUserToTeamModal";
 import EditTeamModal from "./EditTeamModal";
 import { IEnhancedTeam, IEnhancedUser, ICurrentUser, IUser } from "types";
@@ -127,8 +127,10 @@ export default function Team({
         users={users}
         isOpen={isAddUserToTeamModalOpen}
         close={() => setIsAddUserToTeamModalOpen(false)}
-        onOk={() => {
-          _fetchUsersForTeam(team).then(() => setIsExpanded(true));
+        onOk={({ user_id }) => {
+          dispatch(addUserToTeam(user_id, team))
+            .then(() => _fetchUsersForTeam(team))
+            .finally(() => setIsExpanded(true));
           setIsAddUserToTeamModalOpen(false);
         }}
       />
@@ -136,7 +138,9 @@ export default function Team({
         isOpen={isEditTeamModalOpen}
         team={team}
         close={() => setIsEditTeamModalOpen(false)}
-        onOk={() => setIsEditTeamModalOpen(false)}
+        onOk={() => {
+          setIsEditTeamModalOpen(false);
+        }}
       />
       <tbody className={isExpanded ? "pf-m-expanded" : ""}>
         <tr>

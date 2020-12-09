@@ -73,49 +73,47 @@ export function getSubscribedRemotecis(
 }
 
 export function subscribeToARemoteci(
-  remoteci: IRemoteci,
+  remoteci_id: string,
   currentUser: ICurrentUser
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
     return http({
       method: "post",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users`,
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci_id}/users`,
       data: currentUser,
     })
       .then((response) => {
-        dispatch(
-          showSuccess(`You are subscribed to the remoteci ${remoteci.name}`)
-        );
+        dispatch(showSuccess("You are successfully subscribed"));
         return response;
       })
       .catch((error) => {
-        dispatch(showError(`Cannot subscribe to remoteci ${remoteci.name}`));
+        dispatch(showError("Cannot subscribe to remoteci"));
         return error;
       });
   };
 }
 
 export function unsubscribeFromARemoteci(
-  remoteci: IRemoteci,
+  remoteci_id: string,
   currentUser: ICurrentUser
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
     return http({
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci.id}/users/${currentUser.id}`,
+      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci_id}/users/${currentUser.id}`,
     })
       .then((response) => {
         dispatch(
           showWarning(
-            `You will no longer receive notification for the remoteci ${remoteci.name}`
+            "You will no longer receive notification for this remoteci"
           )
         );
         return response;
       })
       .catch((error) => {
-        dispatch(showError(`Cannot unsubscribe to remoteci ${remoteci.name}`));
+        dispatch(showError("Cannot unsubscribe from this remoteci"));
         return error;
       });
   };

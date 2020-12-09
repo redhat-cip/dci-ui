@@ -20,13 +20,13 @@ export function fetchUserTeams(
 }
 
 export function addUserToTeam(
-  user: IUser,
+  user_id: string,
   team: ITeam
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch, getState) => {
     const state = getState();
     return http.post(
-      `${state.config.apiURL}/api/v1/teams/${team.id}/users/${user.id}`,
+      `${state.config.apiURL}/api/v1/teams/${team.id}/users/${user_id}`,
       {}
     );
   };
