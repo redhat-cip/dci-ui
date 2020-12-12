@@ -77,7 +77,6 @@ export const ErrorLabel = styled(Label)`
 `;
 
 export const FileRow = styled(JobStateRow)`
-  color: ${global_palette_gold_300.value};
   background-color: ${global_palette_black_700.value};
   margin-bottom: 1px;
   cursor: pointer;

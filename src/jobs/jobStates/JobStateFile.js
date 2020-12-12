@@ -5,6 +5,11 @@ import {
   CaretRightIcon,
   LinkIcon,
 } from "@patternfly/react-icons";
+import {
+  global_palette_gold_300,
+  global_palette_red_300,
+  global_palette_blue_300,
+} from "@patternfly/react-tokens";
 import { getFileContent } from "jobs/files/filesActions";
 import {
   FileRow,
@@ -64,6 +69,10 @@ export class JobStateFile extends Component {
               seeDetails: !prevState.seeDetails,
             }));
           }}
+          style={{ color: (file.name.startsWith('failed/') || file.name.startsWith('unreachable/')) ?
+                   global_palette_red_300.value :
+                   (file.name.startsWith('skipped/') ? global_palette_blue_300.value :
+                    global_palette_gold_300.value) }}
         >
           <ShareLink href={link} isSelected={isSelected}>
             <LinkIcon />
