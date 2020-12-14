@@ -1,17 +1,18 @@
 import styled, { css } from "styled-components";
 import {
-  global_palette_gold_300,
-  global_palette_red_100,
-  global_palette_green_400,
+  global_warning_color_100,
+  global_info_color_100,
+  global_BackgroundColor_dark_200,
+  global_BackgroundColor_dark_400,
+  global_danger_color_100,
   global_palette_black_200,
   global_palette_black_300,
   global_palette_black_500,
   global_palette_black_600,
-  global_palette_black_700,
   global_palette_black_800,
-  global_palette_white,
 } from "@patternfly/react-tokens";
 import { Button } from "@patternfly/react-core";
+import { IFileStatus } from "types";
 
 export const RawLogRow = styled.div`
   display: flex;
@@ -30,25 +31,30 @@ export const RawLogButton = styled(Button)`
 `;
 
 export const JobStates = styled.div`
-  padding: 1em 0;
-  background-color: ${global_palette_black_800.value};
+  padding: 1rem 0;
+  background-color: ${global_BackgroundColor_dark_200.value};
 `;
 
 export const JobStateRow = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  margin: 0;
+  padding: 0 1rem;
   min-height: 25px;
+  border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
+`;
+
+export const JobStateName = styled.div`
+  color: ${global_palette_black_500.value};
+  font-size: 14px;
+  font-family: monospace;
+  flex: 1;
 `;
 
 export const LabelBox = styled.div`
-  min-width: 60px;
-  margin: 0;
-  margin-right: 1em;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 `;
 
 export const Label = styled.span`
@@ -61,30 +67,30 @@ export const Label = styled.span`
   color: ${global_palette_black_300.value};
 `;
 
-export const SuccessLabel = styled(Label)`
-  background-color: ${global_palette_green_400.value};
-  color: ${global_palette_white.value};
-`;
+interface FileRowProps {
+  status: IFileStatus;
+}
 
-export const FailureLabel = styled(Label)`
-  background-color: ${global_palette_red_100.value};
-  color: ${global_palette_white.value};
-`;
-
-export const ErrorLabel = styled(Label)`
-  background-color: ${global_palette_red_100.value};
-  color: ${global_palette_white.value};
-`;
-
-export const FileRow = styled(JobStateRow)`
-  color: ${global_palette_gold_300.value};
-  background-color: ${global_palette_black_700.value};
-  margin-bottom: 1px;
+export const FileRow = styled(JobStateRow)<FileRowProps>`
+  ${(props) =>
+    props.status === "failed" || props.status === "unreachable"
+      ? css`
+          color: ${global_danger_color_100.value};
+        `
+      : props.status === "skipped"
+      ? css`
+          color: ${global_info_color_100.value};
+        `
+      : css`
+          color: ${global_warning_color_100.value};
+        `};
+  border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
+  background-color: ${global_BackgroundColor_dark_200.value};
   cursor: pointer;
   display: flex;
   align-items: center;
   &:hover {
-    background-color: ${global_palette_black_600.value};
+    background-color: ${global_BackgroundColor_dark_400.value};
   }
 `;
 
@@ -93,7 +99,6 @@ interface ShareLinkProps {
 }
 
 export const ShareLink = styled.a<ShareLinkProps>`
-  margin-left: 10px;
   font-size: 11px;
   color: ${global_palette_black_500.value};
   &:hover {
@@ -107,7 +112,7 @@ export const ShareLink = styled.a<ShareLinkProps>`
 `;
 
 export const CaretIcon = styled.div`
-  margin-left: 10px;
+  margin-left: 1rem;
   font-size: 13px;
   color: ${global_palette_black_500.value};
   &:hover {
@@ -116,7 +121,7 @@ export const CaretIcon = styled.div`
 `;
 
 export const FileName = styled.div`
-  margin-left: 10px;
+  margin-left: 1rem;
   font-size: 14px;
   font-family: monospace;
   flex: 1;

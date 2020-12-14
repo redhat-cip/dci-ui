@@ -353,6 +353,7 @@ export interface IFileWithDuration extends IFile {
   duration: number;
 }
 
+export type IFileStatus = "failed" | "unreachable" | "skipped" | "success";
 export interface IJobState {
   id: string;
   status: Status;
