@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   CaretDownIcon,
   CaretRightIcon,
@@ -18,6 +18,7 @@ import {
 import { IFileWithDuration } from "types";
 import { AppDispatch } from "store";
 import { useDispatch } from "react-redux";
+import { getFileStatus } from "./jobStates";
 
 interface JobStateFileProps {
   id: string;
@@ -34,28 +35,39 @@ export default function JobStateFile({
 }: JobStateFileProps) {
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [seeDetails, setSeeDetails] = useState(isSelected);
+  const [seeDetails, setSeeDetails] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const loadFileContentCallback = useCallback(() => {
+    setIsLoading(true);
+    dispatch(getFileContent(file))
+      .then((response) => {
+        setContent(response.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [dispatch, file]);
+
   useEffect(() => {
     if (seeDetails) {
-      setIsLoading(true);
-      dispatch(getFileContent(file))
-        .then((response) => {
-          setContent(response.data);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      loadFileContentCallback();
     }
-  }, [seeDetails, file, dispatch]);
+  }, [seeDetails, loadFileContentCallback]);
+
+  useEffect(() => {
+    if (isSelected) {
+      setSeeDetails(true);
+    }
+  }, [isSelected, setSeeDetails]);
 
   return (
     <div id={id}>
       <FileRow
+        status={getFileStatus(file)}
         onClick={() => {
-          setSeeDetails(true);
+          setSeeDetails(!seeDetails);
         }}
       >
         <ShareLink href={link} isSelected={isSelected}>
