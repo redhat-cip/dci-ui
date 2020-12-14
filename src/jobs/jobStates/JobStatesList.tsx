@@ -7,36 +7,20 @@ import {
   JobStates,
   JobStateRow,
   JobStatePre,
+  JobStateName,
   FileContent,
   RawLogRow,
   RawLogButton,
-  Label,
-  SuccessLabel,
-  FailureLabel,
-  ErrorLabel,
-  LabelBox,
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
 import { getFileContent } from "jobs/files/filesActions";
-import { IEnhancedJob, IJobState } from "types";
+import { IEnhancedJob } from "types";
 import { useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
+import { humanizeDuration } from "services/date";
 
 interface JobStatesListProps {
   job: IEnhancedJob;
-}
-
-function getLabel(jobstate: IJobState) {
-  switch (jobstate.status) {
-    case "success":
-      return <SuccessLabel>{jobstate.status}</SuccessLabel>;
-    case "failure":
-      return <FailureLabel>{jobstate.status}</FailureLabel>;
-    case "error":
-      return <ErrorLabel>{jobstate.status}</ErrorLabel>;
-    default:
-      return <Label>{jobstate.status}</Label>;
-  }
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
@@ -93,10 +77,13 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           <div key={i}>
             {jobstate.files.length === 0 ? null : (
               <JobStateRow>
-                <LabelBox>{getLabel(jobstate)}</LabelBox>
-                <LabelBox>
-                  <Label>{`${Math.round(jobstate.duration)}s`}</Label>
-                </LabelBox>
+                <JobStateName
+                  title={`${Math.round(jobstate.duration)} seconds`}
+                >
+                  {`Job state ${jobstate.status} (~${humanizeDuration(
+                    jobstate.duration * 1000
+                  )})`}
+                </JobStateName>
               </JobStateRow>
             )}
             {jobstate.files.map((file, j) => {
