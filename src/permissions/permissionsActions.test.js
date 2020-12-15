@@ -16,7 +16,7 @@ const mockStore = configureMockStore(middlewares);
 const axiosMock = new axiosMockAdapter(axios);
 
 it("getProductsWithTeams", () => {
-  axiosMock.onGet("https://api.example.org/api/v1/products").reply(200, {
+  axiosMock.onGet("https://api.distributed-ci.io/api/v1/products").reply(200, {
     products: [
       { id: "p1", name: "RHEL" },
       { id: "p2", name: "OpenStack" },
@@ -24,10 +24,10 @@ it("getProductsWithTeams", () => {
     _meta: { count: 2 },
   });
   axiosMock
-    .onGet("https://api.example.org/api/v1/products/p1/teams")
+    .onGet("https://api.distributed-ci.io/api/v1/products/p1/teams")
     .reply(200, { teams: [{ id: "t1", name: "Team 1" }], _meta: { count: 1 } });
   axiosMock
-    .onGet("https://api.example.org/api/v1/products/p2/teams")
+    .onGet("https://api.distributed-ci.io/api/v1/products/p2/teams")
     .reply(200, {
       teams: [
         { id: "t2", name: "Team 2" },
@@ -35,11 +35,7 @@ it("getProductsWithTeams", () => {
       ],
       _meta: { count: 2 },
     });
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   return store.dispatch(getProductsWithTeams()).then((products) => {
     expect(products[0].teams).toEqual([
       { id: "t1", name: "Team 1" },
@@ -51,7 +47,7 @@ it("getProductsWithTeams", () => {
 
 it("getTopicsWithTeams", () => {
   axiosMock
-    .onGet("https://api.example.org/api/v1/topics", { embed: "teams" })
+    .onGet("https://api.distributed-ci.io/api/v1/topics", { embed: "teams" })
     .reply(200, {
       topics: [
         { id: "to1", name: "Topic 1", teams: [{ id: "t1", name: "Team 1" }] },
@@ -66,11 +62,7 @@ it("getTopicsWithTeams", () => {
       ],
       _meta: { count: 2 },
     });
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   return store.dispatch(getTopicsWithTeams()).then((topics) => {
     expect(topics[0].teams).toEqual([{ id: "t1", name: "Team 1" }]);
     expect(topics[1].teams).toEqual([
@@ -81,18 +73,14 @@ it("getTopicsWithTeams", () => {
 });
 
 it("getTeams", () => {
-  axiosMock.onGet("https://api.example.org/api/v1/teams").reply(200, {
+  axiosMock.onGet("https://api.distributed-ci.io/api/v1/teams").reply(200, {
     teams: [
       { id: "t1", name: "Team 1" },
       { id: "t2", name: "Team 2" },
     ],
     _meta: { count: 2 },
   });
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   return store.dispatch(getTeams()).then((teams) => {
     expect(teams[0].id).toBe("t1");
     expect(teams[1].id).toBe("t2");
@@ -102,13 +90,9 @@ it("getTeams", () => {
 it("grantTeamProductPermission", () => {
   const data = { team_id: "t1" };
   axiosMock
-    .onPost("https://api.example.org/api/v1/products/p1/teams", data)
+    .onPost("https://api.distributed-ci.io/api/v1/products/p1/teams", data)
     .reply(201);
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1" };
   return store
@@ -118,13 +102,9 @@ it("grantTeamProductPermission", () => {
 
 it("removeTeamProductPermission", () => {
   axiosMock
-    .onDelete("https://api.example.org/api/v1/products/p1/teams/t1")
+    .onDelete("https://api.distributed-ci.io/api/v1/products/p1/teams/t1")
     .reply(204);
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   const team = { id: "t1", name: "Team 1" };
   const product = { id: "p1", etag: "ep1" };
   return store
@@ -135,13 +115,9 @@ it("removeTeamProductPermission", () => {
 it("grantTeamTopicPermission", () => {
   const data = { team_id: "t1" };
   axiosMock
-    .onPost("https://api.example.org/api/v1/topics/to1/teams", data)
+    .onPost("https://api.distributed-ci.io/api/v1/topics/to1/teams", data)
     .reply(201);
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1" };
   return store
@@ -151,13 +127,9 @@ it("grantTeamTopicPermission", () => {
 
 it("removeTeamTopicPermission", () => {
   axiosMock
-    .onDelete("https://api.example.org/api/v1/topics/to1/teams/t1")
+    .onDelete("https://api.distributed-ci.io/api/v1/topics/to1/teams/t1")
     .reply(204);
-  const store = mockStore({
-    config: {
-      apiURL: "https://api.example.org",
-    },
-  });
+  const store = mockStore();
   const team = { id: "t1", name: "Team 1" };
   const topic = { id: "to1", etag: "eto1" };
   return store

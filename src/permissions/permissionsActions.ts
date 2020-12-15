@@ -15,14 +15,13 @@ import { AxiosPromise } from "axios";
 import { AppThunk } from "store";
 
 export function getProductsWithTeams(): AppThunk<Promise<IProductWithTeams[]>> {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     return dispatch(productsActions.all()).then((response) => {
       const products = response.data.products as IProduct[];
-      const state = getState();
       const promises = products.map((product) =>
         http({
           method: "get",
-          url: `${state.config.apiURL}/api/v1/products/${product.id}/teams`,
+          url: `/api/v1/products/${product.id}/teams`,
         })
       );
       const productsWithTeams: IProductWithTeams[] = [];
@@ -60,11 +59,10 @@ function grantTeamPermission(
   team: ITeam,
   resource: ITopic | IProduct
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "post",
-      url: `${state.config.apiURL}/api/v1/${resource_name}s/${resource.id}/teams`,
+      url: `/api/v1/${resource_name}s/${resource.id}/teams`,
       data: { team_id: team.id },
     })
       .then((response) => {
@@ -87,11 +85,10 @@ function removeTeamPermission(
   team: ITeam,
   resource: ITopic | IProduct
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/${resource_name}s/${resource.id}/teams/${team.id}`,
+      url: `/api/v1/${resource_name}s/${resource.id}/teams/${team.id}`,
     })
       .then((response) => {
         dispatch(

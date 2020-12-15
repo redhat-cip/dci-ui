@@ -28,17 +28,14 @@ function buildIdentity(identity: ICurrentUser, team: ITeam): ICurrentUser {
 }
 
 export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http
-      .get(`${state.config.apiURL}/api/v1/identity`)
-      .then((response) => {
-        const identity = response.data.identity;
-        const firstTeam = values(identity.teams)[0];
-        const enhancedIdentity = buildIdentity(identity, firstTeam);
-        dispatch(setIdentity(enhancedIdentity));
-        return enhancedIdentity;
-      });
+  return (dispatch) => {
+    return http.get(`/api/v1/identity`).then((response) => {
+      const identity = response.data.identity;
+      const firstTeam = values(identity.teams)[0];
+      const enhancedIdentity = buildIdentity(identity, firstTeam);
+      dispatch(setIdentity(enhancedIdentity));
+      return enhancedIdentity;
+    });
   };
 }
 

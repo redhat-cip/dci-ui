@@ -10,7 +10,7 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("fetchLatestComponents", () => {
   axiosMock
-    .onGet("https://api.example.org/api/v1/topics/t1/components", {
+    .onGet("https://api.distributed-ci.io/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
         limit: 1,
@@ -20,7 +20,7 @@ it("fetchLatestComponents", () => {
     })
     .reply(200, { components: [{ id: "c11" }] });
   axiosMock
-    .onGet("https://api.example.org/api/v1/topics/t1/components", {
+    .onGet("https://api.distributed-ci.io/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
         limit: 1,
@@ -29,7 +29,7 @@ it("fetchLatestComponents", () => {
       },
     })
     .reply(200, { components: [{ id: "c12" }] });
-  const store = mockStore({ config: { apiURL: "https://api.example.org" } });
+  const store = mockStore();
   return store
     .dispatch(
       fetchLatestComponents({
