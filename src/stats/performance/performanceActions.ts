@@ -8,13 +8,12 @@ import { AxiosPromise } from "axios";
 export function calcPerformance<T>(
   jobsIds: string[]
 ): AppThunk<AxiosPromise<T>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     const [base_job_id, ...jobs] = jobsIds;
     return http({
       method: "post",
       data: { base_job_id, jobs },
-      url: `${state.config.apiURL}/api/v1/performance`,
+      url: `/api/v1/performance`,
     }).catch((error) => {
       dispatch(
         showError("An error has occurred, make sure the job ids are correct.")
