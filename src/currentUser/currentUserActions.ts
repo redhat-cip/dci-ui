@@ -24,11 +24,10 @@ interface IUpdateCurrentUser {
 export function updateCurrentUser(
   currentUser: ICurrentUser
 ): AppThunk<AxiosPromise<IUpdateCurrentUser>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "put",
-      url: `${state.config.apiURL}/api/v1/identity`,
+      url: "/api/v1/identity",
       data: currentUser,
       headers: { "If-Match": currentUser.etag },
     })
@@ -60,11 +59,10 @@ interface IGetSubscribedRemotecis {
 export function getSubscribedRemotecis(
   identity: ICurrentUser
 ): AppThunk<AxiosPromise<IGetSubscribedRemotecis>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "get",
-      url: `${state.config.apiURL}/api/v1/users/${identity.id}/remotecis`,
+      url: `/api/v1/users/${identity.id}/remotecis`,
     }).catch((error) => {
       dispatch(showError(`Cannot get subscribed remotecis`));
       return error;
@@ -76,11 +74,10 @@ export function subscribeToARemoteci(
   remoteci_id: string,
   currentUser: ICurrentUser
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "post",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci_id}/users`,
+      url: `/api/v1/remotecis/${remoteci_id}/users`,
       data: currentUser,
     })
       .then((response) => {
@@ -98,11 +95,10 @@ export function unsubscribeFromARemoteci(
   remoteci_id: string,
   currentUser: ICurrentUser
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "delete",
-      url: `${state.config.apiURL}/api/v1/remotecis/${remoteci_id}/users/${currentUser.id}`,
+      url: `/api/v1/remotecis/${remoteci_id}/users/${currentUser.id}`,
     })
       .then((response) => {
         dispatch(

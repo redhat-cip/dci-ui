@@ -1,8 +1,0 @@
-{
-  "apiURL": "http://localhost:5000",
-  "sso": {
-    "url": "http://localhost:8080",
-    "realm": "dci-test",
-    "clientId": "dci"
-  }
-}
