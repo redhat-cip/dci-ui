@@ -43,9 +43,10 @@ export default function JobStateFile({
   const loadFileContentCallback = useCallback(() => {
     setIsLoading(true);
     dispatch(getFileContent(file))
-      .then((response) => {
-        setContent(response.data);
+      .then((content) => {
+        setContent(content);
       })
+      .catch(console.error)
       .finally(() => {
         setIsLoading(false);
       });

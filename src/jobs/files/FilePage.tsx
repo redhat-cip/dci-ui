@@ -18,9 +18,10 @@ export default function FilePage() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getFileContent({ id } as IFile))
-      .then((response) => {
-        setFileContent(response.data);
+      .then((content) => {
+        setFileContent(content);
       })
+      .catch(console.error)
       .finally(() => setIsLoading(false));
   }, [dispatch, id]);
 

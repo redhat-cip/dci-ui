@@ -22,9 +22,10 @@ export default function SeeFileContentModal({
   useEffect(() => {
     if (isOpen) {
       dispatch(getFileContent(file))
-        .then((response) => {
-          setFileContent(response.data);
+        .then((content) => {
+          setFileContent(content);
         })
+        .catch(console.error)
         .finally(() => setIsLoading(false));
     }
   }, [dispatch, file, isOpen]);

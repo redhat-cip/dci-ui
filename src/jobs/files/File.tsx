@@ -44,13 +44,13 @@ export default function File({ file }: FileProps) {
           onClick={() => {
             setIsDownloading(true);
             dispatch(getFileContent(file, { responseType: "blob" }))
-              .then((response) => {
-                const blob = new Blob([response.data], {
+              .then((content) => {
+                const blob = new Blob([content], {
                   type: file.mime || undefined,
                 });
                 FileSaver.saveAs(blob, `${file.name}`);
-                return response;
               })
+              .catch(console.error)
               .finally(() => setIsDownloading(false));
           }}
           className="mr-xs"

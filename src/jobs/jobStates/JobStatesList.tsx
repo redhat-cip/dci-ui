@@ -54,11 +54,11 @@ export default function JobStatesList({ job }: JobStatesListProps) {
             onClick={() => {
               setLoadingRawLog(true);
               dispatch(getFileContent(rawLogFile))
-                .then((r) => {
-                  setRawLog(r.data);
+                .then((content) => {
+                  setRawLog(content);
                   setSeeRawLog(!seeRawLog);
                 })
-                .catch(console.log)
+                .catch(console.error)
                 .then(() => setLoadingRawLog(false));
             }}
           >
