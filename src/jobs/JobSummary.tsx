@@ -15,6 +15,7 @@ import {
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
+  BugIcon,
   StopCircleIcon,
   InProgressIcon,
   UsersIcon,
@@ -107,6 +108,12 @@ function getIcon(status: string) {
         />
       );
     case "failure":
+      return (
+        <BugIcon
+          size="lg"
+          style={{ color: global_danger_color_100.value }}
+        />
+      );
     case "error":
       return (
         <ExclamationCircleIcon
