@@ -25,7 +25,9 @@ export default function SeeFileContentModal({
         .then((response) => {
           setFileContent(response.data);
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [dispatch, file, isOpen]);
 

@@ -9,9 +9,14 @@ To run the app in development mode follow those steps:
 
 - clone this repository
 - ensure DCI api is listening on localhost:5000. See `dci-dev-env`.
-  An alternative is to change `apiURL` to `https://api.distributed-ci.io` in [public/config.json](public/config.json) file.
 - install node dependencies: `npm install`
-- run the development server : `npm start`
+- run the development server : `REACT_APP_BACKEND_HOST='http://127.0.0.1:5000' npm start`
+
+If you want to test the SSO autentification :
+
+- ensure Keycloak is listening on localhost:8080. See `dci-dev-env`.
+- run the development server with SSO env variables : `REACT_APP_SSO_URL='http://localhost:8080' REACT_APP_SSO_REALM='dci-test' REACT_APP_SSO_CLIENT_ID='dci' REACT_APP_BACKEND_HOST='http://127.0.0.1:5000' npm start`
+
 
 ## Build tools
 

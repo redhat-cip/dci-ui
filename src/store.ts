@@ -5,7 +5,6 @@ import thunk, {
   ThunkMiddleware,
 } from "redux-thunk";
 import alertsReducer from "./alerts/alertsReducer";
-import configReducer from "./config/configReducer";
 import currentUserReducer from "./currentUser/currentUserReducer";
 import productsReducer from "./products/productsReducer";
 import topicsReducer from "./topics/topicsReducer";
@@ -17,7 +16,6 @@ import jobsReducer from "./jobs/jobsReducer";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
-  config: configReducer,
   currentUser: currentUserReducer,
   jobs: jobsReducer,
   products: productsReducer,

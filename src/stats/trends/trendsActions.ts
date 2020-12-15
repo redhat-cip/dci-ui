@@ -7,12 +7,12 @@ interface IGetTrends {
   topics: ITrends;
 }
 
+// todo remove app thunk
 export function getTrends(): AppThunk<AxiosPromise<IGetTrends>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return () => {
     return http({
       method: "get",
-      url: `${state.config.apiURL}/api/v1/trends/topics`,
+      url: `/api/v1/trends/topics`,
     });
   };
 }

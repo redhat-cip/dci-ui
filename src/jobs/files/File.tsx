@@ -51,7 +51,9 @@ export default function File({ file }: FileProps) {
                 FileSaver.saveAs(blob, `${file.name}`);
                 return response;
               })
-              .finally(() => setIsDownloading(false));
+              .finally(() => {
+                setIsDownloading(false);
+              });
           }}
           className="mr-xs"
           isDisabled={isDownloading}

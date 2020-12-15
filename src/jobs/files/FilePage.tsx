@@ -21,7 +21,9 @@ export default function FilePage() {
       .then((response) => {
         setFileContent(response.data);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [dispatch, id]);
 
   if (isLoading) {

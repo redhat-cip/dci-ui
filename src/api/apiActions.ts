@@ -17,11 +17,10 @@ export function createActions(resource: IResourceName) {
         dispatch({
           type: actionsTypes.FETCH_ALL_REQUEST,
         });
-        const { apiURL } = getState().config;
 
         return http({
           method: "get",
-          url: `${apiURL}/api/v1/${endpoint}`,
+          url: `/api/v1/${endpoint}`,
           params,
         })
           .then((response) => {
@@ -47,10 +46,9 @@ export function createActions(resource: IResourceName) {
         dispatch({
           type: actionsTypes.FETCH_REQUEST,
         });
-        const { apiURL } = getState().config;
         return http({
           method: "get",
-          url: `${apiURL}/api/v1/${resource}s/${id}`,
+          url: `/api/v1/${resource}s/${id}`,
           params,
         })
           .then((response) => {
@@ -75,10 +73,9 @@ export function createActions(resource: IResourceName) {
         dispatch({
           type: actionsTypes.CREATE_REQUEST,
         });
-        const { apiURL } = getState().config;
         return http({
           method: "post",
-          url: `${apiURL}/api/v1/${resource}s`,
+          url: `/api/v1/${resource}s`,
           data,
           params,
         })
@@ -107,10 +104,9 @@ export function createActions(resource: IResourceName) {
         dispatch({
           type: actionsTypes.UPDATE_REQUEST,
         });
-        const { apiURL } = getState().config;
         return http({
           method: "put",
-          url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+          url: `/api/v1/${resource}s/${data.id}`,
           headers: { "If-Match": data.etag },
           data,
           params,
@@ -142,10 +138,9 @@ export function createActions(resource: IResourceName) {
         dispatch({
           type: actionsTypes.DELETE_REQUEST,
         });
-        const { apiURL } = getState().config;
         return http({
           method: "delete",
-          url: `${apiURL}/api/v1/${resource}s/${data.id}`,
+          url: `/api/v1/${resource}s/${data.id}`,
           headers: { "If-Match": data.etag },
         })
           .then((response) => {

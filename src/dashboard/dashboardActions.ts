@@ -14,12 +14,12 @@ export type Dashboard = {
   [key: string]: ProductDashboard;
 };
 
+// todo remove app thunk
 export function getStats(): AppThunk<Promise<Dashboard>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return () => {
     const request = {
       method: "get",
-      url: `${state.config.apiURL}/api/v1/stats`,
+      url: `/api/v1/stats`,
     } as AxiosRequestConfig;
     return http(request).then((response) => {
       const stats = response.data.stats as IStat[];
