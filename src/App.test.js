@@ -5,19 +5,9 @@ import axiosMockAdapter from "axios-mock-adapter";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
-import { ConfigProvider } from "auth/configContext";
 import { AuthProvider } from "auth/authContext";
 
 const axiosMock = new axiosMockAdapter(axios);
-
-axiosMock.onGet("/config.json").reply(200, {
-  apiURL: "http://localhost:5000",
-  sso: {
-    url: "http://localhost:8180",
-    realm: "dci-test",
-    clientId: "dci",
-  },
-});
 
 axiosMock.onGet("http://localhost:5000/api/v1/identity").reply(200, {
   user: {
@@ -50,11 +40,9 @@ it("renders without crashing", () => {
   const div = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
-      <ConfigProvider>
         <AuthProvider>
           <App />
         </AuthProvider>
-      </ConfigProvider>
     </Provider>,
     div
   );

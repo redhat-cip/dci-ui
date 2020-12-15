@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           dci-ui
-Version:        0.1.1
-Release:        2.VERS%{?dist}
+Version:        0.1.2
+Release:        1.VERS%{?dist}
 
 Summary:        DCI UI static files
 License:        ASL 2.0
@@ -11,7 +11,7 @@ URL:            https://github.com/redhat-cip/dci-ui
 Source0:        dci-ui-%{version}.tar.gz
 
 %if 0%{?rhel} && 0%{?rhel} < 8
-BuildRequires:  rh-nodejs10
+BuildRequires:  rh-nodejs12
 %else
 BuildRequires:  /usr/bin/npm
 %endif
@@ -24,8 +24,8 @@ DCI UI static files
 
 %build
 %if 0%{?rhel} && 0%{?rhel} < 8
-scl enable rh-nodejs10 "npm install"
-scl enable rh-nodejs10 "npm run build"
+scl enable rh-nodejs12 "npm install"
+scl enable rh-nodejs12 "npm run build"
 %else
 npm install
 npm run build
@@ -38,10 +38,13 @@ cp -r build/* %{buildroot}/srv/www/dci-ui
 
 %files
 /srv/www/dci-ui/*
-%config(noreplace) /srv/www/dci-ui/config.json
 
 %changelog
-* Wed Jun  3 2020 Haïkel Guémar <hguemar@fedoraproject.org> - 0.1.1-2
+* Tue Dec 15 2020 Guillaume Vincent <gvincent@redhat.com> 0.1.2-1
+- Remove unused config.json
+- Use node 12
+
+* Wed Jun 3 2020 Haïkel Guémar <hguemar@fedoraproject.org> - 0.1.1-2
 - Use npm from node modules on EL8
 
 * Thu May 23 2019 Guillaume Vincent <gvincent@redhat.com> 0.1.1-1

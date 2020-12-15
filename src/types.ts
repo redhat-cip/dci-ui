@@ -29,15 +29,6 @@ type data = {
   [x: string]: any;
 };
 
-export interface IConfig {
-  apiURL: string;
-  sso: {
-    url: string;
-    realm: string;
-    clientId: string;
-  };
-}
-
 export interface ITeam extends Resource {
   country: string | null;
   external: boolean;
@@ -490,15 +481,6 @@ export interface IToken {
 
 export interface IAlertsState {
   [x: string]: IAlert;
-}
-
-export interface IConfigState {
-  apiURL: string;
-  sso: {
-    url: string;
-    realm: string;
-    clientId: string;
-  };
 }
 
 export type ITrend = [number, number, number];

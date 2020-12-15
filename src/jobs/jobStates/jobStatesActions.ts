@@ -49,14 +49,14 @@ export function addDuration(jobStates: IJobState[]) {
   return newJobStates;
 }
 
+// todo remove app thunk
 export function getJobStatesWithFiles(
   job: IJob
 ): AppThunk<AxiosPromise<IGetJobStates>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return () => {
     return http({
       method: "get",
-      url: `${state.config.apiURL}/api/v1/jobs/${job.id}/jobstates`,
+      url: `/api/v1/jobs/${job.id}/jobstates`,
       params: {
         embed: "files",
       },

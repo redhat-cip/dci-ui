@@ -9,11 +9,10 @@ export default createActions("job");
 export function updateJobComment(
   job: IEnhancedJob
 ): AppThunk<Promise<IEnhancedJob>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return (dispatch) => {
     return http({
       method: "put",
-      url: `${state.config.apiURL}/api/v1/jobs/${job.id}`,
+      url: `/api/v1/jobs/${job.id}`,
       headers: { "If-Match": job.etag },
       data: {
         comment: job.comment,

@@ -7,14 +7,14 @@ interface IFetchComponent {
   component: IComponentWithJobs;
 }
 
+// todo remove app thunk
 export function fetchComponent(
   id: string
 ): AppThunk<AxiosPromise<IFetchComponent>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return () => {
     return http({
       method: "get",
-      url: `${state.config.apiURL}/api/v1/components/${id}`,
+      url: `/api/v1/components/${id}`,
       params: { embed: "jobs" },
     });
   };
