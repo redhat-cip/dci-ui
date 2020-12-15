@@ -4,6 +4,11 @@ LABEL name="DCI APP"
 LABEL version="0.1.1"
 LABEL maintainer="DCI Team <distributed-ci@redhat.com>"
 
+ARG REACT_APP_BACKEND_HOST
+ARG REACT_APP_SSO_URL
+ARG REACT_APP_SSO_REALM
+ARG REACT_APP_SSO_CLIENT_ID
+
 ENV LANG en_US.UTF-8
 
 RUN yum install -y centos-release-scl && \

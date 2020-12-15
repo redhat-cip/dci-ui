@@ -10,36 +10,31 @@ interface IFetchUserTeams {
   teams: ITeam[];
 }
 
+// todo remove app thunk
 export function fetchUserTeams(
   user: IUser
 ): AppThunk<AxiosPromise<IFetchUserTeams>> {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http.get(`${state.config.apiURL}/api/v1/users/${user.id}/teams`);
+  return () => {
+    return http.get(`/api/v1/users/${user.id}/teams`);
   };
 }
 
+// todo remove app thunk
 export function addUserToTeam(
   user_id: string,
   team: ITeam
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http.post(
-      `${state.config.apiURL}/api/v1/teams/${team.id}/users/${user_id}`,
-      {}
-    );
+  return () => {
+    return http.post(`/api/v1/teams/${team.id}/users/${user_id}`, {});
   };
 }
 
+// todo remove app thunk
 export function deleteUserFromTeam(
   user: IUser,
   team: ITeam
 ): AppThunk<AxiosPromise<void>> {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http.delete(
-      `${state.config.apiURL}/api/v1/teams/${team.id}/users/${user.id}`
-    );
+  return () => {
+    return http.delete(`/api/v1/teams/${team.id}/users/${user.id}`);
   };
 }

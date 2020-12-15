@@ -10,11 +10,11 @@ interface IFetchUsersForTeam {
   users: IUser[];
 }
 
+// todo remove app thunk
 export function fetchUsersForTeam(
   team: ITeam
 ): AppThunk<AxiosPromise<IFetchUsersForTeam>> {
-  return (dispatch, getState) => {
-    const state = getState();
-    return http.get(`${state.config.apiURL}/api/v1/teams/${team.id}/users`);
+  return () => {
+    return http.get(`/api/v1/teams/${team.id}/users`);
   };
 }

@@ -11,16 +11,16 @@ interface IFetchLatestComponents {
   };
 }
 
+// todo remove app thunk
 export function fetchLatestComponents(
   topic: ITopic
 ): AppThunk<Promise<IFetchLatestComponents>> {
-  return (dispatch, getState) => {
-    const state = getState();
+  return () => {
     return Promise.all(
       topic.component_types.map((componentType) =>
         http({
           method: "get",
-          url: `${state.config.apiURL}/api/v1/topics/${topic.id}/components`,
+          url: `/api/v1/topics/${topic.id}/components`,
           params: {
             sort: "-created_at",
             limit: 1,
