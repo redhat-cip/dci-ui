@@ -4,14 +4,15 @@ import { EmptyState } from "ui";
 import File from "./File";
 import { FileArchiveIcon } from "@patternfly/react-icons";
 import { IFile } from "types";
+import { sortByName } from "services/sort";
 
 interface FilesListProps {
   files: IFile[];
 }
 
 export default function FilesList({ files }: FilesListProps) {
-  const filesNotAssociatedWithJobState = files.filter(
-    (f) => f.jobstate_id === null
+  const filesNotAssociatedWithJobState = sortByName(
+    files.filter((f) => f.jobstate_id === null)
   );
   if (isEmpty(filesNotAssociatedWithJobState)) {
     return (
