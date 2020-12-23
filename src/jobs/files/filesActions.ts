@@ -15,7 +15,10 @@ export function getFileContent(
         ...params,
       })
       .then((response) => {
-        if (typeof response.data === "object") {
+        if (
+          typeof response.data === "object" &&
+          file.mime === "application/x-ansible-output"
+        ) {
           return JSON.stringify(response.data, null, 2);
         } else {
           return response.data;

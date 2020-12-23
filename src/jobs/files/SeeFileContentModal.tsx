@@ -36,7 +36,10 @@ export default function SeeFileContentModal({
         {isLoading ? (
           "loading...."
         ) : (
-          <div className="p-md" style={{ fontSize: "0.7rem" }}>
+          <div
+            className="p-md"
+            style={{ fontSize: "0.7rem", overflow: "auto" }}
+          >
             <pre>{fileContent}</pre>
           </div>
         )}
