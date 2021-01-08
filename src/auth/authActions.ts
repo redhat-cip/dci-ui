@@ -45,10 +45,10 @@ export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
 export function changeCurrentTeam(
   team: ITeam,
   currentUser: ICurrentUser
-): AppThunk<ICurrentUser> {
+): AppThunk<Promise<ICurrentUser>> {
   return (dispatch) => {
     const identity = buildIdentity(currentUser, team);
     dispatch(setIdentity(identity));
-    return identity;
+    return Promise.resolve(identity);
   };
 }
