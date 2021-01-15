@@ -109,10 +109,7 @@ function getIcon(status: string) {
       );
     case "failure":
       return (
-        <BugIcon
-          size="lg"
-          style={{ color: global_danger_color_100.value }}
-        />
+        <BugIcon size="lg" style={{ color: global_danger_color_100.value }} />
       );
     case "error":
       return (
@@ -268,7 +265,9 @@ export default function JobSummary({ job }: JobSummaryProps) {
 
   return (
     <Job status={innerJob.status}>
-      <JobIcon>{getIcon(innerJob.status)}</JobIcon>
+      <JobIcon title={`job status ${innerJob.status}`}>
+        {getIcon(innerJob.status)}
+      </JobIcon>
       <JobTitle>
         <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
           {innerJob.topic?.name}
