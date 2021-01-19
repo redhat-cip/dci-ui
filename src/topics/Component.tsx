@@ -3,6 +3,7 @@ import { CubesIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { Label } from "@patternfly/react-core";
 import { IComponent } from "types";
+import { Link } from "react-router-dom";
 
 const ComponentContainer = styled.div`
   width: 100%
@@ -30,14 +31,14 @@ interface ComponentProps {
 }
 
 export default function Component({ component }: ComponentProps) {
-  const { name, type, tags = [] } = component;
+  const { id, name, type, tags = [] } = component;
   return (
     <ComponentContainer>
       <IconBox>
         <CubesIcon />
       </IconBox>
       <ComponentInfo>
-        <div>{name}</div>
+        <Link to={`/components/${id}`}>{name}</Link>
         <div>{type}</div>
         <div>
           {tags &&

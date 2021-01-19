@@ -1,7 +1,3 @@
-export interface IItemWithName {
-  name: string;
-}
-
 export type IResourceName =
   | "jobstate"
   | "team"
@@ -32,8 +28,6 @@ export interface Resource {
 type data = {
   [x: string]: any;
 };
-
-type tags = string[];
 
 export interface IConfig {
   apiURL: string;
@@ -235,7 +229,7 @@ export interface IJobFilters extends IPaginationFilters {
   product_id: string | null;
   topic_id: string | null;
   remoteci_id: string | null;
-  tags: tags;
+  tags: string[];
   status: Status | null;
 }
 
@@ -248,7 +242,7 @@ export type PatternflyFilters = {
   products: string[];
   topics: string[];
   remotecis: string[];
-  tags: tags;
+  tags: string[];
   status: Status[];
   page: number;
   perPage: number;
@@ -402,7 +396,7 @@ export interface IJob extends Resource {
   results: IResult[];
   state: string;
   status: string;
-  tags: tags;
+  tags: string[];
   team: ITeam;
   team_id: string;
   topic: ITopic;
@@ -429,7 +423,7 @@ export interface IComponent extends Resource {
   message: string | null;
   released_at: string;
   state: string;
-  tags: tags;
+  tags: string[];
   team_id: string | null;
   title: string | null;
   topic_id: string;
@@ -437,6 +431,31 @@ export interface IComponent extends Resource {
   created_at: string;
   updated_at: string;
   url: null;
+}
+
+export interface IEmbedJob {
+  id: string;
+  etag: string;
+  data: string;
+  client_version: string | null;
+  comment: string | null;
+  duration: number;
+  previous_job_id: string | null;
+  product_id: string;
+  remoteci_id: string;
+  state: string;
+  status: string;
+  tags: string[];
+  team_id: string;
+  topic_id: string;
+  update_previous_job_id: string | null;
+  created_at: string;
+  updated_at: string;
+  user_agent: string;
+}
+
+export interface IComponentWithJobs extends IComponent {
+  jobs: IEmbedJob[];
 }
 
 export interface PerformanceTestsCases {

@@ -17,7 +17,7 @@ type StatHeaderCardProps = {
   subTitle: string;
 };
 
-const StatHeaderCard = ({ title, subTitle }: StatHeaderCardProps) => {
+export const StatHeaderCard = ({ title, subTitle }: StatHeaderCardProps) => {
   return (
     <Card>
       <CardBody>
