@@ -8,6 +8,7 @@ import FilePage from "./jobs/files/FilePage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import TopicPage from "./topics/TopicPage";
+import ComponentPage from "./component/ComponentPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
 import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
@@ -46,6 +47,7 @@ export default {
   ProductsPage,
   TopicsPage,
   TopicPage,
+  ComponentPage,
   RemotecisPage,
   FeedersPage,
   CreateFeederPage,

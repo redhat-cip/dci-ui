@@ -44,6 +44,9 @@ export default function App() {
           <PrivateRoute path="/topics" exact>
             <Pages.TopicsPage />
           </PrivateRoute>
+          <PrivateRoute path="/components/:id">
+            <Pages.ComponentPage />
+          </PrivateRoute>
           <PrivateRoute path="/topics/:id/components">
             <Pages.TopicPage />
           </PrivateRoute>
