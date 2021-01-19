@@ -10,7 +10,8 @@ export function fromNow(
     .toRelative();
 }
 
-export function humanizeDuration(durationInMs: number) {
+export function humanizeDuration(durationInMs: number | null) {
+  if (durationInMs === null) return "0 seconds";
   return humanize(durationInMs, { round: true, largest: 1 });
 }
 

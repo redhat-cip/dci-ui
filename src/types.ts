@@ -1,7 +1,3 @@
-export interface IItemWithName {
-  name: string;
-}
-
 export type IResourceName =
   | "jobstate"
   | "team"
@@ -437,6 +433,31 @@ export interface IComponent extends Resource {
   created_at: string;
   updated_at: string;
   url: null;
+}
+
+export interface IEmbedJob {
+  id: string;
+  etag: string;
+  data: string;
+  client_version: string | null;
+  comment: string | null;
+  duration: number;
+  previous_job_id: string | null;
+  product_id: string;
+  remoteci_id: string;
+  state: string;
+  status: string;
+  tags: tags;
+  team_id: string;
+  topic_id: string;
+  update_previous_job_id: string | null;
+  created_at: string;
+  updated_at: string;
+  user_agent: string;
+}
+
+export interface IComponentWithJobs extends IComponent {
+  jobs: IEmbedJob[];
 }
 
 export interface PerformanceTestsCases {
