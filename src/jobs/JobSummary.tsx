@@ -244,14 +244,20 @@ function Components({ components }: ComponentsProps) {
     <div>
       {nFirstComponents.map((component) => (
         <div key={component.id} className="mt-xs">
-          <CubesIcon /> {component.canonical_project_name || component.name}
+          <CubesIcon />{" "}
+          <Link to={`/components/${component.id}`}>
+            {component.canonical_project_name || component.name}
+          </Link>
         </div>
       ))}
       {showMore ? (
         <>
           {remainingComponents.map((component) => (
             <div key={component.id} className="mt-xs">
-              <CubesIcon /> {component.canonical_project_name || component.name}
+              <CubesIcon />{" "}
+              <Link to={`/components/${component.id}`}>
+                {component.canonical_project_name || component.name}
+              </Link>
             </div>
           ))}
           <Chip
