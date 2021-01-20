@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Label } from "@patternfly/react-core";
+import { Label, Chip } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
   global_danger_color_100,
@@ -29,7 +29,7 @@ import {
   CommentIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob } from "types";
+import { IEnhancedJob, IComponent } from "types";
 import { formatDate, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import { TextAreaEditableOnHover } from "ui";
@@ -38,6 +38,7 @@ import { updateJobComment } from "./jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { convertLinksToHtml } from "./comment";
+import { sortByName } from "services/sort";
 
 function getBackground(
   status: string,
@@ -226,6 +227,58 @@ const CommentBloc = styled.div`
   align-items: center;
 `;
 
+interface ComponentsProps {
+  components: IComponent[];
+}
+
+function Components({ components }: ComponentsProps) {
+  const [showMore, setShowMore] = useState(false);
+  const maxNumberElements = Math.min(3, components.length);
+  const showMoreButton = components.length > maxNumberElements;
+  const sortedComponents = sortByName(
+    components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
+  );
+  const nFirstComponents = sortedComponents.slice(0, maxNumberElements);
+  const remainingComponents = sortedComponents.slice(maxNumberElements);
+  return (
+    <div>
+      {nFirstComponents.map((component) => (
+        <div key={component.id} className="mt-xs">
+          <CubesIcon /> {component.canonical_project_name || component.name}
+        </div>
+      ))}
+      {showMore ? (
+        <>
+          {remainingComponents.map((component) => (
+            <div key={component.id} className="mt-xs">
+              <CubesIcon /> {component.canonical_project_name || component.name}
+            </div>
+          ))}
+          <Chip
+            component="button"
+            onClick={() => setShowMore(false)}
+            isOverflowChip
+            className="mt-xs"
+          >
+            show less
+          </Chip>
+        </>
+      ) : (
+        showMoreButton && (
+          <Chip
+            component="button"
+            onClick={() => setShowMore(true)}
+            isOverflowChip
+            className="mt-xs"
+          >
+            {remainingComponents.length} more
+          </Chip>
+        )
+      )}
+    </div>
+  );
+}
+
 interface RegressionsProps {
   regressions: number;
   [x: string]: any;
@@ -292,13 +345,7 @@ export default function JobSummary({ job }: JobSummaryProps) {
         </JobTag>
       )}
       <JobComponents>
-        <div>
-          {innerJob.components.map((component) => (
-            <div key={component.id} className="mt-xs">
-              <CubesIcon /> {component.canonical_project_name || component.name}
-            </div>
-          ))}
-        </div>
+        <Components components={innerJob.components} />
       </JobComponents>
       <JobDate>
         <div>
