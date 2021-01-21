@@ -144,7 +144,7 @@ it("job normalize", () => {
 });
 
 it("users normalize", () => {
-  const data = [{ id: "user1" }];
+  const data = [{ id: "user1", team: [{ id: "t1" }] }];
 
   const dataNormalized = {
     result: ["user1"],
@@ -152,6 +152,12 @@ it("users normalize", () => {
       users: {
         user1: {
           id: "user1",
+          team: ["t1"],
+        },
+      },
+      teams: {
+        t1: {
+          id: "t1",
         },
       },
     },

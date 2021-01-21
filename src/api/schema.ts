@@ -9,7 +9,7 @@ export function getSchema(resource: IResourcesName) {
   const remoteci = new schema.Entity("remotecis", { team: team });
   const remotecis = [remoteci];
   const user = new schema.Entity("users", {
-    team: team,
+    team: [team],
     remotecis: [remoteci],
   });
   const users = [user];
