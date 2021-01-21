@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { sortByName } from "services/sort";
 import { fromNow } from "services/date";
 import { RootState } from "store";
-import { IEnhancedTeam, ITeamsById } from "types";
+import { ITeamsById } from "types";
 
 export const getTeamsById = (state: RootState): ITeamsById => state.teams.byId;
 export const getTeamsAllIds = (state: RootState): string[] =>
@@ -13,7 +13,7 @@ export const getTeams = createSelector(
   getTeamsById,
   getTeamsAllIds,
   (teams, teamsAllIds) => {
-    return sortByName<IEnhancedTeam>(
+    return sortByName(
       teamsAllIds.map((id) => {
         const team = teams[id];
         return {

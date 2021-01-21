@@ -1,4 +1,4 @@
-import { sortByName,sortByNewestFirst, sortByOldestFirst } from "./sort";
+import { sortByName, sortByNewestFirst, sortByOldestFirst } from "./sort";
 
 it("sortByName", () => {
   expect(
@@ -24,7 +24,6 @@ it("sortByName", () => {
   ]);
 });
 
-
 it("sortByNewestFirst", () => {
   expect(
     sortByNewestFirst([
@@ -48,8 +47,6 @@ it("sortByNewestFirst", () => {
     },
   ]);
 });
-
-
 
 it("sortByOldestFirst", () => {
   expect(

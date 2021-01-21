@@ -15,7 +15,7 @@ export function fetchComponent(
     return http({
       method: "get",
       url: `${state.config.apiURL}/api/v1/components/${id}`,
-      params:{"embed":"jobs"}
+      params: { embed: "jobs" },
     });
   };
 }
