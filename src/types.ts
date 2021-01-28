@@ -423,7 +423,7 @@ export interface IComponent extends Resource {
   message: string | null;
   released_at: string;
   state: string;
-  tags: string[];
+  tags: string[] | null;
   team_id: string | null;
   title: string | null;
   topic_id: string;

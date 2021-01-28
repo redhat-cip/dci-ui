@@ -230,7 +230,7 @@ export default function ComponentPage() {
                   <Line
                     field="Tags"
                     value={
-                      component.tags.length > 0
+                      component.tags && component.tags.length > 0
                         ? component.tags.map((tag, i) => (
                             <Label key={i} className="mt-xs mr-xs" color="blue">
                               {tag}
