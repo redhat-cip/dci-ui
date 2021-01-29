@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Modal } from "@patternfly/react-core";
-import { EyeIcon } from "@patternfly/react-icons";
+import React, { useState, useEffect, ReactNode } from "react";
+import { Modal } from "@patternfly/react-core";
 import { IFile } from "types";
 import { AppDispatch } from "store";
 import { useDispatch } from "react-redux";
@@ -9,10 +8,12 @@ import { getFileContent } from "./filesActions";
 
 interface SeeFileContentModalProps {
   file: IFile;
+  children: (open: () => void) => ReactNode;
 }
 
 export default function SeeFileContentModal({
   file,
+  children,
 }: SeeFileContentModalProps) {
   const { isOpen, show, hide } = useModal(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,9 +45,7 @@ export default function SeeFileContentModal({
           </div>
         )}
       </Modal>
-      <Button variant="secondary" icon={<EyeIcon />} onClick={show}>
-        see
-      </Button>
+      {children(show)}
     </>
   );
 }
