@@ -4,11 +4,15 @@ import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
 import { humanFileSize } from "./filesGetters";
-import { FileDownloadIcon } from "@patternfly/react-icons";
+import {
+  FileDownloadIcon,
+  EyeIcon,
+  ExternalLinkAltIcon,
+} from "@patternfly/react-icons";
 import { RotatingSpinnerIcon } from "ui";
 import { IFile } from "types";
 import { AppDispatch } from "store";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SeeFileContentModal from "./SeeFileContentModal";
 
 interface FileProps {
@@ -17,6 +21,7 @@ interface FileProps {
 
 export default function File({ file }: FileProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
   const textMimeTypes = [
     "text/plain",
@@ -24,6 +29,7 @@ export default function File({ file }: FileProps) {
     "text/css",
     "text/csv",
     "text/html",
+    "text/xml",
     "text/calendar",
     "application/json",
     "text/javascript",
@@ -33,11 +39,17 @@ export default function File({ file }: FileProps) {
   return (
     <tr>
       <td>
-        <Link to={`/files/${file.id}`}>{file.name}</Link>
+        <SeeFileContentModal file={file}>
+          {(show) => (
+            <Button variant="link" className="p-0" onClick={show}>
+              {file.name}
+            </Button>
+          )}
+        </SeeFileContentModal>
       </td>
       <td>{humanFileSize(file.size)}</td>
       <td>{file.mime}</td>
-      <td className="text-left">
+      <td className="text-center">
         <Button
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
@@ -58,9 +70,26 @@ export default function File({ file }: FileProps) {
         >
           download
         </Button>
+        <Button
+          variant="secondary"
+          icon={<ExternalLinkAltIcon />}
+          className="mr-xs"
+          iconPosition="right"
+          onClick={() => {
+            history.push(`/files/${file.id}`);
+          }}
+        >
+          link
+        </Button>
         {file.mime === null ||
         textMimeTypes.indexOf(file.mime) === -1 ? null : (
-          <SeeFileContentModal file={file} />
+          <SeeFileContentModal file={file}>
+            {(show) => (
+              <Button variant="secondary" icon={<EyeIcon />} onClick={show}>
+                see
+              </Button>
+            )}
+          </SeeFileContentModal>
         )}
       </td>
     </tr>
