@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
-import { humanFileSize } from "./filesGetters";
+import { humanFileSize, isATextFile } from "./filesGetters";
 import {
   FileDownloadIcon,
   EyeIcon,
@@ -23,20 +23,25 @@ export default function File({ file }: FileProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
+  const isText = isATextFile(file);
   return (
     <tr>
       <td>
-        <SeeFileContentModal file={file}>
-          {(show) => (
-            <Button variant="link" className="p-0" onClick={show}>
-              {file.name}
-            </Button>
-          )}
-        </SeeFileContentModal>
+        {isText ? (
+          <SeeFileContentModal file={file}>
+            {(show) => (
+              <Button variant="link" className="p-0" onClick={show}>
+                {file.name}
+              </Button>
+            )}
+          </SeeFileContentModal>
+        ) : (
+          file.name
+        )}
       </td>
       <td>{humanFileSize(file.size)}</td>
       <td>{file.mime}</td>
-      <td className="text-center">
+      <td>
         <Button
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
@@ -68,7 +73,7 @@ export default function File({ file }: FileProps) {
         >
           link
         </Button>
-        {file.mime === null ? null : (
+        {isText ? (
           <SeeFileContentModal file={file}>
             {(show) => (
               <Button variant="secondary" icon={<EyeIcon />} onClick={show}>
@@ -76,7 +81,7 @@ export default function File({ file }: FileProps) {
               </Button>
             )}
           </SeeFileContentModal>
-        )}
+        ) : null}
       </td>
     </tr>
   );
