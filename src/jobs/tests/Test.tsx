@@ -1,8 +1,6 @@
 import { Button, Label } from "@patternfly/react-core";
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
 import { IFile, ITest, ITestsCase } from "types";
-import { AppDispatch } from "store";
 import { isEmpty } from "lodash";
 import { humanizeDuration } from "services/date";
 import { global_Color_light_200 } from "@patternfly/react-tokens";
@@ -41,14 +39,13 @@ export default function Test({ test }: TestProps) {
   const [isLoadingTestsCases, setIsLoadingTestsCases] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
   const [testscases, setTestscases] = useState<ITestsCase[]>([]);
-  const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   const loadTestCases = useCallback(() => {
     setSeeDetails(true);
     if (isEmpty(testscases)) {
       setIsLoadingTestsCases(true);
       const file = { id: test.file_id } as IFile;
-      dispatch(getTestsCases(file))
+      getTestsCases(file)
         .then((r) => {
           setTestscases(r.data.testscases);
         })
@@ -56,7 +53,7 @@ export default function Test({ test }: TestProps) {
           setIsLoadingTestsCases(false);
         });
     }
-  }, [test.file_id, testscases, dispatch]);
+  }, [test.file_id, testscases]);
 
   return (
     <TestDiv>

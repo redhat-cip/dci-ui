@@ -9,7 +9,7 @@ import { AuthProvider } from "auth/authContext";
 
 const axiosMock = new axiosMockAdapter(axios);
 
-axiosMock.onGet("http://localhost:5000/api/v1/identity").reply(200, {
+axiosMock.onGet("https://api.distributed-ci.io/api/v1/identity").reply(200, {
   user: {
     created_at: "2017-02-20T10:43:25.326282",
     email: "u1@redhat.com",

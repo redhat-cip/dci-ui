@@ -43,18 +43,15 @@ export default function Team({
     false
   );
 
-  const _fetchUsersForTeam = useCallback(
-    (team) => {
-      return dispatch(fetchUsersForTeam(team))
-        .then((response) => {
-          setTeamUsers(response.data.users);
-          return response;
-        })
-        .catch(console.error)
-        .then(() => setIsLoading(false));
-    },
-    [dispatch]
-  );
+  const _fetchUsersForTeam = useCallback((team) => {
+    return fetchUsersForTeam(team)
+      .then((response) => {
+        setTeamUsers(response.data.users);
+        return response;
+      })
+      .catch(console.error)
+      .then(() => setIsLoading(false));
+  }, []);
 
   if (currentUser === null) return null;
 
@@ -71,7 +68,7 @@ export default function Team({
         key={`remove_user_from_team_${user.id}_dropdown`}
         component="button"
         onClick={() => {
-          dispatch(deleteUserFromTeam(user, team));
+          deleteUserFromTeam(user, team);
           _fetchUsersForTeam(team);
         }}
       >
@@ -127,7 +124,7 @@ export default function Team({
         isOpen={isAddUserToTeamModalOpen}
         close={() => setIsAddUserToTeamModalOpen(false)}
         onOk={({ user_id }) => {
-          dispatch(addUserToTeam(user_id, team))
+          addUserToTeam(user_id, team)
             .then(() => _fetchUsersForTeam(team))
             .finally(() => setIsExpanded(true));
           setIsAddUserToTeamModalOpen(false);

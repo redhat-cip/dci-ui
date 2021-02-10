@@ -61,8 +61,8 @@ export default function JobPage() {
     )
       .then(async (response) => {
         const job = response.data.job;
-        const q1 = await dispatch(getResults(job));
-        const q2 = await dispatch(getJobStatesWithFiles(job));
+        const q1 = await getResults(job);
+        const q2 = await getJobStatesWithFiles(job);
         const enhancedJob = {
           ...job,
           tests: sortByName<ITest>(q1.data.results),

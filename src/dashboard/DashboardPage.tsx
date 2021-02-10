@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Page } from "layout";
-import { useDispatch } from "react-redux";
 import { getStats, Dashboard } from "./dashboardActions";
 import { isEmpty } from "lodash";
 import { ProductTitle } from "../topics/TopicsPage";
@@ -16,20 +15,18 @@ import {
 import { useHistory } from "react-router-dom";
 import { icons, EmptyState } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
-import { AppDispatch } from "store";
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Dashboard>({});
-  const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(getStats()).then((products) => {
+    getStats().then((products) => {
       setProducts(products);
       setIsLoading(false);
     });
-  }, [dispatch]);
+  }, [getStats]);
 
   return (
     <Page
