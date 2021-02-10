@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { Page } from "layout";
 import {
   PageSection,
@@ -151,17 +150,16 @@ type MatchParams = {
 };
 
 export default function ComponentPage() {
-  const dispatch = useDispatch<AppDispatch>();
   const match = useRouteMatch<MatchParams>();
   const { id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
   const getComponentCallback = useCallback(() => {
-    dispatch(fetchComponent(id))
+    fetchComponent(id)
       .then((response) => setComponent(response.data.component))
       .finally(() => setIsFetching(false));
-  }, [dispatch, id, setIsFetching]);
+  }, [id, setIsFetching]);
 
   useEffect(() => {
     getComponentCallback();

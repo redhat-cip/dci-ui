@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
 import { useParams } from "react-router-dom";
-import { AppDispatch } from "store";
 import { getFileContent } from "jobs/files/filesActions";
 import { IFile } from "types";
 import pages from "pages";
@@ -15,15 +12,14 @@ export default function FilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams<MatchParams>();
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getFileContent({ id } as IFile))
+    getFileContent({ id } as IFile)
       .then((content) => {
         setFileContent(content);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
-  }, [dispatch, id]);
+  }, [id]);
 
   if (isLoading) {
     return <pages.NotAuthenticatedLoadingPage />;

@@ -3,14 +3,12 @@ import { Page } from "layout";
 import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
 import { useRouteMatch, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
-import { useDispatch } from "react-redux";
 import { IStat } from "types";
 import { getStat } from "./dashboardActions";
 import { EmptyState } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { LinkIcon } from "@patternfly/react-icons";
-import { AppDispatch } from "store";
 
 type StatHeaderCardProps = {
   title: string;
@@ -125,15 +123,14 @@ export default function DashboardDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [stat, setStat] = useState<IStat | null>(null);
   const match = useRouteMatch<MatchParams>();
-  const dispatch = useDispatch<AppDispatch>();
   const { topic_name } = match.params;
 
   useEffect(() => {
-    dispatch(getStat(topic_name))
+    getStat(topic_name)
       .then(setStat)
       .catch(console.error)
       .then(() => setIsLoading(false));
-  }, [dispatch, topic_name]);
+  }, [getStat, topic_name]);
 
   return (
     <Page

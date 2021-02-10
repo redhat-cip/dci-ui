@@ -39,11 +39,11 @@ export default function EditUserPage() {
 
   const _fetchUserTeams = useCallback(
     (id) => {
-      dispatch(fetchUserTeams({ id: id } as IUser)).then((response) => {
+      fetchUserTeams({ id: id } as IUser).then((response) => {
         setUserTeams(response.data.teams);
       });
     },
-    [dispatch, setUserTeams]
+    [fetchUserTeams, setUserTeams]
   );
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function EditUserPage() {
             <CardBody>
               <AddUserToTeamForm
                 onSubmit={(team: ITeam) => {
-                  dispatch(addUserToTeam(user.id, team)).then(() => {
+                  addUserToTeam(user.id, team).then(() => {
                     _fetchUser(id);
                     _fetchUserTeams(id);
                   });
@@ -100,12 +100,10 @@ export default function EditUserPage() {
                           title={`Delete ${user.name} from ${team.name}`}
                           message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
                           onOk={() => {
-                            dispatch(deleteUserFromTeam(user, team)).then(
-                              () => {
-                                _fetchUser(id);
-                                _fetchUserTeams(id);
-                              }
-                            );
+                            deleteUserFromTeam(user, team).then(() => {
+                              _fetchUser(id);
+                              _fetchUserTeams(id);
+                            });
                           }}
                         >
                           {(openModal) => (

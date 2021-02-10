@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
@@ -11,7 +10,6 @@ import {
 } from "@patternfly/react-icons";
 import { RotatingSpinnerIcon } from "ui";
 import { IFile } from "types";
-import { AppDispatch } from "store";
 import { useHistory } from "react-router-dom";
 import SeeFileContentModal from "./SeeFileContentModal";
 
@@ -22,7 +20,6 @@ interface FileProps {
 export default function File({ file }: FileProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const history = useHistory();
-  const dispatch = useDispatch<AppDispatch>();
   const isText = isATextFile(file);
   return (
     <tr>
@@ -47,7 +44,7 @@ export default function File({ file }: FileProps) {
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
           onClick={() => {
             setIsDownloading(true);
-            dispatch(getFileContent(file, { responseType: "blob" }))
+            getFileContent(file, { responseType: "blob" })
               .then((content) => {
                 const blob = new Blob([content], {
                   type: file.mime || undefined,

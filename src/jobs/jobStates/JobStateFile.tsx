@@ -16,8 +16,6 @@ import {
   LabelBox,
 } from "./JobStateComponents";
 import { IFileWithDuration } from "types";
-import { AppDispatch } from "store";
-import { useDispatch } from "react-redux";
 import { getFileStatus } from "./jobStates";
 
 interface JobStateFileProps {
@@ -38,11 +36,9 @@ export default function JobStateFile({
   const [isLoading, setIsLoading] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const loadFileContentCallback = useCallback(() => {
     setIsLoading(true);
-    dispatch(getFileContent(file))
+    getFileContent(file)
       .then((content) => {
         setContent(content);
       })
@@ -50,7 +46,7 @@ export default function JobStateFile({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [dispatch, file]);
+  }, [file]);
 
   useEffect(() => {
     if (seeDetails) {
