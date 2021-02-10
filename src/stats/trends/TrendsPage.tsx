@@ -39,7 +39,7 @@ export default function TrendsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    Promise.all([dispatch(topicsActions.all()), dispatch(getTrends())])
+    Promise.all([dispatch(topicsActions.all()), getTrends()])
       .then((values) => {
         setTrends(values[1].data.topics);
       })

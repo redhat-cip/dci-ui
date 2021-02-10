@@ -1,10 +1,6 @@
 import axios from "axios";
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
 import axiosMockAdapter from "axios-mock-adapter";
 import { fetchLatestComponents } from "./topicsActions";
-
-const mockStore = configureMockStore([thunk]);
 
 const axiosMock = new axiosMockAdapter(axios);
 
@@ -29,17 +25,12 @@ it("fetchLatestComponents", () => {
       },
     })
     .reply(200, { components: [{ id: "c12" }] });
-  const store = mockStore();
-  return store
-    .dispatch(
-      fetchLatestComponents({
-        id: "t1",
-        component_types: ["Compose", "Harness"],
-      })
-    )
-    .then((r) => {
-      expect(r.data).toEqual({
-        components: [{ id: "c11" }, { id: "c12" }],
-      });
+  return fetchLatestComponents({
+    id: "t1",
+    component_types: ["Compose", "Harness"],
+  }).then((r) => {
+    expect(r.data).toEqual({
+      components: [{ id: "c11" }, { id: "c12" }],
     });
+  });
 });

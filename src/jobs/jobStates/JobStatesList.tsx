@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
-import { useDispatch } from "react-redux";
 import { addDuration } from "./jobStatesActions";
 import JobStateFile from "./JobStateFile";
 import {
@@ -16,7 +15,6 @@ import { EmptyState } from "ui";
 import { getFileContent } from "jobs/files/filesActions";
 import { IEnhancedJob } from "types";
 import { useLocation } from "react-router-dom";
-import { AppDispatch } from "store";
 import { humanizeDuration } from "services/date";
 
 interface JobStatesListProps {
@@ -24,7 +22,6 @@ interface JobStatesListProps {
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
-  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const [hash, setHash] = useState<string | null>(null);
   const [seeRawLog, setSeeRawLog] = useState(false);
@@ -53,7 +50,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
             isSmall
             onClick={() => {
               setLoadingRawLog(true);
-              dispatch(getFileContent(rawLogFile))
+              getFileContent(rawLogFile)
                 .then((content) => {
                   setRawLog(content);
                   setSeeRawLog(!seeRawLog);
