@@ -445,7 +445,7 @@ export interface IEmbedJob {
   remoteci_id: string;
   state: string;
   status: string;
-  tags: string[];
+  tags: string[] | null;
   team_id: string;
   topic_id: string;
   update_previous_job_id: string | null;

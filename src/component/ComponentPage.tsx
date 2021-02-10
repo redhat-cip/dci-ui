@@ -134,7 +134,7 @@ function EmbedJob({ job }: IEmbedJobProps) {
       <Grid hasGutter className="mt-sm">
         <GridItem span={12}>
           <div>
-            {job.tags.map((tag, index) => (
+            {job.tags && job.tags.map((tag, index) => (
               <Label key={index} color="blue" className="mr-xs mt-xs">
                 <small>{tag}</small>
               </Label>
