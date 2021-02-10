@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { Page } from "layout";
 import {
   PageSection,
@@ -20,7 +19,6 @@ import {
   global_active_color_100,
 } from "@patternfly/react-tokens";
 import { EmptyState } from "ui";
-import { AppDispatch } from "store";
 import { IComponentWithJobs, IEmbedJob } from "types";
 import { useRouteMatch, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
@@ -134,11 +132,12 @@ function EmbedJob({ job }: IEmbedJobProps) {
       <Grid hasGutter className="mt-sm">
         <GridItem span={12}>
           <div>
-            {job.tags && job.tags.map((tag, index) => (
-              <Label key={index} color="blue" className="mr-xs mt-xs">
-                <small>{tag}</small>
-              </Label>
-            ))}
+            {job.tags &&
+              job.tags.map((tag, index) => (
+                <Label key={index} color="blue" className="mr-xs mt-xs">
+                  <small>{tag}</small>
+                </Label>
+              ))}
           </div>
         </GridItem>
       </Grid>
@@ -151,17 +150,16 @@ type MatchParams = {
 };
 
 export default function ComponentPage() {
-  const dispatch = useDispatch<AppDispatch>();
   const match = useRouteMatch<MatchParams>();
   const { id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
   const getComponentCallback = useCallback(() => {
-    dispatch(fetchComponent(id))
+    fetchComponent(id)
       .then((response) => setComponent(response.data.component))
       .finally(() => setIsFetching(false));
-  }, [dispatch, id, setIsFetching]);
+  }, [id, setIsFetching]);
 
   useEffect(() => {
     getComponentCallback();

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, ReactNode } from "react";
 import { Modal } from "@patternfly/react-core";
 import { IFile } from "types";
-import { AppDispatch } from "store";
-import { useDispatch } from "react-redux";
 import useModal from "hooks/useModal";
 import { getFileContent } from "./filesActions";
 
@@ -18,18 +16,17 @@ export default function SeeFileContentModal({
   const { isOpen, show, hide } = useModal(false);
   const [isLoading, setIsLoading] = useState(true);
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (isOpen) {
-      dispatch(getFileContent(file))
+      getFileContent(file)
         .then((content) => {
           setFileContent(content);
         })
         .catch(console.error)
         .finally(() => setIsLoading(false));
     }
-  }, [dispatch, file, isOpen]);
+  }, [file, isOpen]);
 
   return (
     <>

@@ -114,16 +114,15 @@ interface ComponentsProps {
 }
 
 function Components({ topic }: ComponentsProps) {
-  const dispatch = useDispatch<AppDispatch>();
   const [isFetching, setIsFetching] = useState(true);
   const [components, setComponents] = useState<IComponent[]>([]);
 
   useEffect(() => {
-    dispatch(fetchLatestComponents(topic))
+    fetchLatestComponents(topic)
       .then((response) => setComponents(response.data.components))
       .catch(console.log)
       .then(() => setIsFetching(false));
-  }, [dispatch, topic, setIsFetching]);
+  }, [topic, setIsFetching]);
 
   if (isFetching) {
     return <div>loading</div>;

@@ -7,7 +7,6 @@ import {
   IFileWithDuration,
   IGetJobStates,
 } from "types";
-import { AppThunk } from "store";
 import { AxiosPromise } from "axios";
 import { sortByOldestFirst } from "services/sort";
 
@@ -49,17 +48,12 @@ export function addDuration(jobStates: IJobState[]) {
   return newJobStates;
 }
 
-// todo remove app thunk
-export function getJobStatesWithFiles(
-  job: IJob
-): AppThunk<AxiosPromise<IGetJobStates>> {
-  return () => {
-    return http({
-      method: "get",
-      url: `/api/v1/jobs/${job.id}/jobstates`,
-      params: {
-        embed: "files",
-      },
-    });
-  };
+export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
+  return http({
+    method: "get",
+    url: `/api/v1/jobs/${job.id}/jobstates`,
+    params: {
+      embed: "files",
+    },
+  });
 }
