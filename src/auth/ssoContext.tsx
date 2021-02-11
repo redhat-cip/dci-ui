@@ -13,6 +13,14 @@ const SSOUrl = process.env.REACT_APP_SSO_URL || "https://sso.redhat.com";
 const SSORealm = process.env.REACT_APP_SSO_REALM || "redhat-external";
 const SSOClientId = process.env.REACT_APP_SSO_CLIENT_ID || "dci";
 
+function signinSilent(manager: UserManager) {
+  manager.signinSilent().then((user) => {
+    if (user) {
+      setJWT(user.access_token);
+    }
+  });
+}
+
 export function getSSOUserManager() {
   const origin = window.location.origin;
   const settings = {
@@ -26,11 +34,10 @@ export function getSSOUserManager() {
   };
   const manager = new UserManager(settings);
   manager.events.addAccessTokenExpiring(() => {
-    manager.signinSilent().then((user) => {
-      if (user) {
-        setJWT(user.access_token);
-      }
-    });
+    signinSilent(manager);
+  });
+  manager.events.addAccessTokenExpired(() => {
+    signinSilent(manager);
   });
   return manager;
 }
