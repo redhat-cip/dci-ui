@@ -13,7 +13,7 @@ export interface IItemWithCreatedAt {
   created_at: string;
 }
 
-export function sortByOldestFirst<T extends IItemWithCreatedAt>(
+export function sortByNewestFirst<T extends IItemWithCreatedAt>(
   items: T[]
 ): T[] {
   return items.sort((i1, i2) => {
@@ -29,7 +29,7 @@ export function sortByOldestFirst<T extends IItemWithCreatedAt>(
   });
 }
 
-export function sortByNewestFirst<T extends IItemWithCreatedAt>(
+export function sortByOldestFirst<T extends IItemWithCreatedAt>(
   items: T[]
 ): T[] {
   return items.sort((i1, i2) => {

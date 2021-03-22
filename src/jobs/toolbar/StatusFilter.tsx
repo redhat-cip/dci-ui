@@ -1,5 +1,5 @@
 import React from "react";
-import { IJobFilters, Status, Statuses } from "types";
+import { IJobFilters, IJobStateStatus, JobStatus } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
 type StatusFilterProps = {
@@ -21,7 +21,7 @@ const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
-          setFilters({ ...filters, status: selection as Status });
+          setFilters({ ...filters, status: selection as IJobStateStatus });
         }}
         onClear={clearStatus}
         selections={filters.status || ""}
@@ -29,7 +29,7 @@ const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {
         aria-labelledby="select"
         placeholderText="Filter by status..."
       >
-        {Statuses.map((s, index) => (
+        {JobStatus.map((s, index) => (
           <SelectOption key={index} value={s} />
         ))}
       </Select>
