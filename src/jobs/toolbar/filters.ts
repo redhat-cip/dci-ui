@@ -1,6 +1,6 @@
 import queryString from "query-string";
 import { isEmpty } from "lodash";
-import { Status, IJobFilters, DCIListParams, IUserFilters } from "types";
+import { IJobStateStatus, IJobFilters, DCIListParams, IUserFilters } from "types";
 
 export const defaultFilters = {
   team_id: null,
@@ -32,7 +32,7 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
           break;
         case "status":
           if (value) {
-            acc.status = value as Status;
+            acc.status = value as IJobStateStatus;
           }
           break;
         default:

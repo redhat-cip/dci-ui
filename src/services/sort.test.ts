@@ -24,9 +24,9 @@ it("sortByName", () => {
   ]);
 });
 
-it("sortByNewestFirst", () => {
+it("sortByOldestFirst", () => {
   expect(
-    sortByNewestFirst([
+    sortByOldestFirst([
       {
         id: "1",
         created_at: "2018-06-14T15:30:39.139451",
@@ -48,9 +48,9 @@ it("sortByNewestFirst", () => {
   ]);
 });
 
-it("sortByOldestFirst", () => {
+it("sortByNewestFirst", () => {
   expect(
-    sortByOldestFirst([
+    sortByNewestFirst([
       {
         id: "1",
         created_at: "2018-06-14T15:30:39.139451",

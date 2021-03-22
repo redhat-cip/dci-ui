@@ -6,14 +6,16 @@ import {
   IJobStateWithDuration,
   IFileWithDuration,
   IGetJobStates,
+  IJobStateStatus,
+  IPipelineStatus,
 } from "types";
 import { AxiosPromise } from "axios";
-import { sortByOldestFirst } from "services/sort";
+import { sortByNewestFirst } from "services/sort";
 
 export function addDuration(jobStates: IJobState[]) {
-  const { newJobStates } = sortByOldestFirst(jobStates).reduce(
+  const { newJobStates } = sortByNewestFirst(jobStates).reduce(
     (acc, jobState) => {
-      const { newFiles, duration } = sortByOldestFirst(jobState.files).reduce(
+      const { newFiles, duration } = sortByNewestFirst(jobState.files).reduce(
         (fileAcc, file) => {
           const duration = acc.currentDate
             ? DateTime.fromISO(file.created_at)
@@ -55,5 +57,31 @@ export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
     params: {
       embed: "files",
     },
+  });
+}
+
+function getPipelineStatus(status: IJobStateStatus): IPipelineStatus {
+  switch (status) {
+    case "success":
+      return "success";
+    case "failure":
+    case "error":
+      return "failure";
+    case "killed":
+      return "failure";
+    default:
+      return "success";
+  }
+}
+
+export function addPipelineStatus(jobStates: IJobState[]) {
+  return sortByNewestFirst(jobStates).map((jobState, i, arr) => {
+    const isTheLastOne = arr.length - 1 === i;
+    return {
+      ...jobState,
+      pipelineStatus: isTheLastOne
+        ? getPipelineStatus(jobState.status)
+        : getPipelineStatus(arr[i + 1].status),
+    };
   });
 }

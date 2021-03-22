@@ -197,7 +197,7 @@ export interface IEnhancedFeeder extends IFeeder {
   from_now: string | null;
 }
 
-export const Statuses = [
+export const JobStatus = [
   "success",
   "failure",
   "error",
@@ -208,7 +208,7 @@ export const Statuses = [
   "post-run",
 ] as const;
 
-export type Status = typeof Statuses[number];
+export type IJobStateStatus = typeof JobStatus[number];
 
 export interface IPaginationFilters {
   page: number;
@@ -221,7 +221,7 @@ export interface IJobFilters extends IPaginationFilters {
   topic_id: string | null;
   remoteci_id: string | null;
   tags: string[];
-  status: Status | null;
+  status: IJobStateStatus | null;
 }
 
 export interface IUserFilters extends IPaginationFilters {
@@ -234,7 +234,7 @@ export type PatternflyFilters = {
   topics: string[];
   remotecis: string[];
   tags: string[];
-  status: Status[];
+  status: IJobStateStatus[];
   page: number;
   perPage: number;
 };
@@ -338,10 +338,13 @@ export interface IFileWithDuration extends IFile {
   duration: number;
 }
 
+export type IPipelineStatus = "success" | "failure";
+
 export type IFileStatus = "failed" | "unreachable" | "skipped" | "success";
 export interface IJobState {
   id: string;
-  status: Status;
+  status: IJobStateStatus;
+  pipelineStatus?: IPipelineStatus;
   files: IFile[];
   comment: string;
   created_at: string;

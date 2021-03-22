@@ -3,7 +3,7 @@ import {
   getParamsFromFilters,
   createSearchFromFilters,
 } from "./filters";
-import { Status } from "types";
+import { IJobStateStatus } from "types";
 
 it("parse filters from search", () => {
   const search =
@@ -60,7 +60,7 @@ it("get params from complex filters", () => {
     team_id: "t1",
     remoteci_id: "r1",
     topic_id: "to1",
-    status: "success" as Status,
+    status: "success" as IJobStateStatus,
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
@@ -81,7 +81,7 @@ it("create search from filters", () => {
     team_id: "t1",
     remoteci_id: "r1",
     topic_id: "to1",
-    status: "success" as Status,
+    status: "success" as IJobStateStatus,
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
