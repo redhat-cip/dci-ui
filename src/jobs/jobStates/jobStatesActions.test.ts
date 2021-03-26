@@ -161,29 +161,69 @@ it("addPipelineStatus with last status failure", () => {
     { created_at: "2018-07-30T04:42:10.000000", status: "failure" },
   ] as IJobState[];
   const expectedJobStates = [
-    {created_at: "2018-07-30T04:38:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:39:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:40:10.000000", status: "pre-run", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:41:10.000000", status: "running", pipelineStatus: "failure" },
-    {created_at: "2018-07-30T04:42:10.000000", status: "failure", pipelineStatus: "failure" },
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:39:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:40:10.000000",
+      status: "pre-run",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:41:10.000000",
+      status: "running",
+      pipelineStatus: "failure",
+    },
+    {
+      created_at: "2018-07-30T04:42:10.000000",
+      status: "failure",
+      pipelineStatus: "failure",
+    },
   ] as IJobState[];
   expect(addPipelineStatus(jobStates)).toEqual(expectedJobStates);
 });
 
 it("addPipelineStatus with last status success", () => {
   const jobStates = [
-    {created_at: "2018-07-30T04:38:10.000000", status: "new" },
-    {created_at: "2018-07-30T04:39:10.000000", status: "new" },
-    {created_at: "2018-07-30T04:40:10.000000", status: "pre-run" },
-    {created_at: "2018-07-30T04:41:10.000000", status: "running" },
-    {created_at: "2018-07-30T04:42:10.000000", status: "success" },
+    { created_at: "2018-07-30T04:38:10.000000", status: "new" },
+    { created_at: "2018-07-30T04:39:10.000000", status: "new" },
+    { created_at: "2018-07-30T04:40:10.000000", status: "pre-run" },
+    { created_at: "2018-07-30T04:41:10.000000", status: "running" },
+    { created_at: "2018-07-30T04:42:10.000000", status: "success" },
   ] as IJobState[];
   const expectedJobStates = [
-    {created_at: "2018-07-30T04:38:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:39:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:40:10.000000", status: "pre-run", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:41:10.000000", status: "running", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:42:10.000000", status: "success", pipelineStatus: "success" },
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:39:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:40:10.000000",
+      status: "pre-run",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:41:10.000000",
+      status: "running",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:42:10.000000",
+      status: "success",
+      pipelineStatus: "success",
+    },
   ] as IJobState[];
   expect(addPipelineStatus(jobStates)).toEqual(expectedJobStates);
 });
@@ -197,11 +237,31 @@ it("addPipelineStatus with last status failure unordered", () => {
     { created_at: "2018-07-30T04:38:10.000000", status: "new" },
   ] as IJobState[];
   const expectedJobStates = [
-    {created_at: "2018-07-30T04:38:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:39:10.000000", status: "new", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:40:10.000000", status: "pre-run", pipelineStatus: "success" },
-    {created_at: "2018-07-30T04:41:10.000000", status: "running", pipelineStatus: "failure" },
-    {created_at: "2018-07-30T04:42:10.000000", status: "failure", pipelineStatus: "failure" },
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:39:10.000000",
+      status: "new",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:40:10.000000",
+      status: "pre-run",
+      pipelineStatus: "success",
+    },
+    {
+      created_at: "2018-07-30T04:41:10.000000",
+      status: "running",
+      pipelineStatus: "failure",
+    },
+    {
+      created_at: "2018-07-30T04:42:10.000000",
+      status: "failure",
+      pipelineStatus: "failure",
+    },
   ] as IJobState[];
   expect(addPipelineStatus(jobStates)).toEqual(expectedJobStates);
 });

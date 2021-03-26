@@ -60,7 +60,7 @@ const DashboardPage = () => {
                         history.push(`/dashboard/${stat.topic.name}`)
                       }
                       title="Click to see detailed stats for this topic"
-                      style={{ cursor: "pointer" }}
+                      className="cursor"
                     >
                       <CardBody>
                         <Title headingLevel="h6" size="md">

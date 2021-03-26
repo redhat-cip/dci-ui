@@ -33,5 +33,3 @@ it("getFileStatus", () => {
     } as IFile)
   ).toEqual("skipped");
 });
-
-

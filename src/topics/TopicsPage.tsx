@@ -108,7 +108,7 @@ export default function TopicsPage() {
                       history.push(`/topics/${topic.id}/components`)
                     }
                     title="Click to see components"
-                    style={{ cursor: "pointer" }}
+                    className="cursor"
                   >
                     <CardBody>
                       <Title headingLevel="h6" size="md">

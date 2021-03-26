@@ -5,3 +5,7 @@
 .pf-c-page__main {
   background-color: whitesmoke !important;
 }
+
+.cursor {
+  cursor: pointer;
+}

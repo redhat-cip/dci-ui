@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Button } from "@patternfly/react-core";
-import { TimesIcon, CheckIcon, PencilAltIcon } from "@patternfly/react-icons";
+import {
+  TimesIcon,
+  CheckIcon,
+  PencilAltIcon,
+  CommentIcon,
+} from "@patternfly/react-icons";
 import * as Yup from "yup";
-import { Form, Formik } from "formik";
-import { TextArea } from "./formik";
+import { Form, Formik, Field } from "formik";
 import styled from "styled-components";
 
 interface TextAreaEditableOnHoverProps {
@@ -19,16 +23,31 @@ const TextAreaEditableOnHoverSchema = Yup.object().shape({
 
 const TextAreaEditable = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
-  &:hover .text_editable__button {
-    display: inline;
+  width: 100%;
+
+  .pencil-icon {
+    display: none;
+    cursor: pointer;
+  }
+
+  .comment-icon {
+    display: block;
+    cursor: pointer;
+  }
+
+  &:hover .pencil-icon {
+    display: block;
+  }
+
+  &:hover .comment-icon {
+    display: none;
   }
 `;
 
-const EditButton = styled(Button)`
-  display: none;
-  padding-top: 0;
-  padding-bottom: 0;
+const InlineForm = styled.div`
+  display: flex;
 `;
 
 export default function TextAreaEditableOnHover({
@@ -38,7 +57,6 @@ export default function TextAreaEditableOnHover({
   ...props
 }: TextAreaEditableOnHoverProps) {
   const [editModeOn, setEditModeOne] = useState(false);
-
   return editModeOn ? (
     <Formik
       initialValues={{ text }}
@@ -49,12 +67,23 @@ export default function TextAreaEditableOnHover({
       }}
     >
       {({ isValid, dirty }) => (
-        <Form className="pf-c-inline-edit pf-m-inline-editable" {...props}>
-          <div className="pf-c-inline-edit__group">
-            <div className="pf-c-inline-edit__input">
-              <TextArea id="text" name="text" type="text" autoFocus />
+        <Form {...props}>
+          <InlineForm>
+            <div style={{ flex: "1" }}>
+              <Field
+                id="text"
+                name="text"
+                as="textarea"
+                style={{
+                  width: "100%",
+                  maxWidth: "100%",
+                  resize: "none",
+                }}
+                cols={50}
+                autoFocus
+              />
             </div>
-            <div className="pf-c-inline-edit__group pf-m-action-group pf-m-icon-group">
+            <div style={{ flex: "none" }}>
               <Button
                 variant="link"
                 type="submit"
@@ -62,34 +91,29 @@ export default function TextAreaEditableOnHover({
               >
                 <CheckIcon />
               </Button>
-              <div className="pf-c-inline-edit__action">
-                <Button
-                  variant="plain"
-                  type="button"
-                  onClick={() => setEditModeOne(false)}
-                >
-                  <TimesIcon />
-                </Button>
-              </div>
+              <Button
+                variant="plain"
+                type="button"
+                onClick={() => setEditModeOne(false)}
+              >
+                <TimesIcon />
+              </Button>
             </div>
-          </div>
+          </InlineForm>
         </Form>
       )}
     </Formik>
   ) : (
     <TextAreaEditable {...props}>
-      <div>{children}</div>
-      <div>
-        <EditButton
-          variant="plain"
-          type="button"
-          isSmall
-          onClick={() => setEditModeOne(true)}
-          className="text_editable__button"
-        >
-          <PencilAltIcon />
-        </EditButton>
+      <div
+        style={{ flex: "none" }}
+        className="cursor"
+        onClick={() => setEditModeOne(true)}
+      >
+        <CommentIcon className="mr-xs comment-icon" />
+        <PencilAltIcon className="mr-xs pencil-icon" />
       </div>
+      <div style={{ flex: "1" }}>{children}</div>
     </TextAreaEditable>
   );
 }

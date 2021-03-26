@@ -26,7 +26,7 @@ import {
   WarningTriangleIcon,
   ThumbsUpIcon,
   CaretRightIcon,
-  CommentIcon,
+  CopyIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { IEnhancedJob, IComponent } from "types";
@@ -39,6 +39,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { convertLinksToHtml } from "./comment";
 import { sortByName } from "services/sort";
+import copyToClipboard from "services/copyToClipboard";
 
 function getBackground(
   status: string,
@@ -59,10 +60,11 @@ function getBackground(
 
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
+
   min-height: 120px;
   width: 100%;
-  padding: 0 1em;
-  padding-bottom: 1em;
+  padding: 0;
+  padding-left: 5px; /* because of 5px in getBackground */
   display: grid;
   grid-template-columns: 64px 1fr;
   grid-auto-rows: auto;
@@ -84,7 +86,6 @@ const Job = styled.div`
     grid-auto-rows: auto;
     grid-template-areas:
       "icon title components date nav"
-      "icon comment comment comment nav"
       "icon tag tag tag nav"
       "icon tests tests tests nav";
   }
@@ -95,8 +96,11 @@ const JobIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-  padding-left: 5px;
+  padding: 1em;
+
+  @media (min-width: 992px) {
+    padding-right: 0;
+  }
 `;
 
 function getIcon(status: string) {
@@ -138,8 +142,8 @@ function getIcon(status: string) {
 
 const JobTitle = styled.div`
   grid-area: title;
-  padding: 0 1em;
-  padding-top: 1em;
+  padding: 1em;
+  overflow: hidden;
 `;
 
 const TopicName: Link = styled(Link)`
@@ -150,36 +154,28 @@ const TopicName: Link = styled(Link)`
 `;
 
 const JobId = styled.div`
-  font-size: 14px;
-  @media (min-width: 992px) {
-    font-size: 16px;
-  }
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   color: ${global_Color_400.value};
 `;
 
 const JobComponents = styled.div`
   grid-area: components;
-  padding: 0 1em;
-  padding-top: 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 1em;
+  overflow: hidden;
 `;
 
 const JobDate = styled.div`
   grid-area: date;
-  padding: 0 1em;
-  padding-top: 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 1em;
 `;
 
 const JobTag = styled.div`
   grid-area: tag;
-  padding: 0 1em;
-  padding-top: 0.5rem;
+  padding: 1em;
+  padding-top: 0;
 `;
 
 const JobNav = styled.div`
@@ -194,12 +190,14 @@ const JobNav = styled.div`
 
 const JobLink = styled(Link)`
   text-decoration: none;
-  height: 32px;
-  width: 32px;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 1.2em;
   align-items: center;
+  font-size: 1.2em;
   &:hover {
     background-color: ${global_BackgroundColor_200.value};
   }
@@ -207,24 +205,39 @@ const JobLink = styled(Link)`
 
 const JobTests = styled.div`
   grid-area: tests;
+  padding: 1em 0;
+  padding-top: 0;
+  overflow: hidden;
   display: flex;
-  padding: 0 1em;
-  padding-top: 1em;
   flex-direction: column;
   @media (min-width: 992px) {
     flex-direction: row;
-    flex-wrap: wrap;
   }
 `;
 
-const JobComment = styled.div`
-  grid-area: comment;
-  padding: 0 1em;
+const JobTest = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-familly: monospace;
+  margin: 0 1em;
+  &:first-child {
+  }
+  &:last-child {
+  }
 `;
+
+const JobComment = styled.div``;
 
 const CommentBloc = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const Component = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 interface ComponentsProps {
@@ -243,22 +256,22 @@ function Components({ components }: ComponentsProps) {
   return (
     <div>
       {nFirstComponents.map((component) => (
-        <div key={component.id} className="mt-xs">
-          <CubesIcon />{" "}
+        <Component key={component.id} className="mt-xs">
           <Link to={`/components/${component.id}`}>
+            <CubesIcon className="mr-xs" />
             {component.canonical_project_name || component.name}
           </Link>
-        </div>
+        </Component>
       ))}
       {showMore ? (
         <>
           {remainingComponents.map((component) => (
-            <div key={component.id} className="mt-xs">
-              <CubesIcon />{" "}
+            <Component key={component.id} className="mt-xs">
               <Link to={`/components/${component.id}`}>
+                <CubesIcon className="mr-xs" />
                 {component.canonical_project_name || component.name}
               </Link>
-            </div>
+            </Component>
           ))}
           <Chip
             component="button"
@@ -291,6 +304,9 @@ interface RegressionsProps {
 }
 
 function Regressions({ regressions, ...props }: RegressionsProps) {
+  if (regressions === 0) {
+    return null;
+  }
   return (
     <Label color="red" {...props}>
       <WarningTriangleIcon className="mr-xs" />
@@ -305,6 +321,9 @@ interface SuccessfixesProps {
 }
 
 function Successfixes({ successfixes, ...props }: SuccessfixesProps) {
+  if (successfixes === 0) {
+    return null;
+  }
   return (
     <Label color="green" {...props}>
       <ThumbsUpIcon className="mr-xs" />
@@ -331,7 +350,15 @@ export default function JobSummary({ job }: JobSummaryProps) {
         <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
           {innerJob.topic?.name}
         </TopicName>
-        <JobId>{innerJob.id}</JobId>
+        <JobId>
+          <CopyIcon
+            onClick={(event) => {
+              copyToClipboard(event, innerJob.id);
+            }}
+            className="mr-xs cursor"
+          />
+          {innerJob.id}
+        </JobId>
         <div className="mt-xs">
           <UsersIcon className="mr-xs" />
           {innerJob.team?.name}
@@ -355,23 +382,39 @@ export default function JobSummary({ job }: JobSummaryProps) {
       </JobComponents>
       <JobDate>
         <div>
-          <div>
-            <span title={`Created at ${innerJob.created_at}`}>
-              <CalendarAltIcon className="mr-xs" />
-              {formatDate(innerJob.created_at)}
-            </span>
-          </div>
-          {innerJob.status !== "new" &&
-            innerJob.status !== "pre-run" &&
-            innerJob.status !== "running" && (
-              <div className="mt-xs">
-                <span title={`Duration in seconds ${innerJob.duration}`}>
-                  <ClockIcon className="mr-xs" />
-                  Ran for {jobDuration}
-                </span>
-              </div>
-            )}
+          <span title={`Created at ${innerJob.created_at}`}>
+            <CalendarAltIcon className="mr-xs" />
+            {formatDate(innerJob.created_at)}
+          </span>
         </div>
+        {innerJob.status !== "new" &&
+          innerJob.status !== "pre-run" &&
+          innerJob.status !== "running" && (
+            <div className="mt-xs">
+              <span title={`Duration in seconds ${innerJob.duration}`}>
+                <ClockIcon className="mr-xs" />
+                Ran for {jobDuration}
+              </span>
+            </div>
+          )}
+        <JobComment className="mt-xs">
+          <TextAreaEditableOnHover
+            text={innerJob.comment || ""}
+            onSubmit={(comment) => {
+              dispatch(
+                updateJobComment({
+                  ...innerJob,
+                  comment,
+                })
+              ).then(setInnerJob);
+            }}
+            style={{ minHeight: "25px" }}
+          >
+            <CommentBloc>
+              <Markup content={convertLinksToHtml(innerJob.comment)} />
+            </CommentBloc>
+          </TextAreaEditableOnHover>
+        </JobComment>
       </JobDate>
       <JobNav>
         <JobLink to={`/jobs/${innerJob.id}/jobStates`}>
@@ -381,19 +424,12 @@ export default function JobSummary({ job }: JobSummaryProps) {
       {isEmpty(innerJob.results) ? null : (
         <JobTests>
           {innerJob.results.map((result, i) => (
-            <div key={i} className="mr-xl">
-              <Label
-                color="green"
-                title={`${result.success} tests in success`}
-                className="mr-xs"
-              >
+            <JobTest key={i}>
+              <Label color="green" title={`${result.success} tests in success`}>
                 {result.success}
               </Label>
-              <Label
-                color="orange"
-                title={`${result.skips} skipped tests`}
-                className="mr-xs"
-              >
+              <Successfixes successfixes={result.successfixes} />
+              <Label color="orange" title={`${result.skips} skipped tests`}>
                 {result.skips}
               </Label>
               <Label
@@ -401,47 +437,15 @@ export default function JobSummary({ job }: JobSummaryProps) {
                 title={`${
                   result.errors + result.failures
                 } errors and failures tests`}
-                className="mr-xs"
               >
                 {result.errors + result.failures}
               </Label>
-              <span className="mr-xs">{result.name}</span>
-              <span>
-                {result.successfixes ? (
-                  <Successfixes
-                    successfixes={result.successfixes}
-                    className="mr-xs"
-                  />
-                ) : null}
-                {result.regressions ? (
-                  <Regressions regressions={result.regressions} />
-                ) : null}
-              </span>
-            </div>
+              <Regressions regressions={result.regressions} />
+              <span className="ml-xs mr-xs">{result.name}</span>
+            </JobTest>
           ))}
         </JobTests>
       )}
-      <JobComment>
-        <TextAreaEditableOnHover
-          text={innerJob.comment || ""}
-          onSubmit={(comment) => {
-            dispatch(
-              updateJobComment({
-                ...innerJob,
-                comment,
-              })
-            ).then(setInnerJob);
-          }}
-          style={{ minHeight: "25px" }}
-        >
-          <CommentBloc>
-            <CommentIcon className="mr-xs" />
-            <span style={{ color: global_Color_400.value }}>
-              <Markup content={convertLinksToHtml(innerJob.comment)} />
-            </span>
-          </CommentBloc>
-        </TextAreaEditableOnHover>
-      </JobComment>
     </Job>
   );
 }

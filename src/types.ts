@@ -35,6 +35,8 @@ export interface ITeam extends Resource {
   state: state;
   created_at: string;
   updated_at: string;
+  remotecis: IRemoteci[];
+  topics: ITopic[];
 }
 
 export interface INewTeam {
@@ -83,6 +85,9 @@ export interface IEnhancedProduct extends IProduct {
 export interface IRemoteci extends Resource {
   team_id: string;
   state: string;
+  data: data;
+  public: boolean;
+  cert_fp: string | null;
   api_secret: string;
   created_at: string;
   updated_at: string;
@@ -116,6 +121,7 @@ export interface ITopic extends Resource {
   updated_at: string;
   export_control: boolean;
   product_id: string;
+  next_topic_id: string | null;
 }
 
 export interface INewTopic {
@@ -368,7 +374,6 @@ export interface IResult {
   errors: number;
   failures: number;
   file_id: string;
-  filename: string;
   name: string;
   regressions: number;
   skips: number;
@@ -378,6 +383,7 @@ export interface IResult {
   total: number;
 }
 
+// todo gvincent: Job dont have a name so don't extends from Resource
 export interface IJob extends Resource {
   client_version: string | null;
   comment: string | null;
@@ -424,7 +430,7 @@ export interface IComponent extends Resource {
   type: string;
   created_at: string;
   updated_at: string;
-  url: null;
+  url: string | null;
 }
 
 export interface IEmbedJob {
