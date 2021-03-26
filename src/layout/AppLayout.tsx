@@ -22,7 +22,7 @@ import Logo from "logo.min.svg";
 import { UserIcon, UsersIcon } from "@patternfly/react-icons";
 import { useAuth, AuthContextProps } from "auth/authContext";
 
-const MenuDropdown = ({
+function MenuDropdown({
   title,
   position,
   dropdownItems,
@@ -30,7 +30,7 @@ const MenuDropdown = ({
   title: React.ReactNode;
   position: DropdownPosition;
   dropdownItems: any[];
-}) => {
+}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   return (
     <Dropdown
@@ -44,9 +44,9 @@ const MenuDropdown = ({
       dropdownItems={dropdownItems}
     />
   );
-};
+}
 
-const DCINavItem = ({
+function DCINavItem({
   children,
   to,
   exact = true,
@@ -54,19 +54,21 @@ const DCINavItem = ({
   children: React.ReactNode;
   to: string;
   exact?: boolean;
-}) => (
-  <Route
-    path={to}
-    exact={exact}
-    children={({ match }) => (
-      <NavItem isActive={!isEmpty(match)}>
-        <Link to={to}>{children}</Link>
-      </NavItem>
-    )}
-  />
-);
+}) {
+  return (
+    <Route
+      path={to}
+      exact={exact}
+      children={({ match }) => (
+        <NavItem isActive={!isEmpty(match)}>
+          <Link to={to}>{children}</Link>
+        </NavItem>
+      )}
+    />
+  );
+}
 
-const AppLayout = ({ children }: { children: React.ReactNode }) => {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
   const history = useHistory();
   if (identity === null) return null;
@@ -184,6 +186,4 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
     </Page>
   );
-};
-
-export default AppLayout;
+}

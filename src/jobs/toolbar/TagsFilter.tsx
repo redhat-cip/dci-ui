@@ -14,7 +14,7 @@ type TagsFilterProps = {
   setFilters: (filters: IJobFilters) => void;
 };
 
-const TagsFilter = ({ filters, setFilters }: TagsFilterProps) => {
+export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
   const [tag, setTag] = React.useState("");
   return (
     <ToolbarFilter
@@ -63,6 +63,4 @@ const TagsFilter = ({ filters, setFilters }: TagsFilterProps) => {
       </form>
     </ToolbarFilter>
   );
-};
-
-export default TagsFilter;
+}

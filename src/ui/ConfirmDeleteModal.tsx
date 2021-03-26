@@ -18,14 +18,14 @@ type ConfirmDeleteModalProps = {
   cancelButton?: string;
 };
 
-const ConfirmDeleteModal = ({
+export default function ConfirmDeleteModal({
   title = "Are you sure?",
   message = "",
   okButton = "Yes",
   cancelButton = "No",
   onOk,
   children,
-}: ConfirmDeleteModalProps) => {
+}: ConfirmDeleteModalProps) {
   const { isOpen, show, hide } = useModal(false);
   return (
     <>
@@ -60,6 +60,4 @@ const ConfirmDeleteModal = ({
       {children(show)}
     </>
   );
-};
-
-export default ConfirmDeleteModal;
+}

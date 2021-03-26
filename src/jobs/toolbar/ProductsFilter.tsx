@@ -14,12 +14,12 @@ type ProductsFilterProps = {
   showToolbarItem: boolean;
 };
 
-const ProductsFilter = ({
+export default function ProductsFilter({
   product_id,
   onSelect,
   onClear,
   showToolbarItem,
-}: ProductsFilterProps) => {
+}: ProductsFilterProps) {
   const products = useSelector(getProducts);
   const product = useSelector(getProductById(product_id));
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +42,4 @@ const ProductsFilter = ({
       />
     </ToolbarFilter>
   );
-};
-
-export default ProductsFilter;
+}

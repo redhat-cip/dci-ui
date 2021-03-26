@@ -26,11 +26,12 @@ type FilterDropdownProps = {
   filters: IJobFilters;
   setFilters: (filters: IJobFilters) => void;
 };
-const FilterDropdown = ({
+
+function FilterDropdown({
   currentCategory,
   filters,
   setFilters,
-}: FilterDropdownProps) => {
+}: FilterDropdownProps) {
   return (
     <>
       <TeamsFilter
@@ -63,7 +64,7 @@ const FilterDropdown = ({
       />
     </>
   );
-};
+}
 
 export const Categories = ["Team", "Remoteci", "Product", "Topic"] as const;
 
@@ -75,11 +76,11 @@ type DCIToolbarProps = {
   clearAllFilters: () => void;
 };
 
-const DCIToolbar = ({
+export default function DCIToolbar({
   filters,
   setFilters,
   clearAllFilters,
-}: DCIToolbarProps) => {
+}: DCIToolbarProps) {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = React.useState(
     false
   );
@@ -172,6 +173,4 @@ const DCIToolbar = ({
       </ToolbarContent>
     </Toolbar>
   );
-};
-
-export default DCIToolbar;
+}

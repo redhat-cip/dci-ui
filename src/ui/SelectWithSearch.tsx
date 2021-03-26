@@ -16,13 +16,13 @@ type SelectWithSearchProps = {
   placeholder?: string;
 };
 
-const SelectWithSearch = ({
+export default function SelectWithSearch({
   option,
   options,
   onClear,
   onSelect,
   placeholder = "...",
-}: SelectWithSearchProps) => {
+}: SelectWithSearchProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <Select
@@ -55,6 +55,4 @@ const SelectWithSearch = ({
         ))}
     </Select>
   );
-};
-
-export default SelectWithSearch;
+}

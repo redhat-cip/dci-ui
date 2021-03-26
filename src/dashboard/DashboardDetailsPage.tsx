@@ -15,7 +15,7 @@ type StatHeaderCardProps = {
   subTitle: string;
 };
 
-export const StatHeaderCard = ({ title, subTitle }: StatHeaderCardProps) => {
+export function StatHeaderCard({ title, subTitle }: StatHeaderCardProps) {
   return (
     <Card>
       <CardBody>
@@ -39,13 +39,13 @@ export const StatHeaderCard = ({ title, subTitle }: StatHeaderCardProps) => {
       </CardBody>
     </Card>
   );
-};
+}
 
 type ListOfJobsCardProps = {
   stat: IStat | null;
 };
 
-const ListOfJobsCard = ({ stat }: ListOfJobsCardProps) => {
+function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
   if (stat === null) return null;
   return (
     <Card>
@@ -113,7 +113,7 @@ const ListOfJobsCard = ({ stat }: ListOfJobsCardProps) => {
       </CardBody>
     </Card>
   );
-};
+}
 
 type MatchParams = {
   topic_name: string;

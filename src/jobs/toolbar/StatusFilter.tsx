@@ -7,7 +7,10 @@ type StatusFilterProps = {
   setFilters: (filters: IJobFilters) => void;
 };
 
-const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {
+export default function StatusFilter({
+  filters,
+  setFilters,
+}: StatusFilterProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const clearStatus = () => setFilters({ ...filters, status: null });
   return (
@@ -35,6 +38,4 @@ const StatusFilter = ({ filters, setFilters }: StatusFilterProps) => {
       </Select>
     </ToolbarFilter>
   );
-};
-
-export default StatusFilter;
+}

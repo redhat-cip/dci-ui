@@ -14,12 +14,12 @@ type RemotecisFilterProps = {
   showToolbarItem: boolean;
 };
 
-const RemotecisFilter = ({
+export default function RemotecisFilter({
   remoteci_id,
   onSelect,
   onClear,
   showToolbarItem,
-}: RemotecisFilterProps) => {
+}: RemotecisFilterProps) {
   const remotecis = useSelector(getRemotecis);
   const remoteci = useSelector(getRemoteciById(remoteci_id));
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +42,4 @@ const RemotecisFilter = ({
       />
     </ToolbarFilter>
   );
-};
-
-export default RemotecisFilter;
+}

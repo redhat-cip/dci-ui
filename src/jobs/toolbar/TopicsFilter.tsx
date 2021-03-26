@@ -14,12 +14,12 @@ type TopicsFilterProps = {
   showToolbarItem: boolean;
 };
 
-const TopicsFilter = ({
+export default function TopicsFilter({
   topic_id,
   onSelect,
   onClear,
   showToolbarItem,
-}: TopicsFilterProps) => {
+}: TopicsFilterProps) {
   const topics = useSelector(getTopics);
   const topic = useSelector(getTopicById(topic_id));
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +42,4 @@ const TopicsFilter = ({
       />
     </ToolbarFilter>
   );
-};
-
-export default TopicsFilter;
+}

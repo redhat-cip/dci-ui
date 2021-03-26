@@ -10,7 +10,7 @@ type NbOfJobsChartProps = {
   stat: IStat | null;
 };
 
-const NbOfJobsChart = ({ stat }: NbOfJobsChartProps) => {
+export default function NbOfJobsChart({ stat }: NbOfJobsChartProps) {
   if (stat === null) return null;
   const title = stat.nbOfJobs.toString();
   const subTitle = `remoteci${stat.nbOfJobs > 1 ? "s" : ""}`;
@@ -34,6 +34,4 @@ const NbOfJobsChart = ({ stat }: NbOfJobsChartProps) => {
       ]}
     />
   );
-};
-
-export default NbOfJobsChart;
+}

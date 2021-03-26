@@ -14,12 +14,12 @@ type TeamsFilterProps = {
   showToolbarItem: boolean;
 };
 
-const TeamsFilter = ({
+export default function TeamsFilter({
   team_id,
   onSelect,
   onClear,
   showToolbarItem,
-}: TeamsFilterProps) => {
+}: TeamsFilterProps) {
   const teams = useSelector(getTeams);
   const team = useSelector(getTeamById(team_id));
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +42,4 @@ const TeamsFilter = ({
       />
     </ToolbarFilter>
   );
-};
-
-export default TeamsFilter;
+}

@@ -14,7 +14,11 @@ type EmailsFilterProps = {
   onClear: () => void;
 };
 
-const EmailsFilter = ({ search, onSearch, onClear }: EmailsFilterProps) => {
+export default function EmailsFilter({
+  search,
+  onSearch,
+  onClear,
+}: EmailsFilterProps) {
   const [email, setEmail] = useState(search);
   return (
     <ToolbarFilter
@@ -51,6 +55,4 @@ const EmailsFilter = ({ search, onSearch, onClear }: EmailsFilterProps) => {
       </form>
     </ToolbarFilter>
   );
-};
-
-export default EmailsFilter;
+}
