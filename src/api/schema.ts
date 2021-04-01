@@ -23,6 +23,7 @@ export function getSchema(resource: IResourcesName) {
     jobstates: [jobstate],
     remoteci: remoteci,
     topic: topic,
+    team: team,
   });
   const jobs = [job];
   const schemas: {
