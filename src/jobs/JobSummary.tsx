@@ -26,20 +26,18 @@ import {
   WarningTriangleIcon,
   ThumbsUpIcon,
   CaretRightIcon,
-  CopyIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { IEnhancedJob, IComponent, IRemoteci, ITeam } from "types";
 import { formatDate, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
-import { TextAreaEditableOnHover } from "ui";
+import { TextAreaEditableOnHover, CopyIconButton } from "ui";
 import { Markup } from "interweave";
 import { updateJobComment } from "./jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { convertLinksToHtml } from "./comment";
 import { sortByName } from "services/sort";
-import copyToClipboard from "services/copyToClipboard";
 
 function getBackground(
   status: string,
@@ -359,10 +357,9 @@ export default function JobSummary({
           {innerJob.topic?.name}
         </TopicName>
         <JobId>
-          <CopyIcon
-            onClick={(event) => {
-              copyToClipboard(event, innerJob.id);
-            }}
+          <CopyIconButton
+            text={innerJob.id}
+            textOnSuccess="copied"
             className="mr-xs pointer"
           />
           {innerJob.id}
