@@ -334,9 +334,13 @@ function Successfixes({ successfixes, ...props }: SuccessfixesProps) {
 
 interface JobSummaryProps {
   job: IEnhancedJob;
+  onTagClicked?: (tag: string) => void;
 }
 
-export default function JobSummary({ job }: JobSummaryProps) {
+export default function JobSummary({
+  job,
+  onTagClicked = console.log,
+}: JobSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
   const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
   const dispatch = useDispatch<AppDispatch>();
@@ -355,7 +359,7 @@ export default function JobSummary({ job }: JobSummaryProps) {
             onClick={(event) => {
               copyToClipboard(event, innerJob.id);
             }}
-            className="mr-xs cursor"
+            className="mr-xs pointer"
           />
           {innerJob.id}
         </JobId>
@@ -371,7 +375,12 @@ export default function JobSummary({ job }: JobSummaryProps) {
       {isEmpty(innerJob.tags) ? null : (
         <JobTag>
           {innerJob.tags.map((tag, index) => (
-            <Label key={index} color="blue" className="mr-xs mt-xs">
+            <Label
+              key={index}
+              color="blue"
+              className="mr-xs mt-xs pointer"
+              onClick={() => onTagClicked(tag)}
+            >
               <small>{tag}</small>
             </Label>
           ))}

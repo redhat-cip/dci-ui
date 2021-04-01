@@ -3,7 +3,7 @@ import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
 import JobSummary from "./JobSummary";
-import { IEnhancedJob } from "types";
+import { IEnhancedJob, IJobFilters } from "types";
 
 const JobUl = styled.ul`
   border: 1px solid ${global_Color_light_200.value};
@@ -23,15 +23,25 @@ const JobLi = styled.li`
 
 interface JobsListProps {
   jobs: IEnhancedJob[];
+  filters: IJobFilters;
+  setFilters: (filters: IJobFilters) => void;
 }
 
-export default function JobsList({ jobs }: JobsListProps) {
+export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
   if (isEmpty(jobs)) return null;
   return (
     <JobUl aria-label="job list">
       {jobs.map((job) => (
         <JobLi key={job.id}>
-          <JobSummary job={job} />
+          <JobSummary
+            job={job}
+            onTagClicked={(tag) => {
+              setFilters({
+                ...filters,
+                tags: [...filters.tags, tag],
+              });
+            }}
+          />
         </JobLi>
       ))}
     </JobUl>

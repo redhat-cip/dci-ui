@@ -91,6 +91,22 @@ it("create search from filters", () => {
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
+it("create search from filters remove duplicate tags", () => {
+  const filters = {
+    product_id: "p1",
+    team_id: "t1",
+    remoteci_id: "r1",
+    topic_id: "to1",
+    status: "success" as IJobStateStatus,
+    tags: ["tag_1", "tag_2", "tag_2"],
+    page: 2,
+    perPage: 40,
+  };
+  const expectedSearch =
+    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
+  expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
+});
+
 it("get params from user filters", () => {
   const filters = {
     email: "test@example.org",

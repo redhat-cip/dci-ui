@@ -76,7 +76,6 @@ export const FileRow = styled.div<FileRowProps>`
   padding: 0 1rem;
   min-height: 25px;
   border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
-  cursor: pointer;
   ${(props) =>
     props.status === "failed" || props.status === "unreachable"
       ? css`

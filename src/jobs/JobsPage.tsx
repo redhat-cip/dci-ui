@@ -62,7 +62,7 @@ export default function JobsPage() {
         />
       }
     >
-      <JobsList jobs={jobs} />
+      <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
     </Page>
   );
 }

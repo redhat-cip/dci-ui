@@ -76,7 +76,7 @@ export default function TrendsPage() {
                   <Card
                     onClick={() => setSelectedTopic(topic)}
                     title="Click to enlarge"
-                    className="cursor"
+                    className="pointer"
                   >
                     <CardTitle>{topic.name}</CardTitle>
                     <CardBody>
@@ -95,7 +95,7 @@ export default function TrendsPage() {
           <Card
             onClick={() => setSelectedTopic(null)}
             title="Click to hide"
-            className="cursor"
+            className="pointer"
           >
             <CardTitle>
               {`Successful jobs per day for ${selectedTopic.name} during the last ${nbMonth} months`}
