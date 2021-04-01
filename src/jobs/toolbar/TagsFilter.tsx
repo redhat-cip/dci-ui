@@ -8,6 +8,7 @@ import {
   ButtonVariant,
 } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
+import { sortedUniq } from "lodash";
 
 type TagsFilterProps = {
   filters: IJobFilters;
@@ -16,14 +17,15 @@ type TagsFilterProps = {
 
 export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
   const [tag, setTag] = React.useState("");
+  const uniqTags = sortedUniq(filters.tags);
   return (
     <ToolbarFilter
-      chips={filters.tags}
+      chips={uniqTags}
       deleteChip={(key, value) => {
         if (key) {
           setFilters({
             ...filters,
-            tags: filters.tags?.filter((f) => f !== value),
+            tags: uniqTags?.filter((f) => f !== value),
           });
         }
       }}
@@ -33,10 +35,10 @@ export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (filters.tags?.indexOf(tag) === -1) {
+          if (uniqTags?.indexOf(tag) === -1) {
             setFilters({
               ...filters,
-              tags: filters.tags.concat(tag),
+              tags: uniqTags.concat(tag),
             });
             setTag("");
           }

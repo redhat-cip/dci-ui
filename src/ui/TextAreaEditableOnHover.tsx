@@ -29,12 +29,10 @@ const TextAreaEditable = styled.div`
 
   .pencil-icon {
     display: none;
-    cursor: pointer;
   }
 
   .comment-icon {
     display: block;
-    cursor: pointer;
   }
 
   &:hover .pencil-icon {
@@ -107,7 +105,7 @@ export default function TextAreaEditableOnHover({
     <TextAreaEditable {...props}>
       <div
         style={{ flex: "none" }}
-        className="cursor"
+        className="pointer"
         onClick={() => setEditModeOne(true)}
       >
         <CommentIcon className="mr-xs comment-icon" />

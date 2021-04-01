@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { isEmpty } from "lodash";
+import { isEmpty, sortedUniq } from "lodash";
 import {
   IJobStateStatus,
   IJobFilters,
@@ -70,7 +70,10 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
       keyValues.push(`${key}:${value}`);
     }
     if (key === "tags" && value.length > 0) {
-      keyValues = keyValues.concat(value.map((t: string) => `tags:${t}`));
+      const tags = value as string[];
+      keyValues = keyValues.concat(
+        sortedUniq(tags).map((t: string) => `tags:${t}`)
+      );
     }
   });
   return keyValues.join(",");

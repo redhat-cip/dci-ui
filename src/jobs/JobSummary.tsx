@@ -29,7 +29,7 @@ import {
   CopyIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent } from "types";
+import { IEnhancedJob, IComponent, IRemoteci, ITeam } from "types";
 import { formatDate, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import { TextAreaEditableOnHover } from "ui";
@@ -334,9 +334,17 @@ function Successfixes({ successfixes, ...props }: SuccessfixesProps) {
 
 interface JobSummaryProps {
   job: IEnhancedJob;
+  onTagClicked?: (tag: string) => void;
+  onRemoteciClicked?: (remoteci: IRemoteci) => void;
+  onTeamClicked?: (team: ITeam) => void;
 }
 
-export default function JobSummary({ job }: JobSummaryProps) {
+export default function JobSummary({
+  job,
+  onTagClicked,
+  onRemoteciClicked,
+  onTeamClicked,
+}: JobSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
   const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
   const dispatch = useDispatch<AppDispatch>();
@@ -355,23 +363,50 @@ export default function JobSummary({ job }: JobSummaryProps) {
             onClick={(event) => {
               copyToClipboard(event, innerJob.id);
             }}
-            className="mr-xs cursor"
+            className="mr-xs pointer"
           />
           {innerJob.id}
         </JobId>
         <div className="mt-xs">
           <UsersIcon className="mr-xs" />
-          {innerJob.team?.name}
+          <span
+            className={onTeamClicked === undefined ? "" : "pointer"}
+            onClick={() =>
+              onTeamClicked === undefined
+                ? void 0
+                : onTeamClicked(innerJob.team)
+            }
+          >
+            {innerJob.team?.name}
+          </span>
         </div>
         <div>
           <ServerIcon className="mr-xs" />
-          {innerJob.remoteci?.name}
+          <span
+            className={onRemoteciClicked === undefined ? "" : "pointer"}
+            onClick={() =>
+              onRemoteciClicked === undefined
+                ? void 0
+                : onRemoteciClicked(innerJob.remoteci)
+            }
+          >
+            {innerJob.remoteci?.name}
+          </span>
         </div>
       </JobTitle>
       {isEmpty(innerJob.tags) ? null : (
         <JobTag>
           {innerJob.tags.map((tag, index) => (
-            <Label key={index} color="blue" className="mr-xs mt-xs">
+            <Label
+              key={index}
+              color="blue"
+              className={`mr-xs mt-xs ${
+                onTagClicked === undefined ? "" : "pointer"
+              }`}
+              onClick={() =>
+                onTagClicked === undefined ? void 0 : onTagClicked(tag)
+              }
+            >
               <small>{tag}</small>
             </Label>
           ))}

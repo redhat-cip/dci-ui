@@ -68,6 +68,7 @@ export default function JobStateFile({
         onClick={() => {
           setSeeDetails(!seeDetails);
         }}
+        className="pointer"
       >
         <ShareLink href={link} isSelected={isSelected}>
           <LinkIcon />
