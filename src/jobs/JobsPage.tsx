@@ -16,15 +16,18 @@ import {
 import { IJobFilters } from "types";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
+import { useAuth } from "auth/authContext";
 
 export default function JobsPage() {
   const location = useLocation();
   const history = useHistory();
+  const { identity } = useAuth();
+  const team_id = identity?.team?.id || null;
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
   const [filters, setFilters] = useState<IJobFilters>(
-    parseFiltersFromSearch(location.search)
+    parseFiltersFromSearch(location.search, team_id)
   );
 
   useEffect(() => {
@@ -41,6 +44,10 @@ export default function JobsPage() {
       })
     );
   }, [dispatch, filters]);
+
+  useEffect(() => {
+    setFilters((f) => ({ ...f, team_id }));
+  }, [team_id]);
 
   return (
     <Page
