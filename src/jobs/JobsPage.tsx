@@ -16,15 +16,17 @@ import {
 import { IJobFilters } from "types";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
+import { useAuth } from "auth/authContext";
 
 export default function JobsPage() {
   const location = useLocation();
   const history = useHistory();
+  const { identity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
   const [filters, setFilters] = useState<IJobFilters>(
-    parseFiltersFromSearch(location.search)
+    parseFiltersFromSearch(location.search, identity)
   );
 
   useEffect(() => {

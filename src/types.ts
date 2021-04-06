@@ -259,7 +259,7 @@ export interface ICurrentUser {
   hasEPMRole?: boolean;
   hasReadOnlyRole?: boolean;
   isReadOnly?: boolean;
-  team?: ITeam;
+  team: ITeam | null;
 }
 
 export type DCIListParams = {
