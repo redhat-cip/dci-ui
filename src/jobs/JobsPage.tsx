@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
 import { getJobs, isFetchingJobs } from "./jobsSelectors";
@@ -52,6 +52,7 @@ export default function JobsPage() {
   return (
     <Page
       title="Jobs"
+      description=""
       loading={isFetching && isEmpty(jobs)}
       empty={!isFetching && isEmpty(jobs)}
       Toolbar={
@@ -67,6 +68,9 @@ export default function JobsPage() {
           title="No job"
           info="There is no job at the moment. Edit your filters to restart a search."
         />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
       }
     >
       <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />

@@ -5,7 +5,7 @@ import { useRouteMatch, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { IStat } from "types";
 import { getStat } from "./dashboardActions";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { LinkIcon } from "@patternfly/react-icons";
@@ -135,12 +135,22 @@ export default function DashboardDetailsPage() {
   return (
     <Page
       title={`Latest stats for ${topic_name}`}
+      description=""
       loading={isLoading && isEmpty(stat)}
       empty={!isLoading && isEmpty(stat)}
       EmptyComponent={
         <EmptyState
           title={`There is no stats for ${topic_name}`}
           info="Add some jobs to see some info for this topic"
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[
+            { to: "/", title: "DCI" },
+            { to: "/dashboard", title: "Dashboard" },
+            { to: `/dashboard/${topic_name}`, title: topic_name },
+          ]}
         />
       }
     >

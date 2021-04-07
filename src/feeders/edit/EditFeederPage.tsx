@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { IFeeder } from "types";
+import { Breadcrumb } from "ui";
 
 interface MatchParams {
   id: string;
@@ -28,10 +29,25 @@ export default function EditFeederPage() {
     });
   }, [dispatch, id]);
 
-  if (feeder === null) return <LoadingPage title="Edit a feeder" />;
+  const breadcrumb = (
+    <Breadcrumb
+      links={[
+        { to: "/", title: "DCI" },
+        { to: "/feeders", title: "Feeders" },
+        { to: `/feeders/${id}`, title: id },
+      ]}
+    />
+  );
+
+  if (feeder === null)
+    return <LoadingPage title="Edit a feeder" breadcrumb={breadcrumb} />;
 
   return (
-    <Page title="Edit a feeder">
+    <Page
+      title="Edit a feeder"
+      description="A feeder is a script in charge of uploading newer versions of components to the control server."
+      breadcrumb={breadcrumb}
+    >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>

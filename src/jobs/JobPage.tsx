@@ -26,6 +26,7 @@ import { IEnhancedJob, ITest } from "types";
 import { AppDispatch } from "store";
 import { sortByName } from "services/sort";
 import JobSettingsPage from "./settings/JobSettingsPage";
+import { Breadcrumb } from "ui";
 
 const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
@@ -78,6 +79,7 @@ export default function JobPage() {
   return (
     <Page
       title="Job"
+      description=""
       HeaderSection={
         !loading && (
           <HeaderSection variant={PageSectionVariants.light}>
@@ -110,6 +112,16 @@ export default function JobPage() {
         )
       }
       loading={loading}
+      breadcrumb={
+        <Breadcrumb
+          links={[
+            { to: "/", title: "DCI" },
+            { to: "/jobs", title: "Jobs" },
+            { to: `/jobs/${id}/${endpoints[activeTabKey].value}`, title: id },
+            { title: endpoints[activeTabKey].value },
+          ]}
+        />
+      }
     >
       {activeTabKey === 0 && job && (
         <Stack>

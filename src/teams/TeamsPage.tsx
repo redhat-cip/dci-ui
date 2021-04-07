@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Page } from "layout";
 import teamsActions from "./teamsActions";
 import usersActions from "users/usersActions";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { getTeams, isFetchingTeams } from "./teamsSelectors";
 import Team from "./Team";
 import { getUsers, isFetchingUsers } from "users/usersSelectors";
@@ -34,6 +34,7 @@ export default function TeamsPage() {
   return (
     <Page
       title="Teams"
+      description="List of DCI teams"
       loading={isFetching && isEmpty(teams)}
       empty={!isFetching && isEmpty(teams)}
       HeaderButton={
@@ -48,6 +49,9 @@ export default function TeamsPage() {
           title="There is no teams"
           info="Do you want to create one?"
         />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
       }
     >
       <table

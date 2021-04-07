@@ -16,7 +16,7 @@ import {
   Label,
   Tooltip,
 } from "@patternfly/react-core";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import styled from "styled-components";
 import Component from "./Component";
 import { InfoCircleIcon } from "@patternfly/react-icons";
@@ -174,9 +174,11 @@ export default function TopicPage() {
   return (
     <Page
       title={topic ? `Topic ${topic.name}` : "Topic"}
+      description={
+        topic ? `Details page for topic ${topic.name}` : "Details page"
+      }
       loading={isFetching && topic === null}
       empty={!isFetching && topic === null}
-      description={topic ? `Details page for topic ${topic.name}` : ""}
       HeaderButton={
         topic ? (
           <EditTopicModal
@@ -195,6 +197,15 @@ export default function TopicPage() {
         <EmptyState
           title="There is no topic"
           info={`There is not topic with id ${id}`}
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[
+            { to: "/", title: "DCI" },
+            { to: "/topics", title: "Topics" },
+            { to: `/topics/${id}/components`, title: id },
+          ]}
         />
       }
     >

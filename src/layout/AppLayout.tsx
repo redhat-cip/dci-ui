@@ -68,7 +68,12 @@ function DCINavItem({
   );
 }
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+interface AppLayoutProps {
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
+export default function AppLayout({ children, ...props }: AppLayoutProps) {
   const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
   const history = useHistory();
   if (identity === null) return null;
@@ -182,7 +187,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   );
   const Sidebar = <PageSidebar nav={PageNav} theme="dark" />;
   return (
-    <Page header={Header} sidebar={Sidebar} isManagedSidebar>
+    <Page header={Header} sidebar={Sidebar} isManagedSidebar {...props}>
       {children}
     </Page>
   );

@@ -12,10 +12,10 @@ import {
   isFetchingRemotecis,
 } from "remotecis/remotecisSelectors";
 import { Page } from "layout";
-import { Grid, GridItem } from "@patternfly/react-core";
+import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { IRemoteci } from "types";
 import { getCurrentUser } from "../currentUserSelectors";
@@ -59,27 +59,40 @@ export default function NotificationsPage() {
           info="There is no remoteci you can subscribe to."
         />
       }
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Notifications" }]}
+        />
+      }
     >
       <Grid hasGutter>
         <GridItem span={6}>
-          <SubscribeForm
-            remotecis={availableRemotecis}
-            onSubmit={({ remoteci_id }) => {
-              dispatch(subscribeToARemoteci(remoteci_id, currentUser)).then(
-                getSubscribedRemotecisCallback
-              );
-            }}
-          />
+          <Card>
+            <CardBody>
+              <SubscribeForm
+                remotecis={availableRemotecis}
+                onSubmit={({ remoteci_id }) => {
+                  dispatch(subscribeToARemoteci(remoteci_id, currentUser)).then(
+                    getSubscribedRemotecisCallback
+                  );
+                }}
+              />
+            </CardBody>
+          </Card>
         </GridItem>
         <GridItem span={6}>
-          <UnsubscribeForm
-            remotecis={currentRemotecis}
-            onSubmit={({ remoteci_id }) => {
-              dispatch(unsubscribeFromARemoteci(remoteci_id, currentUser)).then(
-                getSubscribedRemotecisCallback
-              );
-            }}
-          />
+          <Card>
+            <CardBody>
+              <UnsubscribeForm
+                remotecis={currentRemotecis}
+                onSubmit={({ remoteci_id }) => {
+                  dispatch(
+                    unsubscribeFromARemoteci(remoteci_id, currentUser)
+                  ).then(getSubscribedRemotecisCallback);
+                }}
+              />
+            </CardBody>
+          </Card>
         </GridItem>
       </Grid>
     </Page>

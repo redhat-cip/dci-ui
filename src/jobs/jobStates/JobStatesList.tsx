@@ -88,7 +88,11 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           {jobStates.map((jobState, i) => {
             const jobStateColor = getJobStateColor(jobState.pipelineStatus);
             return (
-              <li key={i} className="li complete" style={{ position: "relative" }}>
+              <li
+                key={i}
+                className="li complete"
+                style={{ position: "relative" }}
+              >
                 <div
                   className="status"
                   style={{

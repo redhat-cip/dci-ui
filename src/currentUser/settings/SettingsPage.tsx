@@ -8,6 +8,7 @@ import { Page } from "layout";
 import { AppDispatch } from "store";
 import { useAuth } from "auth/authContext";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
+import { Breadcrumb } from "ui";
 
 export default function SettingsPage() {
   const { refreshIdentity } = useAuth();
@@ -15,7 +16,15 @@ export default function SettingsPage() {
   const currentUser = useSelector(getCurrentUser);
   if (currentUser === null) return null;
   return (
-    <Page title="User preferences">
+    <Page
+      title="User preferences"
+      description="Edit your preferences"
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "User preferences" }]}
+        />
+      }
+    >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>

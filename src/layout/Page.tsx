@@ -14,7 +14,7 @@ interface PageProps {
   HeaderSection?: React.ReactNode;
   HeaderButton?: React.ReactNode;
   title: string;
-  description?: string;
+  description: string;
   Toolbar?: React.ReactNode;
   loading?: boolean;
   empty?: boolean;
@@ -43,7 +43,7 @@ export default function Page({
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1">{title}</Text>
-            {description ? <Text component="p">{description}</Text> : null}
+            <Text component="p">{description}</Text>
             {HeaderButton}
           </TextContent>
         </PageSection>

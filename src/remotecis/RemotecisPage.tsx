@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getRemotecis, isFetchingRemotecis } from "./remotecisSelectors";
 import SeeCredentialsModal from "./SeeCredentialsModal";
 import { Button, Label } from "@patternfly/react-core";
@@ -36,6 +36,7 @@ export default function RemotecisPage() {
   return (
     <Page
       title="Remotecis"
+      description="The remote ci will host the agent. It is recommended to create a remote ci per lab."
       loading={isFetching && isEmpty(myRemotecis)}
       empty={!isFetching && isEmpty(myRemotecis)}
       HeaderButton={
@@ -56,6 +57,11 @@ export default function RemotecisPage() {
               ? `There is no remotecis in ${identity.team.name} team. Do you want to create one?`
               : "Apparently you are not on any team. Contact your EPM or DCI team if you think this is an error."
           }
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Remotecis" }]}
         />
       }
     >

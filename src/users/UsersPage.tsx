@@ -22,11 +22,11 @@ import {
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { Page, LoadingPage } from "layout";
 import usersActions from "./usersActions";
-import { CopyButton, EmptyState, KebabDropdown, TextRed } from "ui";
+import { CopyButton, EmptyState, KebabDropdown, TextRed, Breadcrumb } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
 import { getParamsFromFilters } from "jobs/toolbar/filters";
 import EmailsFilter from "./EmailsFilter";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { IUser, IUserFilters } from "types";
 import { AppDispatch } from "store";
@@ -65,7 +65,11 @@ export default function UsersPage() {
 
   if (currentUser === null) return null;
 
-  if (isFetching) return <LoadingPage title="Users" />;
+  const breadcrumb = (
+    <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
+  );
+
+  if (isFetching) return <LoadingPage title="Users" breadcrumb={breadcrumb} />;
 
   const getDropdownItems = (user: IUser) => {
     const dropdownItems = [
@@ -98,6 +102,7 @@ export default function UsersPage() {
   return (
     <Page
       title="Users"
+      description="List of DCI users"
       HeaderButton={
         currentUser.isSuperAdmin ? (
           <Button
@@ -156,6 +161,7 @@ export default function UsersPage() {
           </ToolbarContent>
         </Toolbar>
       }
+      breadcrumb={breadcrumb}
     >
       {users.length === 0 ? (
         <PageSection variant={PageSectionVariants.light}>
@@ -185,7 +191,9 @@ export default function UsersPage() {
                 <td>
                   <CopyButton text={user.id} />
                 </td>
-                <td>{user.name}</td>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </td>
                 <td>{user.fullname}</td>
                 <td>{user.email}</td>
                 <td>{user.from_now}</td>

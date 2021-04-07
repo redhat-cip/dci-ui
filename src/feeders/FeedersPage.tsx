@@ -3,16 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import feedersActions from "./feedersActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getFeeders, isFetchingFeeders } from "./feedersSelectors";
-import {
-  TrashIcon,
-  PlusCircleIcon,
-  EditAltIcon,
-} from "@patternfly/react-icons";
+import { TrashIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { Button } from "@patternfly/react-core";
 import { AppDispatch } from "store";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 export default function FeedersPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,6 +23,7 @@ export default function FeedersPage() {
   return (
     <Page
       title="Feeders"
+      description="A feeder is a script in charge of uploading newer versions of components to the control server."
       loading={isFetching && isEmpty(feeders)}
       empty={!isFetching && isEmpty(feeders)}
       HeaderButton={
@@ -43,6 +40,9 @@ export default function FeedersPage() {
           title="There is no feeders"
           info="Do you want to create one?"
         />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Feeders" }]} />
       }
     >
       <table className="pf-c-table pf-m-compact pf-m-grid-md">
@@ -61,17 +61,12 @@ export default function FeedersPage() {
               <td className="text-center">
                 <CopyButton text={feeder.id} />
               </td>
-              <td>{feeder.name}</td>
+              <td>
+                <Link to={`/feeders/${feeder.id}`}>{feeder.name}</Link>
+              </td>
               <td>{feeder.team ? feeder.team.name.toUpperCase() : null}</td>
               <td className="text-center">{feeder.from_now}</td>
               <td className="text-center">
-                <Button
-                  variant="primary"
-                  onClick={() => history.push(`/feeders/${feeder.id}`)}
-                  className="mr-xs"
-                >
-                  <EditAltIcon />
-                </Button>
                 <ConfirmDeleteModal
                   title={`Delete feeder ${feeder.name}`}
                   message={`Are you sure you want to delete ${feeder.name}?`}

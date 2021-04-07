@@ -11,7 +11,7 @@ import {
 } from "../usersActions";
 import AddUserToTeamForm from "./AddUserToTeamsForm";
 import { TrashIcon } from "@patternfly/react-icons";
-import { ConfirmDeleteModal } from "ui";
+import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
 import { useRouteMatch } from "react-router-dom";
@@ -48,9 +48,26 @@ export default function EditUserPage() {
     _fetchUserTeams(id);
   }, [id, _fetchUser, _fetchUserTeams]);
 
-  if (user === null) return <LoadingPage title="Edit user ..." />;
+  const breadcrumb = (
+    <Breadcrumb
+      links={[
+        { to: "/", title: "DCI" },
+        { to: "/users", title: "Users" },
+        { to: `/users/${id}`, title: id },
+      ]}
+    />
+  );
+
+  if (user === null) {
+    return <LoadingPage title="Edit user" breadcrumb={breadcrumb} />;
+  }
+
   return (
-    <Page title={`Edit user ${user.fullname}`}>
+    <Page
+      title={`Edit user ${user.fullname}`}
+      description={user ? `Details page for user ${user.name}` : "Details page"}
+      breadcrumb={breadcrumb}
+    >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>

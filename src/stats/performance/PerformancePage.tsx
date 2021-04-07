@@ -16,6 +16,7 @@ import PerformanceCard from "./PerformanceCard";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
 import { IPerformance } from "types";
+import { Breadcrumb } from "ui";
 
 export default function PerformancePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -57,6 +58,11 @@ export default function PerformancePage() {
       title="Performance"
       description="Observe the evolution of the performance of your tests."
       loading={isFetching}
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Performance" }]}
+        />
+      }
     >
       <PageSection>
         <Card>

@@ -6,12 +6,21 @@ import usersActions from "../usersActions";
 import CreateUserForm from "./CreateUserForm";
 import { AppDispatch } from "store";
 import { useHistory } from "react-router-dom";
+import { Breadcrumb } from "ui";
 
 export default function CreateUserPage() {
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
   return (
-    <Page title="Create a user">
+    <Page
+      title="Create a user"
+      description=""
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Create a user" }]}
+        />
+      }
+    >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>

@@ -13,7 +13,7 @@ import {
   GridItem,
 } from "@patternfly/react-core";
 import { useHistory } from "react-router-dom";
-import { icons, EmptyState } from "ui";
+import { icons, EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
 
 const DashboardPage = () => {
@@ -38,6 +38,11 @@ const DashboardPage = () => {
         <EmptyState
           title="Your Dashboard is empty"
           info="There is no information to display in the dashboard at the moment. If you think this is an error contact the DCI team."
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Dashboard" }]}
         />
       }
     >

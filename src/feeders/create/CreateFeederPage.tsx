@@ -8,6 +8,7 @@ import { AppDispatch } from "store";
 import { useHistory } from "react-router-dom";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
+import { Breadcrumb } from "ui";
 
 export default function CreateFeederPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +20,15 @@ export default function CreateFeederPage() {
   }, [dispatch]);
 
   return (
-    <Page title="Create a feeder">
+    <Page
+      title="Create a feeder"
+      description=""
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Create a feeder" }]}
+        />
+      }
+    >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>

@@ -7,15 +7,13 @@ import {
   Card,
   CardBody,
   TextContent,
-  PageSection,
-  PageSectionVariants,
   Text,
   Tabs,
   Tab,
   TabTitleText,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import {
   getProductsWithTeams,
   getTopicsWithTeams,
@@ -54,25 +52,18 @@ export default function PermissionsPage() {
   return (
     <Page
       title="Permissions"
+      description="On this page, you can grant teams permissions to access products. Make sure the team has the rights before giving it permission to download components from a product."
       loading={isLoading}
       empty={!isLoading && teams.length === 0}
-      HeaderSection={
-        <PageSection variant={PageSectionVariants.light}>
-          <TextContent>
-            <Text component="h1">Permissions</Text>
-            <Text component="p">
-              On this page, you can grant teams permissions to access products.
-              <br />
-              Make sure the team has the rights before giving it permission to
-              download components from a product.
-            </Text>
-          </TextContent>
-        </PageSection>
-      }
       EmptyComponent={
         <EmptyState
           title="There is no teams. You cannot manage permissions"
           info="Contact DCI administrator"
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Permissions" }]}
         />
       }
     >

@@ -10,7 +10,7 @@ import {
   CardBody,
   Title,
 } from "@patternfly/react-core";
-import { EmptyState, icons } from "ui";
+import { EmptyState, icons, Breadcrumb } from "ui";
 import { getTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
@@ -88,6 +88,9 @@ export default function TopicsPage() {
       }
       EmptyComponent={
         <EmptyState title="There is no topics" info="See documentation" />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
       }
     >
       {Object.values(topicsPerProduct).map((product) => {

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import productsActions from "./productsActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal } from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import CreateProductModal from "./CreateProductModal";
 import EditProductModal from "./EditProductModal";
 import { getProducts, isFetchingProducts } from "./productsSelectors";
@@ -27,6 +27,7 @@ export default function ProductsPage() {
   return (
     <Page
       title="Products"
+      description="A product is the main abstraction that describe a Red Hat product (RHEL, OpenStack, Openshift)."
       loading={isFetching && isEmpty(products)}
       empty={!isFetching && isEmpty(products)}
       HeaderButton={
@@ -40,6 +41,11 @@ export default function ProductsPage() {
         <EmptyState
           title="There is no products"
           info="Do you want to create one?"
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[{ to: "/", title: "DCI" }, { title: "Products" }]}
         />
       }
     >

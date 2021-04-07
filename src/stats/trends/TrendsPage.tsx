@@ -5,7 +5,7 @@ import { getTopics } from "topics/topicsSelectors";
 import { getTrends } from "./trendsActions";
 import { Page } from "layout";
 import TrendGraph from "./TrendGraph";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { DateTime } from "luxon";
 import {
   Card,
@@ -62,6 +62,9 @@ export default function TrendsPage() {
           title="There is no trends"
           info="Add some jobs to see trends"
         />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Trends" }]} />
       }
     >
       <PageSection>
