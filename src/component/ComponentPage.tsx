@@ -18,7 +18,7 @@ import {
   global_warning_color_100,
   global_active_color_100,
 } from "@patternfly/react-tokens";
-import { EmptyState } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { IComponentWithJobs, IEmbedJob } from "types";
 import { useRouteMatch, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
@@ -146,12 +146,13 @@ function EmbedJob({ job }: IEmbedJobProps) {
 }
 
 type MatchParams = {
+  topic_id: string;
   id: string;
 };
 
 export default function ComponentPage() {
   const match = useRouteMatch<MatchParams>();
-  const { id } = match.params;
+  const { topic_id, id } = match.params;
   const [isFetching, setIsFetching] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
@@ -177,12 +178,23 @@ export default function ComponentPage() {
       description={
         component
           ? `Details page for component ${component.canonical_project_name}`
-          : ""
+          : "Details page"
       }
       EmptyComponent={
         <EmptyState
           title="There is no component"
           info={`There is not component with id ${id}`}
+        />
+      }
+      breadcrumb={
+        <Breadcrumb
+          links={[
+            { to: "/", title: "DCI" },
+            { to: "/topics", title: "Topics" },
+            { to: `/topics/${topic_id}/components`, title: topic_id },
+            { to: `/topics/${topic_id}/components`, title: "Components" },
+            { to: `/topics/${topic_id}/components/${id}`, title: id },
+          ]}
         />
       }
     >
