@@ -265,7 +265,9 @@ function Components({ components }: ComponentsProps) {
         <>
           {remainingComponents.map((component) => (
             <Component key={component.id} className="mt-xs">
-              <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
+              <Link
+                to={`/topics/${component.topic_id}/components/${component.id}`}
+              >
                 <CubesIcon className="mr-xs" />
                 {component.canonical_project_name || component.name}
               </Link>

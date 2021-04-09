@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { IUser } from "types";
 
-const CreateUserSchema = Yup.object().shape({
+const EditUserSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "User name is too short!")
     .required("User name is required"),
@@ -18,19 +18,16 @@ const CreateUserSchema = Yup.object().shape({
   password: Yup.string(),
 });
 
-interface CreateUserFormProps {
+interface EditUserFormProps {
   user: IUser;
   onSubmit: (user: IUser) => void;
 }
 
-export default function CreateUserForm({
-  user,
-  onSubmit,
-}: CreateUserFormProps) {
+export default function EditUserForm({ user, onSubmit }: EditUserFormProps) {
   return (
     <Formik
       initialValues={user}
-      validationSchema={CreateUserSchema}
+      validationSchema={EditUserSchema}
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (

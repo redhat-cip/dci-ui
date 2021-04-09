@@ -30,6 +30,7 @@ export default function ConfirmDeleteModal({
   return (
     <>
       <Modal
+        title="Confirm delete modal"
         isOpen={isOpen}
         header={
           <Title headingLevel="h1" size={TitleSizes["2xl"]}>

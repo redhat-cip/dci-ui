@@ -11,22 +11,12 @@ import { SearchIcon } from "@patternfly/react-icons";
 type EmailsFilterProps = {
   search: string;
   onSearch: (search: string) => void;
-  onClear: () => void;
 };
 
-export default function EmailsFilter({
-  search,
-  onSearch,
-  onClear,
-}: EmailsFilterProps) {
+export default function EmailsFilter({ search, onSearch }: EmailsFilterProps) {
   const [email, setEmail] = useState(search);
   return (
-    <ToolbarFilter
-      chips={email === "" ? [] : [email]}
-      deleteChip={onClear}
-      categoryName="Email"
-      showToolbarItem
-    >
+    <ToolbarFilter categoryName="Email" showToolbarItem>
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -42,7 +32,7 @@ export default function EmailsFilter({
             aria-label="email filter"
             onChange={(email) => setEmail(email)}
             value={email}
-            placeholder="Filter by email..."
+            placeholder="Search by email..."
           />
           <Button
             variant={ButtonVariant.control}

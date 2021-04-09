@@ -15,15 +15,15 @@ interface DCIBreadcrumbProps {
 export default function DCIBreadcrumb({ links }: DCIBreadcrumbProps) {
   return (
     <Breadcrumb>
-      {links.map((link) => {
+      {links.map((link, i) => {
         if (link.to) {
           return (
-            <BreadcrumbItem>
+            <BreadcrumbItem key={i}>
               <Link to={link.to}>{link.title}</Link>
             </BreadcrumbItem>
           );
         }
-        return <BreadcrumbItem>{link.title}</BreadcrumbItem>;
+        return <BreadcrumbItem key={i}>{link.title}</BreadcrumbItem>;
       })}
     </Breadcrumb>
   );

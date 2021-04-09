@@ -232,6 +232,7 @@ export interface IJobFilters extends IPaginationFilters {
 
 export interface IUserFilters extends IPaginationFilters {
   email: string | null;
+  sort?: string;
 }
 
 export type PatternflyFilters = {
@@ -267,6 +268,7 @@ export type DCIListParams = {
   limit?: number;
   offset?: number;
   where?: string;
+  sort?: string;
 };
 
 export type StatJob = {

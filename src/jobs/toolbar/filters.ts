@@ -94,7 +94,10 @@ export function getParamsFromFilters(filters: IJobFilters | IUserFilters) {
   };
   const where = _getWhereFromFilters(filters);
   if (where) {
-    params["where"] = where;
+    params.where = where;
+  }
+  if ("sort" in filters) {
+    params.sort = filters.sort;
   }
   return params;
 }

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
-  DropdownItem,
-  DropdownPosition,
   ToolbarGroup,
   ToolbarContent,
   Pagination,
@@ -13,28 +11,24 @@ import {
   Bullseye,
   PageSection,
 } from "@patternfly/react-core";
-import {
-  WarningTriangleIcon,
-  EditAltIcon,
-  PlusCircleIcon,
-  SearchIcon,
-} from "@patternfly/react-icons";
-import { global_danger_color_100 } from "@patternfly/react-tokens";
+import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
 import { Page, LoadingPage } from "layout";
 import usersActions from "./usersActions";
-import { CopyButton, EmptyState, KebabDropdown, TextRed, Breadcrumb } from "ui";
+import { CopyButton, EmptyState, Breadcrumb } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
 import { getParamsFromFilters } from "jobs/toolbar/filters";
 import EmailsFilter from "./EmailsFilter";
 import { useHistory, Link } from "react-router-dom";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
-import { IUser, IUserFilters } from "types";
+import { IUserFilters } from "types";
 import { AppDispatch } from "store";
+import CreateUserModal from "./create/CreateUserModal";
 
 const initialUserFilter = {
   page: 1,
   perPage: 20,
   email: null,
+  sort: "-created_at",
 };
 
 export default function UsersPage() {
@@ -42,16 +36,10 @@ export default function UsersPage() {
   const users = useSelector(getUsers);
   const numOfUsers = useSelector(getNbOfUsers);
   const isFetching = useSelector(isFetchingUsers);
-  const history = useHistory();
   const [filters, setFilters] = useState<IUserFilters>({
     ...initialUserFilter,
   });
   const dispatch = useDispatch<AppDispatch>();
-
-  const clear = () => {
-    const s = { ...initialUserFilter };
-    setFilters(s);
-  };
 
   const search = (s: IUserFilters) => {
     setFilters(s);
@@ -71,65 +59,40 @@ export default function UsersPage() {
 
   if (isFetching) return <LoadingPage title="Users" breadcrumb={breadcrumb} />;
 
-  const getDropdownItems = (user: IUser) => {
-    const dropdownItems = [
-      <DropdownItem
-        component="button"
-        onClick={() => history.push(`/users/${user.id}`)}
-        key="edit user"
-      >
-        <EditAltIcon className="mr-xs" /> Edit a user
-      </DropdownItem>,
-    ];
-    if (currentUser.isSuperAdmin) {
-      dropdownItems.push(
-        <DropdownItem
-          component="button"
-          onClick={() => dispatch(usersActions.delete(user))}
-          key="delete user"
-        >
-          <WarningTriangleIcon
-            color={global_danger_color_100.value}
-            className="mr-xs"
-          />
-          <TextRed>delete a user</TextRed>
-        </DropdownItem>
-      );
-    }
-    return dropdownItems;
-  };
-
   return (
     <Page
       title="Users"
       description="List of DCI users"
-      HeaderButton={
-        currentUser.isSuperAdmin ? (
-          <Button
-            variant="primary"
-            onClick={() => history.push("/users/create")}
-          >
-            <PlusCircleIcon className="mr-xs" />
-            Create a new user
-          </Button>
-        ) : null
-      }
       Toolbar={
-        <Toolbar
-          id="toolbar-users"
-          clearAllFilters={clear}
-          collapseListedFiltersBreakpoint="xl"
-        >
+        <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
           <ToolbarContent>
             <ToolbarGroup>
               <ToolbarItem>
                 <EmailsFilter
                   search={filters.email || ""}
-                  onClear={clear}
                   onSearch={(email) => {
                     search({ ...initialUserFilter, email });
                   }}
                 />
+              </ToolbarItem>
+              <ToolbarItem variant="separator" />
+              <ToolbarItem>
+                {currentUser.isSuperAdmin ? (
+                  <CreateUserModal
+                    onSubmit={(user) => {
+                      dispatch(usersActions.create(user)).then(() =>
+                        search({ ...initialUserFilter })
+                      );
+                    }}
+                  >
+                    {(openModal) => (
+                      <Button variant="primary" onClick={openModal}>
+                        <PlusCircleIcon className="mr-xs" />
+                        Create a new user
+                      </Button>
+                    )}
+                  </CreateUserModal>
+                ) : null}
               </ToolbarItem>
             </ToolbarGroup>
             <ToolbarGroup style={{ flex: "1" }}>
@@ -182,7 +145,6 @@ export default function UsersPage() {
               <th>Full name</th>
               <th>Email</th>
               <th>Created</th>
-              <th />
             </tr>
           </thead>
           <tbody>
@@ -197,12 +159,6 @@ export default function UsersPage() {
                 <td>{user.fullname}</td>
                 <td>{user.email}</td>
                 <td>{user.from_now}</td>
-                <td className="pf-c-table__action">
-                  <KebabDropdown
-                    position={DropdownPosition.right}
-                    items={getDropdownItems(user)}
-                  />
-                </td>
               </tr>
             ))}
           </tbody>

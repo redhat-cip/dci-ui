@@ -10,6 +10,7 @@ test("test create user form submit the correct values", async () => {
     name: "user 1",
     fullname: "",
     email: "u1@example.org",
+    password: "",
   } as IUser;
   const { container, getByRole, getByTestId } = render(
     <CreateUserForm user={user} onSubmit={mockOnSubmit} />

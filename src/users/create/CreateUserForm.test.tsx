@@ -42,8 +42,7 @@ test("test create user form submit the correct values", async () => {
   });
   expect(password.type).toBe("password");
 
-  const createButton = getByRole("button", { name: /Create a user/i });
-  fireEvent.click(createButton);
+  fireEvent.submit(name);
 
   await waitFor(() => {
     expect(mockOnSubmit.mock.calls.length).toBe(1);

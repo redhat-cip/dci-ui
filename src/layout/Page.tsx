@@ -51,11 +51,7 @@ export default function Page({
         HeaderSection
       )}
       <PageSection variant={PageSectionVariants.default}>
-        {!isEmpty(Toolbar) && (
-          <PageSection variant={PageSectionVariants.light}>
-            {Toolbar}
-          </PageSection>
-        )}
+        {!isEmpty(Toolbar) && Toolbar}
         {loading ? (
           <Bullseye>
             <BlinkLogo />
@@ -67,11 +63,7 @@ export default function Page({
           </PageSection>
         ) : null}
         {!loading && !empty ? children : null}
-        {!loading && !empty && !isEmpty(Toolbar) && seeSecondToolbar && (
-          <PageSection variant={PageSectionVariants.light}>
-            {Toolbar}
-          </PageSection>
-        )}
+        {!loading && !empty && !isEmpty(Toolbar) && seeSecondToolbar && Toolbar}
       </PageSection>
     </AppLayout>
   );

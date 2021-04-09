@@ -145,11 +145,13 @@ it("get params from user filters", () => {
     email: "test@example.org",
     page: 1,
     perPage: 20,
+    sort: "created_at",
   };
   const expectedParams = {
     where: "email:test@example.org",
     limit: 20,
     offset: 0,
+    sort: "created_at",
   };
   expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });

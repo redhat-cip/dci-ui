@@ -14,7 +14,6 @@ import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/edit/EditUserPage";
-import CreateUserPage from "./users/create/CreateUserPage";
 import CreateFeederPage from "./feeders/create/CreateFeederPage";
 import EditFeederPage from "./feeders/edit/EditFeederPage";
 import SettingsPage from "./currentUser/settings/SettingsPage";
@@ -55,7 +54,6 @@ export default {
   TeamsPage,
   UsersPage,
   EditUserPage,
-  CreateUserPage,
   PermissionsPage,
   SettingsPage,
   NotificationsPage,
