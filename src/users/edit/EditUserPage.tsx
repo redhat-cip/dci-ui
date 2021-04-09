@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Grid, GridItem, Card, CardBody, Button } from "@patternfly/react-core";
+import {
+  Grid,
+  GridItem,
+  Card,
+  CardBody,
+  Button,
+  TextContent,
+  Text,
+  CardTitle,
+} from "@patternfly/react-core";
 import { LoadingPage, Page } from "layout";
 import usersActions from "../usersActions";
 import EditUserForm from "./EditUserForm";
@@ -10,17 +19,32 @@ import {
   deleteUserFromTeam,
 } from "../usersActions";
 import AddUserToTeamForm from "./AddUserToTeamsForm";
-import { TrashIcon } from "@patternfly/react-icons";
+import { TrashAltIcon, MinusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
+import styled from "styled-components";
+import { global_danger_color_100 } from "@patternfly/react-tokens";
+
+const DangerZone = styled.div`
+  border: 1px solid ${global_danger_color_100.value};
+  padding: 1rem;
+  border-radius: 0.5rem;
+`;
+
+const DangerZoneRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 type MatchParams = {
   id: string;
 };
 
 export default function EditUserPage() {
+  const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
   const [user, setUser] = useState<IUser | null>(null);
   const [userTeams, setUserTeams] = useState<ITeam[]>([]);
@@ -85,6 +109,7 @@ export default function EditUserPage() {
         </GridItem>
         <GridItem span={6}>
           <Card>
+            <CardTitle>User teams</CardTitle>
             <CardBody>
               <AddUserToTeamForm
                 onSubmit={(team: ITeam) => {
@@ -94,10 +119,6 @@ export default function EditUserPage() {
                   });
                 }}
               />
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
               <table className="pf-c-table pf-m-compact pf-m-grid-md">
                 <thead>
                   <tr>
@@ -121,8 +142,12 @@ export default function EditUserPage() {
                           }}
                         >
                           {(openModal) => (
-                            <Button variant="danger" onClick={openModal}>
-                              <TrashIcon />
+                            <Button
+                              variant="danger"
+                              isSmall
+                              onClick={openModal}
+                            >
+                              <MinusCircleIcon />
                             </Button>
                           )}
                         </ConfirmDeleteModal>
@@ -131,6 +156,42 @@ export default function EditUserPage() {
                   ))}
                 </tbody>
               </table>
+            </CardBody>
+          </Card>
+          <Card className="mt-lg">
+            <CardTitle>Danger Zone</CardTitle>
+            <CardBody>
+              <DangerZone>
+                <DangerZoneRow>
+                  <div>
+                    <TextContent>
+                      <Text component="h2">{`Delete ${user.name} user`}</Text>
+                      <Text component="p">
+                        Once you delete a user, there is no going back. Please
+                        be certain.
+                      </Text>
+                    </TextContent>
+                  </div>
+                  <div>
+                    <ConfirmDeleteModal
+                      title={`Delete user ${user.name}`}
+                      message={`Are you sure you want to delete ${user.name} user?`}
+                      onOk={() =>
+                        dispatch(usersActions.delete(user)).then(() =>
+                          history.push("/users")
+                        )
+                      }
+                    >
+                      {(openModal) => (
+                        <Button variant="danger" isSmall onClick={openModal}>
+                          <TrashAltIcon className="mr-sm" />
+                          Delete this user
+                        </Button>
+                      )}
+                    </ConfirmDeleteModal>
+                  </div>
+                </DangerZoneRow>
+              </DangerZone>
             </CardBody>
           </Card>
         </GridItem>

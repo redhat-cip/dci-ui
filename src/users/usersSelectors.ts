@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { sortByName } from "services/sort";
 import { fromNow } from "services/date";
 import { RootState } from "store";
 import { IUsersById, IEnhancedUser } from "types";
@@ -14,13 +13,11 @@ export const getUsers = createSelector(
   getUsersById,
   getUsersAllIds,
   (users, usersAllIds) =>
-    sortByName<IEnhancedUser>(
-      usersAllIds.map((id) => {
-        const user = users[id];
-        return {
-          ...user,
-          from_now: fromNow(user.created_at),
-        };
-      })
-    )
+    usersAllIds.map((id) => {
+      const user = users[id];
+      return {
+        ...user,
+        from_now: fromNow(user.created_at),
+      } as IEnhancedUser;
+    })
 );

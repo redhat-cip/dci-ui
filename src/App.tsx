@@ -68,9 +68,6 @@ export default function App() {
           <PrivateRoute path="/users" exact>
             <Pages.UsersPage />
           </PrivateRoute>
-          <PrivateRoute path="/users/create" exact>
-            <Pages.CreateUserPage />
-          </PrivateRoute>
           <PrivateRoute path="/users/:id">
             <Pages.EditUserPage />
           </PrivateRoute>

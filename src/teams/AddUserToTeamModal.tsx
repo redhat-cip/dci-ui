@@ -25,7 +25,7 @@ export default function AddUserToTeamModal({
   team,
   users,
   onSubmit,
-  children
+  children,
 }: AddUserToTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
   const formRef = useRef<FormikProps<INewUserToTeam>>(null);
