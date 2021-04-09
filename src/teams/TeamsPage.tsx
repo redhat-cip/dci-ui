@@ -11,6 +11,7 @@ import { getUsers, isFetchingUsers } from "users/usersSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { AppDispatch } from "store";
 import CreateTeamModal from "./CreateTeamModal";
+import { Button } from "@patternfly/react-core";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +42,13 @@ export default function TeamsPage() {
         currentUser.hasEPMRole ? (
           <CreateTeamModal
             onSubmit={(team) => dispatch(teamsActions.create(team))}
-          />
+          >
+            {(openModal) => (
+              <Button variant="primary" onClick={openModal}>
+                Create a new team
+              </Button>
+            )}
+          </CreateTeamModal>
         ) : null
       }
       EmptyComponent={

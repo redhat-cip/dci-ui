@@ -4,18 +4,17 @@ import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamForm from "./TeamForm";
 import { INewTeam, ITeam } from "types";
-import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditTeamModalProps {
   team: ITeam;
   onSubmit: (team: ITeam) => void;
-  [x: string]: any;
+  children: (open: () => void) => React.ReactNode;
 }
 
 export default function EditTeamModal({
   team,
   onSubmit,
-  ...props
+  children,
 }: EditTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
   const formRef = useRef<FormikProps<INewTeam>>(null);
@@ -52,10 +51,7 @@ export default function EditTeamModal({
           }}
         />
       </Modal>
-      <Button variant="primary" onClick={show} {...props}>
-        <EditAltIcon aria-hidden="true" />
-        <span className="sr-only">Edit {team.name}</span>
-      </Button>
+      {children(show)}
     </>
   );
 }

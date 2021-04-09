@@ -12,7 +12,7 @@ import {
   DropdownItem,
   DropdownPosition,
 } from "@patternfly/react-core";
-import { ConfirmDeleteModal, CopyButton, KebabDropdown } from "ui";
+import { ConfirmDeleteModal, CopyButton, KebabDropdown, EmptyState } from "ui";
 import teamsActions, { fetchUsersForTeam } from "./teamsActions";
 import { deleteUserFromTeam, addUserToTeam } from "users/usersActions";
 import AddUserToTeamModal from "./AddUserToTeamModal";
@@ -39,9 +39,6 @@ export default function Team({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
-  const [isAddUserToTeamModalOpen, setIsAddUserToTeamModalOpen] = useState(
-    false
-  );
 
   const _fetchUsersForTeam = useCallback((team) => {
     return fetchUsersForTeam(team)
@@ -80,21 +77,35 @@ export default function Team({
   };
 
   const teamDropdownItems = [
-    <DropdownItem
+    <AddUserToTeamModal
       key="add_user_to_team_dropdown"
-      component="button"
-      onClick={() => setIsAddUserToTeamModalOpen(true)}
+      team={team}
+      users={users}
+      onSubmit={({ user_id }) => {
+        addUserToTeam(user_id, team)
+          .then(() => _fetchUsersForTeam(team))
+          .finally(() => setIsExpanded(true));
+      }}
     >
-      <PlusCircleIcon className="mr-xs" />
-      Add a user to {team.name} team
-    </DropdownItem>,
-    <DropdownItem key="edit_team_dropdown">
-      <EditTeamModal
-        team={team}
-        onSubmit={(team) => dispatch(teamsActions.update(team))}
-        variante="plain"
-      />
-    </DropdownItem>,
+      {(openModal) => (
+        <DropdownItem component="button" onClick={openModal}>
+          <PlusCircleIcon className="mr-xs" />
+          Add a user to {team.name} team
+        </DropdownItem>
+      )}
+    </AddUserToTeamModal>,
+    <EditTeamModal
+      team={team}
+      onSubmit={(team) => dispatch(teamsActions.update(team))}
+      key="edit_team_dropdown"
+    >
+      {(openModal) => (
+        <DropdownItem onClick={openModal}>
+          <EditAltIcon className="mr-xs" />
+          {`edit ${team.name} team`}
+        </DropdownItem>
+      )}
+    </EditTeamModal>,
   ];
   if (currentUser.isSuperAdmin) {
     teamDropdownItems.push(
@@ -117,120 +128,103 @@ export default function Team({
   }
 
   return (
-    <>
-      <AddUserToTeamModal
-        team={team}
-        users={users}
-        isOpen={isAddUserToTeamModalOpen}
-        close={() => setIsAddUserToTeamModalOpen(false)}
-        onOk={({ user_id }) => {
-          addUserToTeam(user_id, team)
-            .then(() => _fetchUsersForTeam(team))
-            .finally(() => setIsExpanded(true));
-          setIsAddUserToTeamModalOpen(false);
-        }}
-      />
-      <tbody className={isExpanded ? "pf-m-expanded" : ""}>
-        <tr>
-          <td className="pf-c-table__toggle">
-            <button
-              className="pf-c-button pf-m-plain pf-m-expanded"
-              onClick={() => {
-                setIsExpanded(!isExpanded);
-                setIsLoading(true);
-                _fetchUsersForTeam(team);
-              }}
-            >
-              {isExpanded ? (
-                <i className="fas fa-angle-down"></i>
-              ) : (
-                <i className="fas fa-angle-right"></i>
-              )}
-            </button>
-          </td>
-          <th>
-            <CopyButton text={team.id} />
-          </th>
-          <th>{team.name}</th>
-          <td>{team.external ? <Label color="blue">partner</Label> : null}</td>
-          <td>
-            {team.state === "active" ? (
-              <Label color="green">active</Label>
+    <tbody className={isExpanded ? "pf-m-expanded" : ""}>
+      <tr>
+        <td className="pf-c-table__toggle">
+          <Button
+            variant="plain"
+            onClick={() => {
+              setIsExpanded(!isExpanded);
+              setIsLoading(true);
+              _fetchUsersForTeam(team);
+            }}
+          >
+            {isExpanded ? (
+              <i className="fas fa-angle-down"></i>
             ) : (
-              <Label color="red">inactive</Label>
+              <i className="fas fa-angle-right"></i>
             )}
-          </td>
-          <td>{team.from_now}</td>
-          <td className="pf-c-table__action">
-            {currentUser.hasEPMRole && (
-              <KebabDropdown
-                position={DropdownPosition.right}
-                items={teamDropdownItems}
-                menuAppendTo={() => document.body}
-              />
-            )}
-          </td>
-        </tr>
-        <tr
-          className={`pf-c-table__expandable-row ${
-            isExpanded ? "pf-m-expanded" : ""
-          }`}
-        >
-          <td className="pf-m-no-padding" colSpan={7}>
-            <table className="pf-c-table pf-m-compact pf-m-no-border-rows">
-              <thead>
+          </Button>
+        </td>
+        <th>
+          <CopyButton text={team.id} />
+        </th>
+        <th>{team.name}</th>
+        <td>{team.external ? <Label color="blue">partner</Label> : null}</td>
+        <td>
+          {team.state === "active" ? (
+            <Label color="green">active</Label>
+          ) : (
+            <Label color="red">inactive</Label>
+          )}
+        </td>
+        <td>{team.from_now}</td>
+        <td className="pf-c-table__action">
+          {currentUser.hasEPMRole && (
+            <KebabDropdown
+              position={DropdownPosition.right}
+              items={teamDropdownItems}
+              menuAppendTo={() => document.body}
+            />
+          )}
+        </td>
+      </tr>
+      <tr
+        className={`pf-c-table__expandable-row ${
+          isExpanded ? "pf-m-expanded" : ""
+        }`}
+      >
+        <td className="pf-m-no-padding" colSpan={7}>
+          <table className="pf-c-table pf-m-compact pf-m-no-border-rows">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Login</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {isExpanded && isLoading && isEmpty(teamUsers) && (
                 <tr>
-                  <th>ID</th>
-                  <th>Login</th>
-                  <th>Full name</th>
-                  <th>Email</th>
-                  <th>Created</th>
-                  <th></th>
+                  <td>loading...</td>
                 </tr>
-              </thead>
-              <tbody>
-                {isExpanded && isLoading && isEmpty(teamUsers) && (
-                  <tr>
-                    <td>loading...</td>
-                  </tr>
-                )}
-                {isExpanded && !isLoading && isEmpty(teamUsers) && (
-                  <tr>
-                    <td>
-                      <Button
-                        variant="secondary"
-                        onClick={() => setIsAddUserToTeamModalOpen(true)}
-                      >
-                        <PlusCircleIcon className="mr-xs" />
-                        Add a user to {team.name} team
-                      </Button>
-                    </td>
-                  </tr>
-                )}
-                {teamUsers.map((user) => (
-                  <tr key={`${user.id}.${user.etag}`}>
-                    <td data-label="Id">
-                      <CopyButton text={user.id} />
-                    </td>
-                    <td data-label="User name">{user.name}</td>
-                    <td data-label="User fullname">{user.fullname}</td>
-                    <td data-label="User email">{user.email}</td>
-                    <td data-label="User created">{user.created_at}</td>
-                    <td className="pf-c-table__action">
-                      {currentUser.hasEPMRole && (
-                        <KebabDropdown
-                          position={DropdownPosition.right}
-                          items={getUserDropdownItems(user, team)}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </>
+              )}
+              {isExpanded && !isLoading && isEmpty(teamUsers) && (
+                <tr>
+                  <td>
+                    <EmptyState
+                      title="No user"
+                      info={`There is no user in ${team.name} team`}
+                    />
+                  </td>
+                </tr>
+              )}
+              {teamUsers.map((user) => (
+                <tr key={`${user.id}.${user.etag}`}>
+                  <td data-label="Id">
+                    <CopyButton text={user.id} />
+                  </td>
+                  <td data-label="User name">{user.name}</td>
+                  <td data-label="User fullname">{user.fullname}</td>
+                  <td data-label="User email">{user.email}</td>
+                  <td data-label="User created">{user.created_at}</td>
+                  <td className="pf-c-table__action">
+                    {currentUser.hasEPMRole && (
+                      <KebabDropdown
+                        position={DropdownPosition.right}
+                        items={getUserDropdownItems(user, team)}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
   );
 }

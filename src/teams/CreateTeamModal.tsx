@@ -7,9 +7,13 @@ import { INewTeam } from "types";
 
 interface CreateTeamModalProps {
   onSubmit: (team: INewTeam) => void;
+  children: (open: () => void) => React.ReactNode;
 }
 
-export default function CreateTeamModal({ onSubmit }: CreateTeamModalProps) {
+export default function CreateTeamModal({
+  onSubmit,
+  children,
+}: CreateTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
   const formRef = useRef<FormikProps<INewTeam>>(null);
   return (
@@ -39,9 +43,7 @@ export default function CreateTeamModal({ onSubmit }: CreateTeamModalProps) {
       >
         <TeamForm ref={formRef} onSubmit={onSubmit} />
       </Modal>
-      <Button variant="primary" onClick={show}>
-        Create a new team
-      </Button>
+      {children(show)}
     </>
   );
 }
