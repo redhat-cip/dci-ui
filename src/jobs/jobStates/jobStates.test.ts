@@ -32,4 +32,9 @@ it("getFileStatus", () => {
       name: "skipped/node-prep : Check ansible version",
     } as IFile)
   ).toEqual("skipped");
+  expect(
+    getFileStatus({
+      name: "ignored/node-prep : Check ansible version",
+    } as IFile)
+  ).toEqual("ignored");
 });

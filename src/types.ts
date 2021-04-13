@@ -348,7 +348,12 @@ export interface IFileWithDuration extends IFile {
 
 export type IPipelineStatus = "success" | "failure";
 
-export type IFileStatus = "failed" | "unreachable" | "skipped" | "success";
+export type IFileStatus =
+  | "failed"
+  | "unreachable"
+  | "skipped"
+  | "ignored"
+  | "success";
 export interface IJobState {
   id: string;
   status: IJobStateStatus;

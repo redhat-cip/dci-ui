@@ -81,7 +81,7 @@ export const FileRow = styled.div<FileRowProps>`
       ? css`
           color: ${global_danger_color_100.value};
         `
-      : props.status === "skipped"
+      : props.status === "skipped" || props.status === "ignored"
       ? css`
           color: ${global_info_color_100.value};
         `

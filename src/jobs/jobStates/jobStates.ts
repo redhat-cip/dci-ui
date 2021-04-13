@@ -7,5 +7,7 @@ export function getFileStatus(file: IFile): IFileStatus {
     ? "unreachable"
     : file.name.startsWith("skipped/")
     ? "skipped"
+    : file.name.startsWith("ignored/")
+    ? "ignored"
     : "success";
 }
