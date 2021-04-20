@@ -87,6 +87,7 @@ export default function AppLayout({ children, ...props }: AppLayoutProps) {
         <DCINavItem to="/jobs" exact={false}>
           Jobs
         </DCINavItem>
+        <DCINavItem to="/products">Products</DCINavItem>
         <DCINavItem to="/topics">Topics</DCINavItem>
         {isEmpty(identityTeams) ? null : (
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
@@ -103,16 +104,13 @@ export default function AppLayout({ children, ...props }: AppLayoutProps) {
         </NavGroup>
       )}
       {identity.hasEPMRole && (
-        <NavGroup title="EPM">
+        <NavGroup title="Administration">
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
           <DCINavItem to="/permissions">Permissions</DCINavItem>
-        </NavGroup>
-      )}
-      {identity.isSuperAdmin && (
-        <NavGroup title="Admin">
-          <DCINavItem to="/products">Products</DCINavItem>
-          <DCINavItem to="/feeders">Feeders</DCINavItem>
+          {identity.isSuperAdmin && (
+            <DCINavItem to="/feeders">Feeders</DCINavItem>
+          )}
         </NavGroup>
       )}
     </Nav>
