@@ -26,6 +26,7 @@ import { useRouteMatch } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
 import { getProducts } from "products/productsSelectors";
+import { getCurrentUser } from "currentUser/currentUserSelectors";
 
 const Padding = styled.div`
   padding: 1em;
@@ -153,6 +154,7 @@ type MatchParams = {
 };
 
 export default function TopicPage() {
+  const currentUser = useSelector(getCurrentUser);
   const dispatch = useDispatch<AppDispatch>();
   const match = useRouteMatch<MatchParams>();
   const { id } = match.params;
@@ -180,7 +182,7 @@ export default function TopicPage() {
       loading={isFetching && topic === null}
       empty={!isFetching && topic === null}
       HeaderButton={
-        topic ? (
+        currentUser?.isSuperAdmin && topic ? (
           <EditTopicModal
             key={`${topic.id}:${topic.etag}`}
             products={products}
