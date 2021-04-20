@@ -93,39 +93,47 @@ export default function TopicsPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
       }
     >
-      {Object.values(topicsPerProduct).map((product) => {
-        const Icon = icons.getProductIcon(product.name);
-        return (
-          <PageSection key={product.id}>
-            <ProductTitle>
-              <span className="mr-xs">
-                <Icon size="md" />
-              </span>
-              {product.name}
-            </ProductTitle>
-            <Gallery hasGutter key={product.id}>
-              {product.topics.map((topic) => (
-                <GalleryItem key={topic.id}>
-                  <Topic
-                    onClick={() =>
-                      history.push(`/topics/${topic.id}/components`)
-                    }
-                    title="Click to see components"
-                    className="pointer"
-                  >
-                    <CardBody>
-                      <Title headingLevel="h6" size="md">
-                        {topic.name}
-                      </Title>
-                      <TopicId>{topic.id}</TopicId>
-                    </CardBody>
-                  </Topic>
-                </GalleryItem>
-              ))}
-            </Gallery>
-          </PageSection>
-        );
-      })}
+      {Object.values(topicsPerProduct)
+        .sort((p1, p2) => {
+          const lowercaseProductsOrder = ["openshift", "rhel", "openstack"];
+          return (
+            lowercaseProductsOrder.indexOf(p1.name.toLowerCase()) -
+            lowercaseProductsOrder.indexOf(p2.name.toLowerCase())
+          );
+        })
+        .map((product) => {
+          const Icon = icons.getProductIcon(product.name);
+          return (
+            <PageSection key={product.id}>
+              <ProductTitle>
+                <span className="mr-xs">
+                  <Icon size="md" />
+                </span>
+                {product.name}
+              </ProductTitle>
+              <Gallery hasGutter key={product.id}>
+                {product.topics.map((topic) => (
+                  <GalleryItem key={topic.id}>
+                    <Topic
+                      onClick={() =>
+                        history.push(`/topics/${topic.id}/components`)
+                      }
+                      title="Click to see components"
+                      className="pointer"
+                    >
+                      <CardBody>
+                        <Title headingLevel="h6" size="md">
+                          {topic.name}
+                        </Title>
+                        <TopicId>{topic.id}</TopicId>
+                      </CardBody>
+                    </Topic>
+                  </GalleryItem>
+                ))}
+              </Gallery>
+            </PageSection>
+          );
+        })}
     </Page>
   );
 }
