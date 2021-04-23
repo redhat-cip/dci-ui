@@ -19,41 +19,26 @@ describe("parse filters", () => {
       page: 2,
       perPage: 40,
     };
-    expect(parseFiltersFromSearch(search, null)).toEqual(expectedFilters);
+    expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
-
-  it("with team_id overwrite team_id from search", () => {
+  
+  it("from search with more complex tag", () => {
     const search =
-      "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
+      "?page=1&perPage=20&where=tags:job:fake-cnf,tags:inventory:cluster6-post.yml";
     const expectedFilters = {
-      team_id: "t1",
-      product_id: "p1",
-      topic_id: "to1",
-      remoteci_id: "r1",
-      tags: ["tag_1", "tag_2"],
-      status: "success",
-      page: 2,
-      perPage: 40,
-    };
-    expect(parseFiltersFromSearch(search, "t2")).toEqual(expectedFilters);
-  });
-
-  it("from empty search", () => {
-    const search = "";
-    const expectedFilters = {
-      team_id: "t2",
+      team_id: null,
       product_id: null,
       topic_id: null,
       remoteci_id: null,
-      tags: [],
+      tags: ["job:fake-cnf", "inventory:cluster6-post.yml"],
       status: null,
       page: 1,
       perPage: 20,
     };
-    expect(parseFiltersFromSearch(search, "t2")).toEqual(expectedFilters);
+    expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
 
-  it("with identity null", () => {
+  it("from empty search", () => {
     const search = "";
     const expectedFilters = {
       team_id: null,
@@ -65,7 +50,7 @@ describe("parse filters", () => {
       page: 1,
       perPage: 20,
     };
-    expect(parseFiltersFromSearch(search, null)).toEqual(expectedFilters);
+    expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
 });
 

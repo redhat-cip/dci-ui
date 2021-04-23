@@ -18,21 +18,14 @@ export const defaultFilters = {
   perPage: 20,
 };
 
-export function parseFiltersFromSearch(
-  search: string,
-  team_id: string | null
-): IJobFilters {
+export function parseFiltersFromSearch(search: string): IJobFilters {
   const { page = "1", perPage = "20", where } = queryString.parse(search);
-  const copyDefaultFilters = JSON.parse(
-    JSON.stringify({
-      ...defaultFilters,
-      team_id,
-    })
-  );
+  const copyDefaultFilters = JSON.parse(JSON.stringify(defaultFilters));
   if (typeof where !== "string" || isEmpty(where)) return copyDefaultFilters;
   return where.split(",").reduce(
     (acc: IJobFilters, filter: string) => {
-      const [key, value] = filter.split(":");
+      const [key, ...rest] = filter.split(":");
+      const value = rest.join(":");
       switch (key) {
         case "team_id":
         case "product_id":

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState, Breadcrumb } from "ui";
@@ -11,23 +11,20 @@ import {
   parseFiltersFromSearch,
   getParamsFromFilters,
   createSearchFromFilters,
-  defaultFilters,
 } from "./toolbar/filters";
-import { IJobFilters } from "types";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
-import { useAuth } from "auth/authContext";
+import useLocalStorage from "hooks/useLocalStorage";
 
 export default function JobsPage() {
   const location = useLocation();
   const history = useHistory();
-  const { identity } = useAuth();
-  const team_id = identity?.team?.id || null;
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
-  const [filters, setFilters] = useState<IJobFilters>(
-    parseFiltersFromSearch(location.search, team_id)
+  const [filters, setFilters, clearFilters] = useLocalStorage(
+    "dci_jobs_filters",
+    parseFiltersFromSearch(location.search)
   );
 
   useEffect(() => {
@@ -45,10 +42,6 @@ export default function JobsPage() {
     );
   }, [dispatch, filters]);
 
-  useEffect(() => {
-    setFilters((f) => ({ ...f, team_id }));
-  }, [team_id]);
-
   return (
     <Page
       title="Jobs"
@@ -59,7 +52,7 @@ export default function JobsPage() {
         <DCIToolbar
           filters={filters}
           setFilters={setFilters}
-          clearAllFilters={() => setFilters(defaultFilters)}
+          clearAllFilters={clearFilters}
         />
       }
       seeSecondToolbar
