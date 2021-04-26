@@ -14,15 +14,15 @@ import {
 import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
 import { Page, LoadingPage } from "layout";
 import usersActions from "./usersActions";
-import { CopyButton, EmptyState, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
 import { getParamsFromFilters } from "jobs/toolbar/filters";
 import EmailsFilter from "./EmailsFilter";
-import { Link } from "react-router-dom";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { IUserFilters } from "types";
 import { AppDispatch } from "store";
 import CreateUserModal from "./create/CreateUserModal";
+import UsersTable from "./UsersTable";
 
 const initialUserFilter = {
   page: 1,
@@ -137,32 +137,7 @@ export default function UsersPage() {
           </Bullseye>
         </PageSection>
       ) : (
-        <table className="pf-c-table pf-m-compact pf-m-grid-md">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Login</th>
-              <th>Full name</th>
-              <th>Email</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>
-                  <CopyButton text={user.id} />
-                </td>
-                <td>
-                  <Link to={`/users/${user.id}`}>{user.name}</Link>
-                </td>
-                <td>{user.fullname}</td>
-                <td>{user.email}</td>
-                <td>{user.from_now}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <UsersTable users={users} />
       )}
     </Page>
   );

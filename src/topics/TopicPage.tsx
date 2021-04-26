@@ -8,18 +8,14 @@ import {
   PageSection,
   Card,
   CardBody,
-  Grid,
-  GridItem,
   Title,
   Divider,
   Button,
   Label,
-  Tooltip,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import styled from "styled-components";
 import Component from "./Component";
-import { InfoCircleIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
 import { IComponent, ITopic, IEnhancedTopic } from "types";
 import { useRouteMatch } from "react-router-dom";
@@ -27,27 +23,7 @@ import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
 import { getProducts } from "products/productsSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
-
-const Padding = styled.div`
-  padding: 1em;
-`;
-
-const Field = styled.span`
-  color: #72767b;
-  font-weight: bold;
-`;
-
-interface YesNoLabelInvertedProps {
-  value: boolean;
-}
-
-function YesNoLabelInverted({ value }: YesNoLabelInvertedProps) {
-  return value ? (
-    <Label color="red">yes</Label>
-  ) : (
-    <Label color="green">no</Label>
-  );
-}
+import CardLine from "ui/CardLine";
 
 interface SeeContentProps {
   content: string;
@@ -75,34 +51,6 @@ function SeeContent({ content }: SeeContentProps) {
     >
       see content
     </Button>
-  );
-}
-
-interface LineProps {
-  field: string;
-  help?: string;
-  value: React.ReactNode;
-}
-
-function Line({ field, help, value }: LineProps) {
-  return (
-    <Grid hasGutter>
-      <GridItem span={4}>
-        <div>
-          <Field>
-            {field}
-            {help && (
-              <Tooltip position="right" content={<div>{help}</div>}>
-                <span className="ml-xs">
-                  <InfoCircleIcon />
-                </span>
-              </Tooltip>
-            )}
-          </Field>
-        </div>
-      </GridItem>
-      <GridItem span={8}>{value}</GridItem>
-    </Grid>
   );
 }
 
@@ -215,67 +163,66 @@ export default function TopicPage() {
         {topic === null ? null : (
           <Card>
             <CardBody>
-              <Padding>
-                <Title headingLevel="h3" size="xl">
-                  Topic information
-                </Title>
-              </Padding>
+              <Title headingLevel="h3" size="xl">
+                Topic information
+              </Title>
               <Divider />
-              <Padding>
-                <Line field="ID" value={topic.id} />
-              </Padding>
+              <CardLine className="p-md" field="ID" value={topic.id} />
               <Divider />
-              <Padding>
-                <Line field="Name" value={topic.name} />
-              </Padding>
+              <CardLine className="p-md" field="Name" value={topic.name} />
               <Divider />
-              <Padding>
-                <Line
-                  field="Access restricted"
-                  help="This topic has not yet been validated by the legal team. All of these components are restricted."
-                  value={<YesNoLabelInverted value={!topic.export_control} />}
+              <CardLine
+                className="p-md"
+                field="Access restricted"
+                help="This topic has not yet been validated by the legal team. All of these components are restricted."
+                value={
+                  topic.export_control ? (
+                    <Label color="red">yes</Label>
+                  ) : (
+                    <Label color="green">no</Label>
+                  )
+                }
+              />
+              <Divider />
+              <CardLine className="p-md" field="State" value={topic.state} />
+              <Divider />
+              <CardLine
+                className="p-md"
+                field="Created"
+                value={topic.from_now}
+              />
+              <Divider />
+              <CardLine
+                className="p-md"
+                field="Data"
+                value={
+                  isEmpty(topic.data) ? (
+                    "{}"
+                  ) : (
+                    <SeeContent content={JSON.stringify(topic.data, null, 2)} />
+                  )
+                }
+              />
+              <Divider />
+              {topic.product && (
+                <CardLine
+                  className="p-md"
+                  field="Product"
+                  value={topic.product.name}
                 />
-              </Padding>
+              )}
               <Divider />
-              <Padding>
-                <Line field="State" value={topic.state} />
-              </Padding>
+              <CardLine
+                className="p-md"
+                field="Components"
+                value={<Components topic={topic} />}
+              />
               <Divider />
-              <Padding>
-                <Line field="Created" value={topic.from_now} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line
-                  field="Data"
-                  value={
-                    isEmpty(topic.data) ? (
-                      "{}"
-                    ) : (
-                      <SeeContent
-                        content={JSON.stringify(topic.data, null, 2)}
-                      />
-                    )
-                  }
-                />
-              </Padding>
-              <Divider />
-              <Padding>
-                {topic.product && (
-                  <Line field="Product" value={topic.product.name} />
-                )}
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Components" value={<Components topic={topic} />} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line
-                  field="Component types"
-                  value={topic.component_types.join(" - ")}
-                />
-              </Padding>
+              <CardLine
+                className="p-md"
+                field="Component types"
+                value={topic.component_types.join(" - ")}
+              />
             </CardBody>
           </Card>
         )}
