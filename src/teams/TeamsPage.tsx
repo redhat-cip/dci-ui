@@ -3,45 +3,48 @@ import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { Page } from "layout";
 import teamsActions from "./teamsActions";
-import usersActions from "users/usersActions";
-import { EmptyState, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import { getTeams, isFetchingTeams } from "./teamsSelectors";
-import Team from "./Team";
-import { getUsers, isFetchingUsers } from "users/usersSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { AppDispatch } from "store";
 import CreateTeamModal from "./CreateTeamModal";
-import { Button } from "@patternfly/react-core";
+import { Button, Label } from "@patternfly/react-core";
+import { Link, useHistory } from "react-router-dom";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const teams = useSelector(getTeams);
-  const users = useSelector(getUsers);
   const currentUser = useSelector(getCurrentUser);
-  const teamsIsFetching = useSelector(isFetchingTeams);
-  const usersIsFetching = useSelector(isFetchingUsers);
-  const isFetching = teamsIsFetching || usersIsFetching;
+  const isFetching = useSelector(isFetchingTeams);
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(teamsActions.all());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(usersActions.all());
-  }, [dispatch]);
-
   if (currentUser === null) return null;
+
+  const partners = teams.filter((t) => t.external && t.state === "active");
 
   return (
     <Page
       title="Teams"
-      description="List of DCI teams"
+      description={
+        partners.length > 0
+          ? `List of DCI teams. There are ${partners.length} active partners.`
+          : "List of DCI teams."
+      }
       loading={isFetching && isEmpty(teams)}
       empty={!isFetching && isEmpty(teams)}
       HeaderButton={
         currentUser.hasEPMRole ? (
           <CreateTeamModal
-            onSubmit={(team) => dispatch(teamsActions.create(team))}
+            onSubmit={(team) =>
+              dispatch(teamsActions.create(team)).then((response) => {
+                const newTeam = response.data.team;
+                history.push(`/teams/${newTeam.id}`);
+              })
+            }
           >
             {(openModal) => (
               <Button variant="primary" onClick={openModal}>
@@ -62,31 +65,43 @@ export default function TeamsPage() {
       }
     >
       <table
-        className="pf-c-table pf-m-expandable pf-m-grid-lg"
+        className="pf-c-table pf-m-compact pf-m-grid-md"
         role="grid"
         aria-label="Teams table"
         id="teams-table"
       >
         <thead>
           <tr>
-            <td></td>
-            <th scope="col">Id</th>
-            <th scope="col">Team Name</th>
-            <th scope="col">Partner</th>
-            <th scope="col">Active</th>
-            <th scope="col">Created at</th>
-            <td></td>
+            <th>Id</th>
+            <th>Team Name</th>
+            <th>Partner</th>
+            <th>Active</th>
+            <th>Created at</th>
           </tr>
         </thead>
-        {teams.map((team) => (
-          <Team
-            key={`${team.id}.${team.etag}`}
-            team={team}
-            users={users}
-            currentUser={currentUser}
-            deleteTeam={() => dispatch(teamsActions.delete(team))}
-          />
-        ))}
+        <tbody>
+          {teams.map((team) => (
+            <tr>
+              <th>
+                <CopyButton text={team.id} />
+              </th>
+              <th>
+                <Link to={`/teams/${team.id}`}>{team.name}</Link>
+              </th>
+              <td>
+                {team.external ? <Label color="blue">partner</Label> : null}
+              </td>
+              <td>
+                {team.state === "active" ? (
+                  <Label color="green">active</Label>
+                ) : (
+                  <Label color="red">inactive</Label>
+                )}
+              </td>
+              <td>{team.from_now}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </Page>
   );

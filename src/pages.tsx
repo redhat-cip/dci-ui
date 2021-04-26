@@ -12,6 +12,7 @@ import ComponentPage from "./component/ComponentPage";
 import RemotecisPage from "./remotecis/RemotecisPage";
 import FeedersPage from "./feeders/FeedersPage";
 import TeamsPage from "./teams/TeamsPage";
+import TeamPage from "./teams/TeamPage";
 import UsersPage from "./users/UsersPage";
 import EditUserPage from "./users/edit/EditUserPage";
 import CreateFeederPage from "./feeders/create/CreateFeederPage";
@@ -52,6 +53,7 @@ export default {
   CreateFeederPage,
   EditFeederPage,
   TeamsPage,
+  TeamPage,
   UsersPage,
   EditUserPage,
   PermissionsPage,

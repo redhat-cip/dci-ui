@@ -1,10 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { FormikProps, Formik, Form } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import * as Yup from "yup";
-import { ITeam, IUser } from "types";
+import { ITeam } from "types";
 import { SelectWithSearch } from "ui/formik";
 import useModal from "hooks/useModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "store";
+import { getUsers, isFetchingUsers } from "users/usersSelectors";
+import usersActions from "users/usersActions";
 
 interface INewUserToTeam {
   user_id: string;
@@ -16,19 +20,26 @@ const NewUserToTeamSchema = Yup.object().shape({
 
 interface AddUserToTeamModalProps {
   team: ITeam;
-  users: IUser[];
   onSubmit: (newUser: INewUserToTeam) => void;
-  children: (open: () => void) => React.ReactNode;
+  children: (open: () => void, isLoading: boolean) => React.ReactNode;
 }
 
 export default function AddUserToTeamModal({
   team,
-  users,
   onSubmit,
   children,
 }: AddUserToTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
   const formRef = useRef<FormikProps<INewUserToTeam>>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useSelector(getUsers);
+  const isFetching = useSelector(isFetchingUsers);
+
+  useEffect(() => {
+    dispatch(usersActions.all());
+  }, [dispatch]);
+
   return (
     <>
       <Modal
@@ -71,7 +82,7 @@ export default function AddUserToTeamModal({
           </Form>
         </Formik>
       </Modal>
-      {children(show)}
+      {children(show, isFetching)}
     </>
   );
 }

@@ -62,8 +62,11 @@ export default function App() {
           <PrivateRoute path="/feeders">
             <Pages.FeedersPage />
           </PrivateRoute>
-          <PrivateRoute path="/teams">
+          <PrivateRoute path="/teams" exact>
             <Pages.TeamsPage />
+          </PrivateRoute>
+          <PrivateRoute path="/teams/:id">
+            <Pages.TeamPage />
           </PrivateRoute>
           <PrivateRoute path="/users" exact>
             <Pages.UsersPage />
