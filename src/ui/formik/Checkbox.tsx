@@ -1,4 +1,3 @@
-import React from "react";
 import { useField } from "formik";
 import { Checkbox, FormGroup, CheckboxProps } from "@patternfly/react-core";
 

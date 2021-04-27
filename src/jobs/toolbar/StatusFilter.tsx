@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { IJobFilters, IJobStateStatus, JobStatus } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
@@ -11,7 +11,7 @@ export default function StatusFilter({
   filters,
   setFilters,
 }: StatusFilterProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const clearStatus = () => setFilters({ ...filters, status: null });
   return (
     <ToolbarFilter

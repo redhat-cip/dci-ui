@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 import pages from "../pages";
 import { UserManager } from "oidc-client";
 import { setJWT } from "services/localStorage";

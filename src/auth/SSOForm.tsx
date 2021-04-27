@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, ActionGroup } from "@patternfly/react-core";
 import { useSSO } from "./ssoContext";
 import { useLocation } from "react-router-dom";

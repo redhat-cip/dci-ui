@@ -1,5 +1,5 @@
 import { Button, Label } from "@patternfly/react-core";
-import React, { useState } from "react";
+import { useState } from "react";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { Pre } from "jobs/jobStates/JobStateComponents";
 import { ITestsCase } from "types";

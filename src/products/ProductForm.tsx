@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input } from "ui/formik";
@@ -16,7 +16,7 @@ interface ProductFormProps {
   onSubmit: (product: INewProduct | IEditProduct) => void;
 }
 
-const ProductForm = React.forwardRef<
+const ProductForm = forwardRef<
   FormikProps<INewProduct | IEditProduct>,
   ProductFormProps
 >(({ product, onSubmit }, formRef) => (
@@ -33,7 +33,6 @@ const ProductForm = React.forwardRef<
         label="Name"
         name="name"
         isRequired
-        autoFocus
       />
       <Input
         id="product_form__description"

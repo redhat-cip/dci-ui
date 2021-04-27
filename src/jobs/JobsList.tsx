@@ -1,4 +1,3 @@
-import React from "react";
 import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";

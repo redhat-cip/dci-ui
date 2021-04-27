@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
 import { addDuration, addPipelineStatus } from "./jobStatesActions";
 import JobStateFile from "./JobStateFile";

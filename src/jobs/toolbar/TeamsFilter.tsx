@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ITeam } from "types";
 import { getTeams, getTeamById } from "teams/teamsSelectors";

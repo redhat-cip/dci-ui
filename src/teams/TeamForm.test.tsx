@@ -1,4 +1,3 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ITeam } from "types";
 import TeamForm from "./TeamForm";
@@ -6,7 +5,7 @@ import TeamForm from "./TeamForm";
 test("test create team form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = render(
     <TeamForm onSubmit={mockOnSubmit} />
   );
 
@@ -46,7 +45,7 @@ test("test edit team form submit the correct values", async () => {
     state: "active",
     external: false,
   } as unknown) as ITeam;
-  const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = render(
     <TeamForm team={team} onSubmit={mockOnSubmit} />
   );
 

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 import pages from "../pages";
 import { useDispatch } from "react-redux";
 import { deleteCurrentUser } from "currentUser/currentUserActions";
@@ -25,7 +26,7 @@ type AuthProviderProps = {
 };
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [isLoadingIdentity, setIsLoadingIdentity] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { sso } = useSSO();
   const dispatch = useDispatch<AppDispatch>();
   const [identity, setIdentity] = useState<ICurrentUser | null>(null);
@@ -34,10 +35,10 @@ function AuthProvider({ children }: AuthProviderProps) {
     dispatch(authActions.getCurrentUser())
       .then(setIdentity)
       .catch(console.error)
-      .then(() => setIsLoadingIdentity(false));
+      .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (isLoadingIdentity) {
+  if (isLoading) {
     return <pages.NotAuthenticatedLoadingPage />;
   }
 

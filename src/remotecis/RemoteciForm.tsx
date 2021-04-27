@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input, SelectWithSearch } from "ui/formik";
@@ -17,7 +17,7 @@ interface RemoteciFormProps {
   onSubmit: (remoteci: INewRemoteci | IEditRemoteci) => void;
 }
 
-const RemoteciForm = React.forwardRef<
+const RemoteciForm = forwardRef<
   FormikProps<INewRemoteci | IEditRemoteci>,
   RemoteciFormProps
 >(({ remoteci, teams, onSubmit }, formRef) => (
@@ -36,7 +36,6 @@ const RemoteciForm = React.forwardRef<
         label="Name"
         name="name"
         isRequired
-        autoFocus
       />
       <SelectWithSearch
         id="remoteci_form__team_id"

@@ -1,10 +1,9 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import CreateUserForm from "./CreateUserForm";
 
 test("test create user form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
-  const { container, getByRole, getByTestId } = render(
+  const { container, getByTestId } = render(
     <CreateUserForm onSubmit={mockOnSubmit} />
   );
   const create_user_form = container.querySelector("#create_user_form");

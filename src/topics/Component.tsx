@@ -1,4 +1,3 @@
-import React from "react";
 import { CubesIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { Label } from "@patternfly/react-core";

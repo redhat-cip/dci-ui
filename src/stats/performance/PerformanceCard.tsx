@@ -1,4 +1,3 @@
-import React from "react";
 import { isEmpty } from "lodash";
 import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 import { Link } from "react-router-dom";

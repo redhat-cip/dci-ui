@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ClipboardCopyButton } from "@patternfly/react-core/dist/js/components/ClipboardCopy/ClipboardCopyButton";
 import { TooltipPosition } from "@patternfly/react-core";
 import copyToClipboard from "../services/copyToClipboard";

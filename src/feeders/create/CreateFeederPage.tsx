@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
 import { Page } from "layout";

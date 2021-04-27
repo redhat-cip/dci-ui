@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTopics, getTopicById } from "topics/topicsSelectors";
 import { ITopic } from "types";

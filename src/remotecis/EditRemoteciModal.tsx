@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { FormikProps } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import topicsActions, { fetchLatestComponents } from "./topicsActions";
 import { isEmpty } from "lodash";

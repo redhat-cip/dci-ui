@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Flex, FlexItem } from "@patternfly/react-core";
 import { SelectWithSearch } from "ui/formik";

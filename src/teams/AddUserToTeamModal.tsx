@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
+import * as React from "react";
 import { FormikProps, Formik, Form } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import * as Yup from "yup";

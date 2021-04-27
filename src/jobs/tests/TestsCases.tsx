@@ -1,4 +1,3 @@
-import React from "react";
 import { ITestsCase, TestCaseActionType } from "types";
 import { sortBy } from "lodash";
 import TestsCase from "./TestsCase";

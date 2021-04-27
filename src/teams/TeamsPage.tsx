@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { Page } from "layout";

@@ -1,5 +1,5 @@
 import { Button, Label } from "@patternfly/react-core";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { IFile, ITest, ITestsCase } from "types";
 import { isEmpty } from "lodash";
 import { humanizeDuration } from "services/date";

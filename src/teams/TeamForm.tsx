@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input, Checkbox, Select } from "ui/formik";
@@ -18,7 +18,7 @@ interface TeamFormProps {
   onSubmit: (team: INewTeam | ITeam) => void;
 }
 
-const TeamForm = React.forwardRef<FormikProps<INewTeam>, TeamFormProps>(
+const TeamForm = forwardRef<FormikProps<INewTeam>, TeamFormProps>(
   ({ team, onSubmit }, formRef) => (
     <Formik
       innerRef={formRef}
@@ -34,7 +34,6 @@ const TeamForm = React.forwardRef<FormikProps<INewTeam>, TeamFormProps>(
             label="Name"
             name="name"
             isRequired
-            autoFocus
           />
           <Select
             id="team_form__state"

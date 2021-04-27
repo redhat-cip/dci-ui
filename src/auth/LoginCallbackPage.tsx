@@ -1,5 +1,5 @@
 import pages from "pages";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { setJWT } from "services/localStorage";
 import { useAuth } from "./authContext";

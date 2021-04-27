@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getRemotecis, getRemoteciById } from "remotecis/remotecisSelectors";
 import { IRemoteci } from "types";

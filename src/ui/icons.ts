@@ -15,6 +15,8 @@ export function getProductIcon(product_name: string) {
   return get(icons, product_name.toLocaleLowerCase(), BoxIcon);
 }
 
-export default {
+const icons = {
   getProductIcon,
 };
+
+export default icons;

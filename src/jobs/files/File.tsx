@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
 import { getFileContent } from "./filesActions";
