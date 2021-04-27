@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState, Breadcrumb } from "ui";
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
 import { getJobs, isFetchingJobs } from "./jobsSelectors";
 import JobsList from "./JobsList";
-import DCIToolbar from "./toolbar/DCIToolbar";
+import JobsToolbar from "./toolbar/JobsToolbar";
 import {
   parseFiltersFromSearch,
   getParamsFromFilters,
@@ -32,7 +32,7 @@ export default function JobsPage() {
     history.push(`/jobs${newSearch}`);
   }, [history, filters]);
 
-  useEffect(() => {
+  const getJobsCallback = useCallback(() => {
     dispatch(jobsActions.clear());
     dispatch(
       jobsActions.all({
@@ -42,6 +42,10 @@ export default function JobsPage() {
     );
   }, [dispatch, filters]);
 
+  useEffect(() => {
+    getJobsCallback();
+  }, [getJobsCallback]);
+
   return (
     <Page
       title="Jobs"
@@ -49,10 +53,11 @@ export default function JobsPage() {
       loading={isFetching && isEmpty(jobs)}
       empty={!isFetching && isEmpty(jobs)}
       Toolbar={
-        <DCIToolbar
+        <JobsToolbar
           filters={filters}
           setFilters={setFilters}
           clearAllFilters={clearFilters}
+          refresh={getJobsCallback}
         />
       }
       seeSecondToolbar

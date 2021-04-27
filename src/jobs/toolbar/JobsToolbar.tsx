@@ -10,8 +10,10 @@ import {
   ToolbarContent,
   Toolbar,
   Pagination,
+  Button,
+  ButtonVariant,
 } from "@patternfly/react-core";
-import { FilterIcon } from "@patternfly/react-icons";
+import { FilterIcon, SyncAltIcon } from "@patternfly/react-icons";
 import RemotecisFilter from "./RemotecisFilter";
 import ProductsFilter from "./ProductsFilter";
 import TopicsFilter from "./TopicsFilter";
@@ -70,17 +72,19 @@ export const Categories = ["Team", "Remoteci", "Product", "Topic"] as const;
 
 export type Category = typeof Categories[number];
 
-type DCIToolbarProps = {
+type JobsToolbarProps = {
   filters: IJobFilters;
   setFilters: (filters: IJobFilters) => void;
   clearAllFilters: () => void;
+  refresh: () => void;
 };
 
-export default function DCIToolbar({
+export default function JobsToolbar({
   filters,
   setFilters,
   clearAllFilters,
-}: DCIToolbarProps) {
+  refresh
+}: JobsToolbarProps) {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = React.useState(
     false
   );
@@ -142,6 +146,18 @@ export default function DCIToolbar({
         <ToolbarGroup>
           <ToolbarItem>
             <TagsFilter filters={filters} setFilters={setFilters} />
+          </ToolbarItem>
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <ToolbarItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label="refresh"
+              type="button"
+              onClick={refresh}
+            >
+              <SyncAltIcon />
+            </Button>
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup style={{ flex: "1" }}>
