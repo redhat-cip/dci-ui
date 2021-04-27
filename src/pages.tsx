@@ -1,4 +1,3 @@
-import React from "react";
 import Loadable from "react-loadable";
 import DashboardPage from "./dashboard/DashboardPage";
 import DashboardDetailsPage from "./dashboard/DashboardDetailsPage";
@@ -37,7 +36,7 @@ const PerformancePage = Loadable({
   loading: () => <LoadingPage title="Performance" />,
 });
 
-export default {
+const Pages = {
   DashboardPage,
   DashboardDetailsPage,
   JobsPage,
@@ -66,3 +65,5 @@ export default {
   TrendsPage,
   Page404,
 };
+
+export default Pages;

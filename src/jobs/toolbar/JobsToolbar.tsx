@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { IJobFilters } from "types";
 import {
   ToolbarItem,
@@ -83,12 +83,10 @@ export default function JobsToolbar({
   filters,
   setFilters,
   clearAllFilters,
-  refresh
+  refresh,
 }: JobsToolbarProps) {
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = React.useState(
-    false
-  );
-  const [currentCategory, setCurrentCategory] = React.useState<Category>(
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState<Category>(
     Categories[0]
   );
   const nbOfJobs = useSelector(getNbOfJobs);

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
 
 type ObjectWithIdAndName = {
@@ -23,7 +23,7 @@ export default function SelectWithSearch({
   onSelect,
   placeholder = "...",
 }: SelectWithSearchProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Select
       variant={SelectVariant.typeahead}

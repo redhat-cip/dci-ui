@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState, Breadcrumb } from "ui";

@@ -3,7 +3,7 @@ import * as types from "./currentUserActionsTypes";
 
 const initialState: ICurrentUser | null = null;
 
-export default function (
+export default function reduce(
   state = initialState,
   action: types.ICurrentUserActionTypes
 ): ICurrentUser | null {

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { ICurrentUser } from "types";

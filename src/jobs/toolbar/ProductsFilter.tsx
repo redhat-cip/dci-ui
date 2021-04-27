@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts, getProductById } from "products/productsSelectors";
 import { IProduct } from "types";

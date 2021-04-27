@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import * as React from "react";
 import { Button } from "@patternfly/react-core";
 import {
   TimesIcon,
@@ -78,7 +79,6 @@ export default function TextAreaEditableOnHover({
                   resize: "none",
                 }}
                 cols={50}
-                autoFocus
               />
             </div>
             <div style={{ flex: "none" }}>
@@ -104,9 +104,12 @@ export default function TextAreaEditableOnHover({
   ) : (
     <TextAreaEditable {...props}>
       <div
+        tabIndex={0}
+        role="button"
         style={{ flex: "none" }}
         className="pointer"
         onClick={() => setEditModeOne(true)}
+        onKeyDown={() => setEditModeOne(true)}
       >
         <CommentIcon className="mr-xs comment-icon" />
         <PencilAltIcon className="mr-xs pencil-icon" />

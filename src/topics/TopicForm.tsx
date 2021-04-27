@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input, SelectWithSearch, Checkbox, Select, TextArea } from "ui/formik";
@@ -62,7 +62,7 @@ interface TopicFormProps {
   onSubmit: (topic: INewTopic | IEditTopic) => void;
 }
 
-const TopicForm = React.forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
+const TopicForm = forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
   ({ topic, products, onSubmit }, formRef) => (
     <Formik
       innerRef={formRef}
@@ -91,7 +91,6 @@ const TopicForm = React.forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
           label="Name"
           name="name"
           isRequired
-          autoFocus
         />
         <SelectWithSearch
           id="topic_form__product_id"

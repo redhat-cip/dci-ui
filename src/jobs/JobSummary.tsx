@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Label, Chip } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
@@ -367,28 +367,30 @@ export default function JobSummary({
           {innerJob.id}
         </JobId>
         <div className="mt-xs">
-          <UsersIcon className="mr-xs" />
           <span
-            className={onTeamClicked === undefined ? "" : "pointer"}
-            onClick={() =>
-              onTeamClicked === undefined
-                ? void 0
-                : onTeamClicked(innerJob.team)
-            }
+            role="button"
+            tabIndex={0}
+            className={onTeamClicked && "pointer"}
+            onClick={() => onTeamClicked && onTeamClicked(innerJob.team)}
+            onKeyDown={() => onTeamClicked && onTeamClicked(innerJob.team)}
           >
+            <UsersIcon className="mr-xs" />
             {innerJob.team?.name}
           </span>
         </div>
         <div>
-          <ServerIcon className="mr-xs" />
           <span
-            className={onRemoteciClicked === undefined ? "" : "pointer"}
+            role="button"
+            tabIndex={0}
+            className={onRemoteciClicked && "pointer"}
             onClick={() =>
-              onRemoteciClicked === undefined
-                ? void 0
-                : onRemoteciClicked(innerJob.remoteci)
+              onRemoteciClicked && onRemoteciClicked(innerJob.remoteci)
+            }
+            onKeyDown={() =>
+              onRemoteciClicked && onRemoteciClicked(innerJob.remoteci)
             }
           >
+            <ServerIcon className="mr-xs" />
             {innerJob.remoteci?.name}
           </span>
         </div>

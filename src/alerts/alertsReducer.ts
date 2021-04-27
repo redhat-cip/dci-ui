@@ -3,7 +3,7 @@ import * as types from "./alertsActionsTypes";
 
 const initialState: IAlertsState = {};
 
-export default function (
+export default function reduce(
   state = initialState,
   action: types.IAlertsActionTypes
 ) {

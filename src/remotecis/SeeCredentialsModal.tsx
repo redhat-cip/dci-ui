@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Modal } from "@patternfly/react-core";
 import { UserSecretIcon } from "@patternfly/react-icons";
 import copyToClipboard from "../services/copyToClipboard";

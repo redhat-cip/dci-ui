@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import copyToClipboard from "../services/copyToClipboard";
 import { CopyIcon, ClipboardCheckIcon } from "@patternfly/react-icons";
 import { global_success_color_100 } from "@patternfly/react-tokens";

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { InfoCircleIcon } from "@patternfly/react-icons";
 import { Grid, GridItem, Tooltip } from "@patternfly/react-core";
 

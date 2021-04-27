@@ -1,4 +1,3 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ITeam } from "types";
 import TeamForm from "./TeamForm";

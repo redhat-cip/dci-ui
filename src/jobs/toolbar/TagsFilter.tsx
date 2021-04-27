@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { IJobFilters } from "types";
 import {
   ToolbarFilter,
@@ -16,7 +16,7 @@ type TagsFilterProps = {
 };
 
 export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
-  const [tag, setTag] = React.useState("");
+  const [tag, setTag] = useState("");
   const uniqTags = sortedUniq(filters.tags);
   return (
     <ToolbarFilter

@@ -1,4 +1,3 @@
-import React from "react";
 import { BackgroundImage } from "@patternfly/react-core";
 import pfbg_576 from "./pfbg_576.jpg";
 import pfbg_5762x from "./pfbg_576@2x.jpg";

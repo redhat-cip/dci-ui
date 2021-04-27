@@ -21,7 +21,7 @@ describe("parse filters", () => {
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
-  
+
   it("from search with more complex tag", () => {
     const search =
       "?page=1&perPage=20&where=tags:job:fake-cnf,tags:inventory:cluster6-post.yml";

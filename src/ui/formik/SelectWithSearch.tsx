@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useField } from "formik";
 import {
   FormGroup,
@@ -31,7 +31,7 @@ export default function SelectWithSearch({
   isRequired = false,
   ...props
 }: SelectWithSearchProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [field, meta, helpers] = useField(name);
   const { setValue } = helpers;
   const validated = meta.touched && meta.error ? "error" : "default";

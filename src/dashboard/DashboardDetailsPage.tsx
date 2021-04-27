@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Page } from "layout";
 import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
 import { useRouteMatch, Link } from "react-router-dom";

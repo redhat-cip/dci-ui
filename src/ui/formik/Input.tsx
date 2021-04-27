@@ -1,4 +1,3 @@
-import React from "react";
 import { useField } from "formik";
 import { FormGroup, TextInput, TextInputProps } from "@patternfly/react-core";
 

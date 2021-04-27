@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { IEnhancedJob } from "types";
 import { AppDispatch } from "store";

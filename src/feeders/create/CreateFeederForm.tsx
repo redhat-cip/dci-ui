@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@patternfly/react-core";
 import { Input } from "ui/formik";
 import * as Yup from "yup";

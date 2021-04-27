@@ -1,4 +1,3 @@
-import React from "react";
 import { CopyButton } from "ui";
 import { Link } from "react-router-dom";
 import { IEnhancedUser } from "types";

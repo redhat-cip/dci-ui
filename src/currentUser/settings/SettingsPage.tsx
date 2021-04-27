@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
 import { updateCurrentUser } from "../currentUserActions";

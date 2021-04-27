@@ -1,4 +1,3 @@
-import React from "react";
 import { Bullseye, Page } from "@patternfly/react-core";
 import { BlinkLogo, BackgroundImage } from "ui";
 

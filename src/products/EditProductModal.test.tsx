@@ -1,4 +1,3 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import EditProductModal from "./EditProductModal";
 import { IProduct } from "types";

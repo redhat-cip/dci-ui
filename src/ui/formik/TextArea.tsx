@@ -1,4 +1,3 @@
-import React from "react";
 import { FormGroup, TextArea, TextAreaProps } from "@patternfly/react-core";
 import { useField } from "formik";
 

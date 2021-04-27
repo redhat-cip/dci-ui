@@ -1,4 +1,3 @@
-import React from "react";
 import DCIGeckoPawImage from "./dci-gecko-paw.svg";
 import styled, { keyframes } from "styled-components";
 

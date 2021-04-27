@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { Modal } from "@patternfly/react-core";
 import { IFile } from "types";
 import useModal from "hooks/useModal";

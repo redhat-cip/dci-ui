@@ -1,4 +1,3 @@
-import React from "react";
 import { Location } from "history";
 import { Form, Formik } from "formik";
 import { Input } from "ui/formik";
