@@ -5,7 +5,7 @@ import { Page } from "layout";
 import remotecisActions from "./remotecisActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getRemotecis, isFetchingRemotecis } from "./remotecisSelectors";
-import SeeCredentialsModal from "./SeeCredentialsModal";
+import SeeCredentialsModal from "ui/SeeCredentialsModal";
 import { Button, Label } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
@@ -94,7 +94,7 @@ export default function RemotecisPage() {
                 )}
               </td>
               <td className="text-center">
-                <SeeCredentialsModal remoteci={remoteci} />
+                <SeeCredentialsModal role="remoteci" credentials={remoteci} />
               </td>
               <td className="text-center">{remoteci?.team?.name}</td>
               <td>{remoteci.from_now}</td>

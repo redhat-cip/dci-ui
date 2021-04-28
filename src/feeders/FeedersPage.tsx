@@ -9,6 +9,7 @@ import { TrashIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { Button } from "@patternfly/react-core";
 import { AppDispatch } from "store";
 import { useHistory, Link } from "react-router-dom";
+import SeeCredentialsModal from "ui/SeeCredentialsModal";
 
 export default function FeedersPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,6 +52,9 @@ export default function FeedersPage() {
             <th className="text-center">ID</th>
             <th>Name</th>
             <th>Team Owner</th>
+            <th className="text-center" title="Authentication">
+              Authentication
+            </th>
             <th className="text-center">Created</th>
             <th className="text-center">Actions</th>
           </tr>
@@ -65,6 +69,9 @@ export default function FeedersPage() {
                 <Link to={`/feeders/${feeder.id}`}>{feeder.name}</Link>
               </td>
               <td>{feeder.team ? feeder.team.name.toUpperCase() : null}</td>
+              <td className="text-center">
+                <SeeCredentialsModal role="feeder" credentials={feeder} />
+              </td>
               <td className="text-center">{feeder.from_now}</td>
               <td className="text-center">
                 <ConfirmDeleteModal
