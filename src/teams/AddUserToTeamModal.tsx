@@ -3,7 +3,7 @@ import * as React from "react";
 import { FormikProps, Formik, Form } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import * as Yup from "yup";
-import { ITeam } from "types";
+import { IEnhancedUser, ITeam } from "types";
 import { SelectWithSearch } from "ui/formik";
 import useModal from "hooks/useModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ const NewUserToTeamSchema = Yup.object().shape({
 
 interface AddUserToTeamModalProps {
   team: ITeam;
-  onSubmit: (newUser: INewUserToTeam) => void;
+  onSubmit: (newUser: IEnhancedUser) => void;
   children: (open: () => void, isLoading: boolean) => React.ReactNode;
 }
 
@@ -55,6 +55,7 @@ export default function AddUserToTeamModal({
             variant="primary"
             onClick={() => {
               if (formRef.current) {
+                hide();
                 formRef.current.handleSubmit();
               }
             }}
@@ -70,7 +71,12 @@ export default function AddUserToTeamModal({
           innerRef={formRef}
           initialValues={{ user_id: "" }}
           validationSchema={NewUserToTeamSchema}
-          onSubmit={onSubmit}
+          onSubmit={({ user_id }) => {
+            const user = users.find((u) => u.id === user_id);
+            if (user) {
+              onSubmit(user);
+            }
+          }}
         >
           <Form id="user_to_team_form" className="pf-c-form">
             <SelectWithSearch

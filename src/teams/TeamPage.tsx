@@ -32,6 +32,7 @@ import { getCurrentUser } from "currentUser/currentUserSelectors";
 import EditTeamModal from "./EditTeamModal";
 import CardLine from "ui/CardLine";
 import { sortByName } from "services/sort";
+import { showError, showSuccess } from "alerts/alertsActions";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -69,8 +70,8 @@ export default function TeamPage() {
     [dispatch, setTeam]
   );
 
-  const _fetchTeamUsers = useCallback((id) => {
-    fetchUsersForTeam({ id: id } as ITeam)
+  const _fetchTeamUsers = useCallback((id: string) => {
+    fetchUsersForTeam({ id } as ITeam)
       .then((response) => {
         setTeamUsers(response.data.users);
       })
@@ -199,10 +200,26 @@ export default function TeamPage() {
                 <div>
                   <AddUserToTeamModal
                     team={team}
-                    onSubmit={({ user_id }) => {
-                      addUserToTeam(user_id, team).then(() =>
-                        _fetchTeamUsers(team)
-                      );
+                    onSubmit={(user) => {
+                      const fullname = user.fullname;
+                      addUserToTeam(user.id, team)
+                        .then((response) => {
+                          _fetchTeamUsers(team.id);
+                          dispatch(
+                            showSuccess(
+                              `${fullname} added successfully to ${team.name} team.`
+                            )
+                          );
+                          return response;
+                        })
+                        .catch((error) => {
+                          dispatch(
+                            showError(
+                              `We can't add ${fullname} user to ${team.name} team`
+                            )
+                          );
+                          return error;
+                        });
                     }}
                   >
                     {(openModal, isLoading) => (
