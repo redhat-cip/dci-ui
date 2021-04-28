@@ -2,21 +2,35 @@ import { useState } from "react";
 import { Button, Modal } from "@patternfly/react-core";
 import { UserSecretIcon } from "@patternfly/react-icons";
 import copyToClipboard from "../services/copyToClipboard";
-import { IRemoteci } from "types";
 
 interface SeeCredentialsModalProps {
-  remoteci: IRemoteci;
+  credentials: {
+    id: string;
+    api_secret: string;
+    name: string;
+  };
+  role: "remoteci" | "feeder";
 }
 
 export default function SeeCredentialsModal({
-  remoteci,
+  credentials,
+  role,
 }: SeeCredentialsModalProps) {
   const [show, setShow] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const credentials = `
-DCI_CLIENT_ID='remoteci/${remoteci.id}'
-DCI_API_SECRET='${remoteci.api_secret}'
+  const content = `
+DCI_CLIENT_ID='${role}/${credentials.id}'
+DCI_API_SECRET='${credentials.api_secret}'
+DCI_CS_URL='https://api.distributed-ci.io/'
+export DCI_CLIENT_ID
+export DCI_API_SECRET
+export DCI_CS_URL
+`;
+
+  const contentNoSecret = `
+DCI_CLIENT_ID='${role}/${credentials.id}'
+DCI_API_SECRET='*********************************'
 DCI_CS_URL='https://api.distributed-ci.io/'
 export DCI_CLIENT_ID
 export DCI_API_SECRET
@@ -26,7 +40,7 @@ export DCI_CS_URL
   return (
     <>
       <Modal
-        title={`DCI credentials for ${remoteci.name}`}
+        title={`DCI credentials for ${credentials.name}`}
         isOpen={show}
         onClose={() => setShow(false)}
         variant="large"
@@ -41,7 +55,7 @@ export DCI_CS_URL
           <Button
             key="copy"
             onClick={(event) => {
-              copyToClipboard(event, credentials);
+              copyToClipboard(event, content);
               setCopied(true);
             }}
           >
@@ -49,7 +63,7 @@ export DCI_CS_URL
           </Button>,
         ]}
       >
-        <pre>{credentials}</pre>
+        <pre>{contentNoSecret}</pre>
       </Modal>
       <Button onClick={() => setShow(true)}>
         <UserSecretIcon />
