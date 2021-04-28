@@ -194,6 +194,9 @@ export interface IFeeder extends Resource {
   team_id: string;
   created_at: string;
   updated_at: string;
+  api_secret:string
+  data: data,
+  state:string
 }
 export interface IFeedersById {
   [id: string]: IFeeder;
