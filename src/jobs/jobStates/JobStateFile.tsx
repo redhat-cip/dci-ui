@@ -11,6 +11,7 @@ import {
   FileContent,
   CaretIcon,
   ShareLink,
+  ShareLinkBox,
   JobStatePre,
   Label,
   LabelBox,
@@ -23,6 +24,24 @@ interface JobStateFileProps {
   link: string;
   file: IFileWithDuration;
   isSelected: boolean;
+}
+
+function buildTitle(fileName: string) {
+  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY|TASK)(.*)");
+  let title;
+
+  if (re.test(fileName)) {
+    title = fileName.replace(re, "$3$4");
+  } else {
+    title = `TASK [${fileName}] `;
+  }
+  return `${title} `.padEnd(80, "*");
+}
+
+function isFileEmpty(fileName: string) {
+  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY [\\[]|PLAYBOOK)");
+
+  return re.test(fileName);
 }
 
 export default function JobStateFile({
@@ -61,26 +80,41 @@ export default function JobStateFile({
     }
   }, [isSelected, setSeeDetails, divRef]);
 
+  const title = buildTitle(file.name);
+  const fileDuration = `${Math.round(file.duration)}s`;
   return (
     <div id={id} ref={divRef}>
-      <FileRow
-        status={getFileStatus(file)}
-        onClick={() => {
-          setSeeDetails(!seeDetails);
-        }}
-        className="pointer"
-      >
-        <ShareLink href={link} isSelected={isSelected}>
-          <LinkIcon />
-        </ShareLink>
-        <CaretIcon>
-          {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
-        </CaretIcon>
-        <FileName>{`TASK [${file.name}] `.padEnd(80, "*")}</FileName>
-        <LabelBox>
-          <Label>{`${Math.round(file.duration)}s`}</Label>
-        </LabelBox>
-      </FileRow>
+      {isFileEmpty(file.name) ? (
+        <FileRow status={getFileStatus(file)}>
+          <ShareLinkBox />
+          <CaretIcon />
+          <FileName>{title}</FileName>
+          <LabelBox>
+            <Label>{fileDuration}</Label>
+          </LabelBox>
+        </FileRow>
+      ) : (
+        <FileRow
+          status={getFileStatus(file)}
+          onClick={() => {
+            setSeeDetails(!seeDetails);
+          }}
+          className="pointer"
+        >
+          <ShareLinkBox>
+            <ShareLink href={link} isSelected={isSelected}>
+              <LinkIcon />
+            </ShareLink>
+          </ShareLinkBox>
+          <CaretIcon>
+            {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
+          </CaretIcon>
+          <FileName>{title}</FileName>
+          <LabelBox>
+            <Label>{fileDuration}</Label>
+          </LabelBox>
+        </FileRow>
+      )}
       {seeDetails ? (
         <FileContent>
           <JobStatePre>

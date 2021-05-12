@@ -111,8 +111,18 @@ export const ShareLink = styled.a<ShareLinkProps>`
     `};
 `;
 
+export const ShareLinkBox = styled.div`
+  width: 1rem;
+  display: flex;
+  justifycontent: center;
+  alignitems: center;
+`;
+
 export const CaretIcon = styled.div`
-  margin-left: 1rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 13px;
   color: ${global_palette_black_500.value};
   &:hover {
@@ -121,7 +131,6 @@ export const CaretIcon = styled.div`
 `;
 
 export const FileName = styled.div`
-  margin-left: 1rem;
   font-size: 14px;
   font-family: monospace;
   flex: 1;
