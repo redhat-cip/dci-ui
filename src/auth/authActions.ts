@@ -1,10 +1,18 @@
 import http from "services/http";
-import { ICurrentUser, ITeam } from "types";
+import { ICurrentUser, IIdentity, ITeam } from "types";
 import { values } from "lodash";
 import { setIdentity } from "currentUser/currentUserActions";
 import { AppThunk } from "store";
 
-function buildShortcut(team: ITeam) {
+function buildShortcut(team: ITeam | null) {
+  if (team === null) {
+    return {
+      isSuperAdmin: false,
+      hasEPMRole: false,
+      hasReadOnlyRole: false,
+      isReadOnly: false,
+    };
+  }
   const adminTeamName = "admin";
   const EPMTeamName = "EPM";
   const RedHatTeamName = "Red Hat";
@@ -19,22 +27,23 @@ function buildShortcut(team: ITeam) {
   };
 }
 
-function buildIdentity(identity: ICurrentUser, team: ITeam): ICurrentUser {
+function buildIdentity(identity: IIdentity): ICurrentUser {
+  const teams = values(identity.teams).filter((team) => team.id !== null);
+  const firstTeam = teams.length === 0 ? null : teams[0];
   return {
     ...identity,
-    ...buildShortcut(team),
-    team: team,
-  } as ICurrentUser;
+    teams,
+    team: firstTeam,
+    ...buildShortcut(firstTeam),
+  };
 }
 
 export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
   return (dispatch) => {
     return http.get(`/api/v1/identity`).then((response) => {
-      const identity = response.data.identity;
-      const firstTeam = values(identity.teams)[0];
-      const enhancedIdentity = buildIdentity(identity, firstTeam);
-      dispatch(setIdentity(enhancedIdentity));
-      return enhancedIdentity;
+      const identity = buildIdentity(response.data.identity);
+      dispatch(setIdentity(identity));
+      return identity;
     });
   };
 }
@@ -44,7 +53,11 @@ export function changeCurrentTeam(
   currentUser: ICurrentUser
 ): AppThunk<Promise<ICurrentUser>> {
   return (dispatch) => {
-    const identity = buildIdentity(currentUser, team);
+    const identity = {
+      ...currentUser,
+      team,
+      ...buildShortcut(team),
+    };
     dispatch(setIdentity(identity));
     return Promise.resolve(identity);
   };

@@ -249,7 +249,7 @@ export type PatternflyFilters = {
   perPage: number;
 };
 
-export interface ICurrentUser {
+export interface IIdentity {
   email: string;
   etag: string;
   fullname: string;
@@ -259,11 +259,21 @@ export interface ICurrentUser {
     [id: string]: ITeam;
   };
   timezone: string;
-  isSuperAdmin?: boolean;
-  hasEPMRole?: boolean;
-  hasReadOnlyRole?: boolean;
-  isReadOnly?: boolean;
+}
+
+export interface ICurrentUser {
+  email: string;
+  etag: string;
+  fullname: string;
+  id: string;
+  name: string;
+  teams: ITeam[]
   team: ITeam | null;
+  timezone: string;
+  isSuperAdmin: boolean;
+  hasEPMRole: boolean;
+  hasReadOnlyRole: boolean;
+  isReadOnly: boolean;
 }
 
 export type DCIListParams = {
