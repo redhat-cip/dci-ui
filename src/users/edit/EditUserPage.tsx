@@ -23,7 +23,7 @@ import { TrashAltIcon, MinusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import { useRouteMatch, useHistory, Link } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 
@@ -99,9 +99,9 @@ export default function EditUserPage() {
               <EditUserForm
                 user={user}
                 onSubmit={(editedUser) => {
-                  dispatch(
-                    usersActions.update(editedUser as IUser)
-                  ).then((response) => setUser(response.data.user));
+                  dispatch(usersActions.update(editedUser as IUser)).then(
+                    (response) => setUser(response.data.user)
+                  );
                 }}
               />
             </CardBody>
@@ -129,7 +129,9 @@ export default function EditUserPage() {
                 <tbody>
                   {userTeams.map((team) => (
                     <tr key={team.id}>
-                      <td>{team.name}</td>
+                      <td>
+                        <Link to={`/teams/${team.id}`}>{team.name}</Link>
+                      </td>
                       <td className="pf-c-table__action">
                         <ConfirmDeleteModal
                           title={`Delete ${user.name} from ${team.name}`}
