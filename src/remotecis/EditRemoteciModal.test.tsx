@@ -5,13 +5,13 @@ import { IRemoteci, ITeam } from "types";
 test("test edit remoteci form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const remoteci = ({
+  const remoteci = {
     id: "r1",
     etag: "e1",
     name: "Remoteci 1",
     team_id: "t2",
     from_now: "",
-  } as unknown) as IRemoteci;
+  } as unknown as IRemoteci;
   const teams = [
     { id: "t1", name: "team 1" },
     { id: "t2", name: "team 2" },

@@ -5,7 +5,7 @@ import { ITopic, IProduct } from "types";
 test("test edit topic form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const topic = ({
+  const topic = {
     id: "t1",
     name: "Topic 1",
     export_control: true,
@@ -14,7 +14,7 @@ test("test edit topic form submit the correct values", async () => {
     component_types: ["type1", "type 2"],
     data: { secret: "password" },
     from_now: "15 second ago",
-  } as unknown) as ITopic;
+  } as unknown as ITopic;
   const products = [
     { id: "p1", name: "product 1" },
     { id: "p2", name: "product 2" },

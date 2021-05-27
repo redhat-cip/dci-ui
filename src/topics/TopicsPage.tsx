@@ -11,7 +11,7 @@ import {
   Title,
 } from "@patternfly/react-core";
 import { EmptyState, icons, Breadcrumb } from "ui";
-import { getTopics, isFetchingTopics } from "./topicsSelectors";
+import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { IEnhancedTopic, IProduct } from "types";
@@ -43,7 +43,7 @@ interface IProductWithTopics extends IProduct {
 
 export default function TopicsPage() {
   const currentUser = useSelector(getCurrentUser);
-  const topics = useSelector(getTopics);
+  const topics = useSelector(getActiveTopics);
   const products = useSelector(getProducts);
   const isFetching = useSelector(isFetchingTopics);
   const history = useHistory();

@@ -267,7 +267,7 @@ export interface ICurrentUser {
   fullname: string;
   id: string;
   name: string;
-  teams: ITeam[]
+  teams: ITeam[];
   team: ITeam | null;
   timezone: string;
   isSuperAdmin: boolean;

@@ -43,3 +43,7 @@ export const getTopics = createSelector(
       })
     )
 );
+
+export const getActiveTopics = createSelector(getTopics, (topics) =>
+  topics.filter((t) => t.state === "active")
+);

@@ -39,12 +39,12 @@ test("test create team form submit the correct values", async () => {
 test("test edit team form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const team = ({
+  const team = {
     id: "t1",
     name: "team 1",
     state: "active",
     external: false,
-  } as unknown) as ITeam;
+  } as unknown as ITeam;
   const { getByTestId, getByPlaceholderText } = render(
     <TeamForm team={team} onSubmit={mockOnSubmit} />
   );

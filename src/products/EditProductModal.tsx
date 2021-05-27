@@ -52,12 +52,8 @@ export default function EditProductModal({
           product={product}
           onSubmit={(editedProduct) => {
             // why ? dci-control-server api doesnt accept extra field like from_now
-            const {
-              id,
-              etag,
-              name,
-              description,
-            } = editedProduct as IEditProduct;
+            const { id, etag, name, description } =
+              editedProduct as IEditProduct;
             onSubmit({
               id,
               etag,

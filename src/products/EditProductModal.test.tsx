@@ -5,13 +5,13 @@ import { IProduct } from "types";
 test("test edit product form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const product = ({
+  const product = {
     id: "p1",
     etag: "e1",
     name: "RHEL",
     description: "",
     from_now: "",
-  } as unknown) as IProduct;
+  } as unknown as IProduct;
   const { baseElement, getByRole, getByTestId } = render(
     <EditProductModal product={product} onSubmit={mockOnSubmit} />
   );
