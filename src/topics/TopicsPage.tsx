@@ -10,7 +10,7 @@ import {
   CardBody,
   Title,
 } from "@patternfly/react-core";
-import { EmptyState, icons, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
@@ -21,6 +21,7 @@ import { AppDispatch } from "store";
 import productsActions from "products/productsActions";
 import CreateTopicModal from "./CreateTopicModal";
 import { getProducts } from "products/productsSelectors";
+import { getProductIcon } from "ui/icons";
 
 export const ProductTitle = styled.h3`
   display: flex;
@@ -102,7 +103,7 @@ export default function TopicsPage() {
           );
         })
         .map((product) => {
-          const Icon = icons.getProductIcon(product.name);
+          const Icon = getProductIcon(product.name);
           return (
             <PageSection key={product.id}>
               <ProductTitle>

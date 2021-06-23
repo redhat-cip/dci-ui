@@ -52,6 +52,12 @@ export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
                 team_id: team.id,
               });
             }}
+            onTopicClicked={(topic) => {
+              setFilters({
+                ...filters,
+                topic_id: topic.id,
+              });
+            }}
           />
         </JobLi>
       ))}

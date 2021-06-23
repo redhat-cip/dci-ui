@@ -9,6 +9,5 @@ export { default as BackgroundImage } from "./BackgroundImage";
 export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
 export { default as TextGreen } from "./Text/TextGreen";
 export { default as TextRed } from "./Text/TextRed";
-export { default as icons } from "./icons";
 export { default as TextAreaEditableOnHover } from "./TextAreaEditableOnHover";
 export { default as Breadcrumb } from "./Breadcrumb";

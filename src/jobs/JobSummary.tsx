@@ -26,10 +26,13 @@ import {
   WarningTriangleIcon,
   ThumbsUpIcon,
   CaretRightIcon,
+  CogIcon,
+  LinkIcon,
+  InfoCircleIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent, IRemoteci, ITeam } from "types";
-import { formatDate, humanizeDuration } from "services/date";
+import { IEnhancedJob, IComponent, IRemoteci, ITeam, ITopic } from "types";
+import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import { TextAreaEditableOnHover, CopyIconButton } from "ui";
 import { Markup } from "interweave";
@@ -38,6 +41,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { convertLinksToHtml } from "./comment";
 import { sortByName } from "services/sort";
+import { getTopicIcon } from "ui/icons";
 
 function getBackground(
   status: string,
@@ -104,37 +108,30 @@ const JobIcon = styled.div`
 function getIcon(status: string) {
   switch (status) {
     case "success":
-      return (
-        <CheckCircleIcon
-          size="lg"
-          style={{ color: global_success_color_100.value }}
-        />
-      );
+      return <CheckCircleIcon />;
     case "failure":
-      return (
-        <BugIcon size="lg" style={{ color: global_danger_color_100.value }} />
-      );
+      return <BugIcon />;
     case "error":
-      return (
-        <ExclamationCircleIcon
-          size="lg"
-          style={{ color: global_danger_color_100.value }}
-        />
-      );
+      return <ExclamationCircleIcon />;
     case "killed":
-      return (
-        <StopCircleIcon
-          size="lg"
-          style={{ color: global_warning_color_100.value }}
-        />
-      );
+      return <StopCircleIcon />;
     default:
-      return (
-        <InProgressIcon
-          size="lg"
-          style={{ color: global_active_color_100.value }}
-        />
-      );
+      return <InProgressIcon />;
+  }
+}
+
+function getColor(status: string) {
+  switch (status) {
+    case "success":
+      return global_success_color_100.value;
+    case "failure":
+      return global_danger_color_100.value;
+    case "error":
+      return global_danger_color_100.value;
+    case "killed":
+      return global_warning_color_100.value;
+    default:
+      return global_active_color_100.value;
   }
 }
 
@@ -179,6 +176,7 @@ const JobTag = styled.div`
 const JobNav = styled.div`
   grid-area: nav;
   display: none;
+  border-left: 1px dashed ${global_BackgroundColor_200.value};
   @media (min-width: 992px) {
     display: flex;
     justify-content: center;
@@ -337,6 +335,7 @@ interface JobSummaryProps {
   onTagClicked?: (tag: string) => void;
   onRemoteciClicked?: (remoteci: IRemoteci) => void;
   onTeamClicked?: (team: ITeam) => void;
+  onTopicClicked?: (topic: ITopic) => void;
 }
 
 export default function JobSummary({
@@ -344,21 +343,25 @@ export default function JobSummary({
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
+  onTopicClicked,
 }: JobSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
+  const startedSince = fromNow(job.created_at);
   const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
   const dispatch = useDispatch<AppDispatch>();
-
+  const TopicIcon = getTopicIcon(innerJob.topic?.name);
   return (
     <Job status={innerJob.status}>
       <JobIcon title={`job status ${innerJob.status}`}>
-        {getIcon(innerJob.status)}
+        <span style={{ color: getColor(innerJob.status), fontSize: "2em" }}>
+          {getIcon(innerJob.status)}
+        </span>
       </JobIcon>
       <JobTitle>
         <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
-          {innerJob.topic?.name}
+          {innerJob.name || innerJob.topic?.name}
         </TopicName>
-        <JobId>
+        <JobId className="mt-xs">
           <CopyIconButton
             text={innerJob.id}
             textOnSuccess="copied"
@@ -378,7 +381,7 @@ export default function JobSummary({
             {innerJob.team?.name}
           </span>
         </div>
-        <div>
+        <div className="mt-xs">
           <span
             role="button"
             tabIndex={0}
@@ -394,6 +397,24 @@ export default function JobSummary({
             {innerJob.remoteci?.name}
           </span>
         </div>
+        <div className="mt-xs">
+          <span
+            role="button"
+            tabIndex={0}
+            className={onTopicClicked && "pointer"}
+            onClick={() => onTopicClicked && onTopicClicked(innerJob.topic)}
+            onKeyDown={() => onTopicClicked && onTopicClicked(innerJob.topic)}
+          >
+            <TopicIcon className="mr-xs" />
+            {innerJob.topic?.name}
+          </span>
+        </div>
+        {innerJob.configuration !== null && (
+          <div className="mt-xs">
+            <CogIcon className="mr-xs" />
+            {innerJob.configuration}
+          </div>
+        )}
       </JobTitle>
       {isEmpty(innerJob.tags) ? null : (
         <JobTag>
@@ -423,16 +444,35 @@ export default function JobSummary({
             {formatDate(innerJob.created_at)}
           </span>
         </div>
-        {innerJob.status !== "new" &&
-          innerJob.status !== "pre-run" &&
-          innerJob.status !== "running" && (
-            <div className="mt-xs">
-              <span title={`Duration in seconds ${innerJob.duration}`}>
-                <ClockIcon className="mr-xs" />
-                Ran for {jobDuration}
-              </span>
-            </div>
+        <div className="mt-xs">
+          {innerJob.status === "new" ||
+          innerJob.status === "pre-run" ||
+          innerJob.status === "running" ? (
+            <span title={`Job duration in seconds ${innerJob.duration}`}>
+              <ClockIcon className="mr-xs" />
+              Started {startedSince}
+            </span>
+          ) : (
+            <span title={`Job duration in seconds ${innerJob.duration}`}>
+              <ClockIcon className="mr-xs" />
+              Ran for {jobDuration}
+            </span>
           )}
+        </div>
+        {innerJob.url !== null && (
+          <div className="mt-xs">
+            <LinkIcon className="mr-xs" />
+            <a href={innerJob.url}>{innerJob.url}</a>
+          </div>
+        )}
+        <div className="mt-xs">
+          <span style={{ color: getColor(innerJob.status) }}>
+            <InfoCircleIcon className="mr-xs" />
+            {`${innerJob.status} ${
+              innerJob.status_reason !== null ? innerJob.status_reason : ""
+            }`}
+          </span>
+        </div>
         <JobComment className="mt-xs">
           <TextAreaEditableOnHover
             text={innerJob.comment || ""}

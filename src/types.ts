@@ -403,11 +403,11 @@ export interface IResult {
   total: number;
 }
 
-// todo gvincent: Job dont have a name so don't extends from Resource
 export interface IJob extends Resource {
   client_version: string | null;
   comment: string | null;
   components: IComponent[];
+  configuration: string | null;
   duration: number;
   previous_job_id: string | null;
   product_id: string;
@@ -416,6 +416,7 @@ export interface IJob extends Resource {
   results: IResult[];
   state: string;
   status: string;
+  status_reason: string | null;
   tags: string[];
   team: ITeam;
   team_id: string;
@@ -424,6 +425,7 @@ export interface IJob extends Resource {
   update_previous_job_id: string | null;
   created_at: string;
   updated_at: string;
+  url: string | null;
   user_agent: string;
 }
 

@@ -13,8 +13,9 @@ import {
   GridItem,
 } from "@patternfly/react-core";
 import { useHistory } from "react-router-dom";
-import { icons, EmptyState, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
+import { getProductIcon } from "ui/icons";
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +49,7 @@ const DashboardPage = () => {
     >
       <Grid hasGutter>
         {Object.values(products).map((product) => {
-          const Icon = icons.getProductIcon(product.name);
+          const Icon = getProductIcon(product.name);
           return (
             <GridItem key={product.id} span={12} className="mb-xl">
               <ProductTitle>
