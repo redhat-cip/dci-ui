@@ -177,9 +177,9 @@ export default function TopicPage() {
                 help="This topic has not yet been validated by the legal team. All of these components are restricted."
                 value={
                   topic.export_control ? (
-                    <Label color="red">yes</Label>
-                  ) : (
                     <Label color="green">no</Label>
+                  ) : (
+                    <Label color="red">yes</Label>
                   )
                 }
               />
