@@ -18,9 +18,10 @@ import {
   PageHeaderTools,
   PageHeaderToolsGroup,
   PageHeaderToolsItem,
+  Button,
 } from "@patternfly/react-core";
 import Logo from "logo.min.svg";
-import { UserIcon, UsersIcon } from "@patternfly/react-icons";
+import { HelpIcon, UserIcon, UsersIcon } from "@patternfly/react-icons";
 import { useAuth, AuthContextProps } from "auth/authContext";
 
 function MenuDropdown({
@@ -118,6 +119,20 @@ export default function AppLayout({ children, ...props }: AppLayoutProps) {
   );
   const headerTools = (
     <PageHeaderTools>
+      <PageHeaderToolsGroup>
+        <PageHeaderToolsItem>
+          <Button
+            component="a"
+            variant="link"
+            href="https://docs.distributed-ci.io/"
+            target="top"
+            aria-label="Link to Distributed CI Documentation page"
+            style={{ color: "white" }}
+          >
+            <HelpIcon />
+          </Button>
+        </PageHeaderToolsItem>
+      </PageHeaderToolsGroup>
       <PageHeaderToolsGroup>
         <PageHeaderToolsItem>
           <MenuDropdown
