@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
 import { EmptyState, Breadcrumb } from "ui";
@@ -11,10 +11,10 @@ import {
   parseFiltersFromSearch,
   getParamsFromFilters,
   createSearchFromFilters,
+  defaultFilters,
 } from "./toolbar/filters";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
-import useLocalStorage from "hooks/useLocalStorage";
 
 export default function JobsPage() {
   const location = useLocation();
@@ -22,8 +22,7 @@ export default function JobsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
-  const [filters, setFilters, clearFilters] = useLocalStorage(
-    "dci_jobs_filters",
+  const [filters, setFilters] = useState(
     parseFiltersFromSearch(location.search)
   );
 
@@ -56,7 +55,7 @@ export default function JobsPage() {
         <JobsToolbar
           filters={filters}
           setFilters={setFilters}
-          clearAllFilters={clearFilters}
+          clearAllFilters={() => setFilters(defaultFilters)}
           refresh={getJobsCallback}
         />
       }
