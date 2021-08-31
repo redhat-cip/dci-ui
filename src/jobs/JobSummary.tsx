@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Label, Chip } from "@patternfly/react-core";
+import { Label, Chip, LabelGroup } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
   global_danger_color_100,
@@ -62,7 +62,6 @@ function getBackground(
 
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
-
   min-height: 120px;
   width: 100%;
   padding: 0;
@@ -89,7 +88,8 @@ const Job = styled.div`
     grid-template-areas:
       "icon title components date nav"
       "icon tag tag tag nav"
-      "icon tests tests tests nav";
+      "icon tests tests tests nav"
+      "icon pad pad pad nav";
   }
 `;
 
@@ -138,6 +138,7 @@ function getColor(status: string) {
 const JobTitle = styled.div`
   grid-area: title;
   padding: 1em;
+  padding-bottom: 0;
   overflow: hidden;
 `;
 
@@ -159,18 +160,20 @@ const JobId = styled.div`
 const JobComponents = styled.div`
   grid-area: components;
   padding: 1em;
+  padding-bottom: 0;
   overflow: hidden;
 `;
 
 const JobDate = styled.div`
   grid-area: date;
   padding: 1em;
+  padding-bottom: 0;
 `;
 
-const JobTag = styled.div`
+const JobTags = styled.div`
   grid-area: tag;
-  padding: 1em;
-  padding-top: 0;
+  padding: 0.25em 1em;
+  padding-bottom: 0;
 `;
 
 const JobNav = styled.div`
@@ -201,25 +204,17 @@ const JobLink = styled(Link)`
 
 const JobTests = styled.div`
   grid-area: tests;
-  padding: 1em 0;
-  padding-top: 0;
+  padding: 0.25em 1em;
+  padding-bottom: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   @media (min-width: 992px) {
     flex-direction: row;
   }
-`;
 
-const JobTest = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-familly: monospace;
-  margin: 0 1em;
-  &:first-child {
-  }
-  &:last-child {
+  .pf-c-label-group__label {
+    max-width: 200px;
   }
 `;
 
@@ -228,6 +223,11 @@ const JobComment = styled.div``;
 const CommentBloc = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const Pad = styled.div`
+  grid-area: pad;
+  height: 1em;
 `;
 
 const Component = styled.div`
@@ -242,7 +242,7 @@ interface ComponentsProps {
 
 function Components({ components }: ComponentsProps) {
   const [showMore, setShowMore] = useState(false);
-  const maxNumberElements = Math.min(3, components.length);
+  const maxNumberElements = Math.min(4, components.length);
   const showMoreButton = components.length > maxNumberElements;
   const sortedComponents = sortByName(
     components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
@@ -306,8 +306,7 @@ function Regressions({ regressions, ...props }: RegressionsProps) {
     return null;
   }
   return (
-    <Label color="red" {...props}>
-      <WarningTriangleIcon className="mr-xs" />
+    <Label icon={<WarningTriangleIcon />} color="red" {...props}>
       <span>{`${regressions} regression${regressions > 1 ? "s" : ""}`}</span>
     </Label>
   );
@@ -323,8 +322,7 @@ function Successfixes({ successfixes, ...props }: SuccessfixesProps) {
     return null;
   }
   return (
-    <Label color="green" {...props}>
-      <ThumbsUpIcon className="mr-xs" />
+    <Label icon={<ThumbsUpIcon />} color="green" {...props}>
       <span>{`${successfixes} fix${successfixes > 1 ? "es" : ""}`}</span>
     </Label>
   );
@@ -417,22 +415,22 @@ export default function JobSummary({
         )}
       </JobTitle>
       {isEmpty(innerJob.tags) ? null : (
-        <JobTag>
-          {innerJob.tags.map((tag, index) => (
-            <Label
-              key={index}
-              color="blue"
-              className={`mr-xs mt-xs ${
-                onTagClicked === undefined ? "" : "pointer"
-              }`}
-              onClick={() =>
-                onTagClicked === undefined ? void 0 : onTagClicked(tag)
-              }
-            >
-              <small>{tag}</small>
-            </Label>
-          ))}
-        </JobTag>
+        <JobTags>
+          <LabelGroup categoryName="Tags" numLabels={8}>
+            {innerJob.tags.map((tag, index) => (
+              <Label
+                key={index}
+                color="blue"
+                className={onTagClicked === undefined ? "" : "pointer"}
+                onClick={() =>
+                  onTagClicked === undefined ? void 0 : onTagClicked(tag)
+                }
+              >
+                <small>{tag}</small>
+              </Label>
+            ))}
+          </LabelGroup>
+        </JobTags>
       )}
       <JobComponents>
         <Components components={innerJob.components} />
@@ -500,11 +498,15 @@ export default function JobSummary({
       {isEmpty(innerJob.results) ? null : (
         <JobTests>
           {innerJob.results.map((result, i) => (
-            <JobTest key={i}>
+            <LabelGroup
+              categoryName={result.name}
+              numLabels={5}
+              key={i}
+              className="mr-xs"
+            >
               <Label color="green" title={`${result.success} tests in success`}>
                 {result.success}
               </Label>
-              <Successfixes successfixes={result.successfixes} />
               <Label color="orange" title={`${result.skips} skipped tests`}>
                 {result.skips}
               </Label>
@@ -516,12 +518,13 @@ export default function JobSummary({
               >
                 {result.errors + result.failures}
               </Label>
+              <Successfixes successfixes={result.successfixes} />
               <Regressions regressions={result.regressions} />
-              <span className="ml-xs mr-xs">{result.name}</span>
-            </JobTest>
+            </LabelGroup>
           ))}
         </JobTests>
       )}
+      <Pad/>
     </Job>
   );
 }
