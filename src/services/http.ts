@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "./localStorage";
 
 const baseURL =
-  process.env.REACT_APP_BACKEND_HOST || "https://api2.distributed-ci.io";
+  process.env.REACT_APP_BACKEND_HOST || "https://api.distributed-ci.io";
 
 axios.defaults.baseURL = baseURL;
 

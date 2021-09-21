@@ -6,7 +6,7 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("fetchLatestComponents", () => {
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/topics/t1/components", {
+    .onGet("https://api.distributed-ci.io/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
         limit: 1,
@@ -16,7 +16,7 @@ it("fetchLatestComponents", () => {
     })
     .reply(200, { components: [{ id: "c11" }] });
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/topics/t1/components", {
+    .onGet("https://api.distributed-ci.io/api/v1/topics/t1/components", {
       params: {
         sort: "-created_at",
         limit: 1,

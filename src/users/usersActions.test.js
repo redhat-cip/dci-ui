@@ -11,14 +11,14 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("fetchUserTeams", () => {
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/users/abc/teams")
+    .onGet("https://api.distributed-ci.io/api/v1/users/abc/teams")
     .reply(200);
   return fetchUserTeams({ id: "abc" });
 });
 
 it("addUserToTeam", () => {
   axiosMock
-    .onPost("https://api2.distributed-ci.io/api/v1/teams/def/users/abc", {})
+    .onPost("https://api.distributed-ci.io/api/v1/teams/def/users/abc", {})
     .reply(201);
   const team = { id: "def" };
   return addUserToTeam("abc", team);
@@ -26,7 +26,7 @@ it("addUserToTeam", () => {
 
 it("deleteUserFromTeam", () => {
   axiosMock
-    .onDelete("https://api2.distributed-ci.io/api/v1/teams/def/users/abc")
+    .onDelete("https://api.distributed-ci.io/api/v1/teams/def/users/abc")
     .reply(204);
   const user = { id: "abc" };
   const team = { id: "def" };

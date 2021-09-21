@@ -19,7 +19,7 @@ const axiosMock = new axiosMockAdapter(axios);
 
 it("fetch jobs", () => {
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/jobs")
+    .onGet("https://api.distributed-ci.io/api/v1/jobs")
     .reply(200, { jobs: [{ id: "j1" }], _meta: { count: 1 } });
 
   const expectedActions = [
@@ -45,7 +45,7 @@ it("fetch jobs", () => {
 it("fetch users params", () => {
   const params = { embed: "team" };
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/users", { params })
+    .onGet("https://api.distributed-ci.io/api/v1/users", { params })
     .reply(200, { users: [], _meta: { count: 0 } });
   const expectedActions = [
     { type: userActionsTypes.FETCH_ALL_REQUEST },
@@ -66,7 +66,7 @@ it("fetch users params", () => {
 });
 
 it("fetch error", () => {
-  axiosMock.onGet("https://api2.distributed-ci.io/api/v1/jobs").reply(401, {
+  axiosMock.onGet("https://api.distributed-ci.io/api/v1/jobs").reply(401, {
     message: "Authorization header missing",
     status_code: 401,
   });
@@ -79,7 +79,7 @@ it("fetch error", () => {
 });
 
 it("fetch error no message", () => {
-  axiosMock.onGet("https://api2.distributed-ci.io/api/v1/jobs").reply(500);
+  axiosMock.onGet("https://api.distributed-ci.io/api/v1/jobs").reply(500);
   const store = mockStore();
   return store.dispatch(jobsActions.all()).then(() => {
     const actions = store.getActions();
@@ -99,7 +99,7 @@ it("jobs remove cache", () => {
 
 it("fetch job", () => {
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/jobs/j1")
+    .onGet("https://api.distributed-ci.io/api/v1/jobs/j1")
     .reply(200, { job: { id: "j1" } });
 
   const expectedActions = [
@@ -121,7 +121,7 @@ it("fetch job", () => {
 it("fetch job with params", () => {
   const params = { embed: "team" };
   axiosMock
-    .onGet("https://api2.distributed-ci.io/api/v1/jobs/j2", { params })
+    .onGet("https://api.distributed-ci.io/api/v1/jobs/j2", { params })
     .reply(200, { job: { id: "j2" } });
 
   const expectedActions = [
@@ -144,7 +144,7 @@ it("create one user", () => {
   const user = { name: "user 1" };
 
   axiosMock
-    .onPost("https://api2.distributed-ci.io/api/v1/users", user)
+    .onPost("https://api.distributed-ci.io/api/v1/users", user)
     .reply(201, { user: { id: "u1", name: "user 1" } });
 
   const expectedActions = [
@@ -171,7 +171,7 @@ it("create one user", () => {
 it("update one user", () => {
   const user = { id: "u3", name: "user 1", etag: "etag1" };
   axiosMock
-    .onPut("https://api2.distributed-ci.io/api/v1/users/u3", user)
+    .onPut("https://api.distributed-ci.io/api/v1/users/u3", user)
     .reply(200, { user: { id: "u3", name: "user 1", etag: "etag2" } });
 
   const expectedActions = [
@@ -197,7 +197,7 @@ it("update one user", () => {
 
 it("delete one user", () => {
   axiosMock
-    .onDelete("https://api2.distributed-ci.io/api/v1/users/u4")
+    .onDelete("https://api.distributed-ci.io/api/v1/users/u4")
     .reply(204);
   const user = { id: "u4", etag: "eu4", name: "user 1" };
   const store = mockStore();
