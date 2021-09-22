@@ -10,7 +10,10 @@ export function getFileContent(file: IFile, params = {}): Promise<string> {
     })
     .then((response) => {
       const content = response.data;
-      if (typeof content === "object" && response.config.responseType !== "blob") {
+      if (
+        typeof content === "object" &&
+        response.config.responseType !== "blob"
+      ) {
         try {
           return JSON.stringify(content, null, 2);
         } catch (error) {}

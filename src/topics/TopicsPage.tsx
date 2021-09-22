@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isEmpty, get } from "lodash";
+import { isEmpty } from "lodash";
 import { Page } from "layout";
 import {
   Card,
@@ -14,9 +14,8 @@ import { EmptyState, Breadcrumb } from "ui";
 import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
-import { IEnhancedTopic, IProduct } from "types";
 import { useHistory } from "react-router-dom";
-import topicsActions from "./topicsActions";
+import topicsActions, { orderTopicsByProduct } from "./topicsActions";
 import { AppDispatch } from "store";
 import productsActions from "products/productsActions";
 import CreateTopicModal from "./CreateTopicModal";
@@ -30,17 +29,16 @@ export const ProductTitle = styled.h3`
 `;
 
 const TopicId = styled.p`
-  font-size: 0.7em;
-  overflow-wrap: break-word;
+  font-size: 0.65em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: monospace;
 `;
 
 const Topic = styled(Card)`
   display: flex;
 `;
-
-interface IProductWithTopics extends IProduct {
-  topics: IEnhancedTopic[];
-}
 
 export default function TopicsPage() {
   const currentUser = useSelector(getCurrentUser);
@@ -49,20 +47,6 @@ export default function TopicsPage() {
   const isFetching = useSelector(isFetchingTopics);
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
-  const topicsPerProduct = topics.reduce((acc, topic) => {
-    const product = topic.product;
-    if (!product) {
-      return acc;
-    }
-    const productName = product.name.toLowerCase();
-    const currentProduct = get(acc, productName, {
-      ...product,
-      topics: [],
-    } as IProductWithTopics);
-    currentProduct.topics.push(topic);
-    acc[productName] = currentProduct;
-    return acc;
-  }, {} as { [productName: string]: IProductWithTopics });
 
   useEffect(() => {
     dispatch(topicsActions.all({ embed: "product" }));
@@ -70,6 +54,8 @@ export default function TopicsPage() {
   }, [dispatch]);
 
   if (currentUser === null) return null;
+
+  const topicsPerProduct = orderTopicsByProduct(topics);
 
   return (
     <Page
@@ -94,47 +80,39 @@ export default function TopicsPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
       }
     >
-      {Object.values(topicsPerProduct)
-        .sort((p1, p2) => {
-          const lowercaseProductsOrder = ["openshift", "rhel", "openstack"];
-          return (
-            lowercaseProductsOrder.indexOf(p1.name.toLowerCase()) -
-            lowercaseProductsOrder.indexOf(p2.name.toLowerCase())
-          );
-        })
-        .map((product) => {
-          const Icon = getProductIcon(product.name);
-          return (
-            <PageSection key={product.id}>
-              <ProductTitle>
-                <span className="mr-xs">
-                  <Icon size="md" />
-                </span>
-                {product.name}
-              </ProductTitle>
-              <Gallery hasGutter key={product.id}>
-                {product.topics.map((topic) => (
-                  <GalleryItem key={topic.id}>
-                    <Topic
-                      onClick={() =>
-                        history.push(`/topics/${topic.id}/components`)
-                      }
-                      title="Click to see components"
-                      className="pointer"
-                    >
-                      <CardBody>
-                        <Title headingLevel="h6" size="md">
-                          {topic.name}
-                        </Title>
-                        <TopicId>{topic.id}</TopicId>
-                      </CardBody>
-                    </Topic>
-                  </GalleryItem>
-                ))}
-              </Gallery>
-            </PageSection>
-          );
-        })}
+      {topicsPerProduct.map((product) => {
+        const Icon = getProductIcon(product.name);
+        return (
+          <PageSection key={product.id}>
+            <ProductTitle>
+              <span className="mr-xs">
+                <Icon size="md" />
+              </span>
+              {product.name}
+            </ProductTitle>
+            <Gallery hasGutter key={product.id}>
+              {product.topics.map((topic) => (
+                <GalleryItem key={topic.id}>
+                  <Topic
+                    onClick={() =>
+                      history.push(`/topics/${topic.id}/components`)
+                    }
+                    title="Click to see components"
+                    className="pointer"
+                  >
+                    <CardBody>
+                      <Title headingLevel="h6" size="md">
+                        {topic.name}
+                      </Title>
+                      <TopicId>{topic.id}</TopicId>
+                    </CardBody>
+                  </Topic>
+                </GalleryItem>
+              ))}
+            </Gallery>
+          </PageSection>
+        );
+      })}
     </Page>
   );
 }
