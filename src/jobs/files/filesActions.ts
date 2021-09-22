@@ -9,13 +9,12 @@ export function getFileContent(file: IFile, params = {}): Promise<string> {
       ...params,
     })
     .then((response) => {
-      if (
-        typeof response.data === "object" &&
-        file.mime === "application/x-ansible-output"
-      ) {
-        return JSON.stringify(response.data, null, 2);
-      } else {
-        return response.data;
+      const content = response.data;
+      if (typeof content === "object" && response.config.responseType !== "blob") {
+        try {
+          return JSON.stringify(content, null, 2);
+        } catch (error) {}
       }
+      return response.data;
     });
 }
