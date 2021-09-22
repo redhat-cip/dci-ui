@@ -15,7 +15,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const axiosMock = new axiosMockAdapter(axios);
 
-it("getProductsWithTeams", () => {
+test("getProductsWithTeams", () => {
   axiosMock.onGet("https://api.distributed-ci.io/api/v1/products").reply(200, {
     products: [
       { id: "p1", name: "RHEL" },
@@ -45,7 +45,7 @@ it("getProductsWithTeams", () => {
   });
 });
 
-it("getTopicsWithTeams", () => {
+test("getTopicsWithTeams", () => {
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/topics", { embed: "teams" })
     .reply(200, {
@@ -72,7 +72,7 @@ it("getTopicsWithTeams", () => {
   });
 });
 
-it("getTeams", () => {
+test("getTeams", () => {
   axiosMock.onGet("https://api.distributed-ci.io/api/v1/teams").reply(200, {
     teams: [
       { id: "t1", name: "Team 1" },
@@ -87,7 +87,7 @@ it("getTeams", () => {
   });
 });
 
-it("grantTeamProductPermission", () => {
+test("grantTeamProductPermission", () => {
   const data = { team_id: "t1" };
   axiosMock
     .onPost("https://api.distributed-ci.io/api/v1/products/p1/teams", data)
@@ -100,7 +100,7 @@ it("grantTeamProductPermission", () => {
     .then((response) => expect(response.status).toBe(201));
 });
 
-it("removeTeamProductPermission", () => {
+test("removeTeamProductPermission", () => {
   axiosMock
     .onDelete("https://api.distributed-ci.io/api/v1/products/p1/teams/t1")
     .reply(204);
@@ -112,7 +112,7 @@ it("removeTeamProductPermission", () => {
     .then((response) => expect(response.status).toBe(204));
 });
 
-it("grantTeamTopicPermission", () => {
+test("grantTeamTopicPermission", () => {
   const data = { team_id: "t1" };
   axiosMock
     .onPost("https://api.distributed-ci.io/api/v1/topics/to1/teams", data)
@@ -125,7 +125,7 @@ it("grantTeamTopicPermission", () => {
     .then((response) => expect(response.status).toBe(201));
 });
 
-it("removeTeamTopicPermission", () => {
+test("removeTeamTopicPermission", () => {
   axiosMock
     .onDelete("https://api.distributed-ci.io/api/v1/topics/to1/teams/t1")
     .reply(204);

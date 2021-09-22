@@ -9,14 +9,14 @@ import {
 
 const axiosMock = new axiosMockAdapter(axios);
 
-it("fetchUserTeams", () => {
+test("fetchUserTeams", () => {
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/users/abc/teams")
     .reply(200);
   return fetchUserTeams({ id: "abc" });
 });
 
-it("addUserToTeam", () => {
+test("addUserToTeam", () => {
   axiosMock
     .onPost("https://api.distributed-ci.io/api/v1/teams/def/users/abc", {})
     .reply(201);
@@ -24,7 +24,7 @@ it("addUserToTeam", () => {
   return addUserToTeam("abc", team);
 });
 
-it("deleteUserFromTeam", () => {
+test("deleteUserFromTeam", () => {
   axiosMock
     .onDelete("https://api.distributed-ci.io/api/v1/teams/def/users/abc")
     .reply(204);

@@ -4,7 +4,7 @@ import { createActionsTypes } from "./apiActionsTypes";
 const jobActionsTypes = createActionsTypes("job");
 const userActionsTypes = createActionsTypes("user");
 
-it("reducer initial state", () => {
+test("reducer initial state", () => {
   expect(createReducer("job")(undefined, {})).toEqual({
     byId: {},
     allIds: [],
@@ -13,14 +13,14 @@ it("reducer initial state", () => {
   });
 });
 
-it("FETCH_REQUEST", () => {
+test("FETCH_REQUEST", () => {
   const state = createReducer("job")(undefined, {
     type: jobActionsTypes.FETCH_ALL_REQUEST,
   });
   expect(state.isFetching).toBe(true);
 });
 
-it("FETCH_SUCCESS ignore undefined id", () => {
+test("FETCH_SUCCESS ignore undefined id", () => {
   const state = createReducer("job")(
     {
       byId: {},
@@ -44,7 +44,7 @@ it("FETCH_SUCCESS ignore undefined id", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("FETCH_SUCCESS", () => {
+test("FETCH_SUCCESS", () => {
   const state = createReducer("job")(
     {
       byId: {},
@@ -67,7 +67,7 @@ it("FETCH_SUCCESS", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("CLEAR_CACHE", () => {
+test("CLEAR_CACHE", () => {
   const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
@@ -87,7 +87,7 @@ it("CLEAR_CACHE", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("SET_COUNT", () => {
+test("SET_COUNT", () => {
   const state = createReducer("job")(
     {
       byId: {},
@@ -103,7 +103,7 @@ it("SET_COUNT", () => {
   expect(state.count).toBe(10);
 });
 
-it("FETCH_FAILURE", () => {
+test("FETCH_FAILURE", () => {
   const state = createReducer("job")(
     {
       byId: {},
@@ -122,7 +122,7 @@ it("FETCH_FAILURE", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("fetch another reducer with updated entity", () => {
+test("fetch another reducer with updated entity", () => {
   const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
@@ -146,7 +146,7 @@ it("fetch another reducer with updated entity", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("fetch one entity", () => {
+test("fetch one entity", () => {
   const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },
@@ -169,7 +169,7 @@ it("fetch one entity", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("update one entity", () => {
+test("update one entity", () => {
   const state = createReducer("job")(
     {
       byId: { j1: { id: "j1", etag: "e1" } },
@@ -192,7 +192,7 @@ it("update one entity", () => {
   expect(state).toEqual(expectedState);
 });
 
-it("delete one entity", () => {
+test("delete one entity", () => {
   const state = createReducer("job")(
     {
       byId: { j1: { id: "j1" } },

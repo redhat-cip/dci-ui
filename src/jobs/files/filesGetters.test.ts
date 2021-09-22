@@ -2,13 +2,13 @@ import { humanFileSize } from "./filesGetters";
 import { IFile } from "types";
 import { isATextFile } from "./filesGetters";
 
-it("humanFileSize", () => {
+test("humanFileSize", () => {
   expect(humanFileSize(0)).toEqual("0 B");
   expect(humanFileSize(1000)).toEqual("1000 B");
   expect(humanFileSize(6124000)).toEqual("5.84 MB");
 });
 
-it("isATextFile", () => {
+test("isATextFile", () => {
   expect(isATextFile({ mime: "text/plain" } as IFile)).toBe(true);
   expect(isATextFile({ mime: "application/junit" } as IFile)).toBe(true);
   expect(isATextFile({ mime: "text/css" } as IFile)).toBe(true);

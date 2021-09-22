@@ -1,14 +1,14 @@
 import * as currentUserActions from "./currentUserActions";
 import * as types from "./currentUserActionsTypes";
 
-it("deleteCurrentUser", () => {
+test("deleteCurrentUser", () => {
   const expectedAction = {
     type: types.DELETE_CURRENT_USER,
   };
   expect(currentUserActions.deleteCurrentUser()).toEqual(expectedAction);
 });
 
-it("setIdentity", () => {
+test("setIdentity", () => {
   const identity = {
     id: "i1",
   };

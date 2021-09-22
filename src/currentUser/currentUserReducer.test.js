@@ -1,7 +1,7 @@
 import reducer from "./currentUserReducer";
 import * as types from "./currentUserActionsTypes";
 
-it("SET_IDENTITY", () => {
+test("SET_IDENTITY", () => {
   const newState = reducer(undefined, {
     type: types.SET_IDENTITY,
     identity: {
@@ -26,7 +26,7 @@ it("SET_IDENTITY", () => {
   });
 });
 
-it("deleteCurrentUser", () => {
+test("deleteCurrentUser", () => {
   const newState = reducer(
     {
       id: "u1",

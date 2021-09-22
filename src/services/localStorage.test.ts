@@ -6,11 +6,11 @@ import {
   setBasicToken,
 } from "./localStorage";
 
-it("localStorage getToken", () => {
+test("localStorage getToken", () => {
   expect(getToken()).toBe(null);
 });
 
-it("localStorage setToken getToken removeToken", () => {
+test("localStorage setToken getToken removeToken", () => {
   const token = {
     type: "Bearer",
     value: "eyJhbGciOiJSUzI1NiIsInR5cC",
@@ -21,12 +21,12 @@ it("localStorage setToken getToken removeToken", () => {
   expect(getToken()).toBe(null);
 });
 
-it("localStorage setJWT", () => {
+test("localStorage setJWT", () => {
   setJWT("");
   expect(getToken().type).toBe("Bearer");
 });
 
-it("localStorage setBasicToken", () => {
+test("localStorage setBasicToken", () => {
   setBasicToken("");
   expect(getToken().type).toBe("Basic");
 });

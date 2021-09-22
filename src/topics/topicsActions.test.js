@@ -4,7 +4,7 @@ import { fetchLatestComponents } from "./topicsActions";
 
 const axiosMock = new axiosMockAdapter(axios);
 
-it("fetchLatestComponents", () => {
+test("fetchLatestComponents", () => {
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/topics/t1/components", {
       params: {

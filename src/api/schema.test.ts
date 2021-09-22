@@ -1,7 +1,7 @@
 import { normalize, denormalize } from "normalizr";
 import { getSchema } from "./schema";
 
-it("jobs normalize", () => {
+test("jobs normalize", () => {
   const data = [
     {
       components: [{ id: "component1" }],
@@ -59,7 +59,7 @@ it("jobs normalize", () => {
   };
   expect(normalize(data, getSchema("jobs"))).toEqual(dataNormalized);
 });
-it("jobs denormalize", () => {
+test("jobs denormalize", () => {
   const allIds = ["job1", "job2"];
   const entities = {
     jobs: {
@@ -113,7 +113,7 @@ it("jobs denormalize", () => {
     denormalizedJobs
   );
 });
-it("partial jobs normalize", () => {
+test("partial jobs normalize", () => {
   const data = [{ id: "job1" }];
   const dataNormalized = {
     result: ["job1"],
@@ -128,7 +128,7 @@ it("partial jobs normalize", () => {
   expect(normalize(data, getSchema("jobs"))).toEqual(dataNormalized);
 });
 
-it("job normalize", () => {
+test("job normalize", () => {
   const data = { id: "job1" };
   const dataNormalized = {
     result: "job1",
@@ -143,7 +143,7 @@ it("job normalize", () => {
   expect(normalize(data, getSchema("job"))).toEqual(dataNormalized);
 });
 
-it("users normalize", () => {
+test("users normalize", () => {
   const data = [{ id: "user1", team: [{ id: "t1" }] }];
 
   const dataNormalized = {

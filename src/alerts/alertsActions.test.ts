@@ -2,7 +2,7 @@ import { IAlert } from "types";
 import * as actions from "./alertsActions";
 import * as types from "./alertsActionsTypes";
 
-it("showAlert", () => {
+test("showAlert", () => {
   const alert: IAlert = {
     id: "a1",
     type: "success",
@@ -16,7 +16,7 @@ it("showAlert", () => {
   expect(actions.showAlert(alert)).toEqual(expectedAction);
 });
 
-it("hideAlert", () => {
+test("hideAlert", () => {
   const alert: IAlert = {
     id: "a1",
     type: "success",

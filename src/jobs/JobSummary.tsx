@@ -524,7 +524,7 @@ export default function JobSummary({
           ))}
         </JobTests>
       )}
-      <Pad/>
+      <Pad />
     </Job>
   );
 }

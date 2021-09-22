@@ -1,7 +1,7 @@
 import reducer from "./alertsReducer";
 import * as types from "./alertsActionsTypes";
 
-it("SHOW_ALERT", () => {
+test("SHOW_ALERT", () => {
   expect(
     reducer(undefined, {
       type: types.SHOW_ALERT,
@@ -22,7 +22,7 @@ it("SHOW_ALERT", () => {
   });
 });
 
-it("SHOW_ALERT keep existing alerts", () => {
+test("SHOW_ALERT keep existing alerts", () => {
   expect(
     reducer(
       {
@@ -59,7 +59,7 @@ it("SHOW_ALERT keep existing alerts", () => {
   });
 });
 
-it("HIDE_ALERT", () => {
+test("HIDE_ALERT", () => {
   expect(
     reducer(
       {

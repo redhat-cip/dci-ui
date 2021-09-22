@@ -1,6 +1,6 @@
 import { sortByName, sortByNewestFirst, sortByOldestFirst } from "./sort";
 
-it("sortByName", () => {
+test("sortByName", () => {
   expect(
     sortByName([
       {
@@ -24,7 +24,7 @@ it("sortByName", () => {
   ]);
 });
 
-it("sortByOldestFirst", () => {
+test("sortByOldestFirst", () => {
   expect(
     sortByOldestFirst([
       {
@@ -48,7 +48,7 @@ it("sortByOldestFirst", () => {
   ]);
 });
 
-it("sortByNewestFirst", () => {
+test("sortByNewestFirst", () => {
   expect(
     sortByNewestFirst([
       {

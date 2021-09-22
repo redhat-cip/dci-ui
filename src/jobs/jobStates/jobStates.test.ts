@@ -1,7 +1,7 @@
 import { getFileStatus } from "./jobStates";
 import { IFile } from "types";
 
-it("getFileStatus", () => {
+test("getFileStatus", () => {
   expect(
     getFileStatus({
       name: "failed/installer : xxxxxxxxxxxx",

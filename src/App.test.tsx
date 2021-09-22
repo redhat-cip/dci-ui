@@ -34,7 +34,7 @@ axiosMock.onGet("https://api.distributed-ci.io/api/v1/identity").reply(200, {
   },
 });
 
-it("renders without crashing", async () => {
+test("renders without crashing", async () => {
   await act(async () => {
     render(
       <Provider store={store}>

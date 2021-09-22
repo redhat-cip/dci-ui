@@ -17,7 +17,7 @@ const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new axiosMockAdapter(axios);
 
-it("fetch jobs", () => {
+test("fetch jobs", () => {
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/jobs")
     .reply(200, { jobs: [{ id: "j1" }], _meta: { count: 1 } });
@@ -42,7 +42,7 @@ it("fetch jobs", () => {
   });
 });
 
-it("fetch users params", () => {
+test("fetch users params", () => {
   const params = { embed: "team" };
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/users", { params })
@@ -65,7 +65,7 @@ it("fetch users params", () => {
   });
 });
 
-it("fetch error", () => {
+test("fetch error", () => {
   axiosMock.onGet("https://api.distributed-ci.io/api/v1/jobs").reply(401, {
     message: "Authorization header missing",
     status_code: 401,
@@ -78,7 +78,7 @@ it("fetch error", () => {
   });
 });
 
-it("fetch error no message", () => {
+test("fetch error no message", () => {
   axiosMock.onGet("https://api.distributed-ci.io/api/v1/jobs").reply(500);
   const store = mockStore();
   return store.dispatch(jobsActions.all()).then(() => {
@@ -90,14 +90,14 @@ it("fetch error no message", () => {
   });
 });
 
-it("jobs remove cache", () => {
+test("jobs remove cache", () => {
   const expectedAction = {
     type: jobActionsTypes.CLEAR_CACHE,
   };
   expect(jobsActions.clear()).toEqual(expectedAction);
 });
 
-it("fetch job", () => {
+test("fetch job", () => {
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/jobs/j1")
     .reply(200, { job: { id: "j1" } });
@@ -118,7 +118,7 @@ it("fetch job", () => {
   });
 });
 
-it("fetch job with params", () => {
+test("fetch job with params", () => {
   const params = { embed: "team" };
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/jobs/j2", { params })
@@ -140,7 +140,7 @@ it("fetch job with params", () => {
   });
 });
 
-it("create one user", () => {
+test("create one user", () => {
   const user = { name: "user 1" };
 
   axiosMock
@@ -168,7 +168,7 @@ it("create one user", () => {
   });
 });
 
-it("update one user", () => {
+test("update one user", () => {
   const user = { id: "u3", name: "user 1", etag: "etag1" };
   axiosMock
     .onPut("https://api.distributed-ci.io/api/v1/users/u3", user)
@@ -195,7 +195,7 @@ it("update one user", () => {
   });
 });
 
-it("delete one user", () => {
+test("delete one user", () => {
   axiosMock
     .onDelete("https://api.distributed-ci.io/api/v1/users/u4")
     .reply(204);

@@ -54,7 +54,7 @@ describe("parse filters", () => {
   });
 });
 
-it("get params from default filters", () => {
+test("get params from default filters", () => {
   const filters = {
     team_id: null,
     product_id: null,
@@ -72,7 +72,7 @@ it("get params from default filters", () => {
   expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });
 
-it("get params from complex filters", () => {
+test("get params from complex filters", () => {
   const filters = {
     product_id: "p1",
     team_id: "t1",
@@ -93,7 +93,7 @@ it("get params from complex filters", () => {
   expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });
 
-it("create search from filters", () => {
+test("create search from filters", () => {
   const filters = {
     product_id: "p1",
     team_id: "t1",
@@ -109,7 +109,7 @@ it("create search from filters", () => {
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
-it("create search from filters remove duplicate tags", () => {
+test("create search from filters remove duplicate tags", () => {
   const filters = {
     product_id: "p1",
     team_id: "t1",
@@ -125,7 +125,7 @@ it("create search from filters remove duplicate tags", () => {
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
-it("get params from user filters", () => {
+test("get params from user filters", () => {
   const filters = {
     email: "test@example.org",
     page: 1,

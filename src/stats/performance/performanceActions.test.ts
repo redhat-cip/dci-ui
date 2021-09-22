@@ -1,6 +1,6 @@
 import { transposePerformance } from "./performanceActions";
 
-it("should transpose performance", () => {
+test("should transpose performance", () => {
   const performance = [
     {
       job_id: "bac7cc7c-a3c3-4a71-8af5-f7abca9c06ef",
