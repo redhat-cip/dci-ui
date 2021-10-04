@@ -11,14 +11,14 @@ type RemotecisFilterProps = {
   remoteci_id: string | null;
   onSelect: (remoteci: IRemoteci) => void;
   onClear: () => void;
-  showToolbarItem: boolean;
+  showToolbarItem?: boolean;
 };
 
 export default function RemotecisFilter({
   remoteci_id,
   onSelect,
   onClear,
-  showToolbarItem,
+  showToolbarItem = true,
 }: RemotecisFilterProps) {
   const remotecis = useSelector(getRemotecis);
   const remoteci = useSelector(getRemoteciById(remoteci_id));

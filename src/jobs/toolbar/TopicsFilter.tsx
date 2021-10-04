@@ -11,14 +11,14 @@ type TopicsFilterProps = {
   topic_id: string | null;
   onSelect: (topic: ITopic) => void;
   onClear: () => void;
-  showToolbarItem: boolean;
+  showToolbarItem?: boolean;
 };
 
 export default function TopicsFilter({
   topic_id,
   onSelect,
   onClear,
-  showToolbarItem,
+  showToolbarItem = true,
 }: TopicsFilterProps) {
   const topics = useSelector(getTopics);
   const topic = useSelector(getTopicById(topic_id));

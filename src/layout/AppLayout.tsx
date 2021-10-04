@@ -78,7 +78,7 @@ export default function AppLayout({ children, ...props }: AppLayoutProps) {
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
       <NavGroup title="DCI">
-        <DCINavItem to="/dashboard">Dashboard</DCINavItem>
+        <DCINavItem to="/analytics">Analytics</DCINavItem>
         <DCINavItem to="/jobs">Jobs</DCINavItem>
         <DCINavItem to="/products">Products</DCINavItem>
         <DCINavItem to="/topics">Topics</DCINavItem>

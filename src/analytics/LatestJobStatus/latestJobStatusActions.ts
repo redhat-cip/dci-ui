@@ -3,17 +3,17 @@ import { AxiosRequestConfig } from "axios";
 import { IStat } from "types";
 import { get } from "lodash";
 
-export type ProductDashboard = {
+export type JobPerRemoteciStat = {
   id: string;
   name: string;
   stats: IStat[];
 };
 
-export type Dashboard = {
-  [key: string]: ProductDashboard;
+export type JobPerRemoteciStats = {
+  [key: string]: JobPerRemoteciStat;
 };
 
-export function getStats(): Promise<Dashboard> {
+export function getStats(): Promise<JobPerRemoteciStats> {
   const request = {
     method: "get",
     url: `/api/v1/stats`,
@@ -29,11 +29,11 @@ export function getStats(): Promise<Dashboard> {
       const currentProduct = get(acc, productId, {
         ...product,
         stats: [],
-      }) as ProductDashboard;
+      }) as JobPerRemoteciStat;
       currentProduct.stats.push(stat);
       acc[productId] = currentProduct;
       return acc;
-    }, {} as Dashboard);
+    }, {} as JobPerRemoteciStats);
     return Promise.resolve(productsStats);
   });
 }

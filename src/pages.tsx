@@ -1,5 +1,3 @@
-import DashboardPage from "./dashboard/DashboardPage";
-import DashboardDetailsPage from "./dashboard/DashboardDetailsPage";
 import JobsPage from "./jobs/JobsPage";
 import JobPage from "./jobs/JobPage";
 import FilePage from "./jobs/files/FilePage";
@@ -21,10 +19,16 @@ import PermissionsPage from "./permissions/PermissionsPage";
 import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
 import LoginPage from "./auth/LoginPage";
 import Page404 from "./layout/Page404";
+import TasksDurationPerJobPage from "./analytics/TasksDurationPerJob/TasksDurationPerJobPage";
+import AnalyticsPage from "./analytics/AnalyticsPage";
+import LatestJobStatusPage from "./analytics/LatestJobStatus/LatestJobStatusPage";
+import LatestJobStatusDetailsPage from "./analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 
 const Pages = {
-  DashboardPage,
-  DashboardDetailsPage,
+  AnalyticsPage,
+  TasksDurationPerJobPage,
+  LatestJobStatusPage,
+  LatestJobStatusDetailsPage,
   JobsPage,
   JobPage,
   FilePage,

@@ -34,7 +34,7 @@ import {
 import { fromNow, formatDate } from "services/date";
 import { sortByNewestFirst } from "services/sort";
 import { humanizeDuration } from "services/date";
-import { StatHeaderCard } from "dashboard/DashboardDetailsPage";
+import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
 
 const Padding = styled.div`

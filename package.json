@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "^4.151.4",
-    "@patternfly/react-charts": "^6.21.8",
     "@patternfly/react-core": "^4.168.8",
     "@patternfly/react-icons": "^4.19.8",
     "@patternfly/react-tokens": "^4.20.8",
@@ -44,6 +43,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "^4.0.3",
+    "recharts": "^2.1.6",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.0",
     "reselect": "^4.1.3",

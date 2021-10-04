@@ -10,25 +10,39 @@ import PrivateRoute from "auth/PrivateRoute";
 export default function App() {
   return (
     <Routes>
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute>
-            <Pages.DashboardPage />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/dashboard/:topic_name"
-        element={
-          <PrivateRoute>
-            <Pages.DashboardDetailsPage />
-          </PrivateRoute>
-        }
-      />
-
       <Route path="/" element={<Navigate replace to="/jobs" />} />
+      <Route
+        path="/analytics"
+        element={
+          <PrivateRoute>
+            <Pages.AnalyticsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/analytics/tasks_duration_per_job"
+        element={
+          <PrivateRoute>
+            <Pages.TasksDurationPerJobPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/analytics/latest_jobs_status"
+        element={
+          <PrivateRoute>
+            <Pages.LatestJobStatusPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/analytics/latest_jobs_status/:topic_name"
+        element={
+          <PrivateRoute>
+            <Pages.LatestJobStatusDetailsPage />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/jobs"
         element={
@@ -37,7 +51,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/jobs/:id"
         element={<Navigate replace to="/jobs/:id/jobStates" />}
@@ -50,7 +63,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/files/:id"
         element={
@@ -59,7 +71,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/products"
         element={
@@ -68,7 +79,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/topics"
         element={
@@ -77,7 +87,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/topics/:topic_id/components/:id"
         element={
@@ -86,7 +95,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/topics/:id/components"
         element={
@@ -95,7 +103,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/remotecis"
         element={
@@ -104,7 +111,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/feeders/create"
         element={
@@ -113,7 +119,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/feeders/:id"
         element={
@@ -122,7 +127,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/feeders"
         element={
@@ -131,7 +135,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/teams"
         element={
@@ -140,7 +143,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/teams/:id"
         element={
@@ -149,7 +151,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/users"
         element={
@@ -158,7 +159,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/users/:id"
         element={
@@ -167,7 +167,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/currentUser/settings"
         element={
@@ -176,7 +175,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/currentUser/notifications"
         element={
@@ -185,7 +183,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/permissions"
         element={
@@ -194,7 +191,6 @@ export default function App() {
           </PrivateRoute>
         }
       />
-
       <Route path="/login" element={<Pages.LoginPage />} />
       <Route path="*" element={<Pages.Page404 />} />
     </Routes>
