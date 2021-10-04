@@ -20,10 +20,10 @@ export function sortByNewestFirst<T extends IItemWithCreatedAt>(
     const i1CreatedAt = DateTime.fromISO(i1.created_at);
     const i2CreatedAt = DateTime.fromISO(i2.created_at);
     if (i1CreatedAt > i2CreatedAt) {
-      return 1;
+      return -1;
     }
     if (i1CreatedAt < i2CreatedAt) {
-      return -1;
+      return 1;
     }
     return 0;
   });
@@ -36,10 +36,10 @@ export function sortByOldestFirst<T extends IItemWithCreatedAt>(
     const i1CreatedAt = DateTime.fromISO(i1.created_at);
     const i2CreatedAt = DateTime.fromISO(i2.created_at);
     if (i1CreatedAt > i2CreatedAt) {
-      return -1;
+      return 1;
     }
     if (i1CreatedAt < i2CreatedAt) {
-      return 1;
+      return -1;
     }
     return 0;
   });

@@ -10,12 +10,12 @@ import {
   IPipelineStatus,
 } from "types";
 import { AxiosPromise } from "axios";
-import { sortByNewestFirst } from "services/sort";
+import { sortByOldestFirst } from "services/sort";
 
 export function addDuration(jobStates: IJobState[]) {
-  const { newJobStates } = sortByNewestFirst(jobStates).reduce(
+  const { newJobStates } = sortByOldestFirst(jobStates).reduce(
     (acc, jobState) => {
-      const { newFiles, duration } = sortByNewestFirst(jobState.files).reduce(
+      const { newFiles, duration } = sortByOldestFirst(jobState.files).reduce(
         (fileAcc, file) => {
           const duration = acc.currentDate
             ? DateTime.fromISO(file.created_at)
@@ -75,7 +75,7 @@ function getPipelineStatus(status: IJobStateStatus): IPipelineStatus {
 }
 
 export function addPipelineStatus(jobStates: IJobState[]) {
-  return sortByNewestFirst(jobStates).map((jobState, i, arr) => {
+  return sortByOldestFirst(jobStates).map((jobState, i, arr) => {
     const isTheLastOne = arr.length - 1 === i;
     return {
       ...jobState,
