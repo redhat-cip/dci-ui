@@ -49,7 +49,7 @@ export default function TopicsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(topicsActions.all({ embed: "product" }));
+    dispatch(topicsActions.all());
     dispatch(productsActions.all());
   }, [dispatch]);
 

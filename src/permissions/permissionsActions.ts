@@ -40,7 +40,7 @@ export function getProductsWithTeams(): AppThunk<Promise<IProductWithTeams[]>> {
 
 export function getTopicsWithTeams(): AppThunk<Promise<ITopicWithTeams[]>> {
   return (dispatch) => {
-    return dispatch(topicsActions.all({ embed: "teams" })).then((response) => {
+    return dispatch(topicsActions.all()).then((response) => {
       return Promise.resolve(sortByName(response.data.topics));
     });
   };

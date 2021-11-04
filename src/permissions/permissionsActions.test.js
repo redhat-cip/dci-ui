@@ -47,7 +47,7 @@ test("getProductsWithTeams", () => {
 
 test("getTopicsWithTeams", () => {
   axiosMock
-    .onGet("https://api.distributed-ci.io/api/v1/topics", { embed: "teams" })
+    .onGet("https://api.distributed-ci.io/api/v1/topics")
     .reply(200, {
       topics: [
         { id: "to1", name: "Topic 1", teams: [{ id: "t1", name: "Team 1" }] },

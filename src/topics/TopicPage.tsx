@@ -111,7 +111,7 @@ export default function TopicPage() {
   const products = useSelector(getProducts);
 
   const getTopicCallback = useCallback(() => {
-    dispatch(topicsActions.one(id, { embed: "product" }))
+    dispatch(topicsActions.one(id))
       .then((response) => setTopic(response.data.topic))
       .finally(() => setIsFetching(false));
   }, [dispatch, id, setIsFetching]);

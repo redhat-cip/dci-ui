@@ -10,6 +10,7 @@ import { Button } from "@patternfly/react-core";
 import { AppDispatch } from "store";
 import { useHistory, Link } from "react-router-dom";
 import SeeCredentialsModal from "ui/SeeCredentialsModal";
+import teamsActions from "teams/teamsActions";
 
 export default function FeedersPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +19,8 @@ export default function FeedersPage() {
   const isFetching = useSelector(isFetchingFeeders);
 
   useEffect(() => {
-    dispatch(feedersActions.all({ embed: "team" }));
+    dispatch(feedersActions.all());
+    dispatch(teamsActions.all());
   }, [dispatch]);
 
   return (

@@ -28,7 +28,7 @@ export default function NotificationsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(remotecisActions.all({ embed: "team" }));
+    dispatch(remotecisActions.all());
   }, [dispatch]);
 
   const getSubscribedRemotecisCallback = useCallback(() => {

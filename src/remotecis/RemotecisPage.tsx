@@ -20,7 +20,7 @@ export default function RemotecisPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   const fetchRemoteciCallback = useCallback(() => {
-    dispatch(remotecisActions.all({ embed: "team" }));
+    dispatch(remotecisActions.all());
   }, [dispatch]);
 
   useEffect(() => {
