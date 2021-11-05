@@ -44,6 +44,20 @@ export default function TestsCase({ testscase }: TestsCaseProps) {
             <br />
             <b>Value:</b>
             <Pre>{testscase.value}</Pre>
+            {testscase.stdout ? (
+              <>
+                <br />
+                <b>Standard output:</b>
+                <Pre>{testscase.stdout}</Pre>
+              </>
+            ) : null}
+            {testscase.stderr ? (
+              <>
+                <br />
+                <b>Standard error:</b>
+                <Pre>{testscase.stderr}</Pre>
+              </>
+            ) : null}
           </td>
         </tr>
       ) : null}
