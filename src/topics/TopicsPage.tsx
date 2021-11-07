@@ -14,7 +14,7 @@ import { EmptyState, Breadcrumb } from "ui";
 import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import topicsActions, { orderTopicsByProduct } from "./topicsActions";
 import { AppDispatch } from "store";
 import productsActions from "products/productsActions";
@@ -45,7 +45,7 @@ export default function TopicsPage() {
   const topics = useSelector(getActiveTopics);
   const products = useSelector(getProducts);
   const isFetching = useSelector(isFetchingTopics);
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -94,9 +94,7 @@ export default function TopicsPage() {
               {product.topics.map((topic) => (
                 <GalleryItem key={topic.id}>
                   <Topic
-                    onClick={() =>
-                      history.push(`/topics/${topic.id}/components`)
-                    }
+                    onClick={() => navigate(`/topics/${topic.id}/components`)}
                     title="Click to see components"
                     className="pointer"
                   >

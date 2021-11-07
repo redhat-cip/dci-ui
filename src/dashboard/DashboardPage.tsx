@@ -12,7 +12,7 @@ import {
   Grid,
   GridItem,
 } from "@patternfly/react-core";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
 import { getProductIcon } from "ui/icons";
@@ -20,7 +20,7 @@ import { getProductIcon } from "ui/icons";
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Dashboard>({});
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getStats().then((products) => {
@@ -62,9 +62,7 @@ const DashboardPage = () => {
                 {product.stats.map((stat, index) => (
                   <GalleryItem key={index}>
                     <Card
-                      onClick={() =>
-                        history.push(`/dashboard/${stat.topic.name}`)
-                      }
+                      onClick={() => navigate(`/dashboard/${stat.topic.name}`)}
                       title="Click to see detailed stats for this topic"
                       className="pointer"
                     >

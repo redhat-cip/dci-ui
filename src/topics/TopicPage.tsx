@@ -18,7 +18,7 @@ import styled from "styled-components";
 import Component from "./Component";
 import { AppDispatch } from "store";
 import { IComponent, ITopic, IEnhancedTopic } from "types";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
 import { getProducts } from "products/productsSelectors";
@@ -97,29 +97,28 @@ function Components({ topic }: ComponentsProps) {
   );
 }
 
-type MatchParams = {
-  id: string;
-};
-
 export default function TopicPage() {
   const currentUser = useSelector(getCurrentUser);
   const dispatch = useDispatch<AppDispatch>();
-  const match = useRouteMatch<MatchParams>();
-  const { id } = match.params;
+  const { id } = useParams();
   const [isFetching, setIsFetching] = useState(true);
   const [topic, setTopic] = useState<IEnhancedTopic | null>(null);
   const products = useSelector(getProducts);
 
   const getTopicCallback = useCallback(() => {
-    dispatch(topicsActions.one(id))
-      .then((response) => setTopic(response.data.topic))
-      .finally(() => setIsFetching(false));
+    if (id) {
+      dispatch(topicsActions.one(id))
+        .then((response) => setTopic(response.data.topic))
+        .finally(() => setIsFetching(false));
+    }
   }, [dispatch, id, setIsFetching]);
 
   useEffect(() => {
     getTopicCallback();
     dispatch(productsActions.all());
   }, [dispatch, getTopicCallback]);
+
+  if (!id) return null;
 
   return (
     <Page

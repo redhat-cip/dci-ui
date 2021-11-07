@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Page } from "layout";
 import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
-import { useRouteMatch, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { IStat } from "types";
 import { getStat } from "./dashboardActions";
@@ -115,22 +115,21 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
   );
 }
 
-type MatchParams = {
-  topic_name: string;
-};
-
 export default function DashboardDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [stat, setStat] = useState<IStat | null>(null);
-  const match = useRouteMatch<MatchParams>();
-  const { topic_name } = match.params;
+  const { topic_name } = useParams();
 
   useEffect(() => {
-    getStat(topic_name)
-      .then(setStat)
-      .catch(console.error)
-      .then(() => setIsLoading(false));
+    if (topic_name) {
+      getStat(topic_name)
+        .then(setStat)
+        .catch(console.error)
+        .then(() => setIsLoading(false));
+    }
   }, [topic_name]);
+
+  if (!topic_name) return null;
 
   return (
     <Page

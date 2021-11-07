@@ -10,7 +10,7 @@ import {
 } from "@patternfly/react-icons";
 import { RotatingSpinnerIcon } from "ui";
 import { IFile } from "types";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SeeFileContentModal from "./SeeFileContentModal";
 
 interface FileProps {
@@ -19,7 +19,7 @@ interface FileProps {
 
 export default function File({ file }: FileProps) {
   const [isDownloading, setIsDownloading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const isText = isATextFile(file);
   return (
     <tr>
@@ -65,7 +65,7 @@ export default function File({ file }: FileProps) {
           className="mr-xs"
           iconPosition="right"
           onClick={() => {
-            history.push(`/files/${file.id}`);
+            navigate(`/files/${file.id}`);
           }}
         >
           link

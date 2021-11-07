@@ -21,7 +21,7 @@ import {
 } from "@patternfly/react-tokens";
 import { EmptyState, Breadcrumb } from "ui";
 import { IComponentWithJobs, IEmbedJob } from "types";
-import { useRouteMatch, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
 import styled from "styled-components";
 import { Markup } from "interweave";
@@ -146,26 +146,24 @@ function EmbedJob({ job }: IEmbedJobProps) {
   );
 }
 
-type MatchParams = {
-  topic_id: string;
-  id: string;
-};
-
 export default function ComponentPage() {
-  const match = useRouteMatch<MatchParams>();
-  const { topic_id, id } = match.params;
+  const { topic_id, id } = useParams();
   const [isFetching, setIsFetching] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
   const getComponentCallback = useCallback(() => {
-    fetchComponent(id)
-      .then((response) => setComponent(response.data.component))
-      .finally(() => setIsFetching(false));
+    if (id) {
+      fetchComponent(id)
+        .then((response) => setComponent(response.data.component))
+        .finally(() => setIsFetching(false));
+    }
   }, [id, setIsFetching]);
 
   useEffect(() => {
     getComponentCallback();
   }, [getComponentCallback]);
+
+  if (!id || !topic_id) return null;
 
   return (
     <Page

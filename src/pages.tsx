@@ -24,7 +24,6 @@ import LoginCallbackPage from "./auth/LoginCallbackPage";
 import SilentRedirectPage from "./auth/SilentRedirectPage";
 import Page404 from "./layout/Page404";
 
-
 const Pages = {
   DashboardPage,
   DashboardDetailsPage,

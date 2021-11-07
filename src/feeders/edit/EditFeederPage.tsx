@@ -5,29 +5,29 @@ import { LoadingPage, Page } from "layout";
 import feedersActions from "../feedersActions";
 import EditFeederForm from "./EditFeederForm";
 import { AppDispatch } from "store";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { IFeeder } from "types";
 import { Breadcrumb } from "ui";
 
-interface MatchParams {
-  id: string;
-}
-
 export default function EditFeederPage() {
   const dispatch = useDispatch<AppDispatch>();
   const teams = useSelector(getTeams);
-  const history = useHistory();
-  const { id } = useParams<MatchParams>();
+  const navigate = useNavigate();
   const [feeder, setFeeder] = useState<IFeeder | null>(null);
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(teamsActions.all());
-    dispatch(feedersActions.one(id)).then((response) => {
-      setFeeder(response.data.feeder);
-    });
+    if (id) {
+      dispatch(teamsActions.all());
+      dispatch(feedersActions.one(id)).then((response) => {
+        setFeeder(response.data.feeder);
+      });
+    }
   }, [dispatch, id]);
+
+  if (!id) return null;
 
   const breadcrumb = (
     <Breadcrumb
@@ -57,7 +57,7 @@ export default function EditFeederPage() {
                 teams={teams}
                 onSubmit={(feeder) => {
                   dispatch(feedersActions.update(feeder)).then(() =>
-                    history.push("/feeders")
+                    navigate("/feeders")
                   );
                 }}
               />

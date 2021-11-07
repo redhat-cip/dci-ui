@@ -2,13 +2,12 @@ import { render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import axios from "axios";
 import axiosMockAdapter from "axios-mock-adapter";
-import { Router } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
 import { AuthProvider } from "auth/authContext";
 import { SSOProvider } from "auth/ssoContext";
-import { createMemoryHistory } from "history";
 
 const axiosMock = new axiosMockAdapter(axios);
 
@@ -40,9 +39,9 @@ test("renders without crashing", async () => {
       <Provider store={store}>
         <SSOProvider>
           <AuthProvider>
-            <Router history={createMemoryHistory()}>
+            <MemoryRouter>
               <App />
-            </Router>
+            </MemoryRouter>
           </AuthProvider>
         </SSOProvider>
       </Provider>

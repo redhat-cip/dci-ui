@@ -1,4 +1,3 @@
-import { Location } from "history";
 import { Form, Formik } from "formik";
 import { Input } from "ui/formik";
 import { Button } from "@patternfly/react-core";
@@ -6,7 +5,7 @@ import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
 import { showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
 import { AppDispatch } from "store";
 
@@ -17,15 +16,11 @@ const LogInSchema = Yup.object().shape({
   password: Yup.string().required("Your password is required"),
 });
 
-type LocationState = {
-  from: Location;
-};
-
 export default function LoginForm() {
   const { refreshIdentity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  const history = useHistory();
-  const location = useLocation<LocationState>();
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
@@ -36,7 +31,7 @@ export default function LoginForm() {
         refreshIdentity()
           .then(() => {
             const { from } = location.state || { from: { pathname: "/jobs" } };
-            history.replace(from);
+            navigate(from);
           })
           .catch((error) => {
             if (error.response && error.response.status) {

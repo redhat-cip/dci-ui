@@ -8,7 +8,7 @@ axios.defaults.baseURL = baseURL;
 
 axios.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) {
+  if (config && config.headers && token) {
     config.headers.Authorization = `${token.type} ${token.value}`;
   }
   return config;

@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import "./ui/styles";
 import "./css/alignment.css";
@@ -9,73 +9,196 @@ import PrivateRoute from "auth/PrivateRoute";
 
 export default function App() {
   return (
-    <Switch>
-      <PrivateRoute path="/dashboard" exact>
-        <Pages.DashboardPage />
-      </PrivateRoute>
-      <PrivateRoute path="/dashboard/:topic_name" exact>
-        <Pages.DashboardDetailsPage />
-      </PrivateRoute>
-      <Redirect from="/" exact to="/jobs" />
-      <PrivateRoute path="/jobs" exact>
-        <Pages.JobsPage />
-      </PrivateRoute>
-      <Redirect from="/jobs/:id" exact to="/jobs/:id/jobStates" />
-      <PrivateRoute path="/jobs/:id/:endpoint">
-        <Pages.JobPage />
-      </PrivateRoute>
-      <PrivateRoute path="/files/:id">
-        <Pages.FilePage />
-      </PrivateRoute>
-      <PrivateRoute path="/products">
-        <Pages.ProductsPage />
-      </PrivateRoute>
-      <PrivateRoute path="/topics" exact>
-        <Pages.TopicsPage />
-      </PrivateRoute>
-      <PrivateRoute path="/topics/:topic_id/components/:id">
-        <Pages.ComponentPage />
-      </PrivateRoute>
-      <PrivateRoute path="/topics/:id/components">
-        <Pages.TopicPage />
-      </PrivateRoute>
-      <PrivateRoute path="/remotecis">
-        <Pages.RemotecisPage />
-      </PrivateRoute>
-      <PrivateRoute path="/feeders/create" exact>
-        <Pages.CreateFeederPage />
-      </PrivateRoute>
-      <PrivateRoute path="/feeders/:id">
-        <Pages.EditFeederPage />
-      </PrivateRoute>
-      <PrivateRoute path="/feeders">
-        <Pages.FeedersPage />
-      </PrivateRoute>
-      <PrivateRoute path="/teams" exact>
-        <Pages.TeamsPage />
-      </PrivateRoute>
-      <PrivateRoute path="/teams/:id">
-        <Pages.TeamPage />
-      </PrivateRoute>
-      <PrivateRoute path="/users" exact>
-        <Pages.UsersPage />
-      </PrivateRoute>
-      <PrivateRoute path="/users/:id">
-        <Pages.EditUserPage />
-      </PrivateRoute>
-      <PrivateRoute path="/currentUser/settings">
-        <Pages.SettingsPage />
-      </PrivateRoute>
-      <PrivateRoute path="/currentUser/notifications">
-        <Pages.NotificationsPage />
-      </PrivateRoute>
-      <PrivateRoute path="/permissions">
-        <Pages.PermissionsPage />
-      </PrivateRoute>
-      <Route path="/login" component={Pages.LoginPage} />
-      <Route path="/login_callback" component={Pages.LoginCallbackPage} />
-      <Route path="/silent_redirect" component={Pages.SilentRedirectPage} />
-      <Route component={Pages.Page404} />
-    </Switch>
+    <Routes>
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <Pages.DashboardPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/:topic_name"
+        element={
+          <PrivateRoute>
+            <Pages.DashboardDetailsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route path="/" element={<Navigate replace to="/jobs" />} />
+      <Route
+        path="/jobs"
+        element={
+          <PrivateRoute>
+            <Pages.JobsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/jobs/:id"
+        element={<Navigate replace to="/jobs/:id/jobStates" />}
+      />
+      <Route
+        path="/jobs/:id/:endpoint"
+        element={
+          <PrivateRoute>
+            <Pages.JobPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/files/:id"
+        element={
+          <PrivateRoute>
+            <Pages.FilePage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/products"
+        element={
+          <PrivateRoute>
+            <Pages.ProductsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/topics"
+        element={
+          <PrivateRoute>
+            <Pages.TopicsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/topics/:topic_id/components/:id"
+        element={
+          <PrivateRoute>
+            <Pages.ComponentPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/topics/:id/components"
+        element={
+          <PrivateRoute>
+            <Pages.TopicPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/remotecis"
+        element={
+          <PrivateRoute>
+            <Pages.RemotecisPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/feeders/create"
+        element={
+          <PrivateRoute>
+            <Pages.CreateFeederPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/feeders/:id"
+        element={
+          <PrivateRoute>
+            <Pages.EditFeederPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/feeders"
+        element={
+          <PrivateRoute>
+            <Pages.FeedersPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/teams"
+        element={
+          <PrivateRoute>
+            <Pages.TeamsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/teams/:id"
+        element={
+          <PrivateRoute>
+            <Pages.TeamPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/users"
+        element={
+          <PrivateRoute>
+            <Pages.UsersPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/users/:id"
+        element={
+          <PrivateRoute>
+            <Pages.EditUserPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/currentUser/settings"
+        element={
+          <PrivateRoute>
+            <Pages.SettingsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/currentUser/notifications"
+        element={
+          <PrivateRoute>
+            <Pages.NotificationsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/permissions"
+        element={
+          <PrivateRoute>
+            <Pages.PermissionsPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route path="/login" element={<Pages.LoginPage />} />
+      <Route path="/login_callback" element={<Pages.LoginCallbackPage />} />
+      <Route path="/silent_redirect" element={<Pages.SilentRedirectPage />} />
+      <Route path="*" element={<Pages.Page404 />} />
+    </Routes>
   );
 }

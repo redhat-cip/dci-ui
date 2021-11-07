@@ -23,7 +23,7 @@ import { TrashAltIcon, MinusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
-import { useRouteMatch, useHistory, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 
@@ -39,18 +39,12 @@ const DangerZoneRow = styled.div`
   align-items: center;
 `;
 
-type MatchParams = {
-  id: string;
-};
-
 export default function EditUserPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [user, setUser] = useState<IUser | null>(null);
   const [userTeams, setUserTeams] = useState<ITeam[]>([]);
-  const match = useRouteMatch<MatchParams>();
-
-  const { id } = match.params;
+  const { id } = useParams();
 
   const _fetchUser = useCallback(
     (id) => {
@@ -68,9 +62,13 @@ export default function EditUserPage() {
   }, []);
 
   useEffect(() => {
-    _fetchUser(id);
-    _fetchUserTeams(id);
+    if (id) {
+      _fetchUser(id);
+      _fetchUserTeams(id);
+    }
   }, [id, _fetchUser, _fetchUserTeams]);
+
+  if (!id) return null;
 
   const breadcrumb = (
     <Breadcrumb
@@ -180,7 +178,7 @@ export default function EditUserPage() {
                       message={`Are you sure you want to delete ${user.name} user?`}
                       onOk={() =>
                         dispatch(usersActions.delete(user)).then(() =>
-                          history.push("/users")
+                          navigate("/users")
                         )
                       }
                     >

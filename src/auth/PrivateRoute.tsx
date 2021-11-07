@@ -1,28 +1,18 @@
 import * as React from "react";
 import { useAuth } from "./authContext";
-import { Redirect, Route, RouteProps } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 
-interface PrivateRouteProps extends RouteProps {
-  children: React.ReactNode;
+interface PrivateRouteProps {
+  children: React.ReactElement;
 }
 
-export default function PrivateRoute({ children, ...rest }: PrivateRouteProps) {
+export default function PrivateRoute({ children }: PrivateRouteProps) {
   const { identity } = useAuth();
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        identity === null ? (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location },
-            }}
-          />
-        ) : (
-          children
-        )
-      }
-    />
+  const location = useLocation();
+
+  return identity === null ? (
+    <Navigate to="/login" state={{ from: location }} />
+  ) : (
+    children
   );
 }

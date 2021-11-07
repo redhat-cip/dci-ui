@@ -13,12 +13,12 @@ import {
   createSearchFromFilters,
   defaultFilters,
 } from "./toolbar/filters";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
 
 export default function JobsPage() {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
@@ -28,8 +28,8 @@ export default function JobsPage() {
 
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
-    history.push(`/jobs${newSearch}`);
-  }, [history, filters]);
+    navigate(`/jobs${newSearch}`);
+  }, [navigate, filters]);
 
   const getJobsCallback = useCallback(() => {
     dispatch(jobsActions.clear());

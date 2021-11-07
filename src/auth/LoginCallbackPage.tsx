@@ -1,6 +1,6 @@
 import pages from "pages";
 import { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { setJWT } from "services/localStorage";
 import { useAuth } from "./authContext";
 import { useSSO } from "./ssoContext";
@@ -32,6 +32,6 @@ export default function LoginCallbackPage() {
   return isLoadingUser ? (
     <pages.NotAuthenticatedLoadingPage />
   ) : (
-    <Redirect to={location.from} />
+    <Navigate replace to={location.from} />
   );
 }

@@ -23,7 +23,7 @@ import {
 import { ConfirmDeleteModal, Breadcrumb, CopyButton } from "ui";
 import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
-import { useRouteMatch, useHistory, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { addUserToTeam, deleteUserFromTeam } from "users/usersActions";
@@ -46,20 +46,14 @@ const DangerZoneRow = styled.div`
   align-items: center;
 `;
 
-type MatchParams = {
-  id: string;
-};
-
 export default function TeamPage() {
   const currentUser = useSelector(getCurrentUser);
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [team, setTeam] = useState<ITeam | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
-  const match = useRouteMatch<MatchParams>();
-
-  const { id } = match.params;
+  const { id } = useParams();
 
   const _fetchTeam = useCallback(
     (id) => {
@@ -81,9 +75,13 @@ export default function TeamPage() {
   }, []);
 
   useEffect(() => {
-    _fetchTeam(id);
-    _fetchTeamUsers(id);
+    if (id) {
+      _fetchTeam(id);
+      _fetchTeamUsers(id);
+    }
   }, [id, _fetchTeam, _fetchTeamUsers]);
+
+  if (!id) return null;
 
   const breadcrumb = (
     <Breadcrumb
@@ -169,7 +167,7 @@ export default function TeamPage() {
                       message={`Are you sure you want to delete ${team.name} team?`}
                       onOk={() =>
                         dispatch(teamsActions.delete(team)).then(() =>
-                          history.push("/teams")
+                          navigate("/teams")
                         )
                       }
                     >

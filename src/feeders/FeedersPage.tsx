@@ -8,14 +8,14 @@ import { getFeeders, isFetchingFeeders } from "./feedersSelectors";
 import { TrashIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { Button } from "@patternfly/react-core";
 import { AppDispatch } from "store";
-import { useHistory, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import SeeCredentialsModal from "ui/SeeCredentialsModal";
 import teamsActions from "teams/teamsActions";
 
 export default function FeedersPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feeders = useSelector(getFeeders);
-  const history = useHistory();
+  const navigate = useNavigate();
   const isFetching = useSelector(isFetchingFeeders);
 
   useEffect(() => {
@@ -30,10 +30,7 @@ export default function FeedersPage() {
       loading={isFetching && isEmpty(feeders)}
       empty={!isFetching && isEmpty(feeders)}
       HeaderButton={
-        <Button
-          variant="primary"
-          onClick={() => history.push("/feeders/create")}
-        >
+        <Button variant="primary" onClick={() => navigate("/feeders/create")}>
           <PlusCircleIcon className="mr-xs" />
           Create a new feeder
         </Button>

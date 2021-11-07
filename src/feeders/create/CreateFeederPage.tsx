@@ -5,7 +5,7 @@ import { Page } from "layout";
 import feedersActions from "../feedersActions";
 import CreateFeederForm from "./CreateFeederForm";
 import { AppDispatch } from "store";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { Breadcrumb } from "ui";
@@ -13,7 +13,7 @@ import { Breadcrumb } from "ui";
 export default function CreateFeederPage() {
   const dispatch = useDispatch<AppDispatch>();
   const teams = useSelector(getTeams);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(teamsActions.all());
@@ -37,7 +37,7 @@ export default function CreateFeederPage() {
                 teams={teams}
                 onSubmit={(feeder) => {
                   dispatch(feedersActions.create(feeder)).then(() =>
-                    history.push("/feeders")
+                    navigate("/feeders")
                   );
                 }}
               />

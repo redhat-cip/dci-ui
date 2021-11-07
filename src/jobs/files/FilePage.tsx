@@ -4,22 +4,23 @@ import { getFileContent } from "jobs/files/filesActions";
 import { IFile } from "types";
 import pages from "pages";
 
-interface MatchParams {
-  id: string;
-}
-
 export default function FilePage() {
   const [isLoading, setIsLoading] = useState(true);
-  const { id } = useParams<MatchParams>();
   const [fileContent, setFileContent] = useState<string | null>(null);
+  const { id } = useParams();
+
   useEffect(() => {
-    getFileContent({ id } as IFile)
-      .then((content) => {
-        setFileContent(content);
-      })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+    if (id) {
+      getFileContent({ id } as IFile)
+        .then((content) => {
+          setFileContent(content);
+        })
+        .catch(console.error)
+        .finally(() => setIsLoading(false));
+    }
   }, [id]);
+
+  if (!id) return null;
 
   if (isLoading) {
     return <pages.NotAuthenticatedLoadingPage />;

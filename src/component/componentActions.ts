@@ -9,6 +9,6 @@ interface IFetchComponent {
 export function fetchComponent(id: string): AxiosPromise<IFetchComponent> {
   return http({
     method: "get",
-    url: `/api/v1/components/${id}`
+    url: `/api/v1/components/${id}`,
   });
 }

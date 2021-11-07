@@ -21,7 +21,7 @@ import jobsActions from "./jobsActions";
 import { getResults } from "./tests/testsActions";
 import { getJobStatesWithFiles } from "./jobStates/jobStatesActions";
 import JobSummary from "./JobSummary";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IEnhancedJob, ITest } from "types";
 import { AppDispatch } from "store";
 import { sortByName } from "services/sort";
@@ -32,14 +32,9 @@ const HeaderSection = styled(PageSection)`
   padding-bottom: 0 !important;
 `;
 
-interface MatchParams {
-  id: string;
-  endpoint: string;
-}
-
 export default function JobPage() {
   const [isFetching, setIsFetching] = useState(true);
-  const { id, endpoint } = useParams<MatchParams>();
+  const { id, endpoint } = useParams();
   const endpoints = [
     { title: "Logs", value: "jobStates" },
     { title: "Tests", value: "tests" },
@@ -50,31 +45,35 @@ export default function JobPage() {
     endpoints.findIndex((e) => e.value === endpoint)
   );
   const [job, setJob] = useState<IEnhancedJob | null>(null);
-
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(
-      jobsActions.one(id, {
-        embed: "results,team,remoteci,components,topic,files",
-      })
-    )
-      .then(async (response) => {
-        const job = response.data.job;
-        const q1 = await getResults(job);
-        const q2 = await getJobStatesWithFiles(job);
-        const enhancedJob = {
-          ...job,
-          tests: sortByName<ITest>(q1.data.results),
-          jobstates: q2.data.jobstates,
-        };
-        setJob(enhancedJob);
-        return response;
-      })
-      .catch(console.log)
-      .then(() => setIsFetching(false));
+    if (id) {
+      dispatch(
+        jobsActions.one(id, {
+          embed: "results,team,remoteci,components,topic,files",
+        })
+      )
+        .then(async (response) => {
+          const job = response.data.job;
+          const q1 = await getResults(job);
+          const q2 = await getJobStatesWithFiles(job);
+          const enhancedJob = {
+            ...job,
+            tests: sortByName<ITest>(q1.data.results),
+            jobstates: q2.data.jobstates,
+          };
+          setJob(enhancedJob);
+          return response;
+        })
+        .catch(console.log)
+        .then(() => setIsFetching(false));
+    }
   }, [endpoint, dispatch, id]);
+
+  if (!id) return null;
+
   const loading = isFetching && isEmpty(job);
   return (
     <Page
@@ -93,9 +92,7 @@ export default function JobPage() {
                   if (job && tabIndex !== undefined) {
                     const newTabIndex = parseInt(tabIndex as string, 10);
                     setActiveTabKey(newTabIndex);
-                    history.push(
-                      `/jobs/${job.id}/${endpoints[newTabIndex].value}`
-                    );
+                    navigate(`/jobs/${job.id}/${endpoints[newTabIndex].value}`);
                   }
                 }}
               >

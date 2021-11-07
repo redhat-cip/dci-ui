@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as React from "react";
-import { Route, Link, useHistory } from "react-router-dom";
+import { Link, useNavigate, useMatch, useResolvedPath } from "react-router-dom";
 import { isEmpty, values } from "lodash";
 import {
   Brand,
@@ -51,22 +51,17 @@ function MenuDropdown({
 function DCINavItem({
   children,
   to,
-  exact = true,
 }: {
   children: React.ReactNode;
   to: string;
   exact?: boolean;
 }) {
+  let resolved = useResolvedPath(to);
+  let match = useMatch({ path: resolved.pathname, end: true });
   return (
-    <Route
-      path={to}
-      exact={exact}
-      children={({ match }) => (
-        <NavItem isActive={!isEmpty(match)}>
-          <Link to={to}>{children}</Link>
-        </NavItem>
-      )}
-    />
+    <NavItem isActive={match !== null}>
+      <Link to={to}>{children}</Link>
+    </NavItem>
   );
 }
 
@@ -77,18 +72,14 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children, ...props }: AppLayoutProps) {
   const { identity, logout, changeCurrentTeam }: AuthContextProps = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   if (identity === null) return null;
   const identityTeams = values(identity.teams);
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
       <NavGroup title="DCI">
-        <DCINavItem to="/dashboard" exact={false}>
-          Dashboard
-        </DCINavItem>
-        <DCINavItem to="/jobs" exact={false}>
-          Jobs
-        </DCINavItem>
+        <DCINavItem to="/dashboard">Dashboard</DCINavItem>
+        <DCINavItem to="/jobs">Jobs</DCINavItem>
         <DCINavItem to="/products">Products</DCINavItem>
         <DCINavItem to="/topics">Topics</DCINavItem>
         {isEmpty(identityTeams) ? null : (
@@ -141,7 +132,7 @@ export default function AppLayout({ children, ...props }: AppLayoutProps) {
               <DropdownItem
                 key="dropdown_user_settings"
                 component="button"
-                onClick={() => history.push("/currentUser/settings")}
+                onClick={() => navigate("/currentUser/settings")}
               >
                 Settings
               </DropdownItem>,

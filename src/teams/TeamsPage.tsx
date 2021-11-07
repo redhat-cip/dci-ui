@@ -9,14 +9,14 @@ import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { AppDispatch } from "store";
 import CreateTeamModal from "./CreateTeamModal";
 import { Button, Label } from "@patternfly/react-core";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const teams = useSelector(getTeams);
   const currentUser = useSelector(getCurrentUser);
   const isFetching = useSelector(isFetchingTeams);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(teamsActions.all());
@@ -42,7 +42,7 @@ export default function TeamsPage() {
             onSubmit={(team) =>
               dispatch(teamsActions.create(team)).then((response) => {
                 const newTeam = response.data.team;
-                history.push(`/teams/${newTeam.id}`);
+                navigate(`/teams/${newTeam.id}`);
               })
             }
           >

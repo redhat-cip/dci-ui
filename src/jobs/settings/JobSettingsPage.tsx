@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { ConfirmDeleteModal } from "ui";
 import jobsActions from "jobs/jobsActions";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface JobSettingsPageProps {
   job: IEnhancedJob;
@@ -32,7 +32,7 @@ const DangerZoneRow = styled.div`
 
 export default function JobSettingsPage({ job }: JobSettingsPageProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -55,9 +55,7 @@ export default function JobSettingsPage({ job }: JobSettingsPageProps) {
               title="Delete Job"
               message="Are you sure you want to delete this job?"
               onOk={() =>
-                dispatch(jobsActions.delete(job)).then(() =>
-                  history.push("/jobs")
-                )
+                dispatch(jobsActions.delete(job)).then(() => navigate("/jobs"))
               }
             >
               {(openModal) => (

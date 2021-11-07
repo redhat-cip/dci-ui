@@ -46,22 +46,20 @@ test("getProductsWithTeams", () => {
 });
 
 test("getTopicsWithTeams", () => {
-  axiosMock
-    .onGet("https://api.distributed-ci.io/api/v1/topics")
-    .reply(200, {
-      topics: [
-        { id: "to1", name: "Topic 1", teams: [{ id: "t1", name: "Team 1" }] },
-        {
-          id: "to2",
-          name: "Topic 2",
-          teams: [
-            { id: "t1", name: "Team 1" },
-            { id: "t2", name: "Team 2" },
-          ],
-        },
-      ],
-      _meta: { count: 2 },
-    });
+  axiosMock.onGet("https://api.distributed-ci.io/api/v1/topics").reply(200, {
+    topics: [
+      { id: "to1", name: "Topic 1", teams: [{ id: "t1", name: "Team 1" }] },
+      {
+        id: "to2",
+        name: "Topic 2",
+        teams: [
+          { id: "t1", name: "Team 1" },
+          { id: "t2", name: "Team 2" },
+        ],
+      },
+    ],
+    _meta: { count: 2 },
+  });
   const store = mockStore();
   return store.dispatch(getTopicsWithTeams()).then((topics) => {
     expect(topics[0].teams).toEqual([{ id: "t1", name: "Team 1" }]);

@@ -142,7 +142,7 @@ const JobTitle = styled.div`
   overflow: hidden;
 `;
 
-const TopicName: Link = styled(Link)`
+const TopicName = styled(Link)`
   font-size: 20px;
   font-weight: 700;
   color: ${global_primary_color_200.value};
