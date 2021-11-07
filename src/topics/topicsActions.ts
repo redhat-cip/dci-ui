@@ -87,3 +87,20 @@ export function orderTopicsByProduct(
       return productWithTopics;
     });
 }
+
+interface IFetchComponents {
+  data: {
+    components: IComponent[];
+  };
+}
+
+export function fetchComponents(topic: ITopic): Promise<IFetchComponents> {
+  return http({
+    method: "get",
+    url: `/api/v1/topics/${topic.id}/components`,
+    params: {
+      sort: "-created_at",
+      where: `state:active`,
+    },
+  });
+}
