@@ -480,24 +480,6 @@ export interface IComponentWithJobs extends IComponent {
   jobs: IEmbedJob[];
 }
 
-export interface PerformanceTestsCases {
-  classname: string;
-  delta: number;
-  name: string;
-  time: number;
-}
-
-export interface PerformanceData {
-  job_id: string;
-  testscases: PerformanceTestsCases[];
-}
-
-export interface TestPerformance {
-  [testName: string]: PerformanceData[];
-}
-
-export type IPerformance = TestPerformance[];
-
 export interface IAlert {
   id: string;
   title: string;
@@ -514,10 +496,6 @@ export interface IAlertsState {
   [x: string]: IAlert;
 }
 
-export type ITrend = [number, number, number];
-export interface ITrends {
-  [topic_id: string]: ITrend[];
-}
 
 export interface IApiState {
   byId: { [x: string]: any };
