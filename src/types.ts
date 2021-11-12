@@ -331,6 +331,8 @@ export interface ITestsCase {
   time: number;
   type: string;
   value: string;
+  stdout: string | null;
+  stderr: string | null;
 }
 
 export interface IGetTestsCases {
@@ -495,7 +497,6 @@ export interface IToken {
 export interface IAlertsState {
   [x: string]: IAlert;
 }
-
 
 export interface IApiState {
   byId: { [x: string]: any };
