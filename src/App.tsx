@@ -196,8 +196,6 @@ export default function App() {
       />
 
       <Route path="/login" element={<Pages.LoginPage />} />
-      <Route path="/login_callback" element={<Pages.LoginCallbackPage />} />
-      <Route path="/silent_redirect" element={<Pages.SilentRedirectPage />} />
       <Route path="*" element={<Pages.Page404 />} />
     </Routes>
   );

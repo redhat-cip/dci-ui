@@ -1,12 +1,12 @@
 import { Button, ActionGroup } from "@patternfly/react-core";
-import { useSSO } from "./ssoContext";
+import { useKeycloak } from "./ssoContext";
 import { useLocation } from "react-router-dom";
 import { showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 
 export default function SSOForm() {
-  const { sso } = useSSO();
+  const { keycloak } = useKeycloak();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const errorMessage =
@@ -18,12 +18,12 @@ export default function SSOForm() {
           variant="danger"
           className="mt-md"
           onClick={() => {
-            if (sso === null) {
+            if (keycloak === null) {
               dispatch(showError(errorMessage));
             } else {
-              sso.signinRedirect({ state: location.state }).catch(() => {
-                dispatch(showError(errorMessage));
-              });
+              keycloak
+                .login({ redirectUri: location.state.origin })
+                .catch(() => dispatch(showError(errorMessage)));
             }
           }}
         >
