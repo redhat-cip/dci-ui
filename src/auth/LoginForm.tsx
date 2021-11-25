@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
 import { showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
 import { AppDispatch } from "store";
 
@@ -20,6 +20,7 @@ export default function LoginForm() {
   const { refreshIdentity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
@@ -29,7 +30,8 @@ export default function LoginForm() {
         setBasicToken(token);
         refreshIdentity()
           .then(() => {
-            navigate(-1);
+            const { from } = location.state || { from: { pathname: "/jobs" } };
+            navigate(from);
           })
           .catch((error) => {
             if (error.response && error.response.status) {

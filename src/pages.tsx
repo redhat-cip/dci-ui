@@ -20,6 +20,8 @@ import NotificationsPage from "./currentUser/notifications/NotificationsPage";
 import PermissionsPage from "./permissions/PermissionsPage";
 import NotAuthenticatedLoadingPage from "./layout/NotAuthenticatedLoadingPage";
 import LoginPage from "./auth/LoginPage";
+import LoginCallbackPage from "./auth/LoginCallbackPage";
+import SilentRedirectPage from "./auth/SilentRedirectPage";
 import Page404 from "./layout/Page404";
 
 const Pages = {
@@ -45,6 +47,8 @@ const Pages = {
   NotificationsPage,
   NotAuthenticatedLoadingPage,
   LoginPage,
+  LoginCallbackPage,
+  SilentRedirectPage,
   Page404,
 };
 

@@ -1,60 +1,72 @@
-import {
-  useEffect,
-  useState,
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 import pages from "../pages";
+import { UserManager } from "oidc-client";
 import { setJWT } from "services/localStorage";
-import Keycloak, { KeycloakInstance } from "keycloak-js";
 
 export type SSOContextProps = {
-  keycloak: KeycloakInstance;
+  sso: UserManager | null;
 };
 
-const SSOContext = createContext({} as SSOContextProps);
+const SSOContext = React.createContext({} as SSOContextProps);
 
 const SSOUrl = process.env.REACT_APP_SSO_URL || "https://sso.redhat.com";
 const SSORealm = process.env.REACT_APP_SSO_REALM || "redhat-external";
 const SSOClientId = process.env.REACT_APP_SSO_CLIENT_ID || "dci";
 
+function signinSilent(manager: UserManager) {
+  manager.signinSilent().then((user) => {
+    if (user) {
+      setJWT(user.access_token);
+    }
+  });
+}
+
+export function getSSOUserManager() {
+  const origin = window.location.origin;
+  const settings = {
+    authority: `${SSOUrl}/auth/realms/${SSORealm}`,
+    client_id: SSOClientId,
+    redirect_uri: `${origin}/login_callback`,
+    post_logout_redirect_uri: `${origin}/login`,
+    silent_redirect_uri: `${origin}/silent_redirect`,
+    response_type: "code",
+    automaticSilentRenew: true,
+  };
+  const manager = new UserManager(settings);
+  manager.events.addAccessTokenExpiring(() => {
+    signinSilent(manager);
+  });
+  manager.events.addAccessTokenExpired(() => {
+    signinSilent(manager);
+  });
+  return manager;
+}
+
 type SSOProviderProps = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 function SSOProvider({ children }: SSOProviderProps) {
-  const keycloak = Keycloak({
-    url: `${SSOUrl}/auth`,
-    clientId: SSOClientId,
-    realm: SSORealm,
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoadingIdentity, setIsLoadingIdentity] = useState(true);
+  const [sso] = React.useState<UserManager>(getSSOUserManager());
   useEffect(() => {
-    window.keycloak = keycloak;
-    keycloak
-      .init({
-        onLoad: "check-sso",
-        silentCheckSsoRedirectUri:
-          window.location.origin + "/silent-check-sso.html",
-      })
-      .then((isAuthenticated) => {
-        if (isAuthenticated && keycloak.token) {
-          setJWT(keycloak.token);
+    sso
+      .getUser()
+      .then((user) => {
+        if (user) {
+          setJWT(user.access_token);
         }
       })
       .catch(console.error)
-      .then(() => setIsLoading(false));
-  }, [keycloak]);
-  if (isLoading) {
+      .then(() => setIsLoadingIdentity(false));
+  }, [sso]);
+  if (isLoadingIdentity) {
     return <pages.NotAuthenticatedLoadingPage />;
   }
-  return (
-    <SSOContext.Provider value={{ keycloak }}>{children}</SSOContext.Provider>
-  );
+  return <SSOContext.Provider value={{ sso }}>{children}</SSOContext.Provider>;
 }
 
-const useKeycloak = () => useContext(SSOContext);
+const useSSO = () => React.useContext(SSOContext);
 
-export { SSOProvider, useKeycloak };
+export { SSOProvider, useSSO };

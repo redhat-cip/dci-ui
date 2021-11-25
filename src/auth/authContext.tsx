@@ -3,9 +3,9 @@ import * as React from "react";
 import pages from "../pages";
 import { useDispatch } from "react-redux";
 import { deleteCurrentUser } from "currentUser/currentUserActions";
-import { getToken, removeToken } from "services/localStorage";
+import { removeToken } from "services/localStorage";
 import { ITeam, ICurrentUser } from "types";
-import { useKeycloak } from "./ssoContext";
+import { useSSO } from "./ssoContext";
 import * as authActions from "./authActions";
 import { AppDispatch } from "store";
 
@@ -27,20 +27,15 @@ type AuthProviderProps = {
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const { keycloak } = useKeycloak();
+  const { sso } = useSSO();
   const dispatch = useDispatch<AppDispatch>();
   const [identity, setIdentity] = useState<ICurrentUser | null>(null);
 
   useEffect(() => {
-    const token = getToken();
-    if (token) {
-      dispatch(authActions.getCurrentUser())
-        .then(setIdentity)
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
+    dispatch(authActions.getCurrentUser())
+      .then(setIdentity)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   }, [dispatch]);
 
   if (isLoading) {
@@ -67,10 +62,11 @@ function AuthProvider({ children }: AuthProviderProps) {
         },
         logout: () => {
           try {
-            keycloak?.logout();
+            if (sso) {
+              sso.signoutRedirect();
+            }
             setIdentity(null);
             removeToken();
-            //todo: dispatch logout event not specific action
             dispatch(deleteCurrentUser());
           } catch (error) {
             console.error(error);
