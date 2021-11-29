@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Page } from "layout";
-import { getStats, Dashboard } from "./dashboardActions";
+import { getStats, JobPerRemoteciStats } from "./latestJobStatusActions";
 import { isEmpty } from "lodash";
-import { ProductTitle } from "../topics/TopicsPage";
 import {
   Gallery,
   GalleryItem,
@@ -12,15 +11,21 @@ import {
   Grid,
   GridItem,
 } from "@patternfly/react-core";
-import { useNavigate } from "react-router-dom";
 import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
 import { getProductIcon } from "ui/icons";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const DashboardPage = () => {
+export const ProductTitle = styled.h3`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+`;
+
+export default function LatestJobStatusPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState<Dashboard>({});
-  const navigate = useNavigate();
+  const [products, setProducts] = useState<JobPerRemoteciStats>({});
 
   useEffect(() => {
     getStats().then((products) => {
@@ -31,19 +36,23 @@ const DashboardPage = () => {
 
   return (
     <Page
-      title="Dashboard"
+      title="Latest jobs status"
       description="See the latest jobs status per topic and per remoteci"
       loading={isLoading && isEmpty(products)}
       empty={!isLoading && isEmpty(products)}
       EmptyComponent={
         <EmptyState
-          title="Your Dashboard is empty"
-          info="There is no information to display in the dashboard at the moment. If you think this is an error contact the DCI team."
+          title="This page is empty"
+          info="There is no information to display in this page at the moment. If you think this is an error contact the DCI team."
         />
       }
       breadcrumb={
         <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "Dashboard" }]}
+          links={[
+            { to: "/", title: "DCI" },
+            { to: "/analytics", title: "Analytics" },
+            { title: "Latest Jobs Status" },
+          ]}
         />
       }
     >
@@ -62,13 +71,16 @@ const DashboardPage = () => {
                 {product.stats.map((stat, index) => (
                   <GalleryItem key={index}>
                     <Card
-                      onClick={() => navigate(`/dashboard/${stat.topic.name}`)}
                       title="Click to see detailed stats for this topic"
                       className="pointer"
                     >
                       <CardBody>
                         <Title headingLevel="h6" size="md">
-                          {stat.topic.name}
+                          <Link
+                            to={`/analytics/latest_jobs_status/${stat.topic.name}`}
+                          >
+                            {stat.topic.name}
+                          </Link>
                         </Title>
                         <NbOfJobsChart stat={stat} />
                       </CardBody>
@@ -82,6 +94,4 @@ const DashboardPage = () => {
       </Grid>
     </Page>
   );
-};
-
-export default DashboardPage;
+}

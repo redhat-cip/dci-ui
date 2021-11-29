@@ -4,7 +4,7 @@ import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
 import { useParams, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { IStat } from "types";
-import { getStat } from "./dashboardActions";
+import { getStat } from "./latestJobStatusActions";
 import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
@@ -53,11 +53,11 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
         <table
           className="pf-c-table pf-m-grid-md"
           role="grid"
-          aria-label="Latest jobs per remoteci"
+          aria-label="Latest Latest Jobs Status"
           id="latest-jobs-per-remoteci-table"
         >
           <caption>
-            Latest jobs per remoteci using {stat.topic.name} topic
+            Latest Latest Jobs Status using {stat.topic.name} topic
           </caption>
           <thead>
             <tr role="row">
@@ -115,7 +115,7 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
   );
 }
 
-export default function DashboardDetailsPage() {
+export default function LatestJobStatusDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [stat, setStat] = useState<IStat | null>(null);
   const { topic_name } = useParams();
@@ -147,8 +147,9 @@ export default function DashboardDetailsPage() {
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },
-            { to: "/dashboard", title: "Dashboard" },
-            { to: `/dashboard/${topic_name}`, title: topic_name },
+            { to: "/analytics", title: "Analytics" },
+            { to: "/analytics/latest_jobs_status", title: "Latest Jobs Status" },
+            { title: topic_name },
           ]}
         />
       }

@@ -11,14 +11,14 @@ type TeamsFilterProps = {
   team_id: string | null;
   onSelect: (team: ITeam) => void;
   onClear: () => void;
-  showToolbarItem: boolean;
+  showToolbarItem?: boolean;
 };
 
 export default function TeamsFilter({
   team_id,
   onSelect,
   onClear,
-  showToolbarItem,
+  showToolbarItem = true,
 }: TeamsFilterProps) {
   const teams = useSelector(getTeams);
   const team = useSelector(getTeamById(team_id));
