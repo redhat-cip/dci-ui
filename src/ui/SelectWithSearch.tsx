@@ -47,6 +47,7 @@ export default function SelectWithSearch({
       isOpen={isOpen}
       aria-labelledby="select"
       placeholderText={placeholder}
+      maxHeight="220px"
     >
       {options
         .map((o) => ({ ...o, toString: () => o.name }))

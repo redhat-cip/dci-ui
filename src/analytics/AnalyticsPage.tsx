@@ -36,7 +36,12 @@ export default function AnalyticsPage() {
             >
               <CardHeader>
                 <CardHeaderMain>
-                  <img src={TasksPerJobHeaderImage} alt="Task per job header" height={100} width='auto' />
+                  <img
+                    src={TasksPerJobHeaderImage}
+                    alt="Task per job header"
+                    height={100}
+                    width="auto"
+                  />
                 </CardHeaderMain>
               </CardHeader>
               <CardTitle>Tasks duration per job</CardTitle>
@@ -55,7 +60,12 @@ export default function AnalyticsPage() {
             >
               <CardHeader>
                 <CardHeaderMain>
-                  <img src={LatestJobsStatusHeaderImage} alt="Task per job header" height={100} width='auto' />
+                  <img
+                    src={LatestJobsStatusHeaderImage}
+                    alt="Task per job header"
+                    height={100}
+                    width="auto"
+                  />
                 </CardHeaderMain>
               </CardHeader>
               <CardTitle>Latest Job status</CardTitle>

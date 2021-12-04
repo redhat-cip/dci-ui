@@ -148,7 +148,10 @@ export default function LatestJobStatusDetailsPage() {
           links={[
             { to: "/", title: "DCI" },
             { to: "/analytics", title: "Analytics" },
-            { to: "/analytics/latest_jobs_status", title: "Latest Jobs Status" },
+            {
+              to: "/analytics/latest_jobs_status",
+              title: "Latest Jobs Status",
+            },
             { title: topic_name },
           ]}
         />

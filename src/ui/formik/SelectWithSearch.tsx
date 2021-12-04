@@ -62,6 +62,7 @@ export default function SelectWithSearch({
         aria-labelledby={id}
         placeholderText={placeholder}
         menuAppendTo="parent"
+        maxHeight="220px"
       >
         {options
           .map((o) => ({ ...o, toString: () => o.label }))
