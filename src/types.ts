@@ -506,3 +506,41 @@ export interface IApiState {
   isFetching: boolean;
   count: number;
 }
+
+export interface IDataFromES {
+  total: {
+    value: number;
+    relation: string;
+  };
+  max_score: number;
+  hits: {
+    _index: string;
+    _type: string;
+    _id: string;
+    _score: number;
+    _source: {
+      job_id: string;
+      job_name: string;
+      job_status: IJobStateStatus
+      created_at: string;
+      topic_id: string;
+      remoteci_id: string;
+      data: {
+        name: string;
+        duration: number;
+      }[];
+    };
+  }[];
+}
+
+export interface IGraphData {
+  id: string;
+  name: string;
+  status: string;
+  data: { name: string; x: number; y: number }[];
+}
+
+export interface IRefArea {
+  left: number | null;
+  right: number | null;
+}

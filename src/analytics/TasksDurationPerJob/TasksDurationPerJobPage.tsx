@@ -1,6 +1,7 @@
 import { Page } from "layout";
 import { Breadcrumb } from "ui";
 import {
+  Button,
   Card,
   CardBody,
   Toolbar,
@@ -11,7 +12,7 @@ import {
 import TopicsFilter from "jobs/toolbar/TopicsFilter";
 import RemotecisFilter from "jobs/toolbar/RemotecisFilter";
 import { useEffect, useState } from "react";
-import { IRemoteci, ITopic } from "types";
+import { IRemoteci, ITopic, IDataFromES, IGraphData, IRefArea } from "types";
 import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
@@ -22,34 +23,14 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  ReferenceArea,
 } from "recharts";
 import { humanizeDuration } from "services/date";
+import { getDomain, transform } from "./tasksDurationPerJob";
+import { Link } from "react-router-dom";
+import { LinkIcon } from "@patternfly/react-icons";
 
-interface IDataFromES {
-  total: {
-    value: number;
-    relation: string;
-  };
-  max_score: number;
-  hits: {
-    _index: string;
-    _type: string;
-    _id: string;
-    _score: number;
-    _source: {
-      job_id: string;
-      created_at: string;
-      topic_id: string;
-      remoteci_id: string;
-      data: {
-        name: string;
-        duration: number;
-      }[];
-    };
-  }[];
-}
-
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -59,17 +40,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           padding: "1em",
         }}
       >
-        <p className="label">{`Task n°${label}`}</p>
-        {payload.map((p: any) => (
-          <div key={p.name}>
-            <p style={{ color: p.stroke }}>{`${p.name.substring(0, 8)}: ${
-              p.payload.name
-            }`}</p>
-            <p style={{ color: p.stroke }}>{`${humanizeDuration(
-              p.value * 1000
-            )} elapsed (${p.value}s)`}</p>
-          </div>
-        ))}
+        {payload
+          .sort((p1: any, p2: any) => p2.value - p1.value)
+          .map((p: any) => (
+            <div key={p.name}>
+              <p style={{ color: p.stroke }}>{p.payload.name}</p>
+              <p style={{ color: p.stroke }}>{`${humanizeDuration(
+                p.value * 1000
+              )} (${p.value}s)`}</p>
+            </div>
+          ))}
       </div>
     );
   }
@@ -77,33 +57,102 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-interface IGraphData {
-  name: string;
-  data: { name: string; x: number; y: number }[];
-}
+const colors = [
+  "#0066CC",
+  "#4CB140",
+  "#009596",
+  "#5752D1",
+  "#F4C145",
+  "#EC7A08",
+  "#7D1007",
+];
 
-function transform(dataFromES: IDataFromES) {
-  return dataFromES.hits.reduce((acc, hit) => {
-    acc.push({
-      name: hit._source.job_id,
-      data: hit._source.data.reduce(
-        (dataAcc, d, i) => {
-          dataAcc.push({
-            name: d.name,
-            x: i + 1,
-            y: d.duration,
-          });
-          return dataAcc;
-        },
-        [] as {
-          name: string;
-          x: number;
-          y: number;
-        }[]
-      ),
-    });
-    return acc;
-  }, [] as IGraphData[]);
+function Graph({ data }: { data: IGraphData[] }) {
+  const [left, setLeft] = useState<number | null>(null);
+  const [right, setRight] = useState<number | null>(null);
+  const [refArea, setRefArea] = useState<IRefArea>({ left: null, right: null });
+  const [domain, setDomain] = useState(getDomain(data, refArea));
+  useEffect(() => {
+    setDomain(getDomain(data, refArea));
+  }, [data, refArea]);
+  const { minXDomain, maxXDomain, minYDomain, maxYDomain } = domain;
+  const isZoomed = refArea.left && refArea.right;
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        {isZoomed && (
+          <Button
+            type="button"
+            variant="tertiary"
+            onClick={() => setRefArea({ left: null, right: null })}
+          >
+            reset zoom
+          </Button>
+        )}
+      </div>
+      <ResponsiveContainer>
+        <LineChart
+          onMouseDown={(e: any) => e && setLeft(e.activeLabel)}
+          onMouseMove={(e: any) => e && left && setRight(e.activeLabel)}
+          onMouseUp={() => {
+            if (left === right || right === null) {
+              setLeft(null);
+              setRight(null);
+              return;
+            }
+
+            if (left && right && left > right) {
+              setRefArea({
+                left: right,
+                right: left,
+              });
+            } else {
+              setRefArea({
+                left,
+                right,
+              });
+            }
+            setLeft(null);
+            setRight(null);
+          }}
+        >
+          <XAxis
+            tick={false}
+            dataKey="x"
+            type="number"
+            allowDuplicatedCategory={false}
+            domain={[() => minXDomain, () => maxXDomain]}
+          />
+          <YAxis
+            type="number"
+            dataKey="y"
+            interval="preserveEnd"
+            allowDataOverflow
+            domain={[() => minYDomain, () => Math.round(maxYDomain * 1.05)]}
+          />
+
+          {!left && (
+            <Tooltip isAnimationActive={false} content={<CustomTooltip />} />
+          )}
+
+          {data.map((d, i) => (
+            <Line
+              key={d.id}
+              dataKey="y"
+              data={d.data}
+              dot={false}
+              name={`${d.id} ${d.name} ${d.status}`}
+              type="stepAfter"
+              stroke={colors[i % colors.length]}
+            />
+          ))}
+          {left && right && (
+            <ReferenceArea x1={left} x2={right} strokeOpacity={0.3} />
+          )}
+        </LineChart>
+      </ResponsiveContainer>
+    </>
+  );
 }
 
 export default function TasksDurationPerJobPage() {
@@ -111,6 +160,7 @@ export default function TasksDurationPerJobPage() {
   const [topic, setTopic] = useState<ITopic | null>(null);
   const [remoteci, setRemoteci] = useState<IRemoteci | null>(null);
   const [data, setData] = useState<IGraphData[]>([]);
+  const [nbOfJobs, setNbOfJobs] = useState(7);
 
   function clearAllFilters() {
     setTopic(null);
@@ -125,7 +175,7 @@ export default function TasksDurationPerJobPage() {
         )
         .then((response) => {
           const ESData = response.data as IDataFromES;
-          setData(transform(ESData));
+          setData(transform(ESData).slice(-nbOfJobs));
         })
         .catch((error) => {
           dispatch(showAPIError(error));
@@ -133,31 +183,6 @@ export default function TasksDurationPerJobPage() {
         });
     }
   }, [topic, remoteci, dispatch]);
-
-  const colors = ["#23511E", "#38812F", "#4CB140", "#7CC674", "#BDE2B9"];
-  const { minXDomain, maxXDomain, maxYDomain } =
-    data === null
-      ? { minXDomain: 0, maxXDomain: 0, maxYDomain: 0 }
-      : data.reduce(
-          (acc, d, i) => {
-            const nbOfTasks = d.data.length;
-            if (i === 0) {
-              acc.minXDomain = nbOfTasks;
-            }
-            if (nbOfTasks > acc.maxXDomain) {
-              acc.maxXDomain = nbOfTasks;
-            }
-            if (nbOfTasks < acc.minXDomain) {
-              acc.minXDomain = nbOfTasks;
-            }
-            const latestYValue = d.data[nbOfTasks - 1].y;
-            if (latestYValue > acc.maxYDomain) {
-              acc.maxYDomain = latestYValue;
-            }
-            return acc;
-          },
-          { minXDomain: 0, maxXDomain: 0, maxYDomain: 0 }
-        );
 
   return (
     <Page
@@ -204,33 +229,69 @@ export default function TasksDurationPerJobPage() {
       <Card className="mt-lg">
         <CardBody>
           {data.length === 0 ? null : (
-            <div style={{ width: "100%", height: 300 }}>
-              <ResponsiveContainer>
-                <LineChart>
-                  <XAxis
-                    tick={false}
-                    dataKey="x"
-                    type="category"
-                    allowDuplicatedCategory={false}
-                  />
-                  <YAxis type="number" interval="preserveEnd" />
-
-                  <Tooltip content={<CustomTooltip />} />
-
-                  {data.map((d, i) => (
-                    <Line
-                      key={d.name}
-                      dataKey="y"
-                      data={d.data}
-                      dot={false}
-                      name={d.name}
-                      type="stepAfter"
-                      stroke={colors[i % colors.length]}
-                    />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <>
+              <div
+                style={{ width: "100%", minHeight: "400px", height: "400px" }}
+              >
+                <Graph data={data} />
+              </div>
+              <div className="p-xl">
+                <table
+                  className="pf-c-table pf-m-compact pf-m-grid-md"
+                  role="grid"
+                  aria-label="Job Legend"
+                >
+                  <thead>
+                    <tr role="row">
+                      <th role="columnheader" scope="col">
+                        id
+                      </th>
+                      <th role="columnheader" scope="col">
+                        name
+                      </th>
+                      <th role="columnheader" scope="col">
+                        status
+                      </th>
+                      <th
+                        className="text-center"
+                        role="columnheader"
+                        scope="col"
+                      >
+                        Job link
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((d, i) => (
+                      <tr key={i} role="row">
+                        <td
+                          role="cell"
+                          data-label="Job id"
+                          style={{ color: colors[i % colors.length] }}
+                        >
+                          {d.id}
+                        </td>
+                        <td role="cell" data-label="Job name">
+                          {d.name}
+                        </td>
+                        <td role="cell" data-label="Job status">
+                          {d.status}
+                        </td>
+                        <td
+                          className="text-center"
+                          role="cell"
+                          data-label="Job status"
+                        >
+                          <Link to={`/jobs/${d.id}/jobStates`}>
+                            <LinkIcon />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </CardBody>
       </Card>
