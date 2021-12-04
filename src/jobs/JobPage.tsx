@@ -34,7 +34,7 @@ const HeaderSection = styled(PageSection)`
 
 export default function JobPage() {
   const [isFetching, setIsFetching] = useState(true);
-  const { id, endpoint } = useParams();
+  const { id, endpoint = "jobStates" } = useParams();
   const endpoints = [
     { title: "Logs", value: "jobStates" },
     { title: "Tests", value: "tests" },

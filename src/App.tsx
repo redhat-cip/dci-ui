@@ -53,7 +53,11 @@ export default function App() {
       />
       <Route
         path="/jobs/:id"
-        element={<Navigate replace to="/jobs/:id/jobStates" />}
+        element={
+          <PrivateRoute>
+            <Pages.JobPage />
+          </PrivateRoute>
+        }
       />
       <Route
         path="/jobs/:id/:endpoint"
