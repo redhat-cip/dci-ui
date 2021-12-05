@@ -58,6 +58,12 @@ export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
                 topic_id: topic.id,
               });
             }}
+            onConfigurationClicked={(configuration) => {
+              setFilters({
+                ...filters,
+                configuration: configuration,
+              });
+            }}
           />
         </JobLi>
       ))}

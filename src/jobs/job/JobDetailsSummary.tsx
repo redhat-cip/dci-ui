@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Label, Chip, LabelGroup } from "@patternfly/react-core";
+import { Label, LabelGroup } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
   global_primary_color_200,
-  global_BackgroundColor_200,
   global_Color_light_200,
   global_Color_400,
 } from "@patternfly/react-tokens";
@@ -13,7 +12,6 @@ import {
   CubesIcon,
   ClockIcon,
   CalendarAltIcon,
-  CaretRightIcon,
   LinkIcon,
   InfoCircleIcon,
 } from "@patternfly/react-icons";
@@ -23,19 +21,19 @@ import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import { TextAreaEditableOnHover, CopyIconButton } from "ui";
 import { Markup } from "interweave";
-import { updateJobComment } from "./jobsActions";
+import { updateJobComment } from "jobs/jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { sortByName } from "services/sort";
 import { getTopicIcon } from "ui/icons";
-import JobConfiguration from "./jobSummary/JobConfiguration";
+import JobConfiguration from "jobs/jobSummary/JobConfiguration";
 import {
   convertLinksToHtml,
   getBackground,
   getColor,
   getIcon,
-} from "./jobSummary/jobSummaryUtils";
-import { Regressions, Successfixes } from "./jobSummary/components";
+} from "jobs/jobSummary/jobSummaryUtils";
+import { Regressions, Successfixes } from "jobs/jobSummary/components";
 
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
@@ -60,13 +58,13 @@ const Job = styled.div`
 
   @media (min-width: 992px) {
     display: grid;
-    grid-template-columns: 64px 1fr 1fr 1fr 64px;
+    grid-template-columns: 64px 1fr 1fr 1fr;
     grid-auto-rows: auto;
     grid-template-areas:
-      "icon title components date nav"
-      "icon tag tag tag nav"
-      "icon tests tests tests nav"
-      "icon pad pad pad nav";
+      "icon title components date"
+      "icon tag tag tag"
+      "icon tests tests tests"
+      "icon pad pad pad";
   }
 `;
 
@@ -123,32 +121,6 @@ const JobTags = styled.div`
   padding-bottom: 0;
 `;
 
-const JobNav = styled.div`
-  grid-area: nav;
-  display: none;
-  border-left: 1px dashed ${global_BackgroundColor_200.value};
-  @media (min-width: 992px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const JobLink = styled(Link)`
-  text-decoration: none;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2em;
-  &:hover {
-    background-color: ${global_BackgroundColor_200.value};
-  }
-`;
-
 const JobTests = styled.div`
   grid-area: tests;
   padding: 0.25em 1em;
@@ -188,17 +160,12 @@ interface ComponentsProps {
 }
 
 function Components({ components }: ComponentsProps) {
-  const [showMore, setShowMore] = useState(false);
-  const maxNumberElements = Math.min(4, components.length);
-  const showMoreButton = components.length > maxNumberElements;
   const sortedComponents = sortByName(
     components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
   );
-  const nFirstComponents = sortedComponents.slice(0, maxNumberElements);
-  const remainingComponents = sortedComponents.slice(maxNumberElements);
   return (
     <div>
-      {nFirstComponents.map((component) => (
+      {sortedComponents.map((component) => (
         <Component key={component.id} className="mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
             <CubesIcon className="mr-xs" />
@@ -206,44 +173,11 @@ function Components({ components }: ComponentsProps) {
           </Link>
         </Component>
       ))}
-      {showMore ? (
-        <>
-          {remainingComponents.map((component) => (
-            <Component key={component.id} className="mt-xs">
-              <Link
-                to={`/topics/${component.topic_id}/components/${component.id}`}
-              >
-                <CubesIcon className="mr-xs" />
-                {component.canonical_project_name || component.name}
-              </Link>
-            </Component>
-          ))}
-          <Chip
-            component="button"
-            onClick={() => setShowMore(false)}
-            isOverflowChip
-            className="mt-xs"
-          >
-            show less
-          </Chip>
-        </>
-      ) : (
-        showMoreButton && (
-          <Chip
-            component="button"
-            onClick={() => setShowMore(true)}
-            isOverflowChip
-            className="mt-xs"
-          >
-            {remainingComponents.length} more
-          </Chip>
-        )
-      )}
     </div>
   );
 }
 
-interface JobSummaryProps {
+interface JobDetailsSummaryProps {
   job: IEnhancedJob;
   onTagClicked?: (tag: string) => void;
   onRemoteciClicked?: (remoteci: IRemoteci) => void;
@@ -252,14 +186,14 @@ interface JobSummaryProps {
   onConfigurationClicked?: (configuration: string) => void;
 }
 
-export default function JobSummary({
+export default function JobDetailsSummary({
   job,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
   onTopicClicked,
   onConfigurationClicked,
-}: JobSummaryProps) {
+}: JobDetailsSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
   const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
@@ -333,13 +267,15 @@ export default function JobSummary({
       </JobTitle>
       {isEmpty(innerJob.tags) ? null : (
         <JobTags>
-          <LabelGroup numLabels={8}>
+          <LabelGroup categoryName="Tags" numLabels={8}>
             {innerJob.tags.map((tag, index) => (
               <Label
                 key={index}
                 color="blue"
-                className={onTagClicked && "pointer"}
-                onClick={() => onTagClicked && onTagClicked(tag)}
+                className={onTagClicked === undefined ? "" : "pointer"}
+                onClick={() =>
+                  onTagClicked === undefined ? void 0 : onTagClicked(tag)
+                }
               >
                 <small>{tag}</small>
               </Label>
@@ -405,11 +341,6 @@ export default function JobSummary({
           </TextAreaEditableOnHover>
         </JobComment>
       </JobDate>
-      <JobNav>
-        <JobLink to={`/jobs/${innerJob.id}/jobStates`}>
-          <CaretRightIcon />
-        </JobLink>
-      </JobNav>
       {isEmpty(innerJob.results) ? null : (
         <JobTests>
           {innerJob.results.map((result, i) => (

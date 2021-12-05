@@ -229,8 +229,10 @@ export interface IJobFilters extends IPaginationFilters {
   product_id: string | null;
   topic_id: string | null;
   remoteci_id: string | null;
+  configuration: string | null;
   tags: string[];
   status: IJobStateStatus | null;
+  name: string | null;
 }
 
 export interface IUserFilters extends IPaginationFilters {

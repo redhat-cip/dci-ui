@@ -7,7 +7,7 @@ import {
   IUserFilters,
 } from "types";
 
-export const defaultFilters = {
+export const defaultFilters: IJobFilters = {
   team_id: null,
   product_id: null,
   topic_id: null,
@@ -16,11 +16,15 @@ export const defaultFilters = {
   status: null,
   page: 1,
   perPage: 20,
+  configuration: null,
+  name: null,
 };
 
 export function parseFiltersFromSearch(search: string): IJobFilters {
   const { page = "1", perPage = "20", where } = queryString.parse(search);
-  const copyDefaultFilters = JSON.parse(JSON.stringify(defaultFilters));
+  const copyDefaultFilters: IJobFilters = JSON.parse(
+    JSON.stringify(defaultFilters)
+  );
   if (typeof where !== "string" || isEmpty(where)) return copyDefaultFilters;
   return where.split(",").reduce(
     (acc: IJobFilters, filter: string) => {
@@ -31,6 +35,8 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
         case "product_id":
         case "remoteci_id":
         case "topic_id":
+        case "configuration":
+        case "name":
           acc[key] = value;
           break;
         case "tags":
@@ -65,6 +71,8 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
         "topic_id",
         "status",
         "email",
+        "configuration",
+        "name",
       ].includes(key) &&
       value
     ) {

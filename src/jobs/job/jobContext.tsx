@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import * as React from "react";
-import pages from "pages";
 import { IEnhancedJob, ITest } from "types";
 import { useParams } from "react-router";
 import jobsActions from "jobs/jobsActions";
@@ -49,7 +48,7 @@ function JobProvider({ children }: JobProviderProps) {
         .catch(console.log)
         .then(() => setIsLoading(false));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   if (isLoading || job === null) {
     return <LoadingPage title="Job Details" />;

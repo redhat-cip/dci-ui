@@ -11,7 +11,7 @@ import {
   TabTitleText,
   TextContent,
 } from "@patternfly/react-core";
-import JobSummary from "jobs/JobSummary";
+import JobDetailsSummary from "./JobDetailsSummary";
 import { useEffect, useState } from "react";
 
 export default function JobPageWithMenu() {
@@ -74,7 +74,18 @@ export default function JobPageWithMenu() {
         />
       }
     >
-      <JobSummary job={job} />
+      <JobDetailsSummary
+        onTagClicked={(tag) => navigate(`/jobs?where=tags:${tag}`)}
+        onRemoteciClicked={(remoteci) =>
+          navigate(`/jobs?where=remoteci_id:${remoteci.id}`)
+        }
+        onTeamClicked={(team) => navigate(`/jobs?where=team_id:${team.id}`)}
+        onTopicClicked={(topic) => navigate(`/jobs?where=topic_id:${topic.id}`)}
+        onConfigurationClicked={(configuration) =>
+          navigate(`/jobs?where=configuration:${configuration}`)
+        }
+        job={job}
+      />
       <Outlet />
     </Page>
   );

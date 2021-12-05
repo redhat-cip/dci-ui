@@ -34,7 +34,7 @@ export default function TeamsFilter({
       showToolbarItem={showToolbarItem}
     >
       <SelectWithSearch
-        placeholder="Filter by team..."
+        placeholder="Filter by team"
         onClear={onClear}
         onSelect={(t) => onSelect(t as ITeam)}
         option={team}

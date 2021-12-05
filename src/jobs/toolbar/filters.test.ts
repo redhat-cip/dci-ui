@@ -8,7 +8,7 @@ import { IJobStateStatus } from "types";
 describe("parse filters", () => {
   it("from search", () => {
     const search =
-      "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
+      "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config1,name:name1";
     const expectedFilters = {
       team_id: "t1",
       product_id: "p1",
@@ -18,6 +18,8 @@ describe("parse filters", () => {
       status: "success",
       page: 2,
       perPage: 40,
+      configuration: "config1",
+      name: "name1",
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -34,6 +36,8 @@ describe("parse filters", () => {
       status: null,
       page: 1,
       perPage: 20,
+      configuration: null,
+      name: null,
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -49,6 +53,8 @@ describe("parse filters", () => {
       status: null,
       page: 1,
       perPage: 20,
+      configuration: null,
+      name: null,
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -64,6 +70,8 @@ test("get params from default filters", () => {
     status: null,
     page: 1,
     perPage: 20,
+    configuration: null,
+    name: null,
   };
   const expectedParams = {
     limit: 20,
@@ -82,13 +90,15 @@ test("get params from complex filters", () => {
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
+    configuration: "config2",
+    name: "name2",
   };
 
   const expectedParams = {
     limit: 40,
     offset: 40,
     where:
-      "product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2",
+      "product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2",
   };
   expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });
@@ -103,9 +113,11 @@ test("create search from filters", () => {
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
+    configuration: "config2",
+    name: "name2",
   };
   const expectedSearch =
-    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
+    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
@@ -119,9 +131,11 @@ test("create search from filters remove duplicate tags", () => {
     tags: ["tag_1", "tag_2", "tag_2"],
     page: 2,
     perPage: 40,
+    configuration: "config2",
+    name: "name2",
   };
   const expectedSearch =
-    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2";
+    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
   expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 

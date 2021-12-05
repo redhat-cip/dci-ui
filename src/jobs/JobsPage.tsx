@@ -25,7 +25,6 @@ export default function JobsPage() {
   const [filters, setFilters] = useState(
     parseFiltersFromSearch(location.search)
   );
-
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/jobs${newSearch}`);

@@ -25,7 +25,6 @@ import { useParams, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
 import styled from "styled-components";
 import { Markup } from "interweave";
-import { convertLinksToHtml } from "jobs/comment";
 import {
   InfoCircleIcon,
   CalendarAltIcon,
@@ -36,6 +35,7 @@ import { sortByNewestFirst } from "services/sort";
 import { humanizeDuration } from "services/date";
 import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
+import { convertLinksToHtml } from "jobs/jobSummary/jobSummaryUtils";
 
 const Padding = styled.div`
   padding: 1em;

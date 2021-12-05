@@ -52,7 +52,7 @@ export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
             aria-label="tag filter"
             onChange={(tag) => setTag(tag)}
             value={tag}
-            placeholder="Filter by tag..."
+            placeholder="Filter by tag"
           />
           <Button
             variant={ButtonVariant.control}

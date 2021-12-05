@@ -30,7 +30,7 @@ export default function StatusFilter({
         selections={filters.status || ""}
         isOpen={isOpen}
         aria-labelledby="select"
-        placeholderText="Filter by status..."
+        placeholderText="Filter by status"
       >
         {JobStatus.map((s, index) => (
           <SelectOption key={index} value={s} />

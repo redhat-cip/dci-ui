@@ -56,17 +56,7 @@ function DCINavItem({
   to: string;
   exact?: boolean;
 }) {
-  console.log("to:", to);
   const resolved = useResolvedPath(to);
-  console.log("resolved.pathname:", resolved.pathname);
-  console.log(
-    "useMatch({ path: resolved.pathname, end: true }):",
-    useMatch({ path: resolved.pathname, end: true })
-  );
-  console.log(
-    "useMatch({ path: resolved.pathname }):",
-    useMatch({ path: resolved.pathname })
-  );
   const match = useMatch({ path: resolved.pathname, end: true });
   return (
     <NavItem isActive={match !== null}>

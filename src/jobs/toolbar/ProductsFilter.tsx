@@ -11,14 +11,14 @@ type ProductsFilterProps = {
   product_id: string | null;
   onSelect: (product: IProduct) => void;
   onClear: () => void;
-  showToolbarItem: boolean;
+  showToolbarItem?: boolean;
 };
 
 export default function ProductsFilter({
   product_id,
   onSelect,
   onClear,
-  showToolbarItem,
+  showToolbarItem = true,
 }: ProductsFilterProps) {
   const products = useSelector(getProducts);
   const product = useSelector(getProductById(product_id));
@@ -34,7 +34,7 @@ export default function ProductsFilter({
       showToolbarItem={showToolbarItem}
     >
       <SelectWithSearch
-        placeholder="Filter by product..."
+        placeholder="Filter by product"
         onClear={onClear}
         onSelect={(p) => onSelect(p as IProduct)}
         option={product}

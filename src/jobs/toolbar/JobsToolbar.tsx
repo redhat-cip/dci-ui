@@ -13,7 +13,7 @@ import {
   Button,
   ButtonVariant,
 } from "@patternfly/react-core";
-import { FilterIcon, SyncAltIcon } from "@patternfly/react-icons";
+import { SyncAltIcon } from "@patternfly/react-icons";
 import RemotecisFilter from "./RemotecisFilter";
 import ProductsFilter from "./ProductsFilter";
 import TopicsFilter from "./TopicsFilter";
@@ -22,6 +22,8 @@ import { useSelector } from "react-redux";
 import { getNbOfJobs } from "jobs/jobsSelectors";
 import StatusFilter from "./StatusFilter";
 import TagsFilter from "./TagsFilter";
+import ConfigurationFilter from "./ConfigurationFilter";
+import NameFilter from "./NameFilter";
 
 type FilterDropdownProps = {
   currentCategory: Category;
@@ -34,41 +36,63 @@ function FilterDropdown({
   filters,
   setFilters,
 }: FilterDropdownProps) {
-  return (
-    <>
-      <TeamsFilter
-        showToolbarItem={currentCategory === "Team"}
-        team_id={filters.team_id}
-        onClear={() => setFilters({ ...filters, team_id: null })}
-        onSelect={(team) => setFilters({ ...filters, team_id: team.id })}
-      />
-      <RemotecisFilter
-        showToolbarItem={currentCategory === "Remoteci"}
-        remoteci_id={filters.remoteci_id}
-        onClear={() => setFilters({ ...filters, remoteci_id: null })}
-        onSelect={(remoteci) =>
-          setFilters({ ...filters, remoteci_id: remoteci.id })
-        }
-      />
-      <ProductsFilter
-        showToolbarItem={currentCategory === "Product"}
-        product_id={filters.product_id}
-        onClear={() => setFilters({ ...filters, product_id: null })}
-        onSelect={(product) =>
-          setFilters({ ...filters, product_id: product.id })
-        }
-      />
-      <TopicsFilter
-        showToolbarItem={currentCategory === "Topic"}
-        topic_id={filters.topic_id}
-        onClear={() => setFilters({ ...filters, topic_id: null })}
-        onSelect={(topic) => setFilters({ ...filters, topic_id: topic.id })}
-      />
-    </>
-  );
+  switch (currentCategory) {
+    case "Team":
+      return (
+        <TeamsFilter
+          team_id={filters.team_id}
+          onClear={() => setFilters({ ...filters, team_id: null })}
+          onSelect={(team) => setFilters({ ...filters, team_id: team.id })}
+        />
+      );
+    case "Remoteci":
+      return (
+        <RemotecisFilter
+          remoteci_id={filters.remoteci_id}
+          onClear={() => setFilters({ ...filters, remoteci_id: null })}
+          onSelect={(remoteci) =>
+            setFilters({ ...filters, remoteci_id: remoteci.id })
+          }
+        />
+      );
+    case "Product":
+      return (
+        <ProductsFilter
+          product_id={filters.product_id}
+          onClear={() => setFilters({ ...filters, product_id: null })}
+          onSelect={(product) =>
+            setFilters({ ...filters, product_id: product.id })
+          }
+        />
+      );
+    case "Topic":
+      return (
+        <TopicsFilter
+          topic_id={filters.topic_id}
+          onClear={() => setFilters({ ...filters, topic_id: null })}
+          onSelect={(topic) => setFilters({ ...filters, topic_id: topic.id })}
+        />
+      );
+    case "Tag":
+      return <TagsFilter filters={filters} setFilters={setFilters} />;
+    case "Configuration":
+      return <ConfigurationFilter filters={filters} setFilters={setFilters} />;
+    case "Name":
+      return <NameFilter filters={filters} setFilters={setFilters} />;
+    default:
+      return null;
+  }
 }
 
-export const Categories = ["Team", "Remoteci", "Product", "Topic"] as const;
+export const Categories = [
+  "Team",
+  "Remoteci",
+  "Product",
+  "Topic",
+  "Tag",
+  "Configuration",
+  "Name",
+] as const;
 
 export type Category = typeof Categories[number];
 
@@ -118,7 +142,7 @@ export default function JobsToolbar({
                   onToggle={(isOpen) => setIsCategoryDropdownOpen(isOpen)}
                   style={{ width: "100%" }}
                 >
-                  <FilterIcon /> {currentCategory}
+                  {currentCategory}
                 </DropdownToggle>
               }
               isOpen={isCategoryDropdownOpen}
@@ -139,11 +163,6 @@ export default function JobsToolbar({
         <ToolbarGroup>
           <ToolbarItem>
             <StatusFilter filters={filters} setFilters={setFilters} />
-          </ToolbarItem>
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <ToolbarItem>
-            <TagsFilter filters={filters} setFilters={setFilters} />
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>

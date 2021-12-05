@@ -34,7 +34,7 @@ export default function RemotecisFilter({
       showToolbarItem={showToolbarItem}
     >
       <SelectWithSearch
-        placeholder="Filter by remoteci..."
+        placeholder="Filter by remoteci"
         onClear={onClear}
         onSelect={(r) => onSelect(r as IRemoteci)}
         option={remoteci}

@@ -34,7 +34,7 @@ export default function TopicsFilter({
       showToolbarItem={showToolbarItem}
     >
       <SelectWithSearch
-        placeholder="Filter by topic..."
+        placeholder="Filter by topic"
         onClear={onClear}
         onSelect={(t) => onSelect(t as ITopic)}
         option={topic}
