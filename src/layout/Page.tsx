@@ -19,6 +19,7 @@ interface PageProps {
   loading?: boolean;
   empty?: boolean;
   EmptyComponent?: React.ReactNode;
+  SubMenu?: React.ReactNode;
   children: React.ReactNode;
   seeSecondToolbar?: boolean;
   [x: string]: any;
@@ -35,6 +36,7 @@ export default function Page({
   EmptyComponent,
   children,
   seeSecondToolbar = false,
+  SubMenu,
   ...props
 }: PageProps) {
   return (

@@ -12,7 +12,7 @@ import {
   RawLogButton,
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
-import { getFileContent } from "jobs/files/filesActions";
+import { getFileContent } from "jobs/job/files/filesActions";
 import { IEnhancedJob, IPipelineStatus } from "types";
 import { useLocation, Link } from "react-router-dom";
 import { humanizeDuration } from "services/date";

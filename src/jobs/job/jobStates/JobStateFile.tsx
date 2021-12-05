@@ -4,7 +4,7 @@ import {
   CaretRightIcon,
   LinkIcon,
 } from "@patternfly/react-icons";
-import { getFileContent } from "jobs/files/filesActions";
+import { getFileContent } from "jobs/job/files/filesActions";
 import {
   FileRow,
   FileName,

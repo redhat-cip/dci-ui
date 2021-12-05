@@ -1,6 +1,10 @@
 import JobsPage from "./jobs/JobsPage";
-import JobPage from "./jobs/JobPage";
-import FilePage from "./jobs/files/FilePage";
+import JobPage from "jobs/job/JobPage";
+import JobStatesPage from "jobs/job/jobStates/JobStatesPage";
+import JobTestsPage from "jobs/job/tests/JobTestsPage";
+import JobFilesPage from "jobs/job/files/JobFilesPage";
+import JobSettingsPage from "jobs/job/settings/JobSettingsPage";
+import FilePage from "./jobs/job/files/FilePage";
 import ProductsPage from "./products/ProductsPage";
 import TopicsPage from "./topics/TopicsPage";
 import TopicPage from "./topics/TopicPage";
@@ -33,6 +37,10 @@ const Pages = {
   LatestJobStatusDetailsPage,
   JobsPage,
   JobPage,
+  JobStatesPage,
+  JobTestsPage,
+  JobFilesPage,
+  JobSettingsPage,
   FilePage,
   ProductsPage,
   TopicsPage,

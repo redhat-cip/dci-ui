@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-import { IEnhancedJob } from "types";
 import { AppDispatch } from "store";
 import {
   Button,
@@ -13,10 +12,7 @@ import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { ConfirmDeleteModal } from "ui";
 import jobsActions from "jobs/jobsActions";
 import { useNavigate } from "react-router-dom";
-
-interface JobSettingsPageProps {
-  job: IEnhancedJob;
-}
+import { useJob } from "../jobContext";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -30,7 +26,9 @@ const DangerZoneRow = styled.div`
   align-items: center;
 `;
 
-export default function JobSettingsPage({ job }: JobSettingsPageProps) {
+export default function JobSettingsPage() {
+  const { job } = useJob();
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 

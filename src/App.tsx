@@ -58,15 +58,48 @@ export default function App() {
             <Pages.JobPage />
           </PrivateRoute>
         }
-      />
-      <Route
-        path="/jobs/:id/:endpoint"
-        element={
-          <PrivateRoute>
-            <Pages.JobPage />
-          </PrivateRoute>
-        }
-      />
+      >
+        <Route
+          index
+          element={
+            <PrivateRoute>
+              <Pages.JobStatesPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="jobStates"
+          element={
+            <PrivateRoute>
+              <Pages.JobStatesPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="tests"
+          element={
+            <PrivateRoute>
+              <Pages.JobTestsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="files"
+          element={
+            <PrivateRoute>
+              <Pages.JobFilesPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <PrivateRoute>
+              <Pages.JobSettingsPage />
+            </PrivateRoute>
+          }
+        />
+      </Route>
       <Route
         path="/files/:id"
         element={

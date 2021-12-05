@@ -6,7 +6,7 @@ import topicsActions, {
 } from "./topicsActions";
 import { isEmpty } from "lodash";
 import { Page } from "layout";
-import { Pre } from "jobs/jobStates/JobStateComponents";
+import { Pre } from "jobs/job/jobStates/JobStateComponents";
 import {
   PageSection,
   Card,

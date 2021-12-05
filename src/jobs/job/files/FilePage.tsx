@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getFileContent } from "jobs/files/filesActions";
+import { getFileContent } from "jobs/job/files/filesActions";
 import { IFile } from "types";
 import pages from "pages";
 
