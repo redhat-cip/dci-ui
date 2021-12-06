@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IJobFilters } from "types";
 import {
   ToolbarFilter,
   InputGroup,
@@ -11,35 +10,34 @@ import { SearchIcon } from "@patternfly/react-icons";
 import { sortedUniq } from "lodash";
 
 type TagsFilterProps = {
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  tags: string[];
+  onSubmit: (tags: string[]) => void;
+  showToolbarItem?: boolean;
 };
 
-export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
+export default function TagsFilter({
+  tags,
+  onSubmit,
+  showToolbarItem = true,
+}: TagsFilterProps) {
   const [tag, setTag] = useState("");
-  const uniqTags = sortedUniq(filters.tags);
+  const uniqTags = sortedUniq(tags);
   return (
     <ToolbarFilter
-      chips={uniqTags}
+      chips={tags}
       deleteChip={(key, value) => {
         if (key) {
-          setFilters({
-            ...filters,
-            tags: uniqTags?.filter((f) => f !== value),
-          });
+          onSubmit(uniqTags?.filter((f) => f !== value));
         }
       }}
       categoryName="Tags"
-      showToolbarItem
+      showToolbarItem={showToolbarItem}
     >
       <form
         onSubmit={(event) => {
           event.preventDefault();
           if (uniqTags?.indexOf(tag) === -1) {
-            setFilters({
-              ...filters,
-              tags: uniqTags.concat(tag),
-            });
+            onSubmit(uniqTags.concat(tag));
             setTag("");
           }
         }}
@@ -53,6 +51,7 @@ export default function TagsFilter({ filters, setFilters }: TagsFilterProps) {
             onChange={(tag) => setTag(tag)}
             value={tag}
             placeholder="Filter by tag"
+            isRequired
           />
           <Button
             variant={ButtonVariant.control}

@@ -1,33 +1,36 @@
 import { useState } from "react";
-import { IJobFilters, IJobStateStatus, JobStatus } from "types";
+import { IJobStateStatus, JobStatus } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
 type StatusFilterProps = {
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  status: string | null;
+  onSelect: (status: IJobStateStatus) => void;
+  onClear: () => void;
+  showToolbarItem?: boolean;
 };
 
 export default function StatusFilter({
-  filters,
-  setFilters,
+  status,
+  onSelect,
+  onClear,
+  showToolbarItem = true,
 }: StatusFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const clearStatus = () => setFilters({ ...filters, status: null });
   return (
     <ToolbarFilter
-      chips={filters.status ? [filters.status] : []}
-      deleteChip={clearStatus}
+      chips={status === null ? [] : [status]}
+      deleteChip={onClear}
       categoryName="Status"
-      showToolbarItem
+      showToolbarItem={showToolbarItem}
     >
       <Select
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
-          setFilters({ ...filters, status: selection as IJobStateStatus });
+          onSelect(selection as IJobStateStatus);
         }}
-        onClear={clearStatus}
-        selections={filters.status || ""}
+        onClear={onClear}
+        selections={status || ""}
         isOpen={isOpen}
         aria-labelledby="select"
         placeholderText="Filter by status"

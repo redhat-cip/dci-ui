@@ -28,7 +28,7 @@ export default function RemotecisFilter({
   }, [dispatch]);
   return (
     <ToolbarFilter
-      chips={remoteci ? [remoteci.name] : []}
+      chips={remoteci === null ? [] : [remoteci.name]}
       deleteChip={onClear}
       categoryName="Remoteci"
       showToolbarItem={showToolbarItem}

@@ -28,7 +28,7 @@ export default function ProductsFilter({
   }, [dispatch]);
   return (
     <ToolbarFilter
-      chips={product ? [product.name] : []}
+      chips={product === null ? [] : [product.name]}
       deleteChip={onClear}
       categoryName="Product"
       showToolbarItem={showToolbarItem}

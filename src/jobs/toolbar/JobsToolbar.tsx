@@ -25,65 +25,6 @@ import TagsFilter from "./TagsFilter";
 import ConfigurationFilter from "./ConfigurationFilter";
 import NameFilter from "./NameFilter";
 
-type FilterDropdownProps = {
-  currentCategory: Category;
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
-};
-
-function FilterDropdown({
-  currentCategory,
-  filters,
-  setFilters,
-}: FilterDropdownProps) {
-  switch (currentCategory) {
-    case "Team":
-      return (
-        <TeamsFilter
-          team_id={filters.team_id}
-          onClear={() => setFilters({ ...filters, team_id: null })}
-          onSelect={(team) => setFilters({ ...filters, team_id: team.id })}
-        />
-      );
-    case "Remoteci":
-      return (
-        <RemotecisFilter
-          remoteci_id={filters.remoteci_id}
-          onClear={() => setFilters({ ...filters, remoteci_id: null })}
-          onSelect={(remoteci) =>
-            setFilters({ ...filters, remoteci_id: remoteci.id })
-          }
-        />
-      );
-    case "Product":
-      return (
-        <ProductsFilter
-          product_id={filters.product_id}
-          onClear={() => setFilters({ ...filters, product_id: null })}
-          onSelect={(product) =>
-            setFilters({ ...filters, product_id: product.id })
-          }
-        />
-      );
-    case "Topic":
-      return (
-        <TopicsFilter
-          topic_id={filters.topic_id}
-          onClear={() => setFilters({ ...filters, topic_id: null })}
-          onSelect={(topic) => setFilters({ ...filters, topic_id: topic.id })}
-        />
-      );
-    case "Tag":
-      return <TagsFilter filters={filters} setFilters={setFilters} />;
-    case "Configuration":
-      return <ConfigurationFilter filters={filters} setFilters={setFilters} />;
-    case "Name":
-      return <NameFilter filters={filters} setFilters={setFilters} />;
-    default:
-      return null;
-  }
-}
-
 export const Categories = [
   "Team",
   "Remoteci",
@@ -153,16 +94,64 @@ export default function JobsToolbar({
             ></Dropdown>
           </ToolbarItem>
           <ToolbarItem>
-            <FilterDropdown
-              currentCategory={currentCategory as Category}
-              filters={filters}
-              setFilters={setFilters}
+            <TeamsFilter
+              showToolbarItem={currentCategory === "Team"}
+              team_id={filters.team_id}
+              onClear={() => setFilters({ ...filters, team_id: null })}
+              onSelect={(team) => setFilters({ ...filters, team_id: team.id })}
+            />
+            <RemotecisFilter
+              showToolbarItem={currentCategory === "Remoteci"}
+              remoteci_id={filters.remoteci_id}
+              onClear={() => setFilters({ ...filters, remoteci_id: null })}
+              onSelect={(remoteci) =>
+                setFilters({ ...filters, remoteci_id: remoteci.id })
+              }
+            />
+            <ProductsFilter
+              showToolbarItem={currentCategory === "Product"}
+              product_id={filters.product_id}
+              onClear={() => setFilters({ ...filters, product_id: null })}
+              onSelect={(product) =>
+                setFilters({ ...filters, product_id: product.id })
+              }
+            />
+            <TopicsFilter
+              showToolbarItem={currentCategory === "Topic"}
+              topic_id={filters.topic_id}
+              onClear={() => setFilters({ ...filters, topic_id: null })}
+              onSelect={(topic) =>
+                setFilters({ ...filters, topic_id: topic.id })
+              }
+            />
+            <TagsFilter
+              showToolbarItem={currentCategory === "Tag"}
+              tags={filters.tags}
+              onSubmit={(tags) => setFilters({ ...filters, tags })}
+            />
+            <ConfigurationFilter
+              showToolbarItem={currentCategory === "Configuration"}
+              configuration={filters.configuration}
+              onClear={() => setFilters({ ...filters, configuration: null })}
+              onSubmit={(configuration) =>
+                setFilters({ ...filters, configuration })
+              }
+            />
+            <NameFilter
+              showToolbarItem={currentCategory === "Name"}
+              name={filters.name}
+              onSubmit={(name) => setFilters({ ...filters, name })}
+              onClear={() => setFilters({ ...filters, name: null })}
             />
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarItem>
-            <StatusFilter filters={filters} setFilters={setFilters} />
+            <StatusFilter
+              status={filters.status}
+              onSelect={(status) => setFilters({ ...filters, status })}
+              onClear={() => setFilters({ ...filters, status: null })}
+            />
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>

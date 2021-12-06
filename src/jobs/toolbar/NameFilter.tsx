@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IJobFilters } from "types";
 import {
   ToolbarFilter,
   InputGroup,
@@ -10,27 +9,31 @@ import {
 import { SearchIcon } from "@patternfly/react-icons";
 
 type NameFilterProps = {
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  name: string | null;
+  onSubmit: (name: string) => void;
+  onClear: () => void;
+  showToolbarItem?: boolean;
 };
 
-export default function NameFilter({ filters, setFilters }: NameFilterProps) {
-  const [name, setName] = useState("");
+export default function NameFilter({
+  name,
+  onSubmit,
+  onClear,
+  showToolbarItem = true,
+}: NameFilterProps) {
+  const [innerName, setInnerName] = useState("");
   return (
     <ToolbarFilter
-      chips={filters.name ? [filters.name] : []}
-      deleteChip={() => setFilters({ ...filters, name: null })}
+      chips={name === null ? [] : [name]}
+      deleteChip={onClear}
       categoryName="Name"
-      showToolbarItem
+      showToolbarItem={showToolbarItem}
     >
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          setFilters({
-            ...filters,
-            name: name,
-          });
-          setName("");
+          onSubmit(innerName);
+          setInnerName("");
         }}
       >
         <InputGroup>
@@ -39,9 +42,10 @@ export default function NameFilter({ filters, setFilters }: NameFilterProps) {
             id="input-name"
             type="search"
             aria-label="name filter"
-            onChange={setName}
-            value={name}
+            onChange={setInnerName}
+            value={innerName}
             placeholder="Filter by name"
+            isRequired
           />
           <Button
             variant={ButtonVariant.control}

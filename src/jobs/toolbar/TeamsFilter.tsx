@@ -28,7 +28,7 @@ export default function TeamsFilter({
   }, [dispatch]);
   return (
     <ToolbarFilter
-      chips={team ? [team.name] : []}
+      chips={team === null ? [] : [team.name]}
       deleteChip={onClear}
       categoryName="Team"
       showToolbarItem={showToolbarItem}

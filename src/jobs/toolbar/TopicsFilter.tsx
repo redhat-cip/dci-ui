@@ -28,7 +28,7 @@ export default function TopicsFilter({
   }, [dispatch]);
   return (
     <ToolbarFilter
-      chips={topic ? [topic.name] : []}
+      chips={topic === null ? [] : [topic.name]}
       deleteChip={onClear}
       categoryName="Topic"
       showToolbarItem={showToolbarItem}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IJobFilters } from "types";
 import {
   ToolbarFilter,
   InputGroup,
@@ -10,30 +9,31 @@ import {
 import { SearchIcon } from "@patternfly/react-icons";
 
 type ConfigurationFilterProps = {
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  configuration: string | null;
+  onSubmit: (configuration: string) => void;
+  onClear: () => void;
+  showToolbarItem: boolean;
 };
 
 export default function ConfigurationFilter({
-  filters,
-  setFilters,
+  configuration,
+  onSubmit,
+  onClear,
+  showToolbarItem,
 }: ConfigurationFilterProps) {
-  const [configuration, setConfiguration] = useState("");
+  const [innerConfiguration, setInnerConfiguration] = useState("");
   return (
     <ToolbarFilter
-      chips={filters.configuration ? [filters.configuration] : []}
-      deleteChip={() => setFilters({ ...filters, configuration: null })}
+      chips={configuration === null ? [] : [configuration]}
+      deleteChip={onClear}
       categoryName="Configuration"
-      showToolbarItem
+      showToolbarItem={showToolbarItem}
     >
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          setFilters({
-            ...filters,
-            configuration: configuration,
-          });
-          setConfiguration("");
+          onSubmit(innerConfiguration);
+          setInnerConfiguration("");
         }}
       >
         <InputGroup>
@@ -42,9 +42,10 @@ export default function ConfigurationFilter({
             id="input-configuration"
             type="search"
             aria-label="configuration filter"
-            onChange={setConfiguration}
-            value={configuration}
+            onChange={setInnerConfiguration}
+            value={innerConfiguration}
             placeholder="Filter by configuration"
+            isRequired
           />
           <Button
             variant={ButtonVariant.control}
