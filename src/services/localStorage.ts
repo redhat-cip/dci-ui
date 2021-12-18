@@ -2,7 +2,7 @@ import { IToken } from "types";
 
 const TOKEN = "DCI";
 
-export function getToken() {
+export function getToken(): IToken | null {
   const token = localStorage.getItem(TOKEN);
   if (!token) return null;
   return JSON.parse(token);

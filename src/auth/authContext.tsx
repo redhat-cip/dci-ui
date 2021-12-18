@@ -3,7 +3,7 @@ import * as React from "react";
 import pages from "../pages";
 import { useDispatch } from "react-redux";
 import { deleteCurrentUser } from "currentUser/currentUserActions";
-import { removeToken } from "services/localStorage";
+import { removeToken, getToken } from "services/localStorage";
 import { ITeam, ICurrentUser } from "types";
 import { useSSO } from "./ssoContext";
 import * as authActions from "./authActions";
@@ -32,10 +32,15 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [identity, setIdentity] = useState<ICurrentUser | null>(null);
 
   useEffect(() => {
-    dispatch(authActions.getCurrentUser())
-      .then(setIdentity)
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+    const token = getToken();
+    if (token) {
+      dispatch(authActions.getCurrentUser())
+        .then(setIdentity)
+        .catch(console.error)
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
   }, [dispatch]);
 
   if (isLoading) {
