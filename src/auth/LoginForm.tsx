@@ -16,6 +16,12 @@ const LogInSchema = Yup.object().shape({
   password: Yup.string().required("Your password is required"),
 });
 
+interface ILocationState {
+  from: {
+    pathname: string;
+  };
+}
+
 export default function LoginForm() {
   const { refreshIdentity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +36,9 @@ export default function LoginForm() {
         setBasicToken(token);
         refreshIdentity()
           .then(() => {
-            const { from } = location.state || { from: { pathname: "/jobs" } };
+            const { from } = (location.state as ILocationState) || {
+              from: { pathname: "/jobs" },
+            };
             navigate(from);
           })
           .catch((error) => {

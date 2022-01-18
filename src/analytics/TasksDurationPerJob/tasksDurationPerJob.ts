@@ -6,6 +6,7 @@ export function transform(dataFromES: IDataFromES) {
       id: hit._source.job_id,
       name: hit._source.job_name,
       status: hit._source.job_status,
+      created_at: hit._source.created_at,
       data: hit._source.data.reduce((dataAcc, d, i) => {
         dataAcc.push({
           name: d.name,

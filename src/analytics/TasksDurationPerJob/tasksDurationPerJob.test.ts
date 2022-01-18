@@ -72,6 +72,7 @@ test("transform data", () => {
       id: "j1",
       name: "n1",
       status: "failure",
+      created_at: "2021-09-20T20:58:02.041653",
       data: [
         {
           name: "t1",
@@ -94,6 +95,7 @@ test("transform data", () => {
       id: "j2",
       name: "n2",
       status: "success",
+      created_at: "2021-09-20T22:31:02.536562",
       data: [
         {
           name: "t1",
@@ -137,6 +139,7 @@ test("get domain", () => {
           id: "j1",
           name: "j1",
           status: "success",
+          created_at: "2021-09-20T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -164,6 +167,7 @@ test("get domain", () => {
           id: "j2",
           name: "j2",
           status: "success",
+          created_at: "2021-09-21T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -204,7 +208,7 @@ test("get domain with an area", () => {
           id: "j1",
           name: "j1",
           status: "success",
-
+          created_at: "2021-09-20T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -232,6 +236,7 @@ test("get domain with an area", () => {
           id: "j2",
           name: "j2",
           status: "success",
+          created_at: "2021-09-21T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -272,6 +277,7 @@ test("get domain with an area and empty data", () => {
           id: "j1",
           name: "j1",
           status: "success",
+          created_at: "2021-09-20T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -299,6 +305,7 @@ test("get domain with an area and empty data", () => {
           id: "j2",
           name: "j2",
           status: "success",
+          created_at: "2021-09-21T22:31:02.536562",
           data: [],
         },
       ],
@@ -323,6 +330,7 @@ test("get domain with an area and right data inside this area", () => {
           id: "j1",
           name: "j1",
           status: "success",
+          created_at: "2021-09-20T22:31:02.536562",
           data: [
             {
               name: "t1",
@@ -340,6 +348,7 @@ test("get domain with an area and right data inside this area", () => {
           id: "j2",
           name: "j2",
           status: "success",
+          created_at: "2021-09-21T22:31:02.536562",
           data: [
             {
               name: "t1",

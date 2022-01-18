@@ -4,8 +4,10 @@ import {
   Button,
   Card,
   CardBody,
+  DatePicker,
   Toolbar,
   ToolbarContent,
+  ToolbarFilter,
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
@@ -25,10 +27,11 @@ import {
   ResponsiveContainer,
   ReferenceArea,
 } from "recharts";
-import { humanizeDuration } from "services/date";
+import { fromNow, humanizeDuration } from "services/date";
 import { getDomain, transform } from "./tasksDurationPerJob";
 import { Link } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
+import { DateTime } from "luxon";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -44,7 +47,9 @@ const CustomTooltip = ({ active, payload }: any) => {
           .sort((p1: any, p2: any) => p2.value - p1.value)
           .map((p: any) => (
             <div key={p.name}>
-              <p style={{ color: p.stroke }}>{p.payload.name}</p>
+              <p style={{ color: p.stroke }}>{`${p.name.substring(0, 7)} ${
+                p.payload.name
+              }`}</p>
               <p style={{ color: p.stroke }}>{`${humanizeDuration(
                 p.value * 1000
               )} (${p.value}s)`}</p>
@@ -159,12 +164,17 @@ export default function TasksDurationPerJobPage() {
   const dispatch = useDispatch();
   const [topic, setTopic] = useState<ITopic | null>(null);
   const [remoteci, setRemoteci] = useState<IRemoteci | null>(null);
+  const [ESData, setESData] = useState<IDataFromES | null>(null);
   const [data, setData] = useState<IGraphData[]>([]);
-  const [nbOfJobs, setNbOfJobs] = useState(7);
+  const maxJobs = 7;
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
 
   function clearAllFilters() {
     setTopic(null);
     setRemoteci(null);
+    setAfter(null);
+    setBefore(null);
   }
 
   useEffect(() => {
@@ -174,15 +184,35 @@ export default function TasksDurationPerJobPage() {
           `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteci.id}&topic_id=${topic.id}`
         )
         .then((response) => {
-          const ESData = response.data as IDataFromES;
-          setData(transform(ESData).slice(-nbOfJobs));
+          setESData(response.data as IDataFromES);
         })
         .catch((error) => {
           dispatch(showAPIError(error));
           return error;
         });
     }
-  }, [topic, remoteci, dispatch]);
+  }, [topic, remoteci, after, before, dispatch]);
+
+  useEffect(() => {
+    if (ESData) {
+      setData(
+        transform(ESData)
+          .filter((d) => {
+            if (after) {
+              return DateTime.fromISO(d.created_at) >= DateTime.fromISO(after);
+            }
+            return true;
+          })
+          .filter((d) => {
+            if (before) {
+              return DateTime.fromISO(d.created_at) <= DateTime.fromISO(before);
+            }
+            return true;
+          })
+          .slice(-maxJobs)
+      );
+    }
+  }, [ESData]);
 
   return (
     <Page
@@ -207,6 +237,9 @@ export default function TasksDurationPerJobPage() {
           >
             <ToolbarContent>
               <ToolbarGroup>
+                <ToolbarItem>Filter Jobs</ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup>
                 <ToolbarItem>
                   <TopicsFilter
                     topic_id={topic ? topic.id : null}
@@ -222,12 +255,48 @@ export default function TasksDurationPerJobPage() {
                   />
                 </ToolbarItem>
               </ToolbarGroup>
+              <ToolbarGroup>
+                <ToolbarItem>
+                  <ToolbarFilter
+                    chips={after === null ? [] : [after]}
+                    deleteChip={() => setAfter(null)}
+                    categoryName="Created after"
+                    showToolbarItem
+                  >
+                    <DatePicker
+                      value={after || ""}
+                      placeholder="Created after"
+                      onChange={(str) => setAfter(str)}
+                    />
+                  </ToolbarFilter>
+                </ToolbarItem>
+                <ToolbarItem>
+                  <ToolbarFilter
+                    chips={before === null ? [] : [before]}
+                    deleteChip={() => setBefore(null)}
+                    categoryName="Created before"
+                    showToolbarItem
+                  >
+                    <DatePicker
+                      value={before || ""}
+                      placeholder="Created before"
+                      onChange={(str) => setBefore(str)}
+                    />
+                  </ToolbarFilter>
+                </ToolbarItem>
+              </ToolbarGroup>
             </ToolbarContent>
           </Toolbar>
         </CardBody>
       </Card>
       <Card className="mt-lg">
         <CardBody>
+          {ESData === null && (
+            <p>To start choose one topic and one remoteci.</p>
+          )}
+          {ESData !== null && data.length === 0 && (
+            <p>No data available with these filters, change your filters.</p>
+          )}
           {data.length === 0 ? null : (
             <>
               <div
@@ -251,6 +320,9 @@ export default function TasksDurationPerJobPage() {
                       </th>
                       <th role="columnheader" scope="col">
                         status
+                      </th>
+                      <th role="columnheader" scope="col">
+                        created
                       </th>
                       <th
                         className="text-center"
@@ -276,6 +348,11 @@ export default function TasksDurationPerJobPage() {
                         </td>
                         <td role="cell" data-label="Job status">
                           {d.status}
+                        </td>
+                        <td role="cell" data-label="Job created at">
+                          <time title={d.created_at} dateTime={d.created_at}>
+                            {fromNow(d.created_at)}
+                          </time>
                         </td>
                         <td
                           className="text-center"

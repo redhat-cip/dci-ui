@@ -521,7 +521,7 @@ export interface IDataFromES {
     _source: {
       job_id: string;
       job_name: string;
-      job_status: IJobStateStatus
+      job_status: IJobStateStatus;
       created_at: string;
       topic_id: string;
       remoteci_id: string;
@@ -537,6 +537,7 @@ export interface IGraphData {
   id: string;
   name: string;
   status: string;
+  created_at: string;
   data: { name: string; x: number; y: number }[];
 }
 
