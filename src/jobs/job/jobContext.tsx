@@ -28,11 +28,7 @@ function JobProvider({ children }: JobProviderProps) {
 
   useEffect(() => {
     if (id) {
-      dispatch(
-        jobsActions.one(id, {
-          embed: "results,team,remoteci,components,topic,files",
-        })
-      )
+      dispatch(jobsActions.one(id))
         .then(async (response) => {
           const job = response.data.job;
           const q1 = await getResults(job);

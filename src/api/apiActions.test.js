@@ -43,7 +43,7 @@ test("fetch jobs", () => {
 });
 
 test("fetch users params", () => {
-  const params = { embed: "team" };
+  const params = { limit: 20, offset: 0 };
   axiosMock
     .onGet("https://api.distributed-ci.io/api/v1/users", { params })
     .reply(200, { users: [], _meta: { count: 0 } });
@@ -119,9 +119,8 @@ test("fetch job", () => {
 });
 
 test("fetch job with params", () => {
-  const params = { embed: "team" };
   axiosMock
-    .onGet("https://api.distributed-ci.io/api/v1/jobs/j2", { params })
+    .onGet("https://api.distributed-ci.io/api/v1/jobs/j2")
     .reply(200, { job: { id: "j2" } });
 
   const expectedActions = [
@@ -135,7 +134,7 @@ test("fetch job with params", () => {
     },
   ];
   const store = mockStore();
-  return store.dispatch(jobsActions.one("j2", params)).then(() => {
+  return store.dispatch(jobsActions.one("j2")).then(() => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

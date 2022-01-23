@@ -279,9 +279,8 @@ export interface ICurrentUser {
 }
 
 export type DCIListParams = {
-  embed?: string;
-  limit?: number;
-  offset?: number;
+  limit: number;
+  offset: number;
   where?: string;
   sort?: string;
 };

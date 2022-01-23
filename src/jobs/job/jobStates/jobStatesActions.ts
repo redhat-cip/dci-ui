@@ -54,9 +54,6 @@ export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
   return http({
     method: "get",
     url: `/api/v1/jobs/${job.id}/jobstates`,
-    params: {
-      embed: "files",
-    },
   });
 }
 
