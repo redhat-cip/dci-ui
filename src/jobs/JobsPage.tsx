@@ -32,12 +32,7 @@ export default function JobsPage() {
 
   const getJobsCallback = useCallback(() => {
     dispatch(jobsActions.clear());
-    dispatch(
-      jobsActions.all({
-        embed: "results,team,remoteci,components,topic",
-        ...getParamsFromFilters(filters),
-      })
-    );
+    dispatch(jobsActions.all(getParamsFromFilters(filters)));
   }, [dispatch, filters]);
 
   useEffect(() => {
