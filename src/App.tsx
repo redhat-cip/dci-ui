@@ -1,237 +1,116 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import "./App.css";
-import "./ui/styles";
-import "./css/alignment.css";
-import "./css/spacing.css";
-import "./css/flex.css";
-import Pages from "./pages";
-import PrivateRoute from "auth/PrivateRoute";
+import "App.css";
+import "ui/styles";
+import "css/alignment.css";
+import "css/spacing.css";
+import "css/flex.css";
+import JobsPage from "jobs/JobsPage";
+import JobPage from "jobs/job/JobPage";
+import JobStatesPage from "jobs/job/jobStates/JobStatesPage";
+import JobTestsPage from "jobs/job/tests/JobTestsPage";
+import JobFilesPage from "jobs/job/files/JobFilesPage";
+import JobSettingsPage from "jobs/job/settings/JobSettingsPage";
+import FilePage from "jobs/job/files/FilePage";
+import ProductsPage from "products/ProductsPage";
+import TopicsPage from "topics/TopicsPage";
+import TopicPage from "topics/TopicPage";
+import ComponentPage from "component/ComponentPage";
+import RemotecisPage from "remotecis/RemotecisPage";
+import FeedersPage from "feeders/FeedersPage";
+import TeamsPage from "teams/TeamsPage";
+import TeamPage from "teams/TeamPage";
+import UsersPage from "users/UsersPage";
+import EditUserPage from "users/edit/EditUserPage";
+import CreateFeederPage from "feeders/create/CreateFeederPage";
+import EditFeederPage from "feeders/edit/EditFeederPage";
+import SettingsPage from "currentUser/settings/SettingsPage";
+import NotificationsPage from "currentUser/notifications/NotificationsPage";
+import PermissionsPage from "permissions/PermissionsPage";
+import LoginPage from "auth/LoginPage";
+import LoginCallbackPage from "auth/LoginCallbackPage";
+import SilentRedirectPage from "auth/SilentRedirectPage";
+import Page404 from "pages/Page404";
+import TasksDurationPerJobPage from "analytics/TasksDurationPerJob/TasksDurationPerJobPage";
+import AnalyticsPage from "analytics/AnalyticsPage";
+import LatestJobStatusPage from "analytics/LatestJobStatus/LatestJobStatusPage";
+import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
+import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
+import { BackgroundImage } from "ui";
+import Alerts from "alerts/Alerts";
+import AuthenticatedLayout from "pages/AuthenticatedLayout";
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate replace to="/jobs" />} />
-      <Route
-        path="/analytics"
-        element={
-          <PrivateRoute>
-            <Pages.AnalyticsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/analytics/tasks_duration_per_job"
-        element={
-          <PrivateRoute>
-            <Pages.TasksDurationPerJobPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/analytics/latest_jobs_status"
-        element={
-          <PrivateRoute>
-            <Pages.LatestJobStatusPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/analytics/latest_jobs_status/:topic_name"
-        element={
-          <PrivateRoute>
-            <Pages.LatestJobStatusDetailsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/jobs"
-        element={
-          <PrivateRoute>
-            <Pages.JobsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/jobs/:id"
-        element={
-          <PrivateRoute>
-            <Pages.JobPage />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          index
-          element={
-            <PrivateRoute>
-              <Pages.JobStatesPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="jobStates"
-          element={
-            <PrivateRoute>
-              <Pages.JobStatesPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="tests"
-          element={
-            <PrivateRoute>
-              <Pages.JobTestsPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="files"
-          element={
-            <PrivateRoute>
-              <Pages.JobFilesPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="settings"
-          element={
-            <PrivateRoute>
-              <Pages.JobSettingsPage />
-            </PrivateRoute>
-          }
-        />
-      </Route>
-      <Route
-        path="/files/:id"
-        element={
-          <PrivateRoute>
-            <Pages.FilePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/products"
-        element={
-          <PrivateRoute>
-            <Pages.ProductsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/topics"
-        element={
-          <PrivateRoute>
-            <Pages.TopicsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/topics/:topic_id/components/:id"
-        element={
-          <PrivateRoute>
-            <Pages.ComponentPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/topics/:id/components"
-        element={
-          <PrivateRoute>
-            <Pages.TopicPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/remotecis"
-        element={
-          <PrivateRoute>
-            <Pages.RemotecisPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/feeders/create"
-        element={
-          <PrivateRoute>
-            <Pages.CreateFeederPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/feeders/:id"
-        element={
-          <PrivateRoute>
-            <Pages.EditFeederPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/feeders"
-        element={
-          <PrivateRoute>
-            <Pages.FeedersPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/teams"
-        element={
-          <PrivateRoute>
-            <Pages.TeamsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/teams/:id"
-        element={
-          <PrivateRoute>
-            <Pages.TeamPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/users"
-        element={
-          <PrivateRoute>
-            <Pages.UsersPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/users/:id"
-        element={
-          <PrivateRoute>
-            <Pages.EditUserPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/currentUser/settings"
-        element={
-          <PrivateRoute>
-            <Pages.SettingsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/currentUser/notifications"
-        element={
-          <PrivateRoute>
-            <Pages.NotificationsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/permissions"
-        element={
-          <PrivateRoute>
-            <Pages.PermissionsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route path="/login" element={<Pages.LoginPage />} />
-      <Route path="/login_callback" element={<Pages.LoginCallbackPage />} />
-      <Route path="/silent_redirect" element={<Pages.SilentRedirectPage />} />
-      <Route path="*" element={<Pages.Page404 />} />
-    </Routes>
+    <>
+      <BackgroundImage />
+      <Alerts />
+      <Routes>
+        <Route path="/">
+          <Route index element={<Navigate replace to="jobs" />} />
+          <Route element={<NotAuthenticatedLayout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="login_callback" element={<LoginCallbackPage />} />
+            <Route path="silent_redirect" element={<SilentRedirectPage />} />
+          </Route>
+          <Route element={<AuthenticatedLayout />}>
+            <Route path="analytics">
+              <Route index element={<AnalyticsPage />} />
+              <Route
+                path="tasks_duration_per_job"
+                element={<TasksDurationPerJobPage />}
+              />
+              <Route
+                path="latest_jobs_status"
+                element={<LatestJobStatusPage />}
+              />
+              <Route
+                path="latest_jobs_status/:topic_name"
+                element={<LatestJobStatusDetailsPage />}
+              />
+            </Route>
+            <Route path="jobs">
+              <Route index element={<JobsPage />} />
+              <Route path=":job_id" element={<JobPage />}>
+                <Route index element={<JobStatesPage />} />
+                <Route path="jobStates" element={<JobStatesPage />} />
+                <Route path="tests" element={<JobTestsPage />} />
+                <Route path="files" element={<JobFilesPage />} />
+                <Route path="settings" element={<JobSettingsPage />} />
+              </Route>
+            </Route>
+            <Route path="files/:file_id" element={<FilePage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="topics">
+              <Route index element={<TopicsPage />} />
+              <Route path=":topic_id/components/" element={<TopicPage />} />
+              <Route
+                path=":topic_id/components/:component_id"
+                element={<ComponentPage />}
+              />
+            </Route>
+            <Route path="remotecis" element={<RemotecisPage />} />
+            <Route path="feeders">
+              <Route index element={<FeedersPage />} />
+              <Route path="create" element={<CreateFeederPage />} />
+              <Route path=":feeder_id" element={<EditFeederPage />} />
+            </Route>
+            <Route path="teams">
+              <Route index element={<TeamsPage />} />
+              <Route path=":team_id" element={<TeamPage />} />
+            </Route>
+            <Route path="users">
+              <Route index element={<UsersPage />} />
+              <Route path=":user_id" element={<EditUserPage />} />
+            </Route>
+            <Route path="currentUser">
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+            </Route>
+            <Route path="permissions" element={<PermissionsPage />} />
+          </Route>
+          <Route path="*" element={<Page404 />} />
+        </Route>
+      </Routes>
+    </>
   );
 }

@@ -7,12 +7,8 @@ import {
   Pagination,
   ToolbarItem,
   Toolbar,
-  PageSectionVariants,
-  Bullseye,
-  PageSection,
 } from "@patternfly/react-core";
-import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
-import { Page, LoadingPage } from "layout";
+import { PlusCircleIcon } from "@patternfly/react-icons";
 import usersActions from "./usersActions";
 import { EmptyState, Breadcrumb } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
@@ -23,6 +19,8 @@ import { IUserFilters } from "types";
 import { AppDispatch } from "store";
 import CreateUserModal from "./create/CreateUserModal";
 import UsersTable from "./UsersTable";
+import MainPage from "pages/MainPage";
+import { isEmpty } from "lodash";
 
 const initialUserFilter = {
   page: 1,
@@ -53,92 +51,79 @@ export default function UsersPage() {
 
   if (currentUser === null) return null;
 
-  const breadcrumb = (
-    <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
-  );
-
-  if (isFetching) return <LoadingPage title="Users" breadcrumb={breadcrumb} />;
-
   return (
-    <Page
+    <MainPage
       title="Users"
       description="List of DCI users"
-      Toolbar={
-        <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
-          <ToolbarContent>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <EmailsFilter
-                  search={filters.email || ""}
-                  onSearch={(email) => {
-                    search({ ...initialUserFilter, email });
+      loading={isFetching && isEmpty(users)}
+      empty={!isFetching && isEmpty(users)}
+      EmptyComponent={
+        <EmptyState title="No users" info="There is no users at the moment." />
+      }
+      breadcrumb={
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
+      }
+    >
+      <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
+        <ToolbarContent>
+          <ToolbarGroup>
+            <ToolbarItem>
+              <EmailsFilter
+                search={filters.email || ""}
+                onSearch={(email) => {
+                  search({ ...initialUserFilter, email });
+                }}
+              />
+            </ToolbarItem>
+            <ToolbarItem variant="separator" />
+            <ToolbarItem>
+              {currentUser.isSuperAdmin ? (
+                <CreateUserModal
+                  onSubmit={(user) => {
+                    dispatch(usersActions.create(user)).then(() =>
+                      search({ ...initialUserFilter })
+                    );
+                  }}
+                >
+                  {(openModal) => (
+                    <Button variant="primary" onClick={openModal}>
+                      <PlusCircleIcon className="mr-xs" />
+                      Create a new user
+                    </Button>
+                  )}
+                </CreateUserModal>
+              ) : null}
+            </ToolbarItem>
+          </ToolbarGroup>
+          <ToolbarGroup style={{ flex: "1" }}>
+            <ToolbarItem
+              variant="pagination"
+              alignment={{ default: "alignRight" }}
+            >
+              {numOfUsers === 0 ? null : (
+                <Pagination
+                  perPage={filters.perPage}
+                  page={filters.page}
+                  itemCount={numOfUsers}
+                  onSetPage={(e, newPage) => {
+                    search({
+                      ...filters,
+                      page: newPage,
+                    });
+                  }}
+                  onPerPageSelect={(e, newPerPage) => {
+                    search({
+                      ...filters,
+                      perPage: newPerPage,
+                    });
                   }}
                 />
-              </ToolbarItem>
-              <ToolbarItem variant="separator" />
-              <ToolbarItem>
-                {currentUser.isSuperAdmin ? (
-                  <CreateUserModal
-                    onSubmit={(user) => {
-                      dispatch(usersActions.create(user)).then(() =>
-                        search({ ...initialUserFilter })
-                      );
-                    }}
-                  >
-                    {(openModal) => (
-                      <Button variant="primary" onClick={openModal}>
-                        <PlusCircleIcon className="mr-xs" />
-                        Create a new user
-                      </Button>
-                    )}
-                  </CreateUserModal>
-                ) : null}
-              </ToolbarItem>
-            </ToolbarGroup>
-            <ToolbarGroup style={{ flex: "1" }}>
-              <ToolbarItem
-                variant="pagination"
-                alignment={{ default: "alignRight" }}
-              >
-                {numOfUsers === 0 ? null : (
-                  <Pagination
-                    perPage={filters.perPage}
-                    page={filters.page}
-                    itemCount={numOfUsers}
-                    onSetPage={(e, newPage) => {
-                      search({
-                        ...filters,
-                        page: newPage,
-                      });
-                    }}
-                    onPerPageSelect={(e, newPerPage) => {
-                      search({
-                        ...filters,
-                        perPage: newPerPage,
-                      });
-                    }}
-                  />
-                )}
-              </ToolbarItem>
-            </ToolbarGroup>
-          </ToolbarContent>
-        </Toolbar>
-      }
-      breadcrumb={breadcrumb}
-    >
-      {users.length === 0 ? (
-        <PageSection variant={PageSectionVariants.light}>
-          <Bullseye>
-            <EmptyState
-              title="No user matches this search"
-              info={`There are no users with the ${filters.email} email. Change your search and start over.`}
-              icon={SearchIcon}
-            />
-          </Bullseye>
-        </PageSection>
-      ) : (
-        <UsersTable users={users} />
-      )}
-    </Page>
+              )}
+            </ToolbarItem>
+          </ToolbarGroup>
+        </ToolbarContent>
+      </Toolbar>
+      <UsersTable users={users} />
+    </MainPage>
   );
 }

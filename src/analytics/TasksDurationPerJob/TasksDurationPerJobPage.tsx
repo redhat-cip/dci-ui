@@ -1,4 +1,4 @@
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { Breadcrumb } from "ui";
 import {
   Button,
@@ -215,7 +215,7 @@ export default function TasksDurationPerJobPage() {
   }, [ESData]);
 
   return (
-    <Page
+    <MainPage
       title="Tasks duration per job"
       description="Select your topic and remoteci to see duration of tasks per job."
       breadcrumb={
@@ -372,6 +372,6 @@ export default function TasksDurationPerJobPage() {
           )}
         </CardBody>
       </Card>
-    </Page>
+    </MainPage>
   );
 }

@@ -10,7 +10,7 @@ import {
   Text,
   CardTitle,
 } from "@patternfly/react-core";
-import { LoadingPage, Page } from "layout";
+import MainPage from "pages/MainPage";
 import usersActions from "../usersActions";
 import EditUserForm from "./EditUserForm";
 import {
@@ -26,6 +26,7 @@ import { ITeam, IUser } from "types";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
+import LoadingPage from "pages/LoadingPage";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -44,7 +45,7 @@ export default function EditUserPage() {
   const dispatch = useDispatch<AppDispatch>();
   const [user, setUser] = useState<IUser | null>(null);
   const [userTeams, setUserTeams] = useState<ITeam[]>([]);
-  const { id } = useParams();
+  const { user_id } = useParams();
 
   const _fetchUser = useCallback(
     (id) => {
@@ -62,20 +63,20 @@ export default function EditUserPage() {
   }, []);
 
   useEffect(() => {
-    if (id) {
-      _fetchUser(id);
-      _fetchUserTeams(id);
+    if (user_id) {
+      _fetchUser(user_id);
+      _fetchUserTeams(user_id);
     }
-  }, [id, _fetchUser, _fetchUserTeams]);
+  }, [user_id, _fetchUser, _fetchUserTeams]);
 
-  if (!id) return null;
+  if (!user_id) return null;
 
   const breadcrumb = (
     <Breadcrumb
       links={[
         { to: "/", title: "DCI" },
         { to: "/users", title: "Users" },
-        { to: `/users/${id}`, title: id },
+        { to: `/users/${user_id}`, title: user_id },
       ]}
     />
   );
@@ -85,7 +86,7 @@ export default function EditUserPage() {
   }
 
   return (
-    <Page
+    <MainPage
       title={`Edit user ${user.fullname}`}
       description={user ? `Details page for user ${user.name}` : "Details page"}
       breadcrumb={breadcrumb}
@@ -112,8 +113,8 @@ export default function EditUserPage() {
               <AddUserToTeamForm
                 onSubmit={(team: ITeam) => {
                   addUserToTeam(user.id, team).then(() => {
-                    _fetchUser(id);
-                    _fetchUserTeams(id);
+                    _fetchUser(user_id);
+                    _fetchUserTeams(user_id);
                   });
                 }}
               />
@@ -136,8 +137,8 @@ export default function EditUserPage() {
                           message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
                           onOk={() => {
                             deleteUserFromTeam(user, team).then(() => {
-                              _fetchUser(id);
-                              _fetchUserTeams(id);
+                              _fetchUser(user_id);
+                              _fetchUserTeams(user_id);
                             });
                           }}
                         >
@@ -196,6 +197,6 @@ export default function EditUserPage() {
           </Card>
         </GridItem>
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

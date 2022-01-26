@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { getStats, JobPerRemoteciStats } from "./latestJobStatusActions";
 import { isEmpty } from "lodash";
 import {
@@ -35,7 +35,7 @@ export default function LatestJobStatusPage() {
   }, []);
 
   return (
-    <Page
+    <MainPage
       title="Latest jobs status"
       description="See the latest jobs status per topic and per remoteci"
       loading={isLoading && isEmpty(products)}
@@ -92,6 +92,6 @@ export default function LatestJobStatusPage() {
           );
         })}
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

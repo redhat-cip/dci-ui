@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { isEmpty, uniqBy } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import {
   Button,
   Card,
@@ -50,7 +50,7 @@ export default function PermissionsPage() {
   }, [dispatch]);
 
   return (
-    <Page
+    <MainPage
       title="Permissions"
       description="On this page, you can grant teams permissions to access products. Make sure the team has the rights before giving it permission to download components from a product."
       loading={isLoading}
@@ -229,6 +229,6 @@ export default function PermissionsPage() {
           </Tabs>
         </CardBody>
       </Card>
-    </Page>
+    </MainPage>
   );
 }

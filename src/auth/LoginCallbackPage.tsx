@@ -1,4 +1,4 @@
-import pages from "pages";
+import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { setJWT } from "services/localStorage";
@@ -30,7 +30,7 @@ export default function LoginCallbackPage() {
   }, [refreshIdentity, sso]);
 
   return isLoadingUser ? (
-    <pages.NotAuthenticatedLoadingPage />
+    <NotAuthenticatedLoadingPage />
   ) : (
     <Navigate replace to={location.from} />
   );

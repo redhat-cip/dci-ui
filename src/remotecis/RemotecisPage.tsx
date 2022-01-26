@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import remotecisActions from "./remotecisActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getRemotecis, isFetchingRemotecis } from "./remotecisSelectors";
@@ -34,7 +34,7 @@ export default function RemotecisPage() {
   );
 
   return (
-    <Page
+    <MainPage
       title="Remotecis"
       description="The remote ci will host the agent. It is recommended to create a remote ci per lab."
       loading={isFetching && isEmpty(myRemotecis)}
@@ -123,6 +123,6 @@ export default function RemotecisPage() {
           ))}
         </tbody>
       </table>
-    </Page>
+    </MainPage>
   );
 }

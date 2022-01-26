@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import productsActions from "./productsActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import CreateProductModal from "./CreateProductModal";
@@ -29,7 +29,7 @@ export default function ProductsPage() {
   if (currentUser === null) return null;
 
   return (
-    <Page
+    <MainPage
       title="Products"
       description="A product is the main abstraction that describe a Red Hat product (RHEL, OpenStack, Openshift)."
       loading={isFetching && isEmpty(products)}
@@ -108,6 +108,6 @@ export default function ProductsPage() {
           ))}
         </tbody>
       </table>
-    </Page>
+    </MainPage>
   );
 }

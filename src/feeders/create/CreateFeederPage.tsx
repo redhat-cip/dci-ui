@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import feedersActions from "../feedersActions";
 import CreateFeederForm from "./CreateFeederForm";
 import { AppDispatch } from "store";
@@ -20,7 +20,7 @@ export default function CreateFeederPage() {
   }, [dispatch]);
 
   return (
-    <Page
+    <MainPage
       title="Create a feeder"
       description=""
       breadcrumb={
@@ -45,6 +45,6 @@ export default function CreateFeederPage() {
           </Card>
         </GridItem>
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

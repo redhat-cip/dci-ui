@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import teamsActions from "./teamsActions";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import { getTeams, isFetchingTeams } from "./teamsSelectors";
@@ -27,7 +27,7 @@ export default function TeamsPage() {
   const partners = teams.filter((t) => t.external && t.state === "active");
 
   return (
-    <Page
+    <MainPage
       title="Teams"
       description={
         partners.length > 0
@@ -103,6 +103,6 @@ export default function TeamsPage() {
           ))}
         </tbody>
       </table>
-    </Page>
+    </MainPage>
   );
 }

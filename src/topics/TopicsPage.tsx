@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import {
   Card,
   Gallery,
   GalleryItem,
-  PageSection,
   CardBody,
   Title,
 } from "@patternfly/react-core";
@@ -58,7 +57,7 @@ export default function TopicsPage() {
   const topicsPerProduct = orderTopicsByProduct(topics);
 
   return (
-    <Page
+    <MainPage
       title="Topics"
       description="Click on the topic that interests you to see its components."
       loading={isFetching && isEmpty(topicsPerProduct)}
@@ -83,7 +82,7 @@ export default function TopicsPage() {
       {topicsPerProduct.map((product) => {
         const Icon = getProductIcon(product.name);
         return (
-          <PageSection key={product.id}>
+          <div key={product.id} style={{ marginBottom: "2em" }}>
             <ProductTitle>
               <span className="mr-xs">
                 <Icon size="md" />
@@ -108,9 +107,9 @@ export default function TopicsPage() {
                 </GalleryItem>
               ))}
             </Gallery>
-          </PageSection>
+          </div>
         );
       })}
-    </Page>
+    </MainPage>
   );
 }

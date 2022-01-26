@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
-import { LoadingPage, Page } from "layout";
+import MainPage from "pages/MainPage";
 import feedersActions from "../feedersActions";
 import EditFeederForm from "./EditFeederForm";
 import { AppDispatch } from "store";
@@ -10,40 +10,42 @@ import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { IFeeder } from "types";
 import { Breadcrumb } from "ui";
+import LoadingPage from "pages/LoadingPage";
 
 export default function EditFeederPage() {
   const dispatch = useDispatch<AppDispatch>();
   const teams = useSelector(getTeams);
   const navigate = useNavigate();
   const [feeder, setFeeder] = useState<IFeeder | null>(null);
-  const { id } = useParams();
+  const { feeder_id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (feeder_id) {
       dispatch(teamsActions.all());
-      dispatch(feedersActions.one(id)).then((response) => {
+      dispatch(feedersActions.one(feeder_id)).then((response) => {
         setFeeder(response.data.feeder);
       });
     }
-  }, [dispatch, id]);
+  }, [dispatch, feeder_id]);
 
-  if (!id) return null;
+  if (!feeder_id) return null;
 
   const breadcrumb = (
     <Breadcrumb
       links={[
         { to: "/", title: "DCI" },
         { to: "/feeders", title: "Feeders" },
-        { to: `/feeders/${id}`, title: id },
+        { to: `/feeders/${feeder_id}`, title: feeder_id },
       ]}
     />
   );
 
-  if (feeder === null)
+  if (feeder === null) {
     return <LoadingPage title="Edit a feeder" breadcrumb={breadcrumb} />;
+  }
 
   return (
-    <Page
+    <MainPage
       title="Edit a feeder"
       description="A feeder is a script in charge of uploading newer versions of components to the control server."
       breadcrumb={breadcrumb}
@@ -65,6 +67,6 @@ export default function EditFeederPage() {
           </Card>
         </GridItem>
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

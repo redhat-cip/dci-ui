@@ -8,39 +8,34 @@ import {
   Text,
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
-import AppLayout from "./AppLayout";
 
 interface PageProps {
   HeaderSection?: React.ReactNode;
   HeaderButton?: React.ReactNode;
   title: string;
   description: string;
-  Toolbar?: React.ReactNode;
   loading?: boolean;
   empty?: boolean;
   EmptyComponent?: React.ReactNode;
   SubMenu?: React.ReactNode;
   children: React.ReactNode;
-  seeSecondToolbar?: boolean;
   [x: string]: any;
 }
 
-export default function Page({
+export default function MainPage({
   HeaderSection,
   HeaderButton,
   title,
   description,
-  Toolbar,
   loading,
   empty,
   EmptyComponent,
   children,
-  seeSecondToolbar = false,
   SubMenu,
   ...props
 }: PageProps) {
   return (
-    <AppLayout {...props}>
+    <div {...props}>
       {isEmpty(HeaderSection) ? (
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
@@ -52,21 +47,30 @@ export default function Page({
       ) : (
         HeaderSection
       )}
-      <PageSection variant={PageSectionVariants.default}>
-        {!isEmpty(Toolbar) && Toolbar}
-        {loading ? (
+
+      {loading ? (
+        <PageSection
+          variant={PageSectionVariants.default}
+          style={{ height: "80vh" }}
+          isFilled={true}
+        >
           <Bullseye>
             <BlinkLogo />
           </Bullseye>
-        ) : null}
-        {!loading && empty ? (
-          <PageSection variant={PageSectionVariants.light}>
-            <Bullseye>{EmptyComponent}</Bullseye>
-          </PageSection>
-        ) : null}
-        {!loading && !empty ? children : null}
-        {!loading && !empty && !isEmpty(Toolbar) && seeSecondToolbar && Toolbar}
-      </PageSection>
-    </AppLayout>
+        </PageSection>
+      ) : null}
+
+      {!loading && empty ? (
+        <PageSection variant={PageSectionVariants.light}>
+          <Bullseye>{EmptyComponent}</Bullseye>
+        </PageSection>
+      ) : null}
+
+      {!loading && !empty ? (
+        <PageSection variant={PageSectionVariants.default}>
+          {children}
+        </PageSection>
+      ) : null}
+    </div>
   );
 }

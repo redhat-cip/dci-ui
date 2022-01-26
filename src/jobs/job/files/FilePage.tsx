@@ -2,33 +2,47 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getFileContent } from "jobs/job/files/filesActions";
 import { IFile } from "types";
-import pages from "pages";
+import { PageSection } from "@patternfly/react-core";
 
 export default function FilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const { id } = useParams();
+  const { file_id } = useParams();
 
   useEffect(() => {
-    if (id) {
-      getFileContent({ id } as IFile)
+    if (file_id) {
+      getFileContent({ id: file_id } as IFile)
         .then((content) => {
           setFileContent(content);
         })
         .catch(console.error)
         .finally(() => setIsLoading(false));
     }
-  }, [id]);
+  }, [file_id]);
 
-  if (!id) return null;
+  if (!file_id) {
+    return null;
+  }
 
   if (isLoading) {
-    return <pages.NotAuthenticatedLoadingPage />;
+    return (
+      <PageSection>
+        <p>loading...</p>
+      </PageSection>
+    );
   }
-  if (fileContent === null) return null;
+
+  if (!isLoading && fileContent === null) {
+    return (
+      <PageSection>
+        <p>Something went wrong</p>
+      </PageSection>
+    );
+  }
+
   return (
-    <div className="p-md" style={{ fontSize: "0.8rem" }}>
-      <pre>{fileContent}</pre>
-    </div>
+    <PageSection>
+      <pre style={{ fontSize: "0.8rem" }}>{fileContent}</pre>
+    </PageSection>
   );
 }

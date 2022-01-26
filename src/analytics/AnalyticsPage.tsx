@@ -1,9 +1,8 @@
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import {
   Card,
   Gallery,
   GalleryItem,
-  PageSection,
   CardBody,
   CardHeader,
   CardHeaderMain,
@@ -18,7 +17,7 @@ export default function AnalyticsPage() {
   const navigate = useNavigate();
 
   return (
-    <Page
+    <MainPage
       title="Analytics"
       description="DCI Analytics is a service offered by DCI that helps you understand your data."
       breadcrumb={
@@ -27,55 +26,52 @@ export default function AnalyticsPage() {
         />
       }
     >
-      <PageSection>
-        <Gallery hasGutter>
-          <GalleryItem>
-            <Card
-              className="pointer"
-              onClick={() => navigate("/analytics/tasks_duration_per_job")}
-            >
-              <CardHeader>
-                <CardHeaderMain>
-                  <img
-                    src={TasksPerJobHeaderImage}
-                    alt="Task per job header"
-                    height={100}
-                    width="auto"
-                  />
-                </CardHeaderMain>
-              </CardHeader>
-              <CardTitle>Tasks duration per job</CardTitle>
-              <CardBody>
-                For each remoteci compare the evolution of the duration of
-                Ansible tasks per job. This analysis is useful for detecting
-                possible problems in your continuous integration, or your
-                agents.
-              </CardBody>
-            </Card>
-          </GalleryItem>
-          <GalleryItem>
-            <Card
-              className="pointer"
-              onClick={() => navigate("/analytics/latest_jobs_status")}
-            >
-              <CardHeader>
-                <CardHeaderMain>
-                  <img
-                    src={LatestJobsStatusHeaderImage}
-                    alt="Task per job header"
-                    height={100}
-                    width="auto"
-                  />
-                </CardHeaderMain>
-              </CardHeader>
-              <CardTitle>Latest Job status</CardTitle>
-              <CardBody>
-                See the latest jobs status per topic and per remoteci
-              </CardBody>
-            </Card>
-          </GalleryItem>
-        </Gallery>
-      </PageSection>
-    </Page>
+      <Gallery hasGutter>
+        <GalleryItem>
+          <Card
+            className="pointer"
+            onClick={() => navigate("/analytics/tasks_duration_per_job")}
+          >
+            <CardHeader>
+              <CardHeaderMain>
+                <img
+                  src={TasksPerJobHeaderImage}
+                  alt="Task per job header"
+                  height={100}
+                  width="auto"
+                />
+              </CardHeaderMain>
+            </CardHeader>
+            <CardTitle>Tasks duration per job</CardTitle>
+            <CardBody>
+              For each remoteci compare the evolution of the duration of Ansible
+              tasks per job. This analysis is useful for detecting possible
+              problems in your continuous integration, or your agents.
+            </CardBody>
+          </Card>
+        </GalleryItem>
+        <GalleryItem>
+          <Card
+            className="pointer"
+            onClick={() => navigate("/analytics/latest_jobs_status")}
+          >
+            <CardHeader>
+              <CardHeaderMain>
+                <img
+                  src={LatestJobsStatusHeaderImage}
+                  alt="Task per job header"
+                  height={100}
+                  width="auto"
+                />
+              </CardHeaderMain>
+            </CardHeader>
+            <CardTitle>Latest Job status</CardTitle>
+            <CardBody>
+              See the latest jobs status per topic and per remoteci
+            </CardBody>
+          </Card>
+        </GalleryItem>
+      </Gallery>
+    </MainPage>
   );
 }

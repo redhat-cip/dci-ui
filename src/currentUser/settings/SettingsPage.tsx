@@ -3,7 +3,7 @@ import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
 import { updateCurrentUser } from "../currentUserActions";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { AppDispatch } from "store";
 import { useAuth } from "auth/authContext";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
@@ -15,7 +15,7 @@ export default function SettingsPage() {
   const currentUser = useSelector(getCurrentUser);
   if (currentUser === null) return null;
   return (
-    <Page
+    <MainPage
       title="User preferences"
       description="Edit your preferences"
       breadcrumb={
@@ -58,6 +58,6 @@ export default function SettingsPage() {
           </GridItem>
         )}
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

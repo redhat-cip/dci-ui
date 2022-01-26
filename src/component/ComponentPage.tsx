@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import * as React from "react";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import {
-  PageSection,
   Card,
   CardBody,
   Grid,
@@ -147,26 +146,26 @@ function EmbedJob({ job }: IEmbedJobProps) {
 }
 
 export default function ComponentPage() {
-  const { topic_id, id } = useParams();
+  const { topic_id, component_id } = useParams();
   const [isFetching, setIsFetching] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
   const getComponentCallback = useCallback(() => {
-    if (id) {
-      fetchComponent(id)
+    if (component_id) {
+      fetchComponent(component_id)
         .then((response) => setComponent(response.data.component))
         .finally(() => setIsFetching(false));
     }
-  }, [id, setIsFetching]);
+  }, [component_id, setIsFetching]);
 
   useEffect(() => {
     getComponentCallback();
   }, [getComponentCallback]);
 
-  if (!id || !topic_id) return null;
+  if (!component_id || !topic_id) return null;
 
   return (
-    <Page
+    <MainPage
       title={
         component
           ? `Component ${component.canonical_project_name}`
@@ -182,7 +181,7 @@ export default function ComponentPage() {
       EmptyComponent={
         <EmptyState
           title="There is no component"
-          info={`There is not component with id ${id}`}
+          info={`There is not component with id ${component_id}`}
         />
       }
       breadcrumb={
@@ -192,145 +191,144 @@ export default function ComponentPage() {
             { to: "/topics", title: "Topics" },
             { to: `/topics/${topic_id}/components`, title: topic_id },
             { to: `/topics/${topic_id}/components`, title: "Components" },
-            { to: `/topics/${topic_id}/components/${id}`, title: id },
+            {
+              to: `/topics/${topic_id}/components/${component_id}`,
+              title: component_id,
+            },
           ]}
         />
       }
     >
-      <PageSection>
-        {component === null ? null : (
-          <>
-            <Card>
-              <CardBody>
-                <Padding>
-                  <Title headingLevel="h3" size="xl">
-                    Component information
-                  </Title>
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="ID" value={component.id} />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="Name" value={component.canonical_project_name} />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="Unique Name" value={component.name} />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line
-                    field="Topic id"
-                    value={
-                      <Link to={`/topics/${component.topic_id}/components`}>
-                        {component.topic_id}
-                      </Link>
-                    }
-                  />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="Type" value={component.type} />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line
-                    field="Tags"
-                    value={
-                      component.tags && component.tags.length > 0
-                        ? component.tags.map((tag, i) => (
-                            <Label key={i} className="mt-xs mr-xs" color="blue">
-                              {tag}
-                            </Label>
-                          ))
-                        : "no tags"
-                    }
-                  />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="State" value={component.state} />
-                </Padding>
-                <Divider />
-                <Padding>
-                  <Line field="Created" value={fromNow(component.created_at)} />
-                </Padding>
-              </CardBody>
-            </Card>
+      {component === null ? null : (
+        <>
+          <Card>
+            <CardBody>
+              <Padding>
+                <Title headingLevel="h3" size="xl">
+                  Component information
+                </Title>
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="ID" value={component.id} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Name" value={component.canonical_project_name} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Unique Name" value={component.name} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line
+                  field="Topic id"
+                  value={
+                    <Link to={`/topics/${component.topic_id}/components`}>
+                      {component.topic_id}
+                    </Link>
+                  }
+                />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Type" value={component.type} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line
+                  field="Tags"
+                  value={
+                    component.tags && component.tags.length > 0
+                      ? component.tags.map((tag, i) => (
+                          <Label key={i} className="mt-xs mr-xs" color="blue">
+                            {tag}
+                          </Label>
+                        ))
+                      : "no tags"
+                  }
+                />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="State" value={component.state} />
+              </Padding>
+              <Divider />
+              <Padding>
+                <Line field="Created" value={fromNow(component.created_at)} />
+              </Padding>
+            </CardBody>
+          </Card>
 
-            {component.jobs.length === 0 ? null : (
-              <Grid hasGutter className="mt-md">
-                <GridItem span={4}>
-                  <StatHeaderCard
-                    title={component.jobs.length.toString()}
-                    subTitle="Number of jobs"
-                  />
-                </GridItem>
-                <GridItem span={4}>
-                  <StatHeaderCard
-                    title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
-                    subTitle="Percentage of successful jobs"
-                  />
-                </GridItem>
-                <GridItem span={4}>
-                  <StatHeaderCard
-                    title={fromNow(component.jobs[0].created_at) || ""}
-                    subTitle="Latest run"
-                  />
-                </GridItem>
-              </Grid>
-            )}
+          {component.jobs.length === 0 ? null : (
+            <Grid hasGutter className="mt-md">
+              <GridItem span={4}>
+                <StatHeaderCard
+                  title={component.jobs.length.toString()}
+                  subTitle="Number of jobs"
+                />
+              </GridItem>
+              <GridItem span={4}>
+                <StatHeaderCard
+                  title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
+                  subTitle="Percentage of successful jobs"
+                />
+              </GridItem>
+              <GridItem span={4}>
+                <StatHeaderCard
+                  title={fromNow(component.jobs[0].created_at) || ""}
+                  subTitle="Latest run"
+                />
+              </GridItem>
+            </Grid>
+          )}
 
-            <Card className="mt-md">
-              <CardBody>
+          <Card className="mt-md">
+            <CardBody>
+              <Padding>
+                <Title headingLevel="h3" size="xl">
+                  Jobs
+                </Title>
+              </Padding>
+              <div>
+                <Divider />
                 <Padding>
-                  <Title headingLevel="h3" size="xl">
-                    Jobs
-                  </Title>
+                  <Grid hasGutter>
+                    <GridItem span={3}>
+                      <b>Job Id</b>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <b>Status</b>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <b>Duration</b>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <b>Created At</b>
+                    </GridItem>
+                  </Grid>
                 </Padding>
+              </div>
+              {component.jobs.length === 0 ? (
                 <div>
                   <Divider />
-                  <Padding>
-                    <Grid hasGutter>
-                      <GridItem span={3}>
-                        <b>Job Id</b>
-                      </GridItem>
-                      <GridItem span={3}>
-                        <b>Status</b>
-                      </GridItem>
-                      <GridItem span={3}>
-                        <b>Duration</b>
-                      </GridItem>
-                      <GridItem span={3}>
-                        <b>Created At</b>
-                      </GridItem>
-                    </Grid>
-                  </Padding>
+                  <Padding>There is no job attached to this component</Padding>
                 </div>
-                {component.jobs.length === 0 ? (
+              ) : (
+                sortByNewestFirst(component.jobs).map((j) => (
                   <div>
                     <Divider />
                     <Padding>
-                      There is no job attached to this component
+                      <EmbedJob job={j} />
                     </Padding>
                   </div>
-                ) : (
-                  sortByNewestFirst(component.jobs).map((j) => (
-                    <div>
-                      <Divider />
-                      <Padding>
-                        <EmbedJob job={j} />
-                      </Padding>
-                    </div>
-                  ))
-                )}
-              </CardBody>
-            </Card>
-          </>
-        )}
-      </PageSection>
-    </Page>
+                ))
+              )}
+            </CardBody>
+          </Card>
+        </>
+      )}
+    </MainPage>
   );
 }

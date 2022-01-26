@@ -8,7 +8,7 @@ import { AppDispatch } from "store";
 import { getResults } from "jobs/job/tests/testsActions";
 import { getJobStatesWithFiles } from "jobs/job/jobStates/jobStatesActions";
 import { sortByName } from "services/sort";
-import { LoadingPage } from "layout";
+import LoadingPage from "pages/LoadingPage";
 
 export type JobContextProps = {
   job: IEnhancedJob;
@@ -23,12 +23,12 @@ type JobProviderProps = {
 function JobProvider({ children }: JobProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [job, setJob] = React.useState<IEnhancedJob | null>(null);
-  const { id } = useParams();
+  const { job_id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (id) {
-      dispatch(jobsActions.one(id))
+    if (job_id) {
+      dispatch(jobsActions.one(job_id))
         .then(async (response) => {
           const job = response.data.job;
           const q1 = await getResults(job);
@@ -41,10 +41,10 @@ function JobProvider({ children }: JobProviderProps) {
           setJob(enhancedJob);
           return response;
         })
-        .catch(console.log)
+        .catch(console.error)
         .then(() => setIsLoading(false));
     }
-  }, [id, dispatch]);
+  }, [job_id, dispatch]);
 
   if (isLoading || job === null) {
     return <LoadingPage title="Job Details" />;

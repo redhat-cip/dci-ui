@@ -6,7 +6,6 @@ import {
   Text,
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
-import AppLayout from "./AppLayout";
 
 interface LoadingPageProps {
   title: string;
@@ -20,7 +19,7 @@ export default function LoadingPage({
   ...props
 }: LoadingPageProps) {
   return (
-    <AppLayout {...props}>
+    <div {...props}>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
           <Text component="h1">{title}</Text>
@@ -30,6 +29,6 @@ export default function LoadingPage({
       <Bullseye>
         <BlinkLogo />
       </Bullseye>
-    </AppLayout>
+    </div>
   );
 }

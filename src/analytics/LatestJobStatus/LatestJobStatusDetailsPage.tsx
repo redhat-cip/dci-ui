@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
 import { useParams, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
@@ -132,7 +132,7 @@ export default function LatestJobStatusDetailsPage() {
   if (!topic_name) return null;
 
   return (
-    <Page
+    <MainPage
       title={`Latest stats for ${topic_name}`}
       description=""
       loading={isLoading && isEmpty(stat)}
@@ -186,6 +186,6 @@ export default function LatestJobStatusDetailsPage() {
           <ListOfJobsCard stat={stat} />
         </GridItem>
       </Grid>
-    </Page>
+    </MainPage>
   );
 }

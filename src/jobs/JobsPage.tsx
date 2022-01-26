@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react";
 import { isEmpty } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { EmptyState, Breadcrumb } from "ui";
 import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
@@ -39,21 +39,20 @@ export default function JobsPage() {
     getJobsCallback();
   }, [getJobsCallback]);
 
+  const Toolbar = (
+    <JobsToolbar
+      filters={filters}
+      setFilters={setFilters}
+      clearAllFilters={() => setFilters(defaultFilters)}
+      refresh={getJobsCallback}
+    />
+  );
   return (
-    <Page
+    <MainPage
       title="Jobs"
       description=""
       loading={isFetching && isEmpty(jobs)}
       empty={!isFetching && isEmpty(jobs)}
-      Toolbar={
-        <JobsToolbar
-          filters={filters}
-          setFilters={setFilters}
-          clearAllFilters={() => setFilters(defaultFilters)}
-          refresh={getJobsCallback}
-        />
-      }
-      seeSecondToolbar
       EmptyComponent={
         <EmptyState
           title="No job"
@@ -64,7 +63,9 @@ export default function JobsPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
       }
     >
+      {Toolbar}
       <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
-    </Page>
+      {Toolbar}
+    </MainPage>
   );
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import * as React from "react";
-import pages from "../pages";
 import { UserManager } from "oidc-client";
 import { setJWT } from "services/localStorage";
+import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 
 export type SSOContextProps = {
   sso: UserManager | null;
@@ -62,7 +62,7 @@ function SSOProvider({ children }: SSOProviderProps) {
       .then(() => setIsLoadingIdentity(false));
   }, [sso]);
   if (isLoadingIdentity) {
-    return <pages.NotAuthenticatedLoadingPage />;
+    return <NotAuthenticatedLoadingPage />;
   }
   return <SSOContext.Provider value={{ sso }}>{children}</SSOContext.Provider>;
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import feedersActions from "./feedersActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getFeeders, isFetchingFeeders } from "./feedersSelectors";
@@ -24,7 +24,7 @@ export default function FeedersPage() {
   }, [dispatch]);
 
   return (
-    <Page
+    <MainPage
       title="Feeders"
       description="A feeder is a script in charge of uploading newer versions of components to the control server."
       loading={isFetching && isEmpty(feeders)}
@@ -89,6 +89,6 @@ export default function FeedersPage() {
           ))}
         </tbody>
       </table>
-    </Page>
+    </MainPage>
   );
 }

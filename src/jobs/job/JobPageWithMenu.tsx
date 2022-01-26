@@ -1,4 +1,4 @@
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { Breadcrumb } from "ui";
 import { useJob } from "./jobContext";
 import { Outlet, useLocation, useNavigate } from "react-router";
@@ -33,7 +33,7 @@ export default function JobPageWithMenu() {
   }, [location]);
 
   return (
-    <Page
+    <MainPage
       title="Job Details"
       description=""
       HeaderSection={
@@ -87,6 +87,6 @@ export default function JobPageWithMenu() {
         job={job}
       />
       <Outlet />
-    </Page>
+    </MainPage>
   );
 }

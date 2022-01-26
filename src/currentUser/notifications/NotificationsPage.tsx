@@ -11,7 +11,7 @@ import {
   getRemotecis,
   isFetchingRemotecis,
 } from "remotecis/remotecisSelectors";
-import { Page } from "layout";
+import MainPage from "pages/MainPage";
 import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
 import SubscribeForm from "./SubscribeForm";
 import UnsubscribeForm from "./UnsubscribeForm";
@@ -46,7 +46,7 @@ export default function NotificationsPage() {
   const availableRemotecis = differenceBy(remotecis, currentRemotecis, "id");
   if (currentUser === null) return null;
   return (
-    <Page
+    <MainPage
       title="Notifications"
       description="Subscribe to remotecis notifications. You will receive an email for each job in failure."
       loading={isFetching && isEmpty(availableRemotecis)}
@@ -95,6 +95,6 @@ export default function NotificationsPage() {
           </Card>
         </GridItem>
       </Grid>
-    </Page>
+    </MainPage>
   );
 }
