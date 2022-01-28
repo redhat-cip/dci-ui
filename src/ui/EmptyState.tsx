@@ -6,15 +6,22 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
   Title,
+  EmptyStatePrimary,
 } from "@patternfly/react-core";
 
 interface EmptyStateProps {
   title: string;
   info: string;
   icon?: React.ComponentType<any>;
+  action?: React.ReactNode;
 }
 
-export default function DCIEmptyState({ title, info, icon }: EmptyStateProps) {
+export default function DCIEmptyState({
+  title,
+  info,
+  icon,
+  action,
+}: EmptyStateProps) {
   return (
     <Bullseye>
       <EmptyState>
@@ -23,6 +30,7 @@ export default function DCIEmptyState({ title, info, icon }: EmptyStateProps) {
           {title}
         </Title>
         <EmptyStateBody>{info}</EmptyStateBody>
+        {action && <EmptyStatePrimary>{action}</EmptyStatePrimary>}
       </EmptyState>
     </Bullseye>
   );

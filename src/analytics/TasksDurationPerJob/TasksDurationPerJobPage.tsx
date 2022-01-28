@@ -27,7 +27,7 @@ import {
   ResponsiveContainer,
   ReferenceArea,
 } from "recharts";
-import { fromNow, humanizeDuration } from "services/date";
+import { formatDate, humanizeDuration } from "services/date";
 import { getDomain, transform } from "./tasksDurationPerJob";
 import { Link } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
@@ -351,7 +351,7 @@ export default function TasksDurationPerJobPage() {
                         </td>
                         <td role="cell" data-label="Job created at">
                           <time title={d.created_at} dateTime={d.created_at}>
-                            {fromNow(d.created_at)}
+                            {formatDate(d.created_at)}
                           </time>
                         </td>
                         <td

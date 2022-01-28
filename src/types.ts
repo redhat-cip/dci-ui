@@ -511,7 +511,7 @@ export interface IDataFromES {
     value: number;
     relation: string;
   };
-  max_score: number;
+  max_score: number | null;
   hits: {
     _index: string;
     _type: string;
@@ -543,4 +543,34 @@ export interface IGraphData {
 export interface IRefArea {
   left: number | null;
   right: number | null;
+}
+
+export interface IComponentMatrixESData {
+  total: {
+    value: number;
+    relation: string;
+  };
+  max_score: number | null;
+  hits: {
+    _id: string;
+    _index: string;
+    _score: number;
+    _source: {
+      component_id: string;
+      component_name: string;
+      failed_jobs: {
+        created_at: string;
+        id: string;
+      }[];
+      product_id: string;
+      success_jobs: {
+        created_at: string;
+        id: string;
+      }[];
+      tags: string[];
+      team_id: string | null;
+      topic_id: string;
+    };
+    _type: string;
+  }[];
 }
