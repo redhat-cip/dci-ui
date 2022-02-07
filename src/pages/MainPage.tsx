@@ -17,7 +17,7 @@ interface PageProps {
   loading?: boolean;
   empty?: boolean;
   EmptyComponent?: React.ReactNode;
-  SubMenu?: React.ReactNode;
+  Breadcrumb?: React.ReactNode;
   children: React.ReactNode;
   [x: string]: any;
 }
@@ -30,12 +30,15 @@ export default function MainPage({
   loading,
   empty,
   EmptyComponent,
+  Breadcrumb,
   children,
-  SubMenu,
   ...props
 }: PageProps) {
   return (
     <div {...props}>
+      {Breadcrumb && (
+        <section className="pf-c-page__main-breadcrumb">{Breadcrumb}</section>
+      )}
       {isEmpty(HeaderSection) ? (
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
@@ -47,7 +50,6 @@ export default function MainPage({
       ) : (
         HeaderSection
       )}
-
       {loading ? (
         <PageSection
           variant={PageSectionVariants.default}

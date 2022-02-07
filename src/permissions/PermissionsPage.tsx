@@ -61,7 +61,7 @@ export default function PermissionsPage() {
           info="Contact DCI administrator"
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "Permissions" }]}
         />

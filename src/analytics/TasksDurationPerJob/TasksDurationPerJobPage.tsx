@@ -218,7 +218,7 @@ export default function TasksDurationPerJobPage() {
     <MainPage
       title="Tasks duration per job"
       description="Select your topic and remoteci to see duration of tasks per job."
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

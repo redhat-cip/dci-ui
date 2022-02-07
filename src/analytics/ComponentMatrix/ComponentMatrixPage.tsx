@@ -82,7 +82,7 @@ export default function ComponentMatrixPage() {
     <MainPage
       title="Component matrix"
       description="See which components has been tested. Table of components and associated jobs."
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

@@ -75,7 +75,7 @@ export default function TopicsPage() {
       EmptyComponent={
         <EmptyState title="There is no topics" info="See documentation" />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
       }
     >

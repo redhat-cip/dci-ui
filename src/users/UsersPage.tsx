@@ -60,7 +60,7 @@ export default function UsersPage() {
       EmptyComponent={
         <EmptyState title="No users" info="There is no users at the moment." />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
       }
     >

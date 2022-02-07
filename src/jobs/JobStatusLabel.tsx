@@ -8,11 +8,7 @@ import {
 } from "@patternfly/react-icons";
 import { IJobStatus } from "types";
 
-export default function JobStatusLabel({
-  status,
-}: {
-  status: IJobStatus;
-}) {
+export default function JobStatusLabel({ status }: { status: IJobStatus }) {
   switch (status) {
     case "success":
       return (

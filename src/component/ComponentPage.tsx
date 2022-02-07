@@ -161,7 +161,7 @@ export default function ComponentPage() {
           info={`There is not component with id ${component_id}`}
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

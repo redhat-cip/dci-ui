@@ -64,7 +64,7 @@ export default function JobPageWithMenu() {
           </Tabs>
         </PageSection>
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

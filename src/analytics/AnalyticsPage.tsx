@@ -23,7 +23,7 @@ export default function AnalyticsPage() {
     <MainPage
       title="Analytics"
       description="DCI Analytics is a service offered by DCI that helps you understand your data."
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "Analytics" }]}
         />

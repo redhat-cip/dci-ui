@@ -1,7 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import { isEmpty } from "lodash";
-import MainPage from "pages/MainPage";
-import { EmptyState, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
 import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
 import { getJobs, isFetchingJobs } from "./jobsSelectors";
@@ -15,6 +13,13 @@ import {
 } from "./toolbar/filters";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
+import {
+  Bullseye,
+  PageSection,
+  PageSectionVariants,
+  Text,
+  TextContent,
+} from "@patternfly/react-core";
 
 export default function JobsPage() {
   const location = useLocation();
@@ -39,33 +44,50 @@ export default function JobsPage() {
     getJobsCallback();
   }, [getJobsCallback]);
 
-  const Toolbar = (
-    <JobsToolbar
-      filters={filters}
-      setFilters={setFilters}
-      clearAllFilters={() => setFilters(defaultFilters)}
-      refresh={getJobsCallback}
-    />
-  );
   return (
-    <MainPage
-      title="Jobs"
-      description=""
-      loading={isFetching && isEmpty(jobs)}
-      empty={!isFetching && isEmpty(jobs)}
-      EmptyComponent={
-        <EmptyState
-          title="No job"
-          info="There is no job at the moment. Edit your filters to restart a search."
-        />
-      }
-      breadcrumb={
+    <div>
+      <section className="pf-c-page__main-breadcrumb">
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
-      }
-    >
-      {Toolbar}
-      <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
-      {Toolbar}
-    </MainPage>
+      </section>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">Jobs</Text>
+        </TextContent>
+      </PageSection>
+      <PageSection variant={PageSectionVariants.default}>
+        <JobsToolbar
+          filters={filters}
+          setFilters={setFilters}
+          clearAllFilters={() => setFilters(defaultFilters)}
+          refresh={getJobsCallback}
+        />
+        {isFetching && (
+          <PageSection
+            variant={PageSectionVariants.default}
+            style={{ height: "80vh" }}
+            isFilled={true}
+          >
+            <Bullseye>
+              <BlinkLogo />
+            </Bullseye>
+          </PageSection>
+        )}
+        {!isFetching && jobs.length === 0 && (
+          <EmptyState
+            title="No job"
+            info="There is no job at the moment. Edit your filters to restart a search."
+          />
+        )}
+        <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
+        {jobs.length >= 20 && (
+          <JobsToolbar
+            filters={filters}
+            setFilters={setFilters}
+            clearAllFilters={() => setFilters(defaultFilters)}
+            refresh={getJobsCallback}
+          />
+        )}
+      </PageSection>
+    </div>
   );
 }

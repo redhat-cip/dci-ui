@@ -219,7 +219,7 @@ export default function TopicPage() {
           info={`There is not topic with id ${topic_id}`}
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

@@ -18,7 +18,7 @@ export default function SettingsPage() {
     <MainPage
       title="User preferences"
       description="Edit your preferences"
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "User preferences" }]}
         />

@@ -82,14 +82,14 @@ export default function EditUserPage() {
   );
 
   if (user === null) {
-    return <LoadingPage title="Edit user" breadcrumb={breadcrumb} />;
+    return <LoadingPage title="Edit user" Breadcrumb={breadcrumb} />;
   }
 
   return (
     <MainPage
       title={`Edit user ${user.fullname}`}
       description={user ? `Details page for user ${user.name}` : "Details page"}
-      breadcrumb={breadcrumb}
+      Breadcrumb={breadcrumb}
     >
       <Grid hasGutter>
         <GridItem span={6}>

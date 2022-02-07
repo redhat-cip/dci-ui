@@ -143,7 +143,7 @@ export default function LatestJobStatusDetailsPage() {
           info="Add some jobs to see some info for this topic"
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

@@ -102,7 +102,7 @@ export default function TeamPage() {
     <MainPage
       title={`Team ${team.name}`}
       description={team ? `Details page for team ${team.name}` : "Details page"}
-      breadcrumb={breadcrumb}
+      Breadcrumb={breadcrumb}
       HeaderButton={
         currentUser?.isSuperAdmin && team ? (
           <EditTeamModal

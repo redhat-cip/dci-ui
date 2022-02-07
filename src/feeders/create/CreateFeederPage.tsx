@@ -23,7 +23,7 @@ export default function CreateFeederPage() {
     <MainPage
       title="Create a feeder"
       description=""
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "Create a feeder" }]}
         />

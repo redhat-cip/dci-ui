@@ -1,11 +1,6 @@
 import queryString from "query-string";
 import { isEmpty, sortedUniq } from "lodash";
-import {
-  IJobStatus,
-  IJobFilters,
-  DCIListParams,
-  IUserFilters,
-} from "types";
+import { IJobStatus, IJobFilters, DCIListParams, IUserFilters } from "types";
 
 export const defaultFilters: IJobFilters = {
   team_id: null,

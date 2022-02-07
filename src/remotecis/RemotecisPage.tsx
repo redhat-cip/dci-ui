@@ -59,7 +59,7 @@ export default function RemotecisPage() {
           }
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "Remotecis" }]}
         />

@@ -60,7 +60,7 @@ export default function TeamsPage() {
           info="Do you want to create one?"
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
       }
     >

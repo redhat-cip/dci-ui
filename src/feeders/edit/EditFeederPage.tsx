@@ -41,14 +41,14 @@ export default function EditFeederPage() {
   );
 
   if (feeder === null) {
-    return <LoadingPage title="Edit a feeder" breadcrumb={breadcrumb} />;
+    return <LoadingPage title="Edit a feeder" Breadcrumb={breadcrumb} />;
   }
 
   return (
     <MainPage
       title="Edit a feeder"
       description="A feeder is a script in charge of uploading newer versions of components to the control server."
-      breadcrumb={breadcrumb}
+      Breadcrumb={breadcrumb}
     >
       <Grid hasGutter>
         <GridItem span={6}>

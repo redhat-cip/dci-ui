@@ -46,7 +46,7 @@ export default function LatestJobStatusPage() {
           info="There is no information to display in this page at the moment. If you think this is an error contact the DCI team."
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },

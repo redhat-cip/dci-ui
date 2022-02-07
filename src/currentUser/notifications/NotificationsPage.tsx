@@ -59,7 +59,7 @@ export default function NotificationsPage() {
           info="There is no remoteci you can subscribe to."
         />
       }
-      breadcrumb={
+      Breadcrumb={
         <Breadcrumb
           links={[{ to: "/", title: "DCI" }, { title: "Notifications" }]}
         />
