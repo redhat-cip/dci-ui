@@ -6,7 +6,7 @@ import {
   IJobStateWithDuration,
   IFileWithDuration,
   IGetJobStates,
-  IJobStateStatus,
+  IJobStatus,
   IPipelineStatus,
 } from "types";
 import { AxiosPromise } from "axios";
@@ -57,7 +57,7 @@ export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
   });
 }
 
-function getPipelineStatus(status: IJobStateStatus): IPipelineStatus {
+function getPipelineStatus(status: IJobStatus): IPipelineStatus {
   switch (status) {
     case "success":
       return "success";

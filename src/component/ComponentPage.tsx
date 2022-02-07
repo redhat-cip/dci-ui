@@ -11,13 +11,7 @@ import {
   Tooltip,
   Label,
 } from "@patternfly/react-core";
-import {
-  global_Color_400,
-  global_success_color_100,
-  global_danger_color_100,
-  global_warning_color_100,
-  global_active_color_100,
-} from "@patternfly/react-tokens";
+import { global_Color_400 } from "@patternfly/react-tokens";
 import { EmptyState, Breadcrumb } from "ui";
 import { IComponentWithJobs, IEmbedJob } from "types";
 import { useParams, Link } from "react-router-dom";
@@ -35,6 +29,7 @@ import { humanizeDuration } from "services/date";
 import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
 import { convertLinksToHtml } from "jobs/jobSummary/jobSummaryUtils";
+import JobStatusLabel from "jobs/JobStatusLabel";
 
 const Padding = styled.div`
   padding: 1em;
@@ -73,24 +68,6 @@ function Line({ field, help, value }: LineProps) {
   );
 }
 
-function getStatusColor(status: string) {
-  switch (status) {
-    case "success":
-      return global_success_color_100.value;
-    case "failure":
-    case "error":
-      return global_danger_color_100.value;
-    case "killed":
-      return global_warning_color_100.value;
-    default:
-      return global_active_color_100.value;
-  }
-}
-
-const StatusColor = styled.div`
-  color: ${(props: { status: string }) => getStatusColor(props.status)};
-`;
-
 interface IEmbedJobProps {
   job: IEmbedJob;
 }
@@ -103,7 +80,7 @@ function EmbedJob({ job }: IEmbedJobProps) {
           <Link to={`/jobs/${job.id}/jobStates`}>{job.id}</Link>
         </GridItem>
         <GridItem span={3}>
-          <StatusColor status={job.status}>{job.status}</StatusColor>
+          <JobStatusLabel status={job.status} />
         </GridItem>
         <GridItem span={3}>
           <span title={`Duration in seconds ${job.duration}`}>

@@ -1,5 +1,5 @@
 import { sortByOldestFirst } from "services/sort";
-import { IComponentMatrixESData, IJobStateStatus } from "types";
+import { IComponentMatrixESData, IJobStatus } from "types";
 
 export interface IComponentMatrix {
   id: string;
@@ -7,7 +7,7 @@ export interface IComponentMatrix {
   nbOfSuccessfulJobs: number;
   nbOfJobs: number;
   topic_id: string;
-  jobs: { id: string; created_at: string; status: IJobStateStatus }[];
+  jobs: { id: string; created_at: string; status: IJobStatus }[];
 }
 
 interface ComponentsMatrix {

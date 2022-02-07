@@ -6,12 +6,12 @@ import {
   StopCircleIcon,
   InProgressIcon,
 } from "@patternfly/react-icons";
-import { IJobStateStatus } from "types";
+import { IJobStatus } from "types";
 
 export default function JobStatusLabel({
   status,
 }: {
-  status: IJobStateStatus;
+  status: IJobStatus;
 }) {
   switch (status) {
     case "success":

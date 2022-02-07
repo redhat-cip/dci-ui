@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { IJobStateStatus, JobStatus } from "types";
+import { IJobStatus, JobStatus } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
 type StatusFilterProps = {
   status: string | null;
-  onSelect: (status: IJobStateStatus) => void;
+  onSelect: (status: IJobStatus) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
 };
@@ -27,7 +27,7 @@ export default function StatusFilter({
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
-          onSelect(selection as IJobStateStatus);
+          onSelect(selection as IJobStatus);
         }}
         onClear={onClear}
         selections={status || ""}

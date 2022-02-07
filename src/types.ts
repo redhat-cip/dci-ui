@@ -217,7 +217,7 @@ export const JobStatus = [
   "post-run",
 ] as const;
 
-export type IJobStateStatus = typeof JobStatus[number];
+export type IJobStatus = typeof JobStatus[number];
 
 export interface IPaginationFilters {
   page: number;
@@ -231,7 +231,7 @@ export interface IJobFilters extends IPaginationFilters {
   remoteci_id: string | null;
   configuration: string | null;
   tags: string[];
-  status: IJobStateStatus | null;
+  status: IJobStatus | null;
   name: string | null;
 }
 
@@ -246,7 +246,7 @@ export type PatternflyFilters = {
   topics: string[];
   remotecis: string[];
   tags: string[];
-  status: IJobStateStatus[];
+  status: IJobStatus[];
   page: number;
   perPage: number;
 };
@@ -372,7 +372,7 @@ export type IFileStatus =
   | "success";
 export interface IJobState {
   id: string;
-  status: IJobStateStatus;
+  status: IJobStatus;
   pipelineStatus?: IPipelineStatus;
   files: IFile[];
   comment: string;
@@ -469,7 +469,7 @@ export interface IEmbedJob {
   product_id: string;
   remoteci_id: string;
   state: string;
-  status: string;
+  status: IJobStatus;
   tags: string[] | null;
   team_id: string;
   topic_id: string;
@@ -520,7 +520,7 @@ export interface IDataFromES {
     _source: {
       job_id: string;
       job_name: string;
-      job_status: IJobStateStatus;
+      job_status: IJobStatus;
       created_at: string;
       topic_id: string;
       remoteci_id: string;

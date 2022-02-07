@@ -1,7 +1,7 @@
 import queryString from "query-string";
 import { isEmpty, sortedUniq } from "lodash";
 import {
-  IJobStateStatus,
+  IJobStatus,
   IJobFilters,
   DCIListParams,
   IUserFilters,
@@ -44,7 +44,7 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
           break;
         case "status":
           if (value) {
-            acc.status = value as IJobStateStatus;
+            acc.status = value as IJobStatus;
           }
           break;
         default:

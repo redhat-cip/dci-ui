@@ -3,7 +3,7 @@ import {
   getParamsFromFilters,
   createSearchFromFilters,
 } from "./filters";
-import { IJobStateStatus } from "types";
+import { IJobStatus } from "types";
 
 describe("parse filters", () => {
   it("from search", () => {
@@ -86,7 +86,7 @@ test("get params from complex filters", () => {
     team_id: "t1",
     remoteci_id: "r1",
     topic_id: "to1",
-    status: "success" as IJobStateStatus,
+    status: "success" as IJobStatus,
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
@@ -109,7 +109,7 @@ test("create search from filters", () => {
     team_id: "t1",
     remoteci_id: "r1",
     topic_id: "to1",
-    status: "success" as IJobStateStatus,
+    status: "success" as IJobStatus,
     tags: ["tag_1", "tag_2"],
     page: 2,
     perPage: 40,
@@ -127,7 +127,7 @@ test("create search from filters remove duplicate tags", () => {
     team_id: "t1",
     remoteci_id: "r1",
     topic_id: "to1",
-    status: "success" as IJobStateStatus,
+    status: "success" as IJobStatus,
     tags: ["tag_1", "tag_2", "tag_2"],
     page: 2,
     perPage: 40,
