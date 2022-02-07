@@ -418,7 +418,7 @@ export interface IJob extends Resource {
   remoteci_id: string;
   results: IResult[];
   state: string;
-  status: string;
+  status: IJobStatus;
   status_reason: string | null;
   tags: string[];
   team: ITeam;
@@ -574,3 +574,18 @@ export interface IComponentMatrixESData {
     _type: string;
   }[];
 }
+
+const JobsTableListColumns = [
+  "name",
+  "status",
+  "config",
+  "team",
+  "remoteci",
+  "topic",
+  "component",
+  "components",
+  "tags",
+  "duration",
+  "last_run",
+] as const;
+export type JobsTableListColumn = typeof JobsTableListColumns[number];

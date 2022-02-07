@@ -2,60 +2,34 @@ import { useEffect, useState } from "react";
 
 export default function useLocalStorage<T>(
   key: string,
-  initialValue: T
-): [T, (value: T) => void, () => void] {
-  const readValue = () => {
-    if (typeof window === "undefined") {
-      return initialValue;
-    }
+  initialValue: T,
+  version: number = 1
+): [T, (value: T) => void] {
+  const [storedValue, setStoredValue] = useState<T>(readValue);
+  function readValue() {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item) {
+        const { value, version: localStorageVersion } = JSON.parse(item);
+        return localStorageVersion === version ? value : initialValue;
+      }
+      return initialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key “${key}”:`, error);
       return initialValue;
     }
-  };
-  const [storedValue, setStoredValue] = useState<T>(readValue);
-  const setValue = (value: T) => {
-    if (typeof window == "undefined") {
-      console.warn(
-        `Tried setting localStorage key “${key}” even though environment is not a client`
-      );
-    }
+  }
+  function setValue(value: T) {
     try {
-      const newValue = value instanceof Function ? value(storedValue) : value;
-      window.localStorage.setItem(key, JSON.stringify(newValue));
-      setStoredValue(newValue);
-      window.dispatchEvent(new Event("local-storage"));
+      window.localStorage.setItem(key, JSON.stringify({ version, value }));
+      setStoredValue(value);
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
     }
-  };
-  const clearValue = () => {
-    try {
-      window.localStorage.removeItem(key);
-      setStoredValue(initialValue);
-      window.dispatchEvent(new Event("local-storage"));
-    } catch (error) {
-      console.warn(`Error removeItem localStorage key “${key}”:`, error);
-    }
-  };
+  }
   useEffect(() => {
     setStoredValue(readValue());
     // eslint-disable-next-line
   }, []);
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setStoredValue(readValue());
-    };
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("local-storage", handleStorageChange);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("local-storage", handleStorageChange);
-    };
-    // eslint-disable-next-line
-  }, []);
-  return [storedValue, setValue, clearValue];
+  return [storedValue, setValue];
 }
