@@ -1,9 +1,9 @@
 import { createSelector } from "reselect";
-import { sortByName } from "services/sort";
 import { getProductsById } from "products/productsSelectors";
 import { fromNow } from "services/date";
 import { RootState } from "store";
-import { IEnhancedTopic, ITopicsById } from "types";
+import { ITopicsById } from "types";
+import { sortTopicWithSemver } from "./topicsActions";
 
 export const getTopicsById = (state: RootState): ITopicsById =>
   state.topics.byId;
@@ -32,8 +32,8 @@ export const getTopics = createSelector(
   getTopicsById,
   getTopicsAllIds,
   (products, topics, topicsAllIds) =>
-    sortByName<IEnhancedTopic>(
-      topicsAllIds.map((id) => {
+    topicsAllIds
+      .map((id) => {
         const topic = topics[id];
         return {
           ...topic,
@@ -41,7 +41,7 @@ export const getTopics = createSelector(
           from_now: fromNow(topic.created_at),
         };
       })
-    )
+      .sort(sortTopicWithSemver)
 );
 
 export const getActiveTopics = createSelector(getTopics, (topics) =>
