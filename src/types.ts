@@ -576,6 +576,7 @@ export interface IComponentMatrixESData {
 }
 
 const JobsTableListColumns = [
+  "id",
   "name",
   "status",
   "config",
@@ -585,6 +586,7 @@ const JobsTableListColumns = [
   "component",
   "components",
   "tags",
+  "created_at",
   "duration",
   "last_run",
 ] as const;

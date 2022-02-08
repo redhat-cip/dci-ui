@@ -10,12 +10,13 @@ import {
   ITopic,
   JobsTableListColumn,
 } from "types";
-import { fromNow, humanizeDuration } from "services/date";
+import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { getTopicIcon } from "ui/icons";
 import { getBackground } from "./jobSummary/jobSummaryUtils";
 import tableViewColumns from "./tableView/tableViewColumns";
 import JobStatusLabel from "./JobStatusLabel";
 import { sortByName } from "services/sort";
+import { CopyIconButton } from "ui";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
@@ -39,7 +40,6 @@ function JobTableSummary({
   columns,
 }: JobTableSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
-  const startedSince = fromNow(job.created_at);
   const TopicIcon = getTopicIcon(job.topic?.name);
   const principalComponent =
     job.components.find((component) => {
@@ -54,6 +54,16 @@ function JobTableSummary({
     }) || null;
   const config = job.configuration;
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
+    id: (
+      <span>
+        <CopyIconButton
+          text={job.id}
+          textOnSuccess="copied"
+          className="mr-xs pointer"
+        />
+        {job.id}
+      </span>
+    ),
     name: (
       <Link to={`/jobs/${job.id}/jobStates`}>
         <span>{job.name || job.topic?.name}</span>
@@ -152,13 +162,20 @@ function JobTableSummary({
           ))}
         </LabelGroup>
       ),
+    created_at: (
+      <span title={`Created at ${job.created_at}`}>
+        {formatDate(job.created_at)}
+      </span>
+    ),
     duration: (
       <span title={`Job duration in seconds ${job.duration}`}>
         {jobDuration}
       </span>
     ),
     last_run: (
-      <span title={`Created at ${job.created_at}`}>{startedSince}</span>
+      <span title={`Created at ${job.created_at}`}>
+        {fromNow(job.created_at)}
+      </span>
     ),
   };
 

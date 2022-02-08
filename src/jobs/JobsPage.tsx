@@ -39,16 +39,20 @@ export default function JobsPage() {
   );
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]
-  >("tableViewColumns", [
-    "name",
-    "status",
-    "team",
-    "remoteci",
-    "topic",
-    "component",
-    "duration",
-    "last_run",
-  ]);
+  >(
+    "tableViewColumns",
+    [
+      "name",
+      "status",
+      "team",
+      "remoteci",
+      "topic",
+      "component",
+      "duration",
+      "last_run",
+    ],
+    2
+  );
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/jobs${newSearch}`);
@@ -111,8 +115,7 @@ export default function JobsPage() {
         ) : (
           <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
         )}
-
-        {jobs.length >= 20 && (
+        {jobs.length >= 20 && !tableViewActive && (
           <JobsToolbar
             filters={filters}
             setFilters={setFilters}
