@@ -12,7 +12,7 @@ import {
   TextContent,
 } from "@patternfly/react-core";
 import JobDetailsSummary from "./JobDetailsSummary";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function JobPageWithMenu() {
   const { job } = useJob();
@@ -24,14 +24,12 @@ export default function JobPageWithMenu() {
     { title: "Files", value: "files" },
     { title: "Settings", value: "settings" },
   ];
-  const [activeTabKey, setActiveTabKey] = useState<number>(0);
-  useEffect(() => {
-    const endpointIndex = endpoints.findIndex((e) =>
-      location.pathname.endsWith(e.value)
-    );
-    setActiveTabKey(endpointIndex === -1 ? 0 : endpointIndex);
-  }, [location]);
-
+  const endpointIndex = endpoints.findIndex((e) =>
+    location.pathname.endsWith(e.value)
+  );
+  const [activeTabKey, setActiveTabKey] = useState<number>(
+    endpointIndex === -1 ? 0 : endpointIndex
+  );
   return (
     <MainPage
       title="Job Details"
