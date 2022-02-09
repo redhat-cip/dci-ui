@@ -4,5 +4,5 @@ import { useJob } from "../jobContext";
 export default function JobFilesPage() {
   const { job } = useJob();
 
-  return <FilesList files={job.files} />;
+  return <FilesList job={job} />;
 }

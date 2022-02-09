@@ -38,7 +38,7 @@ export default function File({ file }: FileProps) {
       </td>
       <td>{humanFileSize(file.size)}</td>
       <td>{file.mime}</td>
-      <td>
+      <td className="text-center">
         <Button
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
@@ -70,15 +70,18 @@ export default function File({ file }: FileProps) {
         >
           link
         </Button>
-        {isText ? (
-          <SeeFileContentModal file={file}>
-            {(show) => (
-              <Button variant="secondary" icon={<EyeIcon />} onClick={show}>
-                see
-              </Button>
-            )}
-          </SeeFileContentModal>
-        ) : null}
+        <SeeFileContentModal file={file}>
+          {(show) => (
+            <Button
+              variant="secondary"
+              icon={<EyeIcon />}
+              onClick={show}
+              isDisabled={!isText}
+            >
+              see
+            </Button>
+          )}
+        </SeeFileContentModal>
       </td>
     </tr>
   );
