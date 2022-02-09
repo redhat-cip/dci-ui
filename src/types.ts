@@ -545,7 +545,7 @@ export interface IRefArea {
   right: number | null;
 }
 
-export interface IComponentMatrixESData {
+export interface IComponentCoverageESData {
   total: {
     value: number;
     relation: string;

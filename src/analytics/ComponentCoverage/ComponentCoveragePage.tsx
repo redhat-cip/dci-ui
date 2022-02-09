@@ -24,8 +24,8 @@ import {
   global_palette_red_50,
 } from "@patternfly/react-tokens";
 import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
-import { IComponentMatrixESData, ITopic } from "types";
-import { buildComponentMatrix, IComponentMatrix } from "./componentMatrix";
+import { IComponentCoverageESData, ITopic } from "types";
+import { buildComponentCoverage, IComponentCoverage } from "./componentCoverage";
 import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
@@ -52,14 +52,14 @@ interface CumulatedDataPerWeek {
   };
 }
 
-export default function ComponentMatrixPage() {
+export default function ComponentCoveragePage() {
   const dispatch = useDispatch();
   const [topic, setTopic] = useState<ITopic | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [ESData, setESData] = useState<IComponentMatrixESData | null>(null);
-  const components = buildComponentMatrix(ESData);
+  const [ESData, setESData] = useState<IComponentCoverageESData | null>(null);
+  const components = buildComponentCoverage(ESData);
   const [componentDetails, setComponentDetails] =
-    useState<IComponentMatrix | null>(null);
+    useState<IComponentCoverage | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const drawerIsExpanded = componentDetails !== null;
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function ComponentMatrixPage() {
       http
         .get(`/api/v1/analytics/tasks_components_coverage?topic_id=${topic.id}`)
         .then((response) => {
-          setESData(response.data as IComponentMatrixESData);
+          setESData(response.data as IComponentCoverageESData);
         })
         .catch((error) => {
           dispatch(showAPIError(error));
@@ -80,14 +80,14 @@ export default function ComponentMatrixPage() {
 
   return (
     <MainPage
-      title="Component matrix"
+      title="Component coverage"
       description="See which components has been tested. Table of components and associated jobs."
       Breadcrumb={
         <Breadcrumb
           links={[
             { to: "/", title: "DCI" },
             { to: "/analytics", title: "Analytics" },
-            { title: "Component matrix" },
+            { title: "Component coverage" },
           ]}
         />
       }
@@ -120,7 +120,7 @@ export default function ComponentMatrixPage() {
           {topic === null ? (
             <EmptyState
               title="Choose a topic"
-              info="Select a topic in the topic list to display the components matrix"
+              info="Select a topic in the topic list to display the components coverage"
               icon={() => <InfoCircleIcon size="lg" />}
             />
           ) : isLoading ? (

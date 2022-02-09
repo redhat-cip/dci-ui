@@ -1,11 +1,11 @@
 import {
-  buildComponentMatrix,
-  getComponentMatrixDomain,
-} from "./componentMatrix";
+  buildComponentCoverage,
+  getComponentCoverageDomain,
+} from "./componentCoverage";
 
-test("buildComponentMatrix", () => {
+test("buildComponentCoverage", () => {
   expect(
-    buildComponentMatrix({
+    buildComponentCoverage({
       total: {
         value: 8,
         relation: "eq",
@@ -184,9 +184,9 @@ test("buildComponentMatrix", () => {
   });
 });
 
-test("getComponentMatrixDomain", () => {
+test("getComponentCoverageDomain", () => {
   expect(
-    getComponentMatrixDomain({
+    getComponentCoverageDomain({
       c1: {
         id: "c1",
         name: "c1",

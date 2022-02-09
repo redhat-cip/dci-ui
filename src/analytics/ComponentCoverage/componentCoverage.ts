@@ -1,7 +1,7 @@
 import { sortByOldestFirst } from "services/sort";
-import { IComponentMatrixESData, IJobStatus } from "types";
+import { IComponentCoverageESData, IJobStatus } from "types";
 
-export interface IComponentMatrix {
+export interface IComponentCoverage {
   id: string;
   name: string;
   nbOfSuccessfulJobs: number;
@@ -10,12 +10,12 @@ export interface IComponentMatrix {
   jobs: { id: string; created_at: string; status: IJobStatus }[];
 }
 
-interface ComponentsMatrix {
-  [componentId: string]: IComponentMatrix;
+interface ComponentsCoverage {
+  [componentId: string]: IComponentCoverage;
 }
 
-export function buildComponentMatrix(data: IComponentMatrixESData | null) {
-  if (data === null) return {} as ComponentsMatrix;
+export function buildComponentCoverage(data: IComponentCoverageESData | null) {
+  if (data === null) return {} as ComponentsCoverage;
   return data.hits.reduce((acc, d) => {
     const componentId = d._source.component_id;
     const componentStats = acc[componentId] || {
@@ -34,11 +34,11 @@ export function buildComponentMatrix(data: IComponentMatrixESData | null) {
       d._source.success_jobs.length + d._source.failed_jobs.length;
     acc[componentId] = componentStats;
     return acc;
-  }, {} as ComponentsMatrix);
+  }, {} as ComponentsCoverage);
 }
 
-export function getComponentMatrixDomain(matrix: ComponentsMatrix) {
-  return Object.values(matrix).reduce(
+export function getComponentCoverageDomain(coverage: ComponentsCoverage) {
+  return Object.values(coverage).reduce(
     (acc, component) => {
       if (component.nbOfJobs > acc.nbOfJobs.max) {
         acc.nbOfJobs.max = component.nbOfJobs;

@@ -11,7 +11,7 @@ import {
 import { Breadcrumb } from "ui";
 import { useNavigate } from "react-router-dom";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
-import ComponentMatrixImage from "./ComponentMatrix/component_matrix.png";
+import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";
 import LatestJobsStatusHeaderImage from "./LatestJobStatus/latest_jos_status.png";
 import { useAuth } from "auth/authContext";
 
@@ -34,19 +34,19 @@ export default function AnalyticsPage() {
           <GalleryItem>
             <Card
               className="pointer"
-              onClick={() => navigate("/analytics/component_matrix")}
+              onClick={() => navigate("/analytics/component_coverage")}
             >
               <CardHeader>
                 <CardHeaderMain>
                   <img
-                    src={ComponentMatrixImage}
-                    alt="Component matrix"
+                    src={ComponentCoverageImage}
+                    alt="Component coverage"
                     height={100}
                     width="auto"
                   />
                 </CardHeaderMain>
               </CardHeader>
-              <CardTitle>Component matrix</CardTitle>
+              <CardTitle>Component coverage</CardTitle>
               <CardBody>
                 See which components has been tested. Table of components and
                 associated jobs.

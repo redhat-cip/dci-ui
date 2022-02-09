@@ -34,7 +34,7 @@ import TasksDurationPerJobPage from "analytics/TasksDurationPerJob/TasksDuration
 import AnalyticsPage from "analytics/AnalyticsPage";
 import LatestJobStatusPage from "analytics/LatestJobStatus/LatestJobStatusPage";
 import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
-import ComponentMatrixPage from "analytics/ComponentMatrix/ComponentMatrixPage";
+import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
 import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
 import { BackgroundImage } from "ui";
 import Alerts from "alerts/Alerts";
@@ -57,8 +57,8 @@ export default function App() {
             <Route path="analytics">
               <Route index element={<AnalyticsPage />} />
               <Route
-                path="component_matrix"
-                element={<ComponentMatrixPage />}
+                path="component_coverage"
+                element={<ComponentCoveragePage />}
               />
               <Route
                 path="tasks_duration_per_job"
