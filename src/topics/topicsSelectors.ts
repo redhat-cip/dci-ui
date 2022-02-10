@@ -3,7 +3,7 @@ import { getProductsById } from "products/productsSelectors";
 import { fromNow } from "services/date";
 import { RootState } from "store";
 import { ITopicsById } from "types";
-import { sortTopicWithSemver } from "./topicsActions";
+import { sortTopicPerProduct, sortTopicWithSemver } from "./topicsActions";
 
 export const getTopicsById = (state: RootState): ITopicsById =>
   state.topics.byId;
@@ -42,6 +42,7 @@ export const getTopics = createSelector(
         };
       })
       .sort(sortTopicWithSemver)
+      .sort(sortTopicPerProduct)
 );
 
 export const getActiveTopics = createSelector(getTopics, (topics) =>

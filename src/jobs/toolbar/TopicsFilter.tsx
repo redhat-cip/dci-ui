@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTopics, getTopicById } from "topics/topicsSelectors";
+import { getActiveTopics, getTopicById } from "topics/topicsSelectors";
 import { ITopic } from "types";
 import topicsActions from "topics/topicsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
@@ -20,7 +20,7 @@ export default function TopicsFilter({
   onClear,
   showToolbarItem = true,
 }: TopicsFilterProps) {
-  const topics = useSelector(getTopics);
+  const topics = useSelector(getActiveTopics);
   const topic = useSelector(getTopicById(topic_id));
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {

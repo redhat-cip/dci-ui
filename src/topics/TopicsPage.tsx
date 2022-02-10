@@ -14,7 +14,7 @@ import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
 import styled from "styled-components";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { useNavigate } from "react-router-dom";
-import topicsActions, { orderTopicsByProduct } from "./topicsActions";
+import topicsActions, { groupTopicsPerProduct } from "./topicsActions";
 import { AppDispatch } from "store";
 import productsActions from "products/productsActions";
 import CreateTopicModal from "./CreateTopicModal";
@@ -54,7 +54,7 @@ export default function TopicsPage() {
 
   if (currentUser === null) return null;
 
-  const topicsPerProduct = orderTopicsByProduct(topics);
+  const topicsPerProduct = groupTopicsPerProduct(topics);
 
   return (
     <MainPage
