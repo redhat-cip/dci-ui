@@ -4,7 +4,7 @@ import { FormikProps, Formik, Form } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import * as Yup from "yup";
 import { IEnhancedUser, ITeam } from "types";
-import { SelectWithSearch } from "ui/formik";
+import { SelectWithTypeahead } from "ui/formik";
 import useModal from "hooks/useModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "store";
@@ -79,7 +79,7 @@ export default function AddUserToTeamModal({
           }}
         >
           <Form id="user_to_team_form" className="pf-c-form">
-            <SelectWithSearch
+            <SelectWithTypeahead
               id="user_to_team_form__user"
               label="Select a user"
               placeholder="contact@example.org"

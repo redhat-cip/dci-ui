@@ -12,7 +12,7 @@ type SelectOptionType = {
   value: string;
 };
 
-interface SelectWithSearchProps {
+interface SelectWithTypeaheadProps {
   id: string;
   label?: string;
   placeholder?: string;
@@ -22,7 +22,7 @@ interface SelectWithSearchProps {
   [x: string]: any;
 }
 
-export default function SelectWithSearch({
+export default function SelectWithTypeahead({
   id,
   label,
   placeholder,
@@ -30,7 +30,7 @@ export default function SelectWithSearch({
   options,
   isRequired = false,
   ...props
-}: SelectWithSearchProps) {
+}: SelectWithTypeaheadProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [field, meta, helpers] = useField(name);
   const { setValue } = helpers;

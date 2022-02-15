@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button } from "@patternfly/react-core";
-import { SelectWithSearch } from "ui";
+import {
+  Button,
+  Select,
+  SelectOption,
+  SelectVariant,
+} from "@patternfly/react-core";
 import { grantTeamProductPermission } from "./permissionsActions";
 import { Flex, FlexItem } from "@patternfly/react-core";
 import { ITeam, IProduct } from "types";
@@ -21,36 +25,57 @@ export default function AllowTeamToAccessProductForm({
 }: AllowTeamToAccessProductFormProps) {
   const [team, setTeam] = useState<ITeam | null>(null);
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [isTeamSelectOpen, setIsTeamSelectOpen] = useState(false);
+  const [isProductSelectOpen, setIsProductSelectOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-
   return (
     <div className="mt-xl">
       <Flex>
         <FlexItem>Allow</FlexItem>
         <FlexItem>
-          <SelectWithSearch
-            placeholder={team === null ? "..." : team.name}
-            option={team}
-            options={teams}
-            onClear={() => {
-              setTeam(null);
+          <Select
+            variant={SelectVariant.typeahead}
+            onToggle={setIsTeamSelectOpen}
+            onSelect={(event, selection) => {
+              setIsTeamSelectOpen(false);
+              setTeam(selection as ITeam);
             }}
-            onSelect={(team) => setTeam(team as ITeam)}
-          />
+            onClear={() => setTeam(null)}
+            selections={team === null ? "" : team.name}
+            isOpen={isTeamSelectOpen}
+            aria-labelledby="select"
+            placeholderText={team === null ? "..." : team.name}
+            maxHeight="220px"
+          >
+            {teams
+              .map((t) => ({ ...t, toString: () => t.name }))
+              .map((team) => (
+                <SelectOption key={team.id} value={team} />
+              ))}
+          </Select>
         </FlexItem>
         <FlexItem>to download every components from</FlexItem>
         <FlexItem>
-          <SelectWithSearch
-            placeholder={product === null ? "..." : product.name}
-            option={product}
-            options={products}
-            onClear={() => {
-              setProduct(null);
+          <Select
+            variant={SelectVariant.typeahead}
+            onToggle={setIsProductSelectOpen}
+            onSelect={(event, selection) => {
+              setIsProductSelectOpen(false);
+              setProduct(selection as IProduct);
             }}
-            onSelect={(resource) => {
-              setProduct(resource as IProduct);
-            }}
-          />
+            onClear={() => setProduct(null)}
+            selections={product === null ? "" : product.name}
+            isOpen={isProductSelectOpen}
+            aria-labelledby="select"
+            placeholderText={product === null ? "..." : product.name}
+            maxHeight="220px"
+          >
+            {products
+              .map((p) => ({ ...p, toString: () => p.name }))
+              .map((product) => (
+                <SelectOption key={product.id} value={product} />
+              ))}
+          </Select>
         </FlexItem>
         <FlexItem>product</FlexItem>
         <FlexItem>

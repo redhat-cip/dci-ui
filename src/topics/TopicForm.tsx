@@ -1,7 +1,13 @@
 import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
-import { Input, SelectWithSearch, Checkbox, Select, TextArea } from "ui/formik";
+import {
+  Input,
+  SelectWithTypeahead,
+  Checkbox,
+  Select,
+  TextArea,
+} from "ui/formik";
 import { INewTopic, ITopic, ITopicForm, IProduct, IEditTopic } from "types";
 
 function isValidJSON(value: string | null | undefined) {
@@ -92,7 +98,7 @@ const TopicForm = forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
           name="name"
           isRequired
         />
-        <SelectWithSearch
+        <SelectWithTypeahead
           id="topic_form__product_id"
           label="Select a product"
           placeholder="Select a product"

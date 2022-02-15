@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
-import { Input, SelectWithSearch } from "ui/formik";
+import { Input, SelectWithTypeahead } from "ui/formik";
 import { INewRemoteci, IRemoteci, ITeam, IEditRemoteci } from "types";
 
 const RemoteciSchema = Yup.object().shape({
@@ -37,7 +37,7 @@ const RemoteciForm = forwardRef<
         name="name"
         isRequired
       />
-      <SelectWithSearch
+      <SelectWithTypeahead
         id="remoteci_form__team_id"
         label="Team Owner"
         placeholder="Team Owner"

@@ -2,7 +2,7 @@ import { Button } from "@patternfly/react-core";
 import { Input } from "ui/formik";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { SelectWithSearch } from "ui/formik";
+import { SelectWithTypeahead } from "ui/formik";
 import { ITeam } from "types";
 
 interface INewFeeder {
@@ -41,7 +41,7 @@ export default function CreateFeederForm({
             name="name"
             isRequired
           />
-          <SelectWithSearch
+          <SelectWithTypeahead
             id="create_feeder_form__team_id"
             placeholder="Select a team"
             name="team_id"

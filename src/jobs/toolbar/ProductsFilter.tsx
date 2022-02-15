@@ -1,10 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts, getProductById } from "products/productsSelectors";
 import { IProduct } from "types";
 import productsActions from "products/productsActions";
-import { ToolbarFilter } from "@patternfly/react-core";
-import { SelectWithSearch } from "ui";
+import {
+  Select,
+  SelectOption,
+  SelectVariant,
+  ToolbarFilter,
+} from "@patternfly/react-core";
 import { AppDispatch } from "store";
 
 type ProductsFilterProps = {
@@ -22,6 +26,7 @@ export default function ProductsFilter({
 }: ProductsFilterProps) {
   const products = useSelector(getProducts);
   const product = useSelector(getProductById(product_id));
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(productsActions.all());
@@ -33,13 +38,28 @@ export default function ProductsFilter({
       categoryName="Product"
       showToolbarItem={showToolbarItem}
     >
-      <SelectWithSearch
-        placeholder="Filter by product"
+      <Select
+        variant={SelectVariant.typeahead}
+        typeAheadAriaLabel="Filter by product"
+        onToggle={setIsOpen}
+        onSelect={(event, selection) => {
+          setIsOpen(false);
+          const s = selection as IProduct;
+          onSelect(s);
+        }}
         onClear={onClear}
-        onSelect={(p) => onSelect(p as IProduct)}
-        option={product}
-        options={products}
-      />
+        selections={product === null ? "" : product.name}
+        isOpen={isOpen}
+        aria-labelledby="select"
+        placeholderText="Filter by product"
+        maxHeight="220px"
+      >
+        {products
+          .map((p) => ({ ...p, toString: () => p.name }))
+          .map((product) => (
+            <SelectOption key={product.id} value={product} />
+          ))}
+      </Select>
     </ToolbarFilter>
   );
 }

@@ -2,7 +2,7 @@ import { Button } from "@patternfly/react-core";
 import { Input } from "ui/formik";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { SelectWithSearch } from "ui/formik";
+import { SelectWithTypeahead } from "ui/formik";
 import { ITeam, IFeeder } from "types";
 
 const EditFeederSchema = Yup.object().shape({
@@ -38,7 +38,7 @@ export default function EditFeederForm({
             name="name"
             isRequired
           />
-          <SelectWithSearch
+          <SelectWithTypeahead
             id="edit_feeder_form__team_id"
             placeholder="Select a team"
             name="team_id"

@@ -1,7 +1,7 @@
 import { Button } from "@patternfly/react-core";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { SelectWithSearch } from "ui/formik";
+import { SelectWithTypeahead } from "ui/formik";
 import { IRemoteci } from "types";
 
 interface INewRemoteciSubscription {
@@ -29,7 +29,7 @@ export default function SubscribeForm({
     >
       {({ isValid, dirty }) => (
         <Form id="subscribe_form" className="pf-c-form">
-          <SelectWithSearch
+          <SelectWithTypeahead
             id="subscribe_form__remoteci_id"
             label="Available Remotecis"
             placeholder="Available Remotecis"

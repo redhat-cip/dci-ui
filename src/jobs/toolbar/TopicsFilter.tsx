@@ -1,10 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getActiveTopics, getTopicById } from "topics/topicsSelectors";
 import { ITopic } from "types";
 import topicsActions from "topics/topicsActions";
-import { ToolbarFilter } from "@patternfly/react-core";
-import { SelectWithSearch } from "ui";
+import {
+  Select,
+  SelectOption,
+  SelectVariant,
+  ToolbarFilter,
+} from "@patternfly/react-core";
 import { AppDispatch } from "store";
 
 type TopicsFilterProps = {
@@ -22,6 +26,7 @@ export default function TopicsFilter({
 }: TopicsFilterProps) {
   const topics = useSelector(getActiveTopics);
   const topic = useSelector(getTopicById(topic_id));
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(topicsActions.all());
@@ -33,13 +38,28 @@ export default function TopicsFilter({
       categoryName="Topic"
       showToolbarItem={showToolbarItem}
     >
-      <SelectWithSearch
-        placeholder="Filter by topic"
+      <Select
+        variant={SelectVariant.typeahead}
+        typeAheadAriaLabel="Filter by topic"
+        onToggle={setIsOpen}
+        onSelect={(event, selection) => {
+          setIsOpen(false);
+          const s = selection as ITopic;
+          onSelect(s);
+        }}
         onClear={onClear}
-        onSelect={(t) => onSelect(t as ITopic)}
-        option={topic}
-        options={topics}
-      />
+        selections={topic === null ? "" : topic.name}
+        isOpen={isOpen}
+        aria-labelledby="select"
+        placeholderText="Filter by topic"
+        maxHeight="220px"
+      >
+        {topics
+          .map((t) => ({ ...t, toString: () => t.name }))
+          .map((topic) => (
+            <SelectOption key={topic.id} value={topic} />
+          ))}
+      </Select>
     </ToolbarFilter>
   );
 }

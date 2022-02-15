@@ -25,7 +25,10 @@ import {
 } from "@patternfly/react-tokens";
 import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
 import { IComponentCoverageESData, ITopic } from "types";
-import { buildComponentCoverage, IComponentCoverage } from "./componentCoverage";
+import {
+  buildComponentCoverage,
+  IComponentCoverage,
+} from "./componentCoverage";
 import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";

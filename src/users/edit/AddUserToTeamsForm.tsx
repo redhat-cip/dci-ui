@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Flex, FlexItem } from "@patternfly/react-core";
-import { SelectWithSearch } from "ui/formik";
+import { SelectWithTypeahead } from "ui/formik";
 import * as Yup from "yup";
 import { ITeam } from "types";
 import { AppDispatch } from "store";
@@ -45,7 +45,7 @@ export default function AddUserToTeamForm({
             <Flex>
               <FlexItem>Add user in</FlexItem>
               <FlexItem>
-                <SelectWithSearch
+                <SelectWithTypeahead
                   id="add_user_to_team_formadd_user_to_team_form__team_id"
                   name="team_id"
                   option={""}
