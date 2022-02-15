@@ -137,14 +137,8 @@ export default function TeamPage() {
               <CardLine className="p-md" field="State" value={team.state} />
               <CardLine
                 className="p-md"
-                field="Parter"
-                value={
-                  team.external ? (
-                    <Label color="red">yes</Label>
-                  ) : (
-                    <Label color="green">no</Label>
-                  )
-                }
+                field="Partner"
+                value={team.external ? <Label color="blue">yes</Label> : null}
               />
             </CardBody>
           </Card>
