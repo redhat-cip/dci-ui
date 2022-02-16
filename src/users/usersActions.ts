@@ -26,3 +26,12 @@ export function deleteUserFromTeam(
 ): AxiosPromise<void> {
   return http.delete(`/api/v1/teams/${team.id}/users/${user.id}`);
 }
+
+export function searchUserBy(
+  key: "email" | "name",
+  value: string
+): AxiosPromise<{
+  users: IUser[];
+}> {
+  return http.get(`/api/v1/users/?where=${key}:${value}`);
+}

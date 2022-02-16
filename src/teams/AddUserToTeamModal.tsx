@@ -1,46 +1,37 @@
-import { useRef, useEffect } from "react";
-import * as React from "react";
-import { FormikProps, Formik, Form } from "formik";
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
-import * as Yup from "yup";
-import { IEnhancedUser, ITeam } from "types";
-import { SelectWithTypeahead } from "ui/formik";
+import { useState } from "react";
+import {
+  Button,
+  Modal,
+  ModalVariant,
+  SearchInput,
+} from "@patternfly/react-core";
+import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "store";
-import { getUsers, isFetchingUsers } from "users/usersSelectors";
-import usersActions from "users/usersActions";
-
-interface INewUserToTeam {
-  user_id: string;
-}
-
-const NewUserToTeamSchema = Yup.object().shape({
-  user_id: Yup.string().nullable().required("User is required"),
-});
+import { searchUserBy } from "users/usersActions";
+import { Link } from "react-router-dom";
 
 interface AddUserToTeamModalProps {
   team: ITeam;
-  onSubmit: (newUser: IEnhancedUser) => void;
-  children: (open: () => void, isLoading: boolean) => React.ReactNode;
+  onUserSelected: (user: IUser) => void;
+  children: (open: () => void) => React.ReactNode;
 }
 
 export default function AddUserToTeamModal({
   team,
-  onSubmit,
+  onUserSelected,
   children,
 }: AddUserToTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<INewUserToTeam>>(null);
+  const [searchEmail, setSearchEmail] = useState("");
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [touched, setTouched] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
-  const users = useSelector(getUsers);
-  const isFetching = useSelector(isFetchingUsers);
-
-  useEffect(() => {
-    dispatch(usersActions.all());
-  }, [dispatch]);
-
+  const onClear = () => {
+    setSearchEmail("");
+    setTouched(false);
+    setUsers([]);
+  };
   return (
     <>
       <Modal
@@ -48,48 +39,78 @@ export default function AddUserToTeamModal({
         variant={ModalVariant.medium}
         title={`Add a user to ${team.name} team`}
         isOpen={isOpen}
-        onClose={hide}
-        actions={[
-          <Button
-            key="add"
-            variant="primary"
-            onClick={() => {
-              if (formRef.current) {
-                hide();
-                formRef.current.handleSubmit();
-              }
-            }}
-          >
-            Add
-          </Button>,
-          <Button key="cancel" variant="link" onClick={hide}>
-            Cancel
-          </Button>,
-        ]}
+        onClose={() => {
+          onClear();
+          hide();
+        }}
       >
-        <Formik
-          innerRef={formRef}
-          initialValues={{ user_id: "" }}
-          validationSchema={NewUserToTeamSchema}
-          onSubmit={({ user_id }) => {
-            const user = users.find((u) => u.id === user_id);
-            if (user) {
-              onSubmit(user);
-            }
+        <SearchInput
+          placeholder="Find a user by email"
+          value={searchEmail}
+          onChange={setSearchEmail}
+          onSearch={(value) => {
+            setTouched(true);
+            setIsFetching(true);
+            setUsers([]);
+            searchUserBy("email", `${value}*`)
+              .then((response) => setUsers(response.data.users))
+              .finally(() => setIsFetching(false));
           }}
-        >
-          <Form id="user_to_team_form" className="pf-c-form">
-            <SelectWithTypeahead
-              id="user_to_team_form__user"
-              label="Select a user"
-              placeholder="contact@example.org"
-              name="user_id"
-              options={users.map((u) => ({ label: u.email, value: u.id }))}
-            />
-          </Form>
-        </Formik>
+          onClear={onClear}
+        />
+        {touched && (
+          <table className="pf-c-table pf-m-compact" style={{ border: "0" }}>
+            <thead>
+              <tr>
+                <th>Login</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>
+                    <Link to={`/users/${user.id}`} tabIndex={-1}>
+                      {user.name}
+                    </Link>
+                  </td>
+                  <td>{user.fullname}</td>
+                  <td>{user.email}</td>
+                  <td className="pf-c-table__action">
+                    <Button
+                      isSmall
+                      variant="primary"
+                      onClick={() => {
+                        onClear();
+                        hide();
+                        onUserSelected(user);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              {isFetching && users.length === 0 && (
+                <tr>
+                  <td colSpan={4}>...loading</td>
+                </tr>
+              )}
+              {!isFetching &&
+                users.length === 0 &&
+                searchEmail !== "" &&
+                touched && (
+                  <tr>
+                    <td colSpan={4}>No user matching your search</td>
+                  </tr>
+                )}
+            </tbody>
+          </table>
+        )}
       </Modal>
-      {children(show, isFetching)}
+      {children(show)}
     </>
   );
 }

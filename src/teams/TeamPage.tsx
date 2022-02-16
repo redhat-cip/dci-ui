@@ -193,7 +193,7 @@ export default function TeamPage() {
                 <div>
                   <AddUserToTeamModal
                     team={team}
-                    onSubmit={(user) => {
+                    onUserSelected={(user) => {
                       const fullname = user.fullname;
                       addUserToTeam(user.id, team)
                         .then((response) => {
@@ -215,12 +215,11 @@ export default function TeamPage() {
                         });
                     }}
                   >
-                    {(openModal, isLoading) => (
+                    {(openModal) => (
                       <Button
                         type="button"
                         variant="secondary"
                         onClick={openModal}
-                        isDisabled={isLoading}
                       >
                         <PlusCircleIcon className="mr-xs" />
                         Add a user
