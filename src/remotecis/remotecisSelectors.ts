@@ -3,7 +3,7 @@ import { sortByName } from "services/sort";
 import { getTeamsById } from "teams/teamsSelectors";
 import { fromNow } from "services/date";
 import { RootState } from "store";
-import { IEnhancedRemoteci, IRemotecisById } from "types";
+import { IEnhancedRemoteci, IRemotecisById, ITeam } from "types";
 
 export const getRemotecisById = (state: RootState): IRemotecisById =>
   state.remotecis.byId;
@@ -31,4 +31,8 @@ export const getRemoteciById = (id: string | null) =>
   createSelector(getRemotecisById, (remotecis) => {
     if (id && id in remotecis) return remotecis[id];
     return null;
+  });
+export const getRemotecisForTeam = (team: ITeam | null | undefined) =>
+  createSelector(getRemotecis, (remotecis) => {
+    return remotecis.filter((remoteci) => remoteci?.team?.id === team?.id);
   });

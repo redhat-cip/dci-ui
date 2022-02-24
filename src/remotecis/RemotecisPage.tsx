@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
 import remotecisActions from "./remotecisActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
-import { getRemotecis, isFetchingRemotecis } from "./remotecisSelectors";
+import { getRemotecisForTeam, isFetchingRemotecis } from "./remotecisSelectors";
 import SeeCredentialsModal from "ui/SeeCredentialsModal";
 import { Button, Label } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
@@ -14,14 +14,14 @@ import EditRemoteciModal from "./EditRemoteciModal";
 import { useAuth } from "auth/authContext";
 
 export default function RemotecisPage() {
-  const remotecis = useSelector(getRemotecis);
   const { identity } = useAuth();
+  const remotecis = useSelector(getRemotecisForTeam(identity?.team));
   const isFetching = useSelector(isFetchingRemotecis);
   const dispatch = useDispatch<AppDispatch>();
 
   const fetchRemoteciCallback = useCallback(() => {
-    dispatch(remotecisActions.all());
-  }, [dispatch]);
+    dispatch(remotecisActions.all({ where: `team_id:${identity?.team?.id}` }));
+  }, [dispatch, identity?.team]);
 
   useEffect(() => {
     fetchRemoteciCallback();
@@ -29,16 +29,12 @@ export default function RemotecisPage() {
 
   if (identity === null) return null;
 
-  const myRemotecis = remotecis.filter(
-    (remoteci) => remoteci?.team?.id === identity.team?.id
-  );
-
   return (
     <MainPage
       title="Remotecis"
       description="The remote ci will host the agent. It is recommended to create a remote ci per lab."
-      loading={isFetching && isEmpty(myRemotecis)}
-      empty={!isFetching && isEmpty(myRemotecis)}
+      loading={isFetching && isEmpty(remotecis)}
+      empty={!isFetching && isEmpty(remotecis)}
       HeaderButton={
         identity.team && (
           <CreateRemoteciModal
@@ -80,7 +76,7 @@ export default function RemotecisPage() {
           </tr>
         </thead>
         <tbody>
-          {myRemotecis.map((remoteci) => (
+          {remotecis.map((remoteci) => (
             <tr key={`${remoteci.id}.${remoteci.etag}`}>
               <td className="text-center">
                 <CopyButton text={remoteci.id} />

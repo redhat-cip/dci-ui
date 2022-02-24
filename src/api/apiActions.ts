@@ -11,7 +11,13 @@ export function createActions(resource: IResourceName) {
   const actionsTypes = createActionsTypes(resource);
 
   return {
-    all: (params = { limit: 100, offset: 0 }): AppThunk<AxiosPromise<any>> => {
+    all: (
+      params: {
+        limit?: number;
+        offset?: number;
+        where?: string;
+      } = { limit: 100, offset: 0 }
+    ): AppThunk<AxiosPromise<any>> => {
       let endpoint = `${resource}s` as IResourcesName;
       return (dispatch, getState) => {
         dispatch({
