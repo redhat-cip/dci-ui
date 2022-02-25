@@ -130,6 +130,7 @@ function JobTableSummary({
         <ul>
           {sortByName(job.components).map((component) => (
             <li
+              key={component.id}
               style={{
                 whiteSpace: "nowrap",
                 overflow: "hidden",

@@ -4,6 +4,8 @@ import { IComponentCoverageESData, IJobStatus } from "types";
 export interface IComponentCoverage {
   id: string;
   name: string;
+  canonical_project_name: string;
+  type: string;
   nbOfSuccessfulJobs: number;
   nbOfJobs: number;
   topic_id: string;
@@ -17,10 +19,12 @@ interface ComponentsCoverage {
 export function buildComponentCoverage(data: IComponentCoverageESData | null) {
   if (data === null) return {} as ComponentsCoverage;
   return data.hits.reduce((acc, d) => {
-    const componentId = d._source.component_id;
+    const componentId = d._source.id;
     const componentStats = acc[componentId] || {
       id: componentId,
-      name: d._source.component_name,
+      name: d._source.name,
+      canonical_project_name: d._source.canonical_project_name,
+      type: d._source.type,
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,
       topic_id: d._source.topic_id,

@@ -556,8 +556,9 @@ export interface IComponentCoverageESData {
     _index: string;
     _score: number;
     _source: {
-      component_id: string;
-      component_name: string;
+      id: string;
+      name: string;
+      canonical_project_name: string;
       failed_jobs: {
         created_at: string;
         id: string;
@@ -570,6 +571,7 @@ export interface IComponentCoverageESData {
       tags: string[];
       team_id: string | null;
       topic_id: string;
+      type: string
     };
     _type: string;
   }[];

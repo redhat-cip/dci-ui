@@ -45,6 +45,7 @@ import { DateTime } from "luxon";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
+import TypesFilter from "./TypesFilter";
 
 interface CumulatedDataPerWeek {
   [weekNumber: number]: {
@@ -58,6 +59,7 @@ interface CumulatedDataPerWeek {
 export default function ComponentCoveragePage() {
   const dispatch = useDispatch();
   const [topic, setTopic] = useState<ITopic | null>(null);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ESData, setESData] = useState<IComponentCoverageESData | null>(null);
   const components = buildComponentCoverage(ESData);
@@ -65,6 +67,12 @@ export default function ComponentCoveragePage() {
     useState<IComponentCoverage | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const drawerIsExpanded = componentDetails !== null;
+
+  const clearAllFilters = () => {
+    setTopic(null);
+    setSelectedTypes([]);
+  };
+
   useEffect(() => {
     setIsLoading(true);
     if (topic) {
@@ -99,9 +107,7 @@ export default function ComponentCoveragePage() {
         <CardBody>
           <Toolbar
             id="toolbar-select-jobs"
-            clearAllFilters={() => {
-              setTopic(null);
-            }}
+            clearAllFilters={clearAllFilters}
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
@@ -117,6 +123,42 @@ export default function ComponentCoveragePage() {
                   />
                 </ToolbarItem>
               </ToolbarGroup>
+              {topic && (
+                <>
+                  <ToolbarGroup>
+                    <ToolbarItem>Filter by types</ToolbarItem>
+                  </ToolbarGroup>
+                  <ToolbarGroup>
+                    <ToolbarItem>
+                      <TypesFilter
+                        types={[
+                          ...new Set(
+                            Object.values(components).map(
+                              (component) => component.type
+                            )
+                          ),
+                        ]}
+                        typesSelected={selectedTypes}
+                        onClear={() => setSelectedTypes([])}
+                        deleteChip={(type) => {
+                          setSelectedTypes(
+                            selectedTypes.filter((t) => t !== type)
+                          );
+                        }}
+                        onSelect={(type) => {
+                          if (selectedTypes.indexOf(type) === -1) {
+                            setSelectedTypes([...selectedTypes, type]);
+                          } else {
+                            setSelectedTypes(
+                              selectedTypes.filter((t) => t !== type)
+                            );
+                          }
+                        }}
+                      />
+                    </ToolbarItem>
+                  </ToolbarGroup>
+                </>
+              )}
             </ToolbarContent>
           </Toolbar>
 
@@ -165,7 +207,7 @@ export default function ComponentCoveragePage() {
                                 <Link
                                   to={`/topics/${componentDetails.topic_id}/components/${componentDetails.id}`}
                                 >
-                                  {componentDetails.name}
+                                  {componentDetails.canonical_project_name}
                                 </Link>
                               </span>
                             )}
@@ -244,194 +286,202 @@ export default function ComponentCoveragePage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.values(components).map((component, i) => {
-                        const percentageSuccess =
-                          component.nbOfJobs === 0
-                            ? 0
-                            : Math.round(
-                                (component.nbOfSuccessfulJobs * 100) /
-                                  component.nbOfJobs
-                              );
+                      {Object.values(components)
+                        .filter((component) => {
+                          if (selectedTypes.length === 0) return true;
+                          return selectedTypes.indexOf(component.type) !== -1;
+                        })
+                        .map((component, i) => {
+                          const percentageSuccess =
+                            component.nbOfJobs === 0
+                              ? 0
+                              : Math.round(
+                                  (component.nbOfSuccessfulJobs * 100) /
+                                    component.nbOfJobs
+                                );
 
-                        const now = DateTime.now();
-                        const nbWeeksInThePast = 5;
-                        const initialCumulatedData = [
-                          ...Array(nbWeeksInThePast).keys(),
-                        ].reduce((acc, weekInThePast) => {
-                          const weekNumber = now.minus({
-                            weeks: weekInThePast,
-                          }).weekNumber;
-                          acc[weekNumber] = {
-                            success: 0,
-                            failure: 0,
-                            name: `w${weekNumber}`,
-                            weekNumber,
-                          };
-                          return acc;
-                        }, {} as CumulatedDataPerWeek);
-                        const cumulatedPerWeek = component.jobs.reduce(
-                          (acc, job) => {
-                            const jobDate = DateTime.fromISO(job.created_at);
-                            const weekNumber = jobDate.weekNumber;
-                            if (!(weekNumber in initialCumulatedData)) {
-                              return acc;
-                            }
-                            if (job.status === "success") {
-                              acc[weekNumber].success += 1;
-                            } else {
-                              acc[weekNumber].failure += 1;
-                            }
+                          const now = DateTime.now();
+                          const nbWeeksInThePast = 5;
+                          const initialCumulatedData = [
+                            ...Array(nbWeeksInThePast).keys(),
+                          ].reduce((acc, weekInThePast) => {
+                            const weekNumber = now.minus({
+                              weeks: weekInThePast,
+                            }).weekNumber;
+                            acc[weekNumber] = {
+                              success: 0,
+                              failure: 0,
+                              name: `w${weekNumber}`,
+                              weekNumber,
+                            };
                             return acc;
-                          },
-                          { ...initialCumulatedData } as CumulatedDataPerWeek
-                        );
-                        const data = Object.values(cumulatedPerWeek).sort(
-                          (stat1, stat2) => {
-                            if (stat1.weekNumber < stat2.weekNumber) {
-                              return -1;
+                          }, {} as CumulatedDataPerWeek);
+                          const cumulatedPerWeek = component.jobs.reduce(
+                            (acc, job) => {
+                              const jobDate = DateTime.fromISO(job.created_at);
+                              const weekNumber = jobDate.weekNumber;
+                              if (!(weekNumber in initialCumulatedData)) {
+                                return acc;
+                              }
+                              if (job.status === "success") {
+                                acc[weekNumber].success += 1;
+                              } else {
+                                acc[weekNumber].failure += 1;
+                              }
+                              return acc;
+                            },
+                            { ...initialCumulatedData } as CumulatedDataPerWeek
+                          );
+                          const data = Object.values(cumulatedPerWeek).sort(
+                            (stat1, stat2) => {
+                              if (stat1.weekNumber < stat2.weekNumber) {
+                                return -1;
+                              }
+                              if (stat1.weekNumber > stat2.weekNumber) {
+                                return 1;
+                              }
+                              return 0;
                             }
-                            if (stat1.weekNumber > stat2.weekNumber) {
-                              return 1;
-                            }
-                            return 0;
-                          }
-                        );
-                        return (
-                          <tr key={i} role="row">
-                            <td role="cell" data-label="Component name">
-                              <Link
-                                to={`/topics/${component.topic_id}/components/${component.id}`}
-                              >
-                                {component.name}
-                              </Link>
-                            </td>
-                            <td role="cell" data-label="Warning">
-                              {component.nbOfJobs === 0 && (
-                                <span
-                                  style={{
-                                    color: global_palette_red_100.value,
-                                  }}
+                          );
+                          return (
+                            <tr key={i} role="row">
+                              <td role="cell" data-label="Component name">
+                                <Link
+                                  to={`/topics/${component.topic_id}/components/${component.id}`}
                                 >
-                                  <WarningTriangleIcon className="mr-xs" />
-                                  component not tested
-                                </span>
-                              )}
-                            </td>
-                            <td
-                              role="cell"
-                              data-label="% success failures jobs"
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
+                                  {component.canonical_project_name}
+                                </Link>
+                              </td>
+                              <td role="cell" data-label="Warning">
+                                {component.nbOfJobs === 0 && (
+                                  <span
+                                    style={{
+                                      color: global_palette_red_100.value,
+                                    }}
+                                  >
+                                    <WarningTriangleIcon className="mr-xs" />
+                                    component not tested
+                                  </span>
+                                )}
+                              </td>
+                              <td
+                                role="cell"
+                                data-label="% success failures jobs"
                               >
                                 <div
                                   style={{
-                                    backgroundColor:
-                                      percentageSuccess === 0
-                                        ? global_palette_red_50.value
-                                        : global_palette_green_100.value,
-                                    width: "200px",
-                                    display: "block",
+                                    display: "flex",
+                                    alignItems: "center",
                                   }}
-                                  className="mr-md"
                                 >
                                   <div
                                     style={{
-                                      height: "16px",
-                                      width: `${percentageSuccess}%`,
                                       backgroundColor:
-                                        global_palette_green_500.value,
+                                        percentageSuccess === 0
+                                          ? global_palette_red_50.value
+                                          : global_palette_green_100.value,
+                                      width: "200px",
+                                      display: "block",
                                     }}
-                                  ></div>
+                                    className="mr-md"
+                                  >
+                                    <div
+                                      style={{
+                                        height: "16px",
+                                        width: `${percentageSuccess}%`,
+                                        backgroundColor:
+                                          global_palette_green_500.value,
+                                      }}
+                                    ></div>
+                                  </div>
+                                  <span
+                                    style={{
+                                      color:
+                                        percentageSuccess === 0
+                                          ? global_danger_color_100.value
+                                          : global_palette_green_500.value,
+                                      width: "35px",
+                                      textAlign: "right",
+                                    }}
+                                    className="mr-md"
+                                  >
+                                    {percentageSuccess}%
+                                  </span>
+                                  <span
+                                    style={{
+                                      color:
+                                        percentageSuccess === 0
+                                          ? global_danger_color_100.value
+                                          : global_palette_green_500.value,
+                                      fontWeight: "bold",
+                                      minWidth: "42px",
+                                      textAlign: "right",
+                                    }}
+                                  >
+                                    {component.nbOfJobs}{" "}
+                                    {component.nbOfJobs > 1 ? "jobs" : "job"}
+                                  </span>
                                 </div>
-                                <span
-                                  style={{
-                                    color:
-                                      percentageSuccess === 0
-                                        ? global_danger_color_100.value
-                                        : global_palette_green_500.value,
-                                    width: "35px",
-                                    textAlign: "right",
-                                  }}
-                                  className="mr-md"
-                                >
-                                  {percentageSuccess}%
-                                </span>
-                                <span
-                                  style={{
-                                    color:
-                                      percentageSuccess === 0
-                                        ? global_danger_color_100.value
-                                        : global_palette_green_500.value,
-                                    fontWeight: "bold",
-                                    minWidth: "42px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  {component.nbOfJobs}{" "}
-                                  {component.nbOfJobs > 1 ? "jobs" : "job"}
-                                </span>
-                              </div>
-                            </td>
-                            <td
-                              role="cell"
-                              data-label="number of successful/failed jobs over the last 5 weeks."
-                              style={{
-                                padding: 0,
-                                verticalAlign: "inherit",
-                              }}
-                            >
-                              <BarChart
-                                data={data}
-                                width={150}
-                                height={52}
-                                margin={{
-                                  top: 5,
-                                  right: 5,
-                                  bottom: 0,
-                                  left: 5,
+                              </td>
+                              <td
+                                role="cell"
+                                data-label="number of successful/failed jobs over the last 5 weeks."
+                                style={{
+                                  padding: 0,
+                                  verticalAlign: "inherit",
                                 }}
                               >
-                                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                                <Tooltip
-                                  wrapperStyle={{ zIndex: 1000 }}
-                                  allowEscapeViewBox={{ x: true }}
-                                  labelFormatter={(label, payloads) => {
-                                    if (payloads && payloads.length > 1) {
-                                      return `Week ${payloads[0].payload.weekNumber}`;
-                                    }
+                                <BarChart
+                                  data={data}
+                                  width={150}
+                                  height={52}
+                                  margin={{
+                                    top: 5,
+                                    right: 5,
+                                    bottom: 0,
+                                    left: 5,
                                   }}
-                                />
-                                <Bar
-                                  dataKey="success"
-                                  fill={global_palette_green_500.value}
-                                />
-                                <Bar
-                                  dataKey="failure"
-                                  fill={global_danger_color_100.value}
-                                />
-                              </BarChart>
-                            </td>
-                            <td
-                              role="cell"
-                              data-label="actions"
-                              className="text-center"
-                            >
-                              <Button
-                                variant="link"
-                                onClick={() => {
-                                  setComponentDetails(component);
-                                }}
+                                >
+                                  <XAxis
+                                    dataKey="name"
+                                    tick={{ fontSize: 12 }}
+                                  />
+                                  <Tooltip
+                                    wrapperStyle={{ zIndex: 1000 }}
+                                    allowEscapeViewBox={{ x: true }}
+                                    labelFormatter={(label, payloads) => {
+                                      if (payloads && payloads.length > 1) {
+                                        return `Week ${payloads[0].payload.weekNumber}`;
+                                      }
+                                    }}
+                                  />
+                                  <Bar
+                                    dataKey="success"
+                                    fill={global_palette_green_500.value}
+                                  />
+                                  <Bar
+                                    dataKey="failure"
+                                    fill={global_danger_color_100.value}
+                                  />
+                                </BarChart>
+                              </td>
+                              <td
+                                role="cell"
+                                data-label="actions"
+                                className="text-center"
                               >
-                                see jobs
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                                <Button
+                                  variant="link"
+                                  onClick={() => {
+                                    setComponentDetails(component);
+                                  }}
+                                >
+                                  see jobs
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </DrawerContentBody>

@@ -17,8 +17,10 @@ test("buildComponentCoverage", () => {
           _index: "tasks_components_coverage",
           _score: 1.0,
           _source: {
-            component_id: "c1",
-            component_name: "c1",
+            id: "c1",
+            name: "c1",
+            canonical_project_name: "c1",
+            type: "ocp",
             failed_jobs: [
               {
                 created_at: "2022-01-14T01:19:28.198117",
@@ -55,8 +57,10 @@ test("buildComponentCoverage", () => {
           _index: "tasks_components_coverage",
           _score: 1.0,
           _source: {
-            component_id: "c2",
-            component_name: "c2",
+            id: "c2",
+            name: "c2",
+            canonical_project_name: "c2",
+            type: "ocp",
             failed_jobs: [],
             product_id: "p1",
             success_jobs: [
@@ -76,8 +80,10 @@ test("buildComponentCoverage", () => {
           _index: "tasks_components_coverage",
           _score: 1.0,
           _source: {
-            component_id: "c3",
-            component_name: "c3",
+            id: "c3",
+            name: "c3",
+            canonical_project_name: "c3",
+            type: "ocp",
             failed_jobs: [],
             product_id: "p1",
             success_jobs: [
@@ -97,8 +103,10 @@ test("buildComponentCoverage", () => {
           _index: "tasks_components_coverage",
           _score: 1.0,
           _source: {
-            component_id: "c4",
-            component_name: "c4",
+            id: "c4",
+            name: "c4",
+            canonical_project_name: "c4",
+            type: "ocp",
             failed_jobs: [],
             product_id: "p1",
             success_jobs: [],
@@ -114,6 +122,8 @@ test("buildComponentCoverage", () => {
     c1: {
       id: "c1",
       name: "c1",
+      canonical_project_name: "c1",
+      type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 5,
       topic_id: "to1",
@@ -148,6 +158,8 @@ test("buildComponentCoverage", () => {
     c2: {
       id: "c2",
       name: "c2",
+      canonical_project_name: "c2",
+      type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
       topic_id: "to1",
@@ -162,6 +174,8 @@ test("buildComponentCoverage", () => {
     c3: {
       id: "c3",
       name: "c3",
+      canonical_project_name: "c3",
+      type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
       topic_id: "to1",
@@ -176,6 +190,8 @@ test("buildComponentCoverage", () => {
     c4: {
       id: "c4",
       name: "c4",
+      canonical_project_name: "c4",
+      type: "ocp",
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,
       topic_id: "to1",
@@ -190,6 +206,8 @@ test("getComponentCoverageDomain", () => {
       c1: {
         id: "c1",
         name: "c1",
+        canonical_project_name: "c1",
+        type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 5,
         topic_id: "to1",
@@ -224,6 +242,8 @@ test("getComponentCoverageDomain", () => {
       c2: {
         id: "c2",
         name: "c2",
+        canonical_project_name: "c2",
+        type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
         topic_id: "to1",
@@ -238,6 +258,8 @@ test("getComponentCoverageDomain", () => {
       c3: {
         id: "c3",
         name: "c3",
+        canonical_project_name: "c3",
+        type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
         topic_id: "to1",
@@ -252,6 +274,8 @@ test("getComponentCoverageDomain", () => {
       c4: {
         id: "c4",
         name: "c4",
+        canonical_project_name: "c4",
+        type: "ocp",
         nbOfSuccessfulJobs: 0,
         nbOfJobs: 0,
         topic_id: "to1",
