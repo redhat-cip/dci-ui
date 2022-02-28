@@ -8,6 +8,7 @@ import {
   IGetJobStates,
   IJobStatus,
   IPipelineStatus,
+  FinalJobStatuses,
 } from "types";
 import { AxiosPromise } from "axios";
 import { sortByOldestFirst } from "services/sort";
@@ -57,15 +58,15 @@ export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
   });
 }
 
-function getPipelineStatus(status: IJobStatus): IPipelineStatus {
+function getFinalPipelineStatus(status: IJobStatus): IPipelineStatus {
   switch (status) {
-    case "success":
-      return "success";
+    case "running":
+      return "info";
     case "failure":
     case "error":
-      return "failure";
+      return "danger";
     case "killed":
-      return "failure";
+      return "warning";
     default:
       return "success";
   }
@@ -74,11 +75,21 @@ function getPipelineStatus(status: IJobStatus): IPipelineStatus {
 export function addPipelineStatus(jobStates: IJobState[]) {
   return sortByOldestFirst(jobStates).map((jobState, i, arr) => {
     const isTheLastOne = arr.length - 1 === i;
+    const isThePenultimate = arr.length > 1 && arr.length - 2 === i;
+    let pipelineStatus: IPipelineStatus = "success";
+    if (isTheLastOne) {
+      pipelineStatus = getFinalPipelineStatus(jobState.status);
+    } else {
+      const nextStatus = arr[i + 1].status;
+      const nextStatusIsFinalJobStatus =
+        FinalJobStatuses.indexOf(nextStatus) !== -1;
+      if (isThePenultimate && nextStatusIsFinalJobStatus) {
+        pipelineStatus = getFinalPipelineStatus(nextStatus);
+      }
+    }
     return {
       ...jobState,
-      pipelineStatus: isTheLastOne
-        ? getPipelineStatus(jobState.status)
-        : getPipelineStatus(arr[i + 1].status),
+      pipelineStatus,
     };
   });
 }

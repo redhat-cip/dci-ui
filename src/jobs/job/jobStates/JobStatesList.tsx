@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
 import { addDuration, addPipelineStatus } from "./jobStatesActions";
+import { Link } from "react-router-dom";
 import JobStateFile from "./JobStateFile";
 import {
   JobStates,
@@ -13,14 +14,11 @@ import {
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
 import { getFileContent } from "jobs/job/files/filesActions";
-import { IEnhancedJob, IPipelineStatus } from "types";
-import { useLocation, Link } from "react-router-dom";
+import { IEnhancedJob } from "types";
+import { useLocation } from "react-router-dom";
 import { humanizeDuration } from "services/date";
-import {
-  global_success_color_100,
-  global_danger_color_100,
-} from "@patternfly/react-tokens";
 import styled from "styled-components";
+import { ProgressStepper, ProgressStep } from "@patternfly/react-core";
 
 export const Pipeline = styled.div`
   margin: 0.5rem 0;
@@ -28,15 +26,6 @@ export const Pipeline = styled.div`
   padding-top: 2rem;
   background-color: white;
 `;
-
-function getJobStateColor(status: IPipelineStatus | undefined) {
-  switch (status) {
-    case "success":
-      return global_success_color_100.value;
-    default:
-      return global_danger_color_100.value;
-  }
-}
 
 interface JobStatesListProps {
   job: IEnhancedJob;
@@ -76,59 +65,22 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           backgroundColor: "white",
         }}
       >
-        <ul
-          className="timeline"
-          style={{
-            listStyleType: "none",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {jobStates.map((jobState, i) => {
-            const jobStateColor = getJobStateColor(jobState.pipelineStatus);
-            return (
-              <li
-                key={i}
-                className="li complete"
-                style={{ position: "relative" }}
+        <ProgressStepper isCenterAligned>
+          {jobStates.map((jobState, i) => (
+            <ProgressStep
+              variant={jobState.pipelineStatus}
+              id={jobState.status}
+            >
+              <Link
+                to={`${location.pathname}#${jobState.id}:file${
+                  jobState.files.length - 1
+                }`}
               >
-                <div
-                  className="status"
-                  style={{
-                    padding: "0px 2rem",
-                    display: "flex",
-                    justifyContent: "center",
-                    borderTop: `2px solid ${jobStateColor}`,
-                    position: "relative",
-                  }}
-                >
-                  <Link
-                    to={`${location.pathname}#${jobState.id}:file${
-                      jobState.files.length - 1
-                    }`}
-                    style={{ paddingTop: "1rem", color: jobStateColor }}
-                  >
-                    {jobState.status}
-                  </Link>
-                </div>
-                <div
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    backgroundColor: jobStateColor,
-                    borderRadius: "20px",
-                    border: `1px solid ${jobStateColor}`,
-                    position: "absolute",
-                    top: "-10px",
-                    left: "calc(50% - 10px)",
-                    display: "block",
-                  }}
-                ></div>
-              </li>
-            );
-          })}
-        </ul>
+                {jobState.status}
+              </Link>
+            </ProgressStep>
+          ))}
+        </ProgressStepper>
       </div>
       <JobStates>
         {rawLogFile && (

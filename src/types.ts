@@ -206,7 +206,7 @@ export interface IEnhancedFeeder extends IFeeder {
   from_now: string | null;
 }
 
-export const JobStatus = [
+export const JobStatuses = [
   "success",
   "failure",
   "error",
@@ -217,7 +217,11 @@ export const JobStatus = [
   "post-run",
 ] as const;
 
-export type IJobStatus = typeof JobStatus[number];
+export type IJobStatus = typeof JobStatuses[number];
+
+export const FinalJobStatuses = ["success", "failure", "error", "killed"];
+
+export type IFinalJobStatuses = typeof FinalJobStatuses[number];
 
 export interface IPaginationFilters {
   page: number;
@@ -362,7 +366,12 @@ export interface IFileWithDuration extends IFile {
   duration: number;
 }
 
-export type IPipelineStatus = "success" | "failure";
+export type IPipelineStatus =
+  | "success"
+  | "info"
+  | "pending"
+  | "warning"
+  | "danger";
 
 export type IFileStatus =
   | "failed"
@@ -571,7 +580,7 @@ export interface IComponentCoverageESData {
       tags: string[];
       team_id: string | null;
       topic_id: string;
-      type: string
+      type: string;
     };
     _type: string;
   }[];

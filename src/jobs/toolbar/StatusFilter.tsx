@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IJobStatus, JobStatus } from "types";
+import { IJobStatus, JobStatuses } from "types";
 import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
 
 type StatusFilterProps = {
@@ -35,7 +35,7 @@ export default function StatusFilter({
         aria-labelledby="select"
         placeholderText="Filter by status"
       >
-        {JobStatus.map((s, index) => (
+        {JobStatuses.map((s, index) => (
           <SelectOption key={index} value={s} />
         ))}
       </Select>
