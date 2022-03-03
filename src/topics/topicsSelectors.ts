@@ -11,9 +11,9 @@ export const getTopicsById = (state: RootState): ITopicsById =>
 export const getTopicsAllIds = (state: RootState): string[] =>
   state.topics.allIds;
 
-export const getTopicById = (id: string | null) => {
+export const getTopicById = (id: string | null | undefined) => {
   return createSelector(getProductsById, getTopicsById, (products, topics) => {
-    if (id === null) return null;
+    if (id === null || id === undefined) return null;
     const topic = topics[id];
     if (!topic) return null;
     return {

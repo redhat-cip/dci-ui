@@ -6,7 +6,6 @@ import topicsActions, {
 } from "./topicsActions";
 import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
-import { Pre } from "jobs/job/jobStates/JobStateComponents";
 import {
   Card,
   CardBody,
@@ -14,12 +13,15 @@ import {
   Divider,
   Button,
   Label,
+  CodeBlock,
+  CodeBlockCode,
+  CodeBlockAction,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import styled from "styled-components";
 import Component from "./Component";
 import { AppDispatch } from "store";
-import { IComponent, ITopic, IEnhancedTopic } from "types";
+import { IComponent, ITopic } from "types";
 import { useParams } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
@@ -27,35 +29,7 @@ import { getProducts } from "products/productsSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import CardLine from "ui/CardLine";
 import { Link } from "react-router-dom";
-
-interface SeeContentProps {
-  content: string;
-}
-
-function SeeContent({ content }: SeeContentProps) {
-  const [seeContent, setSeeContent] = useState(false);
-  return seeContent ? (
-    <div>
-      <Button
-        onClick={() => setSeeContent(false)}
-        type="button"
-        variant="tertiary"
-        className="mb-md"
-      >
-        hide content
-      </Button>
-      <Pre>{content}</Pre>
-    </div>
-  ) : (
-    <Button
-      onClick={() => setSeeContent(true)}
-      type="button"
-      variant="tertiary"
-    >
-      see content
-    </Button>
-  );
-}
+import { getTopicById } from "./topicsSelectors";
 
 const ComponentsContainer = styled.div`
   padding-top: 1em;
@@ -172,15 +146,14 @@ export default function TopicPage() {
   const currentUser = useSelector(getCurrentUser);
   const dispatch = useDispatch<AppDispatch>();
   const { topic_id } = useParams();
+  const topic = useSelector(getTopicById(topic_id));
   const [isFetching, setIsFetching] = useState(true);
-  const [topic, setTopic] = useState<IEnhancedTopic | null>(null);
   const products = useSelector(getProducts);
+  const [seeData, setSeeData] = useState(false);
 
   const getTopicCallback = useCallback(() => {
     if (topic_id) {
-      dispatch(topicsActions.one(topic_id))
-        .then((response) => setTopic(response.data.topic))
-        .finally(() => setIsFetching(false));
+      dispatch(topicsActions.one(topic_id)).finally(() => setIsFetching(false));
     }
   }, [dispatch, topic_id, setIsFetching]);
 
@@ -190,6 +163,10 @@ export default function TopicPage() {
   }, [dispatch, getTopicCallback]);
 
   if (!topic_id) return null;
+
+  const topicData = isEmpty(topic?.data)
+    ? "{}"
+    : JSON.stringify(topic?.data, null, 2);
 
   return (
     <MainPage
@@ -233,7 +210,7 @@ export default function TopicPage() {
         <>
           <Card>
             <CardBody>
-              <Title headingLevel="h3" size="xl">
+              <Title headingLevel="h3" size="xl" className="p-md">
                 Topic information
               </Title>
               <Divider />
@@ -259,20 +236,49 @@ export default function TopicPage() {
               <CardLine
                 className="p-md"
                 field="Created"
-                value={topic.from_now}
+                value={
+                  <time dateTime={topic.created_at} title={topic.created_at}>
+                    {topic.from_now}
+                  </time>
+                }
               />
               <Divider />
               <CardLine
                 className="p-md"
                 field="Data"
                 value={
-                  isEmpty(topic.data) ? (
-                    "{}"
+                  seeData ? (
+                    <Button
+                      onClick={() => setSeeData(false)}
+                      type="button"
+                      variant="tertiary"
+                      isSmall
+                    >
+                      hide content
+                    </Button>
                   ) : (
-                    <SeeContent content={JSON.stringify(topic.data, null, 2)} />
+                    <Button
+                      onClick={() => setSeeData(true)}
+                      type="button"
+                      variant="tertiary"
+                      isSmall
+                    >
+                      see content
+                    </Button>
                   )
                 }
               />
+              {seeData && (
+                <CodeBlock
+                  actions={[
+                    <CodeBlockAction>
+                      <CopyButton text={topicData} variant="plain" />
+                    </CodeBlockAction>,
+                  ]}
+                >
+                  <CodeBlockCode id="topic.data">{topicData}</CodeBlockCode>
+                </CodeBlock>
+              )}
               <Divider />
               {topic.product && (
                 <CardLine
@@ -297,11 +303,11 @@ export default function TopicPage() {
           </Card>
           <Card className="mb-md">
             <CardBody>
-              <Title headingLevel="h3" size="xl">
+              <Title headingLevel="h3" size="xl" className="p-md">
                 Components
               </Title>
+              <ComponentsTable topic={topic} />
             </CardBody>
-            <ComponentsTable topic={topic} />
           </Card>
         </>
       )}

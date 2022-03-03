@@ -17,23 +17,21 @@ export default function CardLine({
 }: CardLineProps) {
   return (
     <Grid hasGutter {...props}>
-      <GridItem span={4}>
-        <div>
-          <div
-            style={{
-              color: "#72767b",
-              fontWeight: "bold",
-            }}
-          >
-            {field}
-            {help && (
-              <Tooltip position="right" content={<div>{help}</div>}>
-                <span className="ml-xs">
-                  <InfoCircleIcon />
-                </span>
-              </Tooltip>
-            )}
-          </div>
+      <GridItem span={4} style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            color: "#72767b",
+            fontWeight: "bold",
+          }}
+        >
+          {field}
+          {help && (
+            <Tooltip position="right" content={<div>{help}</div>}>
+              <span className="ml-xs">
+                <InfoCircleIcon />
+              </span>
+            </Tooltip>
+          )}
         </div>
       </GridItem>
       <GridItem span={8}>{value}</GridItem>

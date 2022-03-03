@@ -6,11 +6,13 @@ import copyToClipboard from "../services/copyToClipboard";
 interface CopyButtonProps {
   text: string;
   position?: TooltipPosition;
+  [k: string]: any;
 }
 
 export default function CopyButton({
   text,
   position = TooltipPosition.right,
+  ...props
 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function CopyButton({
         copyToClipboard(event, text);
         setCopied(true);
       }}
+      {...props}
     >
       {copied ? "Copied!" : "Copy to clipboard"}
     </ClipboardCopyButton>
