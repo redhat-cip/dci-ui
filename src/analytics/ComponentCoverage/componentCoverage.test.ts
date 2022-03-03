@@ -2,6 +2,10 @@ import {
   buildComponentCoverage,
   getComponentCoverageDomain,
 } from "./componentCoverage";
+import {
+  createCoverageSearchFromFilters,
+  parseCoverageFiltersFromSearch,
+} from "./ComponentCoveragePage";
 
 test("buildComponentCoverage", () => {
   expect(
@@ -286,4 +290,40 @@ test("getComponentCoverageDomain", () => {
     nbOfJobs: { min: 0, max: 5 },
     nbOfSuccessfulJobs: { min: 0, max: 1 },
   });
+});
+
+it("parse filters from search", () => {
+  const search = "?where=topic_id:to1,types:type_1,types:type_2";
+  const expectedFilters = {
+    topic_id: "to1",
+    types: ["type_1", "type_2"],
+  };
+  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
+});
+
+it("parse filters from empty search", () => {
+  const search = "";
+  const expectedFilters = {
+    topic_id: null,
+    types: [],
+  };
+  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
+});
+
+test("create search from filters", () => {
+  const filters = {
+    topic_id: "to1",
+    types: ["type_1", "type_2"],
+  };
+  const expectedSearch = "?where=topic_id:to1,types:type_1,types:type_2";
+  expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
+});
+
+test("create search from filters remove duplicate types", () => {
+  const filters = {
+    topic_id: "to1",
+    types: ["type_1", "type_2", "type_2"],
+  };
+  const expectedSearch = "?where=topic_id:to1,types:type_1,types:type_2";
+  expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
 });

@@ -298,7 +298,6 @@ test("addPipelineStatus with non final status", () => {
   expect(addPipelineStatus(jobStates)).toEqual(expectedJobStates);
 });
 
-
 test("addPipelineStatus with running state in the middle", () => {
   const jobStates = [
     { created_at: "2018-07-30T04:38:10.000000", status: "new" },

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import queryString from "query-string";
 import {
   Bullseye,
   Button,
@@ -24,7 +25,7 @@ import {
   global_palette_red_50,
 } from "@patternfly/react-tokens";
 import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
-import { IComponentCoverageESData, ITopic } from "types";
+import { IComponentCoverageESData } from "types";
 import {
   buildComponentCoverage,
   IComponentCoverage,
@@ -39,13 +40,14 @@ import {
   SearchIcon,
   WarningTriangleIcon,
 } from "@patternfly/react-icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bar, BarChart, XAxis, Tooltip } from "recharts";
 import { DateTime } from "luxon";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
 import TypesFilter from "./TypesFilter";
+import { sortedUniq } from "lodash";
 
 interface CumulatedDataPerWeek {
   [weekNumber: number]: {
@@ -56,10 +58,69 @@ interface CumulatedDataPerWeek {
   };
 }
 
+interface ICoverageFilters {
+  topic_id: string | null;
+  types: string[];
+}
+
+export function parseCoverageFiltersFromSearch(
+  search: string
+): ICoverageFilters {
+  const { where } = queryString.parse(search);
+  const copyDefaultFilters: ICoverageFilters = {
+    topic_id: null,
+    types: [],
+  };
+  if (typeof where !== "string" || where === "") return copyDefaultFilters;
+  return where.split(",").reduce(
+    (acc: ICoverageFilters, filter: string) => {
+      const [key, ...rest] = filter.split(":");
+      const value = rest.join(":");
+      switch (key) {
+        case "topic_id":
+          acc[key] = value;
+          break;
+        case "types":
+          acc.types?.push(value);
+          break;
+        default:
+        // pass
+      }
+      return acc;
+    },
+    {
+      ...copyDefaultFilters,
+    }
+  );
+}
+
+export function createCoverageSearchFromFilters(filters: ICoverageFilters) {
+  let keyValues: string[] = [];
+  Object.entries(filters).forEach(([key, value]) => {
+    if (key === "topic_id" && value) {
+      keyValues.push(`${key}:${value}`);
+    }
+    if (key === "types" && value.length > 0) {
+      const types = value as string[];
+      keyValues = keyValues.concat(
+        sortedUniq(types).map((t: string) => `types:${t}`)
+      );
+    }
+  });
+  const where = keyValues.join(",");
+  if (where) {
+    return `?where=${where}`;
+  }
+  return "";
+}
+
 export default function ComponentCoveragePage() {
   const dispatch = useDispatch();
-  const [topic, setTopic] = useState<ITopic | null>(null);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { topic_id, types } = parseCoverageFiltersFromSearch(location.search);
+  const [topicId, setTopicId] = useState<string | null>(topic_id);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(types);
   const [isLoading, setIsLoading] = useState(false);
   const [ESData, setESData] = useState<IComponentCoverageESData | null>(null);
   const components = buildComponentCoverage(ESData);
@@ -69,15 +130,23 @@ export default function ComponentCoveragePage() {
   const drawerIsExpanded = componentDetails !== null;
 
   const clearAllFilters = () => {
-    setTopic(null);
+    setTopicId(null);
     setSelectedTypes([]);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    if (topic) {
+    const newSearch = createCoverageSearchFromFilters({
+      topic_id: topicId,
+      types: selectedTypes,
+    });
+    navigate(`/analytics/component_coverage${newSearch}`);
+  }, [navigate, topicId, selectedTypes]);
+
+  const getESData = useCallback(() => {
+    if (topicId) {
+      setIsLoading(true);
       http
-        .get(`/api/v1/analytics/tasks_components_coverage?topic_id=${topic.id}`)
+        .get(`/api/v1/analytics/tasks_components_coverage?topic_id=${topicId}`)
         .then((response) => {
           setESData(response.data as IComponentCoverageESData);
         })
@@ -87,7 +156,11 @@ export default function ComponentCoveragePage() {
         })
         .then(() => setIsLoading(false));
     }
-  }, [topic, dispatch]);
+  }, [dispatch, topicId]);
+
+  useEffect(() => {
+    getESData();
+  }, [getESData]);
 
   return (
     <MainPage
@@ -117,13 +190,13 @@ export default function ComponentCoveragePage() {
               <ToolbarGroup>
                 <ToolbarItem>
                   <TopicsFilter
-                    topic_id={topic ? topic.id : null}
-                    onClear={() => setTopic(null)}
-                    onSelect={setTopic}
+                    topic_id={topic_id}
+                    onClear={() => setTopicId(null)}
+                    onSelect={(topic) => setTopicId(topic.id)}
                   />
                 </ToolbarItem>
               </ToolbarGroup>
-              {topic && (
+              {topic_id && (
                 <>
                   <ToolbarGroup>
                     <ToolbarItem>Filter by types</ToolbarItem>
@@ -140,11 +213,11 @@ export default function ComponentCoveragePage() {
                         ]}
                         typesSelected={selectedTypes}
                         onClear={() => setSelectedTypes([])}
-                        deleteChip={(type) => {
+                        deleteChip={(type) =>
                           setSelectedTypes(
                             selectedTypes.filter((t) => t !== type)
-                          );
-                        }}
+                          )
+                        }
                         onSelect={(type) => {
                           if (selectedTypes.indexOf(type) === -1) {
                             setSelectedTypes([...selectedTypes, type]);
@@ -162,7 +235,7 @@ export default function ComponentCoveragePage() {
             </ToolbarContent>
           </Toolbar>
 
-          {topic === null ? (
+          {topicId === null ? (
             <EmptyState
               title="Choose a topic"
               info="Select a topic in the topic list to display the components coverage"
@@ -177,7 +250,7 @@ export default function ComponentCoveragePage() {
               title="No results found"
               info="No results match the filter criteria. Clear all filters and try again."
               action={
-                <Button variant="link" onClick={() => setTopic(null)}>
+                <Button variant="link" onClick={clearAllFilters}>
                   Clear all filters
                 </Button>
               }
