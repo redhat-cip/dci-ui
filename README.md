@@ -14,8 +14,8 @@ To run the app in development mode follow those steps:
 
 If you want to test the SSO autentification :
 
-- ensure Keycloak is listening on localhost:8080. See `dci-dev-env`.
-- run the development server with SSO env variables : `REACT_APP_SSO_URL='http://localhost:8080' REACT_APP_SSO_REALM='dci-test' REACT_APP_SSO_CLIENT_ID='dci' REACT_APP_BACKEND_HOST='http://127.0.0.1:5000' npm start`
+- ensure Keycloak is listening on localhost:8180. See `dci-dev-env`.
+- run the development server with SSO env variables : `REACT_APP_SSO_URL='http://localhost:8180' REACT_APP_BACKEND_HOST='http://127.0.0.1:5000' npm start`
 
 ## Build tools
 

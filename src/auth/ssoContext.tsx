@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as React from "react";
-import { UserManager } from "oidc-client";
+import { UserManager } from "oidc-client-ts";
 import { setJWT } from "services/localStorage";
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 
@@ -23,7 +23,11 @@ function signinSilent(manager: UserManager) {
 }
 
 export function getSSOUserManager() {
-  const origin = window.location.origin;
+  const origin = window.location.href
+    .split("/")
+    .slice(0, -1)
+    .join("/")
+    .concat("/");
   const settings = {
     authority: `${SSOUrl}/auth/realms/${SSORealm}`,
     client_id: SSOClientId,

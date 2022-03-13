@@ -1,6 +1,7 @@
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { Location } from "history";
 import { setJWT } from "services/localStorage";
 import { useAuth } from "./authContext";
 import { useSSO } from "./ssoContext";
@@ -17,8 +18,9 @@ export default function LoginCallbackPage() {
         .signinRedirectCallback()
         .then((user) => {
           if (user) {
-            if (user.state) {
-              setLocation(user.state);
+            const state = user.state as Location["state"];
+            if (state) {
+              setLocation(state);
             }
             setJWT(user.access_token);
           }
