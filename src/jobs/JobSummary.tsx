@@ -155,6 +155,7 @@ const JobTests = styled.div`
   padding-bottom: 0;
   overflow: hidden;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   @media (min-width: 992px) {
     flex-direction: row;
@@ -419,13 +420,22 @@ export default function JobSummary({
               key={i}
               className="mr-xs"
             >
-              <Label color="green" title={`${result.success} tests in success`}>
+              <Label
+                isCompact
+                color="green"
+                title={`${result.success} tests in success`}
+              >
                 {result.success}
               </Label>
-              <Label color="orange" title={`${result.skips} skipped tests`}>
+              <Label
+                isCompact
+                color="orange"
+                title={`${result.skips} skipped tests`}
+              >
                 {result.skips}
               </Label>
               <Label
+                isCompact
                 color="red"
                 title={`${
                   result.errors + result.failures
@@ -433,8 +443,8 @@ export default function JobSummary({
               >
                 {result.errors + result.failures}
               </Label>
-              <Successfixes successfixes={result.successfixes} />
-              <Regressions regressions={result.regressions} />
+              <Successfixes successfixes={result.successfixes} isCompact />
+              <Regressions regressions={result.regressions} isCompact />
             </LabelGroup>
           ))}
         </JobTests>

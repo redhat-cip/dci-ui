@@ -120,6 +120,7 @@ const JobTags = styled.div`
   grid-area: tag;
   padding: 0.25em 1em;
   padding-bottom: 0;
+  margin-top: 1em;
 `;
 
 const JobTests = styled.div`
@@ -129,6 +130,8 @@ const JobTests = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  margin-top: 1em;
   @media (min-width: 992px) {
     flex-direction: row;
   }
@@ -268,7 +271,7 @@ export default function JobDetailsSummary({
       </JobTitle>
       {isEmpty(innerJob.tags) ? null : (
         <JobTags>
-          <LabelGroup categoryName="Tags" numLabels={8}>
+          <LabelGroup numLabels={8}>
             {innerJob.tags.map((tag, index) => (
               <Label
                 key={index}
@@ -365,13 +368,22 @@ export default function JobDetailsSummary({
               key={i}
               className="mr-xs"
             >
-              <Label color="green" title={`${result.success} tests in success`}>
+              <Label
+                isCompact
+                color="green"
+                title={`${result.success} tests in success`}
+              >
                 {result.success}
               </Label>
-              <Label color="orange" title={`${result.skips} skipped tests`}>
+              <Label
+                isCompact
+                color="orange"
+                title={`${result.skips} skipped tests`}
+              >
                 {result.skips}
               </Label>
               <Label
+                isCompact
                 color="red"
                 title={`${
                   result.errors + result.failures
@@ -379,8 +391,8 @@ export default function JobDetailsSummary({
               >
                 {result.errors + result.failures}
               </Label>
-              <Successfixes successfixes={result.successfixes} />
-              <Regressions regressions={result.regressions} />
+              <Successfixes successfixes={result.successfixes} isCompact />
+              <Regressions regressions={result.regressions} isCompact />
             </LabelGroup>
           ))}
         </JobTests>
