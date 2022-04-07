@@ -14,6 +14,7 @@ import {
   CalendarAltIcon,
   LinkIcon,
   InfoCircleIcon,
+  AngleDoubleLeftIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { IEnhancedJob, IComponent, IRemoteci, ITeam, ITopic } from "types";
@@ -312,6 +313,20 @@ export default function JobDetailsSummary({
           <div className="mt-xs">
             <LinkIcon className="mr-xs" />
             <a href={innerJob.url}>{innerJob.url}</a>
+          </div>
+        )}
+        {innerJob.previous_job_id === null ? null : (
+          <div
+            className="mt-xs"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <AngleDoubleLeftIcon className="mr-xs" />
+            <Link
+              tabIndex={-1}
+              to={`/jobs/${innerJob.previous_job_id}/jobStates`}
+            >
+              previous job
+            </Link>
           </div>
         )}
         <div className="mt-xs">
