@@ -73,6 +73,7 @@ export default function JobPageWithMenu() {
       }
     >
       <JobDetailsSummary
+        key={job.id}
         onTagClicked={(tag) => navigate(`/jobs?where=tags:${tag}`)}
         onRemoteciClicked={(remoteci) =>
           navigate(`/jobs?where=remoteci_id:${remoteci.id}`)

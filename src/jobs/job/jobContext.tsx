@@ -28,6 +28,7 @@ function JobProvider({ children }: JobProviderProps) {
 
   useEffect(() => {
     if (job_id) {
+      setIsLoading(true)
       dispatch(jobsActions.one(job_id))
         .then(async (response) => {
           const job = response.data.job;
@@ -41,8 +42,7 @@ function JobProvider({ children }: JobProviderProps) {
           setJob(enhancedJob);
           return response;
         })
-        .catch(console.error)
-        .then(() => setIsLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [job_id, dispatch]);
 

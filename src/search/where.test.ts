@@ -23,4 +23,7 @@ test("buildWhereFromSearch with different default key", () => {
   expect(buildWhereFromSearch("foo", "canonical_project_name")).toBe(
     "state:active,canonical_project_name:foo*"
   );
+  expect(buildWhereFromSearch("name:foo", "canonical_project_name")).toBe(
+    "state:active,name:foo"
+  );
 });
