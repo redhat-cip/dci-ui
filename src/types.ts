@@ -489,7 +489,7 @@ export interface IEmbedJob {
 }
 
 export interface IComponentWithJobs extends IComponent {
-  jobs: IEmbedJob[];
+  jobs: IJob[];
 }
 
 export interface IAlert {

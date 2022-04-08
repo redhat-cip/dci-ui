@@ -11,13 +11,11 @@ import {
   Tooltip,
   Label,
 } from "@patternfly/react-core";
-import { global_Color_400 } from "@patternfly/react-tokens";
 import { EmptyState, Breadcrumb } from "ui";
-import { IComponentWithJobs, IEmbedJob } from "types";
+import { IComponentWithJobs, IJob } from "types";
 import { useParams, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
 import styled from "styled-components";
-import { Markup } from "interweave";
 import {
   InfoCircleIcon,
   CalendarAltIcon,
@@ -28,7 +26,6 @@ import { sortByNewestFirst } from "services/sort";
 import { humanizeDuration } from "services/date";
 import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
-import { convertLinksToHtml } from "jobs/jobSummary/jobSummaryUtils";
 import JobStatusLabel from "jobs/JobStatusLabel";
 
 const Padding = styled.div`
@@ -69,7 +66,7 @@ function Line({ field, help, value }: LineProps) {
 }
 
 interface IEmbedJobProps {
-  job: IEmbedJob;
+  job: IJob;
 }
 
 function EmbedJob({ job }: IEmbedJobProps) {
@@ -77,45 +74,37 @@ function EmbedJob({ job }: IEmbedJobProps) {
     <div>
       <Grid hasGutter>
         <GridItem span={3}>
-          <Link to={`/jobs/${job.id}/jobStates`}>{job.id}</Link>
+          <Link to={`/jobs/${job.id}/jobStates`}>{job.name || job.id}</Link>
         </GridItem>
-        <GridItem span={3}>
+        <GridItem span={2}>
           <JobStatusLabel status={job.status} />
         </GridItem>
         <GridItem span={3}>
+          <div>
+            {job.tags &&
+              job.tags.map((tag, index) => (
+                <Label
+                  isCompact
+                  key={index}
+                  color="blue"
+                  className="mr-xs mt-xs"
+                >
+                  <small>{tag}</small>
+                </Label>
+              ))}
+          </div>
+        </GridItem>
+        <GridItem span={2}>
           <span title={`Duration in seconds ${job.duration}`}>
             <ClockIcon className="mr-xs" />
             {humanizeDuration(job.duration * 1000)}
           </span>
         </GridItem>
-        <GridItem span={3}>
+        <GridItem span={2}>
           <span title={`Created at ${job.created_at}`}>
             <CalendarAltIcon className="mr-xs" />
             {formatDate(job.created_at)}
           </span>
-        </GridItem>
-      </Grid>
-      {job.comment && (
-        <Grid hasGutter className="mt-sm">
-          <GridItem span={12}>
-            <div>
-              <span style={{ color: global_Color_400.value }}>
-                <Markup content={convertLinksToHtml(job.comment)} />
-              </span>
-            </div>
-          </GridItem>
-        </Grid>
-      )}
-      <Grid hasGutter className="mt-sm">
-        <GridItem span={12}>
-          <div>
-            {job.tags &&
-              job.tags.map((tag, index) => (
-                <Label key={index} color="blue" className="mr-xs mt-xs">
-                  <small>{tag}</small>
-                </Label>
-              ))}
-          </div>
         </GridItem>
       </Grid>
     </div>
@@ -272,18 +261,11 @@ export default function ComponentPage() {
                 <Divider />
                 <Padding>
                   <Grid hasGutter>
-                    <GridItem span={3}>
-                      <b>Job Id</b>
-                    </GridItem>
-                    <GridItem span={3}>
-                      <b>Status</b>
-                    </GridItem>
-                    <GridItem span={3}>
-                      <b>Duration</b>
-                    </GridItem>
-                    <GridItem span={3}>
-                      <b>Created At</b>
-                    </GridItem>
+                    <GridItem span={3}>Job name</GridItem>
+                    <GridItem span={2}>Status</GridItem>
+                    <GridItem span={3}>tags</GridItem>
+                    <GridItem span={2}>Duration</GridItem>
+                    <GridItem span={2}>Created At</GridItem>
                   </Grid>
                 </Padding>
               </div>
