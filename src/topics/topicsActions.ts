@@ -90,13 +90,16 @@ interface IFetchComponents {
   };
 }
 
-export function fetchComponents(topic: ITopic): Promise<IFetchComponents> {
+export function fetchComponents(
+  topic: ITopic,
+  where = "state:active"
+): Promise<IFetchComponents> {
   return http({
     method: "get",
     url: `/api/v1/topics/${topic.id}/components`,
     params: {
       sort: "-created_at",
-      where: `state:active`,
+      where,
     },
   });
 }

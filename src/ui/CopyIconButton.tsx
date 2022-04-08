@@ -34,7 +34,7 @@ export default function CopyIconButton({
         }}
       >
         <ClipboardCheckIcon />
-        {textOnSuccess && <span className="pl-xs">{textOnSuccess}</span>}
+        {textOnSuccess && <span>{textOnSuccess}</span>}
       </span>
     );
   }

@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { getProductsById } from "products/productsSelectors";
 import { fromNow } from "services/date";
 import { RootState } from "store";
-import { ITopicsById } from "types";
+import { ITopicsById, IEnhancedTopic } from "types";
 import { sortTopicPerProduct, sortTopicWithSemver } from "./topicsActions";
 
 export const getTopicsById = (state: RootState): ITopicsById =>
@@ -20,7 +20,7 @@ export const getTopicById = (id: string | null | undefined) => {
       ...topic,
       product: topic.product_id ? products[topic.product_id] : null,
       from_now: fromNow(topic.created_at),
-    };
+    } as IEnhancedTopic;
   });
 };
 

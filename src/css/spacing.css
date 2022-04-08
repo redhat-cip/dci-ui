@@ -78,6 +78,11 @@
   padding: 1rem;
 }
 
+.py-md {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .p-xl {
   padding: 2rem;
 }
