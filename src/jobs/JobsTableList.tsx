@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import { Label, LabelGroup } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
@@ -17,9 +16,15 @@ import tableViewColumns from "./tableView/tableViewColumns";
 import JobStatusLabel from "./JobStatusLabel";
 import { sortByName } from "services/sort";
 import { CopyIconButton } from "ui";
+import { groupJobsByPipeline } from "./jobsSelectors";
+import { getPrincipalComponent } from "component/componentSelector";
+import { Regressions, Successfixes } from "./jobSummary/components";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
+  isPipelineJob: boolean;
+  isTheLastPipelineJob: boolean;
+  isPipelineRoot: boolean;
   onTagClicked: (tag: string) => void;
   onRemoteciClicked: (remoteci: IRemoteci) => void;
   onTeamClicked: (team: ITeam) => void;
@@ -31,6 +36,9 @@ interface JobTableSummaryProps {
 
 function JobTableSummary({
   job,
+  isPipelineJob,
+  isTheLastPipelineJob,
+  isPipelineRoot,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
@@ -41,17 +49,7 @@ function JobTableSummary({
 }: JobTableSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
   const TopicIcon = getTopicIcon(job.topic?.name);
-  const principalComponent =
-    job.components.find((component) => {
-      const name = (
-        component.canonical_project_name || component.name
-      ).toLowerCase();
-      return (
-        name.indexOf("openshift ") !== -1 ||
-        name.indexOf("rhel-") !== -1 ||
-        name.indexOf("rhos-") !== -1
-      );
-    }) || null;
+  const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
@@ -68,13 +66,6 @@ function JobTableSummary({
       <Link to={`/jobs/${job.id}/jobStates`}>
         <span>{job.name || job.topic?.name}</span>
       </Link>
-    ),
-    status: (
-      <JobStatusLabel
-        status={job.status}
-        className="pointer"
-        onClick={() => onStatusClicked(job.status)}
-      />
     ),
     config: config ? (
       <Label
@@ -147,6 +138,40 @@ function JobTableSummary({
           ))}
         </ul>
       ),
+    tests:
+      job.results.length === 0 ? null : (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {sortByName(job.results).map((result, i) => (
+            <LabelGroup categoryName={result.name} numLabels={5} key={i}>
+              <Label
+                isCompact
+                color="green"
+                title={`${result.success} tests in success`}
+              >
+                {result.success}
+              </Label>
+              <Label
+                isCompact
+                color="orange"
+                title={`${result.skips} skipped tests`}
+              >
+                {result.skips}
+              </Label>
+              <Label
+                isCompact
+                color="red"
+                title={`${
+                  result.errors + result.failures
+                } errors and failures tests`}
+              >
+                {result.errors + result.failures}
+              </Label>
+              <Successfixes successfixes={result.successfixes} isCompact />
+              <Regressions regressions={result.regressions} isCompact />
+            </LabelGroup>
+          ))}
+        </div>
+      ),
     tags:
       job.tags.length === 0 ? null : (
         <LabelGroup numLabels={10} isCompact>
@@ -180,13 +205,88 @@ function JobTableSummary({
     ),
   };
 
+  const VerticalLineHalfSize = () => (
+    <div
+      style={{
+        position: "absolute",
+        left: "34px",
+        top: "50%",
+        right: "0",
+        bottom: "0",
+        borderLeft: "1px solid #6A6E73",
+      }}
+    ></div>
+  );
+
+  const BottomRightLine = () => (
+    <div
+      style={{
+        position: "absolute",
+        left: "34px",
+        top: "0",
+        right: "72px",
+        bottom: "50%",
+        borderLeft: "1px solid #6A6E73",
+        borderBottom: "1px solid #6A6E73",
+      }}
+    ></div>
+  );
+
   return (
     <tr
       key={`${job.id}.${job.etag}`}
-      style={{ background: getBackground(job.status) }}
+      style={{
+        background: getBackground(job.status),
+        borderBottom: isPipelineJob
+          ? isTheLastPipelineJob
+            ? "1px solid #d2d2d2"
+            : "0"
+          : "1px solid #d2d2d2",
+      }}
     >
+      <td
+        style={{
+          padding: 0,
+          width: "135px",
+          position: "relative",
+        }}
+      >
+        {isPipelineJob ? (
+          isPipelineRoot ? (
+            <VerticalLineHalfSize />
+          ) : isTheLastPipelineJob ? (
+            <BottomRightLine />
+          ) : (
+            <>
+              <VerticalLineHalfSize />
+              <BottomRightLine />
+            </>
+          )
+        ) : null}
+
+        <div
+          style={{
+            position: "absolute",
+            left: isPipelineRoot ? "21px" : "42px",
+            top: "calc(50% - 12px)",
+          }}
+        >
+          <JobStatusLabel
+            status={job.status}
+            className="pointer"
+            onClick={() => onStatusClicked(job.status)}
+          />
+        </div>
+      </td>
       {columns.map((column, i) => (
-        <td key={i}>{columnTds[column]}</td>
+        <td
+          key={i}
+          style={{
+            verticalAlign: "middle",
+          }}
+        >
+          {columnTds[column]}
+        </td>
       ))}
     </tr>
   );
@@ -205,21 +305,27 @@ export default function JobsTableList({
   setFilters,
   columns,
 }: JobsTableListProps) {
-  if (isEmpty(jobs)) return null;
+  if (jobs.length === 0) return null;
+
+  const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
   return (
     <table className="pf-c-table pf-m-compact pf-m-grid-md">
       <thead>
         <tr>
+          <th></th>
           {columns.map((column, i) => (
             <th key={i}>{tableViewColumns[column]}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {jobs.map((job) => {
-          return (
+        {jobsGroupedByPipeline.map((jobsInTheSamePipeline) =>
+          jobsInTheSamePipeline.map((job, i, arr) => (
             <JobTableSummary
               key={`${job.id}:${job.etag}`}
+              isPipelineJob={arr.length > 1}
+              isTheLastPipelineJob={arr.length - 1 === i}
+              isPipelineRoot={i === 0}
               columns={columns}
               job={job}
               onStatusClicked={(status) => {
@@ -259,8 +365,8 @@ export default function JobsTableList({
                 });
               }}
             />
-          );
-        })}
+          ))
+        )}
       </tbody>
     </table>
   );
