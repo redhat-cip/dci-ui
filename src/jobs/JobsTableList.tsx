@@ -205,7 +205,7 @@ function JobTableSummary({
     ),
   };
 
-  const VerticalLineHalfSize = () => (
+  const VerticalHalfLine = () => (
     <div
       style={{
         position: "absolute",
@@ -253,12 +253,12 @@ function JobTableSummary({
       >
         {isPipelineJob ? (
           isPipelineRoot ? (
-            <VerticalLineHalfSize />
+            <VerticalHalfLine />
           ) : isTheLastPipelineJob ? (
             <BottomRightLine />
           ) : (
             <>
-              <VerticalLineHalfSize />
+              <VerticalHalfLine />
               <BottomRightLine />
             </>
           )

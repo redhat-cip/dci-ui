@@ -23,11 +23,7 @@ function signinSilent(manager: UserManager) {
 }
 
 export function getSSOUserManager() {
-  const origin = window.location.href
-    .split("/")
-    .slice(0, -1)
-    .join("/")
-    .concat("/");
+  const origin = window.location.origin;
   const settings = {
     authority: `${SSOUrl}/auth/realms/${SSORealm}`,
     client_id: SSOClientId,
