@@ -182,7 +182,7 @@ export default function JobsToolbar({
           <ToolbarItem>
             <Button
               variant={ButtonVariant.plain}
-              aria-label="refresh"
+              aria-label={tableViewActive ? "Table view" : "List view"}
               type="button"
               onClick={() => setTableViewActive(!tableViewActive)}
             >
