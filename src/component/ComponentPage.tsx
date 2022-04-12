@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import * as React from "react";
 import MainPage from "pages/MainPage";
 import {
   Card,
@@ -8,62 +7,24 @@ import {
   GridItem,
   Title,
   Divider,
-  Tooltip,
   Label,
+  CodeBlock,
+  CodeBlockAction,
+  CodeBlockCode,
+  Button,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb } from "ui";
+import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import { IComponentWithJobs, IJob } from "types";
 import { useParams, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
-import styled from "styled-components";
-import {
-  InfoCircleIcon,
-  CalendarAltIcon,
-  ClockIcon,
-} from "@patternfly/react-icons";
+import { CalendarAltIcon, ClockIcon } from "@patternfly/react-icons";
 import { fromNow, formatDate } from "services/date";
 import { sortByNewestFirst } from "services/sort";
 import { humanizeDuration } from "services/date";
 import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
 import JobStatusLabel from "jobs/JobStatusLabel";
-
-const Padding = styled.div`
-  padding: 1em;
-`;
-
-const Field = styled.span`
-  color: #72767b;
-  font-weight: bold;
-`;
-
-interface LineProps {
-  field: string;
-  help?: string;
-  value: React.ReactNode;
-}
-
-function Line({ field, help, value }: LineProps) {
-  return (
-    <Grid hasGutter>
-      <GridItem span={4}>
-        <div>
-          <Field>
-            {field}
-            {help && (
-              <Tooltip position="right" content={<div>{help}</div>}>
-                <span className="ml-xs">
-                  <InfoCircleIcon />
-                </span>
-              </Tooltip>
-            )}
-          </Field>
-        </div>
-      </GridItem>
-      <GridItem span={8}>{value}</GridItem>
-    </Grid>
-  );
-}
+import CardLine from "ui/CardLine";
 
 interface IEmbedJobProps {
   job: IJob;
@@ -107,6 +68,99 @@ function EmbedJob({ job }: IEmbedJobProps) {
           </span>
         </GridItem>
       </Grid>
+    </div>
+  );
+}
+
+function ComponentDetails({ component }: { component: IComponentWithJobs }) {
+  const [seeData, setSeeData] = useState(false);
+  const componentData = JSON.stringify(component.data, null, 2);
+  return (
+    <div>
+      <Title headingLevel="h3" size="xl" className="p-md">
+        Component information
+      </Title>
+      <Divider />
+      <CardLine className="p-md" field="ID" value={component.id} />
+      <Divider />
+      <CardLine
+        className="p-md"
+        field="Name"
+        value={component.canonical_project_name}
+      />
+      <Divider />
+      <CardLine className="p-md" field="Unique Name" value={component.name} />
+      <Divider />
+      <CardLine
+        className="p-md"
+        field="Topic id"
+        value={
+          <Link to={`/topics/${component.topic_id}/components`}>
+            {component.topic_id}
+          </Link>
+        }
+      />
+      <Divider />
+      <CardLine className="p-md" field="Type" value={component.type} />
+      <Divider />
+      <CardLine
+        className="p-md"
+        field="Data"
+        value={
+          seeData ? (
+            <Button
+              onClick={() => setSeeData(false)}
+              type="button"
+              variant="tertiary"
+              isSmall
+            >
+              hide content
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setSeeData(true)}
+              type="button"
+              variant="tertiary"
+              isSmall
+            >
+              see content
+            </Button>
+          )
+        }
+      />
+      {seeData && (
+        <CodeBlock
+          actions={[
+            <CodeBlockAction>
+              <CopyButton text={componentData} variant="plain" />
+            </CodeBlockAction>,
+          ]}
+        >
+          <CodeBlockCode id="component.data">{componentData}</CodeBlockCode>
+        </CodeBlock>
+      )}
+      <Divider />
+      <CardLine
+        className="p-md"
+        field="Tags"
+        value={
+          component.tags && component.tags.length > 0
+            ? component.tags.map((tag, i) => (
+                <Label key={i} className="mt-xs mr-xs" color="blue">
+                  {tag}
+                </Label>
+              ))
+            : "no tags"
+        }
+      />
+      <Divider />
+      <CardLine className="p-md" field="State" value={component.state} />
+      <Divider />
+      <CardLine
+        className="p-md"
+        field="Created"
+        value={fromNow(component.created_at)}
+      />
     </div>
   );
 }
@@ -169,61 +223,7 @@ export default function ComponentPage() {
         <>
           <Card>
             <CardBody>
-              <Padding>
-                <Title headingLevel="h3" size="xl">
-                  Component information
-                </Title>
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="ID" value={component.id} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Name" value={component.canonical_project_name} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Unique Name" value={component.name} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line
-                  field="Topic id"
-                  value={
-                    <Link to={`/topics/${component.topic_id}/components`}>
-                      {component.topic_id}
-                    </Link>
-                  }
-                />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Type" value={component.type} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line
-                  field="Tags"
-                  value={
-                    component.tags && component.tags.length > 0
-                      ? component.tags.map((tag, i) => (
-                          <Label key={i} className="mt-xs mr-xs" color="blue">
-                            {tag}
-                          </Label>
-                        ))
-                      : "no tags"
-                  }
-                />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="State" value={component.state} />
-              </Padding>
-              <Divider />
-              <Padding>
-                <Line field="Created" value={fromNow(component.created_at)} />
-              </Padding>
+              <ComponentDetails key={component.etag} component={component} />
             </CardBody>
           </Card>
 
@@ -252,35 +252,29 @@ export default function ComponentPage() {
 
           <Card className="mt-md">
             <CardBody>
-              <Padding>
-                <Title headingLevel="h3" size="xl">
-                  Jobs
-                </Title>
-              </Padding>
-              <div>
-                <Divider />
-                <Padding>
-                  <Grid hasGutter>
-                    <GridItem span={3}>Job name</GridItem>
-                    <GridItem span={2}>Status</GridItem>
-                    <GridItem span={3}>tags</GridItem>
-                    <GridItem span={2}>Duration</GridItem>
-                    <GridItem span={2}>Created At</GridItem>
-                  </Grid>
-                </Padding>
+              <Title headingLevel="h3" size="xl" className="p-md">
+                Jobs
+              </Title>
+              <div className="p-md">
+                <Grid hasGutter>
+                  <GridItem span={3}>Job name</GridItem>
+                  <GridItem span={2}>Status</GridItem>
+                  <GridItem span={3}>tags</GridItem>
+                  <GridItem span={2}>Duration</GridItem>
+                  <GridItem span={2}>Created At</GridItem>
+                </Grid>
               </div>
               {component.jobs.length === 0 ? (
-                <div>
-                  <Divider />
-                  <Padding>There is no job attached to this component</Padding>
+                <div className="p-md">
+                  <Divider /> There is no job attached to this component
                 </div>
               ) : (
                 sortByNewestFirst(component.jobs).map((j) => (
                   <div>
                     <Divider />
-                    <Padding>
+                    <div className="p-md">
                       <EmbedJob job={j} />
-                    </Padding>
+                    </div>
                   </div>
                 ))
               )}
