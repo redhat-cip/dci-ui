@@ -71,3 +71,34 @@ test("sortByNewestFirst", () => {
     },
   ]);
 });
+
+test("sortByNewestFirst different key", () => {
+  expect(
+    sortByNewestFirst(
+      [
+        {
+          id: "1",
+          created_at: "2022-04-03T00:00:00.123456",
+          released_at: "2022-04-02T00:00:00.123456",
+        },
+        {
+          id: "2",
+          created_at: "2022-04-04T00:00:00.123456",
+          released_at: "2022-04-01T00:00:00.123456",
+        },
+      ],
+      "released_at"
+    )
+  ).toEqual([
+    {
+      id: "1",
+      created_at: "2022-04-03T00:00:00.123456",
+      released_at: "2022-04-02T00:00:00.123456",
+    },
+    {
+      id: "2",
+      created_at: "2022-04-04T00:00:00.123456",
+      released_at: "2022-04-01T00:00:00.123456",
+    },
+  ]);
+});

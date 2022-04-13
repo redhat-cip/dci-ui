@@ -9,16 +9,26 @@ export function sortByName<T extends IItemWithName>(items: T[]): T[] {
   return sortBy(items, [(e) => e.name.toLowerCase()]);
 }
 
-export interface IItemWithCreatedAt {
+interface IItemWithCreatedAtAndReleasedAtAndUpdatedAt {
   created_at: string;
+  updated_at: string;
+  released_at: string;
 }
 
-export function sortByNewestFirst<T extends IItemWithCreatedAt>(
-  items: T[]
+export function sortByNewestFirst<
+  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>
+>(
+  items: T[],
+  key: "created_at" | "updated_at" | "released_at" = "created_at"
 ): T[] {
   return items.sort((i1, i2) => {
-    const i1CreatedAt = DateTime.fromISO(i1.created_at);
-    const i2CreatedAt = DateTime.fromISO(i2.created_at);
+    const iso1 = i1[key];
+    const iso2 = i2[key];
+    if (iso1 === undefined || iso2 === undefined) {
+      return 0;
+    }
+    const i1CreatedAt = DateTime.fromISO(iso1);
+    const i2CreatedAt = DateTime.fromISO(iso2);
     if (i1CreatedAt > i2CreatedAt) {
       return -1;
     }
@@ -29,18 +39,8 @@ export function sortByNewestFirst<T extends IItemWithCreatedAt>(
   });
 }
 
-export function sortByOldestFirst<T extends IItemWithCreatedAt>(
-  items: T[]
-): T[] {
-  return items.sort((i1, i2) => {
-    const i1CreatedAt = DateTime.fromISO(i1.created_at);
-    const i2CreatedAt = DateTime.fromISO(i2.created_at);
-    if (i1CreatedAt > i2CreatedAt) {
-      return 1;
-    }
-    if (i1CreatedAt < i2CreatedAt) {
-      return -1;
-    }
-    return 0;
-  });
+export function sortByOldestFirst<
+  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>
+>(items: T[]): T[] {
+  return sortByNewestFirst(items).reverse();
 }

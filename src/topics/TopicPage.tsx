@@ -39,6 +39,7 @@ import { Link } from "react-router-dom";
 import { getTopicById } from "./topicsSelectors";
 import { SearchIcon } from "@patternfly/react-icons";
 import { buildWhereFromSearch } from "search/where";
+import { sortByNewestFirst } from "services/sort";
 
 interface ComponentsProps {
   topic: ITopic;
@@ -201,51 +202,54 @@ function ComponentsTable({ topic }: ComponentsProps) {
                 </tr>
               </thead>
               <tbody>
-                {components.map((component) => (
-                  <tr key={`${component.id}.${component.etag}`}>
-                    <td className="text-center">
-                      <CopyButton text={component.id} />
-                    </td>
-                    <td>
-                      <Link
-                        to={`/topics/${topic.id}/components/${component.id}`}
-                      >
-                        {component.canonical_project_name}
-                      </Link>
-                    </td>
-                    <td>
-                      <Label
-                        isCompact
-                        className="pointer"
-                        onClick={() => {
-                          setComponentName(`type:${component.type}`);
-                        }}
-                      >
-                        {component.type}
-                      </Label>
-                    </td>
-                    <td>
-                      <span>
-                        {component.tags !== null && component.tags.length !== 0
-                          ? component.tags.map((tag, i) => (
-                              <Label
-                                isCompact
-                                key={i}
-                                className="mt-xs mr-xs pointer"
-                                color="blue"
-                                onClick={() => {
-                                  setComponentName(`tags:${tag}`);
-                                }}
-                              >
-                                {tag}
-                              </Label>
-                            ))
-                          : "no tags"}
-                      </span>
-                    </td>
-                    <td>{component.state}</td>
-                  </tr>
-                ))}
+                {sortByNewestFirst(components, "released_at").map(
+                  (component) => (
+                    <tr key={`${component.id}.${component.etag}`}>
+                      <td className="text-center">
+                        <CopyButton text={component.id} />
+                      </td>
+                      <td>
+                        <Link
+                          to={`/topics/${topic.id}/components/${component.id}`}
+                        >
+                          {component.canonical_project_name}
+                        </Link>
+                      </td>
+                      <td>
+                        <Label
+                          isCompact
+                          className="pointer"
+                          onClick={() => {
+                            setComponentName(`type:${component.type}`);
+                          }}
+                        >
+                          {component.type}
+                        </Label>
+                      </td>
+                      <td>
+                        <span>
+                          {component.tags !== null &&
+                          component.tags.length !== 0
+                            ? component.tags.map((tag, i) => (
+                                <Label
+                                  isCompact
+                                  key={i}
+                                  className="mt-xs mr-xs pointer"
+                                  color="blue"
+                                  onClick={() => {
+                                    setComponentName(`tags:${tag}`);
+                                  }}
+                                >
+                                  {tag}
+                                </Label>
+                              ))
+                            : "no tags"}
+                        </span>
+                      </td>
+                      <td>{component.state}</td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           )}
