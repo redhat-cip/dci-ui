@@ -426,14 +426,9 @@ export default function ComponentCoveragePage() {
                               </Link>
                             </td>
                             <td role="cell" data-label="Tags">
-                              <LabelGroup numLabels={10} isCompact>
+                              <LabelGroup numLabels={3} isCompact>
                                 {component.tags.map((tag, index) => (
-                                  <Label
-                                    key={index}
-                                    color="blue"
-                                    className="pointer"
-                                    isCompact
-                                  >
+                                  <Label key={index} color="blue" isCompact>
                                     {tag}
                                   </Label>
                                 ))}
