@@ -131,6 +131,7 @@ test("buildComponentCoverage", () => {
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 5,
       topic_id: "to1",
+      tags: ["tag1", "tag2"],
       jobs: [
         {
           created_at: "2022-01-14T01:19:28.198117",
@@ -167,6 +168,7 @@ test("buildComponentCoverage", () => {
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
       topic_id: "to1",
+      tags: ["tag1", "tag2"],
       jobs: [
         {
           created_at: "2022-01-14T01:19:28.198117",
@@ -183,6 +185,7 @@ test("buildComponentCoverage", () => {
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
       topic_id: "to1",
+      tags: ["tag1", "tag2"],
       jobs: [
         {
           created_at: "2022-01-14T01:19:28.198117",
@@ -199,6 +202,7 @@ test("buildComponentCoverage", () => {
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,
       topic_id: "to1",
+      tags: ["tag2"],
       jobs: [],
     },
   });
@@ -215,6 +219,7 @@ test("getComponentCoverageDomain", () => {
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 5,
         topic_id: "to1",
+        tags: [],
         jobs: [
           {
             created_at: "2022-01-14T01:19:28.198117",
@@ -251,6 +256,7 @@ test("getComponentCoverageDomain", () => {
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
         topic_id: "to1",
+        tags: [],
         jobs: [
           {
             created_at: "2022-01-14T01:19:28.198117",
@@ -267,6 +273,7 @@ test("getComponentCoverageDomain", () => {
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
         topic_id: "to1",
+        tags: [],
         jobs: [
           {
             created_at: "2022-01-14T01:19:28.198117",
@@ -283,6 +290,7 @@ test("getComponentCoverageDomain", () => {
         nbOfSuccessfulJobs: 0,
         nbOfJobs: 0,
         topic_id: "to1",
+        tags: [],
         jobs: [],
       },
     })
@@ -306,6 +314,15 @@ it("parse filters from empty search", () => {
   const expectedFilters = {
     topic_id: null,
     types: [],
+  };
+  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
+});
+
+it("nrt parse filters from search with only one type", () => {
+  const search = "?topic_id=to1&types=type_1";
+  const expectedFilters = {
+    topic_id: "to1",
+    types: ["type_1"],
   };
   expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
 });

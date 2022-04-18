@@ -10,6 +10,7 @@ export interface IComponentCoverage {
   nbOfJobs: number;
   topic_id: string;
   jobs: { id: string; created_at: string; status: IJobStatus }[];
+  tags: string[];
 }
 
 interface ComponentsCoverage {
@@ -28,6 +29,7 @@ export function buildComponentCoverage(data: IComponentCoverageESData | null) {
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,
       topic_id: d._source.topic_id,
+      tags: d._source.tags,
       jobs: sortByOldestFirst([
         ...d._source.success_jobs.map((j) => ({ ...j, status: "success" })),
         ...d._source.failed_jobs.map((j) => ({ ...j, status: "failure" })),
