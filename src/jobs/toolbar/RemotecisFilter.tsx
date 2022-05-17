@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getRemotecis, getRemoteciById } from "remotecis/remotecisSelectors";
+import {
+  getRemotecis,
+  getRemoteciById,
+  isFetchingRemotecis,
+} from "remotecis/remotecisSelectors";
 import { IRemoteci } from "types";
 import remotecisActions from "remotecis/remotecisActions";
 import {
@@ -10,12 +14,15 @@ import {
   ToolbarFilter,
 } from "@patternfly/react-core";
 import { AppDispatch } from "store";
+import { useDebouncedValue } from "hooks/useDebouncedValue";
 
 type RemotecisFilterProps = {
   remoteci_id: string | null;
   onSelect: (remoteci: IRemoteci) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
+  placeholderText?: string;
+  categoryName?: string;
 };
 
 export default function RemotecisFilter({
@@ -23,24 +30,36 @@ export default function RemotecisFilter({
   onSelect,
   onClear,
   showToolbarItem = true,
+  placeholderText = "Search a name",
+  categoryName = "Remoteci",
 }: RemotecisFilterProps) {
+  const [searchValue, setSearchValue] = useState("");
   const remotecis = useSelector(getRemotecis);
   const remoteci = useSelector(getRemoteciById(remoteci_id));
+  const isFetching = useSelector(isFetchingRemotecis);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
+  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+
   useEffect(() => {
-    dispatch(remotecisActions.all());
-  }, [dispatch]);
+    if (debouncedSearchValue) {
+      dispatch(
+        remotecisActions.all({ where: `name:${debouncedSearchValue}*` })
+      );
+    }
+  }, [debouncedSearchValue, dispatch]);
+
   return (
     <ToolbarFilter
       chips={remoteci === null ? [] : [remoteci.name]}
       deleteChip={onClear}
-      categoryName="Remoteci"
+      categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
       <Select
         variant={SelectVariant.typeahead}
-        typeAheadAriaLabel="Filter by remoteci"
+        typeAheadAriaLabel={placeholderText}
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
@@ -51,8 +70,16 @@ export default function RemotecisFilter({
         selections={remoteci === null ? "" : remoteci.name}
         isOpen={isOpen}
         aria-labelledby="select"
-        placeholderText="Filter by remoteci"
+        placeholderText={placeholderText}
         maxHeight="220px"
+        onTypeaheadInputChanged={setSearchValue}
+        noResultsFoundText={
+          debouncedSearchValue === ""
+            ? "Search a remoteci by name"
+            : isFetching
+            ? "Searching..."
+            : "No remoteci matching this name"
+        }
       >
         {remotecis
           .map((p) => ({ ...p, toString: () => p.name }))

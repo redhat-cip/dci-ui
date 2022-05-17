@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ITeam } from "types";
-import { getTeams, getTeamById } from "teams/teamsSelectors";
+import { getTeams, getTeamById, isFetchingTeams } from "teams/teamsSelectors";
 import teamsActions from "teams/teamsActions";
 import {
   Select,
@@ -10,12 +10,15 @@ import {
   ToolbarFilter,
 } from "@patternfly/react-core";
 import { AppDispatch } from "store";
+import { useDebouncedValue } from "hooks/useDebouncedValue";
 
 type TeamsFilterProps = {
   team_id: string | null;
   onSelect: (team: ITeam) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
+  placeholderText?: string;
+  categoryName?: string;
 };
 
 export default function TeamsFilter({
@@ -23,24 +26,34 @@ export default function TeamsFilter({
   onSelect,
   onClear,
   showToolbarItem = true,
+  placeholderText = "Search by name",
+  categoryName = "Team",
 }: TeamsFilterProps) {
+  const [searchValue, setSearchValue] = useState("");
   const teams = useSelector(getTeams);
   const team = useSelector(getTeamById(team_id));
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const isFetching = useSelector(isFetchingTeams);
+
+  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+
   useEffect(() => {
-    dispatch(teamsActions.all());
-  }, [dispatch]);
+    if (debouncedSearchValue) {
+      dispatch(teamsActions.all({ where: `name:${debouncedSearchValue}*` }));
+    }
+  }, [debouncedSearchValue, dispatch]);
+
   return (
     <ToolbarFilter
       chips={team === null ? [] : [team.name]}
       deleteChip={onClear}
-      categoryName="Team"
+      categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
       <Select
         variant={SelectVariant.typeahead}
-        typeAheadAriaLabel="Filter by team"
+        typeAheadAriaLabel={placeholderText}
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
@@ -51,8 +64,16 @@ export default function TeamsFilter({
         selections={team === null ? "" : team.name}
         isOpen={isOpen}
         aria-labelledby="select"
-        placeholderText="Filter by team"
+        placeholderText={placeholderText}
         maxHeight="220px"
+        onTypeaheadInputChanged={setSearchValue}
+        noResultsFoundText={
+          debouncedSearchValue === ""
+            ? "Search a team by name"
+            : isFetching
+            ? "Searching..."
+            : "No team matching this name"
+        }
       >
         {teams
           .map((t) => ({ ...t, toString: () => t.name }))
