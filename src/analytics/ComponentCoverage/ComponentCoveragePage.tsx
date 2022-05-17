@@ -325,7 +325,7 @@ export default function ComponentCoveragePage() {
                                   <tr key={i} role="row">
                                     <td role="cell" data-label="Component name">
                                       <Link to={`/jobs/${job.id}`}>
-                                        {job.id}
+                                        {job.name}
                                       </Link>
                                     </td>
                                     <td role="cell" data-label="Warning">

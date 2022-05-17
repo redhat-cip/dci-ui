@@ -571,11 +571,13 @@ export interface IComponentCoverageESData {
       failed_jobs: {
         created_at: string;
         id: string;
+        name: string;
       }[];
       product_id: string;
       success_jobs: {
         created_at: string;
         id: string;
+        name: string;
       }[];
       tags: string[];
       team_id: string | null;

@@ -9,7 +9,7 @@ export interface IComponentCoverage {
   nbOfSuccessfulJobs: number;
   nbOfJobs: number;
   topic_id: string;
-  jobs: { id: string; created_at: string; status: IJobStatus }[];
+  jobs: { id: string; created_at: string; status: IJobStatus; name: string }[];
   tags: string[];
 }
 
