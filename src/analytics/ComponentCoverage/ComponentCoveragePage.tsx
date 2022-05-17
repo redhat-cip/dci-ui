@@ -308,7 +308,7 @@ export default function ComponentCoveragePage() {
                           <thead>
                             <tr role="row">
                               <th role="columnheader" scope="col">
-                                Id
+                                Name
                               </th>
                               <th role="columnheader" scope="col">
                                 Status
