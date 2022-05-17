@@ -13,11 +13,9 @@ import { useNavigate } from "react-router-dom";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";
 import LatestJobsStatusHeaderImage from "./LatestJobStatus/latest_jos_status.png";
-import { useAuth } from "auth/authContext";
 
 export default function AnalyticsPage() {
   const navigate = useNavigate();
-  const { identity } = useAuth();
 
   return (
     <MainPage
@@ -30,30 +28,28 @@ export default function AnalyticsPage() {
       }
     >
       <Gallery hasGutter>
-        {identity?.hasReadOnlyRole && (
-          <GalleryItem>
-            <Card
-              className="pointer"
-              onClick={() => navigate("/analytics/component_coverage")}
-            >
-              <CardHeader>
-                <CardHeaderMain>
-                  <img
-                    src={ComponentCoverageImage}
-                    alt="Component coverage"
-                    height={100}
-                    width="auto"
-                  />
-                </CardHeaderMain>
-              </CardHeader>
-              <CardTitle>Component coverage</CardTitle>
-              <CardBody>
-                See which components has been tested. Table of components and
-                associated jobs.
-              </CardBody>
-            </Card>
-          </GalleryItem>
-        )}
+        <GalleryItem>
+          <Card
+            className="pointer"
+            onClick={() => navigate("/analytics/component_coverage")}
+          >
+            <CardHeader>
+              <CardHeaderMain>
+                <img
+                  src={ComponentCoverageImage}
+                  alt="Component coverage"
+                  height={100}
+                  width="auto"
+                />
+              </CardHeaderMain>
+            </CardHeader>
+            <CardTitle>Component coverage</CardTitle>
+            <CardBody>
+              See which components has been tested. Table of components and
+              associated jobs.
+            </CardBody>
+          </Card>
+        </GalleryItem>
         <GalleryItem>
           <Card
             className="pointer"

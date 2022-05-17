@@ -301,10 +301,21 @@ test("getComponentCoverageDomain", () => {
 });
 
 it("parse filters from search", () => {
+  const search = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
+  const expectedFilters = {
+    topic_id: "to1",
+    types: ["type_1", "type_2"],
+    team_id: "t1",
+  };
+  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
+});
+
+it("parse filters from search without team_id backward compatibility", () => {
   const search = "?topic_id=to1&types=type_1&types=type_2";
   const expectedFilters = {
     topic_id: "to1",
     types: ["type_1", "type_2"],
+    team_id: null,
   };
   expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
 });
@@ -312,6 +323,7 @@ it("parse filters from search", () => {
 it("parse filters from empty search", () => {
   const search = "";
   const expectedFilters = {
+    team_id: null,
     topic_id: null,
     types: [],
   };
@@ -319,8 +331,9 @@ it("parse filters from empty search", () => {
 });
 
 it("nrt parse filters from search with only one type", () => {
-  const search = "?topic_id=to1&types=type_1";
+  const search = "?team_id=t1&topic_id=to1&types=type_1";
   const expectedFilters = {
+    team_id: "t1",
     topic_id: "to1",
     types: ["type_1"],
   };
@@ -329,24 +342,27 @@ it("nrt parse filters from search with only one type", () => {
 
 test("create search from filters", () => {
   const filters = {
+    team_id: "t1",
     topic_id: "to1",
     types: ["type_1", "type_2"],
   };
-  const expectedSearch = "?topic_id=to1&types=type_1&types=type_2";
+  const expectedSearch = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
   expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
 test("create search from filters remove duplicate types", () => {
   const filters = {
+    team_id: "t1",
     topic_id: "to1",
     types: ["type_1", "type_2", "type_2"],
   };
-  const expectedSearch = "?topic_id=to1&types=type_1&types=type_2";
+  const expectedSearch = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
   expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
 });
 
 test("create search from filters remove null", () => {
   const filters = {
+    team_id: null,
     topic_id: null,
     types: [],
   };

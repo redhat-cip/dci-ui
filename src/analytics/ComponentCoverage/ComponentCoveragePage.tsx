@@ -49,6 +49,7 @@ import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
 import TypesFilter from "./TypesFilter";
 import qs from "qs";
+import TeamsFilter from "jobs/toolbar/TeamsFilter";
 
 interface CumulatedDataPerWeek {
   [weekNumber: number]: {
@@ -62,6 +63,7 @@ interface CumulatedDataPerWeek {
 interface ICoverageFilters {
   topic_id: string | null;
   types: string[];
+  team_id: string | null;
 }
 
 export function parseCoverageFiltersFromSearch(
@@ -70,6 +72,7 @@ export function parseCoverageFiltersFromSearch(
   const emptyFilters = {
     topic_id: null,
     types: [],
+    team_id: null,
   };
   if (!search) {
     return emptyFilters;
@@ -115,6 +118,7 @@ export default function ComponentCoveragePage() {
   const navigate = useNavigate();
   const params = parseCoverageFiltersFromSearch(location.search);
   const [topicId, setTopicId] = useState<string | null>(params.topic_id);
+  const [teamId, setTeamId] = useState<string | null>(params.team_id);
   const [types, setTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>(params.types);
   const [isLoading, setIsLoading] = useState(false);
@@ -133,15 +137,17 @@ export default function ComponentCoveragePage() {
 
   useEffect(() => {
     const newSearch = createCoverageSearchFromFilters({
+      team_id: teamId,
       topic_id: topicId,
       types: selectedTypes,
     });
     navigate(`/analytics/component_coverage${newSearch}`);
-  }, [navigate, topicId, selectedTypes]);
+  }, [navigate, teamId, topicId, selectedTypes]);
 
   useEffect(() => {
     if (topicId) {
       const newSearch = createCoverageSearchFromFilters({
+        team_id: teamId,
         topic_id: topicId,
         types: selectedTypes,
       });
@@ -157,7 +163,7 @@ export default function ComponentCoveragePage() {
         })
         .then(() => setIsLoading(false));
     }
-  }, [topicId, selectedTypes]);
+  }, [teamId, topicId, selectedTypes]);
 
   useEffect(() => {
     if (topicId) {
@@ -201,6 +207,18 @@ export default function ComponentCoveragePage() {
                     topic_id={topicId}
                     onClear={() => setTopicId(null)}
                     onSelect={(topic) => setTopicId(topic.id)}
+                  />
+                </ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup>
+                <ToolbarItem>Filter by team</ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup>
+                <ToolbarItem>
+                  <TeamsFilter
+                    team_id={teamId}
+                    onClear={() => setTeamId(null)}
+                    onSelect={(team) => setTeamId(team.id)}
                   />
                 </ToolbarItem>
               </ToolbarGroup>
