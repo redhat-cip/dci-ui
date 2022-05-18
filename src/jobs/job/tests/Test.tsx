@@ -3,37 +3,17 @@ import { useCallback, useState } from "react";
 import { IFile, ITest, ITestsCase } from "types";
 import { isEmpty } from "lodash";
 import { humanizeDuration } from "services/date";
-import { global_Color_light_200 } from "@patternfly/react-tokens";
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ExclamationCircleIcon,
 } from "@patternfly/react-icons";
-import styled from "styled-components";
 import TestsCases from "./TestsCases";
 import { getTestsCases } from "./testsActions";
 
 interface TestProps {
   test: ITest;
 }
-
-const TestDiv = styled.div`
-  border-top: 1px solid ${global_Color_light_200.value};
-  &:first-child {
-    border-top: none;
-  }
-`;
-
-const TestHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 0.5em;
-`;
-
-const TestsDetails = styled.div`
-  padding: 1em 0.5em;
-`;
 
 export default function Test({ test }: TestProps) {
   const [isLoadingTestsCases, setIsLoadingTestsCases] = useState(false);
@@ -56,8 +36,16 @@ export default function Test({ test }: TestProps) {
   }, [test.file_id, testscases]);
 
   return (
-    <TestDiv>
-      <TestHeader>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 0,
+          paddingBottom: "1em"
+        }}
+      >
         <div>
           <span className="mr-lg">
             {test.name || "Test"} ({humanizeDuration(test.time)})
@@ -124,9 +112,9 @@ export default function Test({ test }: TestProps) {
             </Button>
           )}
         </div>
-      </TestHeader>
+      </div>
       {seeDetails && (
-        <TestsDetails>
+        <div style={{ paddingBottom: "2em" }}>
           {isLoadingTestsCases ? (
             <div>loading...</div>
           ) : (
@@ -138,8 +126,8 @@ export default function Test({ test }: TestProps) {
               )}
             </div>
           )}
-        </TestsDetails>
+        </div>
       )}
-    </TestDiv>
+    </div>
   );
 }

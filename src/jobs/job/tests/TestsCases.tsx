@@ -17,7 +17,7 @@ export default function TestsCases({ testscases }: TestsCasesProps) {
     testscaseActions.indexOf(tc.action)
   );
   return (
-    <table className="pf-c-table pf-m-grid-md">
+    <table className="pf-c-table pf-m-expandable pf-m-compact">
       <thead>
         <tr>
           <th />
@@ -29,11 +29,9 @@ export default function TestsCases({ testscases }: TestsCasesProps) {
           <th className="text-right">Time</th>
         </tr>
       </thead>
-      <tbody>
-        {orderedTestsCases.map((tc, i) => (
-          <TestsCase key={i} testscase={tc} />
-        ))}
-      </tbody>
+      {orderedTestsCases.map((tc, i) => (
+        <TestsCase key={i} testscase={tc} />
+      ))}
     </table>
   );
 }

@@ -1,8 +1,18 @@
-import { Button, Label } from "@patternfly/react-core";
+import {
+  Button,
+  CodeBlock,
+  CodeBlockAction,
+  CodeBlockCode,
+  DescriptionList,
+  DescriptionListDescription,
+  DescriptionListGroup,
+  DescriptionListTerm,
+  Label,
+} from "@patternfly/react-core";
 import { useState } from "react";
-import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
-import { Pre } from "jobs/job/jobStates/JobStateComponents";
+import { CaretDownIcon } from "@patternfly/react-icons";
 import { ITestsCase } from "types";
+import { CopyButton } from "ui";
 
 interface TestsCaseProps {
   testscase: ITestsCase;
@@ -11,11 +21,15 @@ interface TestsCaseProps {
 export default function TestsCase({ testscase }: TestsCaseProps) {
   const [seeDetails, setSeeDetails] = useState(false);
   return (
-    <>
+    <tbody className={`${seeDetails ? "pf-m-expanded" : ""}`}>
       <tr>
-        <td className="text-center">
-          <Button variant="link" onClick={() => setSeeDetails(!seeDetails)}>
-            {seeDetails ? <CaretDownIcon /> : <CaretRightIcon />}
+        <td className="text-center pf-c-table__toggle">
+          <Button
+            variant="plain"
+            onClick={() => setSeeDetails(!seeDetails)}
+            className={`${seeDetails ? "pf-m-expanded" : ""}`}
+          >
+            <CaretDownIcon className="pf-c-table__toggle-icon" />
           </Button>
         </td>
         <td>
@@ -36,31 +50,108 @@ export default function TestsCase({ testscase }: TestsCaseProps) {
         </td>
       </tr>
       {seeDetails ? (
-        <tr style={{ borderTop: 0 }}>
-          <td colSpan={6}>
-            <b>Type:</b> {testscase.type}
-            <br />
-            <b>Message:</b> {testscase.message}
-            <br />
-            <b>Value:</b>
-            <Pre>{testscase.value}</Pre>
-            {testscase.stdout ? (
-              <>
-                <br />
-                <b>Standard output:</b>
-                <Pre>{testscase.stdout}</Pre>
-              </>
-            ) : null}
-            {testscase.stderr ? (
-              <>
-                <br />
-                <b>Standard error:</b>
-                <Pre>{testscase.stderr}</Pre>
-              </>
-            ) : null}
+        <tr className="pf-c-table__expandable-row pf-m-expanded">
+          <td colSpan={100}>
+            <div className="pf-c-table__expandable-row-content">
+              <DescriptionList>
+                <DescriptionListGroup>
+                  <DescriptionListTerm>Type</DescriptionListTerm>
+                  <DescriptionListDescription>
+                    {testscase.type}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+
+                <DescriptionListGroup>
+                  <DescriptionListTerm>Message</DescriptionListTerm>
+                  <DescriptionListDescription>
+                    {testscase.message}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+
+                {Object.entries(testscase.properties).map((property) => {
+                  const [propertyName, propertyValue] = property;
+                  return (
+                    <DescriptionListGroup
+                      key={`${propertyName}:${propertyValue}`}
+                    >
+                      <DescriptionListTerm>{propertyName}</DescriptionListTerm>
+                      <DescriptionListDescription>
+                        {propertyValue}
+                      </DescriptionListDescription>
+                    </DescriptionListGroup>
+                  );
+                })}
+
+                {testscase.value ? (
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Value</DescriptionListTerm>
+                    <DescriptionListDescription>
+                      <CodeBlock
+                        actions={[
+                          <CodeBlockAction>
+                            <CopyButton
+                              text={testscase.value}
+                              variant="plain"
+                            />
+                          </CodeBlockAction>,
+                        ]}
+                      >
+                        <CodeBlockCode id="testscase.value">
+                          {testscase.value}
+                        </CodeBlockCode>
+                      </CodeBlock>
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+                ) : null}
+
+                {testscase.stdout ? (
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Standard output</DescriptionListTerm>
+                    <DescriptionListDescription>
+                      <CodeBlock
+                        actions={[
+                          <CodeBlockAction>
+                            <CopyButton
+                              text={testscase.stdout}
+                              variant="plain"
+                            />
+                          </CodeBlockAction>,
+                        ]}
+                      >
+                        <CodeBlockCode id="testscase.stdout">
+                          {testscase.stdout}
+                        </CodeBlockCode>
+                      </CodeBlock>
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+                ) : null}
+
+                {testscase.stderr ? (
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Standard error</DescriptionListTerm>
+                    <DescriptionListDescription>
+                      <CodeBlock
+                        actions={[
+                          <CodeBlockAction>
+                            <CopyButton
+                              text={testscase.stderr}
+                              variant="plain"
+                            />
+                          </CodeBlockAction>,
+                        ]}
+                      >
+                        <CodeBlockCode id="testscase.stderr">
+                          {testscase.stderr}
+                        </CodeBlockCode>
+                      </CodeBlock>
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+                ) : null}
+              </DescriptionList>
+            </div>
           </td>
         </tr>
       ) : null}
-    </>
+    </tbody>
   );
 }
