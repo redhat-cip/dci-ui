@@ -26,7 +26,7 @@ import { Markup } from "interweave";
 import { updateJobComment } from "./jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
-import { sortByName } from "services/sort";
+import { sortByName, sortByOldestFirst } from "services/sort";
 import { getTopicIcon } from "ui/icons";
 import JobConfiguration from "./jobSummary/JobConfiguration";
 import {
@@ -413,7 +413,7 @@ export default function JobSummary({
       </JobNav>
       {isEmpty(innerJob.results) ? null : (
         <JobTests>
-          {innerJob.results.map((result, i) => (
+          {sortByOldestFirst(innerJob.results).map((result, i) => (
             <LabelGroup
               categoryName={result.name}
               numLabels={5}
