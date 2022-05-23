@@ -68,15 +68,14 @@ export default function TestsCase({ testscase }: TestsCaseProps) {
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                {Object.entries(testscase.properties).map((property) => {
-                  const [propertyName, propertyValue] = property;
+                {testscase.properties.map((property) => {
                   return (
                     <DescriptionListGroup
-                      key={`${propertyName}:${propertyValue}`}
+                      key={`${property.name}:${property.value}`}
                     >
-                      <DescriptionListTerm>{propertyName}</DescriptionListTerm>
+                      <DescriptionListTerm>{property.name}</DescriptionListTerm>
                       <DescriptionListDescription>
-                        {propertyValue}
+                        {property.value}
                       </DescriptionListDescription>
                     </DescriptionListGroup>
                   );

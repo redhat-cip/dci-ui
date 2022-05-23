@@ -338,9 +338,7 @@ export interface ITestsCase {
   value: string;
   stdout: string | null;
   stderr: string | null;
-  properties: {
-    [k: string]: string;
-  };
+  properties: { name: string; value: string }[];
 }
 
 export interface IGetTestsCases {
