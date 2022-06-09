@@ -41,8 +41,8 @@ export default function JobsPage() {
     JobsTableListColumn[]
   >(
     "tableViewColumns",
-    ["name", "team", "remoteci", "topic", "component", "duration", "last_run"],
-    3
+    ["name", "team", "remoteci", "topic", "component", "duration", "started"],
+    4
   );
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);

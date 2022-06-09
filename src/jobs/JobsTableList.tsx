@@ -198,7 +198,7 @@ function JobTableSummary({
         {jobDuration}
       </span>
     ),
-    last_run: (
+    started: (
       <span title={`Created at ${job.created_at}`}>
         {fromNow(job.created_at)}
       </span>

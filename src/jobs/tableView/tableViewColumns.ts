@@ -13,7 +13,7 @@ const columnLabels: { [k in JobsTableListColumn]: string } = {
   tags: "Tags",
   created_at: "Created at",
   duration: "Duration",
-  last_run: "Last run",
+  started: "Started",
 };
 
 export default columnLabels;

@@ -74,7 +74,7 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
                 Job link
               </th>
               <th className="text-right" role="columnheader" scope="col">
-                Last run
+                Started
               </th>
             </tr>
           </thead>

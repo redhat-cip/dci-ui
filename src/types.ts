@@ -602,6 +602,6 @@ const JobsTableListColumns = [
   "tags",
   "created_at",
   "duration",
-  "last_run",
+  "started",
 ] as const;
 export type JobsTableListColumn = typeof JobsTableListColumns[number];
