@@ -2,11 +2,9 @@ import http from "services/http";
 import * as types from "./currentUserActionsTypes";
 import {
   showAPIError,
-  showError,
   showSuccess,
-  showWarning,
 } from "alerts/alertsActions";
-import { ICurrentUser, IRemoteci, IUser } from "types";
+import { ICurrentUser, IRemoteci, ITopic, IUser } from "types";
 import { AppThunk } from "store";
 import { AxiosPromise } from "axios";
 
@@ -58,59 +56,55 @@ interface IGetSubscribedRemotecis {
 
 export function getSubscribedRemotecis(
   identity: ICurrentUser
-): AppThunk<AxiosPromise<IGetSubscribedRemotecis>> {
-  return (dispatch) => {
-    return http({
-      method: "get",
-      url: `/api/v1/users/${identity.id}/remotecis`,
-    }).catch((error) => {
-      dispatch(showError(`Cannot get subscribed remotecis`));
-      return error;
-    });
-  };
+): AxiosPromise<IGetSubscribedRemotecis> {
+  return http({
+    method: "get",
+    url: `/api/v1/users/${identity.id}/remotecis`,
+  });
 }
 
 export function subscribeToARemoteci(
-  remoteci_id: string,
+  remoteciId: string,
   currentUser: ICurrentUser
-): AppThunk<AxiosPromise<void>> {
-  return (dispatch) => {
-    return http({
-      method: "post",
-      url: `/api/v1/remotecis/${remoteci_id}/users`,
-      data: currentUser,
-    })
-      .then((response) => {
-        dispatch(showSuccess("You are successfully subscribed"));
-        return response;
-      })
-      .catch((error) => {
-        dispatch(showError("Cannot subscribe to remoteci"));
-        return error;
-      });
-  };
+): AxiosPromise<void> {
+  return http({
+    method: "post",
+    url: `/api/v1/remotecis/${remoteciId}/users`,
+    data: currentUser,
+  });
 }
 
 export function unsubscribeFromARemoteci(
-  remoteci_id: string,
+  remoteciId: string,
   currentUser: ICurrentUser
-): AppThunk<AxiosPromise<void>> {
-  return (dispatch) => {
-    return http({
-      method: "delete",
-      url: `/api/v1/remotecis/${remoteci_id}/users/${currentUser.id}`,
-    })
-      .then((response) => {
-        dispatch(
-          showWarning(
-            "You will no longer receive notification for this remoteci"
-          )
-        );
-        return response;
-      })
-      .catch((error) => {
-        dispatch(showError("Cannot unsubscribe from this remoteci"));
-        return error;
-      });
-  };
+): AxiosPromise<void> {
+  return http({
+    method: "delete",
+    url: `/api/v1/remotecis/${remoteciId}/users/${currentUser.id}`,
+  });
+}
+
+interface IGetSubscribedTopics {
+  topics: ITopic[];
+}
+
+export function getSubscribedTopics(): AxiosPromise<IGetSubscribedTopics> {
+  return http({
+    method: "get",
+    url: `/api/v1/topics/notifications`,
+  });
+}
+
+export function subscribeToATopic(topicId: string): AxiosPromise<void> {
+  return http({
+    method: "post",
+    url: `/api/v1/topics/${topicId}/notifications`,
+  });
+}
+
+export function unsubscribeFromATopic(topicId: string): AxiosPromise<void> {
+  return http({
+    method: "delete",
+    url: `/api/v1/topics/${topicId}/notifications`,
+  });
 }

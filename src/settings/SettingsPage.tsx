@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
-import { updateCurrentUser } from "../currentUserActions";
+import { updateCurrentUser } from "../currentUser/currentUserActions";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import MainPage from "pages/MainPage";
