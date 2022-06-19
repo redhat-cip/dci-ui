@@ -43,7 +43,7 @@ export default function Test({ test }: TestProps) {
           justifyContent: "space-between",
           alignItems: "center",
           padding: 0,
-          paddingBottom: "1em"
+          paddingBottom: "1em",
         }}
       >
         <div>

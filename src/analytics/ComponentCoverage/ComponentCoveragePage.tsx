@@ -163,7 +163,7 @@ export default function ComponentCoveragePage() {
         })
         .then(() => setIsLoading(false));
     }
-  }, [teamId, topicId, selectedTypes]);
+  }, [teamId, topicId, selectedTypes, dispatch]);
 
   useEffect(() => {
     if (topicId) {
@@ -174,7 +174,7 @@ export default function ComponentCoveragePage() {
           return error;
         });
     }
-  }, [topicId]);
+  }, [topicId, dispatch]);
 
   return (
     <MainPage

@@ -5,7 +5,6 @@ import axiosMockAdapter from "axios-mock-adapter";
 import {
   getProductsWithTeams,
   getTopicsWithTeams,
-  getTeams,
   grantTeamProductPermission,
   removeTeamProductPermission,
   grantTeamTopicPermission,
@@ -67,21 +66,6 @@ test("getTopicsWithTeams", () => {
       { id: "t1", name: "Team 1" },
       { id: "t2", name: "Team 2" },
     ]);
-  });
-});
-
-test("getTeams", () => {
-  axiosMock.onGet("https://api.distributed-ci.io/api/v1/teams").reply(200, {
-    teams: [
-      { id: "t1", name: "Team 1" },
-      { id: "t2", name: "Team 2" },
-    ],
-    _meta: { count: 2 },
-  });
-  const store = mockStore();
-  return store.dispatch(getTeams()).then((teams) => {
-    expect(teams[0].id).toBe("t1");
-    expect(teams[1].id).toBe("t2");
   });
 });
 

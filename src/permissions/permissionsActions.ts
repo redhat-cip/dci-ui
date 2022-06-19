@@ -1,5 +1,4 @@
 import productsActions from "products/productsActions";
-import teamsActions from "teams/teamsActions";
 import topicsActions from "topics/topicsActions";
 import http from "services/http";
 import { showAPIError, showSuccess } from "alerts/alertsActions";
@@ -42,14 +41,6 @@ export function getTopicsWithTeams(): AppThunk<Promise<ITopicWithTeams[]>> {
   return (dispatch) => {
     return dispatch(topicsActions.all()).then((response) => {
       return Promise.resolve(sortByName(response.data.topics));
-    });
-  };
-}
-
-export function getTeams(): AppThunk<Promise<ITeam[]>> {
-  return (dispatch) => {
-    return dispatch(teamsActions.all()).then((response) => {
-      return Promise.resolve(sortByName(response.data.teams));
     });
   };
 }

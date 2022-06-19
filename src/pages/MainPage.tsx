@@ -13,7 +13,7 @@ interface PageProps {
   HeaderSection?: React.ReactNode;
   HeaderButton?: React.ReactNode;
   title: string;
-  description: string;
+  description: React.ReactNode;
   loading?: boolean;
   empty?: boolean;
   EmptyComponent?: React.ReactNode;

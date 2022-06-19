@@ -1,9 +1,6 @@
 import http from "services/http";
 import * as types from "./currentUserActionsTypes";
-import {
-  showAPIError,
-  showSuccess,
-} from "alerts/alertsActions";
+import { showAPIError, showSuccess } from "alerts/alertsActions";
 import { ICurrentUser, IRemoteci, ITopic, IUser } from "types";
 import { AppThunk } from "store";
 import { AxiosPromise } from "axios";

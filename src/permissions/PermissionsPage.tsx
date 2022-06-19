@@ -1,65 +1,40 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { isEmpty, uniqBy } from "lodash";
 import MainPage from "pages/MainPage";
-import {
-  Button,
-  Card,
-  CardBody,
-  TextContent,
-  Text,
-  Tabs,
-  Tab,
-  TabTitleText,
-} from "@patternfly/react-core";
-import { TrashIcon } from "@patternfly/react-icons";
-import { EmptyState, Breadcrumb } from "ui";
-import {
-  getProductsWithTeams,
-  getTopicsWithTeams,
-  getTeams,
-  removeTeamProductPermission,
-  removeTeamTopicPermission,
-} from "./permissionsActions";
-import { IProductWithTeams, ITeam, ITopicWithTeams } from "types";
-import { AppDispatch } from "store";
-import AllowTeamToAccessTopicForm from "./AllowTeamToAccessTopicForm";
-import AllowTeamToAccessProductForm from "./AllowTeamToAccessProductForm";
+import { Card, CardBody } from "@patternfly/react-core";
+import { Breadcrumb } from "ui";
+import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+function DCITabItem({
+  children,
+  to,
+  ...props
+}: {
+  children: React.ReactNode;
+  to: string;
+}) {
+  const location = useLocation();
+  const path = useResolvedPath(to);
+  const isActive = location.pathname.startsWith(path.pathname);
+  return (
+    <li
+      className={`pf-c-tabs__item ${isActive ? "pf-m-current" : ""}`}
+      {...props}
+    >
+      <Link to={to} className="pf-c-tabs__link">
+        <span className="pf-c-tabs__item-text">{children}</span>
+      </Link>
+    </li>
+  );
+}
 
 export default function PermissionsPage() {
-  const [teams, setTeams] = useState<ITeam[]>([]);
-  const [topics, setTopics] = useState<ITopicWithTeams[]>([]);
-  const [products, setProducts] = useState<IProductWithTeams[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTabKey, setActiveTabKey] = useState(0);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    Promise.all([
-      dispatch(getTopicsWithTeams()),
-      dispatch(getProductsWithTeams()),
-      dispatch(getTeams()),
-    ])
-      .then((values) => {
-        setTopics(values[0]);
-        setProducts(values[1]);
-        setTeams(values[2]);
-      })
-      .finally(() => setIsLoading(false));
-  }, [dispatch]);
-
   return (
     <MainPage
       title="Permissions"
-      description="On this page, you can grant teams permissions to access products. Make sure the team has the rights before giving it permission to download components from a product."
-      loading={isLoading}
-      empty={!isLoading && teams.length === 0}
-      EmptyComponent={
-        <EmptyState
-          title="There is no teams. You cannot manage permissions"
-          info="Contact DCI administrator"
-        />
+      description={
+        <div>
+          Change team permissions to give them access to topics and products.
+        </div>
       }
       Breadcrumb={
         <Breadcrumb
@@ -69,164 +44,13 @@ export default function PermissionsPage() {
     >
       <Card>
         <CardBody>
-          <Tabs
-            activeKey={activeTabKey}
-            onSelect={(event, tabIndex) => {
-              if (tabIndex !== undefined) {
-                setActiveTabKey(parseInt(tabIndex as string, 10));
-              }
-            }}
-          >
-            <Tab
-              eventKey={0}
-              title={<TabTitleText>Products Teams Permissions</TabTitleText>}
-            >
-              <TextContent className="mt-lg">
-                <Text component="p">
-                  By giving access to a product, a team can download all GA
-                  topics.
-                  <br />
-                  If you want to give access to a non-GA topic, you can use the
-                  Topics Teams Permissions tab.
-                </Text>
-              </TextContent>
-              <AllowTeamToAccessProductForm
-                teams={teams}
-                products={products}
-                onClick={(team, product) => {
-                  const newProducts = products.map((p) => {
-                    if (p.id === product.id) {
-                      p.teams = uniqBy([...p.teams, team], "id");
-                    }
-                    return p;
-                  });
-                  setProducts(newProducts);
-                }}
-              />
-              {products.map((product) => {
-                if (isEmpty(product.teams)) return null;
-                return (
-                  <TextContent
-                    key={`${product.id}.${product.etag}`}
-                    className="mt-lg"
-                  >
-                    <Text component="h1">{product.name}</Text>
-                    <Text component="p">
-                      List of teams that have access to {product.name}
-                    </Text>
-                    <table
-                      className="pf-c-table pf-m-grid-md pf-m-compact"
-                      role="grid"
-                    >
-                      <tbody>
-                        {product.teams.map((team) => (
-                          <tr key={`${team.id}.${team.etag}`}>
-                            <td className="pf-m-width-30">{team.name}</td>
-                            <td className="pf-m-width-70">
-                              <Button
-                                variant="danger"
-                                icon={<TrashIcon />}
-                                onClick={() =>
-                                  dispatch(
-                                    removeTeamProductPermission(team, product)
-                                  ).then(() => {
-                                    const newProducts = products.map((p) => {
-                                      if (p.id === product.id) {
-                                        p.teams = p.teams.filter(
-                                          (t) => t.id !== team.id
-                                        );
-                                      }
-                                      return p;
-                                    });
-                                    setProducts(newProducts);
-                                  })
-                                }
-                              >
-                                remove {team.name} permission
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </TextContent>
-                );
-              })}
-            </Tab>
-            <Tab
-              eventKey={1}
-              title={<TabTitleText>Topics Teams Permissions</TabTitleText>}
-            >
-              <TextContent className="mt-lg">
-                <Text component="p">
-                  By giving access to a topic not export control ready, a team
-                  can download all components from this topic.
-                  <br />
-                  Make sure the team has the rights before giving it permission
-                  to download a product.
-                </Text>
-              </TextContent>
-              <AllowTeamToAccessTopicForm
-                teams={teams}
-                topics={topics}
-                onClick={(team, topic) => {
-                  const newTopics = topics.map((t) => {
-                    if (t.id === topic.id) {
-                      t.teams = uniqBy([...t.teams, team], "id");
-                    }
-                    return t;
-                  });
-                  setTopics(newTopics);
-                }}
-              />
-              {topics.map((topic) => (
-                <TextContent
-                  key={`${topic.id}.${topic.etag}`}
-                  className="mt-lg"
-                >
-                  <Text component="h1">{topic.name}</Text>
-                  <Text component="p">
-                    List of teams that have access to {topic.name}
-                  </Text>
-                  <table
-                    className="pf-c-table pf-m-grid-md pf-m-compact"
-                    role="grid"
-                  >
-                    <tbody>
-                      {topic.teams.map((team) => (
-                        <tr key={`${team.id}.${team.etag}`}>
-                          <td className="pf-m-width-30">{team.name}</td>
-                          <td className="pf-m-width-70">
-                            <Button
-                              variant="danger"
-                              icon={<TrashIcon />}
-                              onClick={() => {
-                                dispatch(
-                                  removeTeamTopicPermission(team, topic)
-                                ).then(() => {
-                                  const newTopics = topics.map((t) => {
-                                    if (t.id === topic.id) {
-                                      t.teams = t.teams.filter(
-                                        (t) => t.id !== team.id
-                                      );
-                                    }
-                                    return t;
-                                  });
-                                  setTopics(newTopics);
-                                });
-                              }}
-                            >
-                              remove {team.name} permission
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </TextContent>
-              ))}
-            </Tab>
-          </Tabs>
+          <div className="pf-c-tabs" id="default-example">
+            <ul className="pf-c-tabs__list">
+              <DCITabItem to="/permissions/products">Products</DCITabItem>
+              <DCITabItem to="/permissions/topics">Topics</DCITabItem>
+            </ul>
+          </div>
+          <Outlet />
         </CardBody>
       </Card>
     </MainPage>

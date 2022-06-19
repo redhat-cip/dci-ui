@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getProducts, getProductById, isFetchingProducts } from "products/productsSelectors";
+import {
+  getProducts,
+  getProductById,
+  isFetchingProducts,
+} from "products/productsSelectors";
 import { IProduct } from "types";
 import productsActions from "products/productsActions";
 import {

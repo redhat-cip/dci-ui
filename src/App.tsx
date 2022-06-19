@@ -26,6 +26,8 @@ import EditFeederPage from "feeders/edit/EditFeederPage";
 import SettingsPage from "settings/SettingsPage";
 import NotificationsPage from "notifications/NotificationsPage";
 import PermissionsPage from "permissions/PermissionsPage";
+import ProductsPermissionsPage from "permissions/ProductsPermissionsPage";
+import TopicsPermissionsPage from "permissions/TopicsPermissionsPage";
 import LoginPage from "auth/LoginPage";
 import LoginCallbackPage from "auth/LoginCallbackPage";
 import SilentRedirectPage from "auth/SilentRedirectPage";
@@ -111,7 +113,10 @@ export default function App() {
               <Route path="settings" element={<SettingsPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
             </Route>
-            <Route path="permissions" element={<PermissionsPage />} />
+            <Route path="permissions" element={<PermissionsPage />}>
+              <Route path="products" element={<ProductsPermissionsPage />} />
+              <Route path="topics" element={<TopicsPermissionsPage />} />
+            </Route>
           </Route>
           <Route path="*" element={<Page404 />} />
         </Route>
