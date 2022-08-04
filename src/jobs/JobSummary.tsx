@@ -20,7 +20,6 @@ import {
 import styled from "styled-components";
 import { IEnhancedJob, IComponent, IRemoteci, ITeam, ITopic } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
-import { isEmpty } from "lodash";
 import { TextAreaEditableOnHover, CopyIconButton } from "ui";
 import { Markup } from "interweave";
 import { updateJobComment } from "./jobsActions";
@@ -332,10 +331,10 @@ export default function JobSummary({
           />
         )}
       </JobTitle>
-      {isEmpty(innerJob.tags) ? null : (
+      {innerJob.tags?.length === 0 ? null : (
         <JobTags>
           <LabelGroup numLabels={8}>
-            {innerJob.tags.map((tag, index) => (
+            {innerJob.tags?.map((tag, index) => (
               <Label
                 key={index}
                 color="blue"
@@ -411,7 +410,7 @@ export default function JobSummary({
           <CaretRightIcon />
         </JobLink>
       </JobNav>
-      {isEmpty(innerJob.results) ? null : (
+      {innerJob.results.length === 0 ? null : (
         <JobTests>
           {sortByOldestFirst(innerJob.results).map((result, i) => (
             <LabelGroup

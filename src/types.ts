@@ -430,7 +430,7 @@ export interface IJob extends Resource {
   state: string;
   status: IJobStatus;
   status_reason: string | null;
-  tags: string[];
+  tags: string[] | null;
   team: ITeam;
   team_id: string;
   topic: ITopic;

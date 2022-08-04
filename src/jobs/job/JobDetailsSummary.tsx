@@ -272,7 +272,7 @@ export default function JobDetailsSummary({
       {isEmpty(innerJob.tags) ? null : (
         <JobTags>
           <LabelGroup numLabels={8}>
-            {innerJob.tags.map((tag, index) => (
+            {innerJob.tags?.map((tag, index) => (
               <Label
                 key={index}
                 color="blue"

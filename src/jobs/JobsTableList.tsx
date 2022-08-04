@@ -173,9 +173,9 @@ function JobTableSummary({
         </div>
       ),
     tags:
-      job.tags.length === 0 ? null : (
+      job.tags?.length === 0 ? null : (
         <LabelGroup numLabels={10} isCompact>
-          {job.tags.map((tag, index) => (
+          {job.tags?.map((tag, index) => (
             <Label
               key={index}
               color="blue"
