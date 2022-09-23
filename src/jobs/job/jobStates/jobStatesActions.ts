@@ -93,3 +93,15 @@ export function addPipelineStatus(jobStates: IJobState[]) {
     };
   });
 }
+
+export function getLongerTaskFirst(jobStates: IJobStateWithDuration[]) {
+  const tasks: IFileWithDuration[] = [];
+  for (let index = 0; index < jobStates.length; index++) {
+    const jobState = jobStates[index];
+    for (let j = 0; j < jobState.files.length; j++) {
+      const task = jobState.files[j];
+      tasks.push(task);
+    }
+  }
+  return tasks.sort((t1, t2) => t2.duration - t1.duration);
+}

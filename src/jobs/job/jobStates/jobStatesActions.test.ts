@@ -1,5 +1,9 @@
-import { addDuration, addPipelineStatus } from "./jobStatesActions";
-import { IJobState } from "types";
+import {
+  addDuration,
+  addPipelineStatus,
+  getLongerTaskFirst,
+} from "./jobStatesActions";
+import { IJobState, IJobStateWithDuration } from "types";
 
 test("addDuration in seconds", () => {
   const jobStates = [
@@ -334,4 +338,54 @@ test("addPipelineStatus with running state in the middle", () => {
     },
   ] as IJobState[];
   expect(addPipelineStatus(jobStates)).toEqual(expectedJobStates);
+});
+
+test("getLongerTaskFirst filter task by duration", () => {
+  const jobStates = [
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      duration: 20,
+      files: [
+        {
+          created_at: "2018-07-30T04:38:10.000000",
+          updated_at: "2018-07-30T04:38:10.000000",
+          duration: 0,
+        },
+        {
+          created_at: "2018-07-30T04:38:30.000000",
+          updated_at: "2018-07-30T04:38:30.000000",
+          duration: 20,
+        },
+      ],
+    },
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      duration: 2,
+      files: [
+        {
+          created_at: "2018-07-30T04:38:32.000000",
+          updated_at: "2018-07-30T04:38:32.000000",
+          duration: 2,
+        },
+      ],
+    },
+  ] as IJobStateWithDuration[];
+  const expectedTasks = [
+    {
+      created_at: "2018-07-30T04:38:30.000000",
+      updated_at: "2018-07-30T04:38:30.000000",
+      duration: 20,
+    },
+    {
+      created_at: "2018-07-30T04:38:32.000000",
+      updated_at: "2018-07-30T04:38:32.000000",
+      duration: 2,
+    },
+    {
+      created_at: "2018-07-30T04:38:10.000000",
+      updated_at: "2018-07-30T04:38:10.000000",
+      duration: 0,
+    },
+  ];
+  expect(getLongerTaskFirst(jobStates)).toEqual(expectedTasks);
 });

@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
-import { addDuration, addPipelineStatus } from "./jobStatesActions";
-import { Link } from "react-router-dom";
+import {
+  addDuration,
+  addPipelineStatus,
+  getLongerTaskFirst,
+} from "./jobStatesActions";
+import { Link, useSearchParams } from "react-router-dom";
 import JobStateFile from "./JobStateFile";
 import {
   JobStates,
@@ -18,7 +22,18 @@ import { IEnhancedJob } from "types";
 import { useLocation } from "react-router-dom";
 import { humanizeDuration } from "services/date";
 import styled from "styled-components";
-import { ProgressStepper, ProgressStep } from "@patternfly/react-core";
+import {
+  ProgressStepper,
+  ProgressStep,
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+} from "@patternfly/react-core";
+import {
+  SortAmountDownIcon,
+  SortAmountDownAltIcon,
+} from "@patternfly/react-icons";
+import { global_palette_black_200 } from "@patternfly/react-tokens";
 
 export const Pipeline = styled.div`
   margin: 0.5rem 0;
@@ -27,22 +42,82 @@ export const Pipeline = styled.div`
   background-color: white;
 `;
 
+type AnsibleTaskFilter = "date" | "duration";
+
+function JobStateFilterButton({
+  changeFilter,
+}: {
+  changeFilter: (newFilter: AnsibleTaskFilter) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <Dropdown
+      onSelect={() => {
+        setIsOpen(false);
+        const element = document.getElementById("toggle-icon-only");
+        element && element.focus();
+      }}
+      toggle={
+        <DropdownToggle
+          toggleIndicator={null}
+          onToggle={(isOpen: boolean) => setIsOpen(isOpen)}
+          aria-label="Applications"
+          id="toggle-icon-only"
+          style={{ color: global_palette_black_200.value }}
+        >
+          <SortAmountDownIcon />
+        </DropdownToggle>
+      }
+      isOpen={isOpen}
+      isPlain
+      dropdownItems={[
+        <DropdownItem
+          key="action"
+          component="button"
+          onClick={() => changeFilter("date")}
+          icon={<SortAmountDownAltIcon />}
+        >
+          Filter by date
+        </DropdownItem>,
+        <DropdownItem
+          key="action"
+          component="button"
+          onClick={() => changeFilter("duration")}
+          icon={<SortAmountDownIcon />}
+        >
+          Filter by duration
+        </DropdownItem>,
+      ]}
+    />
+  );
+}
+
 interface JobStatesListProps {
   job: IEnhancedJob;
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
   const location = useLocation();
-  const [hash, setHash] = useState<string | null>(null);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const [sort, setSort] = useState<AnsibleTaskFilter>(
+    (searchParams.get("sort") as AnsibleTaskFilter) || "date"
+  );
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(
+    searchParams.get("task")
+  );
   const [seeRawLog, setSeeRawLog] = useState(false);
   const [loadingRawLog, setLoadingRawLog] = useState(false);
   const [rawLog, setRawLog] = useState("");
 
   useEffect(() => {
-    if (location.hash) {
-      setHash(location.hash);
+    const newSearchParams: { sort: AnsibleTaskFilter; task?: string } = {
+      sort,
+    };
+    if (selectedTaskId) {
+      newSearchParams.task = selectedTaskId;
     }
-  }, [location.hash]);
+    setSearchParams(newSearchParams);
+  }, [setSearchParams, sort, selectedTaskId]);
 
   const rawLogFile = job.files.find(
     (f) => f.name.toLowerCase() === "ansible.log"
@@ -85,6 +160,12 @@ export default function JobStatesList({ job }: JobStatesListProps) {
       <JobStates>
         {rawLogFile && (
           <RawLogRow>
+            <JobStateFilterButton
+              changeFilter={(sort) => {
+                setSort(sort);
+                setSelectedTaskId(null);
+              }}
+            />
             <RawLogButton
               variant="tertiary"
               isSmall
@@ -113,7 +194,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
               <JobStatePre>{rawLog}</JobStatePre>
             </FileContent>
           </div>
-        ) : (
+        ) : sort === "date" ? (
           jobStates.map((jobstate, i) => (
             <div key={i}>
               <JobStateRow>
@@ -125,20 +206,39 @@ export default function JobStatesList({ job }: JobStatesListProps) {
                   )})`}
                 </JobStateName>
               </JobStateRow>
-              {jobstate.files.map((file, j) => {
-                const h = `${jobstate.id}:file${j}`;
-                return (
-                  <JobStateFile
-                    id={h}
-                    key={j}
-                    file={file}
-                    isSelected={hash === `#${h}`}
-                    link={`${location.pathname}#${h}`}
-                  />
-                );
-              })}
+              {jobstate.files.map((file, j) => (
+                <JobStateFile
+                  key={j}
+                  file={file}
+                  isSelected={selectedTaskId === file.id}
+                  onClick={(seeDetails) => {
+                    if (seeDetails) {
+                      setSelectedTaskId(file.id);
+                    } else {
+                      setSelectedTaskId(null);
+                    }
+                  }}
+                />
+              ))}
             </div>
           ))
+        ) : (
+          <div className="mt-md">
+            {getLongerTaskFirst(jobStates).map((file, k) => (
+              <JobStateFile
+                key={k}
+                file={file}
+                isSelected={selectedTaskId === file.id}
+                onClick={(seeDetails) => {
+                  if (seeDetails) {
+                    setSelectedTaskId(file.id);
+                  } else {
+                    setSelectedTaskId(null);
+                  }
+                }}
+              />
+            ))}
+          </div>
         )}
       </JobStates>
     </div>

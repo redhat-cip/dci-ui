@@ -11,7 +11,7 @@ import {
   global_palette_black_600,
   global_palette_black_800,
 } from "@patternfly/react-tokens";
-import { Button } from "@patternfly/react-core";
+import { Button, Dropdown } from "@patternfly/react-core";
 import { IFileStatus } from "types";
 
 export const JobStates = styled.div`
@@ -21,7 +21,7 @@ export const JobStates = styled.div`
 
 export const RawLogRow = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
 `;
@@ -71,9 +71,7 @@ interface FileRowProps {
 
 export const FileRow = styled.div<FileRowProps>`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
   min-height: 25px;
   border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
   ${(props) =>
@@ -94,32 +92,9 @@ export const FileRow = styled.div<FileRowProps>`
   }
 `;
 
-interface ShareLinkProps {
-  isSelected: boolean;
-}
-
-export const ShareLink = styled.a<ShareLinkProps>`
-  font-size: 11px;
-  color: ${global_palette_black_500.value};
-  &:hover {
-    color: ${global_palette_black_200.value};
-  }
-  ${(props) =>
-    props.isSelected &&
-    css`
-      color: ${global_palette_black_200.value};
-    `};
-`;
-
-export const ShareLinkBox = styled.div`
-  width: 1rem;
-  display: flex;
-  justifycontent: center;
-  alignitems: center;
-`;
-
-export const CaretIcon = styled.div`
+export const IconContainer = styled.div`
   width: 2rem;
+  min-height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
