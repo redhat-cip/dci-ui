@@ -1,45 +1,34 @@
 import { useState } from "react";
 import * as React from "react";
 import { Button } from "@patternfly/react-core";
-import {
-  TimesIcon,
-  CheckIcon,
-  PencilAltIcon,
-  CommentIcon,
-} from "@patternfly/react-icons";
+import { TimesIcon, CheckIcon } from "@patternfly/react-icons";
 import * as Yup from "yup";
 import { Form, Formik, Field } from "formik";
 import styled from "styled-components";
+import { global_palette_black_700 } from "@patternfly/react-tokens";
+
 interface TextAreaEditableOnHoverProps {
   text: string;
   onSubmit: (text: string) => void;
   children: React.ReactNode;
   [x: string]: any;
 }
+
 const TextAreaEditableOnHoverSchema = Yup.object().shape({
   text: Yup.string(),
 });
+
 const TextAreaEditable = styled.div`
-  display: flex;
-  position: relative;
-  align-items: center;
   width: 100%;
-  .pencil-icon {
-    display: none;
-  }
-  .comment-icon {
-    display: block;
-  }
-  &:hover .pencil-icon {
-    display: block;
-  }
-  &:hover .comment-icon {
-    display: none;
+  min-height: 56px;
+  cursor: text;
+  font-size: 0.8em;
+  &:hover {
+    border: 1px solid ${global_palette_black_700.value};
+    border-radius: 2px;
   }
 `;
-const InlineForm = styled.div`
-  display: flex;
-`;
+
 export default function TextAreaEditableOnHover({
   text,
   onSubmit,
@@ -58,8 +47,8 @@ export default function TextAreaEditableOnHover({
     >
       {({ isValid, dirty }) => (
         <Form {...props}>
-          <InlineForm>
-            <div style={{ flex: "1" }}>
+          <div>
+            <div>
               <Field
                 id="text"
                 name="text"
@@ -68,44 +57,52 @@ export default function TextAreaEditableOnHover({
                   width: "100%",
                   maxWidth: "100%",
                   resize: "none",
+                  padding: "0.2em",
                 }}
                 cols={50}
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus
               />
             </div>
-            <div style={{ flex: "none" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
               <Button
-                variant="link"
+                variant="control"
                 type="submit"
+                isInline
+                isSmall
                 isDisabled={!(isValid && dirty)}
               >
                 <CheckIcon />
               </Button>
               <Button
-                variant="plain"
+                variant="control"
                 type="button"
+                isInline
+                isSmall
                 onClick={() => setEditModeOne(false)}
+                className="ml-xs"
               >
                 <TimesIcon />
               </Button>
             </div>
-          </InlineForm>
+          </div>
         </Form>
       )}
     </Formik>
   ) : (
-    <TextAreaEditable {...props}>
-      <div
-        tabIndex={0}
-        role="button"
-        style={{ flex: "none" }}
-        className="pointer"
-        onClick={() => setEditModeOne(true)}
-        onKeyDown={() => setEditModeOne(true)}
-      >
-        <CommentIcon className="mr-xs comment-icon" />
-        <PencilAltIcon className="mr-xs pencil-icon" />
-      </div>
-      <div style={{ flex: "1" }}>{children}</div>
+    <TextAreaEditable
+      {...props}
+      onClick={() => {
+        setEditModeOne(true);
+      }}
+    >
+      {children}
     </TextAreaEditable>
   );
 }

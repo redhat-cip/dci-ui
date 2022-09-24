@@ -42,6 +42,7 @@ import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
 import { BackgroundImage } from "ui";
 import Alerts from "alerts/Alerts";
 import AuthenticatedLayout from "pages/AuthenticatedLayout";
+import JobTestPage from "jobs/job/tests/test/JobTestPage";
 
 export default function App() {
   return (
@@ -85,6 +86,7 @@ export default function App() {
               <Route path=":job_id" element={<JobPage />}>
                 <Route index element={<JobStatesPage />} />
                 <Route path="jobStates" element={<JobStatesPage />} />
+                <Route path="tests/:file_id" element={<JobTestPage />} />
                 <Route path="tests" element={<JobTestsPage />} />
                 <Route path="files" element={<JobFilesPage />} />
                 <Route path="settings" element={<JobSettingsPage />} />

@@ -21,7 +21,7 @@ interface AuthContextType {
 export const AuthContext = React.createContext<AuthContextType>(null!);
 
 type AuthProviderProps = {
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {

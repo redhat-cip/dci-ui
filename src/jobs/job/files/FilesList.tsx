@@ -6,8 +6,6 @@ import { IEnhancedJob } from "types";
 import { sortByName } from "services/sort";
 import {
   Button,
-  PageSection,
-  PageSectionVariants,
   SearchInput,
   Toolbar,
   ToolbarContent,
@@ -53,7 +51,7 @@ export default function FilesList({ job }: FilesListProps) {
     return acc;
   }, 0);
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <div>
       <Toolbar clearAllFilters={() => {}} collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup>
@@ -135,6 +133,6 @@ export default function FilesList({ job }: FilesListProps) {
           </table>
         )}
       </div>
-    </PageSection>
+    </div>
   );
 }

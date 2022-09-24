@@ -1,5 +1,5 @@
 import MainPage from "pages/MainPage";
-import { Breadcrumb } from "ui";
+import { Breadcrumb, CopyIconButton } from "ui";
 import { useJob } from "./jobContext";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import {
@@ -11,25 +11,30 @@ import {
   TabTitleText,
   TextContent,
 } from "@patternfly/react-core";
-import JobDetailsSummary from "./JobDetailsSummary";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const endpoints = [
+  { title: "Logs", value: "jobStates" },
+  { title: "Tests", value: "tests" },
+  { title: "Files", value: "files" },
+  { title: "Settings", value: "settings" },
+];
 
 export default function JobPageWithMenu() {
   const { job } = useJob();
   const navigate = useNavigate();
   const location = useLocation();
-  const endpoints = [
-    { title: "Logs", value: "jobStates" },
-    { title: "Tests", value: "tests" },
-    { title: "Files", value: "files" },
-    { title: "Settings", value: "settings" },
-  ];
-  const endpointIndex = endpoints.findIndex((e) =>
-    location.pathname.endsWith(e.value)
-  );
-  const [activeTabKey, setActiveTabKey] = useState<number>(
-    endpointIndex === -1 ? 0 : endpointIndex
-  );
+  const [activeTabKey, setActiveTabKey] = useState<number>(0);
+
+  useEffect(() => {
+    const endpointIndex = endpoints.findIndex((e) =>
+      location.pathname.includes(`${job.id}/${e.value}`)
+    );
+    if (endpointIndex !== -1) {
+      setActiveTabKey(endpointIndex);
+    }
+  }, [location, job.id]);
+
   return (
     <MainPage
       title="Job Details"
@@ -67,24 +72,23 @@ export default function JobPageWithMenu() {
           links={[
             { to: "/", title: "DCI" },
             { to: "/jobs", title: "Jobs" },
-            { to: `/jobs/${job.id}`, title: job.id },
+            {
+              to: `/jobs/${job.id}`,
+              title: (
+                <span>
+                  {job.id}
+                  <CopyIconButton
+                    text={job.id}
+                    textOnSuccess="copied"
+                    className="ml-xs pointer"
+                  />
+                </span>
+              ),
+            },
           ]}
         />
       }
     >
-      <JobDetailsSummary
-        key={job.id}
-        onTagClicked={(tag) => navigate(`/jobs?where=tags:${tag}`)}
-        onRemoteciClicked={(remoteci) =>
-          navigate(`/jobs?where=remoteci_id:${remoteci.id}`)
-        }
-        onTeamClicked={(team) => navigate(`/jobs?where=team_id:${team.id}`)}
-        onTopicClicked={(topic) => navigate(`/jobs?where=topic_id:${topic.id}`)}
-        onConfigurationClicked={(configuration) =>
-          navigate(`/jobs?where=configuration:${configuration}`)
-        }
-        job={job}
-      />
       <Outlet />
     </MainPage>
   );

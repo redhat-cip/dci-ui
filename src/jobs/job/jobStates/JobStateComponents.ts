@@ -11,7 +11,7 @@ import {
   global_palette_black_600,
   global_palette_black_800,
 } from "@patternfly/react-tokens";
-import { Button, Dropdown } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
 import { IFileStatus } from "types";
 
 export const JobStates = styled.div`

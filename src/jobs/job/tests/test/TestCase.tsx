@@ -10,11 +10,7 @@ import {
   Label,
 } from "@patternfly/react-core";
 import { useState } from "react";
-import {
-  CaretDownIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-} from "@patternfly/react-icons";
+import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { ITestCase } from "types";
 import { CopyButton } from "ui";
 import {
