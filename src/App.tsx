@@ -37,6 +37,7 @@ import AnalyticsPage from "analytics/AnalyticsPage";
 import LatestJobStatusPage from "analytics/LatestJobStatus/LatestJobStatusPage";
 import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
+import JunitComparisonPage from "analytics/JunitComparison/JunitComparisonPage";
 import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
 import { BackgroundImage } from "ui";
 import Alerts from "alerts/Alerts";
@@ -58,6 +59,10 @@ export default function App() {
           <Route element={<AuthenticatedLayout />}>
             <Route path="analytics">
               <Route index element={<AnalyticsPage />} />
+              <Route
+                path="junit_comparison"
+                element={<JunitComparisonPage />}
+              />
               <Route
                 path="component_coverage"
                 element={<ComponentCoveragePage />}
