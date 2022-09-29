@@ -1,16 +1,23 @@
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Location } from "history";
 import { setJWT } from "services/localStorage";
 import { useAuth } from "./authContext";
 import { useSSO } from "./ssoContext";
+
+interface LocationState {
+  from: {
+    pathname: string;
+  };
+}
 
 export default function LoginCallbackPage() {
   const { sso } = useSSO();
   const { refreshIdentity } = useAuth();
   const [isLoadingUser, setIsLoadingUser] = useState(true);
-  const [location, setLocation] = useState({ from: { pathname: "/jobs" } });
+  const [location, setLocation] = useState<LocationState>({
+    from: { pathname: "/jobs" },
+  });
 
   useEffect(() => {
     if (sso !== null) {
@@ -18,7 +25,7 @@ export default function LoginCallbackPage() {
         .signinRedirectCallback()
         .then((user) => {
           if (user) {
-            const state = user.state as Location["state"];
+            const state = user.state as LocationState;
             if (state) {
               setLocation(state);
             }
