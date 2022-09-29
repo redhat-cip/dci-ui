@@ -272,7 +272,7 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
               <DescriptionListTerm icon={<LinkIcon />}>Url</DescriptionListTerm>
               <DescriptionListDescription>
                 {innerJob.url === null ? null : (
-                  <Link to={innerJob.url}>{innerJob.url}</Link>
+                  <a href={innerJob.url}>{innerJob.url}</a>
                 )}
               </DescriptionListDescription>
             </DescriptionListGroup>
