@@ -5,7 +5,7 @@ import {
   addPipelineStatus,
   getLongerTaskFirst,
 } from "./jobStatesActions";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import JobStateFile from "./JobStateFile";
 import {
   JobStates,
@@ -19,7 +19,6 @@ import {
 import { EmptyState } from "ui";
 import { getFileContent } from "jobs/job/files/filesActions";
 import { IEnhancedJob } from "types";
-import { useLocation } from "react-router-dom";
 import { humanizeDuration } from "services/date";
 import styled from "styled-components";
 import {
@@ -28,6 +27,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownItem,
+  Button,
 } from "@patternfly/react-core";
 import {
   SortAmountDownIcon,
@@ -97,7 +97,6 @@ interface JobStatesListProps {
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
-  const location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
   const [sort, setSort] = useState<AnsibleTaskFilter>(
     (searchParams.get("sort") as AnsibleTaskFilter) || "date"
@@ -143,16 +142,19 @@ export default function JobStatesList({ job }: JobStatesListProps) {
         <ProgressStepper isCenterAligned>
           {jobStates.map((jobState, i) => (
             <ProgressStep
+              key={i}
               variant={jobState.pipelineStatus}
               id={jobState.status}
             >
-              <Link
-                to={`${location.pathname}#${jobState.id}:file${
-                  jobState.files.length - 1
-                }`}
+              <Button
+                variant="link"
+                onClick={() => {
+                  const latestTask = jobState.files[jobState.files.length - 1];
+                  setSelectedTaskId(latestTask.id);
+                }}
               >
                 {jobState.status}
-              </Link>
+              </Button>
             </ProgressStep>
           ))}
         </ProgressStepper>
