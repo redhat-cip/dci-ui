@@ -640,3 +640,15 @@ const JobsTableListColumns = [
   "started",
 ] as const;
 export type JobsTableListColumn = typeof JobsTableListColumns[number];
+
+export interface IComponentCoverage {
+  id: string;
+  name: string;
+  canonical_project_name: string;
+  type: string;
+  nbOfSuccessfulJobs: number;
+  nbOfJobs: number;
+  topic_id: string;
+  jobs: { id: string; created_at: string; status: IJobStatus; name: string }[];
+  tags: string[];
+}

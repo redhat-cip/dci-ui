@@ -1,17 +1,5 @@
 import { sortByOldestFirst } from "services/sort";
-import { IComponentCoverageESData, IJobStatus } from "types";
-
-export interface IComponentCoverage {
-  id: string;
-  name: string;
-  canonical_project_name: string;
-  type: string;
-  nbOfSuccessfulJobs: number;
-  nbOfJobs: number;
-  topic_id: string;
-  jobs: { id: string; created_at: string; status: IJobStatus; name: string }[];
-  tags: string[];
-}
+import { IComponentCoverageESData, IComponentCoverage } from "types";
 
 interface ComponentsCoverage {
   [componentId: string]: IComponentCoverage;

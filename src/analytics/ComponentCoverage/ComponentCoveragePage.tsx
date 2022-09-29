@@ -26,11 +26,8 @@ import {
   global_palette_red_50,
 } from "@patternfly/react-tokens";
 import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
-import { IComponentCoverageESData, ITopic } from "types";
-import {
-  buildComponentCoverage,
-  IComponentCoverage,
-} from "./componentCoverage";
+import { IComponentCoverageESData, ITopic, IComponentCoverage } from "types";
+import { buildComponentCoverage } from "./componentCoverage";
 import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
@@ -42,23 +39,13 @@ import {
   WarningTriangleIcon,
 } from "@patternfly/react-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bar, BarChart, XAxis, Tooltip } from "recharts";
-import { DateTime } from "luxon";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
 import TypesFilter from "./TypesFilter";
 import qs from "qs";
 import TeamsFilter from "jobs/toolbar/TeamsFilter";
-
-interface CumulatedDataPerWeek {
-  [weekNumber: number]: {
-    success: number;
-    failure: number;
-    name: string;
-    weekNumber: number;
-  };
-}
+import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 
 interface ICoverageFilters {
   topic_id: string | null;
@@ -390,50 +377,6 @@ export default function ComponentCoveragePage() {
                                 (component.nbOfSuccessfulJobs * 100) /
                                   component.nbOfJobs
                               );
-
-                        const now = DateTime.now();
-                        const nbWeeksInThePast = 5;
-                        const initialCumulatedData = [
-                          ...Array(nbWeeksInThePast).keys(),
-                        ].reduce((acc, weekInThePast) => {
-                          const weekNumber = now.minus({
-                            weeks: weekInThePast,
-                          }).weekNumber;
-                          acc[weekNumber] = {
-                            success: 0,
-                            failure: 0,
-                            name: `w${weekNumber}`,
-                            weekNumber,
-                          };
-                          return acc;
-                        }, {} as CumulatedDataPerWeek);
-                        const cumulatedPerWeek = component.jobs.reduce(
-                          (acc, job) => {
-                            const jobDate = DateTime.fromISO(job.created_at);
-                            const weekNumber = jobDate.weekNumber;
-                            if (!(weekNumber in initialCumulatedData)) {
-                              return acc;
-                            }
-                            if (job.status === "success") {
-                              acc[weekNumber].success += 1;
-                            } else {
-                              acc[weekNumber].failure += 1;
-                            }
-                            return acc;
-                          },
-                          { ...initialCumulatedData } as CumulatedDataPerWeek
-                        );
-                        const data = Object.values(cumulatedPerWeek).sort(
-                          (stat1, stat2) => {
-                            if (stat1.weekNumber < stat2.weekNumber) {
-                              return -1;
-                            }
-                            if (stat1.weekNumber > stat2.weekNumber) {
-                              return 1;
-                            }
-                            return 0;
-                          }
-                        );
                         return (
                           <tr key={i} role="row">
                             <td role="cell" data-label="Component name">
@@ -531,36 +474,9 @@ export default function ComponentCoveragePage() {
                                 verticalAlign: "inherit",
                               }}
                             >
-                              <BarChart
-                                data={data}
-                                width={150}
-                                height={52}
-                                margin={{
-                                  top: 5,
-                                  right: 5,
-                                  bottom: 0,
-                                  left: 5,
-                                }}
-                              >
-                                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                                <Tooltip
-                                  wrapperStyle={{ zIndex: 1000 }}
-                                  allowEscapeViewBox={{ x: true }}
-                                  labelFormatter={(label, payloads) => {
-                                    if (payloads && payloads.length > 1) {
-                                      return `Week ${payloads[0].payload.weekNumber}`;
-                                    }
-                                  }}
-                                />
-                                <Bar
-                                  dataKey="success"
-                                  fill={global_palette_green_500.value}
-                                />
-                                <Bar
-                                  dataKey="failure"
-                                  fill={global_danger_color_100.value}
-                                />
-                              </BarChart>
+                              <LastComponentsJobsBarChart
+                                component={component}
+                              />
                             </td>
                             <td
                               role="cell"

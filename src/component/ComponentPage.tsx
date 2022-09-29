@@ -14,7 +14,12 @@ import {
   Button,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
-import { IComponentWithJobs, IJob } from "types";
+import {
+  IComponentCoverage,
+  IComponentWithJobs,
+  IJob,
+  IJobStatus,
+} from "types";
 import { useParams, Link } from "react-router-dom";
 import { fetchComponent } from "./componentActions";
 import { CalendarAltIcon, ClockIcon } from "@patternfly/react-icons";
@@ -25,6 +30,8 @@ import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetails
 import { getPercentageOfSuccessfulJobs } from "./stats";
 import JobStatusLabel from "jobs/JobStatusLabel";
 import CardLine from "ui/CardLine";
+import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
+import { global_palette_black_500 } from "@patternfly/react-tokens";
 
 interface IEmbedJobProps {
   job: IJob;
@@ -165,6 +172,43 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
   );
 }
 
+function convertComponentWithJobInComponentCoverage(
+  component: IComponentWithJobs
+): IComponentCoverage {
+  const jobsInfo = component.jobs.reduce(
+    (acc, job) => {
+      acc.jobs.push({
+        id: job.id,
+        created_at: job.created_at,
+        status: job.status,
+        name: job.name,
+      });
+      acc.nbOfJobs += 1;
+      acc.nbOfSuccessfulJobs += job.status === "success" ? 1 : 0;
+      return acc;
+    },
+    { nbOfSuccessfulJobs: 0, nbOfJobs: 0, jobs: [] } as {
+      nbOfSuccessfulJobs: number;
+      nbOfJobs: number;
+      jobs: {
+        id: string;
+        created_at: string;
+        status: IJobStatus;
+        name: string;
+      }[];
+    }
+  );
+  return {
+    id: component.id,
+    name: component.name,
+    canonical_project_name: component.canonical_project_name || "",
+    type: component.type,
+    topic_id: component.topic_id,
+    tags: component.tags || [],
+    ...jobsInfo,
+  };
+}
+
 export default function ComponentPage() {
   const { topic_id, component_id } = useParams();
   const [isFetching, setIsFetching] = useState(true);
@@ -221,34 +265,55 @@ export default function ComponentPage() {
     >
       {component === null ? null : (
         <>
-          <Card>
+          <Grid hasGutter>
+            <GridItem span={3}>
+              <StatHeaderCard
+                title={component.jobs.length.toString()}
+                subTitle="Number of jobs"
+              />
+            </GridItem>
+            <GridItem span={3}>
+              <StatHeaderCard
+                title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
+                subTitle="Percentage of successful jobs"
+              />
+            </GridItem>
+            <GridItem span={3}>
+              <StatHeaderCard
+                title={
+                  component.jobs.length === 0
+                    ? "no job"
+                    : fromNow(component.jobs[0].created_at) || ""
+                }
+                subTitle="Latest run"
+              />
+            </GridItem>
+            <GridItem span={3}>
+              <Card>
+                <CardBody style={{ paddingBottom: "8px" }}>
+                  <p
+                    style={{
+                      color: global_palette_black_500.value,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Lastest jobs
+                  </p>
+                  <LastComponentsJobsBarChart
+                    component={convertComponentWithJobInComponentCoverage(
+                      component
+                    )}
+                  />
+                </CardBody>
+              </Card>
+            </GridItem>
+          </Grid>
+
+          <Card className="mt-md">
             <CardBody>
               <ComponentDetails key={component.etag} component={component} />
             </CardBody>
           </Card>
-
-          {component.jobs.length === 0 ? null : (
-            <Grid hasGutter className="mt-md">
-              <GridItem span={4}>
-                <StatHeaderCard
-                  title={component.jobs.length.toString()}
-                  subTitle="Number of jobs"
-                />
-              </GridItem>
-              <GridItem span={4}>
-                <StatHeaderCard
-                  title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
-                  subTitle="Percentage of successful jobs"
-                />
-              </GridItem>
-              <GridItem span={4}>
-                <StatHeaderCard
-                  title={fromNow(component.jobs[0].created_at) || ""}
-                  subTitle="Latest run"
-                />
-              </GridItem>
-            </Grid>
-          )}
 
           <Card className="mt-md">
             <CardBody>
