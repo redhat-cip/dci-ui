@@ -14,10 +14,12 @@ export default function TestsList({ tests }: TestsListProps) {
       <EmptyState title="No tests" info="There is no tests for this job" />
     );
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <>
       {tests.map((test, i) => (
-        <Test key={i} test={test} />
+        <PageSection variant={PageSectionVariants.light} className="mt-xs">
+          <Test key={i} test={test} />
+        </PageSection>
       ))}
-    </PageSection>
+    </>
   );
 }

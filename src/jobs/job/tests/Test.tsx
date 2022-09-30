@@ -1,15 +1,16 @@
-import { Button, Label } from "@patternfly/react-core";
+import { Button, Flex, FlexItem, Label } from "@patternfly/react-core";
 import { useCallback, useState } from "react";
-import { IFile, ITest, ITestsCase } from "types";
-import { isEmpty } from "lodash";
+import { IFile, ITest, ITestSuite } from "types";
 import { humanizeDuration } from "services/date";
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ExclamationCircleIcon,
+  CaretDownIcon,
+  CaretRightIcon,
 } from "@patternfly/react-icons";
-import TestsCases from "./TestsCases";
-import { getTestsCases } from "./testsActions";
+import { getJunit } from "./testsActions";
+import TestSuites from "./TestSuites";
 
 interface TestProps {
   test: ITest;
@@ -18,38 +19,47 @@ interface TestProps {
 export default function Test({ test }: TestProps) {
   const [isLoadingTestsCases, setIsLoadingTestsCases] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
-  const [testscases, setTestscases] = useState<ITestsCase[]>([]);
+  const [testsuites, setTestsuites] = useState<ITestSuite[]>([]);
 
   const loadTestCases = useCallback(() => {
-    setSeeDetails(true);
-    if (isEmpty(testscases)) {
+    if (testsuites.length === 0) {
       setIsLoadingTestsCases(true);
       const file = { id: test.file_id } as IFile;
-      getTestsCases(file)
+      getJunit(file)
         .then((r) => {
-          setTestscases(r.data.testscases);
+          setTestsuites(r.data.testsuites);
         })
         .finally(() => {
           setIsLoadingTestsCases(false);
         });
     }
-  }, [test.file_id, testscases]);
+  }, [test.file_id, testsuites]);
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 0,
-          paddingBottom: "1em",
-        }}
-      >
-        <div>
-          <span className="mr-lg">
-            {test.name || "Test"} ({humanizeDuration(test.time)})
-          </span>
+      <Flex>
+        <FlexItem flex={{ default: "flex_3" }}>
+          <Button
+            variant="link"
+            onClick={() => {
+              setSeeDetails(!seeDetails);
+              loadTestCases();
+            }}
+            style={{ display: "flex", alignItems: "center", padding: 0 }}
+          >
+            {seeDetails ? (
+              <CaretDownIcon className="mr-xs" />
+            ) : (
+              <CaretRightIcon className="mr-xs" />
+            )}
+
+            {test.name || "Test"}
+          </Button>
+        </FlexItem>
+        <FlexItem flex={{ default: "flex_1" }}>
+          {humanizeDuration(test.time)}
+        </FlexItem>
+        <FlexItem flex={{ default: "flex_2" }}>
           <Label color="blue" className="mr-xs">
             {test.total} tests
           </Label>
@@ -95,39 +105,17 @@ export default function Test({ test }: TestProps) {
               {test.regressions} regressions
             </Label>
           ) : null}
-        </div>
-        <div>
-          {isLoadingTestsCases ? (
-            <Button isDisabled={isLoadingTestsCases}>Loading...</Button>
-          ) : seeDetails ? (
-            <Button onClick={() => setSeeDetails(false)}>Hide all tests</Button>
+        </FlexItem>
+      </Flex>
+      <div>
+        {seeDetails ? (
+          isLoadingTestsCases ? (
+            <span>Loading...</span>
           ) : (
-            <Button
-              isDisabled={isLoadingTestsCases}
-              onClick={() => {
-                loadTestCases();
-              }}
-            >
-              See all tests
-            </Button>
-          )}
-        </div>
+            <TestSuites testsuites={testsuites} />
+          )
+        ) : null}
       </div>
-      {seeDetails && (
-        <div style={{ paddingBottom: "2em" }}>
-          {isLoadingTestsCases ? (
-            <div>loading...</div>
-          ) : (
-            <div>
-              {isEmpty(testscases) ? (
-                <div>There are no test cases for this test</div>
-              ) : (
-                <TestsCases testscases={testscases} />
-              )}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

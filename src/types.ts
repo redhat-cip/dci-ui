@@ -345,6 +345,41 @@ export interface IGetTestsCases {
   testscases: ITestsCase[];
 }
 
+export type ITestCaseActionType = "success" | "skipped" | "failure" | "error";
+
+export interface ITestCase {
+  action: ITestCaseActionType;
+  classname: string;
+  message: string | null;
+  name: string;
+  properties: { name: string; value: string }[];
+  stderr: string | null;
+  stdout: string | null;
+  time: number;
+  type: string;
+  value: string;
+  successfix: boolean;
+  regression: boolean;
+}
+
+export interface ITestSuite {
+  errors: number;
+  failures: number;
+  id: number;
+  name: string;
+  skipped: number;
+  success: number;
+  successfixes: number;
+  regressions: number;
+  testcases: ITestCase[];
+  tests: number;
+  time: number;
+}
+
+export interface IGetJunitTestSuites {
+  testsuites: ITestSuite[];
+}
+
 export type state = "active" | "inactive" | "archived";
 
 export interface IFile {
