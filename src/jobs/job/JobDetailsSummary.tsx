@@ -280,22 +280,30 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
           <DescriptionListGroup>
             <DescriptionListTerm>Tags</DescriptionListTerm>
             <DescriptionListDescription>
-              {isEmpty(innerJob.tags) ? null : (
-                <LabelGroup numLabels={99}>
-                  {innerJob.tags?.map((tag, index) => (
+              {isEmpty(innerJob.tags)
+                ? null
+                : innerJob.tags?.map((tag, index) => (
                     <Label
                       key={index}
                       color="blue"
-                      className="pointer"
+                      className="pointer mr-xs mb-xs"
                       onClick={() => {
                         navigate(`/jobs?where=tags:${tag}`);
                       }}
+                      style={{ maxWidth: "100%" }}
                     >
-                      <small>{tag}</small>
+                      <small
+                        title={tag}
+                        style={{
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {tag}
+                      </small>
                     </Label>
                   ))}
-                </LabelGroup>
-              )}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
