@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           dci-ui
-Version:        0.1.2
+Version:        0.1.3
 Release:        1.VERS%{?dist}
 
 Summary:        DCI UI static files
@@ -10,11 +10,7 @@ License:        ASL 2.0
 URL:            https://github.com/redhat-cip/dci-ui
 Source0:        dci-ui-%{version}.tar.gz
 
-%if 0%{?rhel} && 0%{?rhel} < 8
-BuildRequires:  rh-nodejs12
-%else
-BuildRequires:  /usr/bin/npm
-%endif
+BuildRequires:  npm
 
 %description
 DCI UI static files
@@ -23,13 +19,8 @@ DCI UI static files
 %setup -qc
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 8
-scl enable rh-nodejs12 "npm install"
-scl enable rh-nodejs12 "npm run build"
-%else
 npm install
 npm run build
-%endif
 
 %install
 install -d -m0755 %{buildroot}/srv/www/dci-ui
@@ -40,6 +31,9 @@ cp -r build/* %{buildroot}/srv/www/dci-ui
 /srv/www/dci-ui/*
 
 %changelog
+* Tue Nov 8 2022 Guillaume Vincent <gvincent@redhat.com> 0.1.3-1
+- Remove build for EL7
+
 * Tue Dec 15 2020 Guillaume Vincent <gvincent@redhat.com> 0.1.2-1
 - Remove unused config.json
 - Use node 12
