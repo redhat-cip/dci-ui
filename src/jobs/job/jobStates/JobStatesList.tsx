@@ -97,7 +97,7 @@ interface JobStatesListProps {
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [sort, setSort] = useState<AnsibleTaskFilter>(
     (searchParams.get("sort") as AnsibleTaskFilter) || "date"
   );
@@ -109,14 +109,16 @@ export default function JobStatesList({ job }: JobStatesListProps) {
   const [rawLog, setRawLog] = useState("");
 
   useEffect(() => {
-    const newSearchParams: { sort: AnsibleTaskFilter; task?: string } = {
-      sort,
-    };
+    searchParams.set("sort", sort);
+    setSearchParams(searchParams, { replace: true });
+  }, [searchParams, setSearchParams, sort]);
+
+  useEffect(() => {
     if (selectedTaskId) {
-      newSearchParams.task = selectedTaskId;
+      searchParams.set("task", selectedTaskId);
+      setSearchParams(searchParams, { replace: true });
     }
-    setSearchParams(newSearchParams);
-  }, [setSearchParams, sort, selectedTaskId]);
+  }, [searchParams, setSearchParams, selectedTaskId]);
 
   const rawLogFile = job.files.find(
     (f) => f.name.toLowerCase() === "ansible.log"
@@ -160,14 +162,14 @@ export default function JobStatesList({ job }: JobStatesListProps) {
         </ProgressStepper>
       </div>
       <JobStates>
-        {rawLogFile && (
-          <RawLogRow>
-            <JobStateFilterButton
-              changeFilter={(sort) => {
-                setSort(sort);
-                setSelectedTaskId(null);
-              }}
-            />
+        <RawLogRow>
+          <JobStateFilterButton
+            changeFilter={(sort) => {
+              setSort(sort);
+              setSelectedTaskId(null);
+            }}
+          />
+          {rawLogFile && (
             <RawLogButton
               variant="tertiary"
               isSmall
@@ -188,8 +190,8 @@ export default function JobStatesList({ job }: JobStatesListProps) {
                 ? "Hide Raw log"
                 : "Raw Log"}
             </RawLogButton>
-          </RawLogRow>
-        )}
+          )}
+        </RawLogRow>
         {seeRawLog && !loadingRawLog ? (
           <div>
             <FileContent>

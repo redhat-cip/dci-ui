@@ -46,7 +46,7 @@ export default function JobsPage() {
   );
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
-    navigate(`/jobs${newSearch}`);
+    navigate(`/jobs${newSearch}`, { replace: true });
   }, [navigate, filters]);
 
   const getJobsCallback = useCallback(() => {
