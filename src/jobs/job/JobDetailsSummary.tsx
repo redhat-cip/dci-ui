@@ -38,7 +38,7 @@ import {
   getColor,
   getIcon,
 } from "jobs/jobSummary/jobSummaryUtils";
-import { Regressions, Successfixes } from "jobs/jobSummary/components";
+import { TestLabels } from "jobs/TestsLabels";
 
 const CommentBloc = styled.div`
   display: flex;
@@ -82,33 +82,14 @@ function Tests({ jobId, tests }: TestsProps) {
             <Link to={`/jobs/${jobId}/tests/${test.file_id}`}>{test.name}</Link>
           </div>
           <div style={{ flex: "0 0 auto", marginLeft: "1em" }}>
-            <LabelGroup numLabels={5} key={i}>
-              <Label
-                isCompact
-                color="green"
-                title={`${test.success} tests in success`}
-              >
-                {test.success}
-              </Label>
-              <Label
-                isCompact
-                color="orange"
-                title={`${test.skips} skipped tests`}
-              >
-                {test.skips}
-              </Label>
-              <Label
-                isCompact
-                color="red"
-                title={`${
-                  test.errors + test.failures
-                } errors and failures tests`}
-              >
-                {test.errors + test.failures}
-              </Label>
-              <Successfixes successfixes={test.successfixes} isCompact />
-              <Regressions regressions={test.regressions} isCompact />
-            </LabelGroup>
+            <TestLabels
+              success={test.success}
+              skips={test.skips}
+              failures={test.failures}
+              errors={test.errors}
+              successfixes={test.successfixes}
+              regressions={test.regressions}
+            />
           </div>
         </div>
       ))}
