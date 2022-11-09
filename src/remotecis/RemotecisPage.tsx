@@ -5,9 +5,9 @@ import MainPage from "pages/MainPage";
 import remotecisActions from "./remotecisActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { getRemotecisForTeam, isFetchingRemotecis } from "./remotecisSelectors";
-import SeeCredentialsModal from "ui/SeeCredentialsModal";
+import { SeeAuthentificationFileModal } from "ui/Credentials";
 import { Button, Label } from "@patternfly/react-core";
-import { TrashIcon } from "@patternfly/react-icons";
+import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
@@ -68,7 +68,7 @@ export default function RemotecisPage() {
             <th>Name</th>
             <th className="text-center">Status</th>
             <th className="text-center" title="Authentication">
-              Authentication
+              <UserSecretIcon className="mr-xs" /> Authentication
             </th>
             <th className="text-center">Team</th>
             <th>Created</th>
@@ -90,7 +90,17 @@ export default function RemotecisPage() {
                 )}
               </td>
               <td className="text-center">
-                <SeeCredentialsModal role="remoteci" credentials={remoteci} />
+                <SeeAuthentificationFileModal
+                  type="sh"
+                  role="remoteci"
+                  resource={remoteci}
+                  className="mr-xs"
+                />
+                <SeeAuthentificationFileModal
+                  type="yaml"
+                  role="remoteci"
+                  resource={remoteci}
+                />
               </td>
               <td className="text-center">{remoteci?.team?.name}</td>
               <td>{remoteci.from_now}</td>
@@ -109,7 +119,7 @@ export default function RemotecisPage() {
                   onOk={() => dispatch(remotecisActions.delete(remoteci))}
                 >
                   {(openModal) => (
-                    <Button variant="danger" onClick={openModal}>
+                    <Button isSmall variant="danger" onClick={openModal}>
                       <TrashIcon />
                     </Button>
                   )}
