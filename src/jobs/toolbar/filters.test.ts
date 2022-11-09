@@ -58,6 +58,23 @@ describe("parse filters", () => {
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
+
+  it("nrt when user change only the page and perPage value", () => {
+    const search = "?page=2&perPage=50";
+    const expectedFilters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 2,
+      perPage: 50,
+      configuration: null,
+      name: null,
+    };
+    expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
+  });
 });
 
 test("get params from default filters", () => {

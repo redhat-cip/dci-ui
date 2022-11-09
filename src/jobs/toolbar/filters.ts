@@ -16,11 +16,23 @@ export const defaultFilters: IJobFilters = {
 };
 
 export function parseFiltersFromSearch(search: string): IJobFilters {
-  const { page = "1", perPage = "20", where } = queryString.parse(search);
+  const {
+    page: pageString = "1",
+    perPage: perPageString = "20",
+    where,
+  } = queryString.parse(search);
+  const page = parseInt(pageString as string, 10);
+  const perPage = parseInt(perPageString as string, 10);
   const copyDefaultFilters: IJobFilters = JSON.parse(
     JSON.stringify(defaultFilters)
   );
-  if (typeof where !== "string" || isEmpty(where)) return copyDefaultFilters;
+  if (typeof where !== "string" || isEmpty(where)) {
+    return {
+      ...copyDefaultFilters,
+      page,
+      perPage,
+    };
+  }
   return where.split(",").reduce(
     (acc: IJobFilters, filter: string) => {
       const [key, ...rest] = filter.split(":");
@@ -49,8 +61,8 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
     },
     {
       ...copyDefaultFilters,
-      page: parseInt(page as string, 10),
-      perPage: parseInt(perPage as string, 10),
+      page,
+      perPage,
     }
   );
 }
