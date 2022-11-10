@@ -1,3 +1,4 @@
+import { IToken } from "types";
 import {
   setToken,
   getToken,
@@ -14,7 +15,7 @@ test("localStorage setToken getToken removeToken", () => {
   const token = {
     type: "Bearer",
     value: "eyJhbGciOiJSUzI1NiIsInR5cC",
-  };
+  } as IToken;
   setToken(token);
   expect(getToken()).toEqual(token);
   removeToken();
@@ -23,10 +24,10 @@ test("localStorage setToken getToken removeToken", () => {
 
 test("localStorage setJWT", () => {
   setJWT("");
-  expect(getToken().type).toBe("Bearer");
+  expect(getToken()?.type).toBe("Bearer");
 });
 
 test("localStorage setBasicToken", () => {
   setBasicToken("");
-  expect(getToken().type).toBe("Basic");
+  expect(getToken()?.type).toBe("Basic");
 });
