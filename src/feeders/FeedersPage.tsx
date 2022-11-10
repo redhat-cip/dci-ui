@@ -9,7 +9,7 @@ import { TrashIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { Button } from "@patternfly/react-core";
 import { AppDispatch } from "store";
 import { useNavigate, Link } from "react-router-dom";
-import SeeCredentialsModal from "ui/SeeCredentialsModal";
+import { SeeAuthentificationFileModal } from "ui/Credentials";
 import teamsActions from "teams/teamsActions";
 
 export default function FeedersPage() {
@@ -69,7 +69,8 @@ export default function FeedersPage() {
               </td>
               <td>{feeder.team ? feeder.team.name.toUpperCase() : null}</td>
               <td className="text-center">
-                <SeeCredentialsModal role="feeder" credentials={feeder} />
+                <SeeAuthentificationFileModal type='sh' role="feeder" resource={feeder} className="mr-xs" />
+                <SeeAuthentificationFileModal type='yaml' role="feeder" resource={feeder} />
               </td>
               <td className="text-center">{feeder.from_now}</td>
               <td className="text-center">
