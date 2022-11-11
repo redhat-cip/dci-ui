@@ -74,6 +74,10 @@
   padding: 0 !important;
 }
 
+.p-sm {
+  padding: 0.5rem;
+}
+
 .p-md {
   padding: 1rem;
 }
