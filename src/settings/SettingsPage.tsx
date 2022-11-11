@@ -16,11 +16,11 @@ export default function SettingsPage() {
   if (currentUser === null) return null;
   return (
     <MainPage
-      title="User preferences"
-      description="Edit your preferences"
+      title="My profile"
+      description="Edit your profile"
       Breadcrumb={
         <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "User preferences" }]}
+          links={[{ to: "/", title: "DCI" }, { title: "My profile" }]}
         />
       }
     >
