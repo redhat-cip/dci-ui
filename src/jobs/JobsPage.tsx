@@ -23,10 +23,12 @@ import {
 } from "@patternfly/react-core";
 import { JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
+import { useAuth } from "auth/authContext";
 
 export default function JobsPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { identity } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
@@ -51,8 +53,20 @@ export default function JobsPage() {
 
   const getJobsCallback = useCallback(() => {
     dispatch(jobsActions.clear());
-    dispatch(jobsActions.all(getParamsFromFilters(filters)));
-  }, [dispatch, filters]);
+    if (!identity || !identity.team) return;
+    if (identity.hasReadOnlyRole || filters.team_id !== null) {
+      dispatch(jobsActions.all(getParamsFromFilters(filters)));
+    } else {
+      dispatch(
+        jobsActions.all(
+          getParamsFromFilters({
+            ...filters,
+            team_id: identity.team.id,
+          })
+        )
+      );
+    }
+  }, [identity, dispatch, filters]);
 
   useEffect(() => {
     getJobsCallback();
