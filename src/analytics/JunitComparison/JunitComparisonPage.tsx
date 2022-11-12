@@ -37,7 +37,7 @@ import qs from "qs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { showAPIError } from "alerts/alertsActions";
+import { showAPIError, showError } from "alerts/alertsActions";
 import RemotecisFilter from "jobs/toolbar/RemotecisFilter";
 import { DateTime } from "luxon";
 import TestNameFilter from "./TestNameFilter";
@@ -325,7 +325,13 @@ export default function JunitComparisonPage() {
                 http
                   .post("/api/v1/analytics/junit_comparison", values)
                   .then((response) => {
-                    setData(response.data as JunitData);
+                    if (typeof response.data === "object") {
+                      setData(response.data as JunitData);
+                    } else {
+                      dispatch(
+                        showError("JSON returned by the API is not valid")
+                      );
+                    }
                   })
                   .catch((error) => {
                     dispatch(showAPIError(error));
