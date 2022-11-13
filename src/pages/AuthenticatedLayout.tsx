@@ -46,6 +46,7 @@ import {
 import { useAuth } from "auth/authContext";
 import avatarImg from "@patternfly/react-core/src/components/Avatar/examples/avatarImg.svg";
 import { ICurrentUser, ITeam } from "types";
+import { global_link_Color_light } from "@patternfly/react-tokens";
 
 function TeamSelect({
   currentUser,
@@ -67,7 +68,20 @@ function TeamSelect({
           component="button"
           onClick={() => onTeamSelected(team)}
         >
-          {team.name}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span>{team.name}</span>
+            {currentUser.team?.id === team.id && (
+              <span
+                className="ml-xs"
+                style={{
+                  backgroundColor: global_link_Color_light.value,
+                  height: "5px",
+                  width: "5px",
+                  borderRadius: "50%",
+                }}
+              />
+            )}
+          </div>
         </ApplicationLauncherItem>
       ))}
       toggleIcon={<UsersIcon />}
