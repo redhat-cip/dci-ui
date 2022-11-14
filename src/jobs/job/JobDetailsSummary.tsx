@@ -6,7 +6,6 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   Label,
-  LabelGroup,
   PageSection,
   PageSectionVariants,
 } from "@patternfly/react-core";
