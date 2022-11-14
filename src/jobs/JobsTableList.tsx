@@ -18,7 +18,7 @@ import { sortByName } from "services/sort";
 import { CopyIconButton } from "ui";
 import { groupJobsByPipeline } from "./jobsSelectors";
 import { getPrincipalComponent } from "component/componentSelector";
-import { Regressions, Successfixes } from "./jobSummary/components";
+import { TestsLabels } from "./TestsLabels";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
@@ -141,35 +141,7 @@ function JobTableSummary({
     tests:
       job.results.length === 0 ? null : (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {sortByName(job.results).map((result, i) => (
-            <LabelGroup categoryName={result.name} numLabels={5} key={i}>
-              <Label
-                isCompact
-                color="green"
-                title={`${result.success} tests in success`}
-              >
-                {result.success}
-              </Label>
-              <Label
-                isCompact
-                color="orange"
-                title={`${result.skips} skipped tests`}
-              >
-                {result.skips}
-              </Label>
-              <Label
-                isCompact
-                color="red"
-                title={`${
-                  result.errors + result.failures
-                } errors and failures tests`}
-              >
-                {result.errors + result.failures}
-              </Label>
-              <Successfixes successfixes={result.successfixes} isCompact />
-              <Regressions regressions={result.regressions} isCompact />
-            </LabelGroup>
-          ))}
+          <TestsLabels tests={job.results} />
         </div>
       ),
     tags:
