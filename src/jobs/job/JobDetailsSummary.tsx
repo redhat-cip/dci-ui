@@ -160,7 +160,17 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
           <DescriptionListGroup>
             <DescriptionListTerm>Name</DescriptionListTerm>
             <DescriptionListDescription>
-              {innerJob.name || innerJob.topic?.name}
+              {innerJob.name ? (
+                <Button
+                  variant="link"
+                  onClick={() => navigate(`/jobs?where=name:${innerJob.name}`)}
+                  isInline
+                >
+                  {innerJob.name}
+                </Button>
+              ) : (
+                innerJob.topic?.name
+              )}
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
