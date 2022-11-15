@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   DescriptionList,
@@ -19,14 +19,15 @@ import {
   LinkIcon,
   CogIcon,
   CommentIcon,
+  ExternalLinkAltIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent, IResult } from "types";
+import { IEnhancedJob, IComponent, IResult, IJob } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import TextAreaEditableOnHover from "./TextAreaEditableOnHover";
 import { Markup } from "interweave";
-import { updateJobComment } from "jobs/jobsActions";
+import { getJobSilently, updateJobComment } from "jobs/jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { sortByName, sortByOldestFirst } from "services/sort";
@@ -134,6 +135,30 @@ export function JobConfiguration({ configuration }: JobConfigurationProps) {
   );
 }
 
+function JobName({ jobId }: { jobId: string }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [job, setJob] = useState<IJob | null>(null);
+  useEffect(() => {
+    getJobSilently(jobId)
+      .then(setJob)
+      .catch(() => setJob(null))
+      .finally(() => setIsLoading(false));
+  }, [jobId]);
+  if (isLoading) return null;
+  if (job) {
+    return (
+      <Button
+        variant="link"
+        onClick={() => window.open(`/jobs/${jobId}/jobStates`, "_blank")}
+        isInline
+      >
+        {job.name} <ExternalLinkAltIcon style={{ fontSize: "0.7rem" }} />
+      </Button>
+    );
+  }
+  return <span>{jobId}</span>;
+}
+
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
 `;
@@ -157,6 +182,14 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
           isFillColumns
           columnModifier={{ default: "2Col", lg: "3Col" }}
         >
+          {innerJob.previous_job_id !== null && (
+            <DescriptionListGroup>
+              <DescriptionListTerm>Previous job</DescriptionListTerm>
+              <DescriptionListDescription>
+                <JobName jobId={innerJob.previous_job_id} />
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
           <DescriptionListGroup>
             <DescriptionListTerm>Name</DescriptionListTerm>
             <DescriptionListDescription>
