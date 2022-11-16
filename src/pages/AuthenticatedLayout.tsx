@@ -29,36 +29,48 @@ import {
   MastheadBrand,
   MastheadContent,
   ToolbarContent,
+  Avatar,
+  ApplicationLauncher,
+  ApplicationLauncherItem,
+  Text,
+  TextVariants,
+  Tooltip,
 } from "@patternfly/react-core";
 import Logo from "logo.min.svg";
 import {
   BarsIcon,
-  HelpIcon,
+  QuestionCircleIcon,
   UserIcon,
   UsersIcon,
 } from "@patternfly/react-icons";
 import { useAuth } from "auth/authContext";
+import avatarImg from "@patternfly/react-core/src/components/Avatar/examples/avatarImg.svg";
+import { ICurrentUser, ITeam } from "types";
 
-function MenuDropdown({
-  title,
-  position,
-  dropdownItems,
+function TeamSelect({
+  currentUser,
+  onTeamSelected,
 }: {
-  title: React.ReactNode;
-  position: DropdownPosition;
-  dropdownItems: any[];
+  currentUser: ICurrentUser;
+  onTeamSelected: (team: ITeam) => void;
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
-    <Dropdown
-      isPlain
-      position={position}
+    <ApplicationLauncher
       onSelect={() => setIsDropdownOpen(!isDropdownOpen)}
+      onToggle={setIsDropdownOpen}
       isOpen={isDropdownOpen}
-      toggle={
-        <DropdownToggle onToggle={setIsDropdownOpen}>{title}</DropdownToggle>
-      }
-      dropdownItems={dropdownItems}
+      items={Object.values(currentUser.teams).map((team) => (
+        <ApplicationLauncherItem
+          key={team.name}
+          component="button"
+          onClick={() => onTeamSelected(team)}
+        >
+          {team.name}
+        </ApplicationLauncherItem>
+      ))}
+      toggleIcon={<UsersIcon />}
     />
   );
 }
@@ -69,39 +81,11 @@ interface HeaderProps {
 
 function Header({ toggleSidebarVisibility }: HeaderProps) {
   const { identity, logout, changeCurrentTeam } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false);
+
   const navigate = useNavigate();
   if (identity === null) return null;
-  const identityTeams = values(identity.teams);
-
-  const dropdownUserLinks = [
-    <DropdownItem
-      key="dropdown_user_settings"
-      component="button"
-      onClick={() => navigate("/currentUser/settings")}
-    >
-      Settings
-    </DropdownItem>,
-    <DropdownSeparator key="dropdown_user_separator" />,
-    <DropdownItem
-      key="dropdown_user_logout"
-      component="button"
-      onClick={() => {
-        logout();
-      }}
-    >
-      Logout
-    </DropdownItem>,
-  ];
-
-  const dropdownTeamsLinks = identityTeams.map((team) => (
-    <DropdownItem
-      key={team.name}
-      component="button"
-      onClick={() => changeCurrentTeam(team, identity)}
-    >
-      {team.name}
-    </DropdownItem>
-  ));
 
   return (
     <Masthead id="masthead">
@@ -127,79 +111,125 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
               alignment={{ default: "alignRight" }}
               spacer={{ default: "spacerNone", md: "spacerMd" }}
             >
-              <ToolbarItem>
-                <Button
-                  component="a"
-                  variant="link"
-                  href="https://docs.distributed-ci.io/"
-                  target="top"
-                  aria-label="Link to Distributed CI Documentation page"
-                  style={{ color: "white" }}
-                >
-                  <HelpIcon />
-                </Button>
-              </ToolbarItem>
+              <ToolbarGroup variant="icon-button-group">
+                <ToolbarItem>
+                  <TeamSelect
+                    currentUser={identity}
+                    onTeamSelected={(team) => changeCurrentTeam(team, identity)}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Button
+                    component="a"
+                    variant="link"
+                    href="https://docs.distributed-ci.io/"
+                    target="top"
+                    aria-label="Link to Distributed CI Documentation page"
+                    style={{ color: "white" }}
+                  >
+                    <QuestionCircleIcon />
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
               <ToolbarItem
                 visibility={{
-                  default: "visible",
                   md: "hidden",
-                  lg: "hidden",
-                  xl: "hidden",
-                  "2xl": "hidden",
                 }}
               >
-                <MenuDropdown
+                <Dropdown
+                  isPlain
                   position={DropdownPosition.right}
-                  title={<UserIcon />}
-                  dropdownItems={dropdownUserLinks}
-                />
-              </ToolbarItem>
-              <ToolbarItem visibility={{ default: "hidden", md: "visible" }}>
-                <MenuDropdown
-                  position={DropdownPosition.right}
-                  title={
-                    <span>
-                      <UserIcon className="mr-md" />
-                      {identity.fullname || identity.name}
-                    </span>
+                  onSelect={() => setIsKebabDropdownOpen(!isKebabDropdownOpen)}
+                  toggle={
+                    <DropdownToggle
+                      toggleIndicator={null}
+                      onToggle={setIsKebabDropdownOpen}
+                    >
+                      <UserIcon />
+                    </DropdownToggle>
                   }
-                  dropdownItems={dropdownUserLinks}
+                  isOpen={isKebabDropdownOpen}
+                  dropdownItems={[
+                    <DropdownItem
+                      key="dropdown_kebab_settings"
+                      component="button"
+                      onClick={() => navigate("/currentUser/settings")}
+                    >
+                      My profile
+                    </DropdownItem>,
+                    <DropdownItem
+                      key="dropdown_kebab_logout"
+                      component="button"
+                      onClick={() => {
+                        logout();
+                      }}
+                    >
+                      Log out
+                    </DropdownItem>,
+                  ]}
                 />
               </ToolbarItem>
-              {identityTeams.length > 1 && (
-                <>
-                  <ToolbarItem
-                    visibility={{
-                      default: "visible",
-                      md: "hidden",
-                      lg: "hidden",
-                      xl: "hidden",
-                      "2xl": "hidden",
+            </ToolbarGroup>
+            <ToolbarItem visibility={{ default: "hidden", md: "visible" }}>
+              <Dropdown
+                isFullHeight
+                isOpen={isDropdownOpen}
+                position={DropdownPosition.right}
+                onSelect={() => setIsDropdownOpen(!isDropdownOpen)}
+                toggle={
+                  <DropdownToggle
+                    icon={<Avatar src={avatarImg} alt="Avatar" />}
+                    onToggle={setIsDropdownOpen}
+                  >
+                    {identity.fullname || identity.name}
+                  </DropdownToggle>
+                }
+                dropdownItems={[
+                  <DropdownItem key="team" component="div" isPlainText>
+                    <Text component={TextVariants.small}>Email:</Text>
+                    <Text>{identity.email}</Text>
+                  </DropdownItem>,
+                  <DropdownItem key="team" component="div" isPlainText>
+                    <Text component={TextVariants.small}>
+                      Team:
+                      <Tooltip
+                        position="left"
+                        content={
+                          <div>
+                            The team used in DCI. To change team, click the{" "}
+                            <UsersIcon className="mr-xs" />
+                            icon in the top menu. If you don't have a team,
+                            contact DCI or your EPM.
+                          </div>
+                        }
+                      >
+                        <span className="ml-xs">
+                          <QuestionCircleIcon />
+                        </span>
+                      </Tooltip>
+                    </Text>
+                    <Text>{identity.team ? identity.team.name : ""}</Text>
+                  </DropdownItem>,
+                  <DropdownSeparator key="dropdown_user_separator" />,
+                  <DropdownItem
+                    key="dropdown_user_settings"
+                    component="button"
+                    onClick={() => navigate("/currentUser/settings")}
+                  >
+                    My profile
+                  </DropdownItem>,
+                  <DropdownItem
+                    key="dropdown_user_logout"
+                    component="button"
+                    onClick={() => {
+                      logout();
                     }}
                   >
-                    <MenuDropdown
-                      position={DropdownPosition.right}
-                      title={<UsersIcon />}
-                      dropdownItems={dropdownTeamsLinks}
-                    />
-                  </ToolbarItem>
-                  <ToolbarItem
-                    visibility={{ default: "hidden", md: "visible" }}
-                  >
-                    <MenuDropdown
-                      position={DropdownPosition.right}
-                      title={
-                        <span>
-                          <UsersIcon className="mr-md" />
-                          {identity.team && identity.team.name}
-                        </span>
-                      }
-                      dropdownItems={dropdownTeamsLinks}
-                    />
-                  </ToolbarItem>
-                </>
-              )}
-            </ToolbarGroup>
+                    Log out
+                  </DropdownItem>,
+                ]}
+              />
+            </ToolbarItem>
           </ToolbarContent>
         </Toolbar>
       </MastheadContent>
@@ -248,7 +278,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         )}
       </NavGroup>
       <NavGroup title="User Preferences">
-        <DCINavItem to="/currentUser/settings">Settings</DCINavItem>
+        <DCINavItem to="/currentUser/settings">My profile</DCINavItem>
         <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
       </NavGroup>
       {identity.hasEPMRole && (
