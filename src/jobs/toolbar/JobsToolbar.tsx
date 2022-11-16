@@ -32,8 +32,8 @@ import NameFilter from "./NameFilter";
 import TableViewColumnsFilter from "jobs/tableView/TableViewColumnsFilter";
 
 export const Categories = [
-  "Team",
   "Remoteci",
+  "Team",
   "Product",
   "Topic",
   "Tag",
