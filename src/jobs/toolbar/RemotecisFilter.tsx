@@ -16,6 +16,69 @@ import {
 import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 
+export function RemoteciSelect({
+  remoteci,
+  placeholderText,
+  onSelect,
+  onClear,
+}: {
+  remoteci: IRemoteci | null;
+  onSelect: (remoteci: IRemoteci) => void;
+  onClear: () => void;
+  showToolbarItem?: boolean;
+  placeholderText?: string;
+  categoryName?: string;
+}) {
+  const [searchValue, setSearchValue] = useState("");
+  const remotecis = useSelector(getRemotecis);
+  const isFetching = useSelector(isFetchingRemotecis);
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+
+  useEffect(() => {
+    if (debouncedSearchValue) {
+      dispatch(
+        remotecisActions.all({ where: `name:${debouncedSearchValue}*` })
+      );
+    }
+  }, [debouncedSearchValue, dispatch]);
+
+  return (
+    <Select
+      variant={SelectVariant.typeahead}
+      typeAheadAriaLabel={placeholderText}
+      onToggle={setIsOpen}
+      onSelect={(event, selection) => {
+        setIsOpen(false);
+        const s = selection as IRemoteci;
+        onSelect(s);
+      }}
+      onClear={onClear}
+      selections={remoteci === null ? "" : remoteci.name}
+      isOpen={isOpen}
+      aria-labelledby="select"
+      placeholderText={placeholderText}
+      maxHeight="220px"
+      onTypeaheadInputChanged={setSearchValue}
+      noResultsFoundText={
+        debouncedSearchValue === ""
+          ? "Search a remoteci by name"
+          : isFetching
+          ? "Searching..."
+          : "No remoteci matching this name"
+      }
+    >
+      {remotecis
+        .map((p) => ({ ...p, toString: () => p.name }))
+        .map((remoteci) => (
+          <SelectOption key={remoteci.id} value={remoteci} />
+        ))}
+    </Select>
+  );
+}
+
 type RemotecisFilterProps = {
   remoteci_id: string | null;
   onSelect: (remoteci: IRemoteci) => void;
@@ -33,23 +96,7 @@ export default function RemotecisFilter({
   placeholderText = "Search a name",
   categoryName = "Remoteci",
 }: RemotecisFilterProps) {
-  const [searchValue, setSearchValue] = useState("");
-  const remotecis = useSelector(getRemotecis);
   const remoteci = useSelector(getRemoteciById(remoteci_id));
-  const isFetching = useSelector(isFetchingRemotecis);
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
-
-  useEffect(() => {
-    if (debouncedSearchValue) {
-      dispatch(
-        remotecisActions.all({ where: `name:${debouncedSearchValue}*` })
-      );
-    }
-  }, [debouncedSearchValue, dispatch]);
-
   return (
     <ToolbarFilter
       chips={remoteci === null ? [] : [remoteci.name]}
@@ -57,36 +104,12 @@ export default function RemotecisFilter({
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
-      <Select
-        variant={SelectVariant.typeahead}
-        typeAheadAriaLabel={placeholderText}
-        onToggle={setIsOpen}
-        onSelect={(event, selection) => {
-          setIsOpen(false);
-          const s = selection as IRemoteci;
-          onSelect(s);
-        }}
-        onClear={onClear}
-        selections={remoteci === null ? "" : remoteci.name}
-        isOpen={isOpen}
-        aria-labelledby="select"
+      <RemoteciSelect
+        remoteci={remoteci}
         placeholderText={placeholderText}
-        maxHeight="220px"
-        onTypeaheadInputChanged={setSearchValue}
-        noResultsFoundText={
-          debouncedSearchValue === ""
-            ? "Search a remoteci by name"
-            : isFetching
-            ? "Searching..."
-            : "No remoteci matching this name"
-        }
-      >
-        {remotecis
-          .map((p) => ({ ...p, toString: () => p.name }))
-          .map((remoteci) => (
-            <SelectOption key={remoteci.id} value={remoteci} />
-          ))}
-      </Select>
+        onClear={onClear}
+        onSelect={onSelect}
+      />
     </ToolbarFilter>
   );
 }

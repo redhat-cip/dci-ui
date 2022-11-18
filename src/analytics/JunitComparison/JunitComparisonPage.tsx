@@ -4,20 +4,14 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Grid,
-  GridItem,
-  InputGroup,
-  InputGroupText,
-  InputGroupTextVariant,
-  Text,
+  DatePicker,
+  Flex,
+  FlexItem,
+  Form,
+  FormGroup,
   TextInput,
-  TextVariants,
   ToggleGroup,
   ToggleGroupItem,
-  Toolbar,
-  ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
 } from "@patternfly/react-core";
 import MainPage from "pages/MainPage";
 import { BlinkLogo, Breadcrumb } from "ui";
@@ -30,124 +24,300 @@ import {
   CartesianGrid,
   Bar,
   Label,
+  Cell,
 } from "recharts";
 import http from "services/http";
-import TopicsFilter from "jobs/toolbar/TopicsFilter";
-import qs from "qs";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { TopicSelect } from "jobs/toolbar/TopicsFilter";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showAPIError, showError } from "alerts/alertsActions";
-import RemotecisFilter from "jobs/toolbar/RemotecisFilter";
+import { RemoteciSelect } from "jobs/toolbar/RemotecisFilter";
 import { DateTime } from "luxon";
-import TestNameFilter from "./TestNameFilter";
-import { ITopic } from "types";
+import { IRemoteci, ITopic } from "types";
 import { round } from "lodash";
+import {
+  ArrowDownIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpIcon,
+} from "@patternfly/react-icons";
+import {
+  global_danger_color_100,
+  global_primary_color_100,
+} from "@patternfly/react-tokens";
 
-export function parseJunitComparisonFiltersFromSearch(
-  search: string
-): JunitComparisonFilter {
-  const emptyFilters = {
-    topic_1_id: null,
-    topic_1_start_date: null,
-    topic_1_end_date: null,
-    remoteci_1_id: null,
-    topic_1_baseline_computation: "mean",
-    tags_1: [],
-    topic_2_id: null,
-    topic_2_start_date: null,
-    topic_2_end_date: null,
-    remoteci_2_id: null,
-    topic_2_baseline_computation: "mean",
-    tags_2: [],
-    test_name: null,
-  } as JunitComparisonFilter;
-  if (!search) {
-    return emptyFilters;
-  }
-  const filters = {
-    ...emptyFilters,
-    ...qs.parse(search, { ignoreQueryPrefix: true }),
-  };
-  return filters;
-}
+type JunitComputationMode = "mean" | "median";
 
-export function createJunitComparisonSearchFromFilters(
-  filters: JunitComparisonFilter
-) {
-  if (filters.topic_1_id === null || filters.topic_2_id === null) {
-    return "";
-  }
-  return qs.stringify(
-    {
-      ...filters,
-    },
-    {
-      addQueryPrefix: true,
-      encode: false,
-      skipNulls: true,
-    }
-  );
-}
-
-interface JunitData {
-  details: { testcase: string; value: number }[];
-  intervals: [number, number][];
-  values: number[];
-}
-
-export interface JunitComparisonFilter {
+interface JunitComparisonPayload {
   topic_1_id: string | null;
   topic_1_start_date: string | null;
   topic_1_end_date: string | null;
   remoteci_1_id: string | null;
-  topic_1_baseline_computation: "mean" | "median";
+  topic_1_baseline_computation: JunitComputationMode;
   tags_1: string[];
   topic_2_id: string | null;
   topic_2_start_date: string | null;
   topic_2_end_date: string | null;
   remoteci_2_id: string | null;
-  topic_2_baseline_computation: "mean" | "median";
+  topic_2_baseline_computation: JunitComputationMode;
   tags_2: string[];
   test_name: string | null;
 }
 
-export default function JunitComparisonPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const initialValues = parseJunitComparisonFiltersFromSearch(location.search);
+function JunitComparisonForm({
+  isLoading,
+  onSubmit,
+}: {
+  isLoading: boolean;
+  onSubmit: (form: JunitComparisonPayload) => void;
+}) {
   const [topic1, setTopic1] = useState<ITopic | null>(null);
   const [topic2, setTopic2] = useState<ITopic | null>(null);
-  const [thresholdPercentage, setThresholdPercentage] = useState(10);
-  const [values, setValues] = useState<JunitComparisonFilter>({
-    ...initialValues,
-  });
+  const [remoteci1, setRemoteci1] = useState<IRemoteci | null>(null);
+  const [remoteci2, setRemoteci2] = useState<IRemoteci | null>(null);
+  const [baselineComputation, setBaselineComputation] =
+    useState<JunitComputationMode>("mean");
+  const [topic1StartDate, setTopic1StartDate] = useState(
+    DateTime.now().minus({ week: 1 }).toISODate()
+  );
+  const [topic1EndDate, setTopic1EndDate] = useState(
+    DateTime.now().toISODate()
+  );
+  const [topic2StartDate, setTopic2StartDate] = useState(
+    DateTime.now().minus({ week: 1 }).toISODate()
+  );
+  const [topic2EndDate, setTopic2EndDate] = useState(
+    DateTime.now().toISODate()
+  );
+  const [testName, setTestName] = useState("");
+
+  return (
+    <div>
+      <Flex direction={{ default: "column", lg: "row" }}>
+        <FlexItem flex={{ default: "flex_1" }}>
+          <div>
+            <h2 className="pf-c-title pf-m-lg">Reference job filters</h2>
+            <div className="pf-c-description-list__text">
+              All of the jobs corresponding to these filters will be used as the
+              basis for the calculation.
+            </div>
+          </div>
+          <div className="pf-u-mt-md">
+            <Form>
+              <FormGroup label="Reference topic" isRequired fieldId="topic1">
+                <TopicSelect
+                  topic={topic1}
+                  onClear={() => setTopic1(null)}
+                  onSelect={setTopic1}
+                />
+              </FormGroup>
+              <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
+                <RemoteciSelect
+                  remoteci={remoteci1}
+                  onClear={() => setRemoteci1(null)}
+                  onSelect={(remoteci) => {
+                    setRemoteci1(remoteci);
+                    if (remoteci2 === null) {
+                      setRemoteci2(remoteci);
+                    }
+                  }}
+                />
+              </FormGroup>
+              <FormGroup label="Dates" fieldId="topic_1_start_date">
+                <div className="pf-u-display-flex pf-u-justify-content-space-between">
+                  <DatePicker
+                    id="topic_1_start_date"
+                    value={topic1StartDate}
+                    placeholder="Jobs after"
+                    onChange={setTopic1StartDate}
+                  />
+                  <DatePicker
+                    id="topic_1_end_date"
+                    value={topic1EndDate}
+                    placeholder="Jobs before"
+                    onChange={setTopic1EndDate}
+                  />
+                </div>
+              </FormGroup>
+              <FormGroup label="Test name" isRequired fieldId="test_name">
+                <TextInput
+                  isRequired
+                  type="text"
+                  id="test_name"
+                  name="test_name"
+                  value={testName}
+                  onChange={setTestName}
+                />
+              </FormGroup>
+            </Form>
+          </div>
+        </FlexItem>
+        <FlexItem alignSelf={{ default: "alignSelfStretch" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Button
+              variant="plain"
+              aria-label="Action"
+              onClick={() => {
+                const tmpTopic2 = topic2;
+                const tmpRemoteci2 = remoteci2;
+                const tmpTopic2StartDate = topic2StartDate;
+                const tmpTopic2EndDate = topic2EndDate;
+                setTopic2(topic1);
+                setRemoteci2(remoteci1);
+                setTopic2StartDate(topic1StartDate);
+                setTopic2EndDate(topic1EndDate);
+                setTopic1(tmpTopic2);
+                setRemoteci1(tmpRemoteci2);
+                setTopic1StartDate(tmpTopic2StartDate);
+                setTopic1EndDate(tmpTopic2EndDate);
+              }}
+            >
+              <span className="pf-u-display-none pf-u-display-flex-on-lg">
+                <ArrowLeftIcon />
+                <ArrowRightIcon />
+              </span>
+              <span className="pf-u-display-flex pf-u-display-none-on-lg">
+                <ArrowUpIcon />
+                <ArrowDownIcon />
+              </span>
+            </Button>
+          </div>
+        </FlexItem>
+        <FlexItem flex={{ default: "flex_1" }}>
+          <div>
+            <h2 className="pf-c-title pf-m-lg">Target job filters</h2>
+            <div className="pf-c-description-list__text">
+              The test cases of the target jobs will be compared to the test
+              cases of the reference jobs.
+            </div>
+          </div>
+          <div className="pf-u-mt-md">
+            <Form>
+              <FormGroup label="Target topic" isRequired fieldId="topic2">
+                <TopicSelect
+                  topic={topic2}
+                  onClear={() => setTopic2(null)}
+                  onSelect={setTopic2}
+                />
+              </FormGroup>
+              <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
+                <RemoteciSelect
+                  remoteci={remoteci2}
+                  onClear={() => setRemoteci2(null)}
+                  onSelect={(remoteci) => {
+                    setRemoteci2(remoteci);
+                    if (remoteci1 === null) {
+                      setRemoteci1(remoteci);
+                    }
+                  }}
+                />
+              </FormGroup>
+              <FormGroup label="Dates" fieldId="topic_2_start_date">
+                <div className="pf-u-display-flex pf-u-justify-content-space-between">
+                  <DatePicker
+                    id="topic_2_start_date"
+                    value={topic2StartDate}
+                    placeholder="Jobs after"
+                    onChange={setTopic2StartDate}
+                  />
+                  <DatePicker
+                    id="topic_2_end_date"
+                    value={topic2EndDate}
+                    placeholder="Jobs before"
+                    onChange={setTopic2EndDate}
+                  />
+                </div>
+              </FormGroup>
+              <FormGroup
+                label="Calculation mode"
+                fieldId="baseline_computation"
+              >
+                <ToggleGroup>
+                  <ToggleGroupItem
+                    text="Mean"
+                    buttonId="baseline_computation_mean_button"
+                    isSelected={baselineComputation === "mean"}
+                    onChange={(isSelected) => {
+                      setBaselineComputation(isSelected ? "mean" : "median");
+                    }}
+                  />
+                  <ToggleGroupItem
+                    text="Median"
+                    buttonId="baseline_computation_median_button"
+                    isSelected={baselineComputation === "median"}
+                    onChange={(isSelected) => {
+                      setBaselineComputation(isSelected ? "median" : "mean");
+                    }}
+                  />
+                </ToggleGroup>
+              </FormGroup>
+            </Form>
+          </div>
+        </FlexItem>
+      </Flex>
+      <Button
+        isLoading={isLoading}
+        isDisabled={
+          testName === "" ||
+          topic1 === null ||
+          topic2 === null ||
+          remoteci1 === null ||
+          remoteci2 === null
+        }
+        className="pf-u-mt-xl"
+        onClick={() => {
+          if (testName && topic1 && topic2 && remoteci1 && remoteci2) {
+            onSubmit({
+              topic_1_id: topic1.id,
+              topic_1_start_date: topic1StartDate,
+              topic_1_end_date: topic2EndDate,
+              remoteci_1_id: remoteci1.id,
+              topic_1_baseline_computation: baselineComputation,
+              tags_1: [],
+              topic_2_id: topic2.id,
+              topic_2_start_date: topic2StartDate,
+              topic_2_end_date: topic2EndDate,
+              remoteci_2_id: remoteci2.id,
+              topic_2_baseline_computation: baselineComputation,
+              tags_2: [],
+              test_name: testName,
+            });
+          }
+        }}
+      >
+        {isLoading ? "Loading" : "Compare junits"}
+      </Button>
+    </div>
+  );
+}
+
+interface JunitData {
+  details: { testcase: string; value: number }[];
+  intervals: number[];
+  values: number[];
+}
+
+export default function JunitComparisonPage() {
+  const [testLowerBoundary, setTestLowerBoundary] = useState<number | null>(10);
+  const [testUpperBoundary, setTestUpperBoundary] = useState<number | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<JunitData | null>(null);
+
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const newSearch = createJunitComparisonSearchFromFilters(values);
-    navigate(`/analytics/junit_comparison${newSearch}`);
-  }, [navigate, values]);
-
-  function clearAllFilters() {
-    setValues({ ...initialValues });
-  }
-
-  function setPartialValues<T extends keyof JunitComparisonFilter>(
-    newValues: Record<T, JunitComparisonFilter[T]>
-  ) {
-    setValues({
-      ...values,
-      ...newValues,
-    });
-  }
 
   return (
     <MainPage
       title="Junit comparison"
-      description="Compare 2 topics togethers and see how your tests behave in term of performance."
+      description=""
       Breadcrumb={
         <Breadcrumb
           links={[
@@ -160,197 +330,29 @@ export default function JunitComparisonPage() {
     >
       <Card>
         <CardBody>
-          <Toolbar
-            id="toolbar-select-jobs"
-            clearAllFilters={clearAllFilters}
-            collapseListedFiltersBreakpoint="xl"
-          >
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <TestNameFilter
-                    testName={values.test_name}
-                    onClear={() =>
-                      setPartialValues({
-                        test_name: null,
-                      })
-                    }
-                    onChange={(testName) =>
-                      setPartialValues({
-                        test_name: testName,
-                      })
-                    }
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <ToggleGroup>
-                    <ToggleGroupItem
-                      text="Mean"
-                      buttonId="topic_1_baseline_computation_mean"
-                      isSelected={
-                        values.topic_1_baseline_computation === "mean"
-                      }
-                      onChange={(isSelected) => {
-                        const baselineComputation = isSelected
-                          ? "mean"
-                          : "median";
-                        setPartialValues({
-                          topic_1_baseline_computation: baselineComputation,
-                          topic_2_baseline_computation: baselineComputation,
-                        });
-                      }}
-                    />
-                    <ToggleGroupItem
-                      text="Median"
-                      buttonId="topic_1_baseline_computation_median"
-                      isSelected={
-                        values.topic_1_baseline_computation === "median"
-                      }
-                      onChange={(isSelected) => {
-                        const baselineComputation = isSelected
-                          ? "median"
-                          : "mean";
-                        setPartialValues({
-                          topic_1_baseline_computation: baselineComputation,
-                          topic_2_baseline_computation: baselineComputation,
-                        });
-                      }}
-                    />
-                  </ToggleGroup>
-                </ToolbarItem>
-              </ToolbarGroup>
-            </ToolbarContent>
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <TopicsFilter
-                    categoryName="Topic 1"
-                    topic_id={values.topic_1_id}
-                    onClear={() => {
-                      setTopic1(null);
-                      return setPartialValues({
-                        topic_1_id: null,
-                      });
-                    }}
-                    onSelect={(topic) => {
-                      setTopic1(topic);
-                      return setPartialValues({
-                        topic_1_id: topic.id,
-                        topic_1_start_date: DateTime.fromISO(
-                          topic.created_at
-                        ).toISODate(),
-                        topic_1_end_date: DateTime.now().toISODate(),
-                      });
-                    }}
-                    placeholderText="Topic 1"
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <RemotecisFilter
-                    categoryName="Remoteci 1"
-                    remoteci_id={values.remoteci_1_id}
-                    onClear={() =>
-                      setPartialValues({
-                        remoteci_1_id: null,
-                      })
-                    }
-                    onSelect={(remoteci) =>
-                      setPartialValues({
-                        remoteci_1_id: remoteci.id,
-                      })
-                    }
-                    placeholderText="Remoteci 1"
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-            </ToolbarContent>
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <TopicsFilter
-                    categoryName="Topic 2"
-                    topic_id={values.topic_2_id}
-                    onClear={() => {
-                      setTopic2(null);
-                      return setPartialValues({
-                        topic_2_id: null,
-                      });
-                    }}
-                    onSelect={(topic) => {
-                      setTopic2(topic);
-                      return setPartialValues({
-                        topic_2_id: topic.id,
-                        topic_2_start_date: DateTime.fromISO(
-                          topic.created_at
-                        ).toISODate(),
-                        topic_2_end_date: DateTime.now().toISODate(),
-                      });
-                    }}
-                    placeholderText="Topic 2"
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <RemotecisFilter
-                    categoryName="Remoteci 2"
-                    remoteci_id={values.remoteci_2_id}
-                    onClear={() =>
-                      setPartialValues({
-                        remoteci_2_id: null,
-                      })
-                    }
-                    onSelect={(remoteci) =>
-                      setPartialValues({
-                        remoteci_2_id: remoteci.id,
-                      })
-                    }
-                    placeholderText="Remoteci 2"
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-            </ToolbarContent>
-          </Toolbar>
-
-          <div className="p-md">
-            <Button
-              variant="primary"
-              onClick={() => {
-                setData(null);
-                setIsLoading(true);
-                http
-                  .post("/api/v1/analytics/junit_comparison", values)
-                  .then((response) => {
-                    if (typeof response.data === "object") {
-                      setData(response.data as JunitData);
-                    } else {
-                      dispatch(
-                        showError("JSON returned by the API is not valid")
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    dispatch(showAPIError(error));
-                    return error;
-                  })
-                  .then(() => setIsLoading(false));
-              }}
-              isDisabled={
-                isLoading ||
-                values.test_name === null ||
-                values.topic_1_id === null ||
-                values.topic_2_id === null ||
-                values.remoteci_1_id === null ||
-                values.remoteci_2_id === null
-              }
-            >
-              Compare
-            </Button>
-          </div>
+          <JunitComparisonForm
+            isLoading={isLoading}
+            onSubmit={(values) => {
+              setData(null);
+              setIsLoading(true);
+              http
+                .post("/api/v1/analytics/junit_comparison", values)
+                .then((response) => {
+                  if (typeof response.data === "object") {
+                    setData(response.data as JunitData);
+                  } else {
+                    dispatch(
+                      showError("JSON returned by the API is not valid")
+                    );
+                  }
+                })
+                .catch((error) => {
+                  dispatch(showAPIError(error));
+                  return error;
+                })
+                .then(() => setIsLoading(false));
+            }}
+          />
         </CardBody>
       </Card>
 
@@ -366,13 +368,13 @@ export default function JunitComparisonPage() {
         </div>
       )}
 
-      {data && topic1 && topic2 && (
+      {data && (
         <>
           <div className="mt-md">
             <Card>
               <CardTitle>
-                Nb of tests per percentage deviation range between {topic2.name}{" "}
-                and {topic1.name}
+                Nb of tests per percentage deviation range between reference
+                topic and target topic.
               </CardTitle>
               <CardBody>
                 <div
@@ -382,16 +384,18 @@ export default function JunitComparisonPage() {
                     <BarChart
                       width={500}
                       height={300}
-                      data={data.values.map((v, i) => {
-                        const [y1, y2] = data.intervals[i];
-                        return { y: v, x: (y1 + y2) / 2, i };
-                      })}
+                      data={data.values.map((v, i) => ({
+                        y: v,
+                        x: data.intervals[i],
+                        i,
+                      }))}
                       margin={{
                         top: 5,
                         right: 30,
                         left: 20,
                         bottom: 15,
                       }}
+                      barCategoryGap="10%"
                     >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="x">
@@ -412,7 +416,18 @@ export default function JunitComparisonPage() {
                         content={({ active, payload, label }) => {
                           if (active && payload && payload.length) {
                             const range = data.intervals[payload[0].payload.i];
-
+                            let message = `${payload[0].value} test${
+                              (payload[0].value as number) > 1 ? "s" : ""
+                            } with percentage deviation is `;
+                            if (range <= -95) {
+                              message += "under 90%";
+                            } else if (range >= 95) {
+                              message += "over 90%";
+                            } else {
+                              message += `between ${range - 5}% and ${
+                                range + 5
+                              }%`;
+                            }
                             return (
                               <div
                                 style={{
@@ -420,24 +435,47 @@ export default function JunitComparisonPage() {
                                 }}
                                 className="p-sm"
                               >
-                                <p className="desc">
-                                  {`${payload[0].value} test${
-                                    (payload[0].value as number) > 1 ? "s" : ""
-                                  } with percentage deviation is between ${
-                                    range[0]
-                                  }% and ${range[1]}%`}
-                                </p>
+                                <p className="desc">{message}</p>
                               </div>
                             );
                           }
                           return null;
                         }}
                       />
-                      {/* <Tooltip formatter={(value:string,name:string, props:any)=>{
-                      console.log(value,name,props)
-                      return ["test", "Nb of tests"]
-                    }} /> */}
-                      <Bar dataKey="y" fill="#0066CC" name="# tests" />
+                      <Bar
+                        dataKey="y"
+                        fill="#0066CC"
+                        name="# tests"
+                        onClick={(d, index) => {
+                          const lowerBoundary = data.intervals[index] - 5;
+                          const upperBoundary = data.intervals[index] + 5;
+                          const isFirstElement = index === 0;
+                          const isLastElement =
+                            index === data.values.length - 1;
+                          if (isFirstElement) {
+                            setTestLowerBoundary(null);
+                            setTestUpperBoundary(upperBoundary);
+                          } else if (isLastElement) {
+                            setTestLowerBoundary(lowerBoundary);
+                            setTestUpperBoundary(null);
+                          } else {
+                            setTestLowerBoundary(lowerBoundary);
+                            setTestUpperBoundary(upperBoundary);
+                          }
+                        }}
+                      >
+                        {data.values.map((value, index) => (
+                          <Cell
+                            cursor="pointer"
+                            fill={
+                              data.intervals[index] > 0
+                                ? global_danger_color_100.value
+                                : global_primary_color_100.value
+                            }
+                            key={`cell-${index}`}
+                          />
+                        ))}
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -446,41 +484,14 @@ export default function JunitComparisonPage() {
           </div>
           <div className="mt-md">
             <Card>
+              <CardTitle>
+                {testLowerBoundary === null
+                  ? `Testcases under ${testUpperBoundary}%`
+                  : testUpperBoundary === null
+                  ? `Testcases over ${testLowerBoundary}%`
+                  : `Testcases between ${testLowerBoundary}% and ${testUpperBoundary}%`}
+              </CardTitle>
               <CardBody>
-                <Grid>
-                  <GridItem span={11}>
-                    <Text component={TextVariants.p}>
-                      {`We compared ${data.details.length} testcases between ${topic1.name} and ${topic2.name}.`}
-                    </Text>
-                    <Text component={TextVariants.p}>
-                      {`A positive percentage indicates that on average, the test is less good on ${topic2.name} compared to ${topic1.name}.`}
-                    </Text>
-                  </GridItem>
-                  <GridItem span={1}>
-                    <InputGroup>
-                      <TextInput
-                        name="percentage-threshold"
-                        id="percentage-threshold"
-                        type="text"
-                        aria-label="percentage"
-                        value={thresholdPercentage.toString()}
-                        onChange={(e) => {
-                          const thresholdPercentage = Number(e);
-                          if (!isNaN(thresholdPercentage)) {
-                            setThresholdPercentage(thresholdPercentage);
-                          }
-                        }}
-                      />
-                      <InputGroupText
-                        id="plain-example"
-                        variant={InputGroupTextVariant.plain}
-                      >
-                        %
-                      </InputGroupText>
-                    </InputGroup>
-                  </GridItem>
-                </Grid>
-
                 <table
                   className="pf-c-table pf-m-compact"
                   role="grid"
@@ -502,7 +513,16 @@ export default function JunitComparisonPage() {
                   </thead>
                   <tbody>
                     {data.details
-                      .filter((detail) => detail.value > thresholdPercentage)
+                      .filter((detail) =>
+                        testLowerBoundary
+                          ? detail.value > testLowerBoundary
+                          : true
+                      )
+                      .filter((detail) =>
+                        testUpperBoundary
+                          ? detail.value < testUpperBoundary
+                          : true
+                      )
                       .map((detail) => (
                         <tr>
                           <td>{detail.testcase}</td>
