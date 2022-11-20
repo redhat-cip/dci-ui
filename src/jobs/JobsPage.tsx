@@ -11,6 +11,7 @@ import {
   getParamsFromFilters,
   createSearchFromFilters,
   defaultFilters,
+  resetPageIfNeeded,
 } from "./toolbar/filters";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch } from "store";
@@ -63,10 +64,7 @@ export default function JobsPage() {
     } else {
       dispatch(
         jobsActions.all(
-          getParamsFromFilters({
-            ...filters,
-            team_id: identity.team.id,
-          })
+          getParamsFromFilters({ ...filters, team_id: identity.team.id })
         )
       );
     }
@@ -90,8 +88,10 @@ export default function JobsPage() {
         <JobsToolbar
           jobsCount={jobsCount}
           filters={filters}
-          setFilters={setFilters}
-          clearAllFilters={() => setFilters(defaultFilters)}
+          setFilters={(newFilters) =>
+            setFilters(resetPageIfNeeded(filters, newFilters))
+          }
+          clearAllFilters={() => setFilters({ ...defaultFilters })}
           refresh={getJobsCallback}
           tableViewActive={tableViewActive}
           setTableViewActive={setTableViewActive}
@@ -118,33 +118,37 @@ export default function JobsPage() {
         {tableViewActive ? (
           <JobsTableList
             filters={filters}
-            setFilters={setFilters}
+            setFilters={(newFilters) =>
+              setFilters(resetPageIfNeeded(filters, newFilters))
+            }
             jobs={jobs}
             columns={tableViewColumns}
           />
         ) : (
-          <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
+          <JobsList
+            filters={filters}
+            setFilters={(newFilters) =>
+              setFilters(resetPageIfNeeded(filters, newFilters))
+            }
+            jobs={jobs}
+          />
         )}
         {jobs.length > 0 && (
           <div className="pf-u-background-color-100">
             <Pagination
+              className="pf-u-px-md"
               perPage={filters.perPage}
               page={filters.page}
               itemCount={jobsCount}
               variant={PaginationVariant.bottom}
               onSetPage={(e, page) => {
                 jobsPageDivRef?.current?.scrollIntoView();
-                return setFilters({
-                  ...filters,
-                  page,
-                });
+                setFilters({ ...filters, page });
               }}
               onPerPageSelect={(e, perPage) => {
                 jobsPageDivRef?.current?.scrollIntoView();
-                return setFilters({
-                  ...filters,
-                  perPage,
-                });
+                const newFilters = { ...filters, perPage };
+                setFilters(resetPageIfNeeded(filters, newFilters));
               }}
             />
           </div>

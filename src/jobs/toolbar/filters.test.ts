@@ -2,6 +2,7 @@ import {
   parseFiltersFromSearch,
   getParamsFromFilters,
   createSearchFromFilters,
+  resetPageIfNeeded,
 } from "./filters";
 import { IJobStatus } from "types";
 
@@ -171,3 +172,89 @@ test("get params from user filters", () => {
   };
   expect(getParamsFromFilters(filters)).toEqual(expectedParams);
 });
+
+describe("reset filters", () => {
+  it("set page to 1 if user change another filter than page", () => {
+    const oldFilters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: null,
+      tags: ["tag_1", "tag_2"],
+      page: 2,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+    };
+    const newFilters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: "success" as IJobStatus,
+      tags: ["tag_1", "tag_2"],
+      page: 2,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+    };
+    const expectedFilters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: "success" as IJobStatus,
+      tags: ["tag_1", "tag_2"],
+      page: 1,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+    };
+    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(
+      expectedFilters
+    );
+  });
+  it("don't reset page to 1 if user change the page", () => {
+    const oldFilters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 1,
+      perPage: 20,
+      configuration: null,
+      name: null,
+    };
+    const newFilters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 2,
+      perPage: 20,
+      configuration: null,
+      name: null,
+    };
+    const expectedFilters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 2,
+      perPage: 20,
+      configuration: null,
+      name: null,
+    };
+    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(
+      expectedFilters
+    );
+  });
+});
+

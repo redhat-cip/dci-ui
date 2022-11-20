@@ -118,3 +118,16 @@ export function createSearchFromFilters(filters: IJobFilters | IUserFilters) {
   }
   return search;
 }
+
+export function resetPageIfNeeded(
+  oldFilters: IJobFilters,
+  newFilters: IJobFilters
+) {
+  if (oldFilters.page !== 1 && oldFilters.page === newFilters.page) {
+    return {
+      ...newFilters,
+      page: 1,
+    };
+  }
+  return newFilters;
+}
