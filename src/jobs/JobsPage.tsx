@@ -1,8 +1,8 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
 import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
-import { getJobs, isFetchingJobs } from "./jobsSelectors";
+import { getJobs, getNbOfJobs, isFetchingJobs } from "./jobsSelectors";
 import JobsList from "./JobsList";
 import JobsTableList from "./JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
@@ -18,6 +18,8 @@ import {
   Bullseye,
   PageSection,
   PageSectionVariants,
+  Pagination,
+  PaginationVariant,
   Text,
   TextContent,
 } from "@patternfly/react-core";
@@ -32,9 +34,11 @@ export default function JobsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const jobs = useSelector(getJobs);
   const isFetching = useSelector(isFetchingJobs);
+  const jobsCount = useSelector(getNbOfJobs);
   const [filters, setFilters] = useState(
     parseFiltersFromSearch(location.search)
   );
+  const jobsPageDivRef = useRef<HTMLInputElement>(null);
   const [tableViewActive, setTableViewActive] = useLocalStorage(
     "tableViewActive",
     false
@@ -73,7 +77,7 @@ export default function JobsPage() {
   }, [getJobsCallback]);
 
   return (
-    <div>
+    <div ref={jobsPageDivRef}>
       <section className="pf-c-page__main-breadcrumb">
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
       </section>
@@ -84,6 +88,7 @@ export default function JobsPage() {
       </PageSection>
       <PageSection variant={PageSectionVariants.default}>
         <JobsToolbar
+          jobsCount={jobsCount}
           filters={filters}
           setFilters={setFilters}
           clearAllFilters={() => setFilters(defaultFilters)}
@@ -120,17 +125,29 @@ export default function JobsPage() {
         ) : (
           <JobsList filters={filters} setFilters={setFilters} jobs={jobs} />
         )}
-        {jobs.length >= 20 && !tableViewActive && (
-          <JobsToolbar
-            filters={filters}
-            setFilters={setFilters}
-            clearAllFilters={() => setFilters(defaultFilters)}
-            refresh={getJobsCallback}
-            tableViewActive={tableViewActive}
-            setTableViewActive={setTableViewActive}
-            tableViewColumns={tableViewColumns}
-            setTableViewColumns={setTableViewColumns}
-          />
+        {jobs.length > 0 && (
+          <div className="pf-u-background-color-100">
+            <Pagination
+              perPage={filters.perPage}
+              page={filters.page}
+              itemCount={jobsCount}
+              variant={PaginationVariant.bottom}
+              onSetPage={(e, page) => {
+                jobsPageDivRef?.current?.scrollIntoView();
+                return setFilters({
+                  ...filters,
+                  page,
+                });
+              }}
+              onPerPageSelect={(e, perPage) => {
+                jobsPageDivRef?.current?.scrollIntoView();
+                return setFilters({
+                  ...filters,
+                  perPage,
+                });
+              }}
+            />
+          </div>
         )}
       </PageSection>
     </div>

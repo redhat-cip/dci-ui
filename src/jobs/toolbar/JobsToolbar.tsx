@@ -23,8 +23,6 @@ import RemotecisFilter from "./RemotecisFilter";
 import ProductsFilter from "./ProductsFilter";
 import TopicsFilter from "./TopicsFilter";
 import TeamsFilter from "./TeamsFilter";
-import { useSelector } from "react-redux";
-import { getNbOfJobs } from "jobs/jobsSelectors";
 import StatusFilter from "./StatusFilter";
 import TagsFilter from "./TagsFilter";
 import ConfigurationFilter from "./ConfigurationFilter";
@@ -44,6 +42,7 @@ export const Categories = [
 export type Category = typeof Categories[number];
 
 type JobsToolbarProps = {
+  jobsCount: number;
   filters: IJobFilters;
   setFilters: (filters: IJobFilters) => void;
   clearAllFilters: () => void;
@@ -55,6 +54,7 @@ type JobsToolbarProps = {
 };
 
 export default function JobsToolbar({
+  jobsCount,
   filters,
   setFilters,
   clearAllFilters,
@@ -68,7 +68,6 @@ export default function JobsToolbar({
   const [currentCategory, setCurrentCategory] = useState<Category>(
     Categories[0]
   );
-  const nbOfJobs = useSelector(getNbOfJobs);
   return (
     <Toolbar
       id="toolbar-jobs"
@@ -215,11 +214,11 @@ export default function JobsToolbar({
             variant="pagination"
             alignment={{ default: "alignRight" }}
           >
-            {nbOfJobs === 0 ? null : (
+            {jobsCount === 0 ? null : (
               <Pagination
                 perPage={filters.perPage}
                 page={filters.page}
-                itemCount={nbOfJobs}
+                itemCount={jobsCount}
                 onSetPage={(e, page) =>
                   setFilters({
                     ...filters,

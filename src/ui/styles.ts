@@ -13,7 +13,7 @@ import "@patternfly/patternfly/patternfly-base.css";
 // import "@patternfly/patternfly/layouts/Stack/stack.css";
 // import "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 // import "@patternfly/patternfly/utilities/Alignment/alignment.css";
-// import "@patternfly/patternfly/utilities/BackgroundColor/BackgroundColor.css";
+import "@patternfly/patternfly/utilities/BackgroundColor/BackgroundColor.css";
 // import "@patternfly/patternfly/utilities/BoxShadow/box-shadow.css";
 import "@patternfly/patternfly/utilities/Display/display.css";
 import "@patternfly/patternfly/utilities/Flex/flex.css";
