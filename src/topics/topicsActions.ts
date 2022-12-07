@@ -87,19 +87,16 @@ export function groupTopicsPerProduct(
 interface IFetchComponents {
   data: {
     components: IComponent[];
+    _meta: { count: number };
   };
 }
 
 export function fetchComponents(
   topic: ITopic,
-  where = "state:active"
+  search: string
 ): Promise<IFetchComponents> {
   return http({
     method: "get",
-    url: `/api/v1/topics/${topic.id}/components`,
-    params: {
-      sort: "-created_at",
-      where,
-    },
+    url: `/api/v1/topics/${topic.id}/components${search}`,
   });
 }

@@ -9,27 +9,27 @@ import MainPage from "pages/MainPage";
 import {
   Card,
   CardBody,
-  Title,
   Divider,
   Button,
   Label,
   CodeBlock,
   CodeBlockCode,
   CodeBlockAction,
-  InputGroup,
-  TextInput,
-  ButtonVariant,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
   ToolbarItem,
-  ToolbarFilter,
+  Dropdown,
+  DropdownPosition,
+  DropdownToggle,
+  DropdownItem,
+  CardTitle,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import Component from "./Component";
 import { AppDispatch } from "store";
 import { IComponent, IEnhancedTopic, ITopic } from "types";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
 import { getProducts } from "products/productsSelectors";
@@ -37,9 +37,15 @@ import { getCurrentUser } from "currentUser/currentUserSelectors";
 import CardLine from "ui/CardLine";
 import { Link } from "react-router-dom";
 import { getTopicById } from "./topicsSelectors";
-import { SearchIcon } from "@patternfly/react-icons";
-import { buildWhereFromSearch } from "search/where";
+import {
+  buildWhereFromSearch,
+  defaultComponentsFilters,
+  IComponentsFilters,
+  parseWhereFromSearch,
+} from "search/where";
 import { sortByNewestFirst } from "services/sort";
+import NameFilter from "jobs/toolbar/NameFilter";
+import TagsFilter from "jobs/toolbar/TagsFilter";
 
 interface ComponentsProps {
   topic: ITopic;
@@ -58,10 +64,8 @@ function LatestComponentsPerType({ topic }: ComponentsProps) {
 
   return (
     <Card className="mt-md">
+      <CardTitle>Latest components per type</CardTitle>
       <CardBody>
-        <Title headingLevel="h3" size="xl">
-          Latest components per type
-        </Title>
         <div className="py-md">
           {isFetching ? (
             <div>loading</div>
@@ -85,45 +89,59 @@ function LatestComponentsPerType({ topic }: ComponentsProps) {
   );
 }
 
+const Categories = ["Name", "Type", "Tag"] as const;
+
+type Category = typeof Categories[number];
+
 function ComponentsTable({ topic }: ComponentsProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [components, setComponents] = useState<IComponent[]>([]);
-  const [componentName, setComponentName] = useState("");
-  const [search, setSearch] = useState("");
+
+  const [filters, setFilters] = useState<IComponentsFilters>(
+    parseWhereFromSearch(location.search)
+  );
+
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState<Category>(
+    Categories[0]
+  );
 
   const fetchComponentsCallback = useCallback(() => {
     setIsLoading(true);
     setComponents([]);
-    fetchComponents(
-      topic,
-      buildWhereFromSearch(componentName, "canonical_project_name")
-    )
-      .then((response) => setComponents(response.data.components))
+    fetchComponents(topic, buildWhereFromSearch(filters))
+      .then((response) => {
+        setComponents(response.data.components);
+      })
       .finally(() => setIsLoading(false));
-  }, [componentName, topic]);
+  }, [topic, filters]);
+
+  useEffect(() => {
+    const where = buildWhereFromSearch(filters);
+    navigate(`/topics/${topic.id}/components${where}`, { replace: true });
+  }, [navigate, topic.id, filters]);
 
   useEffect(() => {
     fetchComponentsCallback();
   }, [fetchComponentsCallback]);
 
-  function clearSearch() {
-    setSearch("");
-    setComponentName("");
+  function clearAllFilters() {
+    setFilters({ ...defaultComponentsFilters });
   }
 
-  function clearAllFilters() {
-    clearSearch();
-  }
+  const isSearch =
+    filters.canonical_project_name !== null ||
+    filters.type !== null ||
+    filters.tags.length > 0;
 
   return (
     <Card className="mt-md">
+      <CardTitle>Components</CardTitle>
       <CardBody>
-        <Title headingLevel="h3" size="xl">
-          Components
-        </Title>
-
         <Toolbar
-          id="toolbar-component"
+          id="toolbar-components"
           clearAllFilters={clearAllFilters}
           collapseListedFiltersBreakpoint="xl"
           inset={{
@@ -131,41 +149,66 @@ function ComponentsTable({ topic }: ComponentsProps) {
           }}
         >
           <ToolbarContent>
-            <ToolbarGroup>
+            <ToolbarGroup variant="filter-group">
               <ToolbarItem>
-                <ToolbarFilter
-                  chips={componentName === "" ? [] : [componentName]}
-                  deleteChip={clearSearch}
-                  categoryName="Search"
-                  showToolbarItem
-                >
-                  <form
-                    onSubmit={(event) => {
-                      event.preventDefault();
-                      setComponentName(search);
-                      setSearch("");
-                    }}
-                  >
-                    <InputGroup>
-                      <TextInput
-                        name="component"
-                        id="input-component"
-                        type="text"
-                        aria-label="component input search"
-                        onChange={(component) => setSearch(component)}
-                        value={search}
-                        placeholder="Search a component..."
-                      />
-                      <Button
-                        variant={ButtonVariant.control}
-                        aria-label="search component button"
-                        type="submit"
-                      >
-                        <SearchIcon />
-                      </Button>
-                    </InputGroup>
-                  </form>
-                </ToolbarFilter>
+                <Dropdown
+                  onSelect={(event) => {
+                    if (event) {
+                      const link = event.target as HTMLElement;
+                      const selectedCategory = Categories.find(
+                        (category) => category === link.innerText
+                      );
+                      if (selectedCategory) {
+                        setCurrentCategory(selectedCategory);
+                      }
+                    }
+                    setIsCategoryDropdownOpen(false);
+                  }}
+                  position={DropdownPosition.left}
+                  toggle={
+                    <DropdownToggle
+                      onToggle={(isOpen) => setIsCategoryDropdownOpen(isOpen)}
+                      style={{ width: "100%" }}
+                    >
+                      {currentCategory}
+                    </DropdownToggle>
+                  }
+                  isOpen={isCategoryDropdownOpen}
+                  dropdownItems={Categories.map((category) => (
+                    <DropdownItem key={category}>{category}</DropdownItem>
+                  ))}
+                  style={{ width: "100%" }}
+                ></Dropdown>
+              </ToolbarItem>
+              <ToolbarItem>
+                <NameFilter
+                  showToolbarItem={currentCategory === "Name"}
+                  name={filters.canonical_project_name}
+                  onSubmit={(canonical_project_name) =>
+                    setFilters({
+                      ...filters,
+                      canonical_project_name,
+                    })
+                  }
+                  onClear={() =>
+                    setFilters({
+                      ...filters,
+                      canonical_project_name: null,
+                    })
+                  }
+                />
+                <NameFilter
+                  categoryName="Type"
+                  showToolbarItem={currentCategory === "Type"}
+                  name={filters.type}
+                  onSubmit={(type) => setFilters({ ...filters, type })}
+                  onClear={() => setFilters({ ...filters, type: null })}
+                />
+                <TagsFilter
+                  showToolbarItem={currentCategory === "Tag"}
+                  tags={filters.tags}
+                  onSubmit={(tags) => setFilters({ ...filters, tags })}
+                />
               </ToolbarItem>
             </ToolbarGroup>
           </ToolbarContent>
@@ -175,18 +218,18 @@ function ComponentsTable({ topic }: ComponentsProps) {
           {isLoading ? (
             <div>loading</div>
           ) : components.length === 0 ? (
-            componentName === "" ? (
+            isSearch ? (
               <div>
                 <EmptyState
-                  title="There is no component for this topic"
-                  info="We are certainly in the process of uploading components for this topic. Come back in a few hours."
+                  title="No components matching your search"
+                  info={`There are no components matching your search. Please change your search.`}
                 />
               </div>
             ) : (
               <div>
                 <EmptyState
-                  title="No components matching your search"
-                  info={`There are no components matching ${search}. Please change your search.`}
+                  title="There is no component for this topic"
+                  info="We are certainly in the process of uploading components for this topic. Come back in a few hours."
                 />
               </div>
             )
@@ -220,7 +263,7 @@ function ComponentsTable({ topic }: ComponentsProps) {
                           isCompact
                           className="pointer"
                           onClick={() => {
-                            setComponentName(`type:${component.type}`);
+                            setFilters({ ...filters, type: component.type });
                           }}
                         >
                           {component.type}
@@ -237,7 +280,12 @@ function ComponentsTable({ topic }: ComponentsProps) {
                                   className="mt-xs mr-xs pointer"
                                   color="blue"
                                   onClick={() => {
-                                    setComponentName(`tags:${tag}`);
+                                    if (filters.tags.indexOf(tag) === -1) {
+                                      setFilters({
+                                        ...filters,
+                                        tags: [...filters.tags, tag],
+                                      });
+                                    }
                                   }}
                                 >
                                   {tag}
@@ -260,7 +308,6 @@ function ComponentsTable({ topic }: ComponentsProps) {
 }
 
 function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
-  console.log(topic);
   const [seeData, setSeeData] = useState(false);
   const topicData = isEmpty(topic.data)
     ? "{}"
@@ -268,11 +315,8 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
 
   return (
     <Card>
+      <CardTitle>Topic details</CardTitle>
       <CardBody>
-        <Title headingLevel="h3" size="xl">
-          Topic details
-        </Title>
-
         <CardLine className="p-md" field="ID" value={topic.id} />
         <Divider />
         <CardLine className="p-md" field="Name" value={topic.name} />

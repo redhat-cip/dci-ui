@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getActiveTopics,
-  getTopicById,
-} from "topics/topicsSelectors";
+import { getActiveTopics, getTopicById } from "topics/topicsSelectors";
 import { ITopic } from "types";
 import topicsActions from "topics/topicsActions";
 import {

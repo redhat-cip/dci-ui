@@ -119,10 +119,9 @@ export function createSearchFromFilters(filters: IJobFilters | IUserFilters) {
   return search;
 }
 
-export function resetPageIfNeeded(
-  oldFilters: IJobFilters,
-  newFilters: IJobFilters
-) {
+export function resetPageIfNeeded<
+  T extends { page: number; [key: string]: any }
+>(oldFilters: T, newFilters: T) {
   if (oldFilters.page !== 1 && oldFilters.page === newFilters.page) {
     return {
       ...newFilters,

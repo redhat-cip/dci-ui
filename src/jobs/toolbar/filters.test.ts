@@ -180,7 +180,7 @@ describe("reset filters", () => {
       team_id: "t1",
       remoteci_id: "r1",
       topic_id: "to1",
-      status: null,
+      status: "success" as IJobStatus,
       tags: ["tag_1", "tag_2"],
       page: 2,
       perPage: 40,
@@ -191,7 +191,7 @@ describe("reset filters", () => {
       product_id: "p1",
       team_id: "t1",
       remoteci_id: "r1",
-      topic_id: "to1",
+      topic_id: "to2",
       status: "success" as IJobStatus,
       tags: ["tag_1", "tag_2"],
       page: 2,
@@ -203,7 +203,7 @@ describe("reset filters", () => {
       product_id: "p1",
       team_id: "t1",
       remoteci_id: "r1",
-      topic_id: "to1",
+      topic_id: "to2",
       status: "success" as IJobStatus,
       tags: ["tag_1", "tag_2"],
       page: 1,
@@ -211,9 +211,7 @@ describe("reset filters", () => {
       configuration: "config2",
       name: "name2",
     };
-    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(
-      expectedFilters
-    );
+    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(expectedFilters);
   });
   it("don't reset page to 1 if user change the page", () => {
     const oldFilters = {
@@ -252,9 +250,6 @@ describe("reset filters", () => {
       configuration: null,
       name: null,
     };
-    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(
-      expectedFilters
-    );
+    expect(resetPageIfNeeded(oldFilters, newFilters)).toEqual(expectedFilters);
   });
 });
-

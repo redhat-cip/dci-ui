@@ -77,7 +77,6 @@ test("buildIdentity with a default team return this team", () => {
   });
 });
 
-
 test("buildIdentity remove an old team the user doesn't have access to anymore", () => {
   expect(
     buildIdentity(

@@ -69,8 +69,17 @@ export default function FeedersPage() {
               </td>
               <td>{feeder.team ? feeder.team.name.toUpperCase() : null}</td>
               <td className="text-center">
-                <SeeAuthentificationFileModal type='sh' role="feeder" resource={feeder} className="mr-xs" />
-                <SeeAuthentificationFileModal type='yaml' role="feeder" resource={feeder} />
+                <SeeAuthentificationFileModal
+                  type="sh"
+                  role="feeder"
+                  resource={feeder}
+                  className="mr-xs"
+                />
+                <SeeAuthentificationFileModal
+                  type="yaml"
+                  role="feeder"
+                  resource={feeder}
+                />
               </td>
               <td className="text-center">{feeder.from_now}</td>
               <td className="text-center">

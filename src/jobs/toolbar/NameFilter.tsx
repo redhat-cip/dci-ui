@@ -9,6 +9,7 @@ import {
 import { SearchIcon } from "@patternfly/react-icons";
 
 type NameFilterProps = {
+  categoryName?: string;
   name: string | null;
   onSubmit: (name: string) => void;
   onClear: () => void;
@@ -20,13 +21,15 @@ export default function NameFilter({
   onSubmit,
   onClear,
   showToolbarItem = true,
+  categoryName = "Name",
 }: NameFilterProps) {
   const [innerName, setInnerName] = useState("");
+  const lowerCategoryName = categoryName.toLowerCase();
   return (
     <ToolbarFilter
       chips={name === null ? [] : [name]}
       deleteChip={onClear}
-      categoryName="Name"
+      categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
       <form
@@ -38,18 +41,18 @@ export default function NameFilter({
       >
         <InputGroup>
           <TextInput
-            name="name"
-            id="input-name"
+            name={lowerCategoryName}
+            id={`input-${lowerCategoryName}`}
             type="search"
-            aria-label="name filter"
+            aria-label={`${lowerCategoryName} filter`}
             onChange={setInnerName}
             value={innerName}
-            placeholder="Filter by name"
+            placeholder={`Filter by ${lowerCategoryName}`}
             isRequired
           />
           <Button
             variant={ButtonVariant.control}
-            aria-label="search name button"
+            aria-label={`Search by ${lowerCategoryName} button`}
             type="submit"
           >
             <SearchIcon />
