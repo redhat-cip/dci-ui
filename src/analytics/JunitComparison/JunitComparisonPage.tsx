@@ -277,7 +277,7 @@ function JunitComparisonForm({
             onSubmit({
               topic_1_id: topic1.id,
               topic_1_start_date: topic1StartDate,
-              topic_1_end_date: topic2EndDate,
+              topic_1_end_date: topic1EndDate,
               remoteci_1_id: remoteci1.id,
               topic_1_baseline_computation: baselineComputation,
               tags_1: [],
