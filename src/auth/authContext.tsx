@@ -8,6 +8,14 @@ import { useSSO } from "./ssoContext";
 import * as authActions from "./authActions";
 import { AppDispatch } from "store";
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
+import {
+  Card,
+  CardBody,
+  Grid,
+  GridItem,
+  Modal,
+  ModalVariant,
+} from "@patternfly/react-core";
 
 interface AuthContextType {
   identity: ICurrentUser | null;
@@ -17,6 +25,10 @@ interface AuthContextType {
     currentUser: ICurrentUser
   ) => Promise<ICurrentUser>;
   logout: () => void;
+  openChangeTeamModal: () => void;
+  closeChangeTeamModal: () => void;
+  hasMultipleTeams: boolean;
+  hasAtLeastOneTeam: boolean
 }
 export const AuthContext = React.createContext<AuthContextType>(null!);
 
@@ -29,6 +41,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { sso } = useSSO();
   const dispatch = useDispatch<AppDispatch>();
   const [identity, setIdentity] = useState<ICurrentUser | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = getToken();
@@ -75,9 +88,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error(error);
       }
     },
+    openChangeTeamModal: () => setIsModalOpen(true),
+    closeChangeTeamModal: () => setIsModalOpen(false),
+    hasMultipleTeams: identity ? identity.teams.length > 1 : false,
+    hasAtLeastOneTeam: identity ? identity.teams.length > 0 : false,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {identity && (
+        <Modal
+          variant={ModalVariant.small}
+          title="Change team"
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
+          <Grid hasGutter>
+            {identity.teams.map((team) => (
+              <GridItem key={team.id} span={4}>
+                <Card
+                  onKeyDown={() => {
+                    value.changeCurrentTeam(team, identity);
+                    setIsModalOpen(false);
+                  }}
+                  onClick={() => {
+                    value.changeCurrentTeam(team, identity);
+                    setIsModalOpen(false);
+                  }}
+                  hasSelectableInput
+                  isSelectableRaised
+                  isDisabledRaised={team.id === identity.team?.id}
+                >
+                  <CardBody>{team.name}</CardBody>
+                </Card>
+              </GridItem>
+            ))}
+          </Grid>
+        </Modal>
+      )}
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
