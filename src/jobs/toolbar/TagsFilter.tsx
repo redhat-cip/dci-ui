@@ -5,9 +5,76 @@ import {
   TextInput,
   Button,
   ButtonVariant,
+  TextInputGroup,
+  TextInputGroupMain,
+  ChipGroup,
+  Chip,
+  TextInputGroupUtilities,
 } from "@patternfly/react-core";
-import { SearchIcon } from "@patternfly/react-icons";
+import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import { sortedUniq } from "lodash";
+
+export function TagsInput({
+  tags,
+  setTags,
+  ...props
+}: {
+  tags: string[];
+  setTags: (tags: string[]) => void;
+  [k: string]: any;
+}) {
+  const [inputValue, setInputValue] = useState("");
+
+  const showSearchIcon = !tags.length;
+
+  const deleteChip = (chipToDelete: string) => {
+    const newChips = tags.filter((chip) => !Object.is(chip, chipToDelete));
+    setTags(newChips);
+  };
+
+  const showClearButton = !!inputValue || !!tags.length;
+
+  const clearChipsAndInput = () => {
+    setTags([]);
+    setInputValue("");
+  };
+
+  return (
+    <TextInputGroup {...props}>
+      <TextInputGroupMain
+        icon={showSearchIcon && <SearchIcon />}
+        value={inputValue}
+        onChange={setInputValue}
+        onKeyPress={(event) => {
+          if (event.key === "Enter" && tags.indexOf(inputValue) === -1) {
+            event.preventDefault();
+            setTags([...tags, inputValue]);
+            setInputValue("");
+          }
+        }}
+      >
+        <ChipGroup>
+          {tags.map((tag) => (
+            <Chip key={tag} onClick={() => deleteChip(tag)}>
+              {tag}
+            </Chip>
+          ))}
+        </ChipGroup>
+      </TextInputGroupMain>
+      {showClearButton && (
+        <TextInputGroupUtilities>
+          <Button
+            variant="plain"
+            onClick={clearChipsAndInput}
+            aria-label="clear tags"
+          >
+            <TimesIcon />
+          </Button>
+        </TextInputGroupUtilities>
+      )}
+    </TextInputGroup>
+  );
+}
 
 type TagsFilterProps = {
   tags: string[];

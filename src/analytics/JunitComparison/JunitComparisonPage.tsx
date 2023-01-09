@@ -9,6 +9,8 @@ import {
   FlexItem,
   Form,
   FormGroup,
+  Grid,
+  GridItem,
   TextInput,
   ToggleGroup,
   ToggleGroupItem,
@@ -45,6 +47,7 @@ import {
   global_danger_color_100,
   global_primary_color_100,
 } from "@patternfly/react-tokens";
+import { TagsInput } from "jobs/toolbar/TagsFilter";
 
 type JunitComputationMode = "mean" | "median";
 
@@ -75,6 +78,8 @@ function JunitComparisonForm({
   const [topic2, setTopic2] = useState<ITopic | null>(null);
   const [remoteci1, setRemoteci1] = useState<IRemoteci | null>(null);
   const [remoteci2, setRemoteci2] = useState<IRemoteci | null>(null);
+  const [tags_1, setTags1] = useState<string[]>([]);
+  const [tags_2, setTags2] = useState<string[]>([]);
   const [baselineComputation, setBaselineComputation] =
     useState<JunitComputationMode>("mean");
   const [topic1StartDate, setTopic1StartDate] = useState(
@@ -123,22 +128,39 @@ function JunitComparisonForm({
                   }}
                 />
               </FormGroup>
-              <FormGroup label="Dates" fieldId="topic_1_start_date">
-                <div className="pf-u-display-flex pf-u-justify-content-space-between">
-                  <DatePicker
-                    id="topic_1_start_date"
-                    value={topic1StartDate}
-                    placeholder="Jobs after"
-                    onChange={setTopic1StartDate}
-                  />
-                  <DatePicker
-                    id="topic_1_end_date"
-                    value={topic1EndDate}
-                    placeholder="Jobs before"
-                    onChange={setTopic1EndDate}
-                  />
-                </div>
-              </FormGroup>
+              <Grid hasGutter>
+                <GridItem span={3}>
+                  <FormGroup label="From" fieldId="topic_1_start_date">
+                    <DatePicker
+                      id="topic_1_start_date"
+                      value={topic1StartDate}
+                      placeholder="Jobs after"
+                      onChange={setTopic1StartDate}
+                      style={{ width: "100%" }}
+                    />
+                  </FormGroup>
+                </GridItem>
+                <GridItem span={3}>
+                  <FormGroup label="To" fieldId="topic_1_end_date">
+                    <DatePicker
+                      id="topic_1_end_date"
+                      value={topic1EndDate}
+                      placeholder="Jobs before"
+                      onChange={setTopic1EndDate}
+                      style={{ width: "100%" }}
+                    />
+                  </FormGroup>
+                </GridItem>
+                <GridItem span={6}>
+                  <FormGroup label="Tags" fieldId="tags_1">
+                    <TagsInput
+                      id="tags_1"
+                      tags={tags_1}
+                      setTags={(tags) => setTags1(tags)}
+                    />
+                  </FormGroup>
+                </GridItem>
+              </Grid>
               <FormGroup label="Test name" isRequired fieldId="test_name">
                 <TextInput
                   isRequired
@@ -169,14 +191,17 @@ function JunitComparisonForm({
                 const tmpRemoteci2 = remoteci2;
                 const tmpTopic2StartDate = topic2StartDate;
                 const tmpTopic2EndDate = topic2EndDate;
+                const tmpTags2 = tags_2;
                 setTopic2(topic1);
                 setRemoteci2(remoteci1);
                 setTopic2StartDate(topic1StartDate);
                 setTopic2EndDate(topic1EndDate);
+                setTags2(tags_1);
                 setTopic1(tmpTopic2);
                 setRemoteci1(tmpRemoteci2);
                 setTopic1StartDate(tmpTopic2StartDate);
                 setTopic1EndDate(tmpTopic2EndDate);
+                setTags1(tmpTags2);
               }}
             >
               <span className="pf-u-display-none pf-u-display-flex-on-lg">
@@ -219,22 +244,39 @@ function JunitComparisonForm({
                   }}
                 />
               </FormGroup>
-              <FormGroup label="Dates" fieldId="topic_2_start_date">
-                <div className="pf-u-display-flex pf-u-justify-content-space-between">
-                  <DatePicker
-                    id="topic_2_start_date"
-                    value={topic2StartDate}
-                    placeholder="Jobs after"
-                    onChange={setTopic2StartDate}
-                  />
-                  <DatePicker
-                    id="topic_2_end_date"
-                    value={topic2EndDate}
-                    placeholder="Jobs before"
-                    onChange={setTopic2EndDate}
-                  />
-                </div>
-              </FormGroup>
+              <Grid hasGutter>
+                <GridItem span={3}>
+                  <FormGroup label="From" fieldId="topic_2_start_date">
+                    <DatePicker
+                      id="topic_2_start_date"
+                      value={topic2StartDate}
+                      placeholder="Jobs after"
+                      onChange={setTopic2StartDate}
+                      style={{ width: "100%" }}
+                    />
+                  </FormGroup>
+                </GridItem>
+                <GridItem span={3}>
+                  <FormGroup label="To" fieldId="topic_2_end_date">
+                    <DatePicker
+                      id="topic_2_end_date"
+                      value={topic2EndDate}
+                      placeholder="Jobs before"
+                      onChange={setTopic2EndDate}
+                      style={{ width: "100%" }}
+                    />
+                  </FormGroup>
+                </GridItem>
+                <GridItem span={6}>
+                  <FormGroup label="Tags" fieldId="tags_2">
+                    <TagsInput
+                      id="tags_2"
+                      tags={tags_2}
+                      setTags={(tags) => setTags2(tags)}
+                    />
+                  </FormGroup>
+                </GridItem>
+              </Grid>
               <FormGroup
                 label="Calculation mode"
                 fieldId="baseline_computation"
@@ -280,13 +322,13 @@ function JunitComparisonForm({
               topic_1_end_date: topic1EndDate,
               remoteci_1_id: remoteci1.id,
               topic_1_baseline_computation: baselineComputation,
-              tags_1: [],
+              tags_1,
               topic_2_id: topic2.id,
               topic_2_start_date: topic2StartDate,
               topic_2_end_date: topic2EndDate,
               remoteci_2_id: remoteci2.id,
               topic_2_baseline_computation: baselineComputation,
-              tags_2: [],
+              tags_2,
               test_name: testName,
             });
           }
