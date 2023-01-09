@@ -36,3 +36,5 @@ export const getRemotecisForTeam = (team: ITeam | null | undefined) =>
   createSelector(getRemotecis, (remotecis) => {
     return remotecis.filter((remoteci) => remoteci?.team?.id === team?.id);
   });
+export const getNbOfRemotecis = (state: RootState): number =>
+  state.remotecis.count;

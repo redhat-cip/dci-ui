@@ -1,31 +1,55 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
 import remotecisActions from "./remotecisActions";
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
-import { getRemotecisForTeam, isFetchingRemotecis } from "./remotecisSelectors";
+import {
+  getNbOfRemotecis,
+  getRemotecisForTeam,
+  isFetchingRemotecis,
+} from "./remotecisSelectors";
 import { SeeAuthentificationFileModal } from "ui/Credentials";
-import { Button, Label } from "@patternfly/react-core";
+import {
+  Button,
+  Label,
+  Pagination,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+} from "@patternfly/react-core";
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
 import { useAuth } from "auth/authContext";
+import { IPaginationFilters } from "types";
+import { getLimitAndOffset } from "jobs/toolbar/filters";
+
+const initialRemoteciFilter = {
+  page: 1,
+  perPage: 20,
+};
 
 export default function RemotecisPage() {
   const { identity } = useAuth();
   const remotecis = useSelector(getRemotecisForTeam(identity?.team));
+  const nbOfRemotecis = useSelector(getNbOfRemotecis);
   const isFetching = useSelector(isFetchingRemotecis);
   const dispatch = useDispatch<AppDispatch>();
-
-  const fetchRemoteciCallback = useCallback(() => {
-    dispatch(remotecisActions.all({ where: `team_id:${identity?.team?.id}` }));
-  }, [dispatch, identity?.team]);
+  const [filters, setFilters] = useState<IPaginationFilters>({
+    ...initialRemoteciFilter,
+  });
 
   useEffect(() => {
-    fetchRemoteciCallback();
-  }, [fetchRemoteciCallback]);
+    const params = {
+      where: `team_id:${identity?.team?.id}`,
+      ...getLimitAndOffset(filters),
+    };
+    dispatch(remotecisActions.clear());
+    dispatch(remotecisActions.all(params));
+  }, [dispatch, filters, identity?.team]);
 
   if (identity === null) return null;
 
@@ -61,6 +85,36 @@ export default function RemotecisPage() {
         />
       }
     >
+      <Toolbar id="toolbar-remotecis" collapseListedFiltersBreakpoint="xl">
+        <ToolbarContent>
+          <ToolbarGroup style={{ flex: "1" }}>
+            <ToolbarItem
+              variant="pagination"
+              alignment={{ default: "alignRight" }}
+            >
+              {nbOfRemotecis === 0 ? null : (
+                <Pagination
+                  perPage={filters.perPage}
+                  page={filters.page}
+                  itemCount={nbOfRemotecis}
+                  onSetPage={(e, newPage) => {
+                    setFilters({
+                      ...filters,
+                      page: newPage,
+                    });
+                  }}
+                  onPerPageSelect={(e, newPerPage) => {
+                    setFilters({
+                      ...filters,
+                      perPage: newPerPage,
+                    });
+                  }}
+                />
+              )}
+            </ToolbarItem>
+          </ToolbarGroup>
+        </ToolbarContent>
+      </Toolbar>
       <table className="pf-c-table pf-m-compact pf-m-grid-md">
         <thead>
           <tr>

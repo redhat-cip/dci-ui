@@ -1,6 +1,12 @@
 import queryString from "query-string";
 import { isEmpty, sortedUniq } from "lodash";
-import { IJobStatus, IJobFilters, DCIListParams, IUserFilters } from "types";
+import {
+  IJobStatus,
+  IJobFilters,
+  DCIListParams,
+  IUserFilters,
+  IPaginationFilters,
+} from "types";
 
 export const defaultFilters: IJobFilters = {
   team_id: null,
@@ -95,11 +101,15 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
   return keyValues.join(",");
 }
 
-export function getParamsFromFilters(filters: IJobFilters | IUserFilters) {
-  let params: DCIListParams = {
+export function getLimitAndOffset(filters: IPaginationFilters) {
+  return {
     limit: filters.perPage,
     offset: (filters.page - 1) * filters.perPage,
   };
+}
+
+export function getParamsFromFilters(filters: IJobFilters | IUserFilters) {
+  let params: DCIListParams = getLimitAndOffset(filters);
   const where = _getWhereFromFilters(filters);
   if (where) {
     params.where = where;
