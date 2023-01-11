@@ -43,6 +43,7 @@ import { BackgroundImage } from "ui";
 import Alerts from "alerts/Alerts";
 import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import JobTestPage from "jobs/job/tests/test/JobTestPage";
+import PipelinesPage from "analytics/Pipelines/PipelinesPage";
 
 export default function App() {
   return (
@@ -80,6 +81,7 @@ export default function App() {
                 path="latest_jobs_status/:topic_name"
                 element={<LatestJobStatusDetailsPage />}
               />
+              <Route path="pipelines" element={<PipelinesPage />} />
             </Route>
             <Route path="jobs">
               <Route index element={<JobsPage />} />

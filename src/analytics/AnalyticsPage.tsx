@@ -14,6 +14,7 @@ import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
 import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";
 import LatestJobsStatusHeaderImage from "./LatestJobStatus/latest_jos_status.png";
+import PipelinesHeaderImages from "./Pipelines/pipelines.png";
 
 export default function AnalyticsPage() {
   const navigate = useNavigate();
@@ -29,6 +30,27 @@ export default function AnalyticsPage() {
       }
     >
       <Gallery hasGutter>
+        <GalleryItem>
+          <Card
+            className="pointer"
+            onClick={() => {
+              navigate("/analytics/pipelines");
+            }}
+          >
+            <CardHeader>
+              <CardHeaderMain>
+                <img
+                  src={PipelinesHeaderImages}
+                  alt="Pipelines"
+                  height={100}
+                  width="auto"
+                />
+              </CardHeaderMain>
+            </CardHeader>
+            <CardTitle>Pipelines</CardTitle>
+            <CardBody>View pipelines from the past few days</CardBody>
+          </Card>
+        </GalleryItem>
         <GalleryItem>
           <Card
             className="pointer"
