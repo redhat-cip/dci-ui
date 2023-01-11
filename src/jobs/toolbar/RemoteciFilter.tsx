@@ -79,7 +79,7 @@ export function RemoteciSelect({
   );
 }
 
-type RemotecisFilterProps = {
+type RemoteciFilterProps = {
   remoteci_id: string | null;
   onSelect: (remoteci: IRemoteci) => void;
   onClear: () => void;
@@ -88,14 +88,14 @@ type RemotecisFilterProps = {
   categoryName?: string;
 };
 
-export default function RemotecisFilter({
+export default function RemoteciFilter({
   remoteci_id,
   onSelect,
   onClear,
   showToolbarItem = true,
   placeholderText = "Search a name",
   categoryName = "Remoteci",
-}: RemotecisFilterProps) {
+}: RemoteciFilterProps) {
   const remoteci = useSelector(getRemoteciById(remoteci_id));
   return (
     <ToolbarFilter

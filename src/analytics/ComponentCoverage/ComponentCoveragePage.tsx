@@ -32,7 +32,7 @@ import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
 import MainPage from "pages/MainPage";
-import TopicsFilter from "jobs/toolbar/TopicsFilter";
+import TopicFilter from "jobs/toolbar/TopicFilter";
 import {
   InfoCircleIcon,
   SearchIcon,
@@ -44,7 +44,7 @@ import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
 import TypesFilter from "./TypesFilter";
 import qs from "qs";
-import TeamsFilter from "jobs/toolbar/TeamsFilter";
+import TeamFilter from "jobs/toolbar/TeamFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 
 interface ICoverageFilters {
@@ -190,7 +190,7 @@ export default function ComponentCoveragePage() {
               </ToolbarGroup>
               <ToolbarGroup>
                 <ToolbarItem>
-                  <TopicsFilter
+                  <TopicFilter
                     topic_id={topicId}
                     onClear={() => setTopicId(null)}
                     onSelect={(topic) => setTopicId(topic.id)}
@@ -202,7 +202,7 @@ export default function ComponentCoveragePage() {
               </ToolbarGroup>
               <ToolbarGroup>
                 <ToolbarItem>
-                  <TeamsFilter
+                  <TeamFilter
                     team_id={teamId}
                     onClear={() => setTeamId(null)}
                     onSelect={(team) => setTeamId(team.id)}

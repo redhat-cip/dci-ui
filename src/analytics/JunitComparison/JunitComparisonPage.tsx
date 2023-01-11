@@ -29,11 +29,11 @@ import {
   Cell,
 } from "recharts";
 import http from "services/http";
-import { TopicSelect } from "jobs/toolbar/TopicsFilter";
+import { TopicSelect } from "jobs/toolbar/TopicFilter";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showAPIError, showError } from "alerts/alertsActions";
-import { RemoteciSelect } from "jobs/toolbar/RemotecisFilter";
+import { RemoteciSelect } from "jobs/toolbar/RemoteciFilter";
 import { DateTime } from "luxon";
 import { IRemoteci, ITopic } from "types";
 import { round } from "lodash";

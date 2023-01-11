@@ -56,7 +56,7 @@ export function TopicSelect({
   );
 }
 
-type TopicsFilterProps = {
+type TopicFilterProps = {
   topic_id: string | null;
   onSelect: (topic: ITopic) => void;
   onClear: () => void;
@@ -65,14 +65,14 @@ type TopicsFilterProps = {
   categoryName?: string;
 };
 
-export default function TopicsFilter({
+export default function TopicFilter({
   topic_id,
   onSelect,
   onClear,
   showToolbarItem = true,
   placeholderText = "Search by name",
   categoryName = "Topic",
-}: TopicsFilterProps) {
+}: TopicFilterProps) {
   const topic = useSelector(getTopicById(topic_id));
   return (
     <ToolbarFilter

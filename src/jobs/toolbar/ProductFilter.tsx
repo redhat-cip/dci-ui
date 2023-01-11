@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ITeam } from "types";
-import { getTeams, getTeamById, isFetchingTeams } from "teams/teamsSelectors";
-import teamsActions from "teams/teamsActions";
+import {
+  getProducts,
+  getProductById,
+  isFetchingProducts,
+} from "products/productsSelectors";
+import { IProduct } from "types";
+import productsActions from "products/productsActions";
 import {
   Select,
   SelectOption,
@@ -12,41 +16,41 @@ import {
 import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 
-type TeamsFilterProps = {
-  team_id: string | null;
-  onSelect: (team: ITeam) => void;
+type ProductFilterProps = {
+  product_id: string | null;
+  onSelect: (product: IProduct) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
   placeholderText?: string;
   categoryName?: string;
 };
 
-export default function TeamsFilter({
-  team_id,
+export default function ProductFilter({
+  product_id,
   onSelect,
   onClear,
   showToolbarItem = true,
   placeholderText = "Search by name",
-  categoryName = "Team",
-}: TeamsFilterProps) {
+  categoryName = "Product",
+}: ProductFilterProps) {
   const [searchValue, setSearchValue] = useState("");
-  const teams = useSelector(getTeams);
-  const team = useSelector(getTeamById(team_id));
+  const products = useSelector(getProducts);
+  const product = useSelector(getProductById(product_id));
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const isFetching = useSelector(isFetchingTeams);
+  const isFetching = useSelector(isFetchingProducts);
 
   const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
 
   useEffect(() => {
     if (debouncedSearchValue) {
-      dispatch(teamsActions.all({ where: `name:${debouncedSearchValue}*` }));
+      dispatch(productsActions.all({ where: `name:${debouncedSearchValue}*` }));
     }
   }, [debouncedSearchValue, dispatch]);
 
   return (
     <ToolbarFilter
-      chips={team === null ? [] : [team.name]}
+      chips={product === null ? [] : [product.name]}
       deleteChip={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
@@ -57,11 +61,11 @@ export default function TeamsFilter({
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
           setIsOpen(false);
-          const s = selection as ITeam;
+          const s = selection as IProduct;
           onSelect(s);
         }}
         onClear={onClear}
-        selections={team === null ? "" : team.name}
+        selections={product === null ? "" : product.name}
         isOpen={isOpen}
         aria-labelledby="select"
         placeholderText={placeholderText}
@@ -69,16 +73,16 @@ export default function TeamsFilter({
         onTypeaheadInputChanged={setSearchValue}
         noResultsFoundText={
           debouncedSearchValue === ""
-            ? "Search a team by name"
+            ? "Search a product by name"
             : isFetching
             ? "Searching..."
-            : "No team matching this name"
+            : "No product matching this name"
         }
       >
-        {teams
-          .map((t) => ({ ...t, toString: () => t.name }))
-          .map((team) => (
-            <SelectOption key={team.id} value={team} />
+        {products
+          .map((p) => ({ ...p, toString: () => p.name }))
+          .map((product) => (
+            <SelectOption key={product.id} value={product} />
           ))}
       </Select>
     </ToolbarFilter>

@@ -19,10 +19,10 @@ import {
   SyncAltIcon,
   TableIcon,
 } from "@patternfly/react-icons";
-import RemotecisFilter from "./RemotecisFilter";
-import ProductsFilter from "./ProductsFilter";
-import TopicsFilter from "./TopicsFilter";
-import TeamsFilter from "./TeamsFilter";
+import RemoteciFilter from "./RemoteciFilter";
+import ProductFilter from "./ProductFilter";
+import TopicFilter from "./TopicFilter";
+import TeamFilter from "./TeamFilter";
 import StatusFilter from "./StatusFilter";
 import TagsFilter from "./TagsFilter";
 import ConfigurationFilter from "./ConfigurationFilter";
@@ -107,13 +107,13 @@ export default function JobsToolbar({
             ></Dropdown>
           </ToolbarItem>
           <ToolbarItem>
-            <TeamsFilter
+            <TeamFilter
               showToolbarItem={currentCategory === "Team"}
               team_id={filters.team_id}
               onClear={() => setFilters({ ...filters, team_id: null })}
               onSelect={(team) => setFilters({ ...filters, team_id: team.id })}
             />
-            <RemotecisFilter
+            <RemoteciFilter
               showToolbarItem={currentCategory === "Remoteci"}
               remoteci_id={filters.remoteci_id}
               onClear={() => setFilters({ ...filters, remoteci_id: null })}
@@ -121,7 +121,7 @@ export default function JobsToolbar({
                 setFilters({ ...filters, remoteci_id: remoteci.id })
               }
             />
-            <ProductsFilter
+            <ProductFilter
               showToolbarItem={currentCategory === "Product"}
               product_id={filters.product_id}
               onClear={() => setFilters({ ...filters, product_id: null })}
@@ -129,7 +129,7 @@ export default function JobsToolbar({
                 setFilters({ ...filters, product_id: product.id })
               }
             />
-            <TopicsFilter
+            <TopicFilter
               showToolbarItem={currentCategory === "Topic"}
               topic_id={filters.topic_id}
               onClear={() => setFilters({ ...filters, topic_id: null })}
