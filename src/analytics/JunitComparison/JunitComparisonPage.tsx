@@ -344,10 +344,14 @@ interface JunitData {
   details: { testcase: string; value: number }[];
   intervals: number[];
   values: number[];
+  len_jobs_topic_1: number;
+  len_jobs_topic_2: number;
 }
 
 export default function JunitComparisonPage() {
-  const [testLowerBoundary, setTestLowerBoundary] = useState<number | null>(10);
+  const [testLowerBoundary, setTestLowerBoundary] = useState<number | null>(
+    null
+  );
   const [testUpperBoundary, setTestUpperBoundary] = useState<number | null>(
     null
   );
@@ -417,6 +421,9 @@ export default function JunitComparisonPage() {
               <CardTitle>
                 Nb of tests per percentage deviation range between reference
                 topic and target topic.
+                <br />
+                We compared {data.len_jobs_topic_1} reference jobs with{" "}
+                {data.len_jobs_topic_2} target jobs.
               </CardTitle>
               <CardBody>
                 <div
@@ -527,11 +534,28 @@ export default function JunitComparisonPage() {
           <div className="mt-md">
             <Card>
               <CardTitle>
-                {testLowerBoundary === null
-                  ? `Testcases under ${testUpperBoundary}%`
-                  : testUpperBoundary === null
-                  ? `Testcases over ${testLowerBoundary}%`
-                  : `Testcases between ${testLowerBoundary}% and ${testUpperBoundary}%`}
+                <div>
+                  {testLowerBoundary === null
+                    ? testUpperBoundary === null
+                      ? "All testcases"
+                      : `Testcases under ${testUpperBoundary}%`
+                    : testUpperBoundary === null
+                    ? `Testcases over ${testLowerBoundary}%`
+                    : `Testcases between ${testLowerBoundary}% and ${testUpperBoundary}%`}
+                  {testLowerBoundary !== null && testUpperBoundary !== null && (
+                    <small>
+                      <Button
+                        variant="link"
+                        onClick={() => {
+                          setTestLowerBoundary(null);
+                          setTestUpperBoundary(null);
+                        }}
+                      >
+                        (reset)
+                      </Button>
+                    </small>
+                  )}
+                </div>
               </CardTitle>
               <CardBody>
                 <table
