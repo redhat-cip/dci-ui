@@ -14,7 +14,7 @@ import {
 import TopicFilter from "jobs/toolbar/TopicFilter";
 import RemoteciFilter from "jobs/toolbar/RemoteciFilter";
 import { useEffect, useState } from "react";
-import { IRemoteci, ITopic, IDataFromES, IGraphData, IRefArea } from "types";
+import { IDataFromES, IGraphData, IRefArea } from "types";
 import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
@@ -162,57 +162,50 @@ function Graph({ data }: { data: IGraphData[] }) {
 
 export default function TasksDurationPerJobPage() {
   const dispatch = useDispatch();
-  const [topic, setTopic] = useState<ITopic | null>(null);
-  const [remoteci, setRemoteci] = useState<IRemoteci | null>(null);
-  const [ESData, setESData] = useState<IDataFromES | null>(null);
+  const [topicId, setTopicId] = useState<string | null>(null);
+  const [remoteciId, setRemoteciId] = useState<string | null>(null);
   const [data, setData] = useState<IGraphData[]>([]);
-  const maxJobs = 7;
   const [after, setAfter] = useState<string | null>(null);
   const [before, setBefore] = useState<string | null>(null);
 
   function clearAllFilters() {
-    setTopic(null);
-    setRemoteci(null);
+    setTopicId(null);
+    setRemoteciId(null);
     setAfter(null);
     setBefore(null);
   }
 
   useEffect(() => {
-    if (topic && remoteci) {
+    if (topicId && remoteciId) {
       http
         .get(
-          `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteci.id}&topic_id=${topic.id}`
+          `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteciId}&topic_id=${topicId}`
         )
         .then((response) => {
-          setESData(response.data as IDataFromES);
+          setData(transform(response.data as IDataFromES));
         })
         .catch((error) => {
           dispatch(showAPIError(error));
           return error;
         });
     }
-  }, [topic, remoteci, after, before, dispatch]);
+  }, [topicId, remoteciId, dispatch]);
 
-  useEffect(() => {
-    if (ESData) {
-      setData(
-        transform(ESData)
-          .filter((d) => {
-            if (after) {
-              return DateTime.fromISO(d.created_at) >= DateTime.fromISO(after);
-            }
-            return true;
-          })
-          .filter((d) => {
-            if (before) {
-              return DateTime.fromISO(d.created_at) <= DateTime.fromISO(before);
-            }
-            return true;
-          })
-          .slice(-maxJobs)
-      );
-    }
-  }, [ESData]);
+  const maxJobs = 7;
+  const filteredData = data
+    .filter((d) => {
+      if (after) {
+        return DateTime.fromISO(d.created_at) >= DateTime.fromISO(after);
+      }
+      return true;
+    })
+    .filter((d) => {
+      if (before) {
+        return DateTime.fromISO(d.created_at) <= DateTime.fromISO(before);
+      }
+      return true;
+    })
+    .slice(-maxJobs);
 
   return (
     <MainPage
@@ -242,16 +235,16 @@ export default function TasksDurationPerJobPage() {
               <ToolbarGroup>
                 <ToolbarItem>
                   <TopicFilter
-                    topic_id={topic ? topic.id : null}
-                    onClear={() => setTopic(null)}
-                    onSelect={setTopic}
+                    topicId={topicId}
+                    onClear={() => setTopicId(null)}
+                    onSelect={setTopicId}
                   />
                 </ToolbarItem>
                 <ToolbarItem>
                   <RemoteciFilter
-                    remoteci_id={remoteci ? remoteci.id : null}
-                    onClear={() => setRemoteci(null)}
-                    onSelect={setRemoteci}
+                    remoteciId={remoteciId}
+                    onClear={() => setRemoteciId(null)}
+                    onSelect={setRemoteciId}
                   />
                 </ToolbarItem>
               </ToolbarGroup>
@@ -291,18 +284,12 @@ export default function TasksDurationPerJobPage() {
       </Card>
       <Card className="mt-lg">
         <CardBody>
-          {ESData === null && (
-            <p>To start choose one topic and one remoteci.</p>
-          )}
-          {ESData !== null && data.length === 0 && (
-            <p>No data available with these filters, change your filters.</p>
-          )}
-          {data.length === 0 ? null : (
+          {filteredData.length === 0 ? null : (
             <>
               <div
                 style={{ width: "100%", minHeight: "400px", height: "400px" }}
               >
-                <Graph data={data} />
+                <Graph data={filteredData} />
               </div>
               <div className="p-xl">
                 <table
@@ -334,7 +321,7 @@ export default function TasksDurationPerJobPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((d, i) => (
+                    {filteredData.map((d, i) => (
                       <tr key={i} role="row">
                         <td
                           role="cell"

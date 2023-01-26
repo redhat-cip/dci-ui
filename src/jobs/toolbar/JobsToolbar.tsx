@@ -115,10 +115,10 @@ export default function JobsToolbar({
             />
             <RemoteciFilter
               showToolbarItem={currentCategory === "Remoteci"}
-              remoteci_id={filters.remoteci_id}
+              remoteciId={filters.remoteci_id}
               onClear={() => setFilters({ ...filters, remoteci_id: null })}
-              onSelect={(remoteci) =>
-                setFilters({ ...filters, remoteci_id: remoteci.id })
+              onSelect={(remoteciId) =>
+                setFilters({ ...filters, remoteci_id: remoteciId })
               }
             />
             <ProductFilter
@@ -131,10 +131,10 @@ export default function JobsToolbar({
             />
             <TopicFilter
               showToolbarItem={currentCategory === "Topic"}
-              topic_id={filters.topic_id}
+              topicId={filters.topic_id}
               onClear={() => setFilters({ ...filters, topic_id: null })}
-              onSelect={(topic) =>
-                setFilters({ ...filters, topic_id: topic.id })
+              onSelect={(topicId) =>
+                setFilters({ ...filters, topic_id: topicId })
               }
             />
             <TagsFilter

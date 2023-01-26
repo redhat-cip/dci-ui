@@ -17,13 +17,13 @@ import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 
 export function RemoteciSelect({
-  remoteci,
+  remoteciId,
   placeholderText,
   onSelect,
   onClear,
 }: {
-  remoteci: IRemoteci | null;
-  onSelect: (remoteci: IRemoteci) => void;
+  remoteciId: string | null;
+  onSelect: (remoteciId: string) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
   placeholderText?: string;
@@ -32,6 +32,7 @@ export function RemoteciSelect({
   const [searchValue, setSearchValue] = useState("");
   const remotecis = useSelector(getRemotecis);
   const isFetching = useSelector(isFetchingRemotecis);
+  const remoteci = useSelector(getRemoteciById(remoteciId));
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,6 +46,12 @@ export function RemoteciSelect({
     }
   }, [debouncedSearchValue, dispatch]);
 
+  useEffect(() => {
+    if (remoteciId) {
+      dispatch(remotecisActions.one(remoteciId));
+    }
+  }, [remoteciId, dispatch]);
+
   return (
     <Select
       variant={SelectVariant.typeahead}
@@ -53,7 +60,7 @@ export function RemoteciSelect({
       onSelect={(event, selection) => {
         setIsOpen(false);
         const s = selection as IRemoteci;
-        onSelect(s);
+        onSelect(s.id);
       }}
       onClear={onClear}
       selections={remoteci === null ? "" : remoteci.name}
@@ -80,8 +87,8 @@ export function RemoteciSelect({
 }
 
 type RemoteciFilterProps = {
-  remoteci_id: string | null;
-  onSelect: (remoteci: IRemoteci) => void;
+  remoteciId: string | null;
+  onSelect: (remoteci: string) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
   placeholderText?: string;
@@ -89,14 +96,14 @@ type RemoteciFilterProps = {
 };
 
 export default function RemoteciFilter({
-  remoteci_id,
+  remoteciId,
   onSelect,
   onClear,
   showToolbarItem = true,
   placeholderText = "Search a name",
   categoryName = "Remoteci",
 }: RemoteciFilterProps) {
-  const remoteci = useSelector(getRemoteciById(remoteci_id));
+  const remoteci = useSelector(getRemoteciById(remoteciId));
   return (
     <ToolbarFilter
       chips={remoteci === null ? [] : [remoteci.name]}
@@ -105,7 +112,7 @@ export default function RemoteciFilter({
       showToolbarItem={showToolbarItem}
     >
       <RemoteciSelect
-        remoteci={remoteci}
+        remoteciId={remoteciId}
         placeholderText={placeholderText}
         onClear={onClear}
         onSelect={onSelect}

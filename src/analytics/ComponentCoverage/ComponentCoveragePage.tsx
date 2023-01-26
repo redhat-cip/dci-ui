@@ -191,9 +191,9 @@ export default function ComponentCoveragePage() {
               <ToolbarGroup>
                 <ToolbarItem>
                   <TopicFilter
-                    topic_id={topicId}
+                    topicId={topicId}
                     onClear={() => setTopicId(null)}
-                    onSelect={(topic) => setTopicId(topic.id)}
+                    onSelect={setTopicId}
                   />
                 </ToolbarItem>
               </ToolbarGroup>

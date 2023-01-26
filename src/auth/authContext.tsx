@@ -28,7 +28,7 @@ interface AuthContextType {
   openChangeTeamModal: () => void;
   closeChangeTeamModal: () => void;
   hasMultipleTeams: boolean;
-  hasAtLeastOneTeam: boolean
+  hasAtLeastOneTeam: boolean;
 }
 export const AuthContext = React.createContext<AuthContextType>(null!);
 

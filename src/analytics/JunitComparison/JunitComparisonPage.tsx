@@ -35,7 +35,6 @@ import { useDispatch } from "react-redux";
 import { showAPIError, showError } from "alerts/alertsActions";
 import { RemoteciSelect } from "jobs/toolbar/RemoteciFilter";
 import { DateTime } from "luxon";
-import { IRemoteci, ITopic } from "types";
 import { round } from "lodash";
 import {
   ArrowDownIcon,
@@ -48,6 +47,7 @@ import {
   global_primary_color_100,
 } from "@patternfly/react-tokens";
 import { TagsInput } from "jobs/toolbar/TagsFilter";
+import { useSearchParams } from "react-router-dom";
 
 type JunitComputationMode = "mean" | "median";
 
@@ -74,27 +74,41 @@ function JunitComparisonForm({
   isLoading: boolean;
   onSubmit: (form: JunitComparisonPayload) => void;
 }) {
-  const [topic1, setTopic1] = useState<ITopic | null>(null);
-  const [topic2, setTopic2] = useState<ITopic | null>(null);
-  const [remoteci1, setRemoteci1] = useState<IRemoteci | null>(null);
-  const [remoteci2, setRemoteci2] = useState<IRemoteci | null>(null);
-  const [tags_1, setTags1] = useState<string[]>([]);
-  const [tags_2, setTags2] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [topicId1, setTopicId1] = useState(searchParams.get("topicId1"));
+  const [topicId2, setTopicId2] = useState(searchParams.get("topicId2"));
+  const [remoteciId1, setRemoteciId1] = useState(
+    searchParams.get("remoteciId1")
+  );
+  const [remoteciId2, setRemoteciId2] = useState(
+    searchParams.get("remoteciId2")
+  );
+  const [tags1, setTags1] = useState<string[]>(
+    searchParams.get("tags1")?.split(",") || []
+  );
+  const [tags2, setTags2] = useState<string[]>(
+    searchParams.get("tags2")?.split(",") || []
+  );
   const [baselineComputation, setBaselineComputation] =
-    useState<JunitComputationMode>("mean");
+    useState<JunitComputationMode>(
+      (searchParams.get("baselineComputation") ||
+        "mean") as JunitComputationMode
+    );
   const [topic1StartDate, setTopic1StartDate] = useState(
-    DateTime.now().minus({ week: 1 }).toISODate()
+    searchParams.get("topic1StartDate") ||
+      DateTime.now().minus({ week: 1 }).toISODate()
   );
   const [topic1EndDate, setTopic1EndDate] = useState(
-    DateTime.now().toISODate()
+    searchParams.get("topic1EndDate") || DateTime.now().toISODate()
   );
   const [topic2StartDate, setTopic2StartDate] = useState(
-    DateTime.now().minus({ week: 1 }).toISODate()
+    searchParams.get("topic2StartDate") ||
+      DateTime.now().minus({ week: 1 }).toISODate()
   );
   const [topic2EndDate, setTopic2EndDate] = useState(
-    DateTime.now().toISODate()
+    searchParams.get("topic2EndDate") || DateTime.now().toISODate()
   );
-  const [testName, setTestName] = useState("");
+  const [testName, setTestName] = useState(searchParams.get("testName"));
 
   return (
     <div>
@@ -111,19 +125,19 @@ function JunitComparisonForm({
             <Form>
               <FormGroup label="Reference topic" isRequired fieldId="topic1">
                 <TopicSelect
-                  topic={topic1}
-                  onClear={() => setTopic1(null)}
-                  onSelect={setTopic1}
+                  topicId={topicId1}
+                  onClear={() => setTopicId1(null)}
+                  onSelect={setTopicId1}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  remoteci={remoteci1}
-                  onClear={() => setRemoteci1(null)}
-                  onSelect={(remoteci) => {
-                    setRemoteci1(remoteci);
-                    if (remoteci2 === null) {
-                      setRemoteci2(remoteci);
+                  remoteciId={remoteciId1}
+                  onClear={() => setRemoteciId1(null)}
+                  onSelect={(remoteciId) => {
+                    setRemoteciId1(remoteciId);
+                    if (remoteciId2 === null) {
+                      setRemoteciId2(remoteciId);
                     }
                   }}
                 />
@@ -155,7 +169,7 @@ function JunitComparisonForm({
                   <FormGroup label="Tags" fieldId="tags_1">
                     <TagsInput
                       id="tags_1"
-                      tags={tags_1}
+                      tags={tags1}
                       setTags={(tags) => setTags1(tags)}
                     />
                   </FormGroup>
@@ -167,7 +181,7 @@ function JunitComparisonForm({
                   type="text"
                   id="test_name"
                   name="test_name"
-                  value={testName}
+                  value={testName || ""}
                   onChange={setTestName}
                 />
               </FormGroup>
@@ -178,6 +192,7 @@ function JunitComparisonForm({
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
               height: "100%",
@@ -187,18 +202,18 @@ function JunitComparisonForm({
               variant="plain"
               aria-label="Action"
               onClick={() => {
-                const tmpTopic2 = topic2;
-                const tmpRemoteci2 = remoteci2;
+                const tmpTopic2 = topicId2;
+                const tmpRemoteci2 = remoteciId2;
                 const tmpTopic2StartDate = topic2StartDate;
                 const tmpTopic2EndDate = topic2EndDate;
-                const tmpTags2 = tags_2;
-                setTopic2(topic1);
-                setRemoteci2(remoteci1);
+                const tmpTags2 = tags2;
+                setTopicId2(topicId1);
+                setRemoteciId2(remoteciId1);
                 setTopic2StartDate(topic1StartDate);
                 setTopic2EndDate(topic1EndDate);
-                setTags2(tags_1);
-                setTopic1(tmpTopic2);
-                setRemoteci1(tmpRemoteci2);
+                setTags2(tags1);
+                setTopicId1(tmpTopic2);
+                setRemoteciId1(tmpRemoteci2);
                 setTopic1StartDate(tmpTopic2StartDate);
                 setTopic1EndDate(tmpTopic2EndDate);
                 setTags1(tmpTags2);
@@ -227,19 +242,19 @@ function JunitComparisonForm({
             <Form>
               <FormGroup label="Target topic" isRequired fieldId="topic2">
                 <TopicSelect
-                  topic={topic2}
-                  onClear={() => setTopic2(null)}
-                  onSelect={setTopic2}
+                  topicId={topicId2}
+                  onClear={() => setTopicId2(null)}
+                  onSelect={setTopicId2}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  remoteci={remoteci2}
-                  onClear={() => setRemoteci2(null)}
-                  onSelect={(remoteci) => {
-                    setRemoteci2(remoteci);
-                    if (remoteci1 === null) {
-                      setRemoteci1(remoteci);
+                  remoteciId={remoteciId2}
+                  onClear={() => setRemoteciId2(null)}
+                  onSelect={(remoteciId) => {
+                    setRemoteciId2(remoteciId);
+                    if (remoteciId1 === null) {
+                      setRemoteciId1(remoteciId);
                     }
                   }}
                 />
@@ -271,7 +286,7 @@ function JunitComparisonForm({
                   <FormGroup label="Tags" fieldId="tags_2">
                     <TagsInput
                       id="tags_2"
-                      tags={tags_2}
+                      tags={tags2}
                       setTags={(tags) => setTags2(tags)}
                     />
                   </FormGroup>
@@ -308,27 +323,48 @@ function JunitComparisonForm({
         isLoading={isLoading}
         isDisabled={
           testName === "" ||
-          topic1 === null ||
-          topic2 === null ||
-          remoteci1 === null ||
-          remoteci2 === null
+          topicId1 === null ||
+          topicId2 === null ||
+          remoteciId1 === null ||
+          remoteciId2 === null
         }
         className="pf-u-mt-xl"
         onClick={() => {
-          if (testName && topic1 && topic2 && remoteci1 && remoteci2) {
+          if (testName && topicId1 && topicId2 && remoteciId1 && remoteciId2) {
+            searchParams.set("topicId1", topicId1);
+            searchParams.set("topicId2", topicId2);
+            searchParams.set("remoteciId1", remoteciId1);
+            searchParams.set("remoteciId2", remoteciId2);
+            searchParams.set("testName", testName);
+            searchParams.set("baselineComputation", baselineComputation);
+            searchParams.set("topic1StartDate", topic1StartDate);
+            searchParams.set("topic1EndDate", topic1EndDate);
+            searchParams.set("topic2StartDate", topic2StartDate);
+            searchParams.set("topic2EndDate", topic2EndDate);
+            if (tags1.length > 0) {
+              searchParams.set("tags1", tags1.join(","));
+            } else {
+              searchParams.delete("tags1");
+            }
+            if (tags2.length > 0) {
+              searchParams.set("tags2", tags2.join(","));
+            } else {
+              searchParams.delete("tags2");
+            }
+            setSearchParams(searchParams, { replace: true });
             onSubmit({
-              topic_1_id: topic1.id,
+              topic_1_id: topicId1,
               topic_1_start_date: topic1StartDate,
               topic_1_end_date: topic1EndDate,
-              remoteci_1_id: remoteci1.id,
+              remoteci_1_id: remoteciId1,
               topic_1_baseline_computation: baselineComputation,
-              tags_1,
-              topic_2_id: topic2.id,
+              tags_1: tags1,
+              topic_2_id: topicId2,
               topic_2_start_date: topic2StartDate,
               topic_2_end_date: topic2EndDate,
-              remoteci_2_id: remoteci2.id,
+              remoteci_2_id: remoteciId2,
               topic_2_baseline_computation: baselineComputation,
-              tags_2,
+              tags_2: tags2,
               test_name: testName,
             });
           }
@@ -359,7 +395,7 @@ export default function JunitComparisonPage() {
   const [data, setData] = useState<JunitData | null>(null);
 
   const dispatch = useDispatch();
-
+  const interval = 10;
   return (
     <MainPage
       title="Junit comparison"
@@ -468,14 +504,19 @@ export default function JunitComparisonPage() {
                             let message = `${payload[0].value} test${
                               (payload[0].value as number) > 1 ? "s" : ""
                             } with percentage deviation is `;
-                            if (range <= -95) {
-                              message += "under 90%";
-                            } else if (range >= 95) {
-                              message += "over 90%";
+                            const lowerBoundary =
+                              data.intervals[0] + interval / 2;
+                            const upperBoundary =
+                              data.intervals[data.intervals.length - 1] -
+                              interval / 2;
+                            if (range <= lowerBoundary) {
+                              message += `under ${lowerBoundary}%`;
+                            } else if (range >= upperBoundary) {
+                              message += `over ${upperBoundary}%`;
                             } else {
-                              message += `between ${range - 5}% and ${
-                                range + 5
-                              }%`;
+                              message += `between ${
+                                range - interval / 2
+                              }% and ${range + interval / 2}%`;
                             }
                             return (
                               <div
@@ -496,8 +537,10 @@ export default function JunitComparisonPage() {
                         fill="#0066CC"
                         name="# tests"
                         onClick={(d, index) => {
-                          const lowerBoundary = data.intervals[index] - 5;
-                          const upperBoundary = data.intervals[index] + 5;
+                          const lowerBoundary =
+                            data.intervals[index] - interval / 2;
+                          const upperBoundary =
+                            data.intervals[index] + interval / 2;
                           const isFirstElement = index === 0;
                           const isLastElement =
                             index === data.values.length - 1;

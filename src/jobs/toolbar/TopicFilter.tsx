@@ -12,19 +12,20 @@ import {
 import { AppDispatch } from "store";
 
 export function TopicSelect({
-  topic,
+  topicId,
   placeholderText = "",
   onSelect,
   onClear,
 }: {
-  topic: ITopic | null;
+  topicId: string | null;
   placeholderText?: string;
-  onSelect: (topic: ITopic) => void;
+  onSelect: (topicId: string) => void;
   onClear: () => void;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
   const topics = useSelector(getActiveTopics);
+  const topic = useSelector(getTopicById(topicId));
 
   useEffect(() => {
     dispatch(topicsActions.all());
@@ -38,7 +39,7 @@ export function TopicSelect({
       onSelect={(event, selection) => {
         setIsOpen(false);
         const s = selection as ITopic;
-        onSelect(s);
+        onSelect(s.id);
       }}
       onClear={onClear}
       selections={topic === null ? "" : topic.name}
@@ -57,8 +58,8 @@ export function TopicSelect({
 }
 
 type TopicFilterProps = {
-  topic_id: string | null;
-  onSelect: (topic: ITopic) => void;
+  topicId: string | null;
+  onSelect: (topicId: string) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
   placeholderText?: string;
@@ -66,14 +67,14 @@ type TopicFilterProps = {
 };
 
 export default function TopicFilter({
-  topic_id,
+  topicId,
   onSelect,
   onClear,
   showToolbarItem = true,
   placeholderText = "Search by name",
   categoryName = "Topic",
 }: TopicFilterProps) {
-  const topic = useSelector(getTopicById(topic_id));
+  const topic = useSelector(getTopicById(topicId));
   return (
     <ToolbarFilter
       chips={topic === null ? [] : [topic.name]}
@@ -83,7 +84,7 @@ export default function TopicFilter({
     >
       <TopicSelect
         placeholderText={placeholderText}
-        topic={topic}
+        topicId={topicId}
         onSelect={onSelect}
         onClear={onClear}
       />
