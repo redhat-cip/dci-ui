@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uniqBy } from "lodash";
-import { Button, TextContent, Text, Banner } from "@patternfly/react-core";
+import { Button, TextContent, Text } from "@patternfly/react-core";
 import { TrashIcon, WarningTriangleIcon } from "@patternfly/react-icons";
 import {
   getTopicsWithTeams,
@@ -12,6 +12,7 @@ import { AppDispatch } from "store";
 import AllowTeamToAccessTopicForm from "./AllowTeamToAccessTopicForm";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
+import { global_warning_color_100 } from "@patternfly/react-tokens";
 
 export default function TopicsPermissionsPage() {
   const [topics, setTopics] = useState<ITopicWithTeams[]>([]);
@@ -37,13 +38,18 @@ export default function TopicsPermissionsPage() {
         <div>
           <TextContent className="mt-lg">
             <Text component="p">
-              <Banner variant="warning">
+              <div
+                style={{
+                  backgroundColor: global_warning_color_100.value,
+                  padding: "1em",
+                }}
+              >
                 <WarningTriangleIcon className="mr-xs" />
                 Some topics are under the export control policy. Some partners
                 outside the US need an explicit approval. Make sure the partner
                 has the rights before giving it permission to access a
                 restricted topic.
-              </Banner>
+              </div>
             </Text>
           </TextContent>
           <AllowTeamToAccessTopicForm

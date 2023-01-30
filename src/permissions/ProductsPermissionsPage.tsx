@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty, uniqBy } from "lodash";
-import { Button, TextContent, Text, Banner } from "@patternfly/react-core";
+import { Button, TextContent, Text } from "@patternfly/react-core";
 import { TrashIcon, InfoCircleIcon } from "@patternfly/react-icons";
 import {
   getProductsWithTeams,
@@ -12,6 +12,7 @@ import { AppDispatch } from "store";
 import AllowTeamToAccessProductForm from "./AllowTeamToAccessProductForm";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
+import { global_info_color_100 } from "@patternfly/react-tokens";
 
 export default function ProductsPermissionsPage() {
   const [products, setProducts] = useState<IProductWithTeams[]>([]);
@@ -34,13 +35,18 @@ export default function ProductsPermissionsPage() {
         <div>
           <TextContent className="mt-lg">
             <Text component="p">
-              <Banner variant="info">
+              <div
+                style={{
+                  backgroundColor: global_info_color_100.value,
+                  padding: "1em",
+                }}
+              >
                 <InfoCircleIcon className="mr-xs" />
                 By giving access to a product, a team can download all topics
                 non restricted. If you want to give access to a restricted topic
                 (topic under export control policy for example), you can use the
                 Topics tab.
-              </Banner>
+              </div>
             </Text>
           </TextContent>
           <AllowTeamToAccessProductForm
