@@ -376,6 +376,18 @@ function JunitComparisonForm({
   );
 }
 
+function getLabel(i: number, intervals: number[], interval: number) {
+  const leftValue = intervals[i];
+  const rightValue = leftValue + interval;
+  if (i === 0) {
+    return `(-∞, ${rightValue}%)`;
+  } else if (i === intervals.length - 1) {
+    return `(${leftValue}%, ∞)`;
+  } else {
+    return `(${leftValue}%, ${rightValue}%)`;
+  }
+}
+
 interface JunitData {
   details: { testcase: string; value: number }[];
   intervals: number[];
@@ -469,24 +481,29 @@ export default function JunitComparisonPage() {
                     <BarChart
                       width={500}
                       height={300}
-                      data={data.values.map((v, i) => ({
+                      data={data.values.map((v, index) => ({
                         y: v,
-                        x: data.intervals[i],
-                        i,
+                        x: data.intervals[index] + interval / 2,
+                        i: index,
+                        label: getLabel(index, data.intervals, interval),
                       }))}
                       margin={{
                         top: 5,
                         right: 30,
                         left: 20,
-                        bottom: 15,
+                        bottom: 50,
                       }}
                       barCategoryGap="10%"
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="x">
+                      <XAxis
+                        dataKey="label"
+                        tick={{ fontSize: 10 }}
+                        interval={0}
+                      >
                         <Label
-                          value="Percentage deviation ranges"
-                          offset={-10}
+                          value="Intervals of deltas, lower is better"
+                          offset={-25}
                           position="insideBottom"
                         />
                       </XAxis>
@@ -504,19 +521,18 @@ export default function JunitComparisonPage() {
                             let message = `${payload[0].value} test${
                               (payload[0].value as number) > 1 ? "s" : ""
                             } with percentage deviation is `;
-                            const lowerBoundary =
-                              data.intervals[0] + interval / 2;
+                            const lowerBoundary = data.intervals[0] + interval;
                             const upperBoundary =
-                              data.intervals[data.intervals.length - 1] -
-                              interval / 2;
+                              data.intervals[data.intervals.length - 1];
+
                             if (range <= lowerBoundary) {
                               message += `under ${lowerBoundary}%`;
                             } else if (range >= upperBoundary) {
                               message += `over ${upperBoundary}%`;
                             } else {
-                              message += `between ${
-                                range - interval / 2
-                              }% and ${range + interval / 2}%`;
+                              message += `between ${range}% and ${
+                                range + interval
+                              }%`;
                             }
                             return (
                               <div
@@ -537,10 +553,9 @@ export default function JunitComparisonPage() {
                         fill="#0066CC"
                         name="# tests"
                         onClick={(d, index) => {
-                          const lowerBoundary =
-                            data.intervals[index] - interval / 2;
+                          const lowerBoundary = data.intervals[index];
                           const upperBoundary =
-                            data.intervals[index] + interval / 2;
+                            data.intervals[index] + interval;
                           const isFirstElement = index === 0;
                           const isLastElement =
                             index === data.values.length - 1;
@@ -560,7 +575,7 @@ export default function JunitComparisonPage() {
                           <Cell
                             cursor="pointer"
                             fill={
-                              data.intervals[index] > 0
+                              data.intervals[index] >= 0
                                 ? global_danger_color_100.value
                                 : global_primary_color_100.value
                             }
