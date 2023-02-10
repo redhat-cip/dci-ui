@@ -376,18 +376,6 @@ function JunitComparisonForm({
   );
 }
 
-function getLabel(i: number, intervals: number[], interval: number) {
-  const leftValue = intervals[i];
-  const rightValue = leftValue + interval;
-  if (i === 0) {
-    return `(-∞, ${rightValue}%)`;
-  } else if (i === intervals.length - 1) {
-    return `(${leftValue}%, ∞)`;
-  } else {
-    return `(${leftValue}%, ${rightValue}%)`;
-  }
-}
-
 interface JunitData {
   details: { testcase: string; value: number }[];
   intervals: number[];
@@ -485,7 +473,7 @@ export default function JunitComparisonPage() {
                         y: v,
                         x: data.intervals[index] + interval / 2,
                         i: index,
-                        label: getLabel(index, data.intervals, interval),
+                        label: index === 0 ? "" : `${data.intervals[index]}%`,
                       }))}
                       margin={{
                         top: 5,
@@ -493,13 +481,14 @@ export default function JunitComparisonPage() {
                         left: 20,
                         bottom: 50,
                       }}
-                      barCategoryGap="10%"
+                      barCategoryGap={0}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis
                         dataKey="label"
                         tick={{ fontSize: 10 }}
                         interval={0}
+                        scale="band"
                       >
                         <Label
                           value="Intervals of deltas, lower is better"
@@ -515,6 +504,7 @@ export default function JunitComparisonPage() {
                         />
                       </YAxis>
                       <Tooltip
+                        cursor={false}
                         content={({ active, payload, label }) => {
                           if (active && payload && payload.length) {
                             const range = data.intervals[payload[0].payload.i];
