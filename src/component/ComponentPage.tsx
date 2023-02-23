@@ -92,11 +92,11 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       <Divider />
       <CardLine
         className="p-md"
-        field="Name"
+        field="Canonical project name"
         value={component.canonical_project_name}
       />
       <Divider />
-      <CardLine className="p-md" field="Unique Name" value={component.name} />
+      <CardLine className="p-md" field="Name" value={component.name} />
       <Divider />
       <CardLine
         className="p-md"
@@ -167,6 +167,11 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
         className="p-md"
         field="Created"
         value={fromNow(component.created_at)}
+      />
+      <CardLine
+        className="p-md"
+        field="Released at"
+        value={formatDate(component.released_at)}
       />
     </div>
   );
