@@ -33,8 +33,13 @@ export default function TeamsFilter({
   categoryName = "Teams",
 }: TeamsFilterProps) {
   const [searchValue, setSearchValue] = useState("");
-  const teams = useSelector(getTeams);
-  const selectedTeams = teams.filter((t) => teamsIds.indexOf(t.id) !== -1);
+  const teams = useSelector(getTeams).map((t) => ({
+    ...t,
+    toString: () => t.name,
+  }));
+  const selectedTeams = teams
+    .filter((t) => teamsIds.indexOf(t.id) !== -1)
+    .map((t) => ({ ...t, toString: () => t.name }));
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const isFetching = useSelector(isFetchingTeams);
@@ -72,13 +77,18 @@ export default function TeamsFilter({
         variant={SelectVariant.typeaheadMulti}
         typeAheadAriaLabel={placeholderText}
         onToggle={setIsOpen}
-        onSelect={(event, selection) => {
-          setIsOpen(false);
-          const s = selection as ITeam;
-          onSelect(s);
+        onSelect={(event, teamSelected) => {
+          const teamDeleted = selectedTeams.find(
+            (t) => t.id === (teamSelected as ITeam).id
+          );
+          if (teamDeleted) {
+            onClear(teamDeleted);
+          } else {
+            onSelect(teamSelected as ITeam);
+          }
         }}
         onClear={onClearAll}
-        selections={selectedTeams.map((t) => t.name)}
+        selections={selectedTeams}
         isOpen={isOpen}
         aria-labelledby="select"
         placeholderText={placeholderText}
@@ -92,11 +102,9 @@ export default function TeamsFilter({
             : "No team matching this name"
         }
       >
-        {teams
-          .map((t) => ({ ...t, toString: () => t.name }))
-          .map((team) => (
-            <SelectOption key={team.id} value={team} />
-          ))}
+        {teams.map((team) => (
+          <SelectOption key={team.id} value={team} />
+        ))}
       </Select>
     </ToolbarFilter>
   );

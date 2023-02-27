@@ -675,7 +675,7 @@ export interface IPipelines {
         product_id: string;
         remoteci_id: string;
         state: string;
-        status: string;
+        status: IJobStatus;
         status_reason: string | null;
         tags: string[];
         team_id: string;

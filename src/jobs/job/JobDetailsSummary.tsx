@@ -98,10 +98,13 @@ function Tests({ jobId, tests }: TestsProps) {
 }
 
 interface ComponentsProps {
-  components: IComponent[];
+  components: Pick<
+    IComponent,
+    "id" | "topic_id" | "canonical_project_name" | "name"
+  >[];
 }
 
-function Components({ components }: ComponentsProps) {
+export function Components({ components }: ComponentsProps) {
   const sortedComponents = sortByName(
     components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
   );

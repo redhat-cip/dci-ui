@@ -45,6 +45,7 @@ export function TagsInput({
         icon={showSearchIcon && <SearchIcon />}
         value={inputValue}
         onChange={setInputValue}
+        placeholder="Tags"
         onKeyPress={(event) => {
           if (event.key === "Enter" && tags.indexOf(inputValue) === -1) {
             event.preventDefault();

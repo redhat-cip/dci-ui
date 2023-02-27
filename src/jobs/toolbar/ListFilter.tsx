@@ -38,9 +38,7 @@ export default function ListFilter({
         onChange={setItem}
         onSearch={onSearch}
         value={item}
-        onClear={() => {
-          setItem("");
-        }}
+        onClear={() => setItem("")}
       />
     </ToolbarFilter>
   );
