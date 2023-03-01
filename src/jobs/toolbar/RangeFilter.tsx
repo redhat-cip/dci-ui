@@ -20,6 +20,7 @@ export type RangeOptionValue =
   | "currentMonth"
   | "currentQuarter"
   | "currentYear"
+  | "last7Days"
   | "last30Days"
   | "last90Days"
   | "last365Days"
@@ -37,6 +38,7 @@ const labels: { [k in RangeOptionValue]: string } = {
   currentMonth: "Current month",
   currentQuarter: "Current quarter",
   currentYear: "Year to date",
+  last7Days: "Last 7 days",
   last30Days: "Last 30 days",
   last90Days: "Last 90 days",
   last365Days: "Last 365 days",
@@ -139,26 +141,33 @@ export default function RangeFilter({
       setAfter(lastYear.startOf("year").toISODate());
       setBefore(lastYear.endOf("year").toISODate());
     }
+    if (range === "last7Days") {
+      const last7Days = today.minus({
+        days: 7,
+      });
+      setAfter(last7Days.startOf("day").toISODate());
+      setBefore(today.endOf("day").toISODate());
+    }
     if (range === "last30Days") {
       const last30Days = today.minus({
         days: 30,
       });
       setAfter(last30Days.startOf("day").toISODate());
-      setBefore(yesterday.endOf("day").toISODate());
+      setBefore(today.endOf("day").toISODate());
     }
     if (range === "last90Days") {
       const last90Days = today.minus({
         days: 90,
       });
       setAfter(last90Days.startOf("day").toISODate());
-      setBefore(yesterday.endOf("day").toISODate());
+      setBefore(today.endOf("day").toISODate());
     }
     if (range === "last365Days") {
       const last365Days = today.minus({
         days: 365,
       });
       setAfter(last365Days.startOf("day").toISODate());
-      setBefore(yesterday.endOf("day").toISODate());
+      setBefore(today.endOf("day").toISODate());
     }
   }, [range, setAfter, setBefore]);
 

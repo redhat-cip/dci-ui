@@ -86,9 +86,10 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
             style={{
               color,
             }}
+            className="pf-u-mr-xs"
           >
             {getIcon(job.status)}
-          </span>{" "}
+          </span>
           {job.name}
         </Link>
       </td>
@@ -326,8 +327,9 @@ export default function PipelinesPage() {
   const [teamsIds, setTeamsIds] = useState<string[]>(
     searchParams.get("teams_ids")?.split(",") || []
   );
+  const defaultRangeValue: RangeOptionValue = "last7Days";
   const [range, setRange] = useState<RangeOptionValue>(
-    (searchParams.get("range") as RangeOptionValue) || "previousWeek"
+    (searchParams.get("range") as RangeOptionValue) || defaultRangeValue
   );
   const [after, setAfter] = useState(searchParams.get("start_date") || "");
   const [before, setBefore] = useState(searchParams.get("end_date") || "");
@@ -356,7 +358,7 @@ export default function PipelinesPage() {
             clearAllFilters={() => {
               setTeamsIds([]);
               setPipelinesNames([]);
-              setRange("previousWeek");
+              setRange(defaultRangeValue);
             }}
             collapseListedFiltersBreakpoint="xl"
           >
@@ -409,6 +411,7 @@ export default function PipelinesPage() {
                   before={before}
                   setBefore={setBefore}
                   ranges={[
+                    defaultRangeValue,
                     "previousWeek",
                     "currentWeek",
                     "yesterday",
@@ -445,12 +448,12 @@ export default function PipelinesPage() {
                     if (teamsIds.length > 0) {
                       searchParams.set("teams_ids", teamsIds.join(","));
                     }
-                    if (after === "") {
+                    if (after === "" || range !== "custom") {
                       searchParams.delete("start_date");
                     } else {
                       searchParams.set("start_date", after);
                     }
-                    if (before === "") {
+                    if (before === "" || range !== "custom") {
                       searchParams.delete("end_date");
                     } else {
                       searchParams.set("end_date", before);
