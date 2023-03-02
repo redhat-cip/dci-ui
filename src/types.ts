@@ -451,6 +451,8 @@ export interface IResult {
   total: number;
 }
 
+export interface IPipeline extends Resource {}
+
 export interface IJob extends Resource {
   client_version: string | null;
   comment: string | null;
@@ -475,6 +477,7 @@ export interface IJob extends Resource {
   updated_at: string;
   url: string | null;
   user_agent: string;
+  pipeline: IPipeline | null;
 }
 
 export interface IEnhancedJob extends IJob {
@@ -627,6 +630,7 @@ export interface IComponentCoverageESData {
 const JobsTableListColumns = [
   "id",
   "name",
+  "pipeline",
   "config",
   "team",
   "remoteci",

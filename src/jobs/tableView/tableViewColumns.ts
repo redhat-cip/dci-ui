@@ -3,6 +3,7 @@ import { JobsTableListColumn } from "types";
 const columnLabels: { [k in JobsTableListColumn]: string } = {
   id: "Id",
   name: "Name",
+  pipeline: "Pipeline",
   config: "Config",
   team: "Team",
   remoteci: "Remoteci",

@@ -1,5 +1,5 @@
 import { Label, LabelGroup } from "@patternfly/react-core";
-import { Link } from "react-router-dom";
+import { createSearchParams, Link } from "react-router-dom";
 import {
   IEnhancedJob,
   IJobFilters,
@@ -19,6 +19,8 @@ import { CopyIconButton } from "ui";
 import { groupJobsByPipeline } from "./jobsSelectors";
 import { getPrincipalComponent } from "component/componentSelector";
 import { TestsLabels } from "./TestsLabels";
+import { RangeOptionValue } from "./toolbar/RangeFilter";
+import { DateTime } from "luxon";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
@@ -51,6 +53,7 @@ function JobTableSummary({
   const TopicIcon = getTopicIcon(job.topic?.name);
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
+  const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
       <span>
@@ -61,6 +64,22 @@ function JobTableSummary({
         />
         {job.id}
       </span>
+    ),
+    pipeline: (
+      <Link
+        to={{
+          pathname: "/analytics/pipelines",
+          search: createSearchParams({
+            teams_ids: [job.team_id],
+            range: "custom" as RangeOptionValue,
+            start_date: jobCreatedAt.startOf("day").toISODate(),
+            end_date: jobCreatedAt.endOf("day").toISODate(),
+            pipelines_names: job.pipeline === null ? [] : [job.pipeline.name],
+          }).toString(),
+        }}
+      >
+        <span>{job.pipeline?.name}</span>
+      </Link>
     ),
     name: (
       <Link to={`/jobs/${job.id}/jobStates`}>
