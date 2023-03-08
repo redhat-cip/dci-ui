@@ -27,6 +27,7 @@ import {
 import { JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
 import { useAuth } from "auth/authContext";
+import { useTitle } from "hooks/useTitle";
 
 export default function JobsPage() {
   const location = useLocation();
@@ -51,6 +52,7 @@ export default function JobsPage() {
     ["name", "team", "remoteci", "topic", "component", "duration", "started"],
     4
   );
+  useTitle("DCI > Jobs");
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/jobs${newSearch}`, { replace: true });

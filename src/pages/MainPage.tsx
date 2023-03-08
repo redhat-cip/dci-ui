@@ -8,6 +8,7 @@ import {
   Text,
 } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
+import { useTitle } from "hooks/useTitle";
 
 interface PageProps {
   HeaderSection?: React.ReactNode;
@@ -34,6 +35,7 @@ export default function MainPage({
   children,
   ...props
 }: PageProps) {
+  useTitle(`DCI > ${title}`);
   return (
     <div {...props}>
       {Breadcrumb && (

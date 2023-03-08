@@ -37,7 +37,7 @@ export default function JobPageWithMenu() {
 
   return (
     <MainPage
-      title="Job Details"
+      title={`Job ${job.id}`}
       description=""
       HeaderSection={
         <PageSection
