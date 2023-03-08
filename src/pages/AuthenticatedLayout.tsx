@@ -39,7 +39,10 @@ import {
   UserIcon,
   UsersIcon,
 } from "@patternfly/react-icons";
-import { global_palette_black_800 } from "@patternfly/react-tokens";
+import {
+  global_palette_black_500,
+  global_palette_black_800,
+} from "@patternfly/react-tokens";
 import { useAuth } from "auth/authContext";
 import styled from "styled-components";
 
@@ -283,7 +286,12 @@ function Sidebar({ isNavOpen }: SidebarProps) {
   const identityTeams = values(identity.teams);
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
-      <NavGroup title="DCI">
+      <NavGroup
+        // @ts-ignore
+        title={
+          <span style={{ color: global_palette_black_500.value }}>DCI</span>
+        }
+      >
         <DCINavItem to="/analytics">Analytics</DCINavItem>
         <DCINavItem to="/jobs">Jobs</DCINavItem>
         <DCINavItem to="/products">Products</DCINavItem>
@@ -292,12 +300,26 @@ function Sidebar({ isNavOpen }: SidebarProps) {
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         )}
       </NavGroup>
-      <NavGroup title="User Preferences">
+      <NavGroup
+        // @ts-ignore
+        title={
+          <span style={{ color: global_palette_black_500.value }}>
+            User Preferences
+          </span>
+        }
+      >
         <DCINavItem to="/currentUser/settings">My profile</DCINavItem>
         <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
       </NavGroup>
       {identity.hasEPMRole && (
-        <NavGroup title="Administration">
+        <NavGroup
+          // @ts-ignore
+          title={
+            <span style={{ color: global_palette_black_500.value }}>
+              Administration
+            </span>
+          }
+        >
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
           <DCINavItem to="/permissions/products">Permissions</DCINavItem>
