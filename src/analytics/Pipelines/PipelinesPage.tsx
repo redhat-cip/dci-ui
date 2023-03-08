@@ -20,6 +20,7 @@ import {
   KebabToggle,
   DropdownItem,
   CardHeader,
+  Truncate,
 } from "@patternfly/react-core";
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
@@ -30,16 +31,20 @@ import {
   global_palette_red_50,
 } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
-import { formatDate, humanizeDurationShort } from "services/date";
-import { Fragment, useState } from "react";
+import {
+  formatDate,
+  getRangeDates,
+  humanizeDurationShort,
+} from "services/date";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import TeamsFilter from "jobs/toolbar/TeamsFilter";
 import ListFilter from "jobs/toolbar/ListFilter";
 import { Link, useSearchParams } from "react-router-dom";
 import http from "services/http";
 import { showAPIError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
-import { IJobStatus, IPipelines } from "types";
-import RangeFilter, { RangeOptionValue } from "jobs/toolbar/RangeFilter";
+import { IJobStatus, IPipelines, RangeOptionValue } from "types";
+import RangeFilter from "jobs/toolbar/RangeFilter";
 import { getColor, getIcon } from "jobs/jobSummary/jobSummaryUtils";
 import { Components } from "jobs/job/JobDetailsSummary";
 import { notEmpty } from "../../services/utils";
@@ -181,12 +186,11 @@ function PipelineCard({
   const [seeJobComponents, setSeeJobComponents] = useState(false);
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   return (
-    <Card key={pipelineDay.date} className="pf-u-mt-xs">
+    <Card className="pf-u-mt-xs">
       <CardHeader>
         <CardActions>
           <Dropdown
             onSelect={() => {
-              console.log("what");
               setSeeJobComponents(!seeJobComponents);
             }}
             toggle={
@@ -226,13 +230,13 @@ function PipelineCard({
           <thead>
             <tr>
               <th>pipeline</th>
-              <th>name</th>
+              <th style={{ minWidth: "250px" }}>name</th>
               <th colSpan={-1}>jobs</th>
             </tr>
           </thead>
           <tbody>
-            {pipelineDay.pipelines.map((pipeline, i) => (
-              <Fragment key={i}>
+            {pipelineDay.pipelines.map((pipeline, index) => (
+              <Fragment key={index}>
                 <tr>
                   <td
                     rowSpan={seeJobComponents ? 2 : 1}
@@ -241,6 +245,7 @@ function PipelineCard({
                     <ProgressStepper isCompact>
                       {pipeline.jobs.map((job) => (
                         <ProgressStep
+                          key={job.id}
                           variant={jobStatusToVariant(job.status)}
                           id={job.name}
                           titleId={job.name}
@@ -252,10 +257,10 @@ function PipelineCard({
                     rowSpan={seeJobComponents ? 2 : 1}
                     style={{ verticalAlign: "middle" }}
                   >
-                    {pipeline.name}
+                    <Truncate content={pipeline.name} />
                   </td>
-                  {pipeline.jobs.map((job, i) => (
-                    <PipelineJobInfo index={i} job={job} />
+                  {pipeline.jobs.map((job, index) => (
+                    <PipelineJobInfo key={index} index={index} job={job} />
                   ))}
                 </tr>
                 {seeJobComponents && (
@@ -311,14 +316,15 @@ function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
           const epoch2 = day2.datetime.toMillis();
           return epoch1 < epoch2 ? 1 : epoch1 > epoch2 ? -1 : 0;
         })
-        .map((day) => (
-          <PipelineCard pipelineDay={day} />
+        .map((day, index) => (
+          <PipelineCard key={index} pipelineDay={day} />
         ))}
     </div>
   );
 }
 
 export default function PipelinesPage() {
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [pipelinesNames, setPipelinesNames] = useState<string[]>(
@@ -331,11 +337,76 @@ export default function PipelinesPage() {
   const [range, setRange] = useState<RangeOptionValue>(
     (searchParams.get("range") as RangeOptionValue) || defaultRangeValue
   );
-  const [after, setAfter] = useState(searchParams.get("start_date") || "");
-  const [before, setBefore] = useState(searchParams.get("end_date") || "");
+  const dates = getRangeDates(range);
+  const [after, setAfter] = useState(
+    searchParams.get("start_date") || dates.after
+  );
+  const [before, setBefore] = useState(
+    searchParams.get("end_date") || dates.before
+  );
   const [pipelines, setPipelines] = useState<IPipelines | null>(null);
 
-  const dispatch = useDispatch();
+  const updateUrlWithParams = () => {
+    searchParams.set("teams_ids", teamsIds.join(","));
+    if (pipelinesNames.length > 0) {
+      searchParams.set("pipelines_names", pipelinesNames.join(","));
+    } else {
+      searchParams.delete("pipelines_names");
+    }
+    if (after === "" || range !== "custom") {
+      searchParams.delete("start_date");
+    } else {
+      searchParams.set("start_date", after);
+    }
+    if (before === "" || range !== "custom") {
+      searchParams.delete("end_date");
+    } else {
+      searchParams.set("end_date", before);
+    }
+    searchParams.set("range", range);
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  const memoizedGetPipelines = useCallback(() => {
+    if (teamsIds.length > 0) {
+      setIsLoading(true);
+      const data: {
+        start_date: string;
+        end_date: string;
+        teams_ids: string[];
+        pipelines_names?: string[];
+      } = {
+        start_date: after,
+        end_date: before,
+        teams_ids: teamsIds,
+      };
+      if (pipelinesNames.length > 0) {
+        data.pipelines_names = pipelinesNames;
+      }
+      http
+        .post("/api/v1/analytics/pipelines_status", data)
+        .then((response) => {
+          setPipelines(response.data as IPipelines);
+        })
+        .catch((error) => {
+          dispatch(showAPIError(error));
+          return error;
+        })
+        .then(() => setIsLoading(false));
+    }
+  }, [teamsIds, after, before, pipelinesNames, dispatch]);
+
+  useEffect(() => {
+    memoizedGetPipelines();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (range !== "custom") {
+      const dates = getRangeDates(range);
+      setAfter(dates.after);
+      setBefore(dates.before);
+    }
+  }, [range]);
 
   return (
     <MainPage
@@ -405,11 +476,15 @@ export default function PipelinesPage() {
               <ToolbarItem>
                 <RangeFilter
                   range={range}
-                  setRange={setRange}
+                  onChange={(range, after, before) => {
+                    if (range === "custom") {
+                      setAfter(after);
+                      setBefore(before);
+                    }
+                    setRange(range);
+                  }}
                   after={after}
-                  setAfter={setAfter}
                   before={before}
-                  setBefore={setBefore}
                   ranges={[
                     defaultRangeValue,
                     "previousWeek",
@@ -425,51 +500,8 @@ export default function PipelinesPage() {
                   variant="primary"
                   isDisabled={teamsIds.length === 0}
                   onClick={() => {
-                    setIsLoading(true);
-                    const data: {
-                      start_date: string;
-                      end_date: string;
-                      teams_ids: string[];
-                      pipelines_names?: string[];
-                    } = {
-                      start_date: after,
-                      end_date: before,
-                      teams_ids: teamsIds,
-                    };
-                    if (pipelinesNames.length > 0) {
-                      data.pipelines_names = pipelinesNames;
-                      searchParams.set(
-                        "pipelines_names",
-                        pipelinesNames.join(",")
-                      );
-                    } else {
-                      searchParams.delete("pipelines_names");
-                    }
-                    if (teamsIds.length > 0) {
-                      searchParams.set("teams_ids", teamsIds.join(","));
-                    }
-                    if (after === "" || range !== "custom") {
-                      searchParams.delete("start_date");
-                    } else {
-                      searchParams.set("start_date", after);
-                    }
-                    if (before === "" || range !== "custom") {
-                      searchParams.delete("end_date");
-                    } else {
-                      searchParams.set("end_date", before);
-                    }
-                    searchParams.set("range", range);
-                    setSearchParams(searchParams, { replace: true });
-                    http
-                      .post("/api/v1/analytics/pipelines_status", data)
-                      .then((response) => {
-                        setPipelines(response.data as IPipelines);
-                      })
-                      .catch((error) => {
-                        dispatch(showAPIError(error));
-                        return error;
-                      })
-                      .then(() => setIsLoading(false));
+                    memoizedGetPipelines();
+                    updateUrlWithParams();
                   }}
                 >
                   Show pipelines

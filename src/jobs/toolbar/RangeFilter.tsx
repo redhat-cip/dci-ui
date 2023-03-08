@@ -5,32 +5,14 @@ import {
   SelectVariant,
   ToolbarFilter,
 } from "@patternfly/react-core";
-import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
-
-export type RangeOptionValue =
-  | "previousWeek"
-  | "previousMonth"
-  | "previousQuarter"
-  | "lastMonth"
-  | "lastYear"
-  | "yesterday"
-  | "today"
-  | "currentWeek"
-  | "currentMonth"
-  | "currentQuarter"
-  | "currentYear"
-  | "last7Days"
-  | "last30Days"
-  | "last90Days"
-  | "last365Days"
-  | "custom";
+import {  useState } from "react";
+import { RangeOptionValue } from "types";
 
 const labels: { [k in RangeOptionValue]: string } = {
-  previousWeek: "Last week",
-  previousMonth: "Last month",
+  previousWeek: "Previous week",
+  previousMonth: "Previous month",
   currentWeek: "Current week",
-  previousQuarter: "Last quarter",
+  previousQuarter: "Previous quarter",
   lastMonth: "Last month",
   lastYear: "Last year",
   yesterday: "Yesterday",
@@ -53,123 +35,25 @@ type RangeOption = {
 interface IRangeFilterProps {
   range: RangeOptionValue;
   ranges?: RangeOptionValue[];
-  setRange: (option: RangeOptionValue) => void;
   after: string;
-  setAfter: (d: string) => void;
   before: string;
-  setBefore: (d: string) => void;
   categoryName?: string;
   showToolbarItem?: boolean;
+  onChange: (range: RangeOptionValue, after: string, before: string) => void;
 }
 
 export default function RangeFilter({
   range,
-  setRange,
+  after,
+  before,
+  onChange,
   ranges = Object.keys(labels) as Array<keyof typeof labels>,
-  after = "",
-  setAfter,
-  before = "",
-  setBefore,
   categoryName = "Range",
   showToolbarItem = true,
 }: IRangeFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const label = labels[range];
   const seeDatePicker = range === "custom";
-
-  useEffect(() => {
-    const today = DateTime.now();
-    const yesterday = today.minus({
-      day: 1,
-    });
-    if (range === "today") {
-      setAfter(today.startOf("day").toISODate());
-      setBefore(today.endOf("day").toISODate());
-    }
-    if (range === "currentWeek") {
-      setAfter(today.startOf("week").toISODate());
-      setBefore(today.endOf("week").toISODate());
-    }
-    if (range === "currentMonth") {
-      setAfter(today.startOf("month").toISODate());
-      setBefore(today.endOf("month").toISODate());
-    }
-    if (range === "currentQuarter") {
-      setAfter(today.startOf("quarter").toISODate());
-      setBefore(today.endOf("quarter").toISODate());
-    }
-    if (range === "currentYear") {
-      setAfter(today.startOf("year").toISODate());
-      setBefore(today.endOf("year").toISODate());
-    }
-    if (range === "yesterday") {
-      setAfter(yesterday.startOf("day").toISODate());
-      setBefore(yesterday.endOf("day").toISODate());
-    }
-    if (range === "previousWeek") {
-      const lastWeek = today.minus({
-        week: 1,
-      });
-      setAfter(lastWeek.startOf("week").toISODate());
-      setBefore(lastWeek.endOf("week").toISODate());
-    }
-    if (range === "previousMonth") {
-      const lastMonth = today.minus({
-        month: 1,
-      });
-      setAfter(lastMonth.startOf("month").toISODate());
-      setBefore(lastMonth.endOf("month").toISODate());
-    }
-    if (range === "previousQuarter") {
-      const lastQuarter = today.minus({
-        quarter: 1,
-      });
-      setAfter(lastQuarter.startOf("quarter").toISODate());
-      setBefore(lastQuarter.endOf("quarter").toISODate());
-    }
-    if (range === "lastMonth") {
-      const lastMonth = today.minus({
-        month: 1,
-      });
-      setAfter(lastMonth.startOf("month").toISODate());
-      setBefore(lastMonth.endOf("month").toISODate());
-    }
-    if (range === "lastYear") {
-      const lastYear = today.minus({
-        year: 1,
-      });
-      setAfter(lastYear.startOf("year").toISODate());
-      setBefore(lastYear.endOf("year").toISODate());
-    }
-    if (range === "last7Days") {
-      const last7Days = today.minus({
-        days: 7,
-      });
-      setAfter(last7Days.startOf("day").toISODate());
-      setBefore(today.endOf("day").toISODate());
-    }
-    if (range === "last30Days") {
-      const last30Days = today.minus({
-        days: 30,
-      });
-      setAfter(last30Days.startOf("day").toISODate());
-      setBefore(today.endOf("day").toISODate());
-    }
-    if (range === "last90Days") {
-      const last90Days = today.minus({
-        days: 90,
-      });
-      setAfter(last90Days.startOf("day").toISODate());
-      setBefore(today.endOf("day").toISODate());
-    }
-    if (range === "last365Days") {
-      const last365Days = today.minus({
-        days: 365,
-      });
-      setAfter(last365Days.startOf("day").toISODate());
-      setBefore(today.endOf("day").toISODate());
-    }
-  }, [range, setAfter, setBefore]);
 
   return (
     <div>
@@ -186,7 +70,8 @@ export default function RangeFilter({
               variant={SelectVariant.single}
               selections={label}
               onSelect={(event, selectedRange) => {
-                setRange((selectedRange as RangeOption).value);
+                const newRange=(selectedRange as RangeOption).value
+                onChange(newRange, after, before);
                 setIsOpen(false);
               }}
             >
@@ -204,14 +89,14 @@ export default function RangeFilter({
           {seeDatePicker && (
             <div>
               <DatePicker
-                value={after || ""}
+                value={after}
                 placeholder="Created after"
-                onChange={(str) => setAfter(str)}
+                onChange={(newAfterDate) => onChange(range, newAfterDate, before)}
               />
               <DatePicker
-                value={before || ""}
+                value={before}
                 placeholder="Before"
-                onChange={(str) => setBefore(str)}
+                onChange={(newBeforeDate) => onChange(range, after, newBeforeDate)}
               />
             </div>
           )}

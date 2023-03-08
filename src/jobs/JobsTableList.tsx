@@ -8,6 +8,7 @@ import {
   ITeam,
   ITopic,
   JobsTableListColumn,
+  RangeOptionValue,
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { getTopicIcon } from "ui/icons";
@@ -19,7 +20,6 @@ import { CopyIconButton } from "ui";
 import { groupJobsByPipeline } from "./jobsSelectors";
 import { getPrincipalComponent } from "component/componentSelector";
 import { TestsLabels } from "./TestsLabels";
-import { RangeOptionValue } from "./toolbar/RangeFilter";
 import { DateTime } from "luxon";
 
 interface JobTableSummaryProps {

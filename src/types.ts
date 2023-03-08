@@ -717,3 +717,21 @@ export interface IPipelines {
     }[];
   }[];
 }
+
+export type RangeOptionValue =
+  | "previousWeek"
+  | "previousMonth"
+  | "previousQuarter"
+  | "lastMonth"
+  | "lastYear"
+  | "yesterday"
+  | "today"
+  | "currentWeek"
+  | "currentMonth"
+  | "currentQuarter"
+  | "currentYear"
+  | "last7Days"
+  | "last30Days"
+  | "last90Days"
+  | "last365Days"
+  | "custom";
