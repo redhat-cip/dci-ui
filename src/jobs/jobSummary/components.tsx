@@ -1,4 +1,3 @@
-import { Label } from "@patternfly/react-core";
 import { WarningTriangleIcon, ThumbsUpIcon } from "@patternfly/react-icons";
 
 interface RegressionsProps {
@@ -11,9 +10,10 @@ export function Regressions({ regressions, ...props }: RegressionsProps) {
     return null;
   }
   return (
-    <Label icon={<WarningTriangleIcon />} color="red" {...props}>
-      <span>{`${regressions} regression${regressions > 1 ? "s" : ""}`}</span>
-    </Label>
+    <span {...props}>
+      <WarningTriangleIcon style={{ fontSize: "0.8em", marginRight: "1px" }} />
+      {`+${regressions}`}
+    </span>
   );
 }
 
@@ -27,8 +27,9 @@ export function Successfixes({ successfixes, ...props }: SuccessfixesProps) {
     return null;
   }
   return (
-    <Label icon={<ThumbsUpIcon />} color="green" {...props}>
-      <span>{`${successfixes} fix${successfixes > 1 ? "es" : ""}`}</span>
-    </Label>
+    <span {...props}>
+      <ThumbsUpIcon style={{ fontSize: "0.8em", marginRight: "1px" }} />
+      {`+${successfixes}`}
+    </span>
   );
 }
