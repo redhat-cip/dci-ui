@@ -324,7 +324,11 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         <CardLine
           className="p-md"
           field="Access restricted"
-          help="This topic has not yet been validated by the legal team. All of these components are restricted."
+          help={
+            topic.export_control
+              ? "This topic has been validated by the legal team. All its components are accessible."
+              : "This topic has not yet been validated by the legal team. All of these components are restricted."
+          }
           value={
             topic.export_control ? (
               <Label color="green">no</Label>
