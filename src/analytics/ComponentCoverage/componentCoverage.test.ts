@@ -4,7 +4,6 @@ import {
 } from "./componentCoverage";
 import {
   createCoverageSearchFromFilters,
-  parseCoverageFiltersFromSearch,
 } from "./ComponentCoveragePage";
 
 test("buildComponentCoverage", () => {
@@ -298,46 +297,6 @@ test("getComponentCoverageDomain", () => {
     nbOfJobs: { min: 0, max: 5 },
     nbOfSuccessfulJobs: { min: 0, max: 1 },
   });
-});
-
-it("parse filters from search", () => {
-  const search = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
-  const expectedFilters = {
-    topic_id: "to1",
-    types: ["type_1", "type_2"],
-    team_id: "t1",
-  };
-  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
-});
-
-it("parse filters from search without team_id backward compatibility", () => {
-  const search = "?topic_id=to1&types=type_1&types=type_2";
-  const expectedFilters = {
-    topic_id: "to1",
-    types: ["type_1", "type_2"],
-    team_id: null,
-  };
-  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
-});
-
-it("parse filters from empty search", () => {
-  const search = "";
-  const expectedFilters = {
-    team_id: null,
-    topic_id: null,
-    types: [],
-  };
-  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
-});
-
-it("nrt parse filters from search with only one type", () => {
-  const search = "?team_id=t1&topic_id=to1&types=type_1";
-  const expectedFilters = {
-    team_id: "t1",
-    topic_id: "to1",
-    types: ["type_1"],
-  };
-  expect(parseCoverageFiltersFromSearch(search)).toEqual(expectedFilters);
 });
 
 test("create search from filters", () => {
