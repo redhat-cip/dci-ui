@@ -21,6 +21,25 @@ describe("parse filters", () => {
       perPage: 40,
       configuration: "config1",
       name: "name1",
+      query: null,
+    };
+    expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
+  });
+
+  it("from search with query", () => {
+    const search = "?page=2&perPage=40&query=eq(name,openshift)";
+    const expectedFilters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 2,
+      perPage: 40,
+      configuration: null,
+      name: null,
+      query: "eq(name,openshift)",
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -39,6 +58,7 @@ describe("parse filters", () => {
       perPage: 20,
       configuration: null,
       name: null,
+      query: null,
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -56,6 +76,7 @@ describe("parse filters", () => {
       perPage: 20,
       configuration: null,
       name: null,
+      query: null,
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
@@ -73,105 +94,155 @@ describe("parse filters", () => {
       perPage: 50,
       configuration: null,
       name: null,
+      query: null,
     };
     expect(parseFiltersFromSearch(search)).toEqual(expectedFilters);
   });
 });
 
-test("get params from default filters", () => {
-  const filters = {
-    team_id: null,
-    product_id: null,
-    topic_id: null,
-    remoteci_id: null,
-    tags: [],
-    status: null,
-    page: 1,
-    perPage: 20,
-    configuration: null,
-    name: null,
-  };
-  const expectedParams = {
-    limit: 20,
-    offset: 0,
-  };
-  expect(getParamsFromFilters(filters)).toEqual(expectedParams);
+describe("get param", () => {
+  test("get params from default filters", () => {
+    const filters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 1,
+      perPage: 20,
+      configuration: null,
+      name: null,
+      query: null,
+    };
+    const expectedParams = {
+      limit: 20,
+      offset: 0,
+    };
+    expect(getParamsFromFilters(filters)).toEqual(expectedParams);
+  });
+
+  test("get params from complex filters", () => {
+    const filters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: "success" as IJobStatus,
+      tags: ["tag_1", "tag_2"],
+      page: 2,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+      query: null,
+    };
+
+    const expectedParams = {
+      limit: 40,
+      offset: 40,
+      where:
+        "product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2",
+    };
+    expect(getParamsFromFilters(filters)).toEqual(expectedParams);
+  });
+
+  test("get params from query filters", () => {
+    const filters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 1,
+      perPage: 20,
+      configuration: null,
+      name: null,
+      query: "eq(name,openshift)",
+    };
+    const expectedParams = {
+      limit: 20,
+      offset: 0,
+      query: "eq(name,openshift)",
+    };
+    expect(getParamsFromFilters(filters)).toEqual(expectedParams);
+  });
+
+  test("get params from user filters", () => {
+    const filters = {
+      email: "test@example.org",
+      page: 1,
+      perPage: 20,
+      sort: "created_at",
+    };
+    const expectedParams = {
+      where: "email:test@example.org",
+      limit: 20,
+      offset: 0,
+      sort: "created_at",
+    };
+    expect(getParamsFromFilters(filters)).toEqual(expectedParams);
+  });
 });
 
-test("get params from complex filters", () => {
-  const filters = {
-    product_id: "p1",
-    team_id: "t1",
-    remoteci_id: "r1",
-    topic_id: "to1",
-    status: "success" as IJobStatus,
-    tags: ["tag_1", "tag_2"],
-    page: 2,
-    perPage: 40,
-    configuration: "config2",
-    name: "name2",
-  };
+describe('create search from filter', ()=>{
+  test("complex filter", () => {
+    const filters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: "success" as IJobStatus,
+      tags: ["tag_1", "tag_2"],
+      page: 2,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+      query: null,
+    };
+    const expectedSearch =
+      "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
+    expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
+  });
+  
+  test("remove duplicate tags", () => {
+    const filters = {
+      product_id: "p1",
+      team_id: "t1",
+      remoteci_id: "r1",
+      topic_id: "to1",
+      status: "success" as IJobStatus,
+      tags: ["tag_1", "tag_2", "tag_2"],
+      page: 2,
+      perPage: 40,
+      configuration: "config2",
+      name: "name2",
+      query: null,
+    };
+    const expectedSearch =
+      "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
+    expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
+  });
 
-  const expectedParams = {
-    limit: 40,
-    offset: 40,
-    where:
-      "product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2",
-  };
-  expect(getParamsFromFilters(filters)).toEqual(expectedParams);
-});
-
-test("create search from filters", () => {
-  const filters = {
-    product_id: "p1",
-    team_id: "t1",
-    remoteci_id: "r1",
-    topic_id: "to1",
-    status: "success" as IJobStatus,
-    tags: ["tag_1", "tag_2"],
-    page: 2,
-    perPage: 40,
-    configuration: "config2",
-    name: "name2",
-  };
-  const expectedSearch =
-    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
-  expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
-});
-
-test("create search from filters remove duplicate tags", () => {
-  const filters = {
-    product_id: "p1",
-    team_id: "t1",
-    remoteci_id: "r1",
-    topic_id: "to1",
-    status: "success" as IJobStatus,
-    tags: ["tag_1", "tag_2", "tag_2"],
-    page: 2,
-    perPage: 40,
-    configuration: "config2",
-    name: "name2",
-  };
-  const expectedSearch =
-    "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
-  expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
-});
-
-test("get params from user filters", () => {
-  const filters = {
-    email: "test@example.org",
-    page: 1,
-    perPage: 20,
-    sort: "created_at",
-  };
-  const expectedParams = {
-    where: "email:test@example.org",
-    limit: 20,
-    offset: 0,
-    sort: "created_at",
-  };
-  expect(getParamsFromFilters(filters)).toEqual(expectedParams);
-});
+  test("with query", () => {
+    const filters = {
+      team_id: null,
+      product_id: null,
+      topic_id: null,
+      remoteci_id: null,
+      tags: [],
+      status: null,
+      page: 1,
+      perPage: 20,
+      configuration: null,
+      name: null,
+      query: "eq(name,openshift)",
+    };
+    const expectedSearch =
+      "?page=1&perPage=20&query=eq(name,openshift)";
+    expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
+  });
+})
 
 describe("reset filters", () => {
   it("set page to 1 if user change another filter than page", () => {

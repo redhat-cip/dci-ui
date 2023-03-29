@@ -19,6 +19,7 @@ export const defaultFilters: IJobFilters = {
   perPage: 20,
   configuration: null,
   name: null,
+  query: null,
 };
 
 export function parseFiltersFromSearch(search: string): IJobFilters {
@@ -26,12 +27,21 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
     page: pageString = "1",
     perPage: perPageString = "20",
     where,
+    query,
   } = queryString.parse(search);
   const page = parseInt(pageString as string, 10);
   const perPage = parseInt(perPageString as string, 10);
   const copyDefaultFilters: IJobFilters = JSON.parse(
     JSON.stringify(defaultFilters)
   );
+  if (typeof query === "string" && query !== null) {
+    return {
+      ...copyDefaultFilters,
+      page,
+      perPage,
+      query,
+    };
+  }
   if (typeof where !== "string" || isEmpty(where)) {
     return {
       ...copyDefaultFilters,
@@ -117,6 +127,9 @@ export function getParamsFromFilters(filters: IJobFilters | IUserFilters) {
   if ("sort" in filters) {
     params.sort = filters.sort;
   }
+  if ("query" in filters && filters.query !== null) {
+    params.query = filters.query;
+  }
   return params;
 }
 
@@ -125,6 +138,9 @@ export function createSearchFromFilters(filters: IJobFilters | IUserFilters) {
   const where = _getWhereFromFilters(filters);
   if (where) {
     search += `&where=${where}`;
+  }
+  if ("query" in filters && filters.query) {
+    search += `&query=${filters.query}`;
   }
   return search;
 }

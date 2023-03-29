@@ -237,6 +237,7 @@ export interface IJobFilters extends IPaginationFilters {
   tags: string[];
   status: IJobStatus | null;
   name: string | null;
+  query: string | null;
 }
 
 export interface IUserFilters extends IPaginationFilters {
@@ -287,6 +288,7 @@ export type DCIListParams = {
   offset: number;
   where?: string;
   sort?: string;
+  query?: string;
 };
 
 export type StatJob = {
