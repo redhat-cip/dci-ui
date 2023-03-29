@@ -44,6 +44,10 @@ export default function TeamFilter({
     }
   }, [debouncedSearchValue, dispatch]);
 
+  useEffect(() => {
+    dispatch(teamsActions.all());
+  }, [dispatch]);
+
   return (
     <ToolbarFilter
       chips={team === null ? [] : [team.name]}

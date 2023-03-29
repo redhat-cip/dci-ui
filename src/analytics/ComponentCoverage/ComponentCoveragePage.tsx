@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Bullseye,
   Button,
@@ -15,7 +15,6 @@ import {
   LabelGroup,
   Toolbar,
   ToolbarContent,
-  ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
@@ -38,7 +37,7 @@ import {
   SearchIcon,
   WarningTriangleIcon,
 } from "@patternfly/react-icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import JobStatusLabel from "jobs/JobStatusLabel";
@@ -51,27 +50,6 @@ interface ICoverageFilters {
   topic_id: string | null;
   types: string[];
   team_id: string | null;
-}
-
-export function parseCoverageFiltersFromSearch(
-  search: string
-): ICoverageFilters {
-  const emptyFilters = {
-    topic_id: null,
-    types: [],
-    team_id: null,
-  };
-  if (!search) {
-    return emptyFilters;
-  }
-  const filters = {
-    ...emptyFilters,
-    ...qs.parse(search, { ignoreQueryPrefix: true }),
-  };
-  if (typeof filters.types === "string") {
-    filters.types = [filters.types];
-  }
-  return filters;
 }
 
 export function createCoverageSearchFromFilters(filters: ICoverageFilters) {
@@ -101,15 +79,18 @@ export function getAllComponentTypes(topic: ITopic) {
 
 export default function ComponentCoveragePage() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const params = parseCoverageFiltersFromSearch(location.search);
-  const [topicId, setTopicId] = useState<string | null>(params.topic_id);
-  const [teamId, setTeamId] = useState<string | null>(params.team_id);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [topicId, setTopicId] = useState<string | null>(
+    searchParams.get("topic_id")
+  );
+  const [teamId, setTeamId] = useState<string | null>(
+    searchParams.get("team_id")
+  );
   const [types, setTypes] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(params.types);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(
+    searchParams.get("types")?.split(",") || []
+  );
   const [isLoading, setIsLoading] = useState(false);
-
   const [ESData, setESData] = useState<IComponentCoverageESData | null>(null);
   const components = buildComponentCoverage(ESData);
   const [componentDetails, setComponentDetails] =
@@ -117,21 +98,7 @@ export default function ComponentCoveragePage() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const drawerIsExpanded = componentDetails !== null;
 
-  const clearAllFilters = () => {
-    setTopicId(null);
-    setSelectedTypes([]);
-  };
-
-  useEffect(() => {
-    const newSearch = createCoverageSearchFromFilters({
-      team_id: teamId,
-      topic_id: topicId,
-      types: selectedTypes,
-    });
-    navigate(`/analytics/component_coverage${newSearch}`);
-  }, [navigate, teamId, topicId, selectedTypes]);
-
-  useEffect(() => {
+  const memoizedGetComponentsCoverage = useCallback(() => {
     if (topicId) {
       const newSearch = createCoverageSearchFromFilters({
         team_id: teamId,
@@ -152,6 +119,31 @@ export default function ComponentCoveragePage() {
     }
   }, [teamId, topicId, selectedTypes, dispatch]);
 
+  const updateUrlWithParams = () => {
+    if (topicId) {
+      searchParams.set("topic_id", topicId);
+    } else {
+      searchParams.delete("topic_id");
+    }
+    if (teamId) {
+      searchParams.set("team_id", teamId);
+    } else {
+      searchParams.delete("team_id");
+    }
+    if (selectedTypes.length > 0) {
+      searchParams.set("types", selectedTypes.join(","));
+    } else {
+      searchParams.delete("types");
+    }
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  const clearAllFilters = () => {
+    setTopicId(null);
+    setTeamId(null);
+    setSelectedTypes([]);
+  };
+
   useEffect(() => {
     if (topicId) {
       getAllComponentTypes({ id: topicId } as ITopic)
@@ -162,6 +154,10 @@ export default function ComponentCoveragePage() {
         });
     }
   }, [topicId, dispatch]);
+
+  useEffect(() => {
+    memoizedGetComponentsCoverage();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <MainPage
@@ -185,64 +181,63 @@ export default function ComponentCoveragePage() {
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem>Choose a topic</ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <TopicFilter
-                    topicId={topicId}
-                    onClear={() => setTopicId(null)}
-                    onSelect={setTopicId}
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>Filter by team</ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <TeamFilter
-                    team_id={teamId}
-                    onClear={() => setTeamId(null)}
-                    onSelect={(team) => setTeamId(team.id)}
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
+              <ToolbarItem>Choose a topic</ToolbarItem>
+              <ToolbarItem>
+                <TopicFilter
+                  topicId={topicId}
+                  onClear={() => setTopicId(null)}
+                  onSelect={setTopicId}
+                />
+              </ToolbarItem>
+              <ToolbarItem>Filter by team</ToolbarItem>
+              <ToolbarItem>
+                <TeamFilter
+                  team_id={teamId}
+                  onClear={() => setTeamId(null)}
+                  onSelect={(team) => setTeamId(team.id)}
+                />
+              </ToolbarItem>
               {types.length === 0 ? null : (
                 <>
-                  <ToolbarGroup>
-                    <ToolbarItem>Filter by types</ToolbarItem>
-                  </ToolbarGroup>
-                  <ToolbarGroup>
-                    <ToolbarItem>
-                      <TypesFilter
-                        types={types}
-                        typesSelected={selectedTypes}
-                        onClear={() => setSelectedTypes([])}
-                        deleteChip={(type) =>
+                  <ToolbarItem>Filter by types</ToolbarItem>
+                  <ToolbarItem>
+                    <TypesFilter
+                      types={types}
+                      typesSelected={selectedTypes}
+                      onClear={() => setSelectedTypes([])}
+                      deleteChip={(type) =>
+                        setSelectedTypes(
+                          selectedTypes.filter((t) => t !== type)
+                        )
+                      }
+                      onSelect={(type) => {
+                        if (selectedTypes.indexOf(type) === -1) {
+                          setSelectedTypes([...selectedTypes, type]);
+                        } else {
                           setSelectedTypes(
                             selectedTypes.filter((t) => t !== type)
-                          )
+                          );
                         }
-                        onSelect={(type) => {
-                          if (selectedTypes.indexOf(type) === -1) {
-                            setSelectedTypes([...selectedTypes, type]);
-                          } else {
-                            setSelectedTypes(
-                              selectedTypes.filter((t) => t !== type)
-                            );
-                          }
-                        }}
-                      />
-                    </ToolbarItem>
-                  </ToolbarGroup>
+                      }}
+                    />
+                  </ToolbarItem>
                 </>
               )}
+              <ToolbarItem>
+                <Button
+                  variant="primary"
+                  isDisabled={topicId === null}
+                  onClick={() => {
+                    memoizedGetComponentsCoverage();
+                    updateUrlWithParams();
+                  }}
+                >
+                  Get component coverage
+                </Button>
+              </ToolbarItem>
             </ToolbarContent>
           </Toolbar>
-
-          {topicId === null ? (
+          {ESData === null ? (
             <EmptyState
               title="Choose a topic"
               info="Select a topic in the topic list to display the components coverage"
