@@ -47,6 +47,54 @@ export function createActions(resource: IResourceName) {
           });
       };
     },
+    allPaginated: (where?: string): AppThunk<Promise<any>> => {
+      let endpoint = `${resource}s` as IResourcesName;
+      return async (dispatch, getState) => {
+        try {
+          dispatch({
+            type: actionsTypes.FETCH_ALL_REQUEST,
+          });
+          const params: { limit: number; offset: number; where?: string } = {
+            limit: 100,
+            offset: 0,
+          };
+          if (where) {
+            params.where = where;
+          }
+          const response = await http({
+            method: "get",
+            url: `/api/v1/${endpoint}`,
+            params: params,
+          });
+          dispatch({
+            type: actionsTypes.FETCH_ALL_SUCCESS,
+            ...normalize(response.data[endpoint], getSchema(endpoint)),
+          });
+          const count = response.data._meta.count;
+          dispatch({
+            type: actionsTypes.SET_COUNT,
+            count: count,
+          });
+          while (count > params.offset + params.limit) {
+            params.offset += params.limit;
+            const r = await http({
+              method: "get",
+              url: `/api/v1/${endpoint}`,
+              params: params,
+            });
+            dispatch({
+              type: actionsTypes.FETCH_ALL_SUCCESS,
+              ...normalize(r.data[endpoint], getSchema(endpoint)),
+            });
+          }
+          return response;
+        } catch (error: any) {
+          dispatch({ type: actionsTypes.FETCH_ALL_FAILURE });
+          dispatch(showAPIError(error));
+          return error;
+        }
+      };
+    },
     one: (id: string, params = {}): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({

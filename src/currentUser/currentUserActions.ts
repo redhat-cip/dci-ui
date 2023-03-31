@@ -61,23 +61,23 @@ export function getSubscribedRemotecis(
 }
 
 export function subscribeToARemoteci(
-  remoteciId: string,
+  remoteci: IRemoteci,
   currentUser: ICurrentUser
 ): AxiosPromise<void> {
   return http({
     method: "post",
-    url: `/api/v1/remotecis/${remoteciId}/users`,
+    url: `/api/v1/remotecis/${remoteci.id}/users`,
     data: currentUser,
   });
 }
 
 export function unsubscribeFromARemoteci(
-  remoteciId: string,
+  remoteci: IRemoteci,
   currentUser: ICurrentUser
 ): AxiosPromise<void> {
   return http({
     method: "delete",
-    url: `/api/v1/remotecis/${remoteciId}/users/${currentUser.id}`,
+    url: `/api/v1/remotecis/${remoteci.id}/users/${currentUser.id}`,
   });
 }
 

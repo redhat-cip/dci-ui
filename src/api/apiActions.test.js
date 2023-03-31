@@ -13,9 +13,18 @@ const jobActionsTypes = createActionsTypes("job");
 const userActionsTypes = createActionsTypes("user");
 
 const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
-const axiosMock = new axiosMockAdapter(axios);
+let axiosMock;
+let mockStore;
+
+beforeEach(() => {
+  axiosMock = new axiosMockAdapter(axios);
+  mockStore = configureMockStore(middlewares);
+});
+
+afterEach(() => {
+  axiosMock.reset();
+});
 
 test("fetch jobs", () => {
   axiosMock
@@ -208,5 +217,57 @@ test("delete one user", () => {
       type: userActionsTypes.DELETE_SUCCESS,
       id: "u4",
     });
+  });
+});
+
+test("fetch all jobs paginated", () => {
+  axiosMock
+    .onGet("https://api.distributed-ci.io/api/v1/jobs", {
+      limit: 100,
+      offset: 0,
+    })
+    .replyOnce(200, { jobs: [{ id: "j1" }], _meta: { count: 201 } })
+    .onGet("https://api.distributed-ci.io/api/v1/jobs", {
+      limit: 100,
+      offset: 100,
+    })
+    .replyOnce(200, { jobs: [{ id: "j2" }], _meta: { count: 201 } })
+    .onGet("https://api.distributed-ci.io/api/v1/jobs", {
+      limit: 100,
+      offset: 200,
+    })
+    .replyOnce(200, { jobs: [{ id: "j3" }], _meta: { count: 201 } });
+
+  const expectedActions = [
+    { type: jobActionsTypes.FETCH_ALL_REQUEST },
+    {
+      type: jobActionsTypes.FETCH_ALL_SUCCESS,
+      result: ["j1"],
+      entities: {
+        jobs: { j1: { id: "j1" } },
+      },
+    },
+    {
+      type: jobActionsTypes.SET_COUNT,
+      count: 201,
+    },
+    {
+      type: jobActionsTypes.FETCH_ALL_SUCCESS,
+      result: ["j2"],
+      entities: {
+        jobs: { j2: { id: "j2" } },
+      },
+    },
+    {
+      type: jobActionsTypes.FETCH_ALL_SUCCESS,
+      result: ["j3"],
+      entities: {
+        jobs: { j3: { id: "j3" } },
+      },
+    },
+  ];
+  const store = mockStore();
+  return store.dispatch(jobsActions.allPaginated()).then(() => {
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });

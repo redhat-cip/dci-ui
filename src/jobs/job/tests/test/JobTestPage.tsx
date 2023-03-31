@@ -17,7 +17,6 @@ export default function JobTestPage() {
       const file = { id: file_id } as IFile;
       getJunit(file)
         .then((r) => {
-          console.log(r.data);
           setTestsuites(r.data.testsuites);
         })
         .finally(() => {

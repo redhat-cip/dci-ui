@@ -197,7 +197,6 @@ function PipelineCard({
               <KebabToggle
                 id={`${pipelineDay.date}-dropdown-toggle`}
                 onToggle={(isOpen) => {
-                  console.log(isOpen);
                   setDropdownIsOpen(isOpen);
                 }}
               />
