@@ -282,7 +282,7 @@ export default function ComponentCoveragePage() {
                                 <Link
                                   to={`/topics/${componentDetails.topic_id}/components/${componentDetails.id}`}
                                 >
-                                  {componentDetails.canonical_project_name}
+                                  {componentDetails.display_name}
                                 </Link>
                               </span>
                             )}
@@ -378,7 +378,7 @@ export default function ComponentCoveragePage() {
                               <Link
                                 to={`/topics/${component.topic_id}/components/${component.id}`}
                               >
-                                {component.canonical_project_name}
+                                {component.display_name}
                               </Link>
                             </td>
                             <td role="cell" data-label="Tags">

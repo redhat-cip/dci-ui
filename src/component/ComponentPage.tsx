@@ -90,13 +90,11 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       <Divider />
       <CardLine className="p-md" field="ID" value={component.id} />
       <Divider />
-      <CardLine
-        className="p-md"
-        field="Canonical project name"
-        value={component.canonical_project_name}
-      />
+      <CardLine className="p-md" field="Name" value={component.display_name} />
       <Divider />
-      <CardLine className="p-md" field="Name" value={component.name} />
+      <CardLine className="p-md" field="Version" value={component.version} />
+      <Divider />
+      <CardLine className="p-md" field="Unique id" value={component.uid} />
       <Divider />
       <CardLine
         className="p-md"
@@ -205,8 +203,7 @@ function convertComponentWithJobInComponentCoverage(
   );
   return {
     id: component.id,
-    name: component.name,
-    canonical_project_name: component.canonical_project_name || "",
+    display_name: component.display_name || "",
     type: component.type,
     topic_id: component.topic_id,
     tags: component.tags || [],
@@ -235,16 +232,12 @@ export default function ComponentPage() {
 
   return (
     <MainPage
-      title={
-        component
-          ? `Component ${component.canonical_project_name}`
-          : "Component"
-      }
+      title={component ? `Component ${component.display_name}` : "Component"}
       loading={isFetching && component === null}
       empty={!isFetching && component === null}
       description={
         component
-          ? `Details page for component ${component.canonical_project_name}`
+          ? `Details page for component ${component.display_name}`
           : "Details page"
       }
       EmptyComponent={

@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import queryString from "query-string";
 
 export interface IComponentsFilters {
-  canonical_project_name: string | null;
+  display_name: string | null;
   tags: string[];
   type: string | null;
   state: "active" | "inactive";
@@ -10,14 +10,14 @@ export interface IComponentsFilters {
 
 export function buildWhereFromSearch(filters: IComponentsFilters) {
   let search = `?where=`;
-  let { canonical_project_name, tags, type, state } = filters;
+  let { display_name, tags, type, state } = filters;
   let where = [`state:${state}`];
 
-  if (canonical_project_name) {
-    const wildcardCanonicalProjectName = canonical_project_name.endsWith("*")
-      ? canonical_project_name
-      : `${canonical_project_name}*`;
-    where.push(`canonical_project_name:${wildcardCanonicalProjectName}`);
+  if (display_name) {
+    const wildcardCanonicalProjectName = display_name.endsWith("*")
+      ? display_name
+      : `${display_name}*`;
+    where.push(`display_name:${wildcardCanonicalProjectName}`);
   }
 
   if (type) {
@@ -37,7 +37,7 @@ export function buildWhereFromSearch(filters: IComponentsFilters) {
 }
 
 export const defaultComponentsFilters: IComponentsFilters = {
-  canonical_project_name: null,
+  display_name: null,
   tags: [],
   type: null,
   state: "active",
@@ -59,7 +59,7 @@ export function parseWhereFromSearch(search: string): IComponentsFilters {
       const value = rest.join(":");
       switch (key) {
         case "type":
-        case "canonical_project_name":
+        case "display_name":
           acc[key] = value;
           break;
         case "tags":

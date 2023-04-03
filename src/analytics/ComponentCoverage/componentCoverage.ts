@@ -1,7 +1,7 @@
 import { sortByOldestFirst } from "services/sort";
 import { IComponentCoverageESData, IComponentCoverage } from "types";
 
-interface ComponentsCoverage {
+export interface ComponentsCoverage {
   [componentId: string]: IComponentCoverage;
 }
 
@@ -11,8 +11,7 @@ export function buildComponentCoverage(data: IComponentCoverageESData | null) {
     const componentId = d._source.id;
     const componentStats = acc[componentId] || {
       id: componentId,
-      name: d._source.name,
-      canonical_project_name: d._source.canonical_project_name,
+      display_name: d._source.display_name,
       type: d._source.type,
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,

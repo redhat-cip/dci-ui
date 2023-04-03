@@ -132,13 +132,15 @@ function JobTableSummary({
           to={`/topics/${principalComponent.topic_id}/components/${principalComponent.id}`}
         >
           <TopicIcon className="mr-xs" />
-          {principalComponent.canonical_project_name || principalComponent.name}
+          {principalComponent.display_name}
         </Link>
       ),
     components:
       job.components.length === 0 ? null : (
         <ul>
-          {sortByName(job.components).map((component) => (
+          {sortByName(
+            job.components.map((c) => ({ ...c, name: c.display_name }))
+          ).map((component) => (
             <li
               key={component.id}
               style={{
@@ -151,7 +153,7 @@ function JobTableSummary({
                 className="mr-xs"
                 to={`/topics/${component.topic_id}/components/${component.id}`}
               >
-                {component.canonical_project_name || component.name}
+                {component.display_name}
               </Link>
             </li>
           ))}

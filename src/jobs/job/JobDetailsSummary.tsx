@@ -98,22 +98,19 @@ function Tests({ jobId, tests }: TestsProps) {
 }
 
 interface ComponentsProps {
-  components: Pick<
-    IComponent,
-    "id" | "topic_id" | "canonical_project_name" | "name"
-  >[];
+  components: Pick<IComponent, "id" | "topic_id" | "display_name">[];
 }
 
 export function Components({ components }: ComponentsProps) {
   const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
+    components.map((c) => ({ ...c, name: c.display_name }))
   );
   return (
     <div>
       {sortedComponents.map((component) => (
         <Component key={component.id} className="mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
-            {component.canonical_project_name || component.name}
+            {component.display_name}
           </Link>
         </Component>
       ))}

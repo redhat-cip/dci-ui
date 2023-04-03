@@ -185,7 +185,7 @@ describe("get param", () => {
   });
 });
 
-describe('create search from filter', ()=>{
+describe("create search from filter", () => {
   test("complex filter", () => {
     const filters = {
       product_id: "p1",
@@ -204,7 +204,7 @@ describe('create search from filter', ()=>{
       "?page=2&perPage=40&where=product_id:p1,team_id:t1,remoteci_id:r1,topic_id:to1,status:success,tags:tag_1,tags:tag_2,configuration:config2,name:name2";
     expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
   });
-  
+
   test("remove duplicate tags", () => {
     const filters = {
       product_id: "p1",
@@ -238,11 +238,10 @@ describe('create search from filter', ()=>{
       name: null,
       query: "eq(name,openshift)",
     };
-    const expectedSearch =
-      "?page=1&perPage=20&query=eq(name,openshift)";
+    const expectedSearch = "?page=1&perPage=20&query=eq(name,openshift)";
     expect(createSearchFromFilters(filters)).toEqual(expectedSearch);
   });
-})
+});
 
 describe("reset filters", () => {
   it("set page to 1 if user change another filter than page", () => {

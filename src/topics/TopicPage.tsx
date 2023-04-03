@@ -1,9 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import topicsActions, {
-  fetchLatestComponents,
-  fetchComponents,
-} from "./topicsActions";
+import topicsActions, { fetchComponents } from "./topicsActions";
 import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
 import {
@@ -26,7 +23,6 @@ import {
   CardTitle,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
-import Component from "./Component";
 import { AppDispatch } from "store";
 import { IComponent, IEnhancedTopic, ITopic } from "types";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -49,44 +45,6 @@ import TagsFilter from "jobs/toolbar/TagsFilter";
 
 interface ComponentsProps {
   topic: ITopic;
-}
-
-function LatestComponentsPerType({ topic }: ComponentsProps) {
-  const [isFetching, setIsFetching] = useState(true);
-  const [components, setComponents] = useState<IComponent[]>([]);
-
-  useEffect(() => {
-    fetchLatestComponents(topic)
-      .then((response) => setComponents(response.data.components))
-      .catch(console.error)
-      .then(() => setIsFetching(false));
-  }, [topic, setIsFetching]);
-
-  return (
-    <Card className="mt-md">
-      <CardTitle>Latest components per type</CardTitle>
-      <CardBody>
-        <div className="py-md">
-          {isFetching ? (
-            <div>loading</div>
-          ) : components.length === 0 ? (
-            <div>
-              <EmptyState
-                title="There is no component for this topic"
-                info="We are certainly in the process of uploading components for this topic. Come back in a few hours."
-              />
-            </div>
-          ) : (
-            <div style={{ display: "flex", gap: "1rem" }}>
-              {components.map((component) => (
-                <Component key={component.id} component={component} />
-              ))}
-            </div>
-          )}
-        </div>
-      </CardBody>
-    </Card>
-  );
 }
 
 const Categories = ["Name", "Type", "Tag"] as const;
@@ -132,7 +90,7 @@ function ComponentsTable({ topic }: ComponentsProps) {
   }
 
   const isSearch =
-    filters.canonical_project_name !== null ||
+    filters.display_name !== null ||
     filters.type !== null ||
     filters.tags.length > 0;
 
@@ -183,17 +141,17 @@ function ComponentsTable({ topic }: ComponentsProps) {
               <ToolbarItem>
                 <NameFilter
                   showToolbarItem={currentCategory === "Name"}
-                  name={filters.canonical_project_name}
-                  onSubmit={(canonical_project_name) =>
+                  name={filters.display_name}
+                  onSubmit={(display_name) =>
                     setFilters({
                       ...filters,
-                      canonical_project_name,
+                      display_name,
                     })
                   }
                   onClear={() =>
                     setFilters({
                       ...filters,
-                      canonical_project_name: null,
+                      display_name: null,
                     })
                   }
                 />
@@ -255,7 +213,7 @@ function ComponentsTable({ topic }: ComponentsProps) {
                         <Link
                           to={`/topics/${topic.id}/components/${component.id}`}
                         >
-                          {component.canonical_project_name}
+                          {component.display_name}
                         </Link>
                       </td>
                       <td>
@@ -467,7 +425,6 @@ export default function TopicPage() {
       {topic === null ? null : (
         <>
           <TopicDetails topic={topic} />
-          <LatestComponentsPerType topic={topic} />
           <ComponentsTable topic={topic} />
         </>
       )}

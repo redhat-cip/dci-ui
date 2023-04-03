@@ -72,7 +72,9 @@ export default function JobsToolbar({
     Categories[0]
   );
 
-  useHotkeys("ctrl+shift+q", () => setShowQLToolbar(!showQLToolbar), [showQLToolbar]);
+  useHotkeys("ctrl+shift+q", () => setShowQLToolbar(!showQLToolbar), [
+    showQLToolbar,
+  ]);
 
   return (
     <Toolbar

@@ -5,7 +5,7 @@ import {
   SelectVariant,
   ToolbarFilter,
 } from "@patternfly/react-core";
-import {  useState } from "react";
+import { useState } from "react";
 import { RangeOptionValue } from "types";
 
 const labels: { [k in RangeOptionValue]: string } = {
@@ -70,7 +70,7 @@ export default function RangeFilter({
               variant={SelectVariant.single}
               selections={label}
               onSelect={(event, selectedRange) => {
-                const newRange=(selectedRange as RangeOption).value
+                const newRange = (selectedRange as RangeOption).value;
                 onChange(newRange, after, before);
                 setIsOpen(false);
               }}
@@ -91,12 +91,16 @@ export default function RangeFilter({
               <DatePicker
                 value={after}
                 placeholder="Created after"
-                onChange={(newAfterDate) => onChange(range, newAfterDate, before)}
+                onChange={(newAfterDate) =>
+                  onChange(range, newAfterDate, before)
+                }
               />
               <DatePicker
                 value={before}
                 placeholder="Before"
-                onChange={(newBeforeDate) => onChange(range, after, newBeforeDate)}
+                onChange={(newBeforeDate) =>
+                  onChange(range, after, newBeforeDate)
+                }
               />
             </div>
           )}

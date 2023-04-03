@@ -192,7 +192,7 @@ function Components({ components }: ComponentsProps) {
   const maxNumberElements = Math.min(4, components.length);
   const showMoreButton = components.length > maxNumberElements;
   const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.canonical_project_name || c.name }))
+    components.map((c) => ({ ...c, name: c.display_name }))
   );
   const nFirstComponents = sortedComponents.slice(0, maxNumberElements);
   const remainingComponents = sortedComponents.slice(maxNumberElements);
@@ -202,7 +202,7 @@ function Components({ components }: ComponentsProps) {
         <Component key={component.id} className="mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
             <CubesIcon className="mr-xs" />
-            {component.canonical_project_name || component.name}
+            {component.display_name}
           </Link>
         </Component>
       ))}
@@ -214,7 +214,7 @@ function Components({ components }: ComponentsProps) {
                 to={`/topics/${component.topic_id}/components/${component.id}`}
               >
                 <CubesIcon className="mr-xs" />
-                {component.canonical_project_name || component.name}
+                {component.display_name}
               </Link>
             </Component>
           ))}

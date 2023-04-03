@@ -30,23 +30,14 @@ interface ComponentProps {
 }
 
 export default function Component({ component }: ComponentProps) {
-  const {
-    id,
-    canonical_project_name,
-    name,
-    type,
-    tags = [],
-    topic_id,
-  } = component;
+  const { id, display_name, type, tags = [], topic_id } = component;
   return (
     <ComponentContainer>
       <IconBox>
         <CubesIcon />
       </IconBox>
       <ComponentInfo>
-        <Link to={`/topics/${topic_id}/components/${id}`}>
-          {canonical_project_name || name}
-        </Link>
+        <Link to={`/topics/${topic_id}/components/${id}`}>{display_name}</Link>
         <div>{type}</div>
         <div>
           {tags &&

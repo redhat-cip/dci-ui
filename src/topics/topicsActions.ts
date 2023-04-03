@@ -5,37 +5,6 @@ import { padStart } from "lodash";
 
 export default createActions("topic");
 
-interface IFetchLatestComponents {
-  data: {
-    components: IComponent[];
-  };
-}
-
-export function fetchLatestComponents(
-  topic: ITopic
-): Promise<IFetchLatestComponents> {
-  return Promise.all(
-    topic.component_types.map((componentType) =>
-      http({
-        method: "get",
-        url: `/api/v1/topics/${topic.id}/components`,
-        params: {
-          sort: "-created_at",
-          limit: 1,
-          offset: 0,
-          where: `type:${componentType},state:active`,
-        },
-      })
-    )
-  ).then((results) => {
-    const components = results.reduce(
-      (acc, result) => acc.concat(result.data.components),
-      [] as IComponent[]
-    );
-    return Promise.resolve({ data: { components } });
-  });
-}
-
 export function sortTopicWithSemver(t1: ITopic, t2: ITopic): number {
   const paddedName1 = t1.name.replace(/\d+/g, (n) => padStart(n, 6));
   const paddedName2 = t2.name.replace(/\d+/g, (n) => padStart(n, 6));

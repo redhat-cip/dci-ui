@@ -492,20 +492,22 @@ export interface IJobsById {
   [id: string]: IJob;
 }
 
-export interface IComponent extends Resource {
-  canonical_project_name: string | null;
+export interface IComponent {
+  id: string;
+  etag: string;
+  display_name: string;
+  version: string;
+  uid: string;
   data: data;
-  message: string | null;
-  released_at: string;
   state: string;
-  tags: string[] | null;
+  tags: string[];
   team_id: string | null;
-  title: string | null;
   topic_id: string;
   type: string;
+  url: string;
   created_at: string;
   updated_at: string;
-  url: string | null;
+  released_at: string;
 }
 
 export interface IEmbedJob {
@@ -607,8 +609,7 @@ export interface IComponentCoverageESData {
     _score: number;
     _source: {
       id: string;
-      name: string;
-      canonical_project_name: string;
+      display_name: string;
       failed_jobs: {
         created_at: string;
         id: string;
@@ -649,8 +650,7 @@ export type JobsTableListColumn = typeof JobsTableListColumns[number];
 
 export interface IComponentCoverage {
   id: string;
-  name: string;
-  canonical_project_name: string;
+  display_name: string;
   type: string;
   nbOfSuccessfulJobs: number;
   nbOfJobs: number;
@@ -697,24 +697,7 @@ export interface IPipelines {
           skips: number;
           total: number;
         };
-        components: ({
-          canonical_project_name: string;
-          created_at: string;
-          etag: string;
-          id: string;
-          message: string | null;
-          name: string;
-          released_at: string;
-          state: string;
-          tags: string[];
-          team_id: string | null;
-          title: string | null;
-          topic_id: string;
-          type: string;
-          updated_at: string;
-          url: string | null;
-          data: { [k: string]: any };
-        } | null)[];
+        components: (IComponent | null)[];
       }[];
     }[];
   }[];

@@ -2,9 +2,7 @@ import {
   buildComponentCoverage,
   getComponentCoverageDomain,
 } from "./componentCoverage";
-import {
-  createCoverageSearchFromFilters,
-} from "./ComponentCoveragePage";
+import { createCoverageSearchFromFilters } from "./ComponentCoveragePage";
 
 test("buildComponentCoverage", () => {
   expect(
@@ -21,25 +19,28 @@ test("buildComponentCoverage", () => {
           _score: 1.0,
           _source: {
             id: "c1",
-            name: "c1",
-            canonical_project_name: "c1",
+            display_name: "c1",
             type: "ocp",
             failed_jobs: [
               {
                 created_at: "2022-01-14T01:19:28.198117",
                 id: "j1",
+                name: "j1",
               },
               {
                 created_at: "2022-01-14T01:54:26.817058",
                 id: "j3",
+                name: "j3",
               },
               {
                 created_at: "2022-01-14T01:55:05.186011",
                 id: "j4",
+                name: "j4",
               },
               {
                 created_at: "2022-01-14T02:01:09.214449",
                 id: "j5",
+                name: "j5",
               },
             ],
             product_id: "p1",
@@ -47,6 +48,7 @@ test("buildComponentCoverage", () => {
               {
                 created_at: "2022-01-14T01:53:26.817058",
                 id: "j2",
+                name: "j2",
               },
             ],
             tags: ["tag1", "tag2"],
@@ -61,8 +63,7 @@ test("buildComponentCoverage", () => {
           _score: 1.0,
           _source: {
             id: "c2",
-            name: "c2",
-            canonical_project_name: "c2",
+            display_name: "c2",
             type: "ocp",
             failed_jobs: [],
             product_id: "p1",
@@ -70,6 +71,7 @@ test("buildComponentCoverage", () => {
               {
                 created_at: "2022-01-14T01:19:28.198117",
                 id: "j6",
+                name: "j6",
               },
             ],
             tags: ["tag1", "tag2"],
@@ -84,8 +86,7 @@ test("buildComponentCoverage", () => {
           _score: 1.0,
           _source: {
             id: "c3",
-            name: "c3",
-            canonical_project_name: "c3",
+            display_name: "c3",
             type: "ocp",
             failed_jobs: [],
             product_id: "p1",
@@ -93,6 +94,7 @@ test("buildComponentCoverage", () => {
               {
                 created_at: "2022-01-14T01:19:28.198117",
                 id: "j7",
+                name: "j7",
               },
             ],
             tags: ["tag1", "tag2"],
@@ -107,8 +109,7 @@ test("buildComponentCoverage", () => {
           _score: 1.0,
           _source: {
             id: "c4",
-            name: "c4",
-            canonical_project_name: "c4",
+            display_name: "c4",
             type: "ocp",
             failed_jobs: [],
             product_id: "p1",
@@ -124,8 +125,7 @@ test("buildComponentCoverage", () => {
   ).toEqual({
     c1: {
       id: "c1",
-      name: "c1",
-      canonical_project_name: "c1",
+      display_name: "c1",
       type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 5,
@@ -135,34 +135,38 @@ test("buildComponentCoverage", () => {
         {
           created_at: "2022-01-14T01:19:28.198117",
           id: "j1",
+          name: "j1",
           status: "failure",
         },
         {
           created_at: "2022-01-14T01:53:26.817058",
           id: "j2",
+          name: "j2",
           status: "success",
         },
         {
           created_at: "2022-01-14T01:54:26.817058",
           id: "j3",
+          name: "j3",
           status: "failure",
         },
         {
           created_at: "2022-01-14T01:55:05.186011",
           id: "j4",
+          name: "j4",
           status: "failure",
         },
         {
           created_at: "2022-01-14T02:01:09.214449",
           id: "j5",
+          name: "j5",
           status: "failure",
         },
       ],
     },
     c2: {
       id: "c2",
-      name: "c2",
-      canonical_project_name: "c2",
+      display_name: "c2",
       type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
@@ -172,14 +176,14 @@ test("buildComponentCoverage", () => {
         {
           created_at: "2022-01-14T01:19:28.198117",
           id: "j6",
+          name: "j6",
           status: "success",
         },
       ],
     },
     c3: {
       id: "c3",
-      name: "c3",
-      canonical_project_name: "c3",
+      display_name: "c3",
       type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
@@ -189,14 +193,14 @@ test("buildComponentCoverage", () => {
         {
           created_at: "2022-01-14T01:19:28.198117",
           id: "j7",
+          name: "j7",
           status: "success",
         },
       ],
     },
     c4: {
       id: "c4",
-      name: "c4",
-      canonical_project_name: "c4",
+      display_name: "c4",
       type: "ocp",
       nbOfSuccessfulJobs: 0,
       nbOfJobs: 0,
@@ -212,8 +216,7 @@ test("getComponentCoverageDomain", () => {
     getComponentCoverageDomain({
       c1: {
         id: "c1",
-        name: "c1",
-        canonical_project_name: "c1",
+        display_name: "c1",
         type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 5,
@@ -223,34 +226,38 @@ test("getComponentCoverageDomain", () => {
           {
             created_at: "2022-01-14T01:19:28.198117",
             id: "j1",
+            name: "j1",
             status: "failure",
           },
           {
             created_at: "2022-01-14T01:53:26.817058",
             id: "j2",
+            name: "j2",
             status: "success",
           },
           {
             created_at: "2022-01-14T01:54:26.817058",
             id: "j3",
+            name: "j3",
             status: "failure",
           },
           {
             created_at: "2022-01-14T01:45:05.186011",
             id: "j4",
+            name: "j4",
             status: "failure",
           },
           {
             created_at: "2022-01-14T02:01:09.214449",
             id: "j5",
+            name: "j5",
             status: "failure",
           },
         ],
       },
       c2: {
         id: "c2",
-        name: "c2",
-        canonical_project_name: "c2",
+        display_name: "c2",
         type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
@@ -260,14 +267,14 @@ test("getComponentCoverageDomain", () => {
           {
             created_at: "2022-01-14T01:19:28.198117",
             id: "j6",
+            name: "j6",
             status: "success",
           },
         ],
       },
       c3: {
         id: "c3",
-        name: "c3",
-        canonical_project_name: "c3",
+        display_name: "c3",
         type: "ocp",
         nbOfSuccessfulJobs: 1,
         nbOfJobs: 1,
@@ -277,14 +284,14 @@ test("getComponentCoverageDomain", () => {
           {
             created_at: "2022-01-14T01:19:28.198117",
             id: "j7",
+            name: "j7",
             status: "success",
           },
         ],
       },
       c4: {
         id: "c4",
-        name: "c4",
-        canonical_project_name: "c4",
+        display_name: "c4",
         type: "ocp",
         nbOfSuccessfulJobs: 0,
         nbOfJobs: 0,
