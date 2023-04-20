@@ -27,6 +27,8 @@ import {
   Bar,
   Label,
   Cell,
+  Line,
+  LineChart,
 } from "recharts";
 import http from "services/http";
 import { TopicSelect } from "jobs/toolbar/TopicFilter";
@@ -376,12 +378,277 @@ function JunitComparisonForm({
   );
 }
 
-interface JunitData {
+interface JunitBarChartData {
   details: { testcase: string; value: number }[];
   intervals: number[];
   values: number[];
   len_jobs_topic_1: number;
   len_jobs_topic_2: number;
+}
+
+interface TrendPercentageData {
+  job_ids: string[];
+  values: number[];
+}
+
+interface JunitData {
+  bar_chart: JunitBarChartData;
+  trend_percentage: TrendPercentageData;
+  details: { testcase: string; value: number }[];
+  intervals: number[];
+  values: number[];
+  len_jobs_topic_1: number;
+  len_jobs_topic_2: number;
+}
+
+function JunitBarChart({
+  data,
+  rangeSelected,
+}: {
+  data: JunitBarChartData;
+  rangeSelected: (
+    lowerBoundary: null | number,
+    upperBoundary: null | number
+  ) => void;
+}) {
+  const interval = 10;
+  return (
+    <Card>
+      <CardTitle>
+        Nb of tests per percentage deviation range between reference topic and
+        target topic.
+        <br />
+        We compared {data.len_jobs_topic_1} reference jobs with{" "}
+        {data.len_jobs_topic_2} target jobs.
+      </CardTitle>
+      <CardBody>
+        <div style={{ width: "100%", minHeight: "400px", height: "400px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              width={500}
+              height={300}
+              data={data.values.map((v, index) => ({
+                y: v,
+                x: data.intervals[index] + interval / 2,
+                i: index,
+                label: index === 0 ? "" : `${data.intervals[index]}%`,
+              }))}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 50,
+              }}
+              barCategoryGap={0}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="label"
+                tick={{ fontSize: 10 }}
+                interval={0}
+                scale="band"
+              >
+                <Label
+                  value="Intervals of deltas, lower is better"
+                  offset={-25}
+                  position="insideBottom"
+                />
+              </XAxis>
+              <YAxis>
+                <Label
+                  value="Number of tests"
+                  angle={-90}
+                  position="insideLeft"
+                />
+              </YAxis>
+              <Tooltip
+                cursor={false}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    const range = data.intervals[payload[0].payload.i];
+                    let message = `${payload[0].value} test${
+                      (payload[0].value as number) > 1 ? "s" : ""
+                    } with percentage deviation is `;
+                    const lowerBoundary = data.intervals[0] + interval;
+                    const upperBoundary =
+                      data.intervals[data.intervals.length - 1];
+
+                    if (range <= lowerBoundary) {
+                      message += `under ${lowerBoundary}%`;
+                    } else if (range >= upperBoundary) {
+                      message += `over ${upperBoundary}%`;
+                    } else {
+                      message += `between ${range}% and ${range + interval}%`;
+                    }
+                    return (
+                      <div
+                        style={{
+                          backgroundColor: "white",
+                        }}
+                        className="p-sm"
+                      >
+                        <p className="desc">{message}</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar
+                dataKey="y"
+                fill="#0066CC"
+                name="# tests"
+                onClick={(d, index) => {
+                  const lowerBoundary = data.intervals[index];
+                  const upperBoundary = data.intervals[index] + interval;
+                  const isFirstElement = index === 0;
+                  const isLastElement = index === data.values.length - 1;
+                  if (isFirstElement) {
+                    rangeSelected(null, upperBoundary);
+                  } else if (isLastElement) {
+                    rangeSelected(lowerBoundary, null);
+                  } else {
+                    rangeSelected(lowerBoundary, upperBoundary);
+                  }
+                }}
+              >
+                {data.values.map((value, index) => (
+                  <Cell
+                    cursor="pointer"
+                    fill={
+                      data.intervals[index] >= 0
+                        ? global_danger_color_100.value
+                        : global_primary_color_100.value
+                    }
+                    key={`cell-${index}`}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+function TrendChart({ data }: { data: TrendPercentageData }) {
+  return (
+    <Card>
+      <CardTitle>
+        Trend percentile
+        <br />
+        Percentage deviation of the 95 percentile test
+      </CardTitle>
+      <CardBody>
+        <div style={{ width: "100%", minHeight: "400px", height: "400px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              width={500}
+              height={300}
+              data={data.job_ids.map((job_id, index) => ({
+                y: data.values[index],
+                x: job_id,
+                i: index,
+                label: `j${index + 1}`,
+              }))}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 50,
+              }}
+            >
+              <XAxis dataKey="label" />
+              <YAxis />
+              <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+              <Line
+                type="monotone"
+                dataKey="y"
+                stroke={global_primary_color_100.value}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+function TestListDetails({
+  data,
+  lowerBoundary,
+  upperBoundary,
+  resetRange,
+}: {
+  data: JunitBarChartData;
+  lowerBoundary: number | null;
+  upperBoundary: number | null;
+  resetRange: () => void;
+}) {
+  return (
+    <Card>
+      <CardTitle>
+        <div>
+          {lowerBoundary === null
+            ? upperBoundary === null
+              ? "All testcases"
+              : `Testcases under ${upperBoundary}%`
+            : upperBoundary === null
+            ? `Testcases over ${lowerBoundary}%`
+            : `Testcases between ${lowerBoundary}% and ${upperBoundary}%`}
+          {lowerBoundary !== null && upperBoundary !== null && (
+            <small>
+              <Button variant="link" onClick={resetRange}>
+                (reset)
+              </Button>
+            </small>
+          )}
+        </div>
+      </CardTitle>
+      <CardBody>
+        <table
+          className="pf-c-table pf-m-compact"
+          role="grid"
+          aria-label="junit testcase details"
+        >
+          <thead>
+            <tr role="row">
+              <th role="columnheader" scope="col">
+                Testcase name
+              </th>
+              <th
+                role="columnheader"
+                scope="col"
+                style={{ textAlign: "center" }}
+              >
+                <span>% of deviation</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.details
+              .filter((detail) =>
+                lowerBoundary ? detail.value > lowerBoundary : true
+              )
+              .filter((detail) =>
+                upperBoundary ? detail.value < upperBoundary : true
+              )
+              .map((detail) => (
+                <tr>
+                  <td>{detail.testcase}</td>
+                  <td style={{ textAlign: "center" }}>
+                    <span title={detail.value.toString()}>
+                      {round(detail.value, 2)}%
+                    </span>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </CardBody>
+    </Card>
+  );
 }
 
 export default function JunitComparisonPage() {
@@ -395,7 +662,6 @@ export default function JunitComparisonPage() {
   const [data, setData] = useState<JunitData | null>(null);
 
   const dispatch = useDispatch();
-  const interval = 10;
   return (
     <MainPage
       title="Junit comparison"
@@ -453,204 +719,31 @@ export default function JunitComparisonPage() {
       {data && (
         <>
           <div className="mt-md">
-            <Card>
-              <CardTitle>
-                Nb of tests per percentage deviation range between reference
-                topic and target topic.
-                <br />
-                We compared {data.len_jobs_topic_1} reference jobs with{" "}
-                {data.len_jobs_topic_2} target jobs.
-              </CardTitle>
-              <CardBody>
-                <div
-                  style={{ width: "100%", minHeight: "400px", height: "400px" }}
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      width={500}
-                      height={300}
-                      data={data.values.map((v, index) => ({
-                        y: v,
-                        x: data.intervals[index] + interval / 2,
-                        i: index,
-                        label: index === 0 ? "" : `${data.intervals[index]}%`,
-                      }))}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 50,
-                      }}
-                      barCategoryGap={0}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="label"
-                        tick={{ fontSize: 10 }}
-                        interval={0}
-                        scale="band"
-                      >
-                        <Label
-                          value="Intervals of deltas, lower is better"
-                          offset={-25}
-                          position="insideBottom"
-                        />
-                      </XAxis>
-                      <YAxis>
-                        <Label
-                          value="Number of tests"
-                          angle={-90}
-                          position="insideLeft"
-                        />
-                      </YAxis>
-                      <Tooltip
-                        cursor={false}
-                        content={({ active, payload, label }) => {
-                          if (active && payload && payload.length) {
-                            const range = data.intervals[payload[0].payload.i];
-                            let message = `${payload[0].value} test${
-                              (payload[0].value as number) > 1 ? "s" : ""
-                            } with percentage deviation is `;
-                            const lowerBoundary = data.intervals[0] + interval;
-                            const upperBoundary =
-                              data.intervals[data.intervals.length - 1];
-
-                            if (range <= lowerBoundary) {
-                              message += `under ${lowerBoundary}%`;
-                            } else if (range >= upperBoundary) {
-                              message += `over ${upperBoundary}%`;
-                            } else {
-                              message += `between ${range}% and ${
-                                range + interval
-                              }%`;
-                            }
-                            return (
-                              <div
-                                style={{
-                                  backgroundColor: "white",
-                                }}
-                                className="p-sm"
-                              >
-                                <p className="desc">{message}</p>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                      <Bar
-                        dataKey="y"
-                        fill="#0066CC"
-                        name="# tests"
-                        onClick={(d, index) => {
-                          const lowerBoundary = data.intervals[index];
-                          const upperBoundary =
-                            data.intervals[index] + interval;
-                          const isFirstElement = index === 0;
-                          const isLastElement =
-                            index === data.values.length - 1;
-                          if (isFirstElement) {
-                            setTestLowerBoundary(null);
-                            setTestUpperBoundary(upperBoundary);
-                          } else if (isLastElement) {
-                            setTestLowerBoundary(lowerBoundary);
-                            setTestUpperBoundary(null);
-                          } else {
-                            setTestLowerBoundary(lowerBoundary);
-                            setTestUpperBoundary(upperBoundary);
-                          }
-                        }}
-                      >
-                        {data.values.map((value, index) => (
-                          <Cell
-                            cursor="pointer"
-                            fill={
-                              data.intervals[index] >= 0
-                                ? global_danger_color_100.value
-                                : global_primary_color_100.value
-                            }
-                            key={`cell-${index}`}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardBody>
-            </Card>
+            <Grid hasGutter>
+              <GridItem span={6}>
+                <JunitBarChart
+                  data={data.bar_chart}
+                  rangeSelected={(lowerBoundary, upperBoundary) => {
+                    setTestLowerBoundary(lowerBoundary);
+                    setTestUpperBoundary(upperBoundary);
+                  }}
+                />
+              </GridItem>
+              <GridItem span={6}>
+                <TrendChart data={data.trend_percentage} />
+              </GridItem>
+            </Grid>
           </div>
           <div className="mt-md">
-            <Card>
-              <CardTitle>
-                <div>
-                  {testLowerBoundary === null
-                    ? testUpperBoundary === null
-                      ? "All testcases"
-                      : `Testcases under ${testUpperBoundary}%`
-                    : testUpperBoundary === null
-                    ? `Testcases over ${testLowerBoundary}%`
-                    : `Testcases between ${testLowerBoundary}% and ${testUpperBoundary}%`}
-                  {testLowerBoundary !== null && testUpperBoundary !== null && (
-                    <small>
-                      <Button
-                        variant="link"
-                        onClick={() => {
-                          setTestLowerBoundary(null);
-                          setTestUpperBoundary(null);
-                        }}
-                      >
-                        (reset)
-                      </Button>
-                    </small>
-                  )}
-                </div>
-              </CardTitle>
-              <CardBody>
-                <table
-                  className="pf-c-table pf-m-compact"
-                  role="grid"
-                  aria-label="junit testcase details"
-                >
-                  <thead>
-                    <tr role="row">
-                      <th role="columnheader" scope="col">
-                        Testcase name
-                      </th>
-                      <th
-                        role="columnheader"
-                        scope="col"
-                        style={{ textAlign: "center" }}
-                      >
-                        <span>% of deviation</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.details
-                      .filter((detail) =>
-                        testLowerBoundary
-                          ? detail.value > testLowerBoundary
-                          : true
-                      )
-                      .filter((detail) =>
-                        testUpperBoundary
-                          ? detail.value < testUpperBoundary
-                          : true
-                      )
-                      .map((detail) => (
-                        <tr>
-                          <td>{detail.testcase}</td>
-                          <td style={{ textAlign: "center" }}>
-                            <span title={detail.value.toString()}>
-                              {round(detail.value, 2)}%
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </CardBody>
-            </Card>
+            <TestListDetails
+              data={data.bar_chart}
+              lowerBoundary={testLowerBoundary}
+              upperBoundary={testUpperBoundary}
+              resetRange={() => {
+                setTestLowerBoundary(null);
+                setTestUpperBoundary(null);
+              }}
+            />
           </div>
         </>
       )}
