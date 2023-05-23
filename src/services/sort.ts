@@ -1,6 +1,11 @@
 import { sortBy } from "lodash";
 import { DateTime } from "luxon";
 
+
+export function sort(items: string[]) {
+  return sortBy(items, [(e) => e.toLowerCase()]);
+}
+
 export interface IItemWithName {
   name: string;
 }

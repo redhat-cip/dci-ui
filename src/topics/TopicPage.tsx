@@ -21,10 +21,11 @@ import {
   DropdownToggle,
   DropdownItem,
   CardTitle,
+  Bullseye,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton } from "ui";
+import { EmptyState, Breadcrumb, CopyButton, BlinkLogo } from "ui";
 import { AppDispatch } from "store";
-import { IComponent, IEnhancedTopic, ITopic } from "types";
+import { IComponent, IEnhancedTopic } from "types";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
@@ -39,19 +40,19 @@ import {
   IComponentsFilters,
   parseWhereFromSearch,
 } from "search/where";
-import { sortByNewestFirst } from "services/sort";
+import { sort, sortByNewestFirst } from "services/sort";
 import NameFilter from "jobs/toolbar/NameFilter";
 import TagsFilter from "jobs/toolbar/TagsFilter";
 
 interface ComponentsProps {
-  topic: ITopic;
+  topic_id: string;
 }
 
 const Categories = ["Name", "Type", "Tag"] as const;
 
 type Category = typeof Categories[number];
 
-function ComponentsTable({ topic }: ComponentsProps) {
+function ComponentsTable({ topic_id }: ComponentsProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -68,18 +69,17 @@ function ComponentsTable({ topic }: ComponentsProps) {
 
   const fetchComponentsCallback = useCallback(() => {
     setIsLoading(true);
-    setComponents([]);
-    fetchComponents(topic, buildWhereFromSearch(filters))
+    fetchComponents(topic_id, buildWhereFromSearch(filters))
       .then((response) => {
         setComponents(response.data.components);
       })
       .finally(() => setIsLoading(false));
-  }, [topic, filters]);
+  }, [topic_id, filters]);
 
   useEffect(() => {
     const where = buildWhereFromSearch(filters);
-    navigate(`/topics/${topic.id}/components${where}`, { replace: true });
-  }, [navigate, topic.id, filters]);
+    navigate(`/topics/${topic_id}/components${where}`, { replace: true });
+  }, [navigate, topic_id, filters]);
 
   useEffect(() => {
     fetchComponentsCallback();
@@ -174,7 +174,11 @@ function ComponentsTable({ topic }: ComponentsProps) {
 
         <div>
           {isLoading ? (
-            <div>loading</div>
+            <div>
+              <Bullseye>
+                <BlinkLogo />
+              </Bullseye>
+            </div>
           ) : components.length === 0 ? (
             isSearch ? (
               <div>
@@ -211,7 +215,7 @@ function ComponentsTable({ topic }: ComponentsProps) {
                       </td>
                       <td>
                         <Link
-                          to={`/topics/${topic.id}/components/${component.id}`}
+                          to={`/topics/${topic_id}/components/${component.id}`}
                         >
                           {component.display_name}
                         </Link>
@@ -231,7 +235,7 @@ function ComponentsTable({ topic }: ComponentsProps) {
                         <span>
                           {component.tags !== null &&
                           component.tags.length !== 0
-                            ? component.tags.map((tag, i) => (
+                            ? sort(component.tags).map((tag, i) => (
                                 <Label
                                   isCompact
                                   key={i}
@@ -425,7 +429,7 @@ export default function TopicPage() {
       {topic === null ? null : (
         <>
           <TopicDetails topic={topic} />
-          <ComponentsTable topic={topic} />
+          <ComponentsTable topic_id={topic_id} />
         </>
       )}
     </MainPage>

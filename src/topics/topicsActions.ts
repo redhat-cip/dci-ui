@@ -61,11 +61,11 @@ interface IFetchComponents {
 }
 
 export function fetchComponents(
-  topic: ITopic,
+  topic_id: string,
   search: string
 ): Promise<IFetchComponents> {
   return http({
     method: "get",
-    url: `/api/v1/topics/${topic.id}/components${search}`,
+    url: `/api/v1/topics/${topic_id}/components${search}`,
   });
 }
