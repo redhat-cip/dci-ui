@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, Fragment } from "react";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { getFileContent } from "jobs/job/files/filesActions";
 import {
@@ -105,7 +105,12 @@ export default function JobStateFile({
               ? "loading"
               : content === ""
               ? `no log for "${file.name}"`
-              : content}
+              : content.split("\\n").map((line, i) => (
+                  <Fragment key={i}>
+                    {line}
+                    <br />
+                  </Fragment>
+                ))}
           </JobStatePre>
         </FileContent>
       ) : null}
