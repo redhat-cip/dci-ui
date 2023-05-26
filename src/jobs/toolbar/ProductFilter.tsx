@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getProducts,
   getProductById,
-  isFetchingProducts,
 } from "products/productsSelectors";
 import { IProduct } from "types";
 import productsActions from "products/productsActions";
@@ -14,7 +13,6 @@ import {
   ToolbarFilter,
 } from "@patternfly/react-core";
 import { AppDispatch } from "store";
-import { useDebouncedValue } from "hooks/useDebouncedValue";
 
 type ProductFilterProps = {
   product_id: string | null;
@@ -33,20 +31,14 @@ export default function ProductFilter({
   placeholderText = "Search by name",
   categoryName = "Product",
 }: ProductFilterProps) {
-  const [searchValue, setSearchValue] = useState("");
   const products = useSelector(getProducts);
   const product = useSelector(getProductById(product_id));
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const isFetching = useSelector(isFetchingProducts);
-
-  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
 
   useEffect(() => {
-    if (debouncedSearchValue) {
-      dispatch(productsActions.all({ where: `name:${debouncedSearchValue}*` }));
-    }
-  }, [debouncedSearchValue, dispatch]);
+      dispatch(productsActions.all());
+  }, [dispatch]);
 
   return (
     <ToolbarFilter
@@ -56,7 +48,7 @@ export default function ProductFilter({
       showToolbarItem={showToolbarItem}
     >
       <Select
-        variant={SelectVariant.typeahead}
+        variant={SelectVariant.single}
         typeAheadAriaLabel={placeholderText}
         onToggle={setIsOpen}
         onSelect={(event, selection) => {
@@ -64,20 +56,10 @@ export default function ProductFilter({
           const s = selection as IProduct;
           onSelect(s);
         }}
-        onClear={onClear}
         selections={product === null ? "" : product.name}
         isOpen={isOpen}
         aria-labelledby="select"
         placeholderText={placeholderText}
-        maxHeight="220px"
-        onTypeaheadInputChanged={setSearchValue}
-        noResultsFoundText={
-          debouncedSearchValue === ""
-            ? "Search a product by name"
-            : isFetching
-            ? "Searching..."
-            : "No product matching this name"
-        }
       >
         {products
           .map((p) => ({ ...p, toString: () => p.name }))
