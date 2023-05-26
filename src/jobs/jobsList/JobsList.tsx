@@ -1,7 +1,7 @@
 import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
-import JobSummary from "./JobSummary";
+import JobsListRow from "./JobsListRow";
 import { IEnhancedJob, IJobFilters } from "types";
 
 const JobUl = styled.ul`
@@ -32,7 +32,7 @@ export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
     <JobUl aria-label="job list">
       {jobs.map((job) => (
         <JobLi key={job.id}>
-          <JobSummary
+          <JobsListRow
             job={job}
             onTagClicked={(tag) => {
               setFilters({

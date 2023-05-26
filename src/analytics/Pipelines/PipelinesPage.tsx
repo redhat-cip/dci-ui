@@ -45,7 +45,7 @@ import { showAPIError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 import { IJobStatus, IPipelines, RangeOptionValue } from "types";
 import RangeFilter from "jobs/toolbar/RangeFilter";
-import { getColor, getIcon } from "jobs/jobSummary/jobSummaryUtils";
+import { getColor, getIcon } from "jobs/jobUtils";
 import { Components } from "jobs/job/JobDetailsSummary";
 import { notEmpty } from "../../services/utils";
 

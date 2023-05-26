@@ -3,8 +3,8 @@ import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
 import { useDispatch, useSelector } from "react-redux";
 import jobsActions from "./jobsActions";
 import { getJobs, getNbOfJobs, isFetchingJobs } from "./jobsSelectors";
-import JobsList from "./JobsList";
-import JobsTableList from "./JobsTableList";
+import JobsList from "./jobsList/JobsList";
+import JobsTableList from "./jobsTableList/JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
 import {
   parseFiltersFromSearch,

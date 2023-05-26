@@ -2,7 +2,6 @@ import { Label, LabelGroup } from "@patternfly/react-core";
 import { createSearchParams, Link } from "react-router-dom";
 import {
   IEnhancedJob,
-  IJobFilters,
   IJobStatus,
   IRemoteci,
   ITeam,
@@ -12,14 +11,14 @@ import {
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { getTopicIcon } from "ui/icons";
-import { getBackground } from "./jobSummary/jobSummaryUtils";
-import tableViewColumns from "./tableView/tableViewColumns";
-import JobStatusLabel from "./JobStatusLabel";
-import { sortByName } from "services/sort";
+import { getBackground } from "jobs/jobUtils";
+import {
+  TestsLabels,
+  JobStatusLabel,
+  ComponentsListInJobRow,
+} from "jobs/components";
 import { CopyIconButton } from "ui";
-import { groupJobsByPipeline } from "./jobsSelectors";
 import { getPrincipalComponent } from "component/componentSelector";
-import { TestsLabels } from "./TestsLabels";
 import { DateTime } from "luxon";
 
 interface JobTableSummaryProps {
@@ -36,7 +35,7 @@ interface JobTableSummaryProps {
   columns: JobsTableListColumn[];
 }
 
-function JobTableSummary({
+export default function JobTableSummary({
   job,
   isPipelineJob,
   isTheLastPipelineJob,
@@ -137,27 +136,7 @@ function JobTableSummary({
       ),
     components:
       job.components.length === 0 ? null : (
-        <ul>
-          {sortByName(
-            job.components.map((c) => ({ ...c, name: c.display_name }))
-          ).map((component) => (
-            <li
-              key={component.id}
-              style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              <Link
-                className="mr-xs"
-                to={`/topics/${component.topic_id}/components/${component.id}`}
-              >
-                {component.display_name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <ComponentsListInJobRow components={job.components} />
       ),
     tests:
       job.results.length === 0 ? null : (
@@ -282,85 +261,5 @@ function JobTableSummary({
         </td>
       ))}
     </tr>
-  );
-}
-
-interface JobsTableListProps {
-  jobs: IEnhancedJob[];
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
-  columns: JobsTableListColumn[];
-}
-
-export default function JobsTableList({
-  jobs,
-  filters,
-  setFilters,
-  columns,
-}: JobsTableListProps) {
-  if (jobs.length === 0) return null;
-
-  const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
-  return (
-    <table className="pf-c-table pf-m-compact pf-m-grid-md">
-      <thead>
-        <tr>
-          <th></th>
-          {columns.map((column, i) => (
-            <th key={i}>{tableViewColumns[column]}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {jobsGroupedByPipeline.map((jobsInTheSamePipeline) =>
-          jobsInTheSamePipeline.map((job, i, arr) => (
-            <JobTableSummary
-              key={`${job.id}:${job.etag}`}
-              isPipelineJob={arr.length > 1}
-              isTheLastPipelineJob={arr.length - 1 === i}
-              isPipelineRoot={i === 0}
-              columns={columns}
-              job={job}
-              onStatusClicked={(status) => {
-                setFilters({
-                  ...filters,
-                  status,
-                });
-              }}
-              onTagClicked={(tag) => {
-                setFilters({
-                  ...filters,
-                  tags: [...filters.tags, tag],
-                });
-              }}
-              onRemoteciClicked={(remoteci) => {
-                setFilters({
-                  ...filters,
-                  remoteci_id: remoteci.id,
-                });
-              }}
-              onTeamClicked={(team) => {
-                setFilters({
-                  ...filters,
-                  team_id: team.id,
-                });
-              }}
-              onTopicClicked={(topic) => {
-                setFilters({
-                  ...filters,
-                  topic_id: topic.id,
-                });
-              }}
-              onConfigurationClicked={(configuration) => {
-                setFilters({
-                  ...filters,
-                  configuration: configuration,
-                });
-              }}
-            />
-          ))
-        )}
-      </tbody>
-    </table>
   );
 }

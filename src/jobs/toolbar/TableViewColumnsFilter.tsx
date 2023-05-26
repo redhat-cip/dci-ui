@@ -1,7 +1,23 @@
 import { useState } from "react";
 import { JobsTableListColumn } from "types";
 import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
-import tableViewColumns from "./tableViewColumns";
+
+export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
+  id: "Id",
+  name: "Name",
+  pipeline: "Pipeline",
+  config: "Config",
+  team: "Team",
+  remoteci: "Remoteci",
+  topic: "Topic",
+  component: "Component",
+  components: "Components",
+  tests: "Tests",
+  tags: "Tags",
+  created_at: "Created at",
+  duration: "Duration",
+  started: "Started",
+};
 
 type TableViewColumnsFilterProps = {
   columns: JobsTableListColumn[];
@@ -19,7 +35,7 @@ export default function TableViewColumnsFilter({
       onToggle={() => setIsOpen(!isOpen)}
       onSelect={(event, newSelection) => {
         const newColumns = (
-          Object.keys(tableViewColumns) as JobsTableListColumn[]
+          Object.keys(tableViewColumnLabels) as JobsTableListColumn[]
         ).reduce((acc, column) => {
           const columnChecked = columns.indexOf(column) !== -1;
           if (
@@ -37,10 +53,10 @@ export default function TableViewColumnsFilter({
       placeholderText="Filter columns"
       menuAppendTo={() => document.body}
     >
-      {(Object.keys(tableViewColumns) as JobsTableListColumn[]).map(
+      {(Object.keys(tableViewColumnLabels) as JobsTableListColumn[]).map(
         (column, i) => (
           <SelectOption key={i} value={column}>
-            {tableViewColumns[column]}
+            {tableViewColumnLabels[column]}
           </SelectOption>
         )
       )}

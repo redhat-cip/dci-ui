@@ -1,4 +1,4 @@
-import { convertLinksToHtml } from "./jobSummaryUtils";
+import { convertLinksToHtml } from "./jobUtils";
 
 test("convertLinksToHtml", () => {
   expect(

@@ -28,7 +28,7 @@ import { sortByNewestFirst } from "services/sort";
 import { humanizeDuration } from "services/date";
 import { StatHeaderCard } from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import { getPercentageOfSuccessfulJobs } from "./stats";
-import JobStatusLabel from "jobs/JobStatusLabel";
+import { JobStatusLabel } from "jobs/components";
 import CardLine from "ui/CardLine";
 import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
 import { global_palette_black_500 } from "@patternfly/react-tokens";

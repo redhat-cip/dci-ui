@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Label, Chip, LabelGroup } from "@patternfly/react-core";
+import { Label, LabelGroup } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
   global_primary_color_200,
@@ -10,7 +10,6 @@ import {
 import {
   UsersIcon,
   ServerIcon,
-  CubesIcon,
   ClockIcon,
   CalendarAltIcon,
   CaretRightIcon,
@@ -18,23 +17,24 @@ import {
   InfoCircleIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent, IRemoteci, ITeam, ITopic } from "types";
+import { IEnhancedJob, IRemoteci, ITeam, ITopic } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
-import { TextAreaEditableOnHover, CopyIconButton } from "ui";
+import { CopyIconButton } from "ui";
+import TextAreaEditableOnHover from "./TextAreaEditableOnHover";
 import { Markup } from "interweave";
-import { updateJobComment } from "./jobsActions";
+import { updateJobComment } from "../jobsActions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
-import { sortByName, sortByOldestFirst } from "services/sort";
+import { sortByOldestFirst } from "services/sort";
 import { getTopicIcon } from "ui/icons";
-import JobConfiguration from "./jobSummary/JobConfiguration";
+import JobConfiguration from "./JobConfiguration";
 import {
   convertLinksToHtml,
   getBackground,
   getColor,
   getIcon,
-} from "./jobSummary/jobSummaryUtils";
-import { Regressions, Successfixes } from "./jobSummary/components";
+} from "../jobUtils";
+import { ComponentsListInJobRow, TestsLabels } from "jobs/components";
 
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
@@ -177,73 +177,7 @@ const Pad = styled.div`
   height: 1em;
 `;
 
-const Component = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-interface ComponentsProps {
-  components: IComponent[];
-}
-
-function Components({ components }: ComponentsProps) {
-  const [showMore, setShowMore] = useState(false);
-  const maxNumberElements = Math.min(4, components.length);
-  const showMoreButton = components.length > maxNumberElements;
-  const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.display_name }))
-  );
-  const nFirstComponents = sortedComponents.slice(0, maxNumberElements);
-  const remainingComponents = sortedComponents.slice(maxNumberElements);
-  return (
-    <div>
-      {nFirstComponents.map((component) => (
-        <Component key={component.id} className="mt-xs">
-          <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
-            <CubesIcon className="mr-xs" />
-            {component.display_name}
-          </Link>
-        </Component>
-      ))}
-      {showMore ? (
-        <>
-          {remainingComponents.map((component) => (
-            <Component key={component.id} className="mt-xs">
-              <Link
-                to={`/topics/${component.topic_id}/components/${component.id}`}
-              >
-                <CubesIcon className="mr-xs" />
-                {component.display_name}
-              </Link>
-            </Component>
-          ))}
-          <Chip
-            component="button"
-            onClick={() => setShowMore(false)}
-            isOverflowChip
-            className="mt-xs"
-          >
-            show less
-          </Chip>
-        </>
-      ) : (
-        showMoreButton && (
-          <Chip
-            component="button"
-            onClick={() => setShowMore(true)}
-            isOverflowChip
-            className="mt-xs"
-          >
-            {remainingComponents.length} more
-          </Chip>
-        )
-      )}
-    </div>
-  );
-}
-
-interface JobSummaryProps {
+interface JobsListRowProps {
   job: IEnhancedJob;
   onTagClicked?: (tag: string) => void;
   onRemoteciClicked?: (remoteci: IRemoteci) => void;
@@ -252,14 +186,14 @@ interface JobSummaryProps {
   onConfigurationClicked?: (configuration: string) => void;
 }
 
-export default function JobSummary({
+export default function JobsListRow({
   job,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
   onTopicClicked,
   onConfigurationClicked,
-}: JobSummaryProps) {
+}: JobsListRowProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
   const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
@@ -348,7 +282,7 @@ export default function JobSummary({
         </JobTags>
       )}
       <JobComponents>
-        <Components components={innerJob.components} />
+        <ComponentsListInJobRow components={innerJob.components} />
       </JobComponents>
       <JobDate>
         <div>
@@ -419,31 +353,7 @@ export default function JobSummary({
               key={i}
               className="mr-xs"
             >
-              <Label
-                isCompact
-                color="green"
-                title={`${result.success} tests in success`}
-              >
-                {result.success}
-              </Label>
-              <Label
-                isCompact
-                color="orange"
-                title={`${result.skips} skipped tests`}
-              >
-                {result.skips}
-              </Label>
-              <Label
-                isCompact
-                color="red"
-                title={`${
-                  result.errors + result.failures
-                } errors and failures tests`}
-              >
-                {result.errors + result.failures}
-              </Label>
-              <Successfixes successfixes={result.successfixes} isCompact />
-              <Regressions regressions={result.regressions} isCompact />
+              <TestsLabels tests={job.results} />
             </LabelGroup>
           ))}
         </JobTests>

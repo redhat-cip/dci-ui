@@ -40,7 +40,7 @@ import {
 import { Link, useSearchParams } from "react-router-dom";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
-import JobStatusLabel from "jobs/JobStatusLabel";
+import { JobStatusLabel } from "jobs/components";
 import TypesFilter from "./TypesFilter";
 import qs from "qs";
 import TeamFilter from "jobs/toolbar/TeamFilter";

@@ -1,6 +1,6 @@
 import { Label, LabelGroup, Tooltip } from "@patternfly/react-core";
 import { IResult } from "types";
-import { Regressions, Successfixes } from "./jobSummary/components";
+import { SuccessfixesIcon, RegressionsIcon } from "jobs/components";
 
 export function TestLabels({
   success,
@@ -35,7 +35,10 @@ export function TestLabels({
       >
         <Label isCompact color="green">
           {success}
-          <Successfixes successfixes={successfixes} className="pf-u-ml-xs" />
+          <SuccessfixesIcon
+            successfixes={successfixes}
+            className="pf-u-ml-xs"
+          />
         </Label>
       </Tooltip>
       <Tooltip
@@ -68,14 +71,14 @@ export function TestLabels({
       >
         <Label isCompact color="red">
           {errors + failures}
-          <Regressions regressions={regressions} className="pf-u-ml-xs" />
+          <RegressionsIcon regressions={regressions} className="pf-u-ml-xs" />
         </Label>
       </Tooltip>
     </LabelGroup>
   );
 }
 
-export function TestsLabels({ tests }: { tests: IResult[] }) {
+export default function TestsLabels({ tests }: { tests: IResult[] }) {
   const { success, skips, errors, failures, successfixes, regressions } =
     tests.reduce(
       (acc, test) => {

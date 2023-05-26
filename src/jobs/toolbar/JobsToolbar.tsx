@@ -27,9 +27,9 @@ import StatusFilter from "./StatusFilter";
 import TagsFilter from "./TagsFilter";
 import ConfigurationFilter from "./ConfigurationFilter";
 import NameFilter from "./NameFilter";
-import TableViewColumnsFilter from "jobs/tableView/TableViewColumnsFilter";
 import { useHotkeys } from "react-hotkeys-hook";
 import QLToolbar from "./QLToolbar";
+import TableViewColumnsFilter from "./TableViewColumnsFilter";
 
 export const Categories = [
   "Remoteci",

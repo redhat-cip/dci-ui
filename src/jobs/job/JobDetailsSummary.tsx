@@ -37,8 +37,8 @@ import {
   getBackground,
   getColor,
   getIcon,
-} from "jobs/jobSummary/jobSummaryUtils";
-import { TestLabels } from "jobs/TestsLabels";
+} from "jobs/jobUtils";
+import { TestLabels } from "jobs/components";
 
 const CommentBloc = styled.div`
   display: flex;
