@@ -16,7 +16,7 @@ test("buildWhereFromSearch", () => {
       type: null,
       state: "active",
     })
-  ).toBe("?where=state:active,display_name:foo*");
+  ).toBe("?where=state:active,display_name:foo");
   expect(
     buildWhereFromSearch({
       display_name: "foo*",
@@ -56,7 +56,7 @@ test("buildWhereFromSearch", () => {
       type: null,
       state: "inactive",
     })
-  ).toBe("?where=state:inactive,display_name:foo*");
+  ).toBe("?where=state:inactive,display_name:foo");
 });
 
 test("parseWhereFromSearch", () => {

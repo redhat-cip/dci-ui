@@ -14,10 +14,7 @@ export function buildWhereFromSearch(filters: IComponentsFilters) {
   let where = [`state:${state}`];
 
   if (display_name) {
-    const wildcardCanonicalProjectName = display_name.endsWith("*")
-      ? display_name
-      : `${display_name}*`;
-    where.push(`display_name:${wildcardCanonicalProjectName}`);
+    where.push(`display_name:${display_name}`);
   }
 
   if (type) {
