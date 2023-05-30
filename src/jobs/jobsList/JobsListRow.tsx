@@ -34,7 +34,7 @@ import {
   getColor,
   getIcon,
 } from "../jobUtils";
-import { ComponentsListInJobRow, TestsLabels } from "jobs/components";
+import { ComponentsListInJobRow, TestLabels } from "jobs/components";
 
 const Job = styled.div`
   background: ${(props: { status: string }) => getBackground(props.status)};
@@ -353,7 +353,14 @@ export default function JobsListRow({
               key={i}
               className="mr-xs"
             >
-              <TestsLabels tests={job.results} />
+              <TestLabels
+                success={result.success}
+                skips={result.skips}
+                failures={result.failures}
+                errors={result.errors}
+                successfixes={result.successfixes}
+                regressions={result.regressions}
+              />
             </LabelGroup>
           ))}
         </JobTests>
