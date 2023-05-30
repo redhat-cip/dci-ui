@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-14-minimal
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal
 
 LABEL name="DCI UI"
 LABEL version="0.2.0"
