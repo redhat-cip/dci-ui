@@ -48,6 +48,7 @@ import RangeFilter from "jobs/toolbar/RangeFilter";
 import { getColor, getIcon } from "jobs/jobUtils";
 import { Components } from "jobs/job/JobDetailsSummary";
 import { notEmpty } from "../../services/utils";
+import { AppDispatch } from "store";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -323,7 +324,7 @@ function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
 }
 
 export default function PipelinesPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [pipelinesNames, setPipelinesNames] = useState<string[]>(

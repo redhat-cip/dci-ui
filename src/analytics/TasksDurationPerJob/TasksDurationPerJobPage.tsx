@@ -32,6 +32,7 @@ import { getDomain, transform } from "./tasksDurationPerJob";
 import { Link } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
+import { AppDispatch } from "store";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -161,7 +162,7 @@ function Graph({ data }: { data: IGraphData[] }) {
 }
 
 export default function TasksDurationPerJobPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [topicId, setTopicId] = useState<string | null>(null);
   const [remoteciId, setRemoteciId] = useState<string | null>(null);
   const [data, setData] = useState<IGraphData[]>([]);
@@ -259,7 +260,7 @@ export default function TasksDurationPerJobPage() {
                     <DatePicker
                       value={after || ""}
                       placeholder="Created after"
-                      onChange={(str) => setAfter(str)}
+                      onChange={(e, str) => setAfter(str)}
                     />
                   </ToolbarFilter>
                 </ToolbarItem>
@@ -273,7 +274,7 @@ export default function TasksDurationPerJobPage() {
                     <DatePicker
                       value={before || ""}
                       placeholder="Created before"
-                      onChange={(str) => setBefore(str)}
+                      onChange={(e, str) => setBefore(str)}
                     />
                   </ToolbarFilter>
                 </ToolbarItem>

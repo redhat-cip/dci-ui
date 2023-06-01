@@ -57,7 +57,7 @@ export default function TeamPage() {
   const { team_id } = useParams();
 
   const _fetchTeam = useCallback(
-    (id) => {
+    (id: string) => {
       dispatch(teamsActions.one(id)).then((response) => {
         setTeam(response.data.team);
       });

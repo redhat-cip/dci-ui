@@ -87,7 +87,7 @@ export default function NewFailedJobSubscriptionPanel({
         searchInput={
           <SearchInput
             value={searchRemotecis}
-            onChange={(value) => setSearchRemotecis(value)}
+            onChange={(e, value) => setSearchRemotecis(value)}
             onClear={() => setSearchRemotecis("")}
           />
         }
@@ -177,7 +177,7 @@ export default function NewFailedJobSubscriptionPanel({
         searchInput={
           <SearchInput
             value={searchSubscribedRemotecis}
-            onChange={(value) => setSearchSubscribedRemotecis(value)}
+            onChange={(e, value) => setSearchSubscribedRemotecis(value)}
             onClear={() => setSearchSubscribedRemotecis("")}
           />
         }

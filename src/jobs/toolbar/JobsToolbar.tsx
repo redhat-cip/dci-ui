@@ -41,7 +41,7 @@ export const Categories = [
   "Name",
 ] as const;
 
-export type Category = typeof Categories[number];
+export type Category = (typeof Categories)[number];
 
 type JobsToolbarProps = {
   jobsCount: number;

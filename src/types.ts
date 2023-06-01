@@ -217,11 +217,11 @@ export const JobStatuses = [
   "post-run",
 ] as const;
 
-export type IJobStatus = typeof JobStatuses[number];
+export type IJobStatus = (typeof JobStatuses)[number];
 
 export const FinalJobStatuses = ["success", "failure", "error", "killed"];
 
-export type IFinalJobStatuses = typeof FinalJobStatuses[number];
+export type IFinalJobStatuses = (typeof FinalJobStatuses)[number];
 
 export interface IPaginationFilters {
   page: number;
@@ -535,6 +535,14 @@ export interface IComponentWithJobs extends IComponent {
   jobs: IJob[];
 }
 
+export interface DCIError {
+  message?: string;
+  payload?: {
+    error?: { k: string };
+    errors?: string[] | { k: string };
+  };
+}
+
 export interface IAlert {
   id: string;
   title: string;
@@ -646,7 +654,7 @@ const JobsTableListColumns = [
   "duration",
   "started",
 ] as const;
-export type JobsTableListColumn = typeof JobsTableListColumns[number];
+export type JobsTableListColumn = (typeof JobsTableListColumns)[number];
 
 export interface IComponentCoverage {
   id: string;

@@ -35,8 +35,8 @@ export default function ListFilter({
       <SearchInput
         placeholder={placeholderText}
         aria-label="search item"
-        onChange={setItem}
-        onSearch={onSearch}
+        onChange={(e, value) => setItem(value)}
+        onSearch={(e, value) => onSearch(value)}
         value={item}
         onClear={() => setItem("")}
       />

@@ -45,6 +45,7 @@ import TypesFilter from "./TypesFilter";
 import qs from "qs";
 import TeamFilter from "jobs/toolbar/TeamFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
+import { AppDispatch } from "store";
 
 interface ICoverageFilters {
   topic_id: string | null;
@@ -78,7 +79,7 @@ export function getAllComponentTypes(topic: ITopic) {
 }
 
 export default function ComponentCoveragePage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [topicId, setTopicId] = useState<string | null>(
     searchParams.get("topic_id")

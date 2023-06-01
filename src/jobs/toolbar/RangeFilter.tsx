@@ -91,14 +91,14 @@ export default function RangeFilter({
               <DatePicker
                 value={after}
                 placeholder="Created after"
-                onChange={(newAfterDate) =>
+                onChange={(e, newAfterDate) =>
                   onChange(range, newAfterDate, before)
                 }
               />
               <DatePicker
                 value={before}
                 placeholder="Before"
-                onChange={(newBeforeDate) =>
+                onChange={(e, newBeforeDate) =>
                   onChange(range, after, newBeforeDate)
                 }
               />

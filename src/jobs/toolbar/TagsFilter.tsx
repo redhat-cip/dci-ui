@@ -44,7 +44,7 @@ export function TagsInput({
       <TextInputGroupMain
         icon={showSearchIcon && <SearchIcon />}
         value={inputValue}
-        onChange={setInputValue}
+        onChange={(e, value) => setInputValue(value)}
         placeholder="Tags"
         onKeyPress={(event) => {
           if (event.key === "Enter" && tags.indexOf(inputValue) === -1) {

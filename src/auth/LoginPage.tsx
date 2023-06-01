@@ -6,7 +6,7 @@ import {
 } from "@patternfly/react-core";
 import LoginForm from "./LoginForm";
 import SSOForm from "./SSOForm";
-import Logo from "logo.svg";
+import Logo from "logo.min.svg";
 import useSwitch from "hooks/useSwitch";
 import { BackgroundImage } from "ui";
 

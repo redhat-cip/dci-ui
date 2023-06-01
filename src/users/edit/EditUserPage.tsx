@@ -48,7 +48,7 @@ export default function EditUserPage() {
   const { user_id } = useParams();
 
   const _fetchUser = useCallback(
-    (id) => {
+    (id: string) => {
       dispatch(usersActions.one(id)).then((response) => {
         setUser(response.data.user);
       });
@@ -56,7 +56,7 @@ export default function EditUserPage() {
     [dispatch, setUser]
   );
 
-  const _fetchUserTeams = useCallback((id) => {
+  const _fetchUserTeams = useCallback((id: string) => {
     fetchUserTeams({ id: id } as IUser).then((response) => {
       setUserTeams(response.data.teams);
     });

@@ -50,6 +50,7 @@ import {
 } from "@patternfly/react-tokens";
 import { TagsInput } from "jobs/toolbar/TagsFilter";
 import { useSearchParams } from "react-router-dom";
+import { AppDispatch } from "store";
 
 type JunitComputationMode = "mean" | "median";
 
@@ -149,9 +150,9 @@ function JunitComparisonForm({
                   <FormGroup label="From" fieldId="topic_1_start_date">
                     <DatePicker
                       id="topic_1_start_date"
-                      value={topic1StartDate}
+                      value={topic1StartDate || ""}
                       placeholder="Jobs after"
-                      onChange={setTopic1StartDate}
+                      onChange={(e, value) => setTopic1StartDate(value)}
                       style={{ width: "100%" }}
                     />
                   </FormGroup>
@@ -160,9 +161,9 @@ function JunitComparisonForm({
                   <FormGroup label="To" fieldId="topic_1_end_date">
                     <DatePicker
                       id="topic_1_end_date"
-                      value={topic1EndDate}
+                      value={topic1EndDate || ""}
                       placeholder="Jobs before"
-                      onChange={setTopic1EndDate}
+                      onChange={(e, value) => setTopic1EndDate(value)}
                       style={{ width: "100%" }}
                     />
                   </FormGroup>
@@ -266,9 +267,9 @@ function JunitComparisonForm({
                   <FormGroup label="From" fieldId="topic_2_start_date">
                     <DatePicker
                       id="topic_2_start_date"
-                      value={topic2StartDate}
+                      value={topic2StartDate || ""}
                       placeholder="Jobs after"
-                      onChange={setTopic2StartDate}
+                      onChange={(e, value) => setTopic2StartDate(value)}
                       style={{ width: "100%" }}
                     />
                   </FormGroup>
@@ -277,9 +278,9 @@ function JunitComparisonForm({
                   <FormGroup label="To" fieldId="topic_2_end_date">
                     <DatePicker
                       id="topic_2_end_date"
-                      value={topic2EndDate}
+                      value={topic2EndDate || ""}
                       placeholder="Jobs before"
-                      onChange={setTopic2EndDate}
+                      onChange={(e, value) => setTopic2EndDate(value)}
                       style={{ width: "100%" }}
                     />
                   </FormGroup>
@@ -328,11 +329,25 @@ function JunitComparisonForm({
           topicId1 === null ||
           topicId2 === null ||
           remoteciId1 === null ||
-          remoteciId2 === null
+          remoteciId2 === null ||
+          topic1StartDate === null ||
+          topic1EndDate === null ||
+          topic2StartDate === null ||
+          topic2EndDate === null
         }
         className="pf-u-mt-xl"
         onClick={() => {
-          if (testName && topicId1 && topicId2 && remoteciId1 && remoteciId2) {
+          if (
+            testName &&
+            topicId1 &&
+            topicId2 &&
+            remoteciId1 &&
+            remoteciId2 &&
+            topic1StartDate &&
+            topic1EndDate &&
+            topic2StartDate &&
+            topic2EndDate
+          ) {
             searchParams.set("topicId1", topicId1);
             searchParams.set("topicId2", topicId2);
             searchParams.set("remoteciId1", remoteciId1);
@@ -661,7 +676,7 @@ export default function JunitComparisonPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<JunitData | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <MainPage
       title="Junit comparison"

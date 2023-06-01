@@ -1,4 +1,9 @@
-import { sortByName, sortByNewestFirst, sortByOldestFirst, sortByMainComponentType } from "./sort";
+import {
+  sortByName,
+  sortByNewestFirst,
+  sortByOldestFirst,
+  sortByMainComponentType,
+} from "./sort";
 
 test("sortByName", () => {
   expect(

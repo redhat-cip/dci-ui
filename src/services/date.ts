@@ -54,125 +54,97 @@ export function getRangeDates(range: RangeOptionValue, now?: string) {
   const yesterday = today.minus({
     day: 1,
   });
+  let after: string | null = "";
+  let before: string | null = "";
   if (range === "today") {
-    return {
-      after: today.startOf("day").toISODate(),
-      before: today.endOf("day").toISODate(),
-    };
+    after = today.startOf("day").toISODate();
+    before = today.endOf("day").toISODate();
   }
   if (range === "currentWeek") {
-    return {
-      after: today.startOf("week").toISODate(),
-      before: today.endOf("week").toISODate(),
-    };
+    after = today.startOf("week").toISODate();
+    before = today.endOf("week").toISODate();
   }
   if (range === "currentMonth") {
-    return {
-      after: today.startOf("month").toISODate(),
-      before: today.endOf("month").toISODate(),
-    };
+    after = today.startOf("month").toISODate();
+    before = today.endOf("month").toISODate();
   }
   if (range === "currentQuarter") {
-    return {
-      after: today.startOf("quarter").toISODate(),
-      before: today.endOf("quarter").toISODate(),
-    };
+    after = today.startOf("quarter").toISODate();
+    before = today.endOf("quarter").toISODate();
   }
   if (range === "currentYear") {
-    return {
-      after: today.startOf("year").toISODate(),
-      before: today.endOf("year").toISODate(),
-    };
+    after = today.startOf("year").toISODate();
+    before = today.endOf("year").toISODate();
   }
   if (range === "yesterday") {
-    return {
-      after: yesterday.startOf("day").toISODate(),
-      before: yesterday.endOf("day").toISODate(),
-    };
+    after = yesterday.startOf("day").toISODate();
+    before = yesterday.endOf("day").toISODate();
   }
   if (range === "previousWeek") {
     const lastWeek = today.minus({
       week: 1,
     });
-    return {
-      after: lastWeek.startOf("week").toISODate(),
-      before: lastWeek.endOf("week").toISODate(),
-    };
+    after = lastWeek.startOf("week").toISODate();
+    before = lastWeek.endOf("week").toISODate();
   }
   if (range === "previousMonth") {
     const lastMonth = today.minus({
       month: 1,
     });
-    return {
-      after: lastMonth.startOf("month").toISODate(),
-      before: lastMonth.endOf("month").toISODate(),
-    };
+    after = lastMonth.startOf("month").toISODate();
+    before = lastMonth.endOf("month").toISODate();
   }
   if (range === "previousQuarter") {
     const lastQuarter = today.minus({
       quarter: 1,
     });
-    return {
-      after: lastQuarter.startOf("quarter").toISODate(),
-      before: lastQuarter.endOf("quarter").toISODate(),
-    };
+    after = lastQuarter.startOf("quarter").toISODate();
+    before = lastQuarter.endOf("quarter").toISODate();
   }
   if (range === "lastMonth") {
     const lastMonth = today.minus({
       month: 1,
     });
-    return {
-      after: lastMonth.startOf("month").toISODate(),
-      before: lastMonth.endOf("month").toISODate(),
-    };
+    after = lastMonth.startOf("month").toISODate();
+    before = lastMonth.endOf("month").toISODate();
   }
   if (range === "lastYear") {
     const lastYear = today.minus({
       year: 1,
     });
-    return {
-      after: lastYear.startOf("year").toISODate(),
-      before: lastYear.endOf("year").toISODate(),
-    };
+    after = lastYear.startOf("year").toISODate();
+    before = lastYear.endOf("year").toISODate();
   }
   if (range === "last7Days") {
     const last7Days = today.minus({
       days: 7,
     });
-    return {
-      after: last7Days.startOf("day").toISODate(),
-      before: today.endOf("day").toISODate(),
-    };
+    after = last7Days.startOf("day").toISODate();
+    before = today.endOf("day").toISODate();
   }
   if (range === "last30Days") {
     const last30Days = today.minus({
       days: 30,
     });
-    return {
-      after: last30Days.startOf("day").toISODate(),
-      before: today.endOf("day").toISODate(),
-    };
+    after = last30Days.startOf("day").toISODate();
+    before = today.endOf("day").toISODate();
   }
   if (range === "last90Days") {
     const last90Days = today.minus({
       days: 90,
     });
-    return {
-      after: last90Days.startOf("day").toISODate(),
-      before: today.endOf("day").toISODate(),
-    };
+    after = last90Days.startOf("day").toISODate();
+    before = today.endOf("day").toISODate();
   }
   if (range === "last365Days") {
     const last365Days = today.minus({
       days: 365,
     });
-    return {
-      after: last365Days.startOf("day").toISODate(),
-      before: today.endOf("day").toISODate(),
-    };
+    after = last365Days.startOf("day").toISODate();
+    before = today.endOf("day").toISODate();
   }
   return {
-    after: "",
-    before: "",
+    after: after || "",
+    before: before || "",
   };
 }

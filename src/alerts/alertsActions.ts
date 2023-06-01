@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
-import { isEmpty, keys } from "lodash";
+import { isEmpty } from "lodash";
 import { AppThunk } from "store";
-import { IAlert } from "types";
+import { DCIError, IAlert } from "types";
 import * as types from "./alertsActionsTypes";
 
 export function showAlert(alert: IAlert) {
@@ -55,11 +55,11 @@ export function showError(title: string, message: string = "") {
   return showAndHideAfter10s(alert);
 }
 
-export function showAPIError(error: AxiosError) {
+export function showAPIError(error: AxiosError<DCIError>) {
   return showAndHideAfter10s(createAlert(error));
 }
 
-export function createAlert(axiosError: AxiosError): IAlert {
+export function createAlert(axiosError: AxiosError<DCIError>): IAlert {
   const data = axiosError?.response?.data;
   if (isEmpty(data))
     return {
@@ -82,7 +82,7 @@ export function createAlert(axiosError: AxiosError): IAlert {
     return alert;
   }
   const error = payload.error || payload.errors || {};
-  alert.message = keys(error)
+  alert.message = (Object.keys(error) as Array<keyof typeof error>)
     .map((k) => `${k}: ${error[k]}`)
     .join("\n");
   return alert;

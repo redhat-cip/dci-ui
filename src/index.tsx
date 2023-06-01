@@ -1,4 +1,5 @@
-import ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import store from "./store";
 import { BrowserRouter } from "react-router-dom";
@@ -8,15 +9,20 @@ import App from "./App";
 import { SSOProvider } from "auth/ssoContext";
 import { AuthProvider } from "auth/authContext";
 
-ReactDOM.render(
-  <Provider store={store}>
-    <SSOProvider>
-      <AuthProvider>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
-    </SSOProvider>
-  </Provider>,
-  document.getElementById("root")
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <SSOProvider>
+        <AuthProvider>
+          <BrowserRouter basename={process.env.PUBLIC_URL}>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
+      </SSOProvider>
+    </Provider>
+  </React.StrictMode>
 );

@@ -71,8 +71,8 @@ export default function JobTableSummary({
           search: createSearchParams({
             teams_ids: [job.team_id],
             range: "custom" as RangeOptionValue,
-            start_date: jobCreatedAt.startOf("day").toISODate(),
-            end_date: jobCreatedAt.endOf("day").toISODate(),
+            start_date: jobCreatedAt.startOf("day").toISODate() || "",
+            end_date: jobCreatedAt.endOf("day").toISODate() || "",
             pipelines_names: job.pipeline === null ? [] : [job.pipeline.name],
           }).toString(),
         }}

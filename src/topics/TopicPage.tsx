@@ -50,7 +50,7 @@ interface ComponentsProps {
 
 const Categories = ["Name", "Type", "Tag"] as const;
 
-type Category = typeof Categories[number];
+type Category = (typeof Categories)[number];
 
 function ComponentsTable({ topic_id }: ComponentsProps) {
   const location = useLocation();

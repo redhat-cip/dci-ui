@@ -1,4 +1,4 @@
-import DCIGeckoPawImage from "./dci-gecko-paw.svg";
+import DCIGeckoPawImage from "./dci-gecko-paw.min.svg";
 import styled, { keyframes } from "styled-components";
 
 const blink = keyframes`
