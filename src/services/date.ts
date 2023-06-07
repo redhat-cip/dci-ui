@@ -21,8 +21,8 @@ export function humanizeDuration(
 
 export function formatDate(
   datetime: string | DateTime,
-  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
-  format = DateTime.DATETIME_MED_WITH_SECONDS
+  format = DateTime.DATETIME_MED_WITH_SECONDS,
+  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 ) {
   let _datetime: DateTime;
   if (typeof datetime === "string") {

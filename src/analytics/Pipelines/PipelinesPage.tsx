@@ -218,11 +218,7 @@ function PipelineCard({
           />
         </CardActions>
         <CardTitle>
-          {formatDate(
-            pipelineDay.datetime,
-            undefined,
-            DateTime.DATE_MED_WITH_WEEKDAY
-          )}
+          {formatDate(pipelineDay.datetime, DateTime.DATE_MED_WITH_WEEKDAY)}
         </CardTitle>
       </CardHeader>
       <CardBody style={{ overflow: "auto" }}>

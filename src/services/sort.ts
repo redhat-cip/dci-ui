@@ -49,8 +49,11 @@ export function sortByNewestFirst<
 
 export function sortByOldestFirst<
   T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>
->(items: T[]): T[] {
-  return sortByNewestFirst(items).reverse();
+>(
+  items: T[],
+  key: "created_at" | "updated_at" | "released_at" = "created_at"
+): T[] {
+  return sortByNewestFirst(items, key).reverse();
 }
 
 export function sortByMainComponentType<

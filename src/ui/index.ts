@@ -8,3 +8,4 @@ export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
 export { default as TextGreen } from "./Text/TextGreen";
 export { default as TextRed } from "./Text/TextRed";
 export { default as Breadcrumb } from "./Breadcrumb";
+export { default as ComponentStateLabel } from "./ComponentStateLabel";

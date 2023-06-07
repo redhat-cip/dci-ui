@@ -32,6 +32,7 @@ import { JobStatusLabel } from "jobs/components";
 import CardLine from "ui/CardLine";
 import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
+import { DateTime } from "luxon";
 
 interface IEmbedJobProps {
   job: IJob;
@@ -169,7 +170,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       <CardLine
         className="p-md"
         field="Released at"
-        value={formatDate(component.released_at)}
+        value={formatDate(component.released_at, DateTime.DATE_MED)}
       />
     </div>
   );

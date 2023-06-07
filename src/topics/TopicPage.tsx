@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import topicsActions, { fetchComponents } from "./topicsActions";
+import topicsActions from "./topicsActions";
 import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
 import {
@@ -12,262 +12,19 @@ import {
   CodeBlock,
   CodeBlockCode,
   CodeBlockAction,
-  Toolbar,
-  ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
-  Dropdown,
-  DropdownPosition,
-  DropdownToggle,
-  DropdownItem,
   CardTitle,
-  Bullseye,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton, BlinkLogo } from "ui";
+import { EmptyState, Breadcrumb, CopyButton, ComponentStateLabel } from "ui";
 import { AppDispatch } from "store";
-import { IComponent, IEnhancedTopic } from "types";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { IEnhancedTopic } from "types";
+import { useParams } from "react-router-dom";
 import EditTopicModal from "./EditTopicModal";
 import productsActions from "products/productsActions";
 import { getProducts } from "products/productsSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import CardLine from "ui/CardLine";
-import { Link } from "react-router-dom";
 import { getTopicById } from "./topicsSelectors";
-import {
-  buildWhereFromSearch,
-  defaultComponentsFilters,
-  IComponentsFilters,
-  parseWhereFromSearch,
-} from "search/where";
-import { sort, sortByNewestFirst } from "services/sort";
-import NameFilter from "jobs/toolbar/NameFilter";
-import TagsFilter from "jobs/toolbar/TagsFilter";
-
-interface ComponentsProps {
-  topic_id: string;
-}
-
-const Categories = ["Name", "Type", "Tag"] as const;
-
-type Category = (typeof Categories)[number];
-
-function ComponentsTable({ topic_id }: ComponentsProps) {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [components, setComponents] = useState<IComponent[]>([]);
-
-  const [filters, setFilters] = useState<IComponentsFilters>(
-    parseWhereFromSearch(location.search)
-  );
-
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState<Category>(
-    Categories[0]
-  );
-
-  const fetchComponentsCallback = useCallback(() => {
-    setIsLoading(true);
-    fetchComponents(topic_id, buildWhereFromSearch(filters))
-      .then((response) => {
-        setComponents(response.data.components);
-      })
-      .finally(() => setIsLoading(false));
-  }, [topic_id, filters]);
-
-  useEffect(() => {
-    const where = buildWhereFromSearch(filters);
-    navigate(`/topics/${topic_id}/components${where}`, { replace: true });
-  }, [navigate, topic_id, filters]);
-
-  useEffect(() => {
-    fetchComponentsCallback();
-  }, [fetchComponentsCallback]);
-
-  function clearAllFilters() {
-    setFilters({ ...defaultComponentsFilters });
-  }
-
-  const isSearch =
-    filters.display_name !== null ||
-    filters.type !== null ||
-    filters.tags.length > 0;
-
-  return (
-    <Card className="mt-md">
-      <CardTitle>Components</CardTitle>
-      <CardBody>
-        <Toolbar
-          id="toolbar-components"
-          clearAllFilters={clearAllFilters}
-          collapseListedFiltersBreakpoint="xl"
-          inset={{
-            default: "insetNone",
-          }}
-        >
-          <ToolbarContent>
-            <ToolbarGroup variant="filter-group">
-              <ToolbarItem>
-                <Dropdown
-                  onSelect={(event) => {
-                    if (event) {
-                      const link = event.target as HTMLElement;
-                      const selectedCategory = Categories.find(
-                        (category) => category === link.innerText
-                      );
-                      if (selectedCategory) {
-                        setCurrentCategory(selectedCategory);
-                      }
-                    }
-                    setIsCategoryDropdownOpen(false);
-                  }}
-                  position={DropdownPosition.left}
-                  toggle={
-                    <DropdownToggle
-                      onToggle={(isOpen) => setIsCategoryDropdownOpen(isOpen)}
-                      style={{ width: "100%" }}
-                    >
-                      {currentCategory}
-                    </DropdownToggle>
-                  }
-                  isOpen={isCategoryDropdownOpen}
-                  dropdownItems={Categories.map((category) => (
-                    <DropdownItem key={category}>{category}</DropdownItem>
-                  ))}
-                  style={{ width: "100%" }}
-                ></Dropdown>
-              </ToolbarItem>
-              <ToolbarItem>
-                <NameFilter
-                  showToolbarItem={currentCategory === "Name"}
-                  name={filters.display_name}
-                  onSubmit={(display_name) =>
-                    setFilters({
-                      ...filters,
-                      display_name,
-                    })
-                  }
-                  onClear={() =>
-                    setFilters({
-                      ...filters,
-                      display_name: null,
-                    })
-                  }
-                />
-                <NameFilter
-                  categoryName="Type"
-                  showToolbarItem={currentCategory === "Type"}
-                  name={filters.type}
-                  onSubmit={(type) => setFilters({ ...filters, type })}
-                  onClear={() => setFilters({ ...filters, type: null })}
-                />
-                <TagsFilter
-                  showToolbarItem={currentCategory === "Tag"}
-                  tags={filters.tags}
-                  onSubmit={(tags) => setFilters({ ...filters, tags })}
-                />
-              </ToolbarItem>
-            </ToolbarGroup>
-          </ToolbarContent>
-        </Toolbar>
-
-        <div>
-          {isLoading ? (
-            <div>
-              <Bullseye>
-                <BlinkLogo />
-              </Bullseye>
-            </div>
-          ) : components.length === 0 ? (
-            isSearch ? (
-              <div>
-                <EmptyState
-                  title="No components matching your search"
-                  info={`There are no components matching your search. Please change your search.`}
-                />
-              </div>
-            ) : (
-              <div>
-                <EmptyState
-                  title="There is no component for this topic"
-                  info="We are certainly in the process of uploading components for this topic. Come back in a few hours."
-                />
-              </div>
-            )
-          ) : (
-            <table className="pf-c-table pf-m-compact pf-m-grid-md">
-              <thead>
-                <tr>
-                  <th className="text-center">ID</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Tags</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortByNewestFirst(components, "released_at").map(
-                  (component) => (
-                    <tr key={`${component.id}.${component.etag}`}>
-                      <td className="text-center">
-                        <CopyButton text={component.id} />
-                      </td>
-                      <td>
-                        <Link
-                          to={`/topics/${topic_id}/components/${component.id}`}
-                        >
-                          {component.display_name}
-                        </Link>
-                      </td>
-                      <td>
-                        <Label
-                          isCompact
-                          className="pointer"
-                          onClick={() => {
-                            setFilters({ ...filters, type: component.type });
-                          }}
-                        >
-                          {component.type}
-                        </Label>
-                      </td>
-                      <td>
-                        <span>
-                          {component.tags !== null &&
-                          component.tags.length !== 0
-                            ? sort(component.tags).map((tag, i) => (
-                                <Label
-                                  isCompact
-                                  key={i}
-                                  className="mt-xs mr-xs pointer"
-                                  color="blue"
-                                  onClick={() => {
-                                    if (filters.tags.indexOf(tag) === -1) {
-                                      setFilters({
-                                        ...filters,
-                                        tags: [...filters.tags, tag],
-                                      });
-                                    }
-                                  }}
-                                >
-                                  {tag}
-                                </Label>
-                              ))
-                            : "no tags"}
-                        </span>
-                      </td>
-                      <td>{component.state}</td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </CardBody>
-    </Card>
-  );
-}
+import ComponentsTableWithToolbar from "./ComponentsTableWithToolbar";
 
 function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
   const [seeData, setSeeData] = useState(false);
@@ -300,7 +57,11 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
           }
         />
         <Divider />
-        <CardLine className="p-md" field="State" value={topic.state} />
+        <CardLine
+          className="p-md"
+          field="State"
+          value={<ComponentStateLabel state={topic.state} />}
+        />
         <Divider />
         <CardLine
           className="p-md"
@@ -429,7 +190,7 @@ export default function TopicPage() {
       {topic === null ? null : (
         <>
           <TopicDetails topic={topic} />
-          <ComponentsTable topic_id={topic_id} />
+          <ComponentsTableWithToolbar topic={topic} />
         </>
       )}
     </MainPage>
