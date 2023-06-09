@@ -14,7 +14,7 @@ import {
   Button,
   Skeleton,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton } from "ui";
+import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
 import {
   IComponentCoverage,
   IComponentWithJobs,
@@ -203,7 +203,11 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
         }
       />
       <Divider />
-      <CardLine className="p-md" field="State" value={component.state} />
+      <CardLine
+        className="p-md"
+        field="State"
+        value={<StateLabel state={component.state} />}
+      />
       <Divider />
       <CardLine
         className="p-md"
@@ -212,7 +216,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       />
       <CardLine
         className="p-md"
-        field="Released at"
+        field="Release date"
         value={formatDate(component.released_at, DateTime.DATE_MED)}
       />
     </div>
