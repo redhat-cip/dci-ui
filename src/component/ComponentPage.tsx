@@ -12,6 +12,7 @@ import {
   CodeBlockAction,
   CodeBlockCode,
   Button,
+  Skeleton,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import {
@@ -33,6 +34,12 @@ import CardLine from "ui/CardLine";
 import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
+import { useAuth } from "auth/authContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getTopicById } from "topics/topicsSelectors";
+import topicsActions from "topics/topicsActions";
+import { AppDispatch } from "store";
+import { getTopicIcon } from "ui/icons";
 
 interface IEmbedJobProps {
   job: IJob;
@@ -80,8 +87,30 @@ function EmbedJob({ job }: IEmbedJobProps) {
   );
 }
 
+function TopicLink({ topic_id }: { topic_id: string }) {
+  const topic = useSelector(getTopicById(topic_id));
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(topicsActions.one(topic_id));
+  }, [dispatch, topic_id]);
+
+  if (topic === null) {
+    return <Skeleton screenreaderText="Loading topic name" />;
+  }
+  const TopicIcon = getTopicIcon(topic.name);
+  return (
+    <Link to={`/topics/${topic.id}/components`}>
+      <TopicIcon className="pf-u-mr-xs" />
+      {topic.name}
+    </Link>
+  );
+}
+
 function ComponentDetails({ component }: { component: IComponentWithJobs }) {
   const [seeData, setSeeData] = useState(false);
+  const { identity } = useAuth();
   const componentData = JSON.stringify(component.data, null, 2);
   return (
     <div>
@@ -95,18 +124,32 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       <Divider />
       <CardLine className="p-md" field="Version" value={component.version} />
       <Divider />
-      <CardLine className="p-md" field="Unique id" value={component.uid} />
-      <Divider />
+      {component.uid !== "" && (
+        <>
+          <CardLine className="p-md" field="Unique id" value={component.uid} />
+          <Divider />
+        </>
+      )}
       <CardLine
         className="p-md"
-        field="Topic id"
-        value={
-          <Link to={`/topics/${component.topic_id}/components`}>
-            {component.topic_id}
-          </Link>
-        }
+        field="Topic"
+        value={<TopicLink topic_id={component.topic_id} />}
       />
       <Divider />
+      {identity?.hasReadOnlyRole && component.url !== "" && (
+        <>
+          <CardLine
+            className="p-md"
+            field="Url"
+            value={
+              <a href={component.url} target="_blank" rel="noopener noreferrer">
+                {component.url}
+              </a>
+            }
+          />
+          <Divider />
+        </>
+      )}
       <CardLine className="p-md" field="Type" value={component.type} />
       <Divider />
       <CardLine
