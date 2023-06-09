@@ -15,7 +15,7 @@ import {
   CardTitle,
   Bullseye,
 } from "@patternfly/react-core";
-import { EmptyState, CopyButton, BlinkLogo, ComponentStateLabel } from "ui";
+import { EmptyState, CopyButton, BlinkLogo, StateLabel } from "ui";
 import { IComponent, IEnhancedTopic } from "types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -138,7 +138,7 @@ function RHELComponentsTable({
                 </Label>
               </td>
               <td>
-                <ComponentStateLabel isCompact state={component.state} />
+                <StateLabel isCompact state={component.state} />
               </td>
             </tr>
           );
@@ -210,7 +210,7 @@ function DefaultComponentsTable({
               </Label>
             </td>
             <td>
-              <ComponentStateLabel isCompact state={component.state} />
+              <StateLabel isCompact state={component.state} />
             </td>
           </tr>
         ))}

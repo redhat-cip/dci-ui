@@ -14,7 +14,7 @@ import {
   CodeBlockAction,
   CardTitle,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton, ComponentStateLabel } from "ui";
+import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
 import { AppDispatch } from "store";
 import { IEnhancedTopic } from "types";
 import { useParams } from "react-router-dom";
@@ -60,7 +60,7 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         <CardLine
           className="p-md"
           field="State"
-          value={<ComponentStateLabel state={topic.state} />}
+          value={<StateLabel state={topic.state} />}
         />
         <Divider />
         <CardLine
