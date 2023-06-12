@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getProducts,
-  getProductById,
-} from "products/productsSelectors";
+import { getProducts, getProductById } from "products/productsSelectors";
 import { IProduct } from "types";
 import productsActions from "products/productsActions";
 import {
@@ -37,7 +34,7 @@ export default function ProductFilter({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-      dispatch(productsActions.all());
+    dispatch(productsActions.all());
   }, [dispatch]);
 
   return (

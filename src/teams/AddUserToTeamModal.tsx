@@ -48,7 +48,7 @@ export default function AddUserToTeamModal({
           placeholder="Find a user by email"
           value={searchEmail}
           onChange={(e, value) => setSearchEmail(value)}
-          onSearch={(value) => {
+          onSearch={(e, value) => {
             setTouched(true);
             setIsFetching(true);
             setUsers([]);
