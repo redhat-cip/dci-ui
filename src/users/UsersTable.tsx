@@ -15,6 +15,7 @@ export default function UsersTable({ users }: UsersTableProps) {
           <th>Login</th>
           <th>Full name</th>
           <th>Email</th>
+          <th>Red Hat login</th>
           <th>Created</th>
         </tr>
       </thead>
@@ -29,6 +30,7 @@ export default function UsersTable({ users }: UsersTableProps) {
             </td>
             <td>{user.fullname}</td>
             <td>{user.email}</td>
+            <td>{user.sso_username}</td>
             <td>{user.from_now}</td>
           </tr>
         ))}

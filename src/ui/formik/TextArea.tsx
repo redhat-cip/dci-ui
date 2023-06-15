@@ -1,16 +1,25 @@
-import { FormGroup, TextArea, TextAreaProps } from "@patternfly/react-core";
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  TextArea,
+  TextAreaProps,
+} from "@patternfly/react-core";
 import { useField } from "formik";
 
 type DCITextAreaProps = {
   label?: string;
   id: string;
   name: string;
+  helperText?: string;
 } & TextAreaProps;
 
 export default function DCITextArea({
   label,
   id,
   name,
+  helperText,
   ...props
 }: DCITextAreaProps) {
   const [field, meta, helpers] = useField(name);
@@ -35,6 +44,11 @@ export default function DCITextArea({
           }
         }}
       />
+      {helperText && (
+        <HelperText>
+          <HelperTextItem>{helperText}</HelperTextItem>
+        </HelperText>
+      )}
     </FormGroup>
   );
 }

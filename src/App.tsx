@@ -1,9 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import "App.css";
 import "ui/styles";
-import "css/alignment.css";
-import "css/spacing.css";
-import "css/flex.css";
 import JobsPage from "jobs/JobsPage";
 import JobPage from "jobs/job/JobPage";
 import JobStatesPage from "jobs/job/jobStates/JobStatesPage";

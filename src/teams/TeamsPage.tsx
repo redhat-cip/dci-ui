@@ -8,8 +8,9 @@ import { getTeams, isFetchingTeams } from "./teamsSelectors";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { AppDispatch } from "store";
 import CreateTeamModal from "./CreateTeamModal";
-import { Button, Label } from "@patternfly/react-core";
+import { Button, Flex, FlexItem, Label } from "@patternfly/react-core";
 import { Link, useNavigate } from "react-router-dom";
+import TeamCreationWizard from "./TeamCreationWizard";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -38,20 +39,29 @@ export default function TeamsPage() {
       empty={!isFetching && isEmpty(teams)}
       HeaderButton={
         currentUser.hasEPMRole ? (
-          <CreateTeamModal
-            onSubmit={(team) =>
-              dispatch(teamsActions.create(team)).then((response) => {
-                const newTeam = response.data.team;
-                navigate(`/teams/${newTeam.id}`);
-              })
-            }
-          >
-            {(openModal) => (
-              <Button variant="primary" onClick={openModal}>
-                Create a new team
-              </Button>
-            )}
-          </CreateTeamModal>
+          <Flex>
+            <Flex>
+              <FlexItem>
+                <CreateTeamModal
+                  onSubmit={(team) =>
+                    dispatch(teamsActions.create(team)).then((response) => {
+                      const newTeam = response.data.team;
+                      navigate(`/teams/${newTeam.id}`);
+                    })
+                  }
+                >
+                  {(openModal) => (
+                    <Button variant="primary" onClick={openModal}>
+                      Create a new team
+                    </Button>
+                  )}
+                </CreateTeamModal>
+              </FlexItem>
+              <FlexItem>
+                <TeamCreationWizard />
+              </FlexItem>
+            </Flex>
+          </Flex>
         ) : null
       }
       EmptyComponent={

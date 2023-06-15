@@ -116,7 +116,7 @@ export interface IEnhancedRemoteci extends IRemoteci {
 export interface ITopic extends Resource {
   component_types: string[];
   data: data;
-  state: string;
+  state: state;
   created_at: string;
   updated_at: string;
   export_control: boolean;
@@ -186,6 +186,7 @@ export interface INewUser {
 export interface IUsersById {
   [id: string]: IUser;
 }
+
 export interface IEnhancedUser extends IUser {
   from_now: string | null;
 }
@@ -198,9 +199,11 @@ export interface IFeeder extends Resource {
   data: data;
   state: string;
 }
+
 export interface IFeedersById {
   [id: string]: IFeeder;
 }
+
 export interface IEnhancedFeeder extends IFeeder {
   team: ITeam;
   from_now: string | null;
@@ -257,19 +260,19 @@ export type PatternflyFilters = {
 };
 
 export interface IIdentity {
-  email: string;
+  email: string | null;
   etag: string;
   fullname: string;
   id: string;
   name: string;
   teams: {
-    [id: string]: ITeam;
+    [id: string]: ITeam; // todo(gvincent): it's not ITeam, it's {id, name} object
   };
   timezone: string;
 }
 
 export interface ICurrentUser {
-  email: string;
+  email: string | null;
   etag: string;
   fullname: string;
   id: string;

@@ -14,15 +14,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <SSOProvider>
-        <AuthProvider>
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <App />
-          </BrowserRouter>
-        </AuthProvider>
-      </SSOProvider>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <SSOProvider>
+      <AuthProvider>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </SSOProvider>
+  </Provider>
 );

@@ -2,7 +2,6 @@ import axios from "axios";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import axiosMockAdapter from "axios-mock-adapter";
-
 import { createActions } from "./apiActions";
 import { createActionsTypes } from "./apiActionsTypes";
 

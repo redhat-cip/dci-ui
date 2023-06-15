@@ -56,14 +56,30 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@storybook/addon-essentials": "^7.0.21",
+    "@storybook/addon-interactions": "^7.0.21",
+    "@storybook/addon-links": "^7.0.21",
+    "@storybook/blocks": "^7.0.21",
+    "@storybook/preset-create-react-app": "^7.0.21",
+    "@storybook/react": "^7.0.21",
+    "@storybook/react-webpack5": "^7.0.21",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/chroma-js": "^2.1.4",
     "@types/qs": "^6.9.7",
     "acorn": "^8.8.2",
     "axios-mock-adapter": "^1.21.4",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "eslint-plugin-storybook": "^0.6.12",
+    "msw": "^1.2.3",
+    "msw-storybook-addon": "^1.8.0",
     "prettier": "^2.8.8",
-    "redux-mock-store": "^1.5.4"
+    "redux-mock-store": "^1.5.4",
+    "storybook": "^7.0.21",
+    "webpack": "^5.87.0"
   },
   "scripts": {
     "prettier": "prettier --write src",
@@ -72,10 +88,15 @@
     "test": "npm run lint && LANG=en_US.UTF-8 TZ=UTC CI=true react-scripts test",
     "test:watch": "LANG=en_US.UTF-8 TZ=UTC react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:storybook/recommended"
+    ]
   },
   "jest": {
     "transformIgnorePatterns": [
@@ -87,5 +108,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "msw": {
+    "workerDirectory": "public"
+  }
 }

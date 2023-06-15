@@ -113,3 +113,8 @@ import "@patternfly/patternfly/components/Tabs/tabs.css";
 // import "@patternfly/patternfly/components/TreeView/tree-view.css";
 // import "@patternfly/patternfly/components/Truncate/truncate.css";
 // import "@patternfly/patternfly/components/Wizard/wizard.css";
+
+// DCI custom css
+import "ui/css/alignment.css";
+import "ui/css/spacing.css";
+import "ui/css/flex.css";

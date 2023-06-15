@@ -19,7 +19,7 @@ function signinSilent(manager: UserManager) {
     if (user) {
       setJWT(user.access_token);
     }
-  });
+  }).catch(console.error);
 }
 
 export function getSSOUserManager() {

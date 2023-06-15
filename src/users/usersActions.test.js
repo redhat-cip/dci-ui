@@ -1,6 +1,5 @@
 import axios from "axios";
 import axiosMockAdapter from "axios-mock-adapter";
-
 import {
   fetchUserTeams,
   addUserToTeam,

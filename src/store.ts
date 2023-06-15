@@ -1,9 +1,10 @@
-import { createStore, applyMiddleware, combineReducers, Action } from "redux";
-import thunk, {
-  ThunkAction,
-  ThunkDispatch,
-  ThunkMiddleware,
-} from "redux-thunk";
+import { Action } from "redux";
+import { ThunkAction } from "redux-thunk";
+import {
+  combineReducers,
+  configureStore,
+  PreloadedState,
+} from "@reduxjs/toolkit";
 import alertsReducer from "./alerts/alertsReducer";
 import currentUserReducer from "./currentUser/currentUserReducer";
 import productsReducer from "./products/productsReducer";
@@ -27,11 +28,19 @@ export const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-export type AppThunk<R = void> = ThunkAction<R, RootState, null, Action>;
-export type AppDispatch = ThunkDispatch<RootState, null, Action>;
 
-const middleware: ThunkMiddleware<RootState, Action> = thunk;
+export function setupStore(preloadedState?: PreloadedState<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+}
 
-const store = createStore(rootReducer, applyMiddleware(middleware));
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppThunk<R = void> = ThunkAction<R, RootState, unknown, Action>;
+
+const store = setupStore();
+
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
