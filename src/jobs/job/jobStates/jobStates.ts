@@ -9,5 +9,25 @@ export function getFileStatus(file: IFile): IFileStatus {
     ? "skipped"
     : file.name.startsWith("ignored/")
     ? "ignored"
+    : file.name.startsWith("warn/")
+    ? "withAWarning"
     : "success";
+}
+
+export function buildFileTitle(fileName: string) {
+  let re = new RegExp("^((failed|unreachable|skipped|warn)/)?(PLAY|TASK)(.*)");
+  let title;
+
+  if (re.test(fileName)) {
+    title = fileName.replace(re, "$3$4");
+  } else {
+    title = `TASK [${fileName}] `;
+  }
+  return title;
+}
+
+export function isFileEmpty(file: IFile) {
+  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY [\\[]|PLAYBOOK)");
+
+  return re.test(file.name);
 }

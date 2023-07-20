@@ -416,7 +416,8 @@ export type IFileStatus =
   | "unreachable"
   | "skipped"
   | "ignored"
-  | "success";
+  | "success"
+  | "withAWarning";
 export interface IJobState {
   id: string;
   status: IJobStatus;

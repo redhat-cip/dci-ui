@@ -5,6 +5,7 @@ import {
   global_BackgroundColor_dark_200,
   global_BackgroundColor_dark_400,
   global_danger_color_100,
+  global_palette_purple_200,
   global_palette_black_200,
   global_palette_black_300,
   global_palette_black_500,
@@ -82,6 +83,10 @@ export const FileRow = styled.div<FileRowProps>`
       : props.status === "skipped" || props.status === "ignored"
       ? css`
           color: ${global_info_color_100.value};
+        `
+      : props.status === "withAWarning"
+      ? css`
+          color: ${global_palette_purple_200.value};
         `
       : css`
           color: ${global_warning_color_100.value};

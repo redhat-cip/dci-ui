@@ -1,4 +1,4 @@
-import { getFileStatus } from "./jobStates";
+import { getFileStatus, buildFileTitle } from "./jobStates";
 import { IFile } from "types";
 
 test("getFileStatus", () => {
@@ -37,4 +37,27 @@ test("getFileStatus", () => {
       name: "ignored/node-prep : Check ansible version",
     } as IFile)
   ).toEqual("ignored");
+  expect(
+    getFileStatus({
+      name: "warn/TASK [mirror-ocp-release : Read release_image from release.txt]",
+    } as IFile)
+  ).toEqual("withAWarning");
+});
+
+test("buildFileTitle", () => {
+  expect(
+    buildFileTitle("TASK [Upload Junit files to DCI Control Server]")
+  ).toBe("TASK [Upload Junit files to DCI Control Server]");
+  expect(
+    buildFileTitle("skipped/TASK [Run the failure process for partners]")
+  ).toBe("TASK [Run the failure process for partners]");
+  expect(buildFileTitle("failed/PLAY RECAP")).toBe("PLAY RECAP");
+  expect(buildFileTitle("failed/TASK [Fail properly]")).toBe(
+    "TASK [Fail properly]"
+  );
+  expect(
+    buildFileTitle(
+      "warn/TASK [mirror-ocp-release : Read release_image from release.txt]"
+    )
+  ).toBe("TASK [mirror-ocp-release : Read release_image from release.txt]");
 });

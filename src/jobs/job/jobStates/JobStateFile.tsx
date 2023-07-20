@@ -10,31 +10,13 @@ import {
   Label,
   LabelBox,
 } from "./JobStateComponents";
-import { IFile, IFileWithDuration } from "types";
-import { getFileStatus } from "./jobStates";
+import { IFileWithDuration } from "types";
+import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
 
 interface JobStateFileProps {
   file: IFileWithDuration;
   isSelected: boolean;
   onClick: (seeDetails: boolean) => void;
-}
-
-function buildTitle(fileName: string) {
-  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY|TASK)(.*)");
-  let title;
-
-  if (re.test(fileName)) {
-    title = fileName.replace(re, "$3$4");
-  } else {
-    title = `TASK [${fileName}] `;
-  }
-  return `${title} `.padEnd(100, "*");
-}
-
-function isFileEmpty(file: IFile) {
-  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY [\\[]|PLAYBOOK)");
-
-  return re.test(file.name);
 }
 
 export default function JobStateFile({
@@ -72,22 +54,23 @@ export default function JobStateFile({
     }
   }, [isSelected, setSeeDetails, divRef]);
 
-  const title = buildTitle(file.name);
+  const title = buildFileTitle(file.name);
   const fileDuration = `${Math.round(file.duration)}s`;
+  const fileIsEmpty = isFileEmpty(file);
   return (
     <div id={file.id} ref={divRef}>
       <FileRow
         status={getFileStatus(file)}
         onClick={() => {
-          if (!isFileEmpty(file)) {
+          if (!fileIsEmpty) {
             setSeeDetails(!seeDetails);
             onClick(!seeDetails);
           }
         }}
-        className={isFileEmpty(file) ? "" : "pointer"}
+        className={fileIsEmpty ? "" : "pointer"}
       >
         <IconContainer>
-          {isFileEmpty(file) ? null : seeDetails ? (
+          {fileIsEmpty ? null : seeDetails ? (
             <CaretDownIcon />
           ) : (
             <CaretRightIcon />
