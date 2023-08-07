@@ -33,7 +33,7 @@ export default function SettingsPage() {
                 currentUser={currentUser}
                 onSubmit={(newCurrentUser) =>
                   dispatch(updateCurrentUser(newCurrentUser)).then(
-                    refreshIdentity
+                    refreshIdentity,
                   )
                 }
               />
@@ -49,7 +49,7 @@ export default function SettingsPage() {
                   currentUser={currentUser}
                   onSubmit={(newCurrentUser) => {
                     dispatch(updateCurrentUser(newCurrentUser)).then(
-                      refreshIdentity
+                      refreshIdentity,
                     );
                   }}
                 />

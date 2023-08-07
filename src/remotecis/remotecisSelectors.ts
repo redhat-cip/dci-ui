@@ -24,8 +24,8 @@ export const getRemotecis = createSelector(
           team: teams[remoteci.team_id],
           from_now: fromNow(remoteci.created_at),
         };
-      })
-    )
+      }),
+    ),
 );
 export const getRemoteciById = (id: string | null) =>
   createSelector(getRemotecisById, (remotecis) => {

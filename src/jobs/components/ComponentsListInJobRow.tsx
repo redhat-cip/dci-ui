@@ -21,16 +21,16 @@ export default function ComponentsListInJobRow({
   const maxNumberElements = Math.min(4, components.length);
   const showMoreButton = components.length > maxNumberElements;
   const sortedComponents = sortByMainComponentType(
-    components.map((c) => ({ ...c, name: c.display_name }))
+    components.map((c) => ({ ...c, name: c.display_name })),
   );
   const nFirstComponents = sortedComponents.slice(0, maxNumberElements);
   const remainingComponents = sortedComponents.slice(maxNumberElements);
   return (
     <div>
       {nFirstComponents.map((component) => (
-        <Component key={component.id} className="mt-xs">
+        <Component key={component.id} className="pf-v5-u-mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
-            <CubesIcon className="mr-xs" />
+            <CubesIcon className="pf-v5-u-mr-xs" />
             {component.display_name}
           </Link>
         </Component>
@@ -38,11 +38,11 @@ export default function ComponentsListInJobRow({
       {showMore ? (
         <>
           {remainingComponents.map((component) => (
-            <Component key={component.id} className="mt-xs">
+            <Component key={component.id} className="pf-v5-u-mt-xs">
               <Link
                 to={`/topics/${component.topic_id}/components/${component.id}`}
               >
-                <CubesIcon className="mr-xs" />
+                <CubesIcon className="pf-v5-u-mr-xs" />
                 {component.display_name}
               </Link>
             </Component>
@@ -51,7 +51,7 @@ export default function ComponentsListInJobRow({
             component="button"
             onClick={() => setShowMore(false)}
             isOverflowChip
-            className="mt-xs"
+            className="pf-v5-u-mt-xs"
           >
             show less
           </Chip>
@@ -62,7 +62,7 @@ export default function ComponentsListInJobRow({
             component="button"
             onClick={() => setShowMore(true)}
             isOverflowChip
-            className="mt-xs"
+            className="pf-v5-u-mt-xs"
           >
             {remainingComponents.length} more
           </Chip>

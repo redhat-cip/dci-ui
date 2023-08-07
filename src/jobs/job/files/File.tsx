@@ -12,6 +12,7 @@ import { RotatingSpinnerIcon } from "ui";
 import { IFile } from "types";
 import { useNavigate } from "react-router-dom";
 import SeeFileContentModal from "./SeeFileContentModal";
+import { Tr, Td } from "@patternfly/react-table";
 
 interface FileProps {
   file: IFile;
@@ -22,12 +23,12 @@ export default function File({ file }: FileProps) {
   const navigate = useNavigate();
   const isText = isATextFile(file);
   return (
-    <tr>
-      <td>
+    <Tr>
+      <Td>
         {isText ? (
           <SeeFileContentModal file={file}>
             {(show) => (
-              <Button variant="link" className="p-0" onClick={show}>
+              <Button variant="link" className="pf-v5-u-p-0" onClick={show}>
                 {file.name}
               </Button>
             )}
@@ -35,10 +36,10 @@ export default function File({ file }: FileProps) {
         ) : (
           file.name
         )}
-      </td>
-      <td>{humanFileSize(file.size)}</td>
-      <td>{file.mime}</td>
-      <td className="text-center">
+      </Td>
+      <Td>{humanFileSize(file.size)}</Td>
+      <Td>{file.mime}</Td>
+      <Td className="text-center">
         <Button
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
@@ -54,7 +55,7 @@ export default function File({ file }: FileProps) {
               .catch(console.error)
               .finally(() => setIsDownloading(false));
           }}
-          className="mr-xs"
+          className="pf-v5-u-mr-xs"
           isDisabled={isDownloading}
         >
           download
@@ -62,7 +63,7 @@ export default function File({ file }: FileProps) {
         <Button
           variant="secondary"
           icon={<ExternalLinkAltIcon />}
-          className="mr-xs"
+          className="pf-v5-u-mr-xs"
           iconPosition="right"
           onClick={() => {
             navigate(`/files/${file.id}`);
@@ -82,7 +83,7 @@ export default function File({ file }: FileProps) {
             </Button>
           )}
         </SeeFileContentModal>
-      </td>
-    </tr>
+      </Td>
+    </Tr>
   );
 }

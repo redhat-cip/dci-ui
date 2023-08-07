@@ -27,7 +27,7 @@ const TeamForm = forwardRef<FormikProps<INewTeam>, TeamFormProps>(
       onSubmit={onSubmit}
     >
       {({ values }) => (
-        <Form id="team_form" className="pf-c-form">
+        <Form id="team_form" className="pf-v5-c-form">
           <Input
             id="team_form__name"
             data-testid="team_form__name"
@@ -61,7 +61,7 @@ const TeamForm = forwardRef<FormikProps<INewTeam>, TeamFormProps>(
         </Form>
       )}
     </Formik>
-  )
+  ),
 );
 
 export default TeamForm;

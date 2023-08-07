@@ -38,19 +38,19 @@ export default function JobsPage() {
   const isFetching = useSelector(isFetchingJobs);
   const jobsCount = useSelector(getNbOfJobs);
   const [filters, setFilters] = useState(
-    parseFiltersFromSearch(location.search)
+    parseFiltersFromSearch(location.search),
   );
   const jobsPageDivRef = useRef<HTMLInputElement>(null);
   const [tableViewActive, setTableViewActive] = useLocalStorage(
     "tableViewActive",
-    false
+    false,
   );
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]
   >(
     "tableViewColumns",
     ["name", "team", "remoteci", "topic", "component", "duration", "started"],
-    4
+    4,
   );
   useTitle("DCI > Jobs");
   useEffect(() => {
@@ -66,8 +66,8 @@ export default function JobsPage() {
     } else {
       dispatch(
         jobsActions.all(
-          getParamsFromFilters({ ...filters, team_id: identity.team.id })
-        )
+          getParamsFromFilters({ ...filters, team_id: identity.team.id }),
+        ),
       );
     }
   }, [identity, dispatch, filters]);
@@ -78,7 +78,7 @@ export default function JobsPage() {
 
   return (
     <div ref={jobsPageDivRef}>
-      <section className="pf-c-page__main-breadcrumb">
+      <section className="pf-v5-c-page__main-breadcrumb">
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
       </section>
       <PageSection variant={PageSectionVariants.light}>
@@ -136,9 +136,9 @@ export default function JobsPage() {
           />
         )}
         {jobs.length > 0 && (
-          <div className="pf-u-background-color-100">
+          <div className="pf-v5-u-background-color-100">
             <Pagination
-              className="pf-u-px-md"
+              className="pf-v5-u-px-md"
               perPage={filters.perPage}
               page={filters.page}
               itemCount={jobsCount}

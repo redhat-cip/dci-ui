@@ -37,7 +37,7 @@ export default function LastComponentsJobsBarChart({
       };
       return acc;
     },
-    {} as CumulatedDataPerWeek
+    {} as CumulatedDataPerWeek,
   );
   const cumulatedPerWeek = component.jobs.reduce(
     (acc, job) => {
@@ -53,7 +53,7 @@ export default function LastComponentsJobsBarChart({
       }
       return acc;
     },
-    { ...initialCumulatedData } as CumulatedDataPerWeek
+    { ...initialCumulatedData } as CumulatedDataPerWeek,
   );
   const data = Object.values(cumulatedPerWeek).sort((stat1, stat2) => {
     if (stat1.weekNumber < stat2.weekNumber) {

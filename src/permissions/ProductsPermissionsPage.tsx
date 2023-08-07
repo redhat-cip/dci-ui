@@ -13,6 +13,7 @@ import AllowTeamToAccessProductForm from "./AllowTeamToAccessProductForm";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { global_info_color_100 } from "@patternfly/react-tokens";
+import { Table, Tr, Tbody, Td } from "@patternfly/react-table";
 
 export default function ProductsPermissionsPage() {
   const [products, setProducts] = useState<IProductWithTeams[]>([]);
@@ -33,7 +34,7 @@ export default function ProductsPermissionsPage() {
         <div className="py-md">loading...</div>
       ) : (
         <div>
-          <TextContent className="mt-lg">
+          <TextContent className="pf-v5-u-mt-lg">
             <Text component="p">
               <div
                 style={{
@@ -41,7 +42,7 @@ export default function ProductsPermissionsPage() {
                   padding: "1em",
                 }}
               >
-                <InfoCircleIcon className="mr-xs" />
+                <InfoCircleIcon className="pf-v5-u-mr-xs" />
                 By giving access to a product, a team can download all topics
                 non restricted. If you want to give access to a restricted topic
                 (topic under export control policy for example), you can use the
@@ -67,33 +68,33 @@ export default function ProductsPermissionsPage() {
             return (
               <TextContent
                 key={`${product.id}.${product.etag}`}
-                className="mt-lg"
+                className="pf-v5-u-mt-lg"
               >
                 <Text component="h1">{product.name}</Text>
                 <Text component="p">
                   List of teams that have access to {product.name}
                 </Text>
-                <table
-                  className="pf-c-table pf-m-grid-md pf-m-compact"
+                <Table
+                  className="pf-v5-c-table pf-m-grid-md pf-m-compact"
                   role="grid"
                 >
-                  <tbody>
+                  <Tbody>
                     {product.teams.map((team) => (
-                      <tr key={`${team.id}.${team.etag}`}>
-                        <td className="pf-m-width-30">{team.name}</td>
-                        <td className="pf-m-width-70">
+                      <Tr key={`${team.id}.${team.etag}`}>
+                        <Td className="pf-m-width-30">{team.name}</Td>
+                        <Td className="pf-m-width-70">
                           <Button
                             variant="secondary"
                             isDanger
                             icon={<TrashIcon />}
                             onClick={() =>
                               dispatch(
-                                removeTeamProductPermission(team, product)
+                                removeTeamProductPermission(team, product),
                               ).then(() => {
                                 const newProducts = products.map((p) => {
                                   if (p.id === product.id) {
                                     p.teams = p.teams.filter(
-                                      (t) => t.id !== team.id
+                                      (t) => t.id !== team.id,
                                     );
                                   }
                                   return p;
@@ -104,11 +105,11 @@ export default function ProductsPermissionsPage() {
                           >
                             remove {team.name} permission
                           </Button>
-                        </td>
-                      </tr>
+                        </Td>
+                      </Tr>
                     ))}
-                  </tbody>
-                </table>
+                  </Tbody>
+                </Table>
               </TextContent>
             );
           })}

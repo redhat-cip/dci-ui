@@ -33,7 +33,7 @@ export default function CreateFeederForm({
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form id="create_feeder_form" className="pf-c-form">
+        <Form id="create_feeder_form" className="pf-v5-c-form">
           <Input
             id="create_feeder_form__name"
             data-testid="create_feeder_form__name"

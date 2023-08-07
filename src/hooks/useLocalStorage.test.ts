@@ -3,31 +3,31 @@ import useLocalStorage from "./useLocalStorage";
 
 test("useLocalStorage initial value string", () => {
   expect(
-    renderHook(() => useLocalStorage("key1", "abc")).result.current[0]
+    renderHook(() => useLocalStorage("key1", "abc")).result.current[0],
   ).toBe("abc");
 });
 
 test("useLocalStorage initial value boolean", () => {
   expect(
-    renderHook(() => useLocalStorage("key2", true)).result.current[0]
+    renderHook(() => useLocalStorage("key2", true)).result.current[0],
   ).toBe(true);
 });
 
 test("useLocalStorage initial value object", () => {
   expect(
-    renderHook(() => useLocalStorage("key3", { o: 1 })).result.current[0]
+    renderHook(() => useLocalStorage("key3", { o: 1 })).result.current[0],
   ).toEqual({ o: 1 });
 });
 
 test("useLocalStorage initial value null", () => {
   expect(
-    renderHook(() => useLocalStorage("key4", null)).result.current[0]
+    renderHook(() => useLocalStorage("key4", null)).result.current[0],
   ).toBe(null);
 });
 
 test("useLocalStorage initial value array", () => {
   expect(
-    renderHook(() => useLocalStorage("key5", ["a", "b"])).result.current[0]
+    renderHook(() => useLocalStorage("key5", ["a", "b"])).result.current[0],
   ).toEqual(["a", "b"]);
 });
 
@@ -48,7 +48,7 @@ test("useLocalStorage return value previously saved", () => {
   });
   expect(result.current[0]).toBe("def");
   expect(
-    renderHook(() => useLocalStorage("key7", "ijk")).result.current[0]
+    renderHook(() => useLocalStorage("key7", "ijk")).result.current[0],
   ).toBe("def");
 });
 
@@ -59,6 +59,6 @@ test("useLocalStorage doesn't return value previously saved if version is set", 
   });
   expect(result.current[0]).toBe("def");
   expect(
-    renderHook(() => useLocalStorage("key8", "ijk", 2)).result.current[0]
+    renderHook(() => useLocalStorage("key8", "ijk", 2)).result.current[0],
   ).toBe("ijk");
 });

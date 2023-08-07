@@ -38,7 +38,11 @@ export default function DCILoginPage() {
       <div>
         {seeSSOForm ? <SSOForm /> : <LoginForm />}
         <div>
-          <Button variant="link" className="p-0 mt-xl" onClick={toggle}>
+          <Button
+            variant="link"
+            className="pf-v5-u-p-0 pf-v5-u-mt-xl"
+            onClick={toggle}
+          >
             toggle login form
           </Button>
         </div>

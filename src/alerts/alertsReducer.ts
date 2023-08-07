@@ -5,7 +5,7 @@ const initialState: IAlertsState = {};
 
 export default function reduce(
   state = initialState,
-  action: types.IAlertsActionTypes
+  action: types.IAlertsActionTypes,
 ) {
   switch (action.type) {
     case types.SHOW_ALERT:
@@ -21,8 +21,8 @@ export default function reduce(
       return newState;
     case types.HIDE_ALL_ALERTS:
       return {
-        ...initialState
-      }
+        ...initialState,
+      };
     default:
       return state;
   }

@@ -1,10 +1,14 @@
 import * as React from "react";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import {
   FormSelectOption,
   FormSelect,
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from "@patternfly/react-core";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 interface CustomSelectProps {
   id: string;
@@ -25,24 +29,19 @@ export default function CustomSelect({
   options,
   ...props
 }: CustomSelectProps) {
-  const [field, meta, helpers] = useField(name);
-  const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
-
+  const [field] = useField(name);
+  const { touched, errors, setFieldValue } = useFormikContext<{
+    [k: string]: string;
+  }>();
+  const hasError = errors[name] && touched[name];
   return (
-    <FormGroup
-      label={label}
-      isRequired={props.isRequired}
-      fieldId={id}
-      helperTextInvalid={meta.error}
-      validated={validated}
-    >
+    <FormGroup label={label} isRequired={props.isRequired} fieldId={id}>
       <FormSelect
         {...field}
         {...props}
         id={id}
-        onChange={(value, event) => {
-          setValue(value);
+        onChange={(event, value) => {
+          setFieldValue(name, value);
           if (typeof props.onChange !== "undefined") {
             props.onChange(value, event);
           }
@@ -56,6 +55,15 @@ export default function CustomSelect({
           />
         ))}
       </FormSelect>
+      {hasError && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
+              {errors[name]}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

@@ -21,7 +21,7 @@ test("test edit remoteci form submit the correct values", async () => {
       teams={teams}
       remoteci={remoteci}
       onSubmit={mockOnSubmit}
-    />
+    />,
   );
 
   const showModal = getByRole("button", { name: /Edit Remoteci 1/i });
@@ -30,7 +30,7 @@ test("test edit remoteci form submit the correct values", async () => {
 
   await waitFor(() => {
     expect(
-      baseElement.querySelector("#edit_remoteci_modal")
+      baseElement.querySelector("#edit_remoteci_modal"),
     ).toBeInTheDocument();
   });
 
@@ -51,7 +51,7 @@ test("test edit remoteci form submit the correct values", async () => {
     target: { value: teams[0].name },
   });
   const option_1 = getByTestId(
-    "remoteci_form__team_id[0]"
+    "remoteci_form__team_id[0]",
   ) as HTMLButtonElement;
   fireEvent.click(option_1);
 

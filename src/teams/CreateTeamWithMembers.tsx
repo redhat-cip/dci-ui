@@ -4,9 +4,10 @@ import {
   EmptyState,
   EmptyStateBody,
   EmptyStateIcon,
-  EmptyStateSecondaryActions,
   Progress,
-  Title,
+  EmptyStateActions,
+  EmptyStateHeader,
+  EmptyStateFooter,
 } from "@patternfly/react-core";
 import { CogsIcon } from "@patternfly/react-icons";
 import { useFormikContext } from "formik";
@@ -16,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { getOrCreateTeam } from "./teamsActions";
 import { addUserToTeam, getOrCreateUser } from "users/usersActions";
 import { splitTeamMembersString } from "./TeamMembersForm";
-import { grantTeamProductPermission } from "permissions/permissionsActions";
+import { grantTeamPermission } from "permissions/permissionsActions";
 import { ITeam } from "types";
 
 export default function CreateTeamWithMembers({
@@ -42,22 +43,22 @@ export default function CreateTeamWithMembers({
       .then((newTeam) => {
         setPercent(25);
         const createUsersPromises = splitTeamMembersString(
-          values.teamMembers
+          values.teamMembers,
         ).map(getOrCreateUser);
 
         Promise.all(createUsersPromises)
           .then((users) => {
             setPercent(50);
             const associateUsersToTeamPromises = users.map((user) =>
-              addUserToTeam(user.id, newTeam)
+              addUserToTeam(user.id, newTeam),
             );
             Promise.all(associateUsersToTeamPromises)
               .then(() => {
                 setPercent(75);
                 const productPermissionPromises = Object.values(
-                  values.permissions
+                  values.permissions,
                 ).map((product) =>
-                  grantTeamProductPermission(newTeam, product)
+                  grantTeamPermission("product", newTeam, product),
                 );
                 Promise.all(productPermissionPromises)
                   .then(() => {
@@ -66,34 +67,38 @@ export default function CreateTeamWithMembers({
                   })
                   .catch(() =>
                     setError(
-                      "Error associating the team to the products. Please contact a DCI administrator."
-                    )
+                      "Error associating the team to the products. Please contact a DCI administrator.",
+                    ),
                   );
               })
               .catch(() =>
                 setError(
-                  "Error associating users to the team. Please contact a DCI administrator."
-                )
+                  "Error associating users to the team. Please contact a DCI administrator.",
+                ),
               );
           })
           .catch(() =>
             setError(
-              "Users creation failed. Please contact a DCI administrator."
-            )
+              "Users creation failed. Please contact a DCI administrator.",
+            ),
           );
       })
       .catch(() =>
-        setError("Team creation failed. Please contact a DCI administrator.")
+        setError("Team creation failed. Please contact a DCI administrator."),
       );
+    // eslint-disable-next-line
   }, [error]);
 
   return (
     <div className="pf-l-bullseye">
-      <EmptyState variant="large">
-        <EmptyStateIcon icon={CogsIcon} />
-        <Title headingLevel="h4" size="lg">
-          {percent === 100 ? "Team creation complete" : "Creating team"}
-        </Title>
+      <EmptyState variant="lg">
+        <EmptyStateHeader
+          titleText={
+            <>{percent === 100 ? "Team creation complete" : "Creating team"}</>
+          }
+          icon={<EmptyStateIcon icon={CogsIcon} />}
+          headingLevel="h4"
+        />
         <EmptyStateBody>
           <Progress
             value={percent}
@@ -101,29 +106,31 @@ export default function CreateTeamWithMembers({
             aria-label="validation-progress"
           />
         </EmptyStateBody>
-        <EmptyStateBody>
-          Please give us a few seconds to complete this process. We will create
-          this team, with users and associated permissions.
-        </EmptyStateBody>
-        <EmptyStateBody>
-          {hasError && (
-            <Banner variant="danger" className="pf-u-mb-xs">
-              {error}
-            </Banner>
+        <EmptyStateFooter>
+          <EmptyStateBody>
+            Please give us a few seconds to complete this process. We will
+            create this team, with users and associated permissions.
+          </EmptyStateBody>
+          <EmptyStateBody>
+            {hasError && (
+              <Banner variant="red" className="pf-v5-u-mb-xs">
+                {error}
+              </Banner>
+            )}
+          </EmptyStateBody>
+          {percent === 100 && teamCreated !== null && (
+            <EmptyStateActions>
+              <Button
+                onClick={() => {
+                  navigate(`/teams/${teamCreated.id}`);
+                  close();
+                }}
+              >
+                {`See ${values.name} team`}
+              </Button>
+            </EmptyStateActions>
           )}
-        </EmptyStateBody>
-        {percent === 100 && teamCreated !== null && (
-          <EmptyStateSecondaryActions>
-            <Button
-              onClick={() => {
-                navigate(`/teams/${teamCreated.id}`);
-                close();
-              }}
-            >
-              {`See ${values.name} team`}
-            </Button>
-          </EmptyStateSecondaryActions>
-        )}
+        </EmptyStateFooter>
       </EmptyState>
     </div>
   );

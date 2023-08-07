@@ -15,7 +15,7 @@ test("test settings form submit the correct values", async () => {
           fullname: "Test User",
         } as ICurrentUser
       }
-    />
+    />,
   );
   const settings_form = container.querySelector("#settings_form");
   expect(settings_form).not.toBe(null);
@@ -34,7 +34,7 @@ test("test settings form submit the correct values", async () => {
   expect(fullname.value).toBe("Test User");
 
   const current_password = getByTestId(
-    "settings_form__current_password"
+    "settings_form__current_password",
   ) as HTMLInputElement;
   expect(current_password.type).toBe("password");
   expect(current_password.value).toBe("");

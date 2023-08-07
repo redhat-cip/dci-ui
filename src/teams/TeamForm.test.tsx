@@ -6,7 +6,7 @@ test("test create team form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
   const { getByTestId, getByPlaceholderText } = render(
-    <TeamForm onSubmit={mockOnSubmit} />
+    <TeamForm onSubmit={mockOnSubmit} />,
   );
 
   const name = getByTestId("team_form__name");
@@ -46,7 +46,7 @@ test("test edit team form submit the correct values", async () => {
     external: false,
   } as unknown as ITeam;
   const { getByTestId, getByPlaceholderText } = render(
-    <TeamForm team={team} onSubmit={mockOnSubmit} />
+    <TeamForm team={team} onSubmit={mockOnSubmit} />,
   );
 
   const external = getByTestId("team_form__external");

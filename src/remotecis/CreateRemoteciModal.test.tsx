@@ -9,7 +9,7 @@ test("test create remoteci form submit the correct values", async () => {
     { id: "t2", name: "team 2" },
   ] as ITeam[];
   const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
-    <CreateRemoteciModal onSubmit={mockOnSubmit} teams={teams} />
+    <CreateRemoteciModal onSubmit={mockOnSubmit} teams={teams} />,
   );
 
   const showModal = getByRole("button", { name: /Create a new remoteci/i });
@@ -18,7 +18,7 @@ test("test create remoteci form submit the correct values", async () => {
 
   await waitFor(() => {
     expect(
-      baseElement.querySelector("#create_remoteci_modal")
+      baseElement.querySelector("#create_remoteci_modal"),
     ).toBeInTheDocument();
   });
 
@@ -37,7 +37,7 @@ test("test create remoteci form submit the correct values", async () => {
     target: { value: teams[1].name },
   });
   const option_2 = getByTestId(
-    "remoteci_form__team_id[1]"
+    "remoteci_form__team_id[1]",
   ) as HTMLButtonElement;
   fireEvent.click(option_2);
 

@@ -1,4 +1,9 @@
-import { ToolbarFilter, InputGroup, TextInput } from "@patternfly/react-core";
+import {
+  ToolbarFilter,
+  InputGroup,
+  TextInput,
+  InputGroupItem,
+} from "@patternfly/react-core";
 
 type TestNameFilterProps = {
   testName: string | null;
@@ -25,16 +30,18 @@ export default function TestNameFilter({
       showToolbarItem={showToolbarItem}
     >
       <InputGroup>
-        <TextInput
-          id="test-name"
-          name="test-name"
-          type="text"
-          aria-label={placeholder}
-          onChange={onChange}
-          value={testName === null ? "" : testName}
-          placeholder={placeholder}
-          isRequired
-        />
+        <InputGroupItem isFill>
+          <TextInput
+            id="test-name"
+            name="test-name"
+            type="text"
+            aria-label={placeholder}
+            onChange={(e, v) => onChange(v)}
+            value={testName === null ? "" : testName}
+            placeholder={placeholder}
+            isRequired
+          />
+        </InputGroupItem>
       </InputGroup>
     </ToolbarFilter>
   );

@@ -10,7 +10,7 @@ interface IFetchUsersForTeam {
 }
 
 export function fetchUsersForTeam(
-  team: ITeam
+  team: ITeam,
 ): AxiosPromise<IFetchUsersForTeam> {
   return http.get(`/api/v1/teams/${team.id}/users`);
 }

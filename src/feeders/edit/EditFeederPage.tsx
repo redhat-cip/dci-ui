@@ -59,7 +59,7 @@ export default function EditFeederPage() {
                 teams={teams}
                 onSubmit={(feeder) => {
                   dispatch(feedersActions.update(feeder)).then(() =>
-                    navigate("/feeders")
+                    navigate("/feeders"),
                   );
                 }}
               />

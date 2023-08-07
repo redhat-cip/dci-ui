@@ -18,6 +18,7 @@ import { getFileContent } from "./filesActions";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 import { humanFileSize } from "./filesGetters";
+import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
 
 interface FilesListProps {
   job: IEnhancedJob;
@@ -25,7 +26,7 @@ interface FilesListProps {
 
 export default function FilesList({ job }: FilesListProps) {
   const filesNotAssociatedWithJobState = sortByName(
-    job.files.filter((f) => f.jobstate_id === null)
+    job.files.filter((f) => f.jobstate_id === null),
   );
   const [textSearch, setTextSearch] = useState("");
   const [isDownloading, setIsDownloading] = useState(false);
@@ -90,18 +91,18 @@ export default function FilesList({ job }: FilesListProps) {
                   zip
                     .generateAsync({ type: "blob" })
                     .then((content) =>
-                      FileSaver.saveAs(content, `dci-job-${job.id}-files.zip`)
+                      FileSaver.saveAs(content, `dci-job-${job.id}-files.zip`),
                     )
                     .catch(console.error)
                     .finally(() => setIsDownloading(false));
                 }}
-                className="mr-xs"
+                className="pf-v5-u-mr-xs"
                 isDisabled={isDownloading}
               >
                 {textSearch === ""
                   ? `Download all files (${humanFileSize(filesFilteredSize)})`
                   : `Download these files (${humanFileSize(
-                      filesFilteredSize
+                      filesFilteredSize,
                     )})`}
               </Button>
             </ToolbarItem>
@@ -116,21 +117,21 @@ export default function FilesList({ job }: FilesListProps) {
             info="There are no files attached to this search. Change your search."
           />
         ) : (
-          <table className="pf-c-table pf-m-compact pf-m-grid-md">
-            <thead>
-              <tr>
-                <th>Filename</th>
-                <th>Size</th>
-                <th>Mime type</th>
-                <th className="text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+            <Thead>
+              <Tr>
+                <Th>Filename</Th>
+                <Th>Size</Th>
+                <Th>Mime type</Th>
+                <Th className="text-center">Actions</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
               {filesFiltered.map((file) => (
                 <File key={file.id} file={file} />
               ))}
-            </tbody>
-          </table>
+            </Tbody>
+          </Table>
         )}
       </div>
     </div>

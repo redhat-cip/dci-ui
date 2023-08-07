@@ -15,7 +15,7 @@ import {
 
 export function getBackground(
   status: string,
-  backgroundColor: string = global_Color_light_100.value
+  backgroundColor: string = global_Color_light_100.value,
 ) {
   switch (status) {
     case "success":

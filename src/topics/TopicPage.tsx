@@ -36,12 +36,12 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
     <Card>
       <CardTitle>Topic details</CardTitle>
       <CardBody>
-        <CardLine className="p-md" field="ID" value={topic.id} />
+        <CardLine className="pf-v5-u-p-md" field="ID" value={topic.id} />
         <Divider />
-        <CardLine className="p-md" field="Name" value={topic.name} />
+        <CardLine className="pf-v5-u-p-md" field="Name" value={topic.name} />
         <Divider />
         <CardLine
-          className="p-md"
+          className="pf-v5-u-p-md"
           field="Access restricted"
           help={
             topic.export_control
@@ -58,13 +58,13 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         />
         <Divider />
         <CardLine
-          className="p-md"
+          className="pf-v5-u-p-md"
           field="State"
           value={<StateLabel state={topic.state} />}
         />
         <Divider />
         <CardLine
-          className="p-md"
+          className="pf-v5-u-p-md"
           field="Created"
           value={
             <time dateTime={topic.created_at} title={topic.created_at}>
@@ -74,7 +74,7 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         />
         <Divider />
         <CardLine
-          className="p-md"
+          className="pf-v5-u-p-md"
           field="Data"
           value={
             seeData ? (
@@ -82,7 +82,7 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
                 onClick={() => setSeeData(false)}
                 type="button"
                 variant="tertiary"
-                isSmall
+                size="sm"
               >
                 hide content
               </Button>
@@ -91,7 +91,7 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
                 onClick={() => setSeeData(true)}
                 type="button"
                 variant="tertiary"
-                isSmall
+                size="sm"
               >
                 see content
               </Button>
@@ -112,14 +112,14 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         <Divider />
         {topic.product && (
           <CardLine
-            className="p-md"
+            className="pf-v5-u-p-md"
             field="Product"
             value={topic.product.name}
           />
         )}
         <Divider />
         <CardLine
-          className="p-md"
+          className="pf-v5-u-p-md"
           field="Component types"
           value={topic.component_types.join(" - ")}
         />
@@ -165,7 +165,7 @@ export default function TopicPage() {
             topic={topic}
             onSubmit={(editedProduct) => {
               dispatch(topicsActions.update(editedProduct)).then(
-                getTopicCallback
+                getTopicCallback,
               );
             }}
           />

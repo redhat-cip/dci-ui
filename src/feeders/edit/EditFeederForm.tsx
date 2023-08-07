@@ -30,7 +30,7 @@ export default function EditFeederForm({
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form id="edit_feeder_form" className="pf-c-form">
+        <Form id="edit_feeder_form" className="pf-v5-c-form">
           <Input
             id="edit_feeder_form__name"
             data-testid="edit_feeder_form__name"

@@ -36,8 +36,8 @@ import {
 } from "../jobUtils";
 import { ComponentsListInJobRow, TestLabels } from "jobs/components";
 
-const Job = styled.div`
-  background: ${(props: { status: string }) => getBackground(props.status)};
+const Job = styled.div<{ status: string }>`
+  background: ${({ status }) => getBackground(status)};
   min-height: 120px;
   width: 100%;
   padding: 0;
@@ -53,8 +53,8 @@ const Job = styled.div`
     "tests tests";
 
   &:focus-within {
-    background: ${(props) =>
-      getBackground(props.status, global_Color_light_200.value)};
+    background: ${({ status }) =>
+      getBackground(status, global_Color_light_200.value)};
   }
 
   @media (min-width: 992px) {
@@ -160,7 +160,7 @@ const JobTests = styled.div`
     flex-direction: row;
   }
 
-  .pf-c-label-group__label {
+  .pf-v5-c-label-group__label {
     max-width: 200px;
   }
 `;
@@ -210,15 +210,15 @@ export default function JobsListRow({
         <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
           {innerJob.name || innerJob.topic?.name}
         </TopicName>
-        <JobId className="mt-xs">
+        <JobId className="pf-v5-u-mt-xs">
           <CopyIconButton
             text={innerJob.id}
             textOnSuccess="copied"
-            className="mr-xs pointer"
+            className="pf-v5-u-mr-xs pointer"
           />
           {innerJob.id}
         </JobId>
-        <div className="mt-xs">
+        <div className="pf-v5-u-mt-xs">
           <span
             role="button"
             tabIndex={0}
@@ -226,11 +226,11 @@ export default function JobsListRow({
             onClick={() => onTeamClicked && onTeamClicked(innerJob.team)}
             onKeyDown={() => onTeamClicked && onTeamClicked(innerJob.team)}
           >
-            <UsersIcon className="mr-xs" />
+            <UsersIcon className="pf-v5-u-mr-xs" />
             {innerJob.team?.name}
           </span>
         </div>
-        <div className="mt-xs">
+        <div className="pf-v5-u-mt-xs">
           <span
             role="button"
             tabIndex={0}
@@ -242,11 +242,11 @@ export default function JobsListRow({
               onRemoteciClicked && onRemoteciClicked(innerJob.remoteci)
             }
           >
-            <ServerIcon className="mr-xs" />
+            <ServerIcon className="pf-v5-u-mr-xs" />
             {innerJob.remoteci?.name}
           </span>
         </div>
-        <div className="mt-xs">
+        <div className="pf-v5-u-mt-xs">
           <span
             role="button"
             tabIndex={0}
@@ -254,7 +254,7 @@ export default function JobsListRow({
             onClick={() => onTopicClicked && onTopicClicked(innerJob.topic)}
             onKeyDown={() => onTopicClicked && onTopicClicked(innerJob.topic)}
           >
-            <TopicIcon className="mr-xs" />
+            <TopicIcon className="pf-v5-u-mr-xs" />
             {innerJob.topic?.name}
           </span>
         </div>
@@ -287,40 +287,40 @@ export default function JobsListRow({
       <JobDate>
         <div>
           <span title={`Created at ${innerJob.created_at}`}>
-            <CalendarAltIcon className="mr-xs" />
+            <CalendarAltIcon className="pf-v5-u-mr-xs" />
             {formatDate(innerJob.created_at)}
           </span>
         </div>
-        <div className="mt-xs">
+        <div className="pf-v5-u-mt-xs">
           {innerJob.status === "new" ||
           innerJob.status === "pre-run" ||
           innerJob.status === "running" ? (
             <span title={`Job duration in seconds ${innerJob.duration}`}>
-              <ClockIcon className="mr-xs" />
+              <ClockIcon className="pf-v5-u-mr-xs" />
               Started {startedSince}
             </span>
           ) : (
             <span title={`Job duration in seconds ${innerJob.duration}`}>
-              <ClockIcon className="mr-xs" />
+              <ClockIcon className="pf-v5-u-mr-xs" />
               Ran for {jobDuration}
             </span>
           )}
         </div>
         {innerJob.url !== null && (
-          <div className="mt-xs">
-            <LinkIcon className="mr-xs" />
+          <div className="pf-v5-u-mt-xs">
+            <LinkIcon className="pf-v5-u-mr-xs" />
             <a href={innerJob.url}>{innerJob.url}</a>
           </div>
         )}
-        <div className="mt-xs">
+        <div className="pf-v5-u-mt-xs">
           <span style={{ color: getColor(innerJob.status) }}>
-            <InfoCircleIcon className="mr-xs" />
+            <InfoCircleIcon className="pf-v5-u-mr-xs" />
             {`${innerJob.status} ${
               innerJob.status_reason !== null ? innerJob.status_reason : ""
             }`}
           </span>
         </div>
-        <JobComment className="mt-xs">
+        <JobComment className="pf-v5-u-mt-xs">
           <TextAreaEditableOnHover
             text={innerJob.comment || ""}
             onSubmit={(comment) => {
@@ -328,7 +328,7 @@ export default function JobsListRow({
                 updateJobComment({
                   ...innerJob,
                   comment,
-                })
+                }),
               ).then(setInnerJob);
             }}
             style={{ minHeight: "25px" }}
@@ -351,7 +351,7 @@ export default function JobsListRow({
               categoryName={result.name}
               numLabels={5}
               key={i}
-              className="mr-xs"
+              className="pf-v5-u-mr-xs"
             >
               <TestLabels
                 success={result.success}

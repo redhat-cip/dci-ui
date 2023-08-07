@@ -47,6 +47,6 @@ export function getComponentCoverageDomain(coverage: ComponentsCoverage) {
     } as {
       nbOfJobs: { min: number; max: number };
       nbOfSuccessfulJobs: { min: number; max: number };
-    }
+    },
   );
 }

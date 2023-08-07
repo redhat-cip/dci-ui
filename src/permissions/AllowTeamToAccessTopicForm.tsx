@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Button } from "@patternfly/react-core";
 import {
-  Button,
   Select,
   SelectOption,
   SelectVariant,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { grantTeamTopicPermission } from "./permissionsActions";
 import { Flex, FlexItem } from "@patternfly/react-core";
 import { ITeam, ITopic } from "types";
@@ -29,13 +29,13 @@ export default function AllowTeamToAccessTopicForm({
   const [isTopicSelectOpen, setIsTopicSelectOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   return (
-    <div className="mt-xl">
+    <div className="pf-v5-u-mt-xl">
       <Flex>
         <FlexItem>Allow</FlexItem>
         <FlexItem>
           <Select
             variant={SelectVariant.typeahead}
-            onToggle={setIsTeamSelectOpen}
+            onToggle={(_event, val) => setIsTeamSelectOpen(val)}
             onSelect={(event, selection) => {
               setIsTeamSelectOpen(false);
               setTeam(selection as ITeam);
@@ -58,7 +58,7 @@ export default function AllowTeamToAccessTopicForm({
         <FlexItem>
           <Select
             variant={SelectVariant.typeahead}
-            onToggle={setIsTopicSelectOpen}
+            onToggle={(_event, val) => setIsTopicSelectOpen(val)}
             onSelect={(event, selection) => {
               setIsTopicSelectOpen(false);
               setTopic(selection as ITopic);
@@ -91,8 +91,8 @@ export default function AllowTeamToAccessTopicForm({
                   .catch(() => {
                     dispatch(
                       showError(
-                        `Can't grant permission to ${team.name} for topic ${topic.name}`
-                      )
+                        `Can't grant permission to ${team.name} for topic ${topic.name}`,
+                      ),
                     );
                   });
               }

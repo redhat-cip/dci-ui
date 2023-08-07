@@ -37,7 +37,7 @@ export default function CreateFeederPage() {
                 teams={teams}
                 onSubmit={(feeder) => {
                   dispatch(feedersActions.create(feeder)).then(() =>
-                    navigate("/feeders")
+                    navigate("/feeders"),
                   );
                 }}
               />

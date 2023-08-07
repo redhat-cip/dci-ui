@@ -16,7 +16,7 @@ type Selectable<T> = T & { id: string; selected: boolean };
 
 export default function NewComponentSubscriptionPanel() {
   const [availableTopics, setAvailableTopics] = useState<Selectable<ITopic>[]>(
-    []
+    [],
   );
   const [subscribedTopics, setSubscribedTopics] = useState<
     Selectable<ITopic>[]
@@ -25,7 +25,7 @@ export default function NewComponentSubscriptionPanel() {
 
   useEffect(() => {
     const getTopicsPromise = dispatch(
-      topicsActions.all({ where: "state:active" })
+      topicsActions.all({ where: "state:active" }),
     ) as AxiosPromise<{
       topics: ITopic[];
     }>;
@@ -37,12 +37,12 @@ export default function NewComponentSubscriptionPanel() {
           values[0].data.topics
             .filter((r) => !subscribedTopicsIds.includes(r.id))
             .map((r) => ({ ...r, selected: false }))
-            .sort(sortTopicWithSemver)
+            .sort(sortTopicWithSemver),
         );
         setSubscribedTopics(
-          values[1].data.topics.map((r) => ({ ...r, selected: false }))
+          values[1].data.topics.map((r) => ({ ...r, selected: false })),
         );
-      }
+      },
     );
   }, [dispatch]);
 
@@ -70,27 +70,27 @@ export default function NewComponentSubscriptionPanel() {
   }, 0);
 
   return (
-    <div className="pf-c-dual-list-selector">
-      <div className="pf-c-dual-list-selector__pane pf-m-available">
-        <div className="pf-c-dual-list-selector__header">
-          <div className="pf-c-dual-list-selector__title">
-            <div className="pf-c-dual-list-selector__title-text">
+    <div className="pf-v5-c-dual-list-selector">
+      <div className="pf-v5-c-dual-list-selector__pane pf-m-available">
+        <div className="pf-v5-c-dual-list-selector__header">
+          <div className="pf-v5-c-dual-list-selector__title">
+            <div className="pf-v5-c-dual-list-selector__title-text">
               Available topics
             </div>
           </div>
         </div>
-        <div className="pf-c-dual-list-selector__status">
+        <div className="pf-v5-c-dual-list-selector__status">
           <span
-            className="pf-c-dual-list-selector__status-text"
+            className="pf-v5-c-dual-list-selector__status-text"
             id="available-topics-list"
           >
             {nbOfSelectedAvailableTopics} of {availableTopics.length} topics
             selected
           </span>
         </div>
-        <div className="pf-c-dual-list-selector__menu">
+        <div className="pf-v5-c-dual-list-selector__menu">
           <ul
-            className="pf-c-dual-list-selector__list"
+            className="pf-v5-c-dual-list-selector__list"
             role="listbox"
             aria-labelledby="available-topics-list"
             aria-multiselectable="true"
@@ -98,33 +98,33 @@ export default function NewComponentSubscriptionPanel() {
             {availableTopics.map((availableTopic) => (
               <li
                 key={availableTopic.id}
-                className="pf-c-dual-list-selector__list-item"
+                className="pf-v5-c-dual-list-selector__list-item"
                 role="option"
                 aria-selected={availableTopic.selected}
                 onClick={() =>
                   setAvailableTopics(
-                    toggleSelection(availableTopics, availableTopic)
+                    toggleSelection(availableTopics, availableTopic),
                   )
                 }
                 onKeyDown={() =>
                   setAvailableTopics(
-                    toggleSelection(availableTopics, availableTopic)
+                    toggleSelection(availableTopics, availableTopic),
                   )
                 }
               >
                 <div
-                  className={`pf-c-dual-list-selector__list-item-row ${
+                  className={`pf-v5-c-dual-list-selector__list-item-row ${
                     availableTopic.selected ? "pf-m-selected" : ""
                   }`}
                 >
-                  <span className="pf-c-dual-list-selector__item">
-                    <span className="pf-c-dual-list-selector__item-main">
-                      <span className="pf-c-dual-list-selector__item-text">
+                  <span className="pf-v5-c-dual-list-selector__item">
+                    <span className="pf-v5-c-dual-list-selector__item-main">
+                      <span className="pf-v5-c-dual-list-selector__item-text">
                         {availableTopic.name}
                       </span>
                     </span>
-                    <span className="pf-c-dual-list-selector__item-count">
-                      <span className="pf-c-badge pf-m-read"></span>
+                    <span className="pf-v5-c-dual-list-selector__item-count">
+                      <span className="pf-v5-c-badge pf-m-read"></span>
                     </span>
                   </span>
                 </div>
@@ -133,34 +133,34 @@ export default function NewComponentSubscriptionPanel() {
           </ul>
         </div>
       </div>
-      <div className="pf-c-dual-list-selector__controls">
-        <div className="pf-c-dual-list-selector__controls-item">
+      <div className="pf-v5-c-dual-list-selector__controls">
+        <div className="pf-v5-c-dual-list-selector__controls-item">
           <button
-            className="pf-c-button pf-m-plain"
+            className="pf-v5-c-button pf-m-plain"
             type="button"
             disabled={nbOfSelectedAvailableTopics === 0}
             aria-label="Add selected"
             onClick={() => {
               const newSubscribedTopics = availableTopics.filter(
-                (r) => r.selected
+                (r) => r.selected,
               );
               const subscriptions = newSubscribedTopics.map((availableTopic) =>
-                subscribeToATopic(availableTopic.id)
+                subscribeToATopic(availableTopic.id),
               );
               Promise.all(subscriptions)
                 .then(() => {
                   setAvailableTopics(
-                    availableTopics.filter((r) => !r.selected)
+                    availableTopics.filter((r) => !r.selected),
                   );
                   setSubscribedTopics(
                     subscribedTopics
                       .concat(newSubscribedTopics)
-                      .map((r) => ({ ...r, selected: false }))
+                      .map((r) => ({ ...r, selected: false })),
                   );
                 })
                 .catch((error) => {
                   dispatch(
-                    showError("Something went wrong during the subscription")
+                    showError("Something went wrong during the subscription"),
                   );
                   dispatch(showAPIError(error));
                 });
@@ -169,18 +169,18 @@ export default function NewComponentSubscriptionPanel() {
             <i className="fas fa-fw fa-angle-right"></i>
           </button>
         </div>
-        <div className="pf-c-dual-list-selector__controls-item">
+        <div className="pf-v5-c-dual-list-selector__controls-item">
           <button
-            className="pf-c-button pf-m-plain"
+            className="pf-v5-c-button pf-m-plain"
             type="button"
             disabled={nbOfSelectedSubscribedTopics === 0}
             aria-label="Remove selected"
             onClick={() => {
               const newUnsubscribedTopic = subscribedTopics.filter(
-                (r) => r.selected
+                (r) => r.selected,
               );
               const unsubscriptions = newUnsubscribedTopic.map(
-                (availableTopic) => unsubscribeFromATopic(availableTopic.id)
+                (availableTopic) => unsubscribeFromATopic(availableTopic.id),
               );
               Promise.all(unsubscriptions)
                 .then(() => {
@@ -188,15 +188,15 @@ export default function NewComponentSubscriptionPanel() {
                     availableTopics
                       .concat(newUnsubscribedTopic)
                       .map((r) => ({ ...r, selected: false }))
-                      .sort(sortTopicWithSemver)
+                      .sort(sortTopicWithSemver),
                   );
                   setSubscribedTopics(
-                    subscribedTopics.filter((r) => !r.selected)
+                    subscribedTopics.filter((r) => !r.selected),
                   );
                 })
                 .catch((error) => {
                   dispatch(
-                    showError("Something went wrong while unsubscribing")
+                    showError("Something went wrong while unsubscribing"),
                   );
                   dispatch(showAPIError(error));
                 });
@@ -206,26 +206,26 @@ export default function NewComponentSubscriptionPanel() {
           </button>
         </div>
       </div>
-      <div className="pf-c-dual-list-selector__pane pf-m-chosen">
-        <div className="pf-c-dual-list-selector__header">
-          <div className="pf-c-dual-list-selector__title">
-            <div className="pf-c-dual-list-selector__title-text">
+      <div className="pf-v5-c-dual-list-selector__pane pf-m-chosen">
+        <div className="pf-v5-c-dual-list-selector__header">
+          <div className="pf-v5-c-dual-list-selector__title">
+            <div className="pf-v5-c-dual-list-selector__title-text">
               Subscribed topics
             </div>
           </div>
         </div>
-        <div className="pf-c-dual-list-selector__status">
+        <div className="pf-v5-c-dual-list-selector__status">
           <span
-            className="pf-c-dual-list-selector__status-text"
+            className="pf-v5-c-dual-list-selector__status-text"
             id="subcribed-topics-list"
           >
             {nbOfSelectedSubscribedTopics} of {subscribedTopics.length} topics
             selected
           </span>
         </div>
-        <div className="pf-c-dual-list-selector__menu">
+        <div className="pf-v5-c-dual-list-selector__menu">
           <ul
-            className="pf-c-dual-list-selector__list"
+            className="pf-v5-c-dual-list-selector__list"
             role="listbox"
             aria-labelledby="subcribed-topics-list"
             aria-multiselectable="true"
@@ -233,33 +233,33 @@ export default function NewComponentSubscriptionPanel() {
             {subscribedTopics.map((subscribedTopic) => (
               <li
                 key={subscribedTopic.id}
-                className="pf-c-dual-list-selector__list-item"
+                className="pf-v5-c-dual-list-selector__list-item"
                 role="option"
                 aria-selected={subscribedTopic.selected}
                 onClick={() =>
                   setSubscribedTopics(
-                    toggleSelection(subscribedTopics, subscribedTopic)
+                    toggleSelection(subscribedTopics, subscribedTopic),
                   )
                 }
                 onKeyDown={() =>
                   setSubscribedTopics(
-                    toggleSelection(subscribedTopics, subscribedTopic)
+                    toggleSelection(subscribedTopics, subscribedTopic),
                   )
                 }
               >
                 <div
-                  className={`pf-c-dual-list-selector__list-item-row ${
+                  className={`pf-v5-c-dual-list-selector__list-item-row ${
                     subscribedTopic.selected ? "pf-m-selected" : ""
                   }`}
                 >
-                  <span className="pf-c-dual-list-selector__item">
-                    <span className="pf-c-dual-list-selector__item-main">
-                      <span className="pf-c-dual-list-selector__item-text">
+                  <span className="pf-v5-c-dual-list-selector__item">
+                    <span className="pf-v5-c-dual-list-selector__item-main">
+                      <span className="pf-v5-c-dual-list-selector__item-text">
                         {subscribedTopic.name}
                       </span>
                     </span>
-                    <span className="pf-c-dual-list-selector__item-count">
-                      <span className="pf-c-badge pf-m-read"></span>
+                    <span className="pf-v5-c-dual-list-selector__item-count">
+                      <span className="pf-v5-c-badge pf-m-read"></span>
                     </span>
                   </span>
                 </div>

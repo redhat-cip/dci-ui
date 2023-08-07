@@ -27,7 +27,7 @@ export default function CardLine({
           {field}
           {help && (
             <Tooltip position="right" content={<div>{help}</div>}>
-              <span className="ml-xs">
+              <span className="pf-v5-u-ml-xs">
                 <InfoCircleIcon />
               </span>
             </Tooltip>

@@ -66,7 +66,7 @@ test("transform data", () => {
         relation: "eq",
         value: 77,
       },
-    })
+    }),
   ).toEqual([
     {
       id: "j1",
@@ -122,7 +122,7 @@ test("get domain null", () => {
     getDomain(null, {
       left: null,
       right: null,
-    })
+    }),
   ).toEqual({
     minXDomain: 0,
     maxXDomain: 0,
@@ -190,8 +190,8 @@ test("get domain", () => {
       {
         left: null,
         right: null,
-      }
-    )
+      },
+    ),
   ).toEqual({
     minXDomain: 1,
     maxXDomain: 4,
@@ -259,8 +259,8 @@ test("get domain with an area", () => {
       {
         left: 2,
         right: 3,
-      }
-    )
+      },
+    ),
   ).toEqual({
     minXDomain: 2,
     maxXDomain: 3,
@@ -312,8 +312,8 @@ test("get domain with an area and empty data", () => {
       {
         left: 2,
         right: 3,
-      }
-    )
+      },
+    ),
   ).toEqual({
     minXDomain: 2,
     maxXDomain: 3,
@@ -376,8 +376,8 @@ test("get domain with an area and right data inside this area", () => {
       {
         left: 1,
         right: 4,
-      }
-    )
+      },
+    ),
   ).toEqual({
     minXDomain: 1,
     maxXDomain: 2,

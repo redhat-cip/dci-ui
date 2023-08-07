@@ -28,7 +28,7 @@ export default function Alerts() {
           key={alert.id}
           variant={alert.type}
           title={alert.title}
-          className="mt-sm"
+          className="pf-v5-u-mt-sm"
           actionClose={
             <AlertActionCloseButton
               onClose={() => dispatch(hideAlert(alert))}

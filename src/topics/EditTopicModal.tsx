@@ -79,7 +79,7 @@ export default function EditTopicModal({
         />
       </Modal>
       <Button variant="primary" onClick={show} {...props}>
-        <EditAltIcon aria-hidden="true" className="mr-xs" />
+        <EditAltIcon aria-hidden="true" className="pf-v5-u-mr-xs" />
         Edit {topic.name}
       </Button>
     </>

@@ -10,6 +10,7 @@ import {
   ChipGroup,
   Chip,
   TextInputGroupUtilities,
+  InputGroupItem,
 } from "@patternfly/react-core";
 import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import { sortedUniq } from "lodash";
@@ -111,23 +112,27 @@ export default function TagsFilter({
         }}
       >
         <InputGroup>
-          <TextInput
-            name="tag"
-            id="input-tag"
-            type="search"
-            aria-label="tag filter"
-            onChange={(tag) => setTag(tag)}
-            value={tag}
-            placeholder="Filter by tag"
-            isRequired
-          />
-          <Button
-            variant={ButtonVariant.control}
-            aria-label="search tag button"
-            type="submit"
-          >
-            <SearchIcon />
-          </Button>
+          <InputGroupItem isFill>
+            <TextInput
+              name="tag"
+              id="input-tag"
+              type="search"
+              aria-label="tag filter"
+              onChange={(_event, tag) => setTag(tag)}
+              value={tag}
+              placeholder="Filter by tag"
+              isRequired
+            />
+          </InputGroupItem>
+          <InputGroupItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label="search tag button"
+              type="submit"
+            >
+              <SearchIcon />
+            </Button>
+          </InputGroupItem>
         </InputGroup>
       </form>
     </ToolbarFilter>

@@ -24,6 +24,6 @@ export const getFeeders = createSelector(
           team: teams[feeder.team_id],
           from_now: fromNow(feeder.created_at),
         };
-      })
-    )
+      }),
+    ),
 );

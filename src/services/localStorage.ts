@@ -27,7 +27,7 @@ export function removeToken() {
 export function readValue<T>(
   key: string,
   initialValue: T,
-  version: number = 1
+  version: number = 1,
 ) {
   try {
     const item = window.localStorage.getItem(key);

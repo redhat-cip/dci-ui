@@ -34,6 +34,7 @@ import { sortByName } from "services/sort";
 import { showError, showSuccess } from "alerts/alertsActions";
 import MainPage from "pages/MainPage";
 import LoadingPage from "pages/LoadingPage";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -62,7 +63,7 @@ export default function TeamPage() {
         setTeam(response.data.team);
       });
     },
-    [dispatch, setTeam]
+    [dispatch, setTeam],
   );
 
   const _fetchTeamUsers = useCallback((id: string) => {
@@ -111,7 +112,7 @@ export default function TeamPage() {
           >
             {(openModal) => (
               <Button type="button" onClick={openModal}>
-                <EditAltIcon className="mr-xs" />
+                <EditAltIcon className="pf-v5-u-mr-xs" />
                 {`edit ${team.name} team`}
               </Button>
             )}
@@ -124,25 +125,33 @@ export default function TeamPage() {
           <Card>
             <CardTitle>Team information</CardTitle>
             <CardBody>
-              <CardLine className="p-md" field="ID" value={team.id} />
-              <Divider />
-              <CardLine className="p-md" field="Name" value={team.name} />
+              <CardLine className="pf-v5-u-p-md" field="ID" value={team.id} />
               <Divider />
               <CardLine
-                className="p-md"
+                className="pf-v5-u-p-md"
+                field="Name"
+                value={team.name}
+              />
+              <Divider />
+              <CardLine
+                className="pf-v5-u-p-md"
                 field="Members"
                 value={isLoading ? "" : teamUsers.length}
               />
               <Divider />
-              <CardLine className="p-md" field="State" value={team.state} />
               <CardLine
-                className="p-md"
+                className="pf-v5-u-p-md"
+                field="State"
+                value={team.state}
+              />
+              <CardLine
+                className="pf-v5-u-p-md"
                 field="Partner"
                 value={team.external ? <Label color="blue">yes</Label> : null}
               />
             </CardBody>
           </Card>
-          <Card className="mt-lg">
+          <Card className="pf-v5-u-mt-lg">
             <CardTitle>Danger Zone</CardTitle>
             <CardBody>
               <DangerZone>
@@ -162,13 +171,13 @@ export default function TeamPage() {
                       message={`Are you sure you want to delete ${team.name} team?`}
                       onOk={() =>
                         dispatch(teamsActions.delete(team)).then(() =>
-                          navigate("/teams")
+                          navigate("/teams"),
                         )
                       }
                     >
                       {(openModal) => (
-                        <Button variant="danger" isSmall onClick={openModal}>
-                          <TrashAltIcon className="mr-sm" />
+                        <Button variant="danger" size="sm" onClick={openModal}>
+                          <TrashAltIcon className="pf-v5-u-mr-sm" />
                           Delete this team
                         </Button>
                       )}
@@ -200,16 +209,16 @@ export default function TeamPage() {
                           _fetchTeamUsers(team.id);
                           dispatch(
                             showSuccess(
-                              `${fullname} added successfully to ${team.name} team.`
-                            )
+                              `${fullname} added successfully to ${team.name} team.`,
+                            ),
                           );
                           return response;
                         })
                         .catch((error) => {
                           dispatch(
                             showError(
-                              `We can't add ${fullname} user to ${team.name} team`
-                            )
+                              `We can't add ${fullname} user to ${team.name} team`,
+                            ),
                           );
                           return error;
                         });
@@ -221,7 +230,7 @@ export default function TeamPage() {
                         variant="secondary"
                         onClick={openModal}
                       >
-                        <PlusCircleIcon className="mr-xs" />
+                        <PlusCircleIcon className="pf-v5-u-mr-xs" />
                         Add a user
                       </Button>
                     )}
@@ -230,28 +239,28 @@ export default function TeamPage() {
               </div>
             </CardTitle>
             <CardBody>
-              <table className="pf-c-table pf-m-compact pf-m-grid-md">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Login</th>
-                    <th>Full name</th>
-                    <th>Email</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
+              <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+                <Thead>
+                  <Tr>
+                    <Th>ID</Th>
+                    <Th>Login</Th>
+                    <Th>Full name</Th>
+                    <Th>Email</Th>
+                    <Th />
+                  </Tr>
+                </Thead>
+                <Tbody>
                   {sortByName(teamUsers).map((user) => (
-                    <tr key={user.id}>
-                      <td>
+                    <Tr key={user.id}>
+                      <Td>
                         <CopyButton text={user.id} />
-                      </td>
-                      <td>
+                      </Td>
+                      <Td>
                         <Link to={`/users/${user.id}`}>{user.name}</Link>
-                      </td>
-                      <td>{user.fullname}</td>
-                      <td>{user.email}</td>
-                      <td className="pf-c-table__action">
+                      </Td>
+                      <Td>{user.fullname}</Td>
+                      <Td>{user.email}</Td>
+                      <Td className="pf-v5-c-table__action">
                         <ConfirmDeleteModal
                           title={`Delete ${user.name} from ${team.name}`}
                           message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
@@ -264,18 +273,18 @@ export default function TeamPage() {
                           {(openModal) => (
                             <Button
                               variant="danger"
-                              isSmall
+                              size="sm"
                               onClick={openModal}
                             >
                               <MinusCircleIcon />
                             </Button>
                           )}
                         </ConfirmDeleteModal>
-                      </td>
-                    </tr>
+                      </Td>
+                    </Tr>
                   ))}
-                </tbody>
-              </table>
+                </Tbody>
+              </Table>
             </CardBody>
           </Card>
         </GridItem>

@@ -5,7 +5,7 @@ test("test create product form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
   const { baseElement, getByRole, getByTestId } = render(
-    <CreateProductModal onSubmit={mockOnSubmit} />
+    <CreateProductModal onSubmit={mockOnSubmit} />,
   );
 
   const showModal = getByRole("button", { name: /Create a new product/i });
@@ -14,7 +14,7 @@ test("test create product form submit the correct values", async () => {
 
   await waitFor(() => {
     expect(
-      baseElement.querySelector("#create_product_modal")
+      baseElement.querySelector("#create_product_modal"),
     ).toBeInTheDocument();
   });
 

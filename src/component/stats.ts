@@ -4,7 +4,7 @@ interface IItemWithStatusAndTags {
 }
 
 export function getPercentageOfSuccessfulJobs(
-  jobs: IItemWithStatusAndTags[]
+  jobs: IItemWithStatusAndTags[],
 ): number {
   if (jobs.length === 0) return 0;
 

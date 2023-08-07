@@ -15,11 +15,14 @@ const SSORealm = process.env.REACT_APP_SSO_REALM || "redhat-external";
 const SSOClientId = process.env.REACT_APP_SSO_CLIENT_ID || "dci";
 
 function signinSilent(manager: UserManager) {
-  manager.signinSilent().then((user) => {
-    if (user) {
-      setJWT(user.access_token);
-    }
-  }).catch(console.error);
+  manager
+    .signinSilent()
+    .then((user) => {
+      if (user) {
+        setJWT(user.access_token);
+      }
+    })
+    .catch(console.error);
 }
 
 export function getSSOUserManager() {

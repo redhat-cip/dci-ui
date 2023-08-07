@@ -21,8 +21,8 @@ export const getProducts = createSelector(
           ...product,
           from_now: fromNow(product.created_at),
         };
-      })
-    )
+      }),
+    ),
 );
 export const getProductById = (id: string | null) =>
   createSelector(getProductsById, (products) => {

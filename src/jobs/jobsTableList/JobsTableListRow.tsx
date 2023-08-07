@@ -20,6 +20,7 @@ import {
 import { CopyIconButton } from "ui";
 import { getPrincipalComponent } from "component/componentSelector";
 import { DateTime } from "luxon";
+import { Tr, Td } from "@patternfly/react-table";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
@@ -59,7 +60,7 @@ export default function JobTableSummary({
         <CopyIconButton
           text={job.id}
           textOnSuccess="copied"
-          className="mr-xs pointer"
+          className="pf-v5-u-mr-xs pointer"
         />
         {job.id}
       </span>
@@ -130,7 +131,7 @@ export default function JobTableSummary({
         <Link
           to={`/topics/${principalComponent.topic_id}/components/${principalComponent.id}`}
         >
-          <TopicIcon className="mr-xs" />
+          <TopicIcon className="pf-v5-u-mr-xs" />
           {principalComponent.display_name}
         </Link>
       ),
@@ -205,7 +206,7 @@ export default function JobTableSummary({
   );
 
   return (
-    <tr
+    <Tr
       key={`${job.id}.${job.etag}`}
       style={{
         background: getBackground(job.status),
@@ -216,7 +217,7 @@ export default function JobTableSummary({
           : "1px solid #d2d2d2",
       }}
     >
-      <td
+      <Td
         style={{
           padding: 0,
           width: "135px",
@@ -249,17 +250,17 @@ export default function JobTableSummary({
             onClick={() => onStatusClicked(job.status)}
           />
         </div>
-      </td>
+      </Td>
       {columns.map((column, i) => (
-        <td
+        <Td
           key={i}
           style={{
             verticalAlign: "middle",
           }}
         >
           {columnTds[column]}
-        </td>
+        </Td>
       ))}
-    </tr>
+    </Tr>
   );
 }

@@ -7,7 +7,7 @@ function getContent(
   id: string,
   role: string,
   api_secret: string,
-  type: "sh" | "yaml"
+  type: "sh" | "yaml",
 ) {
   return type === "sh"
     ? `DCI_CLIENT_ID='${role}/${id}'
@@ -81,7 +81,7 @@ export function SeeAuthentificationFileModal({
                 resource.id,
                 role,
                 resource.api_secret,
-                type
+                type,
               );
               copyToClipboard(event, content);
               setCopied(true);
@@ -91,12 +91,12 @@ export function SeeAuthentificationFileModal({
           </Button>,
         ]}
       >
-        <div className="mb-md">
+        <div className="pf-v5-u-mb-md">
           <pre>{getContent(resource.id, role, api_secret, type)}</pre>
         </div>
       </Modal>
       <Button
-        isSmall
+        size="sm"
         variant="secondary"
         onClick={() => setShow(true)}
         className={className}

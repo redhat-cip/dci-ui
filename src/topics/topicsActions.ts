@@ -15,7 +15,7 @@ export function sortTopicWithSemver(t1: ITopic, t2: ITopic): number {
 
 export function sortTopicPerProduct(
   t1: IEnhancedTopic,
-  t2: IEnhancedTopic
+  t2: IEnhancedTopic,
 ): number {
   const lowercaseProductsOrder = ["openshift", "rhel", "openstack"];
   const product1LowerName = (t1.product?.name || "").toLocaleLowerCase();
@@ -32,24 +32,27 @@ interface IProductWithTopics extends IProduct {
 }
 
 export function groupTopicsPerProduct(
-  topics: IEnhancedTopic[]
+  topics: IEnhancedTopic[],
 ): IProductWithTopics[] {
-  const topicsPerProduct = topics.reduce((acc, topic) => {
-    const product = topic.product;
-    if (!product) {
+  const topicsPerProduct = topics.reduce(
+    (acc, topic) => {
+      const product = topic.product;
+      if (!product) {
+        return acc;
+      }
+      const productName = product.name.toLowerCase();
+      const currentProduct =
+        acc[productName] ||
+        ({
+          ...product,
+          topics: [],
+        } as IProductWithTopics);
+      currentProduct.topics.push(topic);
+      acc[productName] = currentProduct;
       return acc;
-    }
-    const productName = product.name.toLowerCase();
-    const currentProduct =
-      acc[productName] ||
-      ({
-        ...product,
-        topics: [],
-      } as IProductWithTopics);
-    currentProduct.topics.push(topic);
-    acc[productName] = currentProduct;
-    return acc;
-  }, {} as { [productName: string]: IProductWithTopics });
+    },
+    {} as { [productName: string]: IProductWithTopics },
+  );
   return Object.values(topicsPerProduct);
 }
 
@@ -62,7 +65,7 @@ interface IFetchComponents {
 
 export function fetchComponents(
   topic_id: string,
-  search: string
+  search: string,
 ): Promise<IFetchComponents> {
   return http({
     method: "get",

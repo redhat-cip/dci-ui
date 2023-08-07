@@ -8,13 +8,13 @@ test("test change password form submit the correct values", async () => {
     <ChangePasswordForm
       onSubmit={mockOnSubmit}
       currentUser={{ id: "cu1", etag: "e1" } as ICurrentUser}
-    />
+    />,
   );
   const change_password_form = container.querySelector("#change_password_form");
   expect(change_password_form).not.toBe(null);
 
   const current_password = getByTestId(
-    "change_password_form__current_password"
+    "change_password_form__current_password",
   ) as HTMLInputElement;
   expect(current_password.type).toBe("password");
   fireEvent.change(current_password, {
@@ -24,7 +24,7 @@ test("test change password form submit the correct values", async () => {
   });
 
   const new_password = getByTestId(
-    "change_password_form__new_password"
+    "change_password_form__new_password",
   ) as HTMLInputElement;
   expect(new_password.type).toBe("password");
   fireEvent.change(new_password, {

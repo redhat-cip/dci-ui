@@ -5,7 +5,6 @@ import {
   GalleryItem,
   CardBody,
   CardHeader,
-  CardHeaderMain,
   CardTitle,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
@@ -38,14 +37,17 @@ export default function AnalyticsPage() {
             }}
           >
             <CardHeader>
-              <CardHeaderMain>
-                <img
-                  src={PipelinesHeaderImages}
-                  alt="Pipelines"
-                  height={100}
-                  width="auto"
-                />
-              </CardHeaderMain>
+              actions=
+              {
+                <>
+                  <img
+                    src={PipelinesHeaderImages}
+                    alt="Pipelines"
+                    height={100}
+                    width="auto"
+                  />
+                </>
+              }
             </CardHeader>
             <CardTitle>Pipelines</CardTitle>
             <CardBody>View pipelines from the past few days</CardBody>
@@ -57,14 +59,17 @@ export default function AnalyticsPage() {
             onClick={() => navigate("/analytics/component_coverage")}
           >
             <CardHeader>
-              <CardHeaderMain>
-                <img
-                  src={ComponentCoverageImage}
-                  alt="Component coverage"
-                  height={100}
-                  width="auto"
-                />
-              </CardHeaderMain>
+              actions=
+              {
+                <>
+                  <img
+                    src={ComponentCoverageImage}
+                    alt="Component coverage"
+                    height={100}
+                    width="auto"
+                  />
+                </>
+              }
             </CardHeader>
             <CardTitle>Component coverage</CardTitle>
             <CardBody>
@@ -79,14 +84,17 @@ export default function AnalyticsPage() {
             onClick={() => navigate("/analytics/junit_comparison")}
           >
             <CardHeader>
-              <CardHeaderMain>
-                <img
-                  src={JunitComparisonHeaderImage}
-                  alt="Junit comparison header"
-                  height={100}
-                  width="auto"
-                />
-              </CardHeaderMain>
+              actions=
+              {
+                <>
+                  <img
+                    src={JunitComparisonHeaderImage}
+                    alt="Junit comparison header"
+                    height={100}
+                    width="auto"
+                  />
+                </>
+              }
             </CardHeader>
             <CardTitle>Junit comparison</CardTitle>
             <CardBody>
@@ -101,14 +109,17 @@ export default function AnalyticsPage() {
             onClick={() => navigate("/analytics/tasks_duration_per_job")}
           >
             <CardHeader>
-              <CardHeaderMain>
-                <img
-                  src={TasksPerJobHeaderImage}
-                  alt="Task per job header"
-                  height={100}
-                  width="auto"
-                />
-              </CardHeaderMain>
+              actions=
+              {
+                <>
+                  <img
+                    src={TasksPerJobHeaderImage}
+                    alt="Task per job header"
+                    height={100}
+                    width="auto"
+                  />
+                </>
+              }
             </CardHeader>
             <CardTitle>Tasks duration per job</CardTitle>
             <CardBody>
@@ -124,14 +135,17 @@ export default function AnalyticsPage() {
             onClick={() => navigate("/analytics/latest_jobs_status")}
           >
             <CardHeader>
-              <CardHeaderMain>
-                <img
-                  src={LatestJobsStatusHeaderImage}
-                  alt="Task per job header"
-                  height={100}
-                  width="auto"
-                />
-              </CardHeaderMain>
+              actions=
+              {
+                <>
+                  <img
+                    src={LatestJobsStatusHeaderImage}
+                    alt="Task per job header"
+                    height={100}
+                    width="auto"
+                  />
+                </>
+              }
             </CardHeader>
             <CardTitle>Latest Job status</CardTitle>
             <CardBody>

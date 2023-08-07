@@ -47,11 +47,13 @@ export function createReducer(resource: string) {
           ...initialState,
         };
       case actionType.DELETE_SUCCESS:
-        const newState = { ...state, isFetching: false };
-        delete newState.byId[action.id];
+        const byId = { ...state.byId };
+        delete byId[action.id];
         return {
-          ...newState,
-          allIds: keys(newState.byId),
+          ...state,
+          isFetching: false,
+          byId,
+          allIds: keys(byId),
         };
       case actionType.SET_COUNT:
         return {

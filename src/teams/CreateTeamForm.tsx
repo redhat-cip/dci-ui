@@ -21,7 +21,7 @@ export default function CreateTeamForm() {
         id="create_team_form__external"
         label="Partner"
         name="external"
-        className="pf-u-mt-md"
+        className="pf-v5-u-mt-md"
       />
     </>
   );

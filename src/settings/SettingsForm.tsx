@@ -31,7 +31,7 @@ export default function SettingsForm({
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form id="settings_form" className="pf-c-form">
+        <Form id="settings_form" className="pf-v5-c-form">
           <Input
             id="settings_form__email"
             data-testid="settings_form__email"

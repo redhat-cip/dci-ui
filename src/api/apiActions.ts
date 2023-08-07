@@ -16,7 +16,7 @@ export function createActions(resource: IResourceName) {
         limit?: number;
         offset?: number;
         where?: string;
-      } = { limit: 100, offset: 0 }
+      } = { limit: 100, offset: 0 },
     ): AppThunk<AxiosPromise<any>> => {
       let endpoint = `${resource}s` as IResourcesName;
       return (dispatch, getState) => {
@@ -121,7 +121,7 @@ export function createActions(resource: IResourceName) {
     },
     create: (
       data: { name: string },
-      params = {}
+      params = {},
     ): AppThunk<AxiosPromise<any>> => {
       return (dispatch, getState) => {
         dispatch({
@@ -141,8 +141,8 @@ export function createActions(resource: IResourceName) {
             dispatch(
               showSuccess(
                 "Success",
-                `${resource} ${data.name} created successfully!`
-              )
+                `${resource} ${data.name} created successfully!`,
+              ),
             );
             return response;
           })
@@ -171,7 +171,7 @@ export function createActions(resource: IResourceName) {
               ...normalize(response.data[resource], getSchema(resource)),
             });
             dispatch(
-              showSuccess(`${resource} ${data.name} updated successfully!`)
+              showSuccess(`${resource} ${data.name} updated successfully!`),
             );
             return response;
           })

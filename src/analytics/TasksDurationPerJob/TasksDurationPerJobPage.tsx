@@ -33,6 +33,7 @@ import { Link } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
 import { AppDispatch } from "store";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -52,7 +53,7 @@ const CustomTooltip = ({ active, payload }: any) => {
                 p.payload.name
               }`}</p>
               <p style={{ color: p.stroke }}>{`${humanizeDuration(
-                p.value * 1000
+                p.value * 1000,
               )} (${p.value}s)`}</p>
             </div>
           ))}
@@ -180,7 +181,7 @@ export default function TasksDurationPerJobPage() {
     if (topicId && remoteciId) {
       http
         .get(
-          `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteciId}&topic_id=${topicId}`
+          `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteciId}&topic_id=${topicId}`,
         )
         .then((response) => {
           setData(transform(response.data as IDataFromES));
@@ -283,7 +284,7 @@ export default function TasksDurationPerJobPage() {
           </Toolbar>
         </CardBody>
       </Card>
-      <Card className="mt-lg">
+      <Card className="pf-v5-u-mt-lg">
         <CardBody>
           {filteredData.length === 0 ? null : (
             <>
@@ -292,57 +293,57 @@ export default function TasksDurationPerJobPage() {
               >
                 <Graph data={filteredData} />
               </div>
-              <div className="p-xl">
-                <table
-                  className="pf-c-table pf-m-compact pf-m-grid-md"
+              <div className="pf-v5-u-p-xl">
+                <Table
+                  className="pf-v5-c-table pf-m-compact pf-m-grid-md"
                   role="grid"
                   aria-label="Job Legend"
                 >
-                  <thead>
-                    <tr role="row">
-                      <th role="columnheader" scope="col">
+                  <Thead>
+                    <Tr role="row">
+                      <Th role="columnheader" scope="col">
                         id
-                      </th>
-                      <th role="columnheader" scope="col">
+                      </Th>
+                      <Th role="columnheader" scope="col">
                         name
-                      </th>
-                      <th role="columnheader" scope="col">
+                      </Th>
+                      <Th role="columnheader" scope="col">
                         status
-                      </th>
-                      <th role="columnheader" scope="col">
+                      </Th>
+                      <Th role="columnheader" scope="col">
                         created
-                      </th>
-                      <th
+                      </Th>
+                      <Th
                         className="text-center"
                         role="columnheader"
                         scope="col"
                       >
                         Job link
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
                     {filteredData.map((d, i) => (
-                      <tr key={i} role="row">
-                        <td
+                      <Tr key={i} role="row">
+                        <Td
                           role="cell"
                           data-label="Job id"
                           style={{ color: colors[i % colors.length] }}
                         >
                           {d.id}
-                        </td>
-                        <td role="cell" data-label="Job name">
+                        </Td>
+                        <Td role="cell" data-label="Job name">
                           {d.name}
-                        </td>
-                        <td role="cell" data-label="Job status">
+                        </Td>
+                        <Td role="cell" data-label="Job status">
                           {d.status}
-                        </td>
-                        <td role="cell" data-label="Job created at">
+                        </Td>
+                        <Td role="cell" data-label="Job created at">
                           <time title={d.created_at} dateTime={d.created_at}>
                             {formatDate(d.created_at)}
                           </time>
-                        </td>
-                        <td
+                        </Td>
+                        <Td
                           className="text-center"
                           role="cell"
                           data-label="Job status"
@@ -350,11 +351,11 @@ export default function TasksDurationPerJobPage() {
                           <Link to={`/jobs/${d.id}/jobStates`}>
                             <LinkIcon />
                           </Link>
-                        </td>
-                      </tr>
+                        </Td>
+                      </Tr>
                     ))}
-                  </tbody>
-                </table>
+                  </Tbody>
+                </Table>
               </div>
             </>
           )}

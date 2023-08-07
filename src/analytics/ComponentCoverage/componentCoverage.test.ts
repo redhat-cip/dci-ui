@@ -121,7 +121,7 @@ test("buildComponentCoverage", () => {
           _type: "_doc",
         },
       ],
-    })
+    }),
   ).toEqual({
     c1: {
       id: "c1",
@@ -299,7 +299,7 @@ test("getComponentCoverageDomain", () => {
         tags: [],
         jobs: [],
       },
-    })
+    }),
   ).toEqual({
     nbOfJobs: { min: 0, max: 5 },
     nbOfSuccessfulJobs: { min: 0, max: 1 },

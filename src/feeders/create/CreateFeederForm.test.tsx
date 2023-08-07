@@ -10,7 +10,7 @@ test("test create feeder form submit the correct values", async () => {
     { id: "t2", name: "team 2" },
   ] as ITeam[];
   const { container, getByRole, getByTestId, getByPlaceholderText } = render(
-    <CreateFeederForm teams={teams} onSubmit={mockOnSubmit} />
+    <CreateFeederForm teams={teams} onSubmit={mockOnSubmit} />,
   );
   const create_feeder_form = container.querySelector("#create_feeder_form");
   expect(create_feeder_form).not.toBe(null);
@@ -23,13 +23,13 @@ test("test create feeder form submit the correct values", async () => {
   });
 
   const teams_select = getByPlaceholderText(
-    "Select a team"
+    "Select a team",
   ) as HTMLSelectElement;
   fireEvent.change(teams_select, {
     target: { value: teams[1].name },
   });
   const option_2 = getByTestId(
-    "create_feeder_form__team_id[1]"
+    "create_feeder_form__team_id[1]",
   ) as HTMLButtonElement;
   fireEvent.click(option_2);
 

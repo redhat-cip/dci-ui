@@ -5,8 +5,9 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  Title,
-  EmptyStatePrimary,
+  EmptyStateActions,
+  EmptyStateHeader,
+  EmptyStateFooter,
 } from "@patternfly/react-core";
 
 interface EmptyStateProps {
@@ -25,12 +26,15 @@ export default function DCIEmptyState({
   return (
     <Bullseye>
       <EmptyState>
-        <EmptyStateIcon icon={icon ? icon : SadTearIcon} />
-        <Title headingLevel="h4" size="lg">
-          {title}
-        </Title>
+        <EmptyStateHeader
+          titleText={<>{title}</>}
+          icon={<EmptyStateIcon icon={icon ? icon : SadTearIcon} />}
+          headingLevel="h4"
+        />
         <EmptyStateBody>{info}</EmptyStateBody>
-        {action && <EmptyStatePrimary>{action}</EmptyStatePrimary>}
+        <EmptyStateFooter>
+          {action && <EmptyStateActions>{action}</EmptyStateActions>}
+        </EmptyStateFooter>
       </EmptyState>
     </Bullseye>
   );

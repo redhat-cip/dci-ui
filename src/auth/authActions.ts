@@ -30,7 +30,7 @@ function buildShortcut(team: ITeam | null) {
 
 export function buildIdentity(
   identity: IIdentity,
-  defaultTeam: ITeam | null
+  defaultTeam: ITeam | null,
 ): ICurrentUser {
   const teams = values(identity.teams).filter((team) => team.id !== null);
   const firstTeam = teams.length === 0 ? null : teams[0];
@@ -60,7 +60,7 @@ export function getCurrentUser(): AppThunk<Promise<ICurrentUser>> {
 
 export function changeCurrentTeam(
   team: ITeam,
-  currentUser: ICurrentUser
+  currentUser: ICurrentUser,
 ): AppThunk<Promise<ICurrentUser>> {
   saveValue("defaultTeam", team);
   return (dispatch) => {

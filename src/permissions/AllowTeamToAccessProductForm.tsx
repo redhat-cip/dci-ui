@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Button } from "@patternfly/react-core";
 import {
-  Button,
   Select,
   SelectOption,
   SelectVariant,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { grantTeamProductPermission } from "./permissionsActions";
 import { Flex, FlexItem } from "@patternfly/react-core";
 import { ITeam, IProduct } from "types";
@@ -29,13 +29,13 @@ export default function AllowTeamToAccessProductForm({
   const [isProductSelectOpen, setIsProductSelectOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   return (
-    <div className="mt-xl">
+    <div className="pf-v5-u-mt-xl">
       <Flex>
         <FlexItem>Allow</FlexItem>
         <FlexItem>
           <Select
             variant={SelectVariant.typeahead}
-            onToggle={setIsTeamSelectOpen}
+            onToggle={(_event, val) => setIsTeamSelectOpen(val)}
             onSelect={(event, selection) => {
               setIsTeamSelectOpen(false);
               setTeam(selection as ITeam);
@@ -58,7 +58,7 @@ export default function AllowTeamToAccessProductForm({
         <FlexItem>
           <Select
             variant={SelectVariant.typeahead}
-            onToggle={setIsProductSelectOpen}
+            onToggle={(_event, val) => setIsProductSelectOpen(val)}
             onSelect={(event, selection) => {
               setIsProductSelectOpen(false);
               setProduct(selection as IProduct);
@@ -91,8 +91,8 @@ export default function AllowTeamToAccessProductForm({
                   .catch(() => {
                     dispatch(
                       showError(
-                        `Can't grant permission to ${team.name} for product ${product.name}`
-                      )
+                        `Can't grant permission to ${team.name} for product ${product.name}`,
+                      ),
                     );
                   });
               }

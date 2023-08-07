@@ -11,7 +11,7 @@ test("test edit feeder form submit the correct values", async () => {
   ] as ITeam[];
   const feeder = { id: "f1", name: "feeder", team_id: "t2" } as IFeeder;
   const { container, getByRole, getByTestId, getByPlaceholderText } = render(
-    <EditFeederForm feeder={feeder} teams={teams} onSubmit={mockOnSubmit} />
+    <EditFeederForm feeder={feeder} teams={teams} onSubmit={mockOnSubmit} />,
   );
   const edit_feeder_form = container.querySelector("#edit_feeder_form");
   expect(edit_feeder_form).not.toBe(null);
@@ -24,13 +24,13 @@ test("test edit feeder form submit the correct values", async () => {
   });
 
   const teams_select = getByPlaceholderText(
-    "Select a team"
+    "Select a team",
   ) as HTMLSelectElement;
   fireEvent.change(teams_select, {
     target: { value: teams[0].name },
   });
   const option_1 = getByTestId(
-    "edit_feeder_form__team_id[0]"
+    "edit_feeder_form__team_id[0]",
   ) as HTMLButtonElement;
   fireEvent.click(option_1);
 

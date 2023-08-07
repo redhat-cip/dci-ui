@@ -10,18 +10,19 @@ import {
   Label,
   ProgressStep,
   ProgressStepper,
-  Title,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
   Tooltip,
-  CardActions,
+  CardHeader,
+  Truncate,
+  EmptyStateHeader,
+} from "@patternfly/react-core";
+import {
   Dropdown,
   KebabToggle,
   DropdownItem,
-  CardHeader,
-  Truncate,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
 import {
@@ -49,6 +50,7 @@ import { getColor, getIcon } from "jobs/jobUtils";
 import { Components } from "jobs/job/JobDetailsSummary";
 import { notEmpty } from "../../services/utils";
 import { AppDispatch } from "store";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -74,7 +76,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
   const color = getColor(job.status);
   return (
     <>
-      <td
+      <Td
         style={{
           borderLeft:
             index === 0
@@ -92,14 +94,14 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
             style={{
               color,
             }}
-            className="pf-u-mr-xs"
+            className="pf-v5-u-mr-xs"
           >
             {getIcon(job.status)}
           </span>
           {job.name}
         </Link>
-      </td>
-      <td
+      </Td>
+      <Td
         style={{
           whiteSpace: "nowrap",
           textAlign: "center",
@@ -120,8 +122,8 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
             {job.comment || ""}
           </span>
         </Tooltip>
-      </td>
-      <td
+      </Td>
+      <Td
         style={{
           whiteSpace: "nowrap",
           backgroundColor:
@@ -134,7 +136,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           isCompact
           color="green"
           title={`${job?.tests?.success || 0} tests in success`}
-          className="mr-xs"
+          className="pf-v5-u-mr-xs"
         >
           {job?.tests?.success || 0}
         </Label>
@@ -142,7 +144,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           isCompact
           color="orange"
           title={`${job?.tests?.skips || 0} skipped tests`}
-          className="mr-xs"
+          className="pf-v5-u-mr-xs"
         >
           {job?.tests?.skips || 0}
         </Label>
@@ -155,8 +157,8 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
         >
           {(job?.tests?.failures || 0) + (job?.tests?.errors || 0)}
         </Label>
-      </td>
-      <td
+      </Td>
+      <Td
         style={{
           whiteSpace: "nowrap",
           textAlign: "center",
@@ -172,7 +174,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           round: true,
           largest: 2,
         })}
-      </td>
+      </Td>
     </>
   );
 }
@@ -187,54 +189,61 @@ function PipelineCard({
   const [seeJobComponents, setSeeJobComponents] = useState(false);
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   return (
-    <Card className="pf-u-mt-xs">
-      <CardHeader>
-        <CardActions>
-          <Dropdown
-            onSelect={() => {
-              setSeeJobComponents(!seeJobComponents);
-            }}
-            toggle={
-              <KebabToggle
-                id={`${pipelineDay.date}-dropdown-toggle`}
-                onToggle={(isOpen) => {
-                  setDropdownIsOpen(isOpen);
+    <Card className="pf-v5-u-mt-xs">
+      <CardHeader
+        actions={{
+          actions: (
+            <>
+              <Dropdown
+                onSelect={() => {
+                  setSeeJobComponents(!seeJobComponents);
                 }}
+                toggle={
+                  <KebabToggle
+                    id={`${pipelineDay.date}-dropdown-toggle`}
+                    onToggle={(_event, isOpen) => {
+                      setDropdownIsOpen(isOpen);
+                    }}
+                  />
+                }
+                isOpen={dropdownIsOpen}
+                isPlain
+                dropdownItems={[
+                  <DropdownItem
+                    key={`${pipelineDay.date}-dropdown-item`}
+                    component="button"
+                  >
+                    {seeJobComponents
+                      ? "Hide job components"
+                      : "See job components"}
+                  </DropdownItem>,
+                ]}
+                position={"right"}
               />
-            }
-            isOpen={dropdownIsOpen}
-            isPlain
-            dropdownItems={[
-              <DropdownItem
-                key={`${pipelineDay.date}-dropdown-item`}
-                component="button"
-              >
-                {seeJobComponents
-                  ? "Hide job components"
-                  : "See job components"}
-              </DropdownItem>,
-            ]}
-            position={"right"}
-          />
-        </CardActions>
+            </>
+          ),
+          hasNoOffset: false,
+          className: undefined,
+        }}
+      >
         <CardTitle>
           {formatDate(pipelineDay.datetime, DateTime.DATE_MED_WITH_WEEKDAY)}
         </CardTitle>
       </CardHeader>
       <CardBody style={{ overflow: "auto" }}>
-        <table className="pf-c-table pf-m-compact pf-m-grid-md">
-          <thead>
-            <tr>
-              <th>pipeline</th>
-              <th style={{ minWidth: "250px" }}>name</th>
-              <th colSpan={-1}>jobs</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+          <Thead>
+            <Tr>
+              <Th>pipeline</Th>
+              <Th style={{ minWidth: "250px" }}>name</Th>
+              <Th colSpan={-1}>jobs</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {pipelineDay.pipelines.map((pipeline, index) => (
               <Fragment key={index}>
-                <tr>
-                  <td
+                <Tr>
+                  <Td
                     rowSpan={seeJobComponents ? 2 : 1}
                     style={{ verticalAlign: "middle" }}
                   >
@@ -248,21 +257,21 @@ function PipelineCard({
                         />
                       ))}
                     </ProgressStepper>
-                  </td>
-                  <td
+                  </Td>
+                  <Td
                     rowSpan={seeJobComponents ? 2 : 1}
                     style={{ verticalAlign: "middle" }}
                   >
                     <Truncate content={pipeline.name} />
-                  </td>
+                  </Td>
                   {pipeline.jobs.map((job, index) => (
                     <PipelineJobInfo key={index} index={index} job={job} />
                   ))}
-                </tr>
+                </Tr>
                 {seeJobComponents && (
-                  <tr>
+                  <Tr>
                     {pipeline.jobs.map((job) => (
-                      <td
+                      <Td
                         style={{
                           borderLeft: `1px solid ${global_palette_black_400.value}`,
                           whiteSpace: "nowrap",
@@ -276,14 +285,14 @@ function PipelineCard({
                         <Components
                           components={job.components.filter(notEmpty)}
                         />
-                      </td>
+                      </Td>
                     ))}
-                  </tr>
+                  </Tr>
                 )}
               </Fragment>
             ))}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
       </CardBody>
     </Card>
   );
@@ -293,9 +302,10 @@ function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
   if (pipelines.days.length === 0) {
     return (
       <EmptyState variant={EmptyStateVariant.xs}>
-        <Title headingLevel="h4" size="md">
-          No pipeline between these dates
-        </Title>
+        <EmptyStateHeader
+          titleText="No pipeline between these dates"
+          headingLevel="h4"
+        />
         <EmptyStateBody>
           change your search parameters and try again
         </EmptyStateBody>
@@ -324,21 +334,21 @@ export default function PipelinesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [pipelinesNames, setPipelinesNames] = useState<string[]>(
-    searchParams.get("pipelines_names")?.split(",") || []
+    searchParams.get("pipelines_names")?.split(",") || [],
   );
   const [teamsIds, setTeamsIds] = useState<string[]>(
-    searchParams.get("teams_ids")?.split(",") || []
+    searchParams.get("teams_ids")?.split(",") || [],
   );
   const defaultRangeValue: RangeOptionValue = "last7Days";
   const [range, setRange] = useState<RangeOptionValue>(
-    (searchParams.get("range") as RangeOptionValue) || defaultRangeValue
+    (searchParams.get("range") as RangeOptionValue) || defaultRangeValue,
   );
   const dates = getRangeDates(range);
   const [after, setAfter] = useState(
-    searchParams.get("start_date") || dates.after
+    searchParams.get("start_date") || dates.after,
   );
   const [before, setBefore] = useState(
-    searchParams.get("end_date") || dates.before
+    searchParams.get("end_date") || dates.before,
   );
   const [pipelines, setPipelines] = useState<IPipelines | null>(null);
 
@@ -439,7 +449,7 @@ export default function PipelinesPage() {
                   teamsIds={teamsIds}
                   onClear={(team) =>
                     setTeamsIds((oldTeamsIds) =>
-                      oldTeamsIds.filter((t) => t !== team.id)
+                      oldTeamsIds.filter((t) => t !== team.id),
                     )
                   }
                   onClearAll={() => setTeamsIds([])}
@@ -455,7 +465,7 @@ export default function PipelinesPage() {
                   placeholderText="Pipelines names"
                   onClear={(item) =>
                     setPipelinesNames((oldPipelinesNames) =>
-                      oldPipelinesNames.filter((p) => p !== item)
+                      oldPipelinesNames.filter((p) => p !== item),
                     )
                   }
                   onSearch={(item) =>
@@ -519,9 +529,10 @@ export default function PipelinesPage() {
         <Card>
           <CardBody>
             <EmptyState variant={EmptyStateVariant.xs}>
-              <Title headingLevel="h4" size="md">
-                Display pipeline jobs
-              </Title>
+              <EmptyStateHeader
+                titleText="Display pipeline jobs"
+                headingLevel="h4"
+              />
               <EmptyStateBody>
                 You can fill in the filters to view your team's pipelines.
               </EmptyStateBody>

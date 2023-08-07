@@ -5,6 +5,7 @@ import {
   TextInput,
   Button,
   ButtonVariant,
+  InputGroupItem,
 } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
 
@@ -37,23 +38,27 @@ export default function ConfigurationFilter({
         }}
       >
         <InputGroup>
-          <TextInput
-            name="configuration"
-            id="input-configuration"
-            type="search"
-            aria-label="configuration filter"
-            onChange={setInnerConfiguration}
-            value={innerConfiguration}
-            placeholder="Filter by configuration"
-            isRequired
-          />
-          <Button
-            variant={ButtonVariant.control}
-            aria-label="search configuration button"
-            type="submit"
-          >
-            <SearchIcon />
-          </Button>
+          <InputGroupItem isFill>
+            <TextInput
+              name="configuration"
+              id="input-configuration"
+              type="search"
+              aria-label="configuration filter"
+              onChange={(_event, val) => setInnerConfiguration(val)}
+              value={innerConfiguration}
+              placeholder="Filter by configuration"
+              isRequired
+            />
+          </InputGroupItem>
+          <InputGroupItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label="search configuration button"
+              type="submit"
+            >
+              <SearchIcon />
+            </Button>
+          </InputGroupItem>
         </InputGroup>
       </form>
     </ToolbarFilter>

@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { getProducts, getProductById } from "products/productsSelectors";
 import { IProduct } from "types";
 import productsActions from "products/productsActions";
+import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { AppDispatch } from "store";
 
 type ProductFilterProps = {
@@ -47,7 +47,7 @@ export default function ProductFilter({
       <Select
         variant={SelectVariant.single}
         typeAheadAriaLabel={placeholderText}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, selection) => {
           setIsOpen(false);
           const s = selection as IProduct;

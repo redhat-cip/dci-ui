@@ -37,7 +37,7 @@ export function TestLabels({
           {success}
           <SuccessfixesIcon
             successfixes={successfixes}
-            className="pf-u-ml-xs"
+            className="pf-v5-u-ml-xs"
           />
         </Label>
       </Tooltip>
@@ -71,7 +71,10 @@ export function TestLabels({
       >
         <Label isCompact color="red">
           {errors + failures}
-          <RegressionsIcon regressions={regressions} className="pf-u-ml-xs" />
+          <RegressionsIcon
+            regressions={regressions}
+            className="pf-v5-u-ml-xs"
+          />
         </Label>
       </Tooltip>
     </LabelGroup>
@@ -97,7 +100,7 @@ export default function TestsLabels({ tests }: { tests: IResult[] }) {
         errors: 0,
         successfixes: 0,
         regressions: 0,
-      }
+      },
     );
   return (
     <TestLabels

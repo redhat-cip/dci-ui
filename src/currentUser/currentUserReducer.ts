@@ -5,7 +5,7 @@ const initialState: ICurrentUser | null = null;
 
 export default function reduce(
   state = initialState,
-  action: types.ICurrentUserActionTypes
+  action: types.ICurrentUserActionTypes,
 ): ICurrentUser | null {
   switch (action.type) {
     case types.SET_IDENTITY:

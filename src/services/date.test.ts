@@ -10,7 +10,7 @@ test("humanizeDuration", () => {
 
 test("formatDate", () => {
   expect(date.formatDate("2018-06-14T15:30:39.139451")).toBe(
-    "Jun 14, 2018, 3:30:39 PM"
+    "Jun 14, 2018, 3:30:39 PM",
   );
 });
 

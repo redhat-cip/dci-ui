@@ -18,7 +18,7 @@ export function renderWithProviders(
     preloadedState = {},
     store = setupStore(preloadedState),
     ...renderOptions
-  }: ExtendedRenderOptions = {}
+  }: ExtendedRenderOptions = {},
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return <Provider store={store}>{children}</Provider>;

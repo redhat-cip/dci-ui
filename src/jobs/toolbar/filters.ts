@@ -32,7 +32,7 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
   const page = parseInt(pageString as string, 10);
   const perPage = parseInt(perPageString as string, 10);
   const copyDefaultFilters: IJobFilters = JSON.parse(
-    JSON.stringify(defaultFilters)
+    JSON.stringify(defaultFilters),
   );
   if (typeof query === "string" && query !== null) {
     return {
@@ -79,7 +79,7 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
       ...copyDefaultFilters,
       page,
       perPage,
-    }
+    },
   );
 }
 
@@ -104,7 +104,7 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
     if (key === "tags" && value.length > 0) {
       const tags = value as string[];
       keyValues = keyValues.concat(
-        sortedUniq(tags).map((t: string) => `tags:${t}`)
+        sortedUniq(tags).map((t: string) => `tags:${t}`),
       );
     }
   });
@@ -146,7 +146,7 @@ export function createSearchFromFilters(filters: IJobFilters | IUserFilters) {
 }
 
 export function resetPageIfNeeded<
-  T extends { page: number; [key: string]: any }
+  T extends { page: number; [key: string]: any },
 >(oldFilters: T, newFilters: T) {
   if (oldFilters.page !== 1 && oldFilters.page === newFilters.page) {
     return {

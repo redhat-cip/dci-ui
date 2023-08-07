@@ -17,7 +17,7 @@ interface IUpdateCurrentUser {
 }
 
 export function updateCurrentUser(
-  currentUser: ICurrentUser
+  currentUser: ICurrentUser,
 ): AppThunk<AxiosPromise<IUpdateCurrentUser>> {
   return (dispatch) => {
     return http({
@@ -52,7 +52,7 @@ interface IGetSubscribedRemotecis {
 }
 
 export function getSubscribedRemotecis(
-  identity: ICurrentUser
+  identity: ICurrentUser,
 ): AxiosPromise<IGetSubscribedRemotecis> {
   return http({
     method: "get",
@@ -62,7 +62,7 @@ export function getSubscribedRemotecis(
 
 export function subscribeToARemoteci(
   remoteci: IRemoteci,
-  currentUser: ICurrentUser
+  currentUser: ICurrentUser,
 ): AxiosPromise<void> {
   return http({
     method: "post",
@@ -73,7 +73,7 @@ export function subscribeToARemoteci(
 
 export function unsubscribeFromARemoteci(
   remoteci: IRemoteci,
-  currentUser: ICurrentUser
+  currentUser: ICurrentUser,
 ): AxiosPromise<void> {
   return http({
     method: "delete",

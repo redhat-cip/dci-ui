@@ -1,6 +1,7 @@
 import { CopyButton } from "ui";
 import { Link } from "react-router-dom";
 import { IEnhancedUser } from "types";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 interface UsersTableProps {
   users: IEnhancedUser[];
@@ -8,33 +9,33 @@ interface UsersTableProps {
 
 export default function UsersTable({ users }: UsersTableProps) {
   return (
-    <table className="pf-c-table pf-m-compact pf-m-grid-md">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Login</th>
-          <th>Full name</th>
-          <th>Email</th>
-          <th>Red Hat login</th>
-          <th>Created</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table aria-label="Users table" variant="compact">
+      <Thead>
+        <Tr>
+          <Th>ID</Th>
+          <Th>Login</Th>
+          <Th>Full name</Th>
+          <Th>Email</Th>
+          <Th>Red Hat login</Th>
+          <Th>Created</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {users.map((user) => (
-          <tr key={user.id}>
-            <td>
+          <Tr key={user.id}>
+            <Td dataLabel="ID">
               <CopyButton text={user.id} />
-            </td>
-            <td>
+            </Td>
+            <Td dataLabel="Login">
               <Link to={`/users/${user.id}`}>{user.name}</Link>
-            </td>
-            <td>{user.fullname}</td>
-            <td>{user.email}</td>
-            <td>{user.sso_username}</td>
-            <td>{user.from_now}</td>
-          </tr>
+            </Td>
+            <Td dataLabel="Full name">{user.fullname}</Td>
+            <Td dataLabel="Email">{user.email}</Td>
+            <Td dataLabel="Red Hat login">{user.sso_username}</Td>
+            <Td dataLabel="Created">{user.from_now}</Td>
+          </Tr>
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }

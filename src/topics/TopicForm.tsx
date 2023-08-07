@@ -31,7 +31,7 @@ const TopicSchema = Yup.object().shape({
   component_types: Yup.string().test(
     "isJSON",
     "Component types should be a valid JSON",
-    isValidJSON
+    isValidJSON,
   ),
   data: Yup.string().test("isJSON", "Data should be a valid JSON", isValidJSON),
 });
@@ -46,7 +46,7 @@ function fromTopicToTopicForm(topic: INewTopic | IEditTopic): ITopicForm {
 }
 
 function fromTopicFormToTopic(
-  topic: ITopicForm
+  topic: ITopicForm,
 ): INewTopic | IEditTopic | undefined {
   const component_types =
     topic.component_types === "" ? [] : JSON.parse(topic.component_types);
@@ -80,7 +80,7 @@ const TopicForm = forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
           product_id: null,
           component_types: [],
           data: {},
-        }
+        },
       )}
       validationSchema={TopicSchema}
       onSubmit={(values) => {
@@ -90,7 +90,7 @@ const TopicForm = forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
         }
       }}
     >
-      <Form id="topic_form" className="pf-c-form">
+      <Form id="topic_form" className="pf-v5-c-form">
         <Input
           id="topic_form__name"
           data-testid="topic_form__name"
@@ -144,7 +144,7 @@ const TopicForm = forwardRef<FormikProps<ITopicForm>, TopicFormProps>(
         />
       </Form>
     </Formik>
-  )
+  ),
 );
 
 export default TopicForm;

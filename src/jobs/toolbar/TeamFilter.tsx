@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { ITeam } from "types";
 import { getTeams, getTeamById, isFetchingTeams } from "teams/teamsSelectors";
 import teamsActions from "teams/teamsActions";
+import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 
@@ -58,7 +58,7 @@ export default function TeamFilter({
       <Select
         variant={SelectVariant.typeahead}
         typeAheadAriaLabel={placeholderText}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, selection) => {
           setIsOpen(false);
           const s = selection as ITeam;

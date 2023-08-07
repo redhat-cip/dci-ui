@@ -29,7 +29,7 @@ const CreateUserForm = forwardRef<FormikProps<INewUser>, CreateUserFormProps>(
       validationSchema={CreateUserSchema}
       onSubmit={onSubmit}
     >
-      <Form id="create_user_form" className="pf-c-form">
+      <Form id="create_user_form" className="pf-v5-c-form">
         <Input
           id="create_user_form__name"
           data-testid="create_user_form__name"
@@ -62,7 +62,7 @@ const CreateUserForm = forwardRef<FormikProps<INewUser>, CreateUserFormProps>(
         />
       </Form>
     </Formik>
-  )
+  ),
 );
 
 export default CreateUserForm;

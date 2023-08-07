@@ -16,7 +16,7 @@ test("sortByName", () => {
         id: "2",
         name: "A",
       },
-    ])
+    ]),
   ).toEqual([
     {
       id: "2",
@@ -40,7 +40,7 @@ test("sortByOldestFirst", () => {
         id: "2",
         created_at: "2018-06-16T16:08:17.125194",
       },
-    ])
+    ]),
   ).toEqual([
     {
       id: "1",
@@ -64,7 +64,7 @@ test("sortByNewestFirst", () => {
         id: "2",
         created_at: "2018-06-16T16:08:17.125194",
       },
-    ])
+    ]),
   ).toEqual([
     {
       id: "2",
@@ -92,8 +92,8 @@ test("sortByNewestFirst different key", () => {
           released_at: "2022-04-01T00:00:00.123456",
         },
       ],
-      "released_at"
-    )
+      "released_at",
+    ),
   ).toEqual([
     {
       id: "1",
@@ -141,7 +141,7 @@ test("sortByMainComponentType", () => {
         name: "e",
         type: "rpm",
       },
-    ])
+    ]),
   ).toEqual([
     {
       id: "4",

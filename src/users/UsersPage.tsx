@@ -81,13 +81,13 @@ export default function UsersPage() {
                 <CreateUserModal
                   onSubmit={(user) => {
                     dispatch(usersActions.create(user)).then(() =>
-                      search({ ...initialUserFilter })
+                      search({ ...initialUserFilter }),
                     );
                   }}
                 >
                   {(openModal) => (
                     <Button variant="primary" onClick={openModal}>
-                      <PlusCircleIcon className="mr-xs" />
+                      <PlusCircleIcon className="pf-v5-u-mr-xs" />
                       Create a new user
                     </Button>
                   )}
@@ -96,10 +96,7 @@ export default function UsersPage() {
             </ToolbarItem>
           </ToolbarGroup>
           <ToolbarGroup style={{ flex: "1" }}>
-            <ToolbarItem
-              variant="pagination"
-              alignment={{ default: "alignRight" }}
-            >
+            <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
               {numOfUsers === 0 ? null : (
                 <Pagination
                   perPage={filters.perPage}

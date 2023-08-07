@@ -9,7 +9,7 @@ test("test create topic form submit the correct values", async () => {
     { id: "p2", name: "product 2" },
   ] as IProduct[];
   const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
-    <CreateTopicModal onSubmit={mockOnSubmit} products={products} />
+    <CreateTopicModal onSubmit={mockOnSubmit} products={products} />,
   );
 
   const showModal = getByRole("button", { name: /Create a new topic/i });
@@ -18,7 +18,7 @@ test("test create topic form submit the correct values", async () => {
 
   await waitFor(() => {
     expect(
-      baseElement.querySelector("#create_topic_modal")
+      baseElement.querySelector("#create_topic_modal"),
     ).toBeInTheDocument();
   });
 
@@ -36,14 +36,14 @@ test("test create topic form submit the correct values", async () => {
   fireEvent.click(export_control);
 
   const product_select = getByPlaceholderText(
-    "Select a product"
+    "Select a product",
   ) as HTMLSelectElement;
   expect(product_select.value).toBe("");
   fireEvent.change(product_select, {
     target: { value: products[1].name },
   });
   const option_2 = getByTestId(
-    "topic_form__product_id[1]"
+    "topic_form__product_id[1]",
   ) as HTMLButtonElement;
   fireEvent.click(option_2);
   expect(product_select.value).toBe(products[1].name);

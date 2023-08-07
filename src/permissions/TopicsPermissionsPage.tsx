@@ -13,6 +13,7 @@ import AllowTeamToAccessTopicForm from "./AllowTeamToAccessTopicForm";
 import teamsActions from "teams/teamsActions";
 import { getTeams } from "teams/teamsSelectors";
 import { global_warning_color_100 } from "@patternfly/react-tokens";
+import { Table, Tr, Tbody, Td } from "@patternfly/react-table";
 
 export default function TopicsPermissionsPage() {
   const [topics, setTopics] = useState<ITopicWithTeams[]>([]);
@@ -36,7 +37,7 @@ export default function TopicsPermissionsPage() {
         <div className="py-md">loading...</div>
       ) : (
         <div>
-          <TextContent className="mt-lg">
+          <TextContent className="pf-v5-u-mt-lg">
             <Text component="p">
               <div
                 style={{
@@ -44,7 +45,7 @@ export default function TopicsPermissionsPage() {
                   padding: "1em",
                 }}
               >
-                <WarningTriangleIcon className="mr-xs" />
+                <WarningTriangleIcon className="pf-v5-u-mr-xs" />
                 Some topics are under the export control policy. Some partners
                 outside the US need an explicit approval. Make sure the partner
                 has the rights before giving it permission to access a
@@ -67,7 +68,10 @@ export default function TopicsPermissionsPage() {
           />
           {restrictedTopics.map((topic) => {
             return (
-              <TextContent key={`${topic.id}.${topic.etag}`} className="mt-lg">
+              <TextContent
+                key={`${topic.id}.${topic.etag}`}
+                className="pf-v5-u-mt-lg"
+              >
                 <Text component="h1">{topic.name}</Text>
                 <Text component="p">
                   {topic.teams.length === 0 ? (
@@ -76,27 +80,27 @@ export default function TopicsPermissionsPage() {
                     <span>List of teams that have access to {topic.name}</span>
                   )}
                 </Text>
-                <table
-                  className="pf-c-table pf-m-grid-md pf-m-compact"
+                <Table
+                  className="pf-v5-c-table pf-m-grid-md pf-m-compact"
                   role="grid"
                 >
-                  <tbody>
+                  <Tbody>
                     {topic.teams.map((team) => (
-                      <tr key={`${team.id}.${team.etag}`}>
-                        <td className="pf-m-width-30">{team.name}</td>
-                        <td className="pf-m-width-70">
+                      <Tr key={`${team.id}.${team.etag}`}>
+                        <Td className="pf-m-width-30">{team.name}</Td>
+                        <Td className="pf-m-width-70">
                           <Button
                             variant="secondary"
                             isDanger
                             icon={<TrashIcon />}
                             onClick={() =>
                               dispatch(
-                                removeTeamTopicPermission(team, topic)
+                                removeTeamTopicPermission(team, topic),
                               ).then(() => {
                                 const newTopics = topics.map((p) => {
                                   if (p.id === topic.id) {
                                     p.teams = p.teams.filter(
-                                      (t) => t.id !== team.id
+                                      (t) => t.id !== team.id,
                                     );
                                   }
                                   return p;
@@ -107,11 +111,11 @@ export default function TopicsPermissionsPage() {
                           >
                             remove {team.name} permission
                           </Button>
-                        </td>
-                      </tr>
+                        </Td>
+                      </Tr>
                     ))}
-                  </tbody>
-                </table>
+                  </Tbody>
+                </Table>
               </TextContent>
             );
           })}

@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { getActiveTopics, getTopicById } from "topics/topicsSelectors";
 import { ITopic } from "types";
 import topicsActions from "topics/topicsActions";
+import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { AppDispatch } from "store";
 
 export function TopicSelect({
@@ -35,7 +35,7 @@ export function TopicSelect({
     <Select
       variant={SelectVariant.typeahead}
       typeAheadAriaLabel={placeholderText}
-      onToggle={setIsOpen}
+      onToggle={(_event, val) => setIsOpen(val)}
       onSelect={(event, selection) => {
         setIsOpen(false);
         const s = selection as ITopic;

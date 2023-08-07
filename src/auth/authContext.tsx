@@ -23,7 +23,7 @@ interface AuthContextType {
   refreshIdentity: () => Promise<ICurrentUser>;
   changeCurrentTeam: (
     team: ITeam,
-    currentUser: ICurrentUser
+    currentUser: ICurrentUser,
   ) => Promise<ICurrentUser>;
   logout: () => void;
   openChangeTeamModal: () => void;
@@ -53,8 +53,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           if (error.response.status === 400) {
             dispatch(
               showError(
-                "Something went wrong during the SSO connection, please contact a DCI administrator."
-              )
+                "Something went wrong during the SSO connection, please contact a DCI administrator.",
+              ),
             );
           }
         })
@@ -75,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         (identity) => {
           setIdentity(identity);
           return identity;
-        }
+        },
       );
     },
     refreshIdentity: () => {
@@ -125,8 +125,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     setIsModalOpen(false);
                   }}
                   hasSelectableInput
-                  isSelectableRaised
-                  isDisabledRaised={team.id === identity.team?.id}
+                  isSelectable
+                  isDisabled
+                  tabIndex={0}
                 >
                   <CardBody>{team.name}</CardBody>
                 </Card>

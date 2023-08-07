@@ -6,48 +6,48 @@ import {
   TextArea,
   TextAreaProps,
 } from "@patternfly/react-core";
-import { useField } from "formik";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
+import { useField, useFormikContext } from "formik";
 
 type DCITextAreaProps = {
   label?: string;
   id: string;
   name: string;
-  helperText?: string;
 } & TextAreaProps;
 
 export default function DCITextArea({
   label,
   id,
   name,
-  helperText,
   ...props
 }: DCITextAreaProps) {
-  const [field, meta, helpers] = useField(name);
-  const { setValue } = helpers;
+  const [field] = useField(name);
+  const { touched, errors, setFieldValue } = useFormikContext<{
+    [k: string]: string;
+  }>();
+  const hasError = errors[name] && touched[name];
   return (
-    <FormGroup
-      label={label}
-      isRequired={props.isRequired}
-      fieldId={id}
-      helperTextInvalid={meta.error}
-      validated={meta.touched && meta.error ? "error" : "success"}
-    >
+    <FormGroup label={label} isRequired={props.isRequired} fieldId={id}>
       <TextArea
         id={id}
         {...field}
         {...props}
-        onChange={(value, event) => {
+        onChange={(event, value) => {
           if (typeof props.onChange === "undefined") {
-            setValue(value);
+            setFieldValue(name, value);
           } else {
-            props.onChange(value, event);
+            props.onChange(event, value);
           }
         }}
       />
-      {helperText && (
-        <HelperText>
-          <HelperTextItem>{helperText}</HelperTextItem>
-        </HelperText>
+      {hasError && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
+              {errors[name]}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
       )}
     </FormGroup>
   );

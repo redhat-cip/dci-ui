@@ -21,7 +21,11 @@ test("test edit topic form submit the correct values", async () => {
   ] as IProduct[];
 
   const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
-    <EditTopicModal products={products} topic={topic} onSubmit={mockOnSubmit} />
+    <EditTopicModal
+      products={products}
+      topic={topic}
+      onSubmit={mockOnSubmit}
+    />,
   );
 
   const showModal = getByRole("button", { name: /Edit Topic 1/i });
@@ -44,14 +48,14 @@ test("test edit topic form submit the correct values", async () => {
   });
 
   const product_select = getByPlaceholderText(
-    "Select a product"
+    "Select a product",
   ) as HTMLSelectElement;
   expect(product_select.value).toBe("product 2");
   fireEvent.change(product_select, {
     target: { value: products[0].name },
   });
   const option_1 = getByTestId(
-    "topic_form__product_id[0]"
+    "topic_form__product_id[0]",
   ) as HTMLButtonElement;
   fireEvent.click(option_1);
 

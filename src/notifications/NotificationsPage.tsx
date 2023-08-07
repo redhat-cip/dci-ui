@@ -30,7 +30,7 @@ export default function NotificationsPage() {
           <NewFailedJobSubscriptionPanel currentUser={currentUser} />
         </CardBody>
       </Card>
-      <Card className="mt-md">
+      <Card className="pf-v5-u-mt-md">
         <CardTitle>New component on a topic</CardTitle>
         <CardHeader>
           Get notified when a new component is created for a topic.

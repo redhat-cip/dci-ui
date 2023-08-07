@@ -27,6 +27,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import LoadingPage from "pages/LoadingPage";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -53,7 +54,7 @@ export default function EditUserPage() {
         setUser(response.data.user);
       });
     },
-    [dispatch, setUser]
+    [dispatch, setUser],
   );
 
   const _fetchUserTeams = useCallback((id: string) => {
@@ -99,7 +100,7 @@ export default function EditUserPage() {
                 user={user}
                 onSubmit={(editedUser) => {
                   dispatch(usersActions.update(editedUser as IUser)).then(
-                    (response) => setUser(response.data.user)
+                    (response) => setUser(response.data.user),
                   );
                 }}
               />
@@ -118,20 +119,20 @@ export default function EditUserPage() {
                   });
                 }}
               />
-              <table className="pf-c-table pf-m-compact pf-m-grid-md">
-                <thead>
-                  <tr>
-                    <th>Team name</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
+              <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+                <Thead>
+                  <Tr>
+                    <Th>Team name</Th>
+                    <Th />
+                  </Tr>
+                </Thead>
+                <Tbody>
                   {userTeams.map((team) => (
-                    <tr key={team.id}>
-                      <td>
+                    <Tr key={team.id}>
+                      <Td>
                         <Link to={`/teams/${team.id}`}>{team.name}</Link>
-                      </td>
-                      <td className="pf-c-table__action">
+                      </Td>
+                      <Td className="pf-v5-c-table__action">
                         <ConfirmDeleteModal
                           title={`Delete ${user.name} from ${team.name}`}
                           message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
@@ -145,21 +146,21 @@ export default function EditUserPage() {
                           {(openModal) => (
                             <Button
                               variant="danger"
-                              isSmall
+                              size="sm"
                               onClick={openModal}
                             >
                               <MinusCircleIcon />
                             </Button>
                           )}
                         </ConfirmDeleteModal>
-                      </td>
-                    </tr>
+                      </Td>
+                    </Tr>
                   ))}
-                </tbody>
-              </table>
+                </Tbody>
+              </Table>
             </CardBody>
           </Card>
-          <Card className="mt-lg">
+          <Card className="pf-v5-u-mt-lg">
             <CardTitle>Danger Zone</CardTitle>
             <CardBody>
               <DangerZone>
@@ -179,13 +180,13 @@ export default function EditUserPage() {
                       message={`Are you sure you want to delete ${user.name} user?`}
                       onOk={() =>
                         dispatch(usersActions.delete(user)).then(() =>
-                          navigate("/users")
+                          navigate("/users"),
                         )
                       }
                     >
                       {(openModal) => (
-                        <Button variant="danger" isSmall onClick={openModal}>
-                          <TrashAltIcon className="mr-sm" />
+                        <Button variant="danger" size="sm" onClick={openModal}>
+                          <TrashAltIcon className="pf-v5-u-mr-sm" />
                           Delete this user
                         </Button>
                       )}

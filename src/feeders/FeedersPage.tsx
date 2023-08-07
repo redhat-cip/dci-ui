@@ -11,6 +11,7 @@ import { AppDispatch } from "store";
 import { useNavigate, Link } from "react-router-dom";
 import { SeeAuthentificationFileModal } from "ui/Credentials";
 import teamsActions from "teams/teamsActions";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 export default function FeedersPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +32,7 @@ export default function FeedersPage() {
       empty={!isFetching && isEmpty(feeders)}
       HeaderButton={
         <Button variant="primary" onClick={() => navigate("/feeders/create")}>
-          <PlusCircleIcon className="mr-xs" />
+          <PlusCircleIcon className="pf-v5-u-mr-xs" />
           Create a new feeder
         </Button>
       }
@@ -45,44 +46,44 @@ export default function FeedersPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Feeders" }]} />
       }
     >
-      <table className="pf-c-table pf-m-compact pf-m-grid-md">
-        <thead>
-          <tr>
-            <th className="text-center">ID</th>
-            <th>Name</th>
-            <th>Team Owner</th>
-            <th className="text-center" title="Authentication">
+      <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+        <Thead>
+          <Tr>
+            <Th className="text-center">ID</Th>
+            <Th>Name</Th>
+            <Th>Team Owner</Th>
+            <Th className="text-center" title="Authentication">
               Authentication
-            </th>
-            <th className="text-center">Created</th>
-            <th className="text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+            </Th>
+            <Th className="text-center">Created</Th>
+            <Th className="text-center">Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {feeders.map((feeder) => (
-            <tr key={`${feeder.id}.${feeder.etag}`}>
-              <td className="text-center">
+            <Tr key={`${feeder.id}.${feeder.etag}`}>
+              <Td className="text-center">
                 <CopyButton text={feeder.id} />
-              </td>
-              <td>
+              </Td>
+              <Td>
                 <Link to={`/feeders/${feeder.id}`}>{feeder.name}</Link>
-              </td>
-              <td>{feeder.team ? feeder.team.name.toUpperCase() : null}</td>
-              <td className="text-center">
+              </Td>
+              <Td>{feeder.team ? feeder.team.name.toUpperCase() : null}</Td>
+              <Td className="text-center">
                 <SeeAuthentificationFileModal
                   type="sh"
                   role="feeder"
                   resource={feeder}
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 />
                 <SeeAuthentificationFileModal
                   type="yaml"
                   role="feeder"
                   resource={feeder}
                 />
-              </td>
-              <td className="text-center">{feeder.from_now}</td>
-              <td className="text-center">
+              </Td>
+              <Td className="text-center">{feeder.from_now}</Td>
+              <Td className="text-center">
                 <ConfirmDeleteModal
                   title={`Delete feeder ${feeder.name}`}
                   message={`Are you sure you want to delete ${feeder.name}?`}
@@ -94,11 +95,11 @@ export default function FeedersPage() {
                     </Button>
                   )}
                 </ConfirmDeleteModal>
-              </td>
-            </tr>
+              </Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
     </MainPage>
   );
 }

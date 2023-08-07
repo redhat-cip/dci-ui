@@ -34,7 +34,7 @@ export function addDuration(jobStates: IJobState[]) {
         { newFiles: [], duration: 0 } as {
           newFiles: IFileWithDuration[];
           duration: number;
-        }
+        },
       );
       acc.newJobStates.push({
         ...jobState,
@@ -46,7 +46,7 @@ export function addDuration(jobStates: IJobState[]) {
     { newJobStates: [], currentDate: null } as {
       newJobStates: IJobStateWithDuration[];
       currentDate: DateTime | null;
-    }
+    },
   );
   return newJobStates;
 }

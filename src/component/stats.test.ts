@@ -7,7 +7,7 @@ test("get percentage of successful job", () => {
         id: "j1",
         status: "success",
       },
-    ])
+    ]),
   ).toBe(100);
   expect(getPercentageOfSuccessfulJobs([])).toBe(0);
 });
@@ -18,6 +18,6 @@ test("get percentage of successful job rounded", () => {
       { id: "j1", status: "success" },
       { id: "j2", status: "post-run" },
       { id: "j3", status: "error" },
-    ])
+    ]),
   ).toBe(33);
 });

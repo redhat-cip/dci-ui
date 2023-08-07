@@ -2,13 +2,13 @@ import { createActionsTypes } from "./apiActionsTypes";
 
 test("fetch all actions types", () => {
   expect(createActionsTypes("user").FETCH_ALL_REQUEST).toBe(
-    "FETCH_USERS_REQUEST"
+    "FETCH_USERS_REQUEST",
   );
   expect(createActionsTypes("user").FETCH_ALL_SUCCESS).toBe(
-    "FETCH_USERS_SUCCESS"
+    "FETCH_USERS_SUCCESS",
   );
   expect(createActionsTypes("user").FETCH_ALL_FAILURE).toBe(
-    "FETCH_USERS_FAILURE"
+    "FETCH_USERS_FAILURE",
   );
   expect(createActionsTypes("user").SET_COUNT).toBe("SET_USERS_COUNT");
 });

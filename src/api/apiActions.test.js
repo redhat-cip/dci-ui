@@ -93,7 +93,7 @@ test("fetch error no message", () => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({ type: jobActionsTypes.FETCH_ALL_REQUEST });
     expect(actions[2].alert.message).toBe(
-      "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?"
+      "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
     );
   });
 });

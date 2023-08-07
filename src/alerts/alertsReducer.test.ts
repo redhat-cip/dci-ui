@@ -11,7 +11,7 @@ test("SHOW_ALERT", () => {
         title: "",
         message: "",
       },
-    })
+    }),
   ).toEqual({
     a1: {
       id: "a1",
@@ -41,8 +41,8 @@ test("SHOW_ALERT keep existing alerts", () => {
           title: "",
           message: "",
         },
-      }
-    )
+      },
+    ),
   ).toEqual({
     a1: {
       id: "a1",
@@ -84,8 +84,8 @@ test("HIDE_ALERT", () => {
           title: "",
           message: "",
         },
-      }
-    )
+      },
+    ),
   ).toEqual({
     a2: {
       id: "a2",
@@ -115,7 +115,7 @@ test("HIDE_ALL_ALERTS", () => {
       },
       {
         type: types.HIDE_ALL_ALERTS,
-      }
-    )
+      },
+    ),
   ).toEqual({});
 });

@@ -42,7 +42,12 @@ export default function Component({ component }: ComponentProps) {
         <div>
           {tags &&
             tags.map((tag, i) => (
-              <Label isCompact key={i} className="mt-xs mr-xs" color="blue">
+              <Label
+                isCompact
+                key={i}
+                className="pf-v5-u-mt-xs pf-v5-u-mr-xs"
+                color="blue"
+              >
                 {tag}
               </Label>
             ))}

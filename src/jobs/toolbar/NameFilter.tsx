@@ -5,6 +5,7 @@ import {
   TextInput,
   Button,
   ButtonVariant,
+  InputGroupItem,
 } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
 
@@ -40,23 +41,27 @@ export default function NameFilter({
         }}
       >
         <InputGroup>
-          <TextInput
-            name={lowerCategoryName}
-            id={`input-${lowerCategoryName}`}
-            type="search"
-            aria-label={`${lowerCategoryName} filter`}
-            onChange={setInnerName}
-            value={innerName}
-            placeholder={`Filter by ${lowerCategoryName}`}
-            isRequired
-          />
-          <Button
-            variant={ButtonVariant.control}
-            aria-label={`Search by ${lowerCategoryName} button`}
-            type="submit"
-          >
-            <SearchIcon />
-          </Button>
+          <InputGroupItem isFill>
+            <TextInput
+              name={lowerCategoryName}
+              id={`input-${lowerCategoryName}`}
+              type="search"
+              aria-label={`${lowerCategoryName} filter`}
+              onChange={(_event, val) => setInnerName(val)}
+              value={innerName}
+              placeholder={`Filter by ${lowerCategoryName}`}
+              isRequired
+            />
+          </InputGroupItem>
+          <InputGroupItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label={`Search by ${lowerCategoryName} button`}
+              type="submit"
+            >
+              <SearchIcon />
+            </Button>
+          </InputGroupItem>
         </InputGroup>
       </form>
     </ToolbarFilter>

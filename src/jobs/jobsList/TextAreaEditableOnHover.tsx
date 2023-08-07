@@ -102,8 +102,8 @@ export default function TextAreaEditableOnHover({
         onClick={() => setEditModeOne(true)}
         onKeyDown={() => setEditModeOne(true)}
       >
-        <CommentIcon className="mr-xs comment-icon" />
-        <PencilAltIcon className="mr-xs pencil-icon" />
+        <CommentIcon className="pf-v5-u-mr-xs comment-icon" />
+        <PencilAltIcon className="pf-v5-u-mr-xs pencil-icon" />
       </div>
       <div style={{ flex: "1" }}>{children}</div>
     </TextAreaEditable>

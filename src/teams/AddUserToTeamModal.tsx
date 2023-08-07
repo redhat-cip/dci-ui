@@ -9,6 +9,7 @@ import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
 import { searchUserBy } from "users/usersActions";
 import { Link } from "react-router-dom";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 interface AddUserToTeamModalProps {
   team: ITeam;
@@ -59,28 +60,28 @@ export default function AddUserToTeamModal({
           onClear={onClear}
         />
         {touched && (
-          <table className="pf-c-table pf-m-compact" style={{ border: "0" }}>
-            <thead>
-              <tr>
-                <th>Login</th>
-                <th>Full name</th>
-                <th>Email</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="pf-v5-c-table pf-m-compact" style={{ border: "0" }}>
+            <Thead>
+              <Tr>
+                <Th>Login</Th>
+                <Th>Full name</Th>
+                <Th>Email</Th>
+                <Th />
+              </Tr>
+            </Thead>
+            <Tbody>
               {users.map((user) => (
-                <tr key={user.id}>
-                  <td>
+                <Tr key={user.id}>
+                  <Td>
                     <Link to={`/users/${user.id}`} tabIndex={-1}>
                       {user.name}
                     </Link>
-                  </td>
-                  <td>{user.fullname}</td>
-                  <td>{user.email}</td>
-                  <td className="pf-c-table__action">
+                  </Td>
+                  <Td>{user.fullname}</Td>
+                  <Td>{user.email}</Td>
+                  <Td className="pf-v5-c-table__action">
                     <Button
-                      isSmall
+                      size="sm"
                       variant="primary"
                       onClick={() => {
                         onClear();
@@ -90,24 +91,24 @@ export default function AddUserToTeamModal({
                     >
                       Add
                     </Button>
-                  </td>
-                </tr>
+                  </Td>
+                </Tr>
               ))}
               {isFetching && users.length === 0 && (
-                <tr>
-                  <td colSpan={4}>...loading</td>
-                </tr>
+                <Tr>
+                  <Td colSpan={4}>...loading</Td>
+                </Tr>
               )}
               {!isFetching &&
                 users.length === 0 &&
                 searchEmail !== "" &&
                 touched && (
-                  <tr>
-                    <td colSpan={4}>No user matching your search</td>
-                  </tr>
+                  <Tr>
+                    <Td colSpan={4}>No user matching your search</Td>
+                  </Tr>
                 )}
-            </tbody>
-          </table>
+            </Tbody>
+          </Table>
         )}
       </Modal>
       {children(show)}

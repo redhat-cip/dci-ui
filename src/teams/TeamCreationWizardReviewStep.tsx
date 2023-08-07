@@ -21,7 +21,7 @@ export default function TeamCreationWizardReviewStep() {
       {!(isValid && dirty) ? (
         <Banner
           screenReaderText="Team creation wizard form error"
-          variant="danger"
+          variant="red"
         >
           <Flex spaceItems={{ default: "spaceItemsSm" }}>
             <FlexItem>
@@ -45,7 +45,7 @@ export default function TeamCreationWizardReviewStep() {
                 {splitTeamMembersString(values.teamMembers).map(
                   (memberEmail, index) => (
                     <li key={index}>{memberEmail}</li>
-                  )
+                  ),
                 )}
               </ul>
             </DescriptionListDescription>
@@ -54,7 +54,9 @@ export default function TeamCreationWizardReviewStep() {
             <DescriptionListTerm>Permissions</DescriptionListTerm>
             <DescriptionListDescription>
               {productsAuthorized.length > 0
-                ? `The ${values.name} team will have access to all components from ${productsAuthorized
+                ? `The ${
+                    values.name
+                  } team will have access to all components from ${productsAuthorized
                     .map((p) => p.name)
                     .join(" and ")} product${
                     productsAuthorized.length > 1 ? "s" : ""

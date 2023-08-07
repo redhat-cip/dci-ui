@@ -1,5 +1,13 @@
-import { useField } from "formik";
-import { FormGroup, TextInput, TextInputProps } from "@patternfly/react-core";
+import { useField, useFormikContext } from "formik";
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  TextInput,
+  TextInputProps,
+} from "@patternfly/react-core";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 type InputProps = {
   label?: string;
@@ -8,30 +16,34 @@ type InputProps = {
 } & TextInputProps;
 
 export default function Input({ label, id, name, ...props }: InputProps) {
-  const [field, meta, helpers] = useField(name);
-  const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
+  const [field] = useField(name);
+  const { touched, errors, setFieldValue } = useFormikContext<{
+    [k: string]: string;
+  }>();
+  const hasError = errors[name] && touched[name];
   return (
-    <FormGroup
-      label={label}
-      isRequired={props.isRequired}
-      fieldId={id}
-      helperTextInvalid={meta.error}
-      validated={validated}
-    >
+    <FormGroup label={label} isRequired={props.isRequired} fieldId={id}>
       <TextInput
         id={id}
         {...field}
         {...props}
-        validated={validated}
-        onChange={(value, event) => {
+        onChange={(event, value) => {
           if (typeof props.onChange === "undefined") {
-            setValue(value);
+            setFieldValue(name, value);
           } else {
-            props.onChange(value, event);
+            props.onChange(event, value);
           }
         }}
       />
+      {hasError && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
+              {errors[name]}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

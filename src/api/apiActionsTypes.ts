@@ -16,6 +16,6 @@ export function createActionsTypes(resource: string): DynamicActionTypes {
     {
       SET_COUNT: `SET_${RESOURCE}S_COUNT`,
       CLEAR_CACHE: `CLEAR_${RESOURCE}_CACHE`,
-    } as DynamicActionTypes
+    } as DynamicActionTypes,
   );
 }

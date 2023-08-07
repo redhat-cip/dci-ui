@@ -14,7 +14,7 @@ export default function TestCases({ testcases }: ITestCasesProps) {
     "success",
   ];
   const orderedTestsCases = sortBy(testcases, (tc) =>
-    testscaseActions.indexOf(tc.action)
+    testscaseActions.indexOf(tc.action),
   );
   return (
     <div style={{ overflowX: "auto" }}>

@@ -110,7 +110,7 @@ test("jobs denormalize", () => {
     },
   ];
   expect(denormalize(allIds, getSchema("jobs"), entities)).toEqual(
-    denormalizedJobs
+    denormalizedJobs,
   );
 });
 test("partial jobs normalize", () => {

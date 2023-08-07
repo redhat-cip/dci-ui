@@ -16,7 +16,7 @@ export default function SSOForm() {
       <ActionGroup>
         <Button
           variant="danger"
-          className="mt-md"
+          className="pf-v5-u-mt-md"
           onClick={() => {
             if (sso === null) {
               dispatch(showError(errorMessage));

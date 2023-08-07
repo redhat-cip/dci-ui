@@ -18,7 +18,7 @@ test("renders without crashing", async () => {
             </MemoryRouter>
           </AuthProvider>
         </SSOProvider>
-      </Provider>
+      </Provider>,
     );
   });
 });

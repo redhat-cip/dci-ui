@@ -14,7 +14,7 @@ export function getJobSilently(jobId: string): Promise<IJob> {
 }
 
 export function updateJobComment(
-  job: IEnhancedJob
+  job: IEnhancedJob,
 ): AppThunk<Promise<IEnhancedJob>> {
   return (dispatch) => {
     return http({

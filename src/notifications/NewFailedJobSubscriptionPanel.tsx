@@ -29,14 +29,14 @@ export default function NewFailedJobSubscriptionPanel({
 }) {
   const [searchRemotecis, setSearchRemotecis] = useState("");
   const [selectedRemoteci, setSelectedRemoteci] = useState<IRemoteci | null>(
-    null
+    null,
   );
   const remotecis = useSelector(getRemotecis);
 
   const [searchSubscribedRemotecis, setSearchSubscribedRemotecis] =
     useState("");
   const [subscribedRemotecis, setSubscribedRemotecis] = useState<IRemoteci[]>(
-    []
+    [],
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -55,13 +55,13 @@ export default function NewFailedJobSubscriptionPanel({
   }, [memoizedGetSubscribedRemotecis]);
 
   const subscribedRemotecisIds = subscribedRemotecis.map(
-    (remoteci) => remoteci.id
+    (remoteci) => remoteci.id,
   );
   const nbSubscribedRemotecis = subscribedRemotecis.length;
   const visibleRemotecis = useMemo(() => {
     return remotecis
       .filter((remoteci) =>
-        remoteci.name.toLowerCase().includes(searchRemotecis.toLowerCase())
+        remoteci.name.toLowerCase().includes(searchRemotecis.toLowerCase()),
       )
       .filter((remoteci) => {
         if (nbSubscribedRemotecis === 0) {
@@ -119,15 +119,15 @@ export default function NewFailedJobSubscriptionPanel({
                 .then(() =>
                   dispatch(
                     showSuccess(
-                      `You are subscribed to remoteci ${selectedRemoteci?.name}. You will receive an email when a job fails on this remoteci.`
-                    )
-                  )
+                      `You are subscribed to remoteci ${selectedRemoteci?.name}. You will receive an email when a job fails on this remoteci.`,
+                    ),
+                  ),
                 )
                 .catch(() => {
                   dispatch(
                     showError(
-                      "We are sorry, we are unable to subscribe to this remoteci. Can you try again in a few minutes or contact an administrator?"
-                    )
+                      "We are sorry, we are unable to subscribe to this remoteci. Can you try again in a few minutes or contact an administrator?",
+                    ),
                   );
                   memoizedGetSubscribedRemotecis();
                 });
@@ -144,22 +144,22 @@ export default function NewFailedJobSubscriptionPanel({
             if (selectedRemoteci) {
               setSubscribedRemotecis(
                 subscribedRemotecis.filter(
-                  (remoteci) => remoteci.id !== selectedRemoteci.id
-                )
+                  (remoteci) => remoteci.id !== selectedRemoteci.id,
+                ),
               );
               unsubscribeFromARemoteci(selectedRemoteci, currentUser)
                 .then(() =>
                   dispatch(
                     showSuccess(
-                      `Unsubscription confirmed. You will no longer receive emails for failed jobs on the ${selectedRemoteci?.name} remoteci.`
-                    )
-                  )
+                      `Unsubscription confirmed. You will no longer receive emails for failed jobs on the ${selectedRemoteci?.name} remoteci.`,
+                    ),
+                  ),
                 )
                 .catch(() => {
                   dispatch(
                     showError(
-                      "We are sorry, we are unable to unsubscribe from this remoteci. Can you try again in a few minutes or contact an administrator?"
-                    )
+                      "We are sorry, we are unable to unsubscribe from this remoteci. Can you try again in a few minutes or contact an administrator?",
+                    ),
                   );
                 });
             }
@@ -187,7 +187,7 @@ export default function NewFailedJobSubscriptionPanel({
             .filter((remoteci) =>
               remoteci.name
                 .toLowerCase()
-                .includes(searchSubscribedRemotecis.toLowerCase())
+                .includes(searchSubscribedRemotecis.toLowerCase()),
             )
             .map((remoteci, index) => (
               <DualListSelectorListItem

@@ -38,7 +38,7 @@ export default function TeamPermission() {
   return (
     <>
       <Text component={TextVariants.h3}>Product permissions</Text>
-      <HelperText className="pf-u-mb-sm">
+      <HelperText className="pf-v5-u-mb-sm">
         <HelperTextItem>
           Select the product the team has access to:
         </HelperTextItem>
@@ -56,7 +56,7 @@ export default function TeamPermission() {
                 label={product.name}
                 name="permissions"
                 isChecked={isChecked}
-                onChange={(checked, e) => {
+                onChange={(e, checked) => {
                   if (checked) {
                     const permissionsWithProduct = {
                       ...values.permissions,

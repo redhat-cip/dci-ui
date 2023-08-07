@@ -7,12 +7,12 @@ import {
 } from "remotecis/remotecisSelectors";
 import { IRemoteci } from "types";
 import remotecisActions from "remotecis/remotecisActions";
+import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 
@@ -41,7 +41,7 @@ export function RemoteciSelect({
   useEffect(() => {
     if (debouncedSearchValue) {
       dispatch(
-        remotecisActions.all({ where: `name:${debouncedSearchValue}*` })
+        remotecisActions.all({ where: `name:${debouncedSearchValue}*` }),
       );
     }
   }, [debouncedSearchValue, dispatch]);
@@ -56,7 +56,7 @@ export function RemoteciSelect({
     <Select
       variant={SelectVariant.typeahead}
       typeAheadAriaLabel={placeholderText}
-      onToggle={setIsOpen}
+      onToggle={(_event, val) => setIsOpen(val)}
       onSelect={(event, selection) => {
         setIsOpen(false);
         const s = selection as IRemoteci;

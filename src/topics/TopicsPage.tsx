@@ -8,6 +8,7 @@ import {
   GalleryItem,
   CardBody,
   Title,
+  Icon,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import { getActiveTopics, isFetchingTopics } from "./topicsSelectors";
@@ -80,12 +81,14 @@ export default function TopicsPage() {
       }
     >
       {topicsPerProduct.map((product) => {
-        const Icon = getProductIcon(product.name);
+        const ProductIcon = getProductIcon(product.name);
         return (
           <div key={product.id} style={{ marginBottom: "2em" }}>
             <ProductTitle>
-              <span className="mr-xs">
-                <Icon size="md" />
+              <span className="pf-v5-u-mr-xs">
+                <Icon size="md">
+                  <ProductIcon />
+                </Icon>
               </span>
               {product.name}
             </ProductTitle>

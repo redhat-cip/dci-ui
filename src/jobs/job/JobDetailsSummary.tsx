@@ -103,12 +103,12 @@ interface ComponentsProps {
 
 export function Components({ components }: ComponentsProps) {
   const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.display_name }))
+    components.map((c) => ({ ...c, name: c.display_name })),
   );
   return (
     <div>
       {sortedComponents.map((component) => (
-        <Component key={component.id} className="mt-xs">
+        <Component key={component.id} className="pf-v5-u-mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
             {component.display_name}
           </Link>
@@ -159,8 +159,8 @@ function JobName({ jobId }: { jobId: string }) {
   return <span>{jobId}</span>;
 }
 
-const Job = styled.div`
-  background: ${(props: { status: string }) => getBackground(props.status)};
+const Job = styled.div<{ status: string }>`
+  background: ${({ status }) => getBackground(status)};
 `;
 
 interface JobDetailsSummaryProps {
@@ -309,7 +309,7 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                     <Label
                       key={index}
                       color="blue"
-                      className="pointer mr-xs mb-xs"
+                      className="pointer pf-v5-u-mr-xs pf-v5-u-mb-xs"
                       onClick={() => {
                         navigate(`/jobs?where=tags:${tag}`);
                       }}
@@ -383,7 +383,7 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                     updateJobComment({
                       ...innerJob,
                       comment,
-                    })
+                    }),
                   ).then(setInnerJob);
                 }}
               >

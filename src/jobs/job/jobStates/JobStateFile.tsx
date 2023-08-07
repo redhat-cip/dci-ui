@@ -77,7 +77,7 @@ export default function JobStateFile({
           )}
         </IconContainer>
         <FileName>{title}</FileName>
-        <LabelBox className="mr-md">
+        <LabelBox className="pf-v5-u-mr-md">
           <Label>{fileDuration}</Label>
         </LabelBox>
       </FileRow>

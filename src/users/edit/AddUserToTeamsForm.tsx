@@ -40,7 +40,7 @@ export default function AddUserToTeamForm({
       }}
     >
       {({ isValid, dirty }) => (
-        <Form id="add_user_to_team_form" className="pf-c-form">
+        <Form id="add_user_to_team_form" className="pf-v5-c-form">
           <div>
             <Flex>
               <FlexItem>Add user in</FlexItem>

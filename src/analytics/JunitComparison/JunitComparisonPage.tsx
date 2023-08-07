@@ -51,6 +51,7 @@ import {
 import { TagsInput } from "jobs/toolbar/TagsFilter";
 import { useSearchParams } from "react-router-dom";
 import { AppDispatch } from "store";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 type JunitComputationMode = "mean" | "median";
 
@@ -81,35 +82,35 @@ function JunitComparisonForm({
   const [topicId1, setTopicId1] = useState(searchParams.get("topicId1"));
   const [topicId2, setTopicId2] = useState(searchParams.get("topicId2"));
   const [remoteciId1, setRemoteciId1] = useState(
-    searchParams.get("remoteciId1")
+    searchParams.get("remoteciId1"),
   );
   const [remoteciId2, setRemoteciId2] = useState(
-    searchParams.get("remoteciId2")
+    searchParams.get("remoteciId2"),
   );
   const [tags1, setTags1] = useState<string[]>(
-    searchParams.get("tags1")?.split(",") || []
+    searchParams.get("tags1")?.split(",") || [],
   );
   const [tags2, setTags2] = useState<string[]>(
-    searchParams.get("tags2")?.split(",") || []
+    searchParams.get("tags2")?.split(",") || [],
   );
   const [baselineComputation, setBaselineComputation] =
     useState<JunitComputationMode>(
       (searchParams.get("baselineComputation") ||
-        "mean") as JunitComputationMode
+        "mean") as JunitComputationMode,
     );
   const [topic1StartDate, setTopic1StartDate] = useState(
     searchParams.get("topic1StartDate") ||
-      DateTime.now().minus({ week: 1 }).toISODate()
+      DateTime.now().minus({ week: 1 }).toISODate(),
   );
   const [topic1EndDate, setTopic1EndDate] = useState(
-    searchParams.get("topic1EndDate") || DateTime.now().toISODate()
+    searchParams.get("topic1EndDate") || DateTime.now().toISODate(),
   );
   const [topic2StartDate, setTopic2StartDate] = useState(
     searchParams.get("topic2StartDate") ||
-      DateTime.now().minus({ week: 1 }).toISODate()
+      DateTime.now().minus({ week: 1 }).toISODate(),
   );
   const [topic2EndDate, setTopic2EndDate] = useState(
-    searchParams.get("topic2EndDate") || DateTime.now().toISODate()
+    searchParams.get("topic2EndDate") || DateTime.now().toISODate(),
   );
   const [testName, setTestName] = useState(searchParams.get("testName"));
 
@@ -118,13 +119,13 @@ function JunitComparisonForm({
       <Flex direction={{ default: "column", lg: "row" }}>
         <FlexItem flex={{ default: "flex_1" }}>
           <div>
-            <h2 className="pf-c-title pf-m-lg">Reference job filters</h2>
-            <div className="pf-c-description-list__text">
+            <h2 className="pf-v5-c-title pf-m-lg">Reference job filters</h2>
+            <div className="pf-v5-c-description-list__text">
               All of the jobs corresponding to these filters will be used as the
               basis for the calculation.
             </div>
           </div>
-          <div className="pf-u-mt-md">
+          <div className="pf-v5-u-mt-md">
             <Form>
               <FormGroup label="Reference topic" isRequired fieldId="topic1">
                 <TopicSelect
@@ -185,7 +186,7 @@ function JunitComparisonForm({
                   id="test_name"
                   name="test_name"
                   value={testName || ""}
-                  onChange={setTestName}
+                  onChange={(_event, val) => setTestName(val)}
                 />
               </FormGroup>
             </Form>
@@ -222,11 +223,11 @@ function JunitComparisonForm({
                 setTags1(tmpTags2);
               }}
             >
-              <span className="pf-u-display-none pf-u-display-flex-on-lg">
+              <span className="pf-v5-u-display-none pf-v5-u-display-flex-on-lg">
                 <ArrowLeftIcon />
                 <ArrowRightIcon />
               </span>
-              <span className="pf-u-display-flex pf-u-display-none-on-lg">
+              <span className="pf-v5-u-display-flex pf-v5-u-display-none-on-lg">
                 <ArrowUpIcon />
                 <ArrowDownIcon />
               </span>
@@ -235,13 +236,13 @@ function JunitComparisonForm({
         </FlexItem>
         <FlexItem flex={{ default: "flex_1" }}>
           <div>
-            <h2 className="pf-c-title pf-m-lg">Target job filters</h2>
-            <div className="pf-c-description-list__text">
+            <h2 className="pf-v5-c-title pf-m-lg">Target job filters</h2>
+            <div className="pf-v5-c-description-list__text">
               The test cases of the target jobs will be compared to the test
               cases of the reference jobs.
             </div>
           </div>
-          <div className="pf-u-mt-md">
+          <div className="pf-v5-u-mt-md">
             <Form>
               <FormGroup label="Target topic" isRequired fieldId="topic2">
                 <TopicSelect
@@ -304,7 +305,7 @@ function JunitComparisonForm({
                     text="Mean"
                     buttonId="baseline_computation_mean_button"
                     isSelected={baselineComputation === "mean"}
-                    onChange={(isSelected) => {
+                    onChange={(_event, isSelected) => {
                       setBaselineComputation(isSelected ? "mean" : "median");
                     }}
                   />
@@ -312,7 +313,7 @@ function JunitComparisonForm({
                     text="Median"
                     buttonId="baseline_computation_median_button"
                     isSelected={baselineComputation === "median"}
-                    onChange={(isSelected) => {
+                    onChange={(_event, isSelected) => {
                       setBaselineComputation(isSelected ? "median" : "mean");
                     }}
                   />
@@ -335,7 +336,7 @@ function JunitComparisonForm({
           topic2StartDate === null ||
           topic2EndDate === null
         }
-        className="pf-u-mt-xl"
+        className="pf-v5-u-mt-xl"
         onClick={() => {
           if (
             testName &&
@@ -423,7 +424,7 @@ function JunitBarChart({
   data: JunitBarChartData;
   rangeSelected: (
     lowerBoundary: null | number,
-    upperBoundary: null | number
+    upperBoundary: null | number,
   ) => void;
 }) {
   const interval = 10;
@@ -500,7 +501,7 @@ function JunitBarChart({
                         style={{
                           backgroundColor: "white",
                         }}
-                        className="p-sm"
+                        className="pf-v5-u-p-sm"
                       >
                         <p className="desc">{message}</p>
                       </div>
@@ -622,45 +623,45 @@ function TestListDetails({
         </div>
       </CardTitle>
       <CardBody>
-        <table
-          className="pf-c-table pf-m-compact"
+        <Table
+          className="pf-v5-c-table pf-m-compact"
           role="grid"
           aria-label="junit testcase details"
         >
-          <thead>
-            <tr role="row">
-              <th role="columnheader" scope="col">
+          <Thead>
+            <Tr role="row">
+              <Th role="columnheader" scope="col">
                 Testcase name
-              </th>
-              <th
+              </Th>
+              <Th
                 role="columnheader"
                 scope="col"
                 style={{ textAlign: "center" }}
               >
                 <span>% of deviation</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {data.details
               .filter((detail) =>
-                lowerBoundary ? detail.value > lowerBoundary : true
+                lowerBoundary ? detail.value > lowerBoundary : true,
               )
               .filter((detail) =>
-                upperBoundary ? detail.value < upperBoundary : true
+                upperBoundary ? detail.value < upperBoundary : true,
               )
               .map((detail) => (
-                <tr>
-                  <td>{detail.testcase}</td>
-                  <td style={{ textAlign: "center" }}>
+                <Tr>
+                  <Td>{detail.testcase}</Td>
+                  <Td style={{ textAlign: "center" }}>
                     <span title={detail.value.toString()}>
                       {round(detail.value, 2)}%
                     </span>
-                  </td>
-                </tr>
+                  </Td>
+                </Tr>
               ))}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
       </CardBody>
     </Card>
   );
@@ -668,10 +669,10 @@ function TestListDetails({
 
 export default function JunitComparisonPage() {
   const [testLowerBoundary, setTestLowerBoundary] = useState<number | null>(
-    null
+    null,
   );
   const [testUpperBoundary, setTestUpperBoundary] = useState<number | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<JunitData | null>(null);
@@ -705,7 +706,7 @@ export default function JunitComparisonPage() {
                     setData(response.data as JunitData);
                   } else {
                     dispatch(
-                      showError("JSON returned by the API is not valid")
+                      showError("JSON returned by the API is not valid"),
                     );
                   }
                 })
@@ -720,7 +721,7 @@ export default function JunitComparisonPage() {
       </Card>
 
       {isLoading && (
-        <div className="mt-md">
+        <div className="pf-v5-u-mt-md">
           <Card>
             <CardBody>
               <Bullseye>
@@ -733,7 +734,7 @@ export default function JunitComparisonPage() {
 
       {data && (
         <>
-          <div className="mt-md">
+          <div className="pf-v5-u-mt-md">
             <Grid hasGutter>
               <GridItem span={6}>
                 <JunitBarChart
@@ -749,7 +750,7 @@ export default function JunitComparisonPage() {
               </GridItem>
             </Grid>
           </div>
-          <div className="mt-md">
+          <div className="pf-v5-u-mt-md">
             <TestListDetails
               data={data.bar_chart}
               lowerBoundary={testLowerBoundary}

@@ -43,8 +43,8 @@ export default function ConfirmDeleteModal({
         <div>
           <TextRed>{message}</TextRed>
         </div>
-        <div className="mt-md">
-          <Button variant="secondary" className="mr-xs" onClick={hide}>
+        <div className="pf-v5-u-mt-md">
+          <Button variant="secondary" className="pf-v5-u-mr-xs" onClick={hide}>
             {cancelButton}
           </Button>
           <Button

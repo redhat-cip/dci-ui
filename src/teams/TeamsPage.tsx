@@ -11,6 +11,7 @@ import CreateTeamModal from "./CreateTeamModal";
 import { Button, Flex, FlexItem, Label } from "@patternfly/react-core";
 import { Link, useNavigate } from "react-router-dom";
 import TeamCreationWizard from "./TeamCreationWizard";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 export default function TeamsPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -74,45 +75,45 @@ export default function TeamsPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
       }
     >
-      <table
-        className="pf-c-table pf-m-compact pf-m-grid-md"
+      <Table
+        className="pf-v5-c-table pf-m-compact pf-m-grid-md"
         role="grid"
         aria-label="Teams table"
         id="teams-table"
       >
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Team Name</th>
-            <th>Partner</th>
-            <th>Active</th>
-            <th>Created at</th>
-          </tr>
-        </thead>
-        <tbody>
+        <Thead>
+          <Tr>
+            <Th>Id</Th>
+            <Th>Team Name</Th>
+            <Th>Partner</Th>
+            <Th>Active</Th>
+            <Th>Created at</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {teams.map((team) => (
-            <tr>
-              <th>
+            <Tr key={team.id}>
+              <Th>
                 <CopyButton text={team.id} />
-              </th>
-              <th>
+              </Th>
+              <Th>
                 <Link to={`/teams/${team.id}`}>{team.name}</Link>
-              </th>
-              <td>
+              </Th>
+              <Td>
                 {team.external ? <Label color="blue">partner</Label> : null}
-              </td>
-              <td>
+              </Td>
+              <Td>
                 {team.state === "active" ? (
                   <Label color="green">active</Label>
                 ) : (
                   <Label color="red">inactive</Label>
                 )}
-              </td>
-              <td>{team.from_now}</td>
-            </tr>
+              </Td>
+              <Td>{team.from_now}</Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
     </MainPage>
   );
 }

@@ -1,10 +1,9 @@
+import { DatePicker, ToolbarFilter } from "@patternfly/react-core";
 import {
-  DatePicker,
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { useState } from "react";
 import { RangeOptionValue } from "types";
 
@@ -65,7 +64,7 @@ export default function RangeFilter({
         <div>
           <div>
             <Select
-              onToggle={setIsOpen}
+              onToggle={(_event, val) => setIsOpen(val)}
               isOpen={isOpen}
               variant={SelectVariant.single}
               selections={label}

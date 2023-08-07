@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import { ToolbarFilter, ToolbarChip } from "@patternfly/react-core";
 import {
-  ToolbarFilter,
   Select,
   SelectVariant,
   SelectOption,
-  ToolbarChip,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 import { useDispatch, useSelector } from "react-redux";
 import { getTeams, isFetchingTeams } from "teams/teamsSelectors";
 import { AppDispatch } from "store";
@@ -64,7 +63,7 @@ export default function TeamsFilter({
       }))}
       deleteChip={(category, chip) => {
         const teamToUnselect = selectedTeams.find(
-          (t) => t.id === (chip as ToolbarChip).key
+          (t) => t.id === (chip as ToolbarChip).key,
         );
         if (teamToUnselect) {
           onClear(teamToUnselect);
@@ -76,10 +75,10 @@ export default function TeamsFilter({
       <Select
         variant={SelectVariant.typeaheadMulti}
         typeAheadAriaLabel={placeholderText}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, teamSelected) => {
           const teamDeleted = selectedTeams.find(
-            (t) => t.id === (teamSelected as ITeam).id
+            (t) => t.id === (teamSelected as ITeam).id,
           );
           if (teamDeleted) {
             onClear(teamDeleted);

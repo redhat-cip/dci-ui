@@ -39,7 +39,9 @@ export default function MainPage({
   return (
     <div {...props}>
       {Breadcrumb && (
-        <section className="pf-c-page__main-breadcrumb">{Breadcrumb}</section>
+        <section className="pf-v5-c-page__main-breadcrumb">
+          {Breadcrumb}
+        </section>
       )}
       {isEmpty(HeaderSection) ? (
         <PageSection variant={PageSectionVariants.light}>

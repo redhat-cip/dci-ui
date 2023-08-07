@@ -1,7 +1,7 @@
 import http from "services/http";
 import { createActions } from "api/apiActions";
 import { AxiosPromise } from "axios";
-import { INewUser, ITeam, IUser } from "types";
+import { ITeam, IUser } from "types";
 
 export default createActions("user");
 
@@ -29,21 +29,21 @@ export function getOrCreateUser(sso_username: string) {
 
 export function addUserToTeam(
   user_id: string,
-  team: ITeam
+  team: ITeam,
 ): AxiosPromise<void> {
   return http.post(`/api/v1/teams/${team.id}/users/${user_id}`, {});
 }
 
 export function deleteUserFromTeam(
   user: IUser,
-  team: ITeam
+  team: ITeam,
 ): AxiosPromise<void> {
   return http.delete(`/api/v1/teams/${team.id}/users/${user.id}`);
 }
 
 export function searchUserBy(
   key: "email" | "name" | "sso_username",
-  value: string
+  value: string,
 ): AxiosPromise<{
   users: IUser[];
 }> {

@@ -19,5 +19,5 @@ export const getUsers = createSelector(
         ...user,
         from_now: fromNow(user.created_at),
       } as IEnhancedUser;
-    })
+    }),
 );

@@ -11,6 +11,7 @@ import { Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { AppDispatch } from "store";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 export default function ProductsPage() {
   const currentUser = useSelector(getCurrentUser);
@@ -55,37 +56,35 @@ export default function ProductsPage() {
         />
       }
     >
-      <table className="pf-c-table pf-m-compact pf-m-grid-md">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Label</th>
-            <th>Description</th>
-            <th className="text-center">
-              {currentUser.isSuperAdmin ? "Actions" : ""}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table aria-label="Products table" variant="compact">
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Name</Th>
+            <Th>Label</Th>
+            <Th>Description</Th>
+            <Th textCenter> {currentUser.isSuperAdmin ? "Actions" : ""}</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {products.map((product) => (
-            <tr key={`${product.id}.${product.etag}`}>
-              <td>
+            <Tr key={`${product.id}.${product.etag}`}>
+              <Td dataLabel="ID">
                 <CopyButton text={product.id} />
-              </td>
-              <td>{product.name}</td>
-              <td>{product.label}</td>
-              <td>{product.description}</td>
-              <td className="text-center">
+              </Td>
+              <Td dataLabel="Name">{product.name}</Td>
+              <Td dataLabel="Label">{product.label}</Td>
+              <Td dataLabel="Description">{product.description}</Td>
+              <Td className="text-center">
                 {currentUser.isSuperAdmin ? (
                   <>
                     <EditProductModal
-                      className="mr-xs"
+                      className="pf-v5-u-mr-xs"
                       onSubmit={(editedProduct) => {
                         dispatch(productsActions.update(editedProduct)).finally(
                           () => {
                             getAllProducts();
-                          }
+                          },
                         );
                       }}
                       product={product}
@@ -103,11 +102,11 @@ export default function ProductsPage() {
                     </ConfirmDeleteModal>
                   </>
                 ) : null}
-              </td>
-            </tr>
+              </Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
     </MainPage>
   );
 }

@@ -11,6 +11,7 @@ import {
   DrawerContentBody,
   DrawerHead,
   DrawerPanelContent,
+  Icon,
   Label,
   LabelGroup,
   Toolbar,
@@ -46,6 +47,15 @@ import qs from "qs";
 import TeamFilter from "jobs/toolbar/TeamFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 import { AppDispatch } from "store";
+import {
+  Table,
+  Caption,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+} from "@patternfly/react-table";
 
 interface ICoverageFilters {
   topic_id: string | null;
@@ -64,7 +74,7 @@ export function createCoverageSearchFromFilters(filters: ICoverageFilters) {
       encode: false,
       arrayFormat: "repeat",
       skipNulls: true,
-    }
+    },
   );
 }
 
@@ -82,14 +92,14 @@ export default function ComponentCoveragePage() {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [topicId, setTopicId] = useState<string | null>(
-    searchParams.get("topic_id")
+    searchParams.get("topic_id"),
   );
   const [teamId, setTeamId] = useState<string | null>(
-    searchParams.get("team_id")
+    searchParams.get("team_id"),
   );
   const [types, setTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>(
-    searchParams.get("types")?.split(",") || []
+    searchParams.get("types")?.split(",") || [],
   );
   const [isLoading, setIsLoading] = useState(false);
   const [ESData, setESData] = useState<IComponentCoverageESData | null>(null);
@@ -208,7 +218,7 @@ export default function ComponentCoveragePage() {
                       onClear={() => setSelectedTypes([])}
                       deleteChip={(type) =>
                         setSelectedTypes(
-                          selectedTypes.filter((t) => t !== type)
+                          selectedTypes.filter((t) => t !== type),
                         )
                       }
                       onSelect={(type) => {
@@ -216,7 +226,7 @@ export default function ComponentCoveragePage() {
                           setSelectedTypes([...selectedTypes, type]);
                         } else {
                           setSelectedTypes(
-                            selectedTypes.filter((t) => t !== type)
+                            selectedTypes.filter((t) => t !== type),
                           );
                         }
                       }}
@@ -242,7 +252,11 @@ export default function ComponentCoveragePage() {
             <EmptyState
               title="Choose a topic"
               info="Select a topic in the topic list to display the components coverage"
-              icon={() => <InfoCircleIcon size="lg" />}
+              icon={() => (
+                <Icon size="lg">
+                  <InfoCircleIcon />
+                </Icon>
+              )}
             />
           ) : isLoading ? (
             <Bullseye>
@@ -271,12 +285,8 @@ export default function ComponentCoveragePage() {
                   <DrawerPanelContent widths={{ default: "width_66" }}>
                     <DrawerHead>
                       <div ref={drawerRef}>
-                        <table
-                          className="pf-c-table pf-m-compact pf-m-grid-md"
-                          role="grid"
-                          aria-label="list jobs"
-                        >
-                          <caption>
+                        <Table variant="compact" aria-label="jobs list">
+                          <Caption>
                             {componentDetails && (
                               <span>
                                 Jobs for component{" "}
@@ -287,41 +297,41 @@ export default function ComponentCoveragePage() {
                                 </Link>
                               </span>
                             )}
-                          </caption>
-                          <thead>
-                            <tr role="row">
-                              <th role="columnheader" scope="col">
+                          </Caption>
+                          <Thead>
+                            <Tr role="row">
+                              <Th role="columnheader" scope="col">
                                 Name
-                              </th>
-                              <th role="columnheader" scope="col">
+                              </Th>
+                              <Th role="columnheader" scope="col">
                                 Status
-                              </th>
-                              <th role="columnheader" scope="col">
+                              </Th>
+                              <Th role="columnheader" scope="col">
                                 Created at
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
+                              </Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
                             {componentDetails &&
                               sortByNewestFirst(componentDetails.jobs).map(
                                 (job, i) => (
-                                  <tr key={i} role="row">
-                                    <td role="cell" data-label="Component name">
+                                  <Tr key={i} role="row">
+                                    <Td role="cell" data-label="Component name">
                                       <Link to={`/jobs/${job.id}`}>
                                         {job.name}
                                       </Link>
-                                    </td>
-                                    <td role="cell" data-label="Warning">
+                                    </Td>
+                                    <Td role="cell" data-label="Warning">
                                       <JobStatusLabel status={job.status} />
-                                    </td>
-                                    <td role="cell" data-label="Warning">
+                                    </Td>
+                                    <Td role="cell" data-label="Warning">
                                       {formatDate(job.created_at)}
-                                    </td>
-                                  </tr>
-                                )
+                                    </Td>
+                                  </Tr>
+                                ),
                               )}
-                          </tbody>
-                        </table>
+                          </Tbody>
+                        </Table>
                       </div>
                       <DrawerActions>
                         <DrawerCloseButton
@@ -333,56 +343,56 @@ export default function ComponentCoveragePage() {
                 }
               >
                 <DrawerContentBody>
-                  <table
-                    className="pf-c-table pf-m-compact pf-m-grid-md"
+                  <Table
+                    className="pf-v5-c-table pf-m-compact pf-m-grid-md"
                     role="grid"
                     aria-label="component coverage"
                   >
-                    <thead>
-                      <tr role="row">
-                        <th role="columnheader" scope="col">
+                    <Thead>
+                      <Tr role="row">
+                        <Th role="columnheader" scope="col">
                           Component name
-                        </th>
-                        <th role="columnheader" scope="col">
+                        </Th>
+                        <Th role="columnheader" scope="col">
                           Tags
-                        </th>
-                        <th role="columnheader" scope="col"></th>
-                        <th role="columnheader" scope="col">
+                        </Th>
+                        <Th role="columnheader" scope="col"></Th>
+                        <Th role="columnheader" scope="col">
                           Percentage of successful jobs{" "}
-                        </th>
-                        <th role="columnheader" scope="col">
+                        </Th>
+                        <Th role="columnheader" scope="col">
                           Nb success/failed jobs
                           <br />
                           over the last 5 weeks
-                        </th>
-                        <th
+                        </Th>
+                        <Th
                           role="columnheader"
                           scope="col"
                           className="text-center"
                         >
                           Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                        </Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
                       {Object.values(components).map((component, i) => {
                         const percentageSuccess =
                           component.nbOfJobs === 0
                             ? 0
                             : Math.round(
                                 (component.nbOfSuccessfulJobs * 100) /
-                                  component.nbOfJobs
+                                  component.nbOfJobs,
                               );
                         return (
-                          <tr key={i} role="row">
-                            <td role="cell" data-label="Component name">
+                          <Tr key={i} role="row">
+                            <Td role="cell" data-label="Component name">
                               <Link
                                 to={`/topics/${component.topic_id}/components/${component.id}`}
                               >
                                 {component.display_name}
                               </Link>
-                            </td>
-                            <td role="cell" data-label="Tags">
+                            </Td>
+                            <Td role="cell" data-label="Tags">
                               <LabelGroup numLabels={3} isCompact>
                                 {component.tags.map((tag, index) => (
                                   <Label key={index} color="blue" isCompact>
@@ -390,20 +400,20 @@ export default function ComponentCoveragePage() {
                                   </Label>
                                 ))}
                               </LabelGroup>
-                            </td>
-                            <td role="cell" data-label="Warning">
+                            </Td>
+                            <Td role="cell" data-label="Warning">
                               {component.nbOfJobs === 0 && (
                                 <span
                                   style={{
                                     color: global_palette_red_100.value,
                                   }}
                                 >
-                                  <WarningTriangleIcon className="mr-xs" />
+                                  <WarningTriangleIcon className="pf-u-mr-xs" />
                                   not tested
                                 </span>
                               )}
-                            </td>
-                            <td
+                            </Td>
+                            <Td
                               role="cell"
                               data-label="% success failures jobs"
                             >
@@ -422,7 +432,7 @@ export default function ComponentCoveragePage() {
                                     width: "200px",
                                     display: "block",
                                   }}
-                                  className="mr-md"
+                                  className="pf-v5-u-mr-md"
                                 >
                                   <div
                                     style={{
@@ -442,7 +452,7 @@ export default function ComponentCoveragePage() {
                                     width: "35px",
                                     textAlign: "right",
                                   }}
-                                  className="mr-md"
+                                  className="pf-v5-u-mr-md"
                                 >
                                   {percentageSuccess}%
                                 </span>
@@ -461,8 +471,8 @@ export default function ComponentCoveragePage() {
                                   {component.nbOfJobs > 1 ? "jobs" : "job"}
                                 </span>
                               </div>
-                            </td>
-                            <td
+                            </Td>
+                            <Td
                               role="cell"
                               data-label="number of successful/failed jobs over the last 5 weeks."
                               style={{
@@ -473,8 +483,8 @@ export default function ComponentCoveragePage() {
                               <LastComponentsJobsBarChart
                                 component={component}
                               />
-                            </td>
-                            <td
+                            </Td>
+                            <Td
                               role="cell"
                               data-label="actions"
                               className="text-center"
@@ -487,12 +497,12 @@ export default function ComponentCoveragePage() {
                               >
                                 see jobs
                               </Button>
-                            </td>
-                          </tr>
+                            </Td>
+                          </Tr>
                         );
                       })}
-                    </tbody>
-                  </table>
+                    </Tbody>
+                  </Table>
                 </DrawerContentBody>
               </DrawerContent>
             </Drawer>

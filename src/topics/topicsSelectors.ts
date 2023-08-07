@@ -42,9 +42,9 @@ export const getTopics = createSelector(
         };
       })
       .sort(sortTopicWithSemver)
-      .sort(sortTopicPerProduct)
+      .sort(sortTopicPerProduct),
 );
 
 export const getActiveTopics = createSelector(getTopics, (topics) =>
-  topics.filter((t) => t.state === "active")
+  topics.filter((t) => t.state === "active"),
 );

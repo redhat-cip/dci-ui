@@ -7,7 +7,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: null,
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active");
   expect(
     buildWhereFromSearch({
@@ -15,7 +15,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: null,
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active,display_name:foo");
   expect(
     buildWhereFromSearch({
@@ -23,7 +23,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: null,
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active,display_name:foo*");
   expect(
     buildWhereFromSearch({
@@ -31,7 +31,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: "compose",
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active,type:compose");
   expect(
     buildWhereFromSearch({
@@ -39,7 +39,7 @@ test("buildWhereFromSearch", () => {
       tags: ["build:candidate"],
       type: null,
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active,tags:build:candidate");
   expect(
     buildWhereFromSearch({
@@ -47,7 +47,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: "Compose",
       state: "active",
-    })
+    }),
   ).toBe("?where=state:active,type:compose");
   expect(
     buildWhereFromSearch({
@@ -55,7 +55,7 @@ test("buildWhereFromSearch", () => {
       tags: [],
       type: null,
       state: "inactive",
-    })
+    }),
   ).toBe("?where=state:inactive,display_name:foo");
 });
 
@@ -74,8 +74,8 @@ test("parseWhereFromSearch", () => {
   });
   expect(
     parseWhereFromSearch(
-      "?where=display_name:toto,state:inactive,tags:test:1,tags:test:2,type:compose"
-    )
+      "?where=display_name:toto,state:inactive,tags:test:1,tags:test:2,type:compose",
+    ),
   ).toEqual({
     display_name: "toto",
     tags: ["test:1", "test:2"],

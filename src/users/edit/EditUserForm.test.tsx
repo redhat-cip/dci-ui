@@ -12,7 +12,7 @@ test("test create user form submit the correct values", async () => {
     password: "",
   } as IUser;
   const { container, getByRole, getByTestId } = render(
-    <CreateUserForm user={user} onSubmit={mockOnSubmit} />
+    <CreateUserForm user={user} onSubmit={mockOnSubmit} />,
   );
   const create_user_form = container.querySelector("#create_user_form");
   expect(create_user_form).not.toBe(null);
@@ -33,7 +33,7 @@ test("test create user form submit the correct values", async () => {
   });
 
   const password = getByTestId(
-    "create_user_form__password"
+    "create_user_form__password",
   ) as HTMLInputElement;
   fireEvent.change(password, {
     target: {

@@ -17,11 +17,11 @@ function DCITabItem({
   const isActive = location.pathname.startsWith(path.pathname);
   return (
     <li
-      className={`pf-c-tabs__item ${isActive ? "pf-m-current" : ""}`}
+      className={`pf-v5-c-tabs__item ${isActive ? "pf-m-current" : ""}`}
       {...props}
     >
-      <Link to={to} className="pf-c-tabs__link">
-        <span className="pf-c-tabs__item-text">{children}</span>
+      <Link to={to} className="pf-v5-c-tabs__link">
+        <span className="pf-v5-c-tabs__item-text">{children}</span>
       </Link>
     </li>
   );
@@ -44,8 +44,8 @@ export default function PermissionsPage() {
     >
       <Card>
         <CardBody>
-          <div className="pf-c-tabs" id="default-example">
-            <ul className="pf-c-tabs__list">
+          <div className="pf-v5-c-tabs" id="default-example">
+            <ul className="pf-v5-c-tabs__list">
               <DCITabItem to="/permissions/products">Products</DCITabItem>
               <DCITabItem to="/permissions/topics">Topics</DCITabItem>
             </ul>

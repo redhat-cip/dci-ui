@@ -13,7 +13,7 @@ test("test edit product form submit the correct values", async () => {
     from_now: "",
   } as unknown as IProduct;
   const { baseElement, getByRole, getByTestId } = render(
-    <EditProductModal product={product} onSubmit={mockOnSubmit} />
+    <EditProductModal product={product} onSubmit={mockOnSubmit} />,
   );
 
   const showModal = getByRole("button", { name: /Edit RHEL/i });
@@ -22,7 +22,7 @@ test("test edit product form submit the correct values", async () => {
 
   await waitFor(() => {
     expect(
-      baseElement.querySelector("#edit_product_modal")
+      baseElement.querySelector("#edit_product_modal"),
     ).toBeInTheDocument();
   });
 
@@ -33,7 +33,7 @@ test("test edit product form submit the correct values", async () => {
   expect(name.value).toBe("RHEL");
 
   const description = getByTestId(
-    "product_form__description"
+    "product_form__description",
   ) as HTMLInputElement;
   expect(description.value).toBe("");
   fireEvent.change(description, {

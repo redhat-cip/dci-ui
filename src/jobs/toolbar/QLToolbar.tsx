@@ -48,7 +48,7 @@ export default function QLToolbar({
           <Text component={TextVariants.h4}>Example 1</Text>
           <Text component={TextVariants.p}>
             Find all job with name
-            <span className="pf-u-background-color-200 pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
               job-name
             </span>
           </Text>
@@ -56,11 +56,11 @@ export default function QLToolbar({
           <Text component={TextVariants.h4}>Example 2</Text>
           <Text component={TextVariants.p}>
             Find all job with name
-            <span className="pf-u-background-color-200 pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
               job-name
             </span>
             and status
-            <span className="pf-u-background-color-success pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-success pf-v5-u-px-xs pf-v5-u-mx-xs">
               success
             </span>
           </Text>
@@ -68,15 +68,15 @@ export default function QLToolbar({
           <Text component={TextVariants.h4}>Example 3</Text>
           <Text component={TextVariants.p}>
             Find all job with name
-            <span className="pf-u-background-color-200 pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
               job-name
             </span>
             and status
-            <span className="pf-u-background-color-danger pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-danger pf-v5-u-px-xs pf-v5-u-mx-xs">
               failure
             </span>
             or
-            <span className="pf-u-background-color-danger pf-u-px-xs pf-u-mx-xs">
+            <span className="pf-v5-u-background-color-danger pf-v5-u-px-xs pf-v5-u-mx-xs">
               error
             </span>
           </Text>
@@ -105,11 +105,10 @@ export default function QLToolbar({
             <TextInput
               value={value}
               type="text"
-              onChange={(value) => setValue(value)}
+              onChange={(_event, value) => setValue(value)}
               placeholder="Query language search"
               aria-label="query language search input"
               style={{ minWidth: "380px" }}
-              iconVariant="search"
             />
           </Form>
         </ToolbarFilter>

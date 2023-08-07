@@ -9,11 +9,6 @@ import {
 } from "react-router-dom";
 import { isEmpty, values } from "lodash";
 import {
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownSeparator,
-  DropdownPosition,
   Nav,
   NavGroup,
   NavItem,
@@ -31,7 +26,15 @@ import {
   ToolbarContent,
   Text,
   TextVariants,
+  PageSidebarBody,
 } from "@patternfly/react-core";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownSeparator,
+  DropdownPosition,
+} from "@patternfly/react-core/deprecated";
 import Logo from "logo.min.svg";
 import {
   BarsIcon,
@@ -63,7 +66,10 @@ function UserDropdownMenuMobile() {
       position={DropdownPosition.right}
       onSelect={() => setIsOpen(!isOpen)}
       toggle={
-        <DropdownToggle toggleIndicator={null} onToggle={setIsOpen}>
+        <DropdownToggle
+          toggleIndicator={null}
+          onToggle={(_event, val) => setIsOpen(val)}
+        >
           <UserIcon />
         </DropdownToggle>
       }
@@ -104,12 +110,12 @@ function UserDropdownMenu() {
       position={DropdownPosition.right}
       onSelect={() => setIsOpen(!isOpen)}
       toggle={
-        <DropdownToggle onToggle={setIsOpen}>
+        <DropdownToggle onToggle={(_event, val) => setIsOpen(val)}>
           {identity.fullname || identity.name}
         </DropdownToggle>
       }
       dropdownItems={[
-        <DropdownItem key="team" component="div" isPlainText>
+        <DropdownItem key="email" component="div" isPlainText>
           <Text component={TextVariants.small}>Email:</Text>
           <Text>{identity.email}</Text>
         </DropdownItem>,
@@ -187,7 +193,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
           </Button>
         </MastheadToggle>
         <MastheadMain>
-          <MastheadBrand onClick={() => navigate("/")}>
+          <MastheadBrand component="a" onClick={() => navigate("/")}>
             <img src={Logo} alt="DCI Logo" />
           </MastheadBrand>
         </MastheadMain>
@@ -196,7 +202,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
             <ToolbarContent>
               <ToolbarGroup
                 variant="icon-button-group"
-                alignment={{ default: "alignRight" }}
+                align={{ default: "alignRight" }}
                 spacer={{ default: "spacerNone" }}
                 visibility={{ md: "hidden" }}
               >
@@ -218,7 +224,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 </ToolbarItem>
               </ToolbarGroup>
               <ToolbarGroup
-                alignment={{ default: "alignRight" }}
+                align={{ default: "alignRight" }}
                 spacer={{ default: "spacerMd" }}
                 visibility={{ default: "hidden", md: "visible" }}
               >
@@ -330,7 +336,11 @@ function Sidebar({ isNavOpen }: SidebarProps) {
       )}
     </Nav>
   );
-  return <PageSidebar nav={PageNav} theme="dark" isNavOpen={isNavOpen} />;
+  return (
+    <PageSidebar theme="dark" isSidebarOpen={isNavOpen}>
+      <PageSidebarBody>{PageNav}</PageSidebarBody>
+    </PageSidebar>
+  );
 }
 
 export default function AuthenticatedLayout({ ...props }) {
@@ -353,7 +363,7 @@ export default function AuthenticatedLayout({ ...props }) {
       }
       sidebar={<Sidebar isNavOpen={isNavOpen} />}
       isManagedSidebar={false}
-      onPageResize={({ windowSize }) => {
+      onPageResize={(_event, { windowSize }) => {
         if (windowSize >= 1450) {
           setIsNavOpen(true);
         } else {

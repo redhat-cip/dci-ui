@@ -56,6 +56,6 @@ export const getJobs = createSelector(
           jobstates: [],
           files: [],
         };
-      })
-    )
+      }),
+    ),
 );

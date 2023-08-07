@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { JobsTableListColumn } from "types";
-import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
+import {
+  Select,
+  SelectOption,
+  SelectVariant,
+} from "@patternfly/react-core/deprecated";
 
 export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
   id: "Id",
@@ -58,7 +62,7 @@ export default function TableViewColumnsFilter({
           <SelectOption key={i} value={column}>
             {tableViewColumnLabels[column]}
           </SelectOption>
-        )
+        ),
       )}
     </Select>
   );

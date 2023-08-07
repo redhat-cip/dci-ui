@@ -10,6 +10,7 @@ import {
   Title,
   Grid,
   GridItem,
+  Icon,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
@@ -58,12 +59,14 @@ export default function LatestJobStatusPage() {
     >
       <Grid hasGutter>
         {Object.values(products).map((product) => {
-          const Icon = getProductIcon(product.name);
+          const ProductIcon = getProductIcon(product.name);
           return (
-            <GridItem key={product.id} span={12} className="mb-xl">
+            <GridItem key={product.id} span={12} className="pf-v5-u-mb-xl">
               <ProductTitle>
-                <span className="mr-xs">
-                  <Icon size="md" />
+                <span className="pf-v5-u-mr-xs">
+                  <Icon size="md">
+                    <ProductIcon />
+                  </Icon>
                 </span>
                 {product.name}
               </ProductTitle>

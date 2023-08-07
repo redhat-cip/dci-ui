@@ -75,7 +75,7 @@ export default function TextAreaEditableOnHover({
                 variant="control"
                 type="submit"
                 isInline
-                isSmall
+                size="sm"
                 isDisabled={!(isValid && dirty)}
               >
                 <CheckIcon />
@@ -84,9 +84,9 @@ export default function TextAreaEditableOnHover({
                 variant="control"
                 type="button"
                 isInline
-                isSmall
+                size="sm"
                 onClick={() => setEditModeOne(false)}
-                className="ml-xs"
+                className="pf-v5-u-ml-xs"
               >
                 <TimesIcon />
               </Button>

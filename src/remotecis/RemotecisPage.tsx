@@ -26,6 +26,7 @@ import EditRemoteciModal from "./EditRemoteciModal";
 import { useAuth } from "auth/authContext";
 import { IPaginationFilters } from "types";
 import { getLimitAndOffset } from "jobs/toolbar/filters";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 const initialRemoteciFilter = {
   page: 1,
@@ -88,10 +89,7 @@ export default function RemotecisPage() {
       <Toolbar id="toolbar-remotecis" collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup style={{ flex: "1" }}>
-            <ToolbarItem
-              variant="pagination"
-              alignment={{ default: "alignRight" }}
-            >
+            <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
               {nbOfRemotecis === 0 ? null : (
                 <Pagination
                   perPage={filters.perPage}
@@ -115,52 +113,52 @@ export default function RemotecisPage() {
           </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
-      <table className="pf-c-table pf-m-compact pf-m-grid-md">
-        <thead>
-          <tr>
-            <th className="text-center">ID</th>
-            <th>Name</th>
-            <th className="text-center">Status</th>
-            <th className="text-center" title="Authentication">
-              <UserSecretIcon className="mr-xs" /> Authentication
-            </th>
-            <th className="text-center">Team</th>
-            <th>Created</th>
-            <th className="text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+        <Thead>
+          <Tr>
+            <Th className="text-center">ID</Th>
+            <Th>Name</Th>
+            <Th className="text-center">Status</Th>
+            <Th className="text-center" title="Authentication">
+              <UserSecretIcon className="pf-v5-u-mr-xs" /> Authentication
+            </Th>
+            <Th className="text-center">Team</Th>
+            <Th>Created</Th>
+            <Th className="text-center">Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {remotecis.map((remoteci) => (
-            <tr key={`${remoteci.id}.${remoteci.etag}`}>
-              <td className="text-center">
+            <Tr key={`${remoteci.id}.${remoteci.etag}`}>
+              <Td className="text-center">
                 <CopyButton text={remoteci.id} />
-              </td>
-              <td>{remoteci.name}</td>
-              <td className="text-center">
+              </Td>
+              <Td>{remoteci.name}</Td>
+              <Td className="text-center">
                 {remoteci.state === "active" ? (
                   <Label color="green">active</Label>
                 ) : (
                   <Label color="red">inactive</Label>
                 )}
-              </td>
-              <td className="text-center">
+              </Td>
+              <Td className="text-center">
                 <SeeAuthentificationFileModal
                   type="sh"
                   role="remoteci"
                   resource={remoteci}
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 />
                 <SeeAuthentificationFileModal
                   type="yaml"
                   role="remoteci"
                   resource={remoteci}
                 />
-              </td>
-              <td className="text-center">{remoteci?.team?.name}</td>
-              <td>{remoteci.from_now}</td>
-              <td className="text-center">
+              </Td>
+              <Td className="text-center">{remoteci?.team?.name}</Td>
+              <Td>{remoteci.from_now}</Td>
+              <Td className="text-center">
                 <EditRemoteciModal
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                   remoteci={remoteci}
                   teams={Object.values(identity.teams)}
                   onSubmit={(editedRemoteci) => {
@@ -173,16 +171,16 @@ export default function RemotecisPage() {
                   onOk={() => dispatch(remotecisActions.delete(remoteci))}
                 >
                   {(openModal) => (
-                    <Button isSmall variant="danger" onClick={openModal}>
+                    <Button size="sm" variant="danger" onClick={openModal}>
                       <TrashIcon />
                     </Button>
                   )}
                 </ConfirmDeleteModal>
-              </td>
-            </tr>
+              </Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
     </MainPage>
   );
 }

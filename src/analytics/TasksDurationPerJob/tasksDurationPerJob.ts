@@ -7,14 +7,17 @@ export function transform(dataFromES: IDataFromES) {
       name: hit._source.job_name,
       status: hit._source.job_status,
       created_at: hit._source.created_at,
-      data: hit._source.data.reduce((dataAcc, d, i) => {
-        dataAcc.push({
-          name: d.name,
-          x: i + 1,
-          y: d.duration,
-        });
-        return dataAcc;
-      }, [] as IGraphData["data"]),
+      data: hit._source.data.reduce(
+        (dataAcc, d, i) => {
+          dataAcc.push({
+            name: d.name,
+            x: i + 1,
+            y: d.duration,
+          });
+          return dataAcc;
+        },
+        [] as IGraphData["data"],
+      ),
     });
     return acc;
   }, [] as IGraphData[]);
@@ -63,6 +66,6 @@ export function getDomain(graphData: IGraphData[] | null, area: IRefArea) {
       }
       return acc;
     },
-    { ...initialDomain }
+    { ...initialDomain },
   );
 }

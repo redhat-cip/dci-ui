@@ -20,8 +20,8 @@ test("buildIdentity without a default team return the first team", () => {
         },
         timezone: "UTC-04",
       },
-      null
-    )
+      null,
+    ),
   ).toEqual({
     email: "test@example.org",
     etag: "e1",
@@ -59,8 +59,8 @@ test("buildIdentity with a default team return this team", () => {
       },
       {
         id: "t2",
-      } as ITeam
-    )
+      } as ITeam,
+    ),
   ).toEqual({
     email: "test@example.org",
     etag: "e1",
@@ -98,8 +98,8 @@ test("buildIdentity remove an old team the user doesn't have access to anymore",
       },
       {
         id: "t3",
-      } as ITeam
-    )
+      } as ITeam,
+    ),
   ).toEqual({
     email: "test@example.org",
     etag: "e1",

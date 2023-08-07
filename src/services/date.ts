@@ -4,7 +4,7 @@ import { RangeOptionValue } from "types";
 
 export function fromNow(
   dateString: string,
-  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ) {
   return DateTime.fromISO(dateString, { zone: "utc" })
     .setZone(timezone)
@@ -13,7 +13,7 @@ export function fromNow(
 
 export function humanizeDuration(
   durationInMs: number | null,
-  option: humanize.Options = {}
+  option: humanize.Options = {},
 ) {
   if (durationInMs === null) return "0 seconds";
   return humanize(durationInMs, { round: true, largest: 1, ...option });
@@ -22,7 +22,7 @@ export function humanizeDuration(
 export function formatDate(
   datetime: string | DateTime,
   format = DateTime.DATETIME_MED_WITH_SECONDS,
-  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ) {
   let _datetime: DateTime;
   if (typeof datetime === "string") {

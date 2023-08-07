@@ -21,7 +21,7 @@ const meta = {
     (Story) => (
       <Provider store={store}>
         <MemoryRouter>
-        <Story />
+          <Story />
         </MemoryRouter>
       </Provider>
     ),

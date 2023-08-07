@@ -2,10 +2,6 @@ import { useState } from "react";
 import { IJobFilters, JobsTableListColumn } from "types";
 import {
   ToolbarItem,
-  Dropdown,
-  DropdownPosition,
-  DropdownToggle,
-  DropdownItem,
   ToolbarGroup,
   ToolbarContent,
   Toolbar,
@@ -13,6 +9,12 @@ import {
   Button,
   ButtonVariant,
 } from "@patternfly/react-core";
+import {
+  Dropdown,
+  DropdownPosition,
+  DropdownToggle,
+  DropdownItem,
+} from "@patternfly/react-core/deprecated";
 import {
   ArrowsAltVIcon,
   ListIcon,
@@ -69,7 +71,7 @@ export default function JobsToolbar({
   const [showQLToolbar, setShowQLToolbar] = useState(filters.query !== null);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<Category>(
-    Categories[0]
+    Categories[0],
   );
 
   useHotkeys("ctrl+shift+q", () => setShowQLToolbar(!showQLToolbar), [
@@ -91,7 +93,7 @@ export default function JobsToolbar({
                   if (event) {
                     const link = event.target as HTMLElement;
                     const selectedCategory = Categories.find(
-                      (category) => category === link.innerText
+                      (category) => category === link.innerText,
                     );
                     if (selectedCategory) {
                       setCurrentCategory(selectedCategory);
@@ -102,7 +104,9 @@ export default function JobsToolbar({
                 position={DropdownPosition.left}
                 toggle={
                   <DropdownToggle
-                    onToggle={(isOpen) => setIsCategoryDropdownOpen(isOpen)}
+                    onToggle={(_event, isOpen) =>
+                      setIsCategoryDropdownOpen(isOpen)
+                    }
                     style={{ width: "100%" }}
                   >
                     {currentCategory}
@@ -232,10 +236,7 @@ export default function JobsToolbar({
           </ToolbarItem>
         )}
         <ToolbarGroup style={{ flex: "1" }}>
-          <ToolbarItem
-            variant="pagination"
-            alignment={{ default: "alignRight" }}
-          >
+          <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
             {jobsCount === 0 ? null : (
               <Pagination
                 perPage={filters.perPage}

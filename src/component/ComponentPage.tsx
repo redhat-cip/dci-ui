@@ -63,7 +63,7 @@ function EmbedJob({ job }: IEmbedJobProps) {
                   isCompact
                   key={index}
                   color="blue"
-                  className="mr-xs mt-xs"
+                  className="pf-v5-u-mr-xs pf-v5-u-mt-xs"
                 >
                   <small>{tag}</small>
                 </Label>
@@ -72,13 +72,13 @@ function EmbedJob({ job }: IEmbedJobProps) {
         </GridItem>
         <GridItem span={2}>
           <span title={`Duration in seconds ${job.duration}`}>
-            <ClockIcon className="mr-xs" />
+            <ClockIcon className="pf-v5-u-mr-xs" />
             {humanizeDuration(job.duration * 1000)}
           </span>
         </GridItem>
         <GridItem span={2}>
           <span title={`Created at ${job.created_at}`}>
-            <CalendarAltIcon className="mr-xs" />
+            <CalendarAltIcon className="pf-v5-u-mr-xs" />
             {formatDate(job.created_at)}
           </span>
         </GridItem>
@@ -102,7 +102,7 @@ function TopicLink({ topic_id }: { topic_id: string }) {
   const TopicIcon = getTopicIcon(topic.name);
   return (
     <Link to={`/topics/${topic.id}/components`}>
-      <TopicIcon className="pf-u-mr-xs" />
+      <TopicIcon className="pf-v5-u-mr-xs" />
       {topic.name}
     </Link>
   );
@@ -114,24 +114,36 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
   const componentData = JSON.stringify(component.data, null, 2);
   return (
     <div>
-      <Title headingLevel="h3" size="xl" className="p-md">
+      <Title headingLevel="h3" size="xl" className="pf-v5-u-p-md">
         Component information
       </Title>
       <Divider />
-      <CardLine className="p-md" field="ID" value={component.id} />
+      <CardLine className="pf-v5-u-p-md" field="ID" value={component.id} />
       <Divider />
-      <CardLine className="p-md" field="Name" value={component.display_name} />
+      <CardLine
+        className="pf-v5-u-p-md"
+        field="Name"
+        value={component.display_name}
+      />
       <Divider />
-      <CardLine className="p-md" field="Version" value={component.version} />
+      <CardLine
+        className="pf-v5-u-p-md"
+        field="Version"
+        value={component.version}
+      />
       <Divider />
       {component.uid !== "" && (
         <>
-          <CardLine className="p-md" field="Unique id" value={component.uid} />
+          <CardLine
+            className="pf-v5-u-p-md"
+            field="Unique id"
+            value={component.uid}
+          />
           <Divider />
         </>
       )}
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="Topic"
         value={<TopicLink topic_id={component.topic_id} />}
       />
@@ -139,7 +151,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       {identity?.hasReadOnlyRole && component.url !== "" && (
         <>
           <CardLine
-            className="p-md"
+            className="pf-v5-u-p-md"
             field="Url"
             value={
               <a href={component.url} target="_blank" rel="noopener noreferrer">
@@ -150,10 +162,10 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
           <Divider />
         </>
       )}
-      <CardLine className="p-md" field="Type" value={component.type} />
+      <CardLine className="pf-v5-u-p-md" field="Type" value={component.type} />
       <Divider />
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="Data"
         value={
           seeData ? (
@@ -161,7 +173,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
               onClick={() => setSeeData(false)}
               type="button"
               variant="tertiary"
-              isSmall
+              size="sm"
             >
               hide content
             </Button>
@@ -170,7 +182,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
               onClick={() => setSeeData(true)}
               type="button"
               variant="tertiary"
-              isSmall
+              size="sm"
             >
               see content
             </Button>
@@ -190,12 +202,16 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       )}
       <Divider />
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="Tags"
         value={
           component.tags && component.tags.length > 0
             ? component.tags.map((tag, i) => (
-                <Label key={i} className="mt-xs mr-xs" color="blue">
+                <Label
+                  key={i}
+                  className="pf-v5-u-mt-xs pf-v5-u-mr-xs"
+                  color="blue"
+                >
                   {tag}
                 </Label>
               ))
@@ -204,18 +220,18 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       />
       <Divider />
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="State"
         value={<StateLabel state={component.state} />}
       />
       <Divider />
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="Created"
         value={fromNow(component.created_at)}
       />
       <CardLine
-        className="p-md"
+        className="pf-v5-u-p-md"
         field="Release date"
         value={formatDate(component.released_at, DateTime.DATE_MED)}
       />
@@ -224,7 +240,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
 }
 
 function convertComponentWithJobInComponentCoverage(
-  component: IComponentWithJobs
+  component: IComponentWithJobs,
 ): IComponentCoverage {
   const jobsInfo = component.jobs.reduce(
     (acc, job) => {
@@ -247,7 +263,7 @@ function convertComponentWithJobInComponentCoverage(
         status: IJobStatus;
         name: string;
       }[];
-    }
+    },
   );
   return {
     id: component.id,
@@ -347,7 +363,7 @@ export default function ComponentPage() {
                   </p>
                   <LastComponentsJobsBarChart
                     component={convertComponentWithJobInComponentCoverage(
-                      component
+                      component,
                     )}
                   />
                 </CardBody>
@@ -355,18 +371,18 @@ export default function ComponentPage() {
             </GridItem>
           </Grid>
 
-          <Card className="mt-md">
+          <Card className="pf-v5-u-mt-md">
             <CardBody>
               <ComponentDetails key={component.etag} component={component} />
             </CardBody>
           </Card>
 
-          <Card className="mt-md">
+          <Card className="pf-v5-u-mt-md">
             <CardBody>
-              <Title headingLevel="h3" size="xl" className="p-md">
+              <Title headingLevel="h3" size="xl" className="pf-v5-u-p-md">
                 Jobs
               </Title>
-              <div className="p-md">
+              <div className="pf-v5-u-p-md">
                 <Grid hasGutter>
                   <GridItem span={3}>Job name</GridItem>
                   <GridItem span={2}>Status</GridItem>
@@ -376,14 +392,14 @@ export default function ComponentPage() {
                 </Grid>
               </div>
               {component.jobs.length === 0 ? (
-                <div className="p-md">
+                <div className="pf-v5-u-p-md">
                   <Divider /> There is no job attached to this component
                 </div>
               ) : (
                 sortByNewestFirst(component.jobs).map((j) => (
                   <div>
                     <Divider />
-                    <div className="p-md">
+                    <div className="pf-v5-u-p-md">
                       <EmbedJob job={j} />
                     </div>
                   </div>

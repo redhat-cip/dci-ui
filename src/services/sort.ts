@@ -12,7 +12,7 @@ export interface IItemWithName {
 export function sortByName<
   T extends {
     name: string;
-  }
+  },
 >(items: T[]): T[] {
   return sortBy(items, [(e) => e.name.toLowerCase()]);
 }
@@ -24,10 +24,10 @@ interface IItemWithCreatedAtAndReleasedAtAndUpdatedAt {
 }
 
 export function sortByNewestFirst<
-  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>
+  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>,
 >(
   items: T[],
-  key: "created_at" | "updated_at" | "released_at" = "created_at"
+  key: "created_at" | "updated_at" | "released_at" = "created_at",
 ): T[] {
   return items.sort((i1, i2) => {
     const iso1 = i1[key];
@@ -48,10 +48,10 @@ export function sortByNewestFirst<
 }
 
 export function sortByOldestFirst<
-  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>
+  T extends Partial<IItemWithCreatedAtAndReleasedAtAndUpdatedAt>,
 >(
   items: T[],
-  key: "created_at" | "updated_at" | "released_at" = "created_at"
+  key: "created_at" | "updated_at" | "released_at" = "created_at",
 ): T[] {
   return sortByNewestFirst(items, key).reverse();
 }
@@ -60,7 +60,7 @@ export function sortByMainComponentType<
   T extends {
     name: string;
     type: string;
-  }
+  },
 >(items: T[]): T[] {
   const componentTypesOrderReversed = ["ocp", "compose-noinstall", "compose"];
   return sortByName(items).sort((item1, item2) => {

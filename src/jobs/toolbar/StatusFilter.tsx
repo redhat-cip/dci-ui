@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IJobStatus, JobStatuses } from "types";
-import { Select, SelectOption, ToolbarFilter } from "@patternfly/react-core";
+import { ToolbarFilter } from "@patternfly/react-core";
+import { Select, SelectOption } from "@patternfly/react-core/deprecated";
 
 type StatusFilterProps = {
   status: string | null;
@@ -24,7 +25,7 @@ export default function StatusFilter({
       showToolbarItem={showToolbarItem}
     >
       <Select
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, selection) => {
           setIsOpen(false);
           onSelect(selection as IJobStatus);

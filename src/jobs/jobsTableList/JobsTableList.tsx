@@ -1,5 +1,5 @@
 import { IEnhancedJob, IJobFilters, JobsTableListColumn } from "types";
-
+import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
 import { groupJobsByPipeline } from "../jobsSelectors";
 import JobsTableListRow from "./JobsTableListRow";
 import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsFilter";
@@ -20,16 +20,16 @@ export default function JobsTableList({
   if (jobs.length === 0) return null;
   const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
   return (
-    <table className="pf-c-table pf-m-compact pf-m-grid-md">
-      <thead>
-        <tr>
-          <th></th>
+    <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+      <Thead>
+        <Tr>
+          <Th></Th>
           {columns.map((column, i) => (
-            <th key={i}>{tableViewColumnLabels[column]}</th>
+            <Th key={i}>{tableViewColumnLabels[column]}</Th>
           ))}
-        </tr>
-      </thead>
-      <tbody>
+        </Tr>
+      </Thead>
+      <Tbody>
         {jobsGroupedByPipeline.map((jobsInTheSamePipeline) =>
           jobsInTheSamePipeline.map((job, i, arr) => (
             <JobsTableListRow
@@ -76,9 +76,9 @@ export default function JobsTableList({
                 });
               }}
             />
-          ))
+          )),
         )}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }

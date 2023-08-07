@@ -9,6 +9,15 @@ import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { LinkIcon } from "@patternfly/react-icons";
+import {
+  Table,
+  Caption,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+} from "@patternfly/react-table";
 
 type StatHeaderCardProps = {
   title: string;
@@ -50,54 +59,54 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
   return (
     <Card>
       <CardBody>
-        <table
-          className="pf-c-table pf-m-grid-md"
+        <Table
+          className="pf-v5-c-table pf-m-grid-md"
           role="grid"
           aria-label="Latest Latest Jobs Status"
           id="latest-jobs-per-remoteci-table"
         >
-          <caption>
+          <Caption>
             Latest Latest Jobs Status using {stat.topic.name} topic
-          </caption>
-          <thead>
-            <tr role="row">
-              <th role="columnheader" scope="col">
+          </Caption>
+          <Thead>
+            <Tr role="row">
+              <Th role="columnheader" scope="col">
                 Team
-              </th>
-              <th role="columnheader" scope="col">
+              </Th>
+              <Th role="columnheader" scope="col">
                 Remote CI
-              </th>
-              <th className="text-center" role="columnheader" scope="col">
+              </Th>
+              <Th className="text-center" role="columnheader" scope="col">
                 Status
-              </th>
-              <th className="text-center" role="columnheader" scope="col">
+              </Th>
+              <Th className="text-center" role="columnheader" scope="col">
                 Job link
-              </th>
-              <th className="text-right" role="columnheader" scope="col">
+              </Th>
+              <Th className="text-right" role="columnheader" scope="col">
                 Started
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {stat.jobs.map((job, i) => (
-              <tr key={i} role="row">
-                <td role="cell" data-label="Team name">
+              <Tr key={i} role="row">
+                <Td role="cell" data-label="Team name">
                   {job.team_name}
-                </td>
-                <td role="cell" data-label="Remoteci name">
+                </Td>
+                <Td role="cell" data-label="Remoteci name">
                   {job.remoteci_name}
-                </td>
-                <td className="text-center" role="cell" data-label="Job status">
+                </Td>
+                <Td className="text-center" role="cell" data-label="Job status">
                   <Label color={job.status === "success" ? "green" : "red"}>
                     {job.status}
                   </Label>
-                </td>
-                <td className="text-center" role="cell" data-label="Job status">
+                </Td>
+                <Td className="text-center" role="cell" data-label="Job status">
                   <Link to={`/jobs/${job.id}/jobStates`}>
                     <LinkIcon />
                   </Link>
-                </td>
-                <td
+                </Td>
+                <Td
                   className="text-right"
                   role="cell"
                   data-label="Job created at"
@@ -105,11 +114,11 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
                   <time title={job.created_at} dateTime={job.created_at}>
                     {fromNow(job.created_at)}
                   </time>
-                </td>
-              </tr>
+                </Td>
+              </Tr>
             ))}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
       </CardBody>
     </Card>
   );

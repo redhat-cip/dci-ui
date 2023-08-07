@@ -33,7 +33,7 @@ test("FETCH_SUCCESS ignore undefined id", () => {
       entities: {
         jobs: { undefined: {}, j2: { id: "j2" } },
       },
-    }
+    },
   );
 
   const expectedState = {
@@ -57,7 +57,7 @@ test("FETCH_SUCCESS", () => {
       entities: {
         jobs: { j1: { id: "j1" } },
       },
-    }
+    },
   );
   const expectedState = {
     byId: { j1: { id: "j1" } },
@@ -76,7 +76,7 @@ test("CLEAR_CACHE", () => {
     },
     {
       type: jobActionsTypes.CLEAR_CACHE,
-    }
+    },
   );
   const expectedState = {
     byId: {},
@@ -98,7 +98,7 @@ test("SET_COUNT", () => {
     {
       type: jobActionsTypes.SET_COUNT,
       count: 10,
-    }
+    },
   );
   expect(state.count).toBe(10);
 });
@@ -112,7 +112,7 @@ test("FETCH_FAILURE", () => {
     },
     {
       type: jobActionsTypes.FETCH_ALL_FAILURE,
-    }
+    },
   );
   const expectedState = {
     byId: {},
@@ -136,7 +136,7 @@ test("fetch another reducer with updated entity", () => {
         users: { u1: { id: "u1" } },
         jobs: { j2: { id: "j2" } },
       },
-    }
+    },
   );
   const expectedState = {
     byId: { j1: { id: "j1" }, j2: { id: "j2" } },
@@ -159,7 +159,7 @@ test("fetch one entity", () => {
       entities: {
         jobs: { j2: { id: "j2" } },
       },
-    }
+    },
   );
   const expectedState = {
     byId: { j1: { id: "j1" }, j2: { id: "j2" } },
@@ -182,7 +182,7 @@ test("update one entity", () => {
       entities: {
         jobs: { j1: { id: "j1", etag: "e2" } },
       },
-    }
+    },
   );
   const expectedState = {
     byId: { j1: { id: "j1", etag: "e2" } },
@@ -202,7 +202,7 @@ test("delete one entity", () => {
     {
       type: jobActionsTypes.DELETE_SUCCESS,
       id: "j1",
-    }
+    },
   );
   const expectedState = {
     byId: {},

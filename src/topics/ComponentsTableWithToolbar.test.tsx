@@ -8,14 +8,14 @@ test("findChannelInTags", () => {
       "nightly",
       "candidate",
       "milestone",
-    ])
+    ]),
   ).toBe("milestone");
   expect(
-    findChannelInTags(["kernel:4.18.0-477.10.1.el8_8", "candidate", "nightly"])
+    findChannelInTags(["kernel:4.18.0-477.10.1.el8_8", "candidate", "nightly"]),
   ).toBe("candidate");
   expect(findChannelInTags(["candidate", "nightly"])).toBe("candidate");
   expect(findChannelInTags(["kernel:4.18.0-477.10.1.el8_8", "nightly"])).toBe(
-    "nightly"
+    "nightly",
   );
   expect(findChannelInTags(["kernel:4.18.0-477.10.1.el8_8"])).toBe(null);
 });

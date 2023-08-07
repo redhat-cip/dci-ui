@@ -48,14 +48,14 @@ export default function LoginForm() {
             } else {
               dispatch(
                 showError(
-                  "Network error, check your connectivity or contact a DCI administrator"
-                )
+                  "Network error, check your connectivity or contact a DCI administrator",
+                ),
               );
             }
           });
       }}
     >
-      <Form className="pf-c-form">
+      <Form className="pf-v5-c-form">
         <Input id="username" label="Username" name="username" isRequired />
         <Input
           id="password"

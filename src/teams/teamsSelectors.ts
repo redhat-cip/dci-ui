@@ -20,9 +20,9 @@ export const getTeams = createSelector(
           ...team,
           from_now: fromNow(team.created_at),
         };
-      })
+      }),
     );
-  }
+  },
 );
 export const getTeamById = (id: string | null) =>
   createSelector(getTeamsById, (teams) => {

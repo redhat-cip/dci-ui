@@ -9,6 +9,7 @@ import {
   ExclamationTriangleIcon,
 } from "@patternfly/react-icons";
 import { Link } from "react-router-dom";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 interface TestsListProps {
   tests: ITest[];
@@ -20,105 +21,105 @@ export default function TestsList({ tests }: TestsListProps) {
       <EmptyState title="No tests" info="There is no tests for this job" />
     );
   return (
-    <table
-      className="pf-c-table pf-m-grid-md"
+    <Table
+      className="pf-v5-c-table pf-m-grid-md"
       role="grid"
       aria-label="List of tests"
       id="tests-list"
     >
-      <thead>
-        <tr role="row">
-          <th role="columnheader" scope="col">
+      <Thead>
+        <Tr role="row">
+          <Th role="columnheader" scope="col">
             Test name
-          </th>
-          <th role="columnheader" scope="col">
+          </Th>
+          <Th role="columnheader" scope="col">
             Duration
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {tests.map((test, i) => (
-          <tr role="row">
-            <td role="cell" data-label="Test name">
+          <Tr role="row">
+            <Td role="cell" data-label="Test name">
               <Link to={test.file_id}>{test.name || "Test"}</Link>
-            </td>
-            <td
+            </Td>
+            <Td
               role="cell"
               data-label="Test humanized duration"
               title={`${test.time}`}
             >
               {humanizeDuration(test.time)}
-            </td>
-            <td role="cell" data-label="Number of tests">
-              <Label color="blue" className="mr-xs">
+            </Td>
+            <Td role="cell" data-label="Number of tests">
+              <Label color="blue" className="pf-v5-u-mr-xs">
                 {test.total} tests
               </Label>
-            </td>
-            <td role="cell" data-label="Success">
+            </Td>
+            <Td role="cell" data-label="Success">
               {test.success ? (
                 <Label
                   icon={<CheckCircleIcon />}
                   color="green"
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 >
                   {test.success} success
                 </Label>
               ) : null}
-            </td>
-            <td role="cell" data-label="Skipped">
+            </Td>
+            <Td role="cell" data-label="Skipped">
               {test.skips ? (
                 <Label
                   icon={<ExclamationTriangleIcon />}
                   color="orange"
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 >
                   {test.skips} skipped
                 </Label>
               ) : null}
-            </td>
-            <td role="cell" data-label="Error">
+            </Td>
+            <Td role="cell" data-label="Error">
               {test.errors ? (
                 <Label
                   icon={<ExclamationCircleIcon />}
                   color="red"
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 >
                   {test.errors} errors
                 </Label>
               ) : null}
-            </td>
-            <td role="cell" data-label="Failed">
+            </Td>
+            <Td role="cell" data-label="Failed">
               {test.failures ? (
                 <Label
                   icon={<ExclamationCircleIcon />}
                   color="red"
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 >
                   {test.failures} failures
                 </Label>
               ) : null}
-            </td>
-            <td role="cell" data-label="Success fixes">
+            </Td>
+            <Td role="cell" data-label="Success fixes">
               {test.successfixes ? (
                 <Label
                   icon={<CheckCircleIcon />}
                   color="green"
-                  className="mr-xs"
+                  className="pf-v5-u-mr-xs"
                 >
                   {test.successfixes} fixes
                 </Label>
               ) : null}
-            </td>
-            <td role="cell" data-label="Regression">
+            </Td>
+            <Td role="cell" data-label="Regression">
               {test.regressions ? (
                 <Label icon={<ExclamationCircleIcon />} color="red">
                   {test.regressions} regressions
                 </Label>
               ) : null}
-            </td>
-          </tr>
+            </Td>
+          </Tr>
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }

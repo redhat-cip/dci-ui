@@ -1,4 +1,5 @@
-import { Button, Wizard } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Wizard } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import TeamMembersForm, { TeamMembersFormSchema } from "./TeamMembersForm";
 import TeamPermissionForm from "./TeamPermissionForm";
@@ -8,7 +9,7 @@ import TeamCreationWizardReviewStep from "./TeamCreationWizardReviewStep";
 import CreateTeamWithMembers from "./CreateTeamWithMembers";
 
 const TeamCreationWizardSchema = CreateTeamFormSchema.concat(
-  TeamMembersFormSchema
+  TeamMembersFormSchema,
 );
 
 export default function TeamCreationWizard() {

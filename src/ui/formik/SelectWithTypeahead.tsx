@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import {
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from "@patternfly/react-core";
+import {
   Select,
   SelectVariant,
   SelectOption,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 type SelectOptionType = {
   label: string;
@@ -32,29 +38,25 @@ export default function SelectWithTypeahead({
   ...props
 }: SelectWithTypeaheadProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [field, meta, helpers] = useField(name);
-  const { setValue } = helpers;
-  const validated = meta.touched && meta.error ? "error" : "default";
+  const [field] = useField(name);
+  const { touched, errors, setFieldValue } = useFormikContext<{
+    [k: string]: string;
+  }>();
+  const hasError = errors[name] && touched[name];
   return (
-    <FormGroup
-      label={label}
-      isRequired={isRequired}
-      fieldId={id}
-      helperTextInvalid={meta.error}
-      validated={validated}
-    >
+    <FormGroup label={label} isRequired={isRequired} fieldId={id}>
       <Select
         {...field}
         {...props}
         variant={SelectVariant.typeahead}
         typeAheadAriaLabel={placeholder}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, selection) => {
           const s = selection as SelectOptionType;
           setIsOpen(false);
-          setValue(s.value);
+          setFieldValue(name, s.value);
         }}
-        onClear={() => setValue(null)}
+        onClear={() => setFieldValue(name, null)}
         selections={
           field.value ? options.find((o) => o.value === field.value)?.label : ""
         }
@@ -75,6 +77,15 @@ export default function SelectWithTypeahead({
             />
           ))}
       </Select>
+      {hasError && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
+              {errors[name]}
+            </HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
     </FormGroup>
   );
 }

@@ -10,7 +10,7 @@ export default function JobConfiguration({
   onClick,
 }: JobConfigurationProps) {
   return (
-    <div className="mt-xs">
+    <div className="pf-v5-u-mt-xs">
       <span
         role="button"
         tabIndex={0}
@@ -18,7 +18,7 @@ export default function JobConfiguration({
         onClick={() => onClick && onClick(configuration)}
         onKeyDown={() => onClick && onClick(configuration)}
       >
-        <CogIcon className="mr-xs" />
+        <CogIcon className="pf-v5-u-mr-xs" />
         {configuration}
       </span>
     </div>

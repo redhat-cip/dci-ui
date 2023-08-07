@@ -33,7 +33,7 @@ test("deleteCurrentUser", () => {
     },
     {
       type: types.DELETE_CURRENT_USER,
-    }
+    },
   );
   expect(newState).toEqual(null);
 });

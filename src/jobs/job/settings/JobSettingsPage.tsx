@@ -37,7 +37,7 @@ export default function JobSettingsPage() {
       <TextContent>
         <Text component="h1">Danger Zone</Text>
       </TextContent>
-      <DangerZone className="mt-md">
+      <DangerZone className="pf-v5-u-mt-md">
         <DangerZoneRow>
           <div>
             <TextContent>

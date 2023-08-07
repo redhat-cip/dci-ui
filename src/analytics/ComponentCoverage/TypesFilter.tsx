@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
-  ToolbarFilter,
-} from "@patternfly/react-core";
+} from "@patternfly/react-core/deprecated";
 
 type TypesFilterProps = {
   types: string[];
@@ -33,7 +33,7 @@ export default function TypesFilter({
     >
       <Select
         variant={SelectVariant.typeaheadMulti}
-        onToggle={setIsOpen}
+        onToggle={(_event, val) => setIsOpen(val)}
         onSelect={(event, selection) => {
           setIsOpen(false);
           onSelect(selection as string);

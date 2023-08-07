@@ -21,7 +21,7 @@ export function getProductsWithTeams(): AppThunk<Promise<IProductWithTeams[]>> {
         http({
           method: "get",
           url: `/api/v1/products/${product.id}/teams`,
-        })
+        }),
       );
       const productsWithTeams: IProductWithTeams[] = [];
       return Promise.all(promises).then((responses) => {
@@ -45,22 +45,30 @@ export function getTopicsWithTeams(): AppThunk<Promise<ITopicWithTeams[]>> {
   };
 }
 
-function grantTeamPermission(
-  resource_name: string,
+export function grantTeamPermission(
+  resource_name: "product" | "topic",
   team: ITeam,
-  resource: ITopic | IProduct
+  resource: ITopic | IProduct,
+): AxiosPromise<void> {
+  return http({
+    method: "post",
+    url: `/api/v1/${resource_name}s/${resource.id}/teams`,
+    data: { team_id: team.id },
+  });
+}
+
+function grantTeamPermissionThunk(
+  resource_name: "product" | "topic",
+  team: ITeam,
+  resource: ITopic | IProduct,
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch) => {
-    return http({
-      method: "post",
-      url: `/api/v1/${resource_name}s/${resource.id}/teams`,
-      data: { team_id: team.id },
-    })
+    return grantTeamPermission(resource_name, team, resource)
       .then((response) => {
         dispatch(
           showSuccess(
-            `${team.name} can download components for the ${resource_name} ${resource.name}`
-          )
+            `${team.name} can download components for the ${resource_name} ${resource.name}`,
+          ),
         );
         return response;
       })
@@ -74,7 +82,7 @@ function grantTeamPermission(
 function removeTeamPermission(
   resource_name: string,
   team: ITeam,
-  resource: ITopic | IProduct
+  resource: ITopic | IProduct,
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch) => {
     return http({
@@ -84,8 +92,8 @@ function removeTeamPermission(
       .then((response) => {
         dispatch(
           showSuccess(
-            `${team.name} to ${resource.name} permission successfully removed`
-          )
+            `${team.name} to ${resource.name} permission successfully removed`,
+          ),
         );
         return response;
       })
@@ -97,7 +105,7 @@ function removeTeamPermission(
 }
 
 export function grantTeamProductPermission(team: ITeam, product: IProduct) {
-  return grantTeamPermission("product", team, product);
+  return grantTeamPermissionThunk("product", team, product);
 }
 
 export function removeTeamProductPermission(team: ITeam, product: IProduct) {
@@ -105,7 +113,7 @@ export function removeTeamProductPermission(team: ITeam, product: IProduct) {
 }
 
 export function grantTeamTopicPermission(team: ITeam, topic: ITopic) {
-  return grantTeamPermission("topic", team, topic);
+  return grantTeamPermissionThunk("topic", team, topic);
 }
 
 export function removeTeamTopicPermission(team: ITeam, topic: ITopic) {

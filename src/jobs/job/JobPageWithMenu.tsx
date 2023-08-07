@@ -28,7 +28,7 @@ export default function JobPageWithMenu() {
 
   useEffect(() => {
     const endpointIndex = endpoints.findIndex((e) =>
-      location.pathname.includes(`${job.id}/${e.value}`)
+      location.pathname.includes(`${job.id}/${e.value}`),
     );
     if (endpointIndex !== -1) {
       setActiveTabKey(endpointIndex);
@@ -44,7 +44,7 @@ export default function JobPageWithMenu() {
           variant={PageSectionVariants.light}
           style={{ paddingBottom: 0 }}
         >
-          <TextContent className="mb-md">
+          <TextContent className="pf-v5-u-mb-md">
             <Text component="h1">Job details</Text>
           </TextContent>
           <Tabs
@@ -80,7 +80,7 @@ export default function JobPageWithMenu() {
                   <CopyIconButton
                     text={job.id}
                     textOnSuccess="copied"
-                    className="ml-xs pointer"
+                    className="pf-v5-u-ml-xs pointer"
                   />
                 </span>
               ),

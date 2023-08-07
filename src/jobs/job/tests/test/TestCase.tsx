@@ -35,14 +35,14 @@ export default function TestCase({ testcase }: TestCaseProps) {
           style={{ display: "flex", alignItems: "center" }}
         >
           <Button
-            isSmall
+            size="sm"
             variant="link"
             onClick={() => setSeeDetails(!seeDetails)}
           >
             {seeDetails ? (
-              <CaretDownIcon className="mr-xs" />
+              <CaretDownIcon className="pf-v5-u-mr-xs" />
             ) : (
-              <CaretRightIcon className="mr-xs" />
+              <CaretRightIcon className="pf-v5-u-mr-xs" />
             )}
           </Button>
           {testcase.action === "skipped" && (
@@ -86,7 +86,7 @@ export default function TestCase({ testcase }: TestCaseProps) {
           title={`${testcase.classname} ${testcase.name}`}
         >
           <Button
-            isSmall
+            size="sm"
             variant="link"
             onClick={() => setSeeDetails(!seeDetails)}
           >

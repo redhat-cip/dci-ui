@@ -65,7 +65,7 @@ export default function EditRemoteciModal({
           }}
         />
       </Modal>
-      <Button isSmall variant="primary" onClick={show} {...props}>
+      <Button size="sm" variant="primary" onClick={show} {...props}>
         <EditAltIcon aria-hidden="true" />
         <span className="sr-only">Edit {remoteci.name}</span>
       </Button>

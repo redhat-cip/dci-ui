@@ -43,7 +43,7 @@ export const defaultComponentsFilters: IComponentsFilters = {
 export function parseWhereFromSearch(search: string): IComponentsFilters {
   const { where } = queryString.parse(search);
   const copyDefaultFilters: IComponentsFilters = JSON.parse(
-    JSON.stringify(defaultComponentsFilters)
+    JSON.stringify(defaultComponentsFilters),
   );
   if (typeof where !== "string" || isEmpty(where)) {
     return {
@@ -72,6 +72,6 @@ export function parseWhereFromSearch(search: string): IComponentsFilters {
     },
     {
       ...copyDefaultFilters,
-    }
+    },
   );
 }
