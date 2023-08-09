@@ -18,6 +18,10 @@ export default function reduce(
       return {
         ...state,
       };
+    case types.HIDE_ALL_ALERTS:
+      return {
+        ...initialState
+      }
     default:
       return state;
   }

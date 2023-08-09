@@ -95,3 +95,27 @@ test("HIDE_ALERT", () => {
     },
   });
 });
+
+test("HIDE_ALL_ALERTS", () => {
+  expect(
+    reducer(
+      {
+        a1: {
+          id: "a1",
+          type: "success",
+          title: "",
+          message: "",
+        },
+        a2: {
+          id: "a2",
+          type: "success",
+          title: "",
+          message: "",
+        },
+      },
+      {
+        type: types.HIDE_ALL_ALERTS,
+      }
+    )
+  ).toEqual({});
+});

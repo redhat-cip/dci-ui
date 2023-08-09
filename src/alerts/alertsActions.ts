@@ -18,6 +18,12 @@ export function hideAlert(alert: IAlert) {
   };
 }
 
+export function hideAllAlerts() {
+  return {
+    type: types.HIDE_ALL_ALERTS,
+  };
+}
+
 function showAndHideAfter10s(alert: IAlert): AppThunk<void> {
   return (dispatch) => {
     dispatch(showAlert(alert));

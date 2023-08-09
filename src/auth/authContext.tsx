@@ -16,6 +16,7 @@ import {
   Modal,
   ModalVariant,
 } from "@patternfly/react-core";
+import { showError } from "alerts/alertsActions";
 
 interface AuthContextType {
   identity: ICurrentUser | null;
@@ -48,7 +49,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       dispatch(authActions.getCurrentUser())
         .then(setIdentity)
-        .catch(console.error)
+        .catch((error) => {
+          if (error.response.status === 400) {
+            dispatch(
+              showError(
+                "Something went wrong during the SSO connection, please contact a DCI administrator."
+              )
+            );
+          }
+        })
         .finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);

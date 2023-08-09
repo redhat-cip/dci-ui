@@ -29,3 +29,10 @@ test("hideAlert", () => {
   };
   expect(actions.hideAlert(alert)).toEqual(expectedAction);
 });
+
+test("hideAllAlerts", () => {
+  const expectedAction = {
+    type: types.HIDE_ALL_ALERTS,
+  };
+  expect(actions.hideAllAlerts()).toEqual(expectedAction);
+});

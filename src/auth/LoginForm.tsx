@@ -3,7 +3,7 @@ import { Input } from "ui/formik";
 import { Button } from "@patternfly/react-core";
 import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
-import { showError } from "alerts/alertsActions";
+import { hideAllAlerts, showError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
@@ -34,6 +34,7 @@ export default function LoginForm() {
       onSubmit={(values) => {
         const token = window.btoa(values.username.concat(":", values.password));
         setBasicToken(token);
+        dispatch(hideAllAlerts());
         refreshIdentity()
           .then(() => {
             const { from } = (location.state as ILocationState) || {
