@@ -4,7 +4,6 @@ import { BlinkLogo, BackgroundImage } from "ui";
 export default function NotAuthenticatedLoadingPage() {
   return (
     <Page header={null} sidebar={null}>
-      <BackgroundImage />
       <Bullseye>
         <BlinkLogo />
       </Bullseye>

@@ -1,10 +1,15 @@
 import { BackgroundImage } from "@patternfly/react-core";
 import { useEffect, useState } from "react";
-import pfbg_576 from "./pfbg_576.jpg";
-import pfbg_768 from "./pfbg_768.jpg";
-import pfbg_1152 from "./pfbg_1152.jpg";
-import pfbg_1200 from "./pfbg_1200.jpg";
-import pfbg_1536 from "./pfbg_1536.jpg";
+import pfbg_640 from "./pfbg_640.jpg";
+import pfbg_1920 from "./pfbg_1920.jpg";
+import styled from "styled-components";
+
+// fixing BackgroundImage issue https://github.com/patternfly/patternfly/issues/5806
+const BackgroundImageWithCoverWorkaround = styled(BackgroundImage)`
+  background-position: center;
+  background-size: cover;
+  transform: scaleX(-1);
+`;
 
 export default function DCIBackgroundImage() {
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -19,16 +24,7 @@ export default function DCIBackgroundImage() {
     };
   }, []);
 
-  const imageSrc =
-    width <= 576
-      ? pfbg_576
-      : width <= 768
-      ? pfbg_768
-      : width <= 1152
-      ? pfbg_1152
-      : width <= 1200
-      ? pfbg_1200
-      : pfbg_1536;
+  const imageSrc = width <= 640 ? pfbg_640 : pfbg_1920;
 
-  return <BackgroundImage src={imageSrc} />;
+  return <BackgroundImageWithCoverWorkaround src={imageSrc} />;
 }

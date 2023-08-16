@@ -5,3 +5,7 @@
 .pointer {
   cursor: pointer;
 }
+
+a {
+  color: #06c;
+}

@@ -35,7 +35,6 @@ import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatu
 import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
 import JunitComparisonPage from "analytics/JunitComparison/JunitComparisonPage";
 import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
-import { BackgroundImage } from "ui";
 import Alerts from "alerts/Alerts";
 import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import JobTestPage from "jobs/job/tests/test/JobTestPage";
@@ -44,7 +43,6 @@ import PipelinesPage from "analytics/Pipelines/PipelinesPage";
 export default function App() {
   return (
     <>
-      <BackgroundImage />
       <Alerts />
       <Routes>
         <Route path="/">

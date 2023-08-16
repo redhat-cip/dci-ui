@@ -73,7 +73,7 @@ import "@patternfly/patternfly/components/DualListSelector/dual-list-selector.cs
 // import "@patternfly/patternfly/components/Label/label.css";
 // import "@patternfly/patternfly/components/List/list.css";
 // import "@patternfly/patternfly/components/LogViewer/log-viewer.css";
-// import "@patternfly/patternfly/components/Login/login.css";
+import "@patternfly/patternfly/components/Login/login.css";
 // import "@patternfly/patternfly/components/Masthead/masthead.css";
 // import "@patternfly/patternfly/components/MenuToggle/menu-toggle.css";
 // import "@patternfly/patternfly/components/Menu/menu.css";
