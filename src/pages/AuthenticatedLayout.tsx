@@ -27,6 +27,7 @@ import {
   Text,
   TextVariants,
   PageSidebarBody,
+  Switch,
 } from "@patternfly/react-core";
 import {
   Dropdown,
@@ -43,15 +44,18 @@ import {
   UsersIcon,
 } from "@patternfly/react-icons";
 import {
+  global_palette_black_100,
   global_palette_black_500,
   global_palette_black_800,
 } from "@patternfly/react-tokens";
 import { useAuth } from "auth/authContext";
 import styled from "styled-components";
+import { useTheme } from "ui/Theme/themeContext";
 
-const ToolbarItemStyledLikeDropdown = styled(ToolbarItem)`
+const ToolbarItemStyledLikeDropdown = styled(ToolbarItem)<{ isDark: boolean }>`
   &:after {
-    background-color: ${global_palette_black_800.value};
+    background-color: ${({ isDark }) =>
+      isDark ? global_palette_black_800.value : global_palette_black_100.value};
   }
 `;
 
@@ -173,6 +177,7 @@ interface HeaderProps {
 
 function Header({ toggleSidebarVisibility }: HeaderProps) {
   const navigate = useNavigate();
+  const { isDark, toggleColor } = useTheme();
   const { identity, openChangeTeamModal, hasAtLeastOneTeam, hasMultipleTeams } =
     useAuth();
 
@@ -229,11 +234,26 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 visibility={{ default: "hidden", md: "visible" }}
               >
                 <ToolbarItem>
+                  <Switch
+                    id="toggle-theme-switch"
+                    label="Dark theme"
+                    isChecked={isDark}
+                    onChange={toggleColor}
+                  />
+                </ToolbarItem>
+                <ToolbarItemStyledLikeDropdown
+                  isDark={isDark}
+                  variant="separator"
+                />
+                <ToolbarItem>
                   <DCIDocLinkIcon />
                 </ToolbarItem>
                 {hasAtLeastOneTeam && (
                   <>
-                    <ToolbarItemStyledLikeDropdown variant="separator" />
+                    <ToolbarItemStyledLikeDropdown
+                      isDark={isDark}
+                      variant="separator"
+                    />
                     <ToolbarItem>
                       <Button
                         variant="plain"
@@ -288,10 +308,11 @@ interface SidebarProps {
 
 function Sidebar({ isNavOpen }: SidebarProps) {
   const { identity } = useAuth();
+  const { isDark } = useTheme();
   if (identity === null) return null;
   const identityTeams = values(identity.teams);
   const PageNav = (
-    <Nav aria-label="Nav" theme="dark">
+    <Nav aria-label="Nav" theme={isDark ? "dark" : "light"}>
       <NavGroup
         // @ts-ignore
         title={
@@ -337,7 +358,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
     </Nav>
   );
   return (
-    <PageSidebar theme="dark" isSidebarOpen={isNavOpen}>
+    <PageSidebar theme={isDark ? "dark" : "light"} isSidebarOpen={isNavOpen}>
       <PageSidebarBody>{PageNav}</PageSidebarBody>
     </PageSidebar>
   );

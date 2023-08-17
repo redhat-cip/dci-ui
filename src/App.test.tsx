@@ -6,19 +6,22 @@ import store from "./store";
 import App from "./App";
 import { AuthProvider } from "auth/authContext";
 import { SSOProvider } from "auth/ssoContext";
+import { ThemeProvider } from "ui/Theme/themeContext";
 
 test("renders without crashing", async () => {
   await act(async () => {
     render(
-      <Provider store={store}>
-        <SSOProvider>
-          <AuthProvider>
-            <MemoryRouter>
-              <App />
-            </MemoryRouter>
-          </AuthProvider>
-        </SSOProvider>
-      </Provider>,
+      <ThemeProvider>
+        <Provider store={store}>
+          <SSOProvider>
+            <AuthProvider>
+              <MemoryRouter>
+                <App />
+              </MemoryRouter>
+            </AuthProvider>
+          </SSOProvider>
+        </Provider>
+      </ThemeProvider>,
     );
   });
 });

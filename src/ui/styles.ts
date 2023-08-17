@@ -93,7 +93,7 @@ import "@patternfly/patternfly/components/Login/login.css";
 // import "@patternfly/patternfly/components/Progress/progress.css";
 // import "@patternfly/patternfly/components/Radio/radio.css";
 // import "@patternfly/patternfly/components/Select/select.css";
-// import "@patternfly/patternfly/components/Sidebar/sidebar.css";
+import "@patternfly/patternfly/components/Sidebar/sidebar.css";
 // import "@patternfly/patternfly/components/SimpleList/simple-list.css";
 // import "@patternfly/patternfly/components/Skeleton/skeleton.css";
 // import "@patternfly/patternfly/components/SkipToContent/skip-to-content.css";

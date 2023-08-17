@@ -15,9 +15,11 @@ import {
 import { Button } from "@patternfly/react-core";
 import { IFileStatus } from "types";
 
-export const JobStates = styled.div`
+export const JobStates = styled.div<{ isDark: boolean }>`
   padding: 1rem 0;
-  background-color: ${global_BackgroundColor_dark_200.value};
+  background-color: #1b1d21;
+  background-color: ${({ isDark }) =>
+    isDark ? "#1b1d21" : global_BackgroundColor_dark_200.value};
 `;
 
 export const RawLogRow = styled.div`
@@ -68,6 +70,7 @@ export const Label = styled.span`
 
 interface FileRowProps {
   status: IFileStatus;
+  isDark: boolean;
 }
 
 export const FileRow = styled.div<FileRowProps>`
@@ -75,23 +78,24 @@ export const FileRow = styled.div<FileRowProps>`
   align-items: center;
   min-height: 25px;
   border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
-  ${(props) =>
-    props.status === "failed" || props.status === "unreachable"
+  ${({ status }) =>
+    status === "failed" || status === "unreachable"
       ? css`
           color: ${global_danger_color_100.value};
         `
-      : props.status === "skipped" || props.status === "ignored"
+      : status === "skipped" || status === "ignored"
       ? css`
           color: ${global_info_color_100.value};
         `
-      : props.status === "withAWarning"
+      : status === "withAWarning"
       ? css`
           color: ${global_palette_purple_200.value};
         `
       : css`
           color: ${global_warning_color_100.value};
         `};
-  background-color: ${global_BackgroundColor_dark_200.value};
+  background-color: ${({ isDark }) =>
+    isDark ? "#1b1d21" : global_BackgroundColor_dark_200.value};
   &:hover {
     background-color: ${global_BackgroundColor_dark_400.value};
   }

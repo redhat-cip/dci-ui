@@ -36,3 +36,13 @@ export const localStorageMock = (function () {
 })();
 
 global.localStorage = localStorageMock;
+
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    };
+  };

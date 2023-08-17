@@ -3,15 +3,18 @@ import styled from "styled-components";
 import { isEmpty } from "lodash";
 import JobsListRow from "./JobsListRow";
 import { IEnhancedJob, IJobFilters } from "types";
+import { useTheme } from "ui/Theme/themeContext";
 
-const JobUl = styled.ul`
-  border: 1px solid ${global_Color_light_200.value};
+const JobUl = styled.ul<{ isDark: boolean }>`
+  border: 1px solid
+    ${({ isDark }) => (isDark ? "#444548" : global_Color_light_200.value)};
   padding: 0;
   margin: 0;
 `;
 
-const JobLi = styled.li`
-  border-top: 1px solid ${global_Color_light_200.value};
+const JobLi = styled.li<{ isDark: boolean }>`
+  border-top: 1px solid
+    ${({ isDark }) => (isDark ? "#444548" : global_Color_light_200.value)};
   &:first-child {
     border-top: none;
   }
@@ -27,11 +30,12 @@ interface JobsListProps {
 }
 
 export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
+  const { isDark } = useTheme();
   if (isEmpty(jobs)) return null;
   return (
-    <JobUl aria-label="job list">
+    <JobUl aria-label="job list" isDark={isDark}>
       {jobs.map((job) => (
-        <JobLi key={job.id}>
+        <JobLi key={job.id} isDark={isDark}>
           <JobsListRow
             job={job}
             onTagClicked={(tag) => {

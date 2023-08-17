@@ -30,7 +30,11 @@ import {
   SortAmountDownIcon,
   SortAmountDownAltIcon,
 } from "@patternfly/react-icons";
-import { global_palette_black_200 } from "@patternfly/react-tokens";
+import {
+  global_palette_black_200,
+  global_Color_light_100,
+} from "@patternfly/react-tokens";
+import { useTheme } from "ui/Theme/themeContext";
 
 type AnsibleTaskFilter = "date" | "duration";
 
@@ -97,6 +101,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
   const [seeRawLog, setSeeRawLog] = useState(false);
   const [loadingRawLog, setLoadingRawLog] = useState(false);
   const [rawLog, setRawLog] = useState("");
+  const { isDark } = useTheme();
 
   useEffect(() => {
     searchParams.set("sort", sort);
@@ -128,7 +133,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           margin: "0.5rem 0",
           paddingTop: "calc(2rem + 10px)",
           paddingBottom: "calc(2rem - 10px)",
-          backgroundColor: "white",
+          backgroundColor: isDark ? "#1b1d21" : global_Color_light_100.value,
         }}
       >
         <ProgressStepper isCenterAligned>
@@ -151,7 +156,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           ))}
         </ProgressStepper>
       </div>
-      <JobStates>
+      <JobStates isDark={isDark}>
         <RawLogRow>
           <JobStateFilterButton
             changeFilter={(sort) => {

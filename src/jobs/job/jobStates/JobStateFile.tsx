@@ -12,6 +12,7 @@ import {
 } from "./JobStateComponents";
 import { IFileWithDuration } from "types";
 import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
+import { useTheme } from "ui/Theme/themeContext";
 
 interface JobStateFileProps {
   file: IFileWithDuration;
@@ -28,7 +29,7 @@ export default function JobStateFile({
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
-
+  const { isDark } = useTheme();
   const loadFileContentCallback = useCallback(() => {
     setIsLoading(true);
     getFileContent(file)
@@ -60,6 +61,7 @@ export default function JobStateFile({
   return (
     <div id={file.id} ref={divRef}>
       <FileRow
+        isDark={isDark}
         status={getFileStatus(file)}
         onClick={() => {
           if (!fileIsEmpty) {

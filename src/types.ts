@@ -732,3 +732,5 @@ export type RangeOptionValue =
   | "last90Days"
   | "last365Days"
   | "custom";
+
+export type colorTheme = "dark" | "light";

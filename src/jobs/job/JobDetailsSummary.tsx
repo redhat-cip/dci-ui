@@ -32,12 +32,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { sortByName, sortByOldestFirst } from "services/sort";
 import { getTopicIcon } from "ui/icons";
-import {
-  convertLinksToHtml,
-  getBackground,
-  getColor,
-  getIcon,
-} from "jobs/jobUtils";
+import { convertLinksToHtml, getColor, getIcon } from "jobs/jobUtils";
 import { TestLabels } from "jobs/components";
 
 const CommentBloc = styled.div`
@@ -159,10 +154,6 @@ function JobName({ jobId }: { jobId: string }) {
   return <span>{jobId}</span>;
 }
 
-const Job = styled.div<{ status: string }>`
-  background: ${({ status }) => getBackground(status)};
-`;
-
 interface JobDetailsSummaryProps {
   job: IEnhancedJob;
 }
@@ -174,9 +165,8 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
   const dispatch = useDispatch<AppDispatch>();
   const TopicIcon = getTopicIcon(innerJob.topic?.name);
   const navigate = useNavigate();
-
   return (
-    <Job status={innerJob.status}>
+    <div>
       <PageSection variant={PageSectionVariants.light}>
         <DescriptionList
           isFillColumns
@@ -395,6 +385,6 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
           </DescriptionListGroup>
         </DescriptionList>
       </PageSection>
-    </Job>
+    </div>
   );
 }

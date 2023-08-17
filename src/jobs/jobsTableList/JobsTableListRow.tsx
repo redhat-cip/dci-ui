@@ -21,6 +21,8 @@ import { CopyIconButton } from "ui";
 import { getPrincipalComponent } from "component/componentSelector";
 import { DateTime } from "luxon";
 import { Tr, Td } from "@patternfly/react-table";
+import { useTheme } from "ui/Theme/themeContext";
+import { global_Color_light_100 } from "@patternfly/react-tokens";
 
 interface JobTableSummaryProps {
   job: IEnhancedJob;
@@ -54,6 +56,7 @@ export default function JobTableSummary({
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
   const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
+  const { isDark } = useTheme();
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
       <span>
@@ -209,12 +212,15 @@ export default function JobTableSummary({
     <Tr
       key={`${job.id}.${job.etag}`}
       style={{
-        background: getBackground(job.status),
+        background: getBackground(
+          job.status,
+          isDark ? "#1f1d21" : global_Color_light_100.value,
+        ),
         borderBottom: isPipelineJob
           ? isTheLastPipelineJob
-            ? "1px solid #d2d2d2"
+            ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}`
             : "0"
-          : "1px solid #d2d2d2",
+          : `1px solid ${isDark ? "#444548" : "#d2d2d2"}`,
       }}
     >
       <Td
