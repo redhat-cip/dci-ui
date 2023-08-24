@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ToolbarFilter, SearchInput } from "@patternfly/react-core";
-import { sortedUniq } from "lodash";
 
 type ListFilterProps = {
   items: string[];
@@ -20,7 +19,7 @@ export default function ListFilter({
   placeholderText,
 }: ListFilterProps) {
   const [item, setItem] = useState("");
-  const uniqItems = sortedUniq(items);
+  const uniqItems = [...new Set(items)];
   return (
     <ToolbarFilter
       chips={uniqItems}

@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import queryString from "query-string";
+import qs from "qs";
 
 export interface IComponentsFilters {
   display_name: string | null;
@@ -41,7 +41,7 @@ export const defaultComponentsFilters: IComponentsFilters = {
 };
 
 export function parseWhereFromSearch(search: string): IComponentsFilters {
-  const { where } = queryString.parse(search);
+  const { where } = qs.parse(search.replace(/^\?/, ""));
   const copyDefaultFilters: IComponentsFilters = JSON.parse(
     JSON.stringify(defaultComponentsFilters),
   );

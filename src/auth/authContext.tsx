@@ -9,10 +9,9 @@ import * as authActions from "./authActions";
 import { AppDispatch } from "store";
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import {
-  Card,
-  CardBody,
-  Grid,
-  GridItem,
+  Button,
+  Flex,
+  FlexItem,
   Modal,
   ModalVariant,
 } from "@patternfly/react-core";
@@ -112,28 +111,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          <Grid hasGutter>
+          <Flex gap={{ default: "gapXl" }}>
             {identity.teams.map((team) => (
-              <GridItem key={team.id} span={4}>
-                <Card
-                  onKeyDown={() => {
-                    value.changeCurrentTeam(team, identity);
-                    setIsModalOpen(false);
-                  }}
+              <FlexItem key={team.id}>
+                <Button
+                  variant="tertiary"
                   onClick={() => {
                     value.changeCurrentTeam(team, identity);
                     setIsModalOpen(false);
                   }}
-                  hasSelectableInput
-                  isSelectable
-                  isDisabled
-                  tabIndex={0}
                 >
-                  <CardBody>{team.name}</CardBody>
-                </Card>
-              </GridItem>
+                  {team.name}
+                </Button>
+              </FlexItem>
             ))}
-          </Grid>
+          </Flex>
         </Modal>
       )}
       {children}

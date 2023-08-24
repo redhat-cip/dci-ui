@@ -13,7 +13,6 @@ import {
   InputGroupItem,
 } from "@patternfly/react-core";
 import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
-import { sortedUniq } from "lodash";
 
 export function TagsInput({
   tags,
@@ -90,7 +89,7 @@ export default function TagsFilter({
   showToolbarItem = true,
 }: TagsFilterProps) {
   const [tag, setTag] = useState("");
-  const uniqTags = sortedUniq(tags);
+  const uniqTags = [...new Set(tags)];
   return (
     <ToolbarFilter
       chips={tags}

@@ -1,5 +1,5 @@
-import queryString from "query-string";
-import { isEmpty, sortedUniq } from "lodash";
+import qs from "qs";
+import { isEmpty } from "lodash";
 import {
   IJobStatus,
   IJobFilters,
@@ -28,7 +28,7 @@ export function parseFiltersFromSearch(search: string): IJobFilters {
     perPage: perPageString = "20",
     where,
     query,
-  } = queryString.parse(search);
+  } = qs.parse(search.replace(/^\?/, ""));
   const page = parseInt(pageString as string, 10);
   const perPage = parseInt(perPageString as string, 10);
   const copyDefaultFilters: IJobFilters = JSON.parse(
@@ -104,7 +104,7 @@ function _getWhereFromFilters(filters: IJobFilters | IUserFilters) {
     if (key === "tags" && value.length > 0) {
       const tags = value as string[];
       keyValues = keyValues.concat(
-        sortedUniq(tags).map((t: string) => `tags:${t}`),
+        [...new Set(tags)].map((t: string) => `tags:${t}`),
       );
     }
   });
