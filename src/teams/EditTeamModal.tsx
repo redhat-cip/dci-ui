@@ -32,6 +32,7 @@ export default function EditTeamModal({
             key="edit"
             variant="primary"
             onClick={() => {
+              hide();
               if (formRef.current) {
                 formRef.current.handleSubmit();
               }

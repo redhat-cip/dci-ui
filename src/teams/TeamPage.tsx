@@ -35,6 +35,7 @@ import { showError, showSuccess } from "alerts/alertsActions";
 import MainPage from "pages/MainPage";
 import LoadingPage from "pages/LoadingPage";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { getTeamById } from "./teamsSelectors";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -52,19 +53,10 @@ export default function TeamPage() {
   const currentUser = useSelector(getCurrentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [team, setTeam] = useState<ITeam | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
   const { team_id } = useParams();
-
-  const _fetchTeam = useCallback(
-    (id: string) => {
-      dispatch(teamsActions.one(id)).then((response) => {
-        setTeam(response.data.team);
-      });
-    },
-    [dispatch, setTeam],
-  );
+  const team = useSelector(getTeamById(team_id));
 
   const _fetchTeamUsers = useCallback((id: string) => {
     fetchUsersForTeam({ id } as ITeam)
@@ -78,10 +70,15 @@ export default function TeamPage() {
 
   useEffect(() => {
     if (team_id) {
-      _fetchTeam(team_id);
+      dispatch(teamsActions.one(team_id));
+    }
+  }, [team_id, dispatch]);
+
+  useEffect(() => {
+    if (team_id) {
       _fetchTeamUsers(team_id);
     }
-  }, [team_id, _fetchTeam, _fetchTeamUsers]);
+  }, [team_id, _fetchTeamUsers]);
 
   if (!team_id) return null;
 
@@ -148,6 +145,17 @@ export default function TeamPage() {
                 className="pf-v5-u-p-md"
                 field="Partner"
                 value={team.external ? <Label color="blue">yes</Label> : null}
+              />
+              <CardLine
+                className="pf-v5-u-p-md"
+                field="Has access to pre release content"
+                value={
+                  team.has_pre_release_access ? (
+                    <Label color="green">yes</Label>
+                  ) : (
+                    <Label color="red">no</Label>
+                  )
+                }
               />
             </CardBody>
           </Card>

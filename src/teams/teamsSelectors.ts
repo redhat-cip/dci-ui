@@ -24,7 +24,7 @@ export const getTeams = createSelector(
     );
   },
 );
-export const getTeamById = (id: string | null) =>
+export const getTeamById = (id: string | null | undefined) =>
   createSelector(getTeamsById, (teams) => {
     if (id && id in teams) return teams[id];
     return null;

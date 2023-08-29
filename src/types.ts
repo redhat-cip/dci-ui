@@ -32,6 +32,7 @@ type data = {
 export interface ITeam extends Resource {
   country: string | null;
   external: boolean;
+  has_pre_release_access: boolean;
   state: state;
   created_at: string;
   updated_at: string;
@@ -42,6 +43,7 @@ export interface ITeam extends Resource {
 export interface INewTeam {
   name: string;
   external: boolean;
+  has_pre_release_access: boolean;
   state: string;
 }
 

@@ -38,6 +38,7 @@ export default function CreateTeamWithMembers({
     getOrCreateTeam({
       name: values.name,
       external: values.external,
+      has_pre_release_access: values.has_pre_release_access,
       state: "active",
     })
       .then((newTeam) => {

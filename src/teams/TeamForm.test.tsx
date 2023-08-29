@@ -5,7 +5,7 @@ import TeamForm from "./TeamForm";
 test("test create team form submit the correct values", async () => {
   const mockOnSubmit = jest.fn();
 
-  const { getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText, getByLabelText } = render(
     <TeamForm onSubmit={mockOnSubmit} />,
   );
 
@@ -21,8 +21,11 @@ test("test create team form submit the correct values", async () => {
     target: { value: "inactive" },
   });
 
-  const external = getByTestId("team_form__external");
+  const external = getByLabelText("Partner");
   fireEvent.click(external);
+
+  const has_pre_release_access = getByLabelText("Pre release access");
+  fireEvent.click(has_pre_release_access);
 
   fireEvent.submit(name);
 
@@ -32,6 +35,7 @@ test("test create team form submit the correct values", async () => {
       name: "RHEL",
       state: "inactive",
       external: false,
+      has_pre_release_access: true,
     });
   });
 });
@@ -44,13 +48,17 @@ test("test edit team form submit the correct values", async () => {
     name: "team 1",
     state: "active",
     external: false,
+    has_pre_release_access: true,
   } as unknown as ITeam;
-  const { getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText, getByLabelText } = render(
     <TeamForm team={team} onSubmit={mockOnSubmit} />,
   );
 
-  const external = getByTestId("team_form__external");
+  const external = getByLabelText("Partner");
   fireEvent.click(external);
+
+  const has_pre_release_access = getByLabelText("Pre release access");
+  fireEvent.click(has_pre_release_access);
 
   const state = getByPlaceholderText("State") as HTMLSelectElement;
   fireEvent.change(state, {
@@ -67,6 +75,7 @@ test("test edit team form submit the correct values", async () => {
       name: "team 1",
       state: "inactive",
       external: true,
+      has_pre_release_access: false,
     });
   });
 });

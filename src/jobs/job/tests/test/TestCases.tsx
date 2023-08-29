@@ -15,7 +15,7 @@ export default function TestCases({ testcases }: ITestCasesProps) {
     "success",
   ];
   const orderedTestsCases = sortBy(testcases, (tc) =>
-    testscaseActions.indexOf(tc.action)
+    testscaseActions.indexOf(tc.action),
   );
   return (
     <DataList aria-label="Expandable testcase list">

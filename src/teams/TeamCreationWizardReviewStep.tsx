@@ -39,6 +39,14 @@ export default function TeamCreationWizardReviewStep() {
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
+            <DescriptionListTerm>Content access</DescriptionListTerm>
+            <DescriptionListDescription>
+              {values.has_pre_release_access
+                ? "pre release content access"
+                : "no pre release content access"}
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+          <DescriptionListGroup>
             <DescriptionListTerm>List of users</DescriptionListTerm>
             <DescriptionListDescription>
               <ul>

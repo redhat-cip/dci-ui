@@ -11,6 +11,7 @@ const TeamSchema = Yup.object().shape({
   description: Yup.string(),
   state: Yup.string().required(),
   external: Yup.boolean(),
+  has_pre_release_access: Yup.boolean(),
 });
 
 interface TeamFormProps {
@@ -22,7 +23,14 @@ const TeamForm = forwardRef<FormikProps<INewTeam>, TeamFormProps>(
   ({ team, onSubmit }, formRef) => (
     <Formik
       innerRef={formRef}
-      initialValues={team || { name: "", external: true, state: "active" }}
+      initialValues={
+        team || {
+          name: "",
+          external: true,
+          state: "active",
+          has_pre_release_access: false,
+        }
+      }
       validationSchema={TeamSchema}
       onSubmit={onSubmit}
     >
@@ -57,6 +65,11 @@ const TeamForm = forwardRef<FormikProps<INewTeam>, TeamFormProps>(
             data-testid="team_form__external"
             label="Partner"
             name="external"
+          />
+          <Checkbox
+            id="team_form__has_pre_release_access"
+            label="Pre release access"
+            name="has_pre_release_access"
           />
         </Form>
       )}
