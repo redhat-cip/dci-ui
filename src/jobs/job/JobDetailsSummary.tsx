@@ -98,7 +98,7 @@ interface ComponentsProps {
 
 export function Components({ components }: ComponentsProps) {
   const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.display_name })),
+    components.map((c) => ({ ...c, name: c.display_name }))
   );
   return (
     <div>
@@ -319,6 +319,32 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                   ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
+          {isEmpty(innerJob.keys_values) ? null : (
+            <DescriptionListGroup>
+              <DescriptionListTerm>Keys values</DescriptionListTerm>
+              <DescriptionListDescription>
+                {innerJob.keys_values.map((kv, index) => (
+                  <Label
+                    key={index}
+                    color="blue"
+                    className="pf-v5-u-mr-xs pf-v5-u-mb-xs"
+                    style={{ maxWidth: "100%" }}
+                  >
+                    <small
+                      title={`${kv.key}:${kv.value}`}
+                      style={{
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {`${kv.key}:${kv.value}`}
+                    </small>
+                  </Label>
+                ))}
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
           <DescriptionListGroup>
             <DescriptionListTerm icon={<CubesIcon />}>
               Components
@@ -373,7 +399,7 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                     updateJobComment({
                       ...innerJob,
                       comment,
-                    }),
+                    })
                   ).then(setInnerJob);
                 }}
               >

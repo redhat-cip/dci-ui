@@ -18,6 +18,7 @@ export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
   components: "Components",
   tests: "Tests",
   tags: "Tags",
+  keysValues: "Keys Values",
   created_at: "Created at",
   duration: "Duration",
   started: "Started",

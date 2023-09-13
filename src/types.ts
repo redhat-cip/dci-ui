@@ -461,6 +461,11 @@ export interface IResult {
 
 export interface IPipeline extends Resource {}
 
+export interface IKeyValue {
+  key: string;
+  value: number;
+}
+
 export interface IJob extends Resource {
   client_version: string | null;
   comment: string | null;
@@ -486,6 +491,7 @@ export interface IJob extends Resource {
   url: string | null;
   user_agent: string;
   pipeline: IPipeline | null;
+  keys_values: IKeyValue[];
 }
 
 export interface IEnhancedJob extends IJob {
@@ -656,6 +662,7 @@ const JobsTableListColumns = [
   "components",
   "tests",
   "tags",
+  "keysValues",
   "created_at",
   "duration",
   "started",

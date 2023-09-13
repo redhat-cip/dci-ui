@@ -164,6 +164,16 @@ export default function JobTableSummary({
           ))}
         </LabelGroup>
       ),
+    keysValues:
+      job.keys_values?.length === 0 ? null : (
+        <LabelGroup numLabels={10} isCompact>
+          {job.keys_values?.map((kv, index) => (
+            <Label key={index} color="blue" isCompact>
+              {kv.key}:{kv.value}
+            </Label>
+          ))}
+        </LabelGroup>
+      ),
     created_at: (
       <span title={`Created at ${job.created_at}`}>
         {formatDate(job.created_at)}
@@ -214,7 +224,7 @@ export default function JobTableSummary({
       style={{
         background: getBackground(
           job.status,
-          isDark ? "#1f1d21" : global_Color_light_100.value,
+          isDark ? "#1f1d21" : global_Color_light_100.value
         ),
         borderBottom: isPipelineJob
           ? isTheLastPipelineJob
