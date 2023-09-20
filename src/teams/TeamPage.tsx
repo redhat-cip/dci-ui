@@ -11,13 +11,22 @@ import {
   CardTitle,
   Divider,
   Label,
+  Skeleton,
+  Switch,
+  Popover,
 } from "@patternfly/react-core";
-import teamsActions, { fetchUsersForTeam } from "./teamsActions";
+import teamsActions, {
+  getProductsTeamHasAccessTo,
+  fetchUsersForTeam,
+  grantTeamProductPermission,
+  removeTeamProductPermission,
+} from "./teamsActions";
 import {
   TrashAltIcon,
   MinusCircleIcon,
   PlusCircleIcon,
   EditAltIcon,
+  HelpIcon,
 } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb, CopyButton } from "ui";
 import { AppDispatch } from "store";
@@ -36,6 +45,8 @@ import MainPage from "pages/MainPage";
 import LoadingPage from "pages/LoadingPage";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { getTeamById } from "./teamsSelectors";
+import { getProducts } from "products/productsSelectors";
+import { getProductIcon } from "ui/icons";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -57,16 +68,27 @@ export default function TeamPage() {
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
   const { team_id } = useParams();
   const team = useSelector(getTeamById(team_id));
+  const products = useSelector(getProducts);
+  const [productsIdsTeamHasAccessTo, setProductsIdsTeamHasAccessTo] = useState<
+    string[]
+  >([]);
 
-  const _fetchTeamUsers = useCallback((id: string) => {
-    fetchUsersForTeam({ id } as ITeam)
-      .then((response) => {
-        setTeamUsers(response.data.users);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  const _fetchTeamUsers = useCallback(
+    (id: string) => {
+      Promise.all([
+        fetchUsersForTeam({ id } as ITeam),
+        dispatch(getProductsTeamHasAccessTo({ id } as ITeam)),
+      ])
+        .then((response) => {
+          setTeamUsers(response[0]);
+          setProductsIdsTeamHasAccessTo(response[1].map((p) => p.id));
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (team_id) {
@@ -144,7 +166,13 @@ export default function TeamPage() {
               <CardLine
                 className="pf-v5-u-p-md"
                 field="Partner"
-                value={team.external ? <Label color="blue">yes</Label> : null}
+                value={
+                  team.external ? (
+                    <Label color="green">yes</Label>
+                  ) : (
+                    <Label color="red">no</Label>
+                  )
+                }
               />
               <CardLine
                 className="pf-v5-u-p-md"
@@ -157,6 +185,80 @@ export default function TeamPage() {
                   )
                 }
               />
+            </CardBody>
+          </Card>
+          <Card className="pf-v5-u-mt-lg">
+            <CardTitle>
+              Product access
+              <Popover bodyContent="If a product is checked, then the team has access to all released components of the product.">
+                <button
+                  type="button"
+                  aria-label="More info on product access"
+                  onClick={(e) => e.preventDefault()}
+                  className="pf-v5-c-form__group-label-help pf-v5-u-ml-sm"
+                >
+                  <HelpIcon />
+                </button>
+              </Popover>
+            </CardTitle>
+            <CardBody>
+              {isLoading ? (
+                <Skeleton screenreaderText="Loading products the team has access to" />
+              ) : (
+                <Table
+                  className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+                  style={{ maxWidth: 400 }}
+                >
+                  <Thead>
+                    <Tr>
+                      <Th />
+                      <Th />
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {products.map((product) => {
+                      const ProductIcon = getProductIcon(product.name);
+                      return (
+                        <Tr key={product.id}>
+                          <Td>
+                            <ProductIcon className="pf-v5-u-mr-xs" />
+                            {product.name}
+                          </Td>
+                          <Td className="pf-v5-c-table__action">
+                            <Switch
+                              id={`product-${product.id}-team-${team.id}-access`}
+                              aria-label={`team ${team.name} has access to ${product.name}`}
+                              isChecked={productsIdsTeamHasAccessTo.includes(
+                                product.id,
+                              )}
+                              onChange={(e, hasAccessToProduct) => {
+                                if (hasAccessToProduct) {
+                                  setProductsIdsTeamHasAccessTo([
+                                    ...productsIdsTeamHasAccessTo,
+                                    product.id,
+                                  ]);
+                                  dispatch(
+                                    grantTeamProductPermission(team, product),
+                                  );
+                                } else {
+                                  setProductsIdsTeamHasAccessTo(
+                                    productsIdsTeamHasAccessTo.filter(
+                                      (id) => id !== product.id,
+                                    ),
+                                  );
+                                  dispatch(
+                                    removeTeamProductPermission(team, product),
+                                  );
+                                }
+                              }}
+                            />
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                  </Tbody>
+                </Table>
+              )}
             </CardBody>
           </Card>
           <Card className="pf-v5-u-mt-lg">
@@ -247,52 +349,56 @@ export default function TeamPage() {
               </div>
             </CardTitle>
             <CardBody>
-              <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
-                <Thead>
-                  <Tr>
-                    <Th>ID</Th>
-                    <Th>Login</Th>
-                    <Th>Full name</Th>
-                    <Th>Email</Th>
-                    <Th />
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {sortByName(teamUsers).map((user) => (
-                    <Tr key={user.id}>
-                      <Td>
-                        <CopyButton text={user.id} />
-                      </Td>
-                      <Td>
-                        <Link to={`/users/${user.id}`}>{user.name}</Link>
-                      </Td>
-                      <Td>{user.fullname}</Td>
-                      <Td>{user.email}</Td>
-                      <Td className="pf-v5-c-table__action">
-                        <ConfirmDeleteModal
-                          title={`Delete ${user.name} from ${team.name}`}
-                          message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
-                          onOk={() => {
-                            deleteUserFromTeam(user, team).then(() => {
-                              _fetchTeamUsers(team_id);
-                            });
-                          }}
-                        >
-                          {(openModal) => (
-                            <Button
-                              variant="danger"
-                              size="sm"
-                              onClick={openModal}
-                            >
-                              <MinusCircleIcon />
-                            </Button>
-                          )}
-                        </ConfirmDeleteModal>
-                      </Td>
+              {isLoading ? (
+                <Skeleton screenreaderText="Loading team's users" />
+              ) : (
+                <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+                  <Thead>
+                    <Tr>
+                      <Th>ID</Th>
+                      <Th>Login</Th>
+                      <Th>Full name</Th>
+                      <Th>Email</Th>
+                      <Th />
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+                  </Thead>
+                  <Tbody>
+                    {sortByName(teamUsers).map((user) => (
+                      <Tr key={user.id}>
+                        <Td>
+                          <CopyButton text={user.id} />
+                        </Td>
+                        <Td>
+                          <Link to={`/users/${user.id}`}>{user.name}</Link>
+                        </Td>
+                        <Td>{user.fullname}</Td>
+                        <Td>{user.email}</Td>
+                        <Td className="pf-v5-c-table__action">
+                          <ConfirmDeleteModal
+                            title={`Delete ${user.name} from ${team.name}`}
+                            message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
+                            onOk={() => {
+                              deleteUserFromTeam(user, team).then(() => {
+                                _fetchTeamUsers(team_id);
+                              });
+                            }}
+                          >
+                            {(openModal) => (
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={openModal}
+                              >
+                                <MinusCircleIcon />
+                              </Button>
+                            )}
+                          </ConfirmDeleteModal>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              )}
             </CardBody>
           </Card>
         </GridItem>

@@ -14,10 +14,9 @@ import { useFormikContext } from "formik";
 import { useEffect, useState } from "react";
 import { TeamCreationWizardValues } from "./TeamCreationWizardTypes";
 import { useNavigate } from "react-router-dom";
-import { getOrCreateTeam } from "./teamsActions";
+import { getOrCreateTeam, grantTeamPermission } from "./teamsActions";
 import { addUserToTeam, getOrCreateUser } from "users/usersActions";
 import { splitTeamMembersString } from "./TeamMembersForm";
-import { grantTeamPermission } from "permissions/permissionsActions";
 import { ITeam } from "types";
 
 export default function CreateTeamWithMembers({
@@ -58,9 +57,7 @@ export default function CreateTeamWithMembers({
                 setPercent(75);
                 const productPermissionPromises = Object.values(
                   values.permissions,
-                ).map((product) =>
-                  grantTeamPermission("product", newTeam, product),
-                );
+                ).map((product) => grantTeamPermission(newTeam, product));
                 Promise.all(productPermissionPromises)
                   .then(() => {
                     setPercent(100);

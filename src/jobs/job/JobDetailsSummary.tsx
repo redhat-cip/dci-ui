@@ -98,7 +98,7 @@ interface ComponentsProps {
 
 export function Components({ components }: ComponentsProps) {
   const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.display_name }))
+    components.map((c) => ({ ...c, name: c.display_name })),
   );
   return (
     <div>
@@ -399,7 +399,7 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                     updateJobComment({
                       ...innerJob,
                       comment,
-                    })
+                    }),
                   ).then(setInnerJob);
                 }}
               >

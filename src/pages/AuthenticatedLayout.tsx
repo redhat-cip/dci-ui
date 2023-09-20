@@ -349,7 +349,6 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         >
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
-          <DCINavItem to="/permissions/products">Permissions</DCINavItem>
           {identity.isSuperAdmin && (
             <DCINavItem to="/feeders">Feeders</DCINavItem>
           )}

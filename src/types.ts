@@ -73,10 +73,6 @@ export interface IEditProduct {
   description: string;
 }
 
-export interface IProductWithTeams extends IProduct {
-  teams: ITeam[];
-}
-
 export interface IProductsById {
   [id: string]: IProduct;
 }

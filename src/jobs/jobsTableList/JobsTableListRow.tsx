@@ -224,7 +224,7 @@ export default function JobTableSummary({
       style={{
         background: getBackground(
           job.status,
-          isDark ? "#1f1d21" : global_Color_light_100.value
+          isDark ? "#1f1d21" : global_Color_light_100.value,
         ),
         borderBottom: isPipelineJob
           ? isTheLastPipelineJob
