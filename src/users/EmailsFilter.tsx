@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Button,
-  InputGroup,
-  TextInput,
-  ButtonVariant,
-  ToolbarFilter,
-  InputGroupItem,
-} from "@patternfly/react-core";
-import { SearchIcon } from "@patternfly/react-icons";
+import { ToolbarFilter, SearchInput } from "@patternfly/react-core";
 
 type EmailsFilterProps = {
   search: string;
@@ -18,36 +10,15 @@ export default function EmailsFilter({ search, onSearch }: EmailsFilterProps) {
   const [email, setEmail] = useState(search);
   return (
     <ToolbarFilter categoryName="Email" showToolbarItem>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          setEmail("");
-          onSearch(email);
+      <SearchInput
+        placeholder="Find a user by email"
+        value={email}
+        onChange={(e, value) => setEmail(value)}
+        onSearch={(e, value) => {
+          onSearch(value);
         }}
-      >
-        <InputGroup>
-          <InputGroupItem isFill>
-            <TextInput
-              name="email"
-              id="input-email"
-              type="email"
-              aria-label="email filter"
-              onChange={(_event, email) => setEmail(email)}
-              value={email}
-              placeholder="Search by email..."
-            />
-          </InputGroupItem>
-          <InputGroupItem>
-            <Button
-              variant={ButtonVariant.control}
-              aria-label="search email button"
-              type="submit"
-            >
-              <SearchIcon />
-            </Button>
-          </InputGroupItem>
-        </InputGroup>
-      </form>
+        onClear={() => setEmail("")}
+      />
     </ToolbarFilter>
   );
 }

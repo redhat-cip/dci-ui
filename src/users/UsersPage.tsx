@@ -8,7 +8,7 @@ import {
   ToolbarItem,
   Toolbar,
 } from "@patternfly/react-core";
-import { PlusCircleIcon } from "@patternfly/react-icons";
+import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
 import usersActions from "./usersActions";
 import { EmptyState, Breadcrumb } from "ui";
 import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
@@ -39,10 +39,6 @@ export default function UsersPage() {
   });
   const dispatch = useDispatch<AppDispatch>();
 
-  const search = (s: IUserFilters) => {
-    setFilters(s);
-  };
-
   useEffect(() => {
     const params = getParamsFromFilters(filters);
     dispatch(usersActions.clear());
@@ -56,7 +52,24 @@ export default function UsersPage() {
       title="Users"
       description="List of DCI users"
       loading={isFetching && isEmpty(users)}
-      empty={!isFetching && isEmpty(users)}
+      HeaderButton={
+        currentUser.isSuperAdmin ? (
+          <CreateUserModal
+            onSubmit={(user) => {
+              dispatch(usersActions.create(user)).then(() =>
+                setFilters({ ...initialUserFilter })
+              );
+            }}
+          >
+            {(openModal) => (
+              <Button variant="primary" onClick={openModal}>
+                <PlusCircleIcon className="pf-v5-u-mr-xs" />
+                Create a new user
+              </Button>
+            )}
+          </CreateUserModal>
+        ) : null
+      }
       EmptyComponent={
         <EmptyState title="No users" info="There is no users at the moment." />
       }
@@ -71,28 +84,9 @@ export default function UsersPage() {
               <EmailsFilter
                 search={filters.email || ""}
                 onSearch={(email) => {
-                  search({ ...initialUserFilter, email });
+                  setFilters({ ...initialUserFilter, email });
                 }}
               />
-            </ToolbarItem>
-            <ToolbarItem variant="separator" />
-            <ToolbarItem>
-              {currentUser.isSuperAdmin ? (
-                <CreateUserModal
-                  onSubmit={(user) => {
-                    dispatch(usersActions.create(user)).then(() =>
-                      search({ ...initialUserFilter }),
-                    );
-                  }}
-                >
-                  {(openModal) => (
-                    <Button variant="primary" onClick={openModal}>
-                      <PlusCircleIcon className="pf-v5-u-mr-xs" />
-                      Create a new user
-                    </Button>
-                  )}
-                </CreateUserModal>
-              ) : null}
             </ToolbarItem>
           </ToolbarGroup>
           <ToolbarGroup style={{ flex: "1" }}>
@@ -103,16 +97,10 @@ export default function UsersPage() {
                   page={filters.page}
                   itemCount={numOfUsers}
                   onSetPage={(e, newPage) => {
-                    search({
-                      ...filters,
-                      page: newPage,
-                    });
+                    setFilters({ ...filters, page: newPage });
                   }}
                   onPerPageSelect={(e, newPerPage) => {
-                    search({
-                      ...filters,
-                      perPage: newPerPage,
-                    });
+                    setFilters({ ...filters, perPage: newPerPage });
                   }}
                 />
               )}
@@ -120,7 +108,34 @@ export default function UsersPage() {
           </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
-      <UsersTable users={users} />
+      {!isFetching && users.length === 0 ? (
+        filters.email === "" ? (
+          <EmptyState
+            title="There is no users"
+            info="Do you want to create one?"
+          />
+        ) : (
+          <EmptyState
+            icon={SearchIcon}
+            title="There is no users"
+            info={`We found 0 results for ${filters.email} search.`}
+            action={
+              filters.email?.endsWith("*") ? null : (
+                <Button
+                  variant="link"
+                  onClick={() =>
+                    setFilters({ ...filters, email: `${filters.email}*` })
+                  }
+                >
+                  Try {filters.email}* instead
+                </Button>
+              )
+            }
+          />
+        )
+      ) : (
+        <UsersTable users={users} />
+      )}
     </MainPage>
   );
 }
