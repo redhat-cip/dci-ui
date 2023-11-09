@@ -17,36 +17,31 @@ import {
 } from "@patternfly/react-core";
 import teamsActions, {
   getProductsTeamHasAccessTo,
-  fetchUsersForTeam,
   grantTeamProductPermission,
   removeTeamProductPermission,
 } from "./teamsActions";
 import {
   TrashAltIcon,
-  MinusCircleIcon,
-  PlusCircleIcon,
   EditAltIcon,
   HelpIcon,
 } from "@patternfly/react-icons";
-import { ConfirmDeleteModal, Breadcrumb, CopyButton } from "ui";
+import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
-import { ITeam, IUser } from "types";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { ITeam } from "types";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
-import { addUserToTeam, deleteUserFromTeam } from "users/usersActions";
-import AddUserToTeamModal from "./AddUserToTeamModal";
 import { getCurrentUser } from "currentUser/currentUserSelectors";
 import EditTeamModal from "./EditTeamModal";
 import CardLine from "ui/CardLine";
-import { sortByName } from "services/sort";
-import { showError, showSuccess } from "alerts/alertsActions";
 import MainPage from "pages/MainPage";
 import LoadingPage from "pages/LoadingPage";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { getTeamById } from "./teamsSelectors";
 import { getProducts } from "products/productsSelectors";
 import { getProductIcon } from "ui/icons";
+import TeamMembers from "./TeamMembers";
+import TeamComponentsPermissions from "./TeamComponentsPermissions";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -65,7 +60,6 @@ export default function TeamPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
-  const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
   const { team_id } = useParams();
   const team = useSelector(getTeamById(team_id));
   const products = useSelector(getProducts);
@@ -73,21 +67,17 @@ export default function TeamPage() {
     string[]
   >([]);
 
-  const _fetchTeamUsers = useCallback(
+  const _getProductsTeamHasAccessTo = useCallback(
     (id: string) => {
-      Promise.all([
-        fetchUsersForTeam({ id } as ITeam),
-        dispatch(getProductsTeamHasAccessTo({ id } as ITeam)),
-      ])
+      dispatch(getProductsTeamHasAccessTo({ id } as ITeam))
         .then((response) => {
-          setTeamUsers(response[0]);
-          setProductsIdsTeamHasAccessTo(response[1].map((p) => p.id));
+          setProductsIdsTeamHasAccessTo(response.map((p) => p.id));
         })
         .finally(() => {
           setIsLoading(false);
         });
     },
-    [dispatch],
+    [dispatch]
   );
 
   useEffect(() => {
@@ -98,9 +88,9 @@ export default function TeamPage() {
 
   useEffect(() => {
     if (team_id) {
-      _fetchTeamUsers(team_id);
+      _getProductsTeamHasAccessTo(team_id);
     }
-  }, [team_id, _fetchTeamUsers]);
+  }, [team_id, _getProductsTeamHasAccessTo]);
 
   if (!team_id) return null;
 
@@ -154,12 +144,6 @@ export default function TeamPage() {
               <Divider />
               <CardLine
                 className="pf-v5-u-p-md"
-                field="Members"
-                value={isLoading ? "" : teamUsers.length}
-              />
-              <Divider />
-              <CardLine
-                className="pf-v5-u-p-md"
                 field="State"
                 value={team.state}
               />
@@ -187,7 +171,46 @@ export default function TeamPage() {
               />
             </CardBody>
           </Card>
+          <TeamMembers team={team} className="pf-v5-u-mt-lg" />
           <Card className="pf-v5-u-mt-lg">
+            <CardTitle>Danger Zone</CardTitle>
+            <CardBody>
+              <DangerZone>
+                <DangerZoneRow>
+                  <div>
+                    <TextContent>
+                      <Text component="h2">{`Delete ${team.name} team`}</Text>
+                      <Text component="p">
+                        Once you delete a team, there is no going back. Please
+                        be certain.
+                      </Text>
+                    </TextContent>
+                  </div>
+                  <div>
+                    <ConfirmDeleteModal
+                      title={`Delete team ${team.name}`}
+                      message={`Are you sure you want to delete ${team.name} team?`}
+                      onOk={() =>
+                        dispatch(teamsActions.delete(team)).then(() =>
+                          navigate("/teams")
+                        )
+                      }
+                    >
+                      {(openModal) => (
+                        <Button variant="danger" size="sm" onClick={openModal}>
+                          <TrashAltIcon className="pf-v5-u-mr-sm" />
+                          Delete this team
+                        </Button>
+                      )}
+                    </ConfirmDeleteModal>
+                  </div>
+                </DangerZoneRow>
+              </DangerZone>
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem span={6}>
+          <Card>
             <CardTitle>
               Product access
               <Popover bodyContent="If a product is checked, then the team has access to all released components of the product.">
@@ -229,7 +252,7 @@ export default function TeamPage() {
                               id={`product-${product.id}-team-${team.id}-access`}
                               aria-label={`team ${team.name} has access to ${product.name}`}
                               isChecked={productsIdsTeamHasAccessTo.includes(
-                                product.id,
+                                product.id
                               )}
                               onChange={(e, hasAccessToProduct) => {
                                 if (hasAccessToProduct) {
@@ -238,16 +261,16 @@ export default function TeamPage() {
                                     product.id,
                                   ]);
                                   dispatch(
-                                    grantTeamProductPermission(team, product),
+                                    grantTeamProductPermission(team, product)
                                   );
                                 } else {
                                   setProductsIdsTeamHasAccessTo(
                                     productsIdsTeamHasAccessTo.filter(
-                                      (id) => id !== product.id,
-                                    ),
+                                      (id) => id !== product.id
+                                    )
                                   );
                                   dispatch(
-                                    removeTeamProductPermission(team, product),
+                                    removeTeamProductPermission(team, product)
                                   );
                                 }
                               }}
@@ -261,146 +284,7 @@ export default function TeamPage() {
               )}
             </CardBody>
           </Card>
-          <Card className="pf-v5-u-mt-lg">
-            <CardTitle>Danger Zone</CardTitle>
-            <CardBody>
-              <DangerZone>
-                <DangerZoneRow>
-                  <div>
-                    <TextContent>
-                      <Text component="h2">{`Delete ${team.name} team`}</Text>
-                      <Text component="p">
-                        Once you delete a team, there is no going back. Please
-                        be certain.
-                      </Text>
-                    </TextContent>
-                  </div>
-                  <div>
-                    <ConfirmDeleteModal
-                      title={`Delete team ${team.name}`}
-                      message={`Are you sure you want to delete ${team.name} team?`}
-                      onOk={() =>
-                        dispatch(teamsActions.delete(team)).then(() =>
-                          navigate("/teams"),
-                        )
-                      }
-                    >
-                      {(openModal) => (
-                        <Button variant="danger" size="sm" onClick={openModal}>
-                          <TrashAltIcon className="pf-v5-u-mr-sm" />
-                          Delete this team
-                        </Button>
-                      )}
-                    </ConfirmDeleteModal>
-                  </div>
-                </DangerZoneRow>
-              </DangerZone>
-            </CardBody>
-          </Card>
-        </GridItem>
-        <GridItem span={6}>
-          <Card>
-            <CardTitle>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>Team members</div>
-                <div>
-                  <AddUserToTeamModal
-                    team={team}
-                    onUserSelected={(user) => {
-                      const fullname = user.fullname;
-                      addUserToTeam(user.id, team)
-                        .then((response) => {
-                          _fetchTeamUsers(team.id);
-                          dispatch(
-                            showSuccess(
-                              `${fullname} added successfully to ${team.name} team.`,
-                            ),
-                          );
-                          return response;
-                        })
-                        .catch((error) => {
-                          dispatch(
-                            showError(
-                              `We can't add ${fullname} user to ${team.name} team`,
-                            ),
-                          );
-                          return error;
-                        });
-                    }}
-                  >
-                    {(openModal) => (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={openModal}
-                      >
-                        <PlusCircleIcon className="pf-v5-u-mr-xs" />
-                        Add a user
-                      </Button>
-                    )}
-                  </AddUserToTeamModal>
-                </div>
-              </div>
-            </CardTitle>
-            <CardBody>
-              {isLoading ? (
-                <Skeleton screenreaderText="Loading team's users" />
-              ) : (
-                <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
-                  <Thead>
-                    <Tr>
-                      <Th>ID</Th>
-                      <Th>Login</Th>
-                      <Th>Full name</Th>
-                      <Th>Email</Th>
-                      <Th />
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {sortByName(teamUsers).map((user) => (
-                      <Tr key={user.id}>
-                        <Td>
-                          <CopyButton text={user.id} />
-                        </Td>
-                        <Td>
-                          <Link to={`/users/${user.id}`}>{user.name}</Link>
-                        </Td>
-                        <Td>{user.fullname}</Td>
-                        <Td>{user.email}</Td>
-                        <Td className="pf-v5-c-table__action">
-                          <ConfirmDeleteModal
-                            title={`Delete ${user.name} from ${team.name}`}
-                            message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
-                            onOk={() => {
-                              deleteUserFromTeam(user, team).then(() => {
-                                _fetchTeamUsers(team_id);
-                              });
-                            }}
-                          >
-                            {(openModal) => (
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={openModal}
-                              >
-                                <MinusCircleIcon />
-                              </Button>
-                            )}
-                          </ConfirmDeleteModal>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              )}
-            </CardBody>
-          </Card>
+          <TeamComponentsPermissions className="pf-v5-u-mt-lg" team={team}/>
         </GridItem>
       </Grid>
     </MainPage>

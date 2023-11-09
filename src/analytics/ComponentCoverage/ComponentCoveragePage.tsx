@@ -203,7 +203,7 @@ export default function ComponentCoveragePage() {
               <ToolbarItem>Filter by team</ToolbarItem>
               <ToolbarItem>
                 <TeamFilter
-                  team_id={teamId}
+                  teamId={teamId}
                   onClear={() => setTeamId(null)}
                   onSelect={(team) => setTeamId(team.id)}
                 />
@@ -408,7 +408,7 @@ export default function ComponentCoveragePage() {
                                     color: global_palette_red_100.value,
                                   }}
                                 >
-                                  <WarningTriangleIcon className="pf-u-mr-xs" />
+                                  <WarningTriangleIcon className="pf-v5-u-mr-xs" />
                                   not tested
                                 </span>
                               )}

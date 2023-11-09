@@ -35,16 +35,13 @@ export function getOrCreateTeam(team: INewTeam) {
 }
 
 export function getProductsTeamHasAccessTo(
-  team: ITeam,
+  team: ITeam
 ): AppThunk<Promise<IProduct[]>> {
   return (dispatch) => {
     return dispatch(productsActions.all()).then((response) => {
       const products = response.data.products as IProduct[];
       const promises = products.map((product) =>
-        http({
-          method: "get",
-          url: `/api/v1/products/${product.id}/teams`,
-        }),
+        http.get(`/api/v1/products/${product.id}/teams`)
       );
       const productsTeamHasAccessTo: IProduct[] = [];
       return Promise.all(promises).then((responses) => {
@@ -61,7 +58,7 @@ export function getProductsTeamHasAccessTo(
 
 export function grantTeamPermission(
   team: ITeam,
-  product: IProduct,
+  product: IProduct
 ): AxiosPromise<void> {
   return http({
     method: "post",
@@ -72,15 +69,15 @@ export function grantTeamPermission(
 
 export function grantTeamProductPermission(
   team: ITeam,
-  product: IProduct,
+  product: IProduct
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch) => {
     return grantTeamPermission(team, product)
       .then((response) => {
         dispatch(
           showSuccess(
-            `${team.name} can download components for the product ${product.name}`,
-          ),
+            `${team.name} can download components for the product ${product.name}`
+          )
         );
         return response;
       })
@@ -93,7 +90,7 @@ export function grantTeamProductPermission(
 
 export function removeTeamProductPermission(
   team: ITeam,
-  product: IProduct,
+  product: IProduct
 ): AppThunk<AxiosPromise<void>> {
   return (dispatch) => {
     return http({
@@ -103,8 +100,8 @@ export function removeTeamProductPermission(
       .then((response) => {
         dispatch(
           showSuccess(
-            `${team.name} to ${product.name} permission successfully removed`,
-          ),
+            `${team.name} to ${product.name} permission successfully removed`
+          )
         );
         return response;
       })
@@ -113,4 +110,32 @@ export function removeTeamProductPermission(
         return error;
       });
   };
+}
+
+export function getComponentsPermissions(team: ITeam): Promise<ITeam[]> {
+  return http
+    .get(`/api/v1/teams/${team.id}/permissions/components`)
+    .then((response) => response.data.teams);
+}
+
+export function addRemoteTeamPermissionForTheTeam(
+  remoteTeam: ITeam,
+  team: ITeam
+): AxiosPromise<void> {
+  return http({
+    method: "post",
+    url: `/api/v1/teams/${team.id}/permissions/components`,
+    data: { teams_ids: [remoteTeam.id] },
+  });
+}
+
+export function removeRemoteTeamPermissionForTheTeam(
+  remoteTeam: ITeam,
+  team: ITeam
+): AxiosPromise<void> {
+  return http({
+    method: "delete",
+    url: `/api/v1/teams/${team.id}/permissions/components`,
+    data: { teams_ids: [remoteTeam.id] },
+  });
 }

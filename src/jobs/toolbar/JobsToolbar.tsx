@@ -122,7 +122,7 @@ export default function JobsToolbar({
             <ToolbarItem>
               <TeamFilter
                 showToolbarItem={currentCategory === "Team"}
-                team_id={filters.team_id}
+                teamId={filters.team_id}
                 onClear={() => setFilters({ ...filters, team_id: null })}
                 onSelect={(team) =>
                   setFilters({ ...filters, team_id: team.id })
