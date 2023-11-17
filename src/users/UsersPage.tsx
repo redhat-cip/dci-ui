@@ -57,7 +57,7 @@ export default function UsersPage() {
           <CreateUserModal
             onSubmit={(user) => {
               dispatch(usersActions.create(user)).then(() =>
-                setFilters({ ...initialUserFilter })
+                setFilters({ ...initialUserFilter }),
               );
             }}
           >

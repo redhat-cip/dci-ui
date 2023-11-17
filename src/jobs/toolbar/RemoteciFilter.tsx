@@ -73,8 +73,8 @@ export function RemoteciSelect({
         debouncedSearchValue === ""
           ? "Search a remoteci by name"
           : isFetching
-          ? "Searching..."
-          : "No remoteci matching this name"
+            ? "Searching..."
+            : "No remoteci matching this name"
       }
     >
       {remotecis

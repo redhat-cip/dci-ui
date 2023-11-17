@@ -97,8 +97,8 @@ export default function TeamsFilter({
           debouncedSearchValue === ""
             ? "Search a team by name"
             : isFetching
-            ? "Searching..."
-            : "No team matching this name"
+              ? "Searching..."
+              : "No team matching this name"
         }
       >
         {teams.map((team) => (

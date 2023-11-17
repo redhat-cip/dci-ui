@@ -84,16 +84,16 @@ export const FileRow = styled.div<FileRowProps>`
           color: ${global_danger_color_100.value};
         `
       : status === "skipped" || status === "ignored"
-      ? css`
-          color: ${global_info_color_100.value};
-        `
-      : status === "withAWarning"
-      ? css`
-          color: ${global_palette_purple_200.value};
-        `
-      : css`
-          color: ${global_warning_color_100.value};
-        `};
+        ? css`
+            color: ${global_info_color_100.value};
+          `
+        : status === "withAWarning"
+          ? css`
+              color: ${global_palette_purple_200.value};
+            `
+          : css`
+              color: ${global_warning_color_100.value};
+            `};
   background-color: ${({ isDark }) =>
     isDark ? "#1b1d21" : global_BackgroundColor_dark_200.value};
   &:hover {

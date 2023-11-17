@@ -38,9 +38,9 @@ export default function AddRemoteTeamPermissionModal({
           teamId={teamId}
           filteredTeamsIds={[team.id]}
           onClear={() => onClear()}
-          onSelect={team=>{
-            hide()
-            onTeamSelected(team)
+          onSelect={(team) => {
+            hide();
+            onTeamSelected(team);
           }}
           menuAppendTo={() => document.body}
         />

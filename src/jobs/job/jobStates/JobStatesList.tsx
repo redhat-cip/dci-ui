@@ -182,8 +182,8 @@ export default function JobStatesList({ job }: JobStatesListProps) {
               {loadingRawLog
                 ? "Loading"
                 : seeRawLog
-                ? "Hide Raw log"
-                : "Raw Log"}
+                  ? "Hide Raw log"
+                  : "Raw Log"}
             </RawLogButton>
           )}
         </RawLogRow>

@@ -71,16 +71,16 @@ export default function TeamComponentsPermissions({
                     _getComponentsPermissions(team);
                     dispatch(
                       showSuccess(
-                        `${team.name} team can see component of ${remoteTeam.name} team.`
-                      )
+                        `${team.name} team can see component of ${remoteTeam.name} team.`,
+                      ),
                     );
                     return response;
                   })
                   .catch((error) => {
                     dispatch(
                       showError(
-                        `We can't add permission for ${remoteTeam.name} to ${team.name} team`
-                      )
+                        `We can't add permission for ${remoteTeam.name} to ${team.name} team`,
+                      ),
                     );
                     return error;
                   });
@@ -137,7 +137,7 @@ export default function TeamComponentsPermissions({
                           onOk={() => {
                             removeRemoteTeamPermissionForTheTeam(
                               remoteTeam,
-                              team
+                              team,
                             ).then(() => _getComponentsPermissions(team));
                           }}
                         >

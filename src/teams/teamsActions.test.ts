@@ -46,7 +46,7 @@ test("grantTeamProductPermission", () => {
   const product = { id: "p1" } as IProduct;
   const dispatch = store.dispatch as AppDispatch;
   return dispatch(grantTeamProductPermission(team, product)).then((response) =>
-    expect(response.status).toBe(201)
+    expect(response.status).toBe(201),
   );
 });
 
@@ -59,6 +59,6 @@ test("removeTeamProductPermission", () => {
   const product = { id: "p1", etag: "ep1" } as IProduct;
   const dispatch = store.dispatch as AppDispatch;
   return dispatch(removeTeamProductPermission(team, product)).then((response) =>
-    expect(response.status).toBe(204)
+    expect(response.status).toBe(204),
   );
 });

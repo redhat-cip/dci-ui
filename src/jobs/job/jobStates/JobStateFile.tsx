@@ -89,13 +89,13 @@ export default function JobStateFile({
             {isLoading
               ? "loading"
               : content === ""
-              ? `no log for "${file.name}"`
-              : content.split("\\n").map((line, i) => (
-                  <Fragment key={i}>
-                    {line}
-                    <br />
-                  </Fragment>
-                ))}
+                ? `no log for "${file.name}"`
+                : content.split("\\n").map((line, i) => (
+                    <Fragment key={i}>
+                      {line}
+                      <br />
+                    </Fragment>
+                  ))}
           </JobStatePre>
         </FileContent>
       ) : null}

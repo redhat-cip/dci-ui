@@ -20,11 +20,7 @@ import teamsActions, {
   grantTeamProductPermission,
   removeTeamProductPermission,
 } from "./teamsActions";
-import {
-  TrashAltIcon,
-  EditAltIcon,
-  HelpIcon,
-} from "@patternfly/react-icons";
+import { TrashAltIcon, EditAltIcon, HelpIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { AppDispatch } from "store";
 import { ITeam } from "types";
@@ -77,7 +73,7 @@ export default function TeamPage() {
           setIsLoading(false);
         });
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -192,7 +188,7 @@ export default function TeamPage() {
                       message={`Are you sure you want to delete ${team.name} team?`}
                       onOk={() =>
                         dispatch(teamsActions.delete(team)).then(() =>
-                          navigate("/teams")
+                          navigate("/teams"),
                         )
                       }
                     >
@@ -252,7 +248,7 @@ export default function TeamPage() {
                               id={`product-${product.id}-team-${team.id}-access`}
                               aria-label={`team ${team.name} has access to ${product.name}`}
                               isChecked={productsIdsTeamHasAccessTo.includes(
-                                product.id
+                                product.id,
                               )}
                               onChange={(e, hasAccessToProduct) => {
                                 if (hasAccessToProduct) {
@@ -261,16 +257,16 @@ export default function TeamPage() {
                                     product.id,
                                   ]);
                                   dispatch(
-                                    grantTeamProductPermission(team, product)
+                                    grantTeamProductPermission(team, product),
                                   );
                                 } else {
                                   setProductsIdsTeamHasAccessTo(
                                     productsIdsTeamHasAccessTo.filter(
-                                      (id) => id !== product.id
-                                    )
+                                      (id) => id !== product.id,
+                                    ),
                                   );
                                   dispatch(
-                                    removeTeamProductPermission(team, product)
+                                    removeTeamProductPermission(team, product),
                                   );
                                 }
                               }}
@@ -284,7 +280,7 @@ export default function TeamPage() {
               )}
             </CardBody>
           </Card>
-          <TeamComponentsPermissions className="pf-v5-u-mt-lg" team={team}/>
+          <TeamComponentsPermissions className="pf-v5-u-mt-lg" team={team} />
         </GridItem>
       </Grid>
     </MainPage>

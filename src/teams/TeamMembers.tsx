@@ -30,16 +30,13 @@ export default function TeamMembers({
   const [isLoading, setIsLoading] = useState(true);
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
 
-  const _fetchTeamUsers = useCallback(
-    (team: ITeam) => {
-      fetchUsersForTeam(team)
-        .then(setTeamUsers)
-        .finally(() => {
-          setIsLoading(false);
-        });
-    },
-    []
-  );
+  const _fetchTeamUsers = useCallback((team: ITeam) => {
+    fetchUsersForTeam(team)
+      .then(setTeamUsers)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     _fetchTeamUsers(team);
@@ -66,16 +63,16 @@ export default function TeamMembers({
                     _fetchTeamUsers(team);
                     dispatch(
                       showSuccess(
-                        `${fullname} added successfully to ${team.name} team.`
-                      )
+                        `${fullname} added successfully to ${team.name} team.`,
+                      ),
                     );
                     return response;
                   })
                   .catch((error) => {
                     dispatch(
                       showError(
-                        `We can't add ${fullname} user to ${team.name} team`
-                      )
+                        `We can't add ${fullname} user to ${team.name} team`,
+                      ),
                     );
                     return error;
                   });

@@ -611,8 +611,8 @@ function TestListDetails({
               ? "All testcases"
               : `Testcases under ${upperBoundary}%`
             : upperBoundary === null
-            ? `Testcases over ${lowerBoundary}%`
-            : `Testcases between ${lowerBoundary}% and ${upperBoundary}%`}
+              ? `Testcases over ${lowerBoundary}%`
+              : `Testcases between ${lowerBoundary}% and ${upperBoundary}%`}
           {lowerBoundary !== null && upperBoundary !== null && (
             <small>
               <Button variant="link" onClick={resetRange}>
