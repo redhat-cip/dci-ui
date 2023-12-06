@@ -1,20 +1,9 @@
-import { useEffect, useCallback, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
-import { useDispatch, useSelector } from "react-redux";
-import jobsActions from "./jobsActions";
-import { getJobs, getNbOfJobs, isFetchingJobs } from "./jobsSelectors";
 import JobsList from "./jobsList/JobsList";
 import JobsTableList from "./jobsTableList/JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
-import {
-  parseFiltersFromSearch,
-  getParamsFromFilters,
-  createSearchFromFilters,
-  defaultFilters,
-  resetPageIfNeeded,
-} from "./toolbar/filters";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AppDispatch } from "store";
 import {
   Bullseye,
   PageSection,
@@ -24,22 +13,41 @@ import {
   Text,
   TextContent,
 } from "@patternfly/react-core";
-import { JobsTableListColumn } from "types";
+import { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
 import { useAuth } from "auth/authContext";
 import { useTitle } from "hooks/useTitle";
+import {
+  createSearchFromFilters,
+  offsetAndLimitToPage,
+  pageAndLimitToOffset,
+  parseFiltersFromSearch,
+  getDefaultFilters,
+} from "api/filters";
+import { useListJobsQuery } from "./jobsApi";
 
 export default function JobsPage() {
+  const { currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { identity } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
-  const jobs = useSelector(getJobs);
-  const isFetching = useSelector(isFetchingJobs);
-  const jobsCount = useSelector(getNbOfJobs);
-  const [filters, setFilters] = useState(
+  const [filters, setFilters] = useState<Filters>(
     parseFiltersFromSearch(location.search),
   );
+
+  useEffect(() => {
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/jobs${newSearch}`, { replace: true });
+  }, [navigate, filters]);
+
+  const filtersWithTeamId =
+    currentUser === null ||
+    currentUser.hasReadOnlyRole ||
+    filters.team_id !== null
+      ? { ...filters }
+      : { ...filters, team_id: currentUser.team?.id };
+  const { data, isLoading, refetch } = useListJobsQuery(filtersWithTeamId);
+  // const [trigger] = useListJobsLazyQuery()
+
   const jobsPageDivRef = useRef<HTMLInputElement>(null);
   const [tableViewActive, setTableViewActive] = useLocalStorage(
     "tableViewActive",
@@ -53,28 +61,10 @@ export default function JobsPage() {
     4,
   );
   useTitle("DCI > Jobs");
-  useEffect(() => {
-    const newSearch = createSearchFromFilters(filters);
-    navigate(`/jobs${newSearch}`, { replace: true });
-  }, [navigate, filters]);
 
-  const getJobsCallback = useCallback(() => {
-    dispatch(jobsActions.clear());
-    if (!identity || !identity.team) return;
-    if (identity.hasReadOnlyRole || filters.team_id !== null) {
-      dispatch(jobsActions.all(getParamsFromFilters(filters)));
-    } else {
-      dispatch(
-        jobsActions.all(
-          getParamsFromFilters({ ...filters, team_id: identity.team.id }),
-        ),
-      );
-    }
-  }, [identity, dispatch, filters]);
+  if (!data || currentUser === null) return null;
 
-  useEffect(() => {
-    getJobsCallback();
-  }, [getJobsCallback]);
+  const count = data._meta.count;
 
   return (
     <div ref={jobsPageDivRef}>
@@ -88,19 +78,17 @@ export default function JobsPage() {
       </PageSection>
       <PageSection variant={PageSectionVariants.default}>
         <JobsToolbar
-          jobsCount={jobsCount}
+          jobsCount={count}
           filters={filters}
-          setFilters={(newFilters) =>
-            setFilters(resetPageIfNeeded(filters, newFilters))
-          }
-          clearAllFilters={() => setFilters({ ...defaultFilters })}
-          refresh={getJobsCallback}
+          setFilters={setFilters}
+          clearAllFilters={() => setFilters(getDefaultFilters())}
+          refresh={refetch}
           tableViewActive={tableViewActive}
           setTableViewActive={setTableViewActive}
           tableViewColumns={tableViewColumns}
           setTableViewColumns={setTableViewColumns}
         />
-        {isFetching && (
+        {isLoading && (
           <PageSection
             variant={PageSectionVariants.default}
             style={{ height: "80vh" }}
@@ -111,7 +99,7 @@ export default function JobsPage() {
             </Bullseye>
           </PageSection>
         )}
-        {!isFetching && jobs.length === 0 && (
+        {!isLoading && count === 0 && (
           <EmptyState
             title="No job"
             info="There is no job at the moment. Edit your filters to restart a search."
@@ -120,37 +108,35 @@ export default function JobsPage() {
         {tableViewActive ? (
           <JobsTableList
             filters={filters}
-            setFilters={(newFilters) =>
-              setFilters(resetPageIfNeeded(filters, newFilters))
-            }
-            jobs={jobs}
+            setFilters={setFilters}
+            jobs={data.jobs}
             columns={tableViewColumns}
           />
         ) : (
           <JobsList
             filters={filters}
-            setFilters={(newFilters) =>
-              setFilters(resetPageIfNeeded(filters, newFilters))
-            }
-            jobs={jobs}
+            setFilters={setFilters}
+            jobs={data.jobs}
           />
         )}
-        {jobs.length > 0 && (
+        {count > 0 && (
           <div className="pf-v5-u-background-color-100">
             <Pagination
               className="pf-v5-u-px-md"
-              perPage={filters.perPage}
-              page={filters.page}
-              itemCount={jobsCount}
+              perPage={filters.limit}
+              page={offsetAndLimitToPage(filters.offset, filters.limit)}
+              itemCount={count}
               variant={PaginationVariant.bottom}
-              onSetPage={(e, page) => {
+              onSetPage={(e, newPage) => {
                 jobsPageDivRef?.current?.scrollIntoView();
-                setFilters({ ...filters, page });
+                setFilters({
+                  ...filters,
+                  offset: pageAndLimitToOffset(newPage, filters.limit),
+                });
               }}
-              onPerPageSelect={(e, perPage) => {
+              onPerPageSelect={(e, newPerPage) => {
                 jobsPageDivRef?.current?.scrollIntoView();
-                const newFilters = { ...filters, perPage };
-                setFilters(resetPageIfNeeded(filters, newFilters));
+                setFilters({ ...filters, limit: newPerPage });
               }}
             />
           </div>

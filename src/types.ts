@@ -25,7 +25,7 @@ export interface Resource {
   name: string;
 }
 
-type data = {
+export type dataField = {
   [x: string]: any;
 };
 
@@ -40,16 +40,10 @@ export interface ITeam extends Resource {
   topics: ITopic[];
 }
 
-export interface INewTeam {
-  name: string;
-  external: boolean;
-  has_pre_release_access: boolean;
-  state: string;
-}
-
 export interface ITeamsById {
   [id: string]: ITeam;
 }
+
 export interface IEnhancedTeam extends ITeam {
   from_now: string | null;
 }
@@ -61,21 +55,10 @@ export interface IProduct extends Resource {
   updated_at: string;
 }
 
-export interface INewProduct {
-  name: string;
-  description: string;
-}
-
-export interface IEditProduct {
-  id: string;
-  etag: string;
-  name: string;
-  description: string;
-}
-
 export interface IProductsById {
   [id: string]: IProduct;
 }
+
 export interface IEnhancedProduct extends IProduct {
   from_now: string | null;
 }
@@ -83,29 +66,17 @@ export interface IEnhancedProduct extends IProduct {
 export interface IRemoteci extends Resource {
   team_id: string;
   state: string;
-  data: data;
+  data: dataField;
   public: boolean;
-  cert_fp: string | null;
   api_secret: string;
   created_at: string;
   updated_at: string;
 }
 
-export interface INewRemoteci {
-  name: string;
-  team_id: string;
-}
-
-export interface IEditRemoteci {
-  id: string;
-  etag: string;
-  name: string;
-  team_id: string;
-}
-
 export interface IRemotecisById {
   [id: string]: IRemoteci;
 }
+
 export interface IEnhancedRemoteci extends IRemoteci {
   team: ITeam | null;
   from_now: string | null;
@@ -113,42 +84,13 @@ export interface IEnhancedRemoteci extends IRemoteci {
 
 export interface ITopic extends Resource {
   component_types: string[];
-  data: data;
+  data: dataField;
   state: state;
   created_at: string;
   updated_at: string;
   export_control: boolean;
   product_id: string;
   next_topic_id: string | null;
-}
-
-export interface INewTopic {
-  name: string;
-  export_control: boolean;
-  state: string;
-  product_id: string | null;
-  component_types: string[];
-  data: data;
-}
-
-export interface IEditTopic {
-  id: string;
-  etag: string;
-  name: string;
-  export_control: boolean;
-  state: string;
-  product_id: string | null;
-  component_types: string[];
-  data: data;
-}
-
-export interface ITopicForm {
-  name: string;
-  export_control: boolean;
-  state: string;
-  product_id: string;
-  component_types: string;
-  data: string;
 }
 
 export interface ITopicsById {
@@ -174,13 +116,6 @@ export interface IUser extends Resource {
   password: string;
 }
 
-export interface INewUser {
-  name: string;
-  fullname: string;
-  email: string;
-  password: string;
-}
-
 export interface IUsersById {
   [id: string]: IUser;
 }
@@ -194,7 +129,7 @@ export interface IFeeder extends Resource {
   created_at: string;
   updated_at: string;
   api_secret: string;
-  data: data;
+  data: dataField;
   state: string;
 }
 
@@ -257,6 +192,12 @@ export type PatternflyFilters = {
   perPage: number;
 };
 
+export interface IIdentityTeam {
+  has_pre_release_access: boolean;
+  id: string;
+  name: string;
+}
+
 export interface IIdentity {
   email: string | null;
   etag: string;
@@ -264,7 +205,7 @@ export interface IIdentity {
   id: string;
   name: string;
   teams: {
-    [id: string]: ITeam; // todo(gvincent): it's not ITeam, it's {id, name} object
+    [id: string]: IIdentityTeam;
   };
   timezone: string;
 }
@@ -275,14 +216,19 @@ export interface ICurrentUser {
   fullname: string;
   id: string;
   name: string;
-  teams: ITeam[];
-  team: ITeam | null;
+  teams: IIdentityTeam[];
+  team: IIdentityTeam | null;
   timezone: string;
   isSuperAdmin: boolean;
   hasEPMRole: boolean;
   hasReadOnlyRole: boolean;
   isReadOnly: boolean;
 }
+
+export type ICurrentUserWithPasswordsFields = ICurrentUser & {
+  current_password: string;
+  new_password: string;
+};
 
 export type DCIListParams = {
   limit: number;
@@ -506,7 +452,7 @@ export interface IComponent {
   display_name: string;
   version: string;
   uid: string;
-  data: data;
+  data: dataField;
   state: string;
   tags: string[];
   team_id: string | null;
@@ -739,3 +685,52 @@ export type RangeOptionValue =
   | "custom";
 
 export type colorTheme = "dark" | "light";
+
+interface BaseListResponse {
+  _meta: {
+    count: number;
+  };
+}
+
+export interface ComponentListResponse extends BaseListResponse {
+  components: IComponent[];
+}
+
+export interface RemoteciListResponse extends BaseListResponse {
+  remotecis: IRemoteci[];
+}
+
+export interface Filters {
+  limit: number;
+  offset: number;
+  sort: string;
+  query: string | null;
+  name: string | null;
+  sso_username: string | null;
+  display_name: string | null;
+  team_id: string | null;
+  email: string | null;
+  remoteci_id: string | null;
+  product_id: string | null;
+  topic_id: string | null;
+  tags: string[] | undefined;
+  configuration: string | null;
+  status: string | null;
+  state: state;
+}
+
+export type WhereFilters = Pick<
+  Filters,
+  | "name"
+  | "display_name"
+  | "team_id"
+  | "email"
+  | "sso_username"
+  | "remoteci_id"
+  | "product_id"
+  | "topic_id"
+  | "configuration"
+  | "status"
+  | "tags"
+  | "state"
+>;

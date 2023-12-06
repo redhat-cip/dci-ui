@@ -43,21 +43,9 @@ import {
   UserIcon,
   UsersIcon,
 } from "@patternfly/react-icons";
-import {
-  global_palette_black_100,
-  global_palette_black_500,
-  global_palette_black_800,
-} from "@patternfly/react-tokens";
+import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { useAuth } from "auth/authContext";
-import styled from "styled-components";
 import { useTheme } from "ui/Theme/themeContext";
-
-const ToolbarItemStyledLikeDropdown = styled(ToolbarItem)<{ isDark: boolean }>`
-  &:after {
-    background-color: ${({ isDark }) =>
-      isDark ? global_palette_black_800.value : global_palette_black_100.value};
-  }
-`;
 
 function UserDropdownMenuMobile() {
   const { logout } = useAuth();
@@ -101,11 +89,12 @@ function UserDropdownMenuMobile() {
 }
 
 function UserDropdownMenu() {
-  const { identity, logout, openChangeTeamModal, hasMultipleTeams } = useAuth();
+  const { currentUser, logout, openChangeTeamModal, hasMultipleTeams } =
+    useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  if (identity === null) return null;
+  if (currentUser === null) return null;
 
   return (
     <Dropdown
@@ -115,13 +104,13 @@ function UserDropdownMenu() {
       onSelect={() => setIsOpen(!isOpen)}
       toggle={
         <DropdownToggle onToggle={(_event, val) => setIsOpen(val)}>
-          {identity.fullname || identity.name}
+          {currentUser.fullname || currentUser.name}
         </DropdownToggle>
       }
       dropdownItems={[
         <DropdownItem key="email" component="div" isPlainText>
           <Text component={TextVariants.small}>Email:</Text>
-          <Text>{identity.email}</Text>
+          <Text>{currentUser.email}</Text>
         </DropdownItem>,
         <DropdownItem
           key="team"
@@ -132,7 +121,7 @@ function UserDropdownMenu() {
           }}
         >
           <Text component={TextVariants.small}>Team:</Text>
-          <Text>{identity.team ? identity.team.name : ""}</Text>
+          <Text>{currentUser.team ? currentUser.team.name : ""}</Text>
         </DropdownItem>,
         <DropdownSeparator key="dropdown_user_separator" />,
         <DropdownItem
@@ -178,10 +167,14 @@ interface HeaderProps {
 function Header({ toggleSidebarVisibility }: HeaderProps) {
   const navigate = useNavigate();
   const { isDark, toggleColor } = useTheme();
-  const { identity, openChangeTeamModal, hasAtLeastOneTeam, hasMultipleTeams } =
-    useAuth();
+  const {
+    currentUser,
+    openChangeTeamModal,
+    hasAtLeastOneTeam,
+    hasMultipleTeams,
+  } = useAuth();
 
-  if (identity === null) {
+  if (currentUser === null) {
     return null;
   }
 
@@ -241,19 +234,13 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                     onChange={toggleColor}
                   />
                 </ToolbarItem>
-                <ToolbarItemStyledLikeDropdown
-                  isDark={isDark}
-                  variant="separator"
-                />
+                <ToolbarItem variant="separator" />
                 <ToolbarItem>
                   <DCIDocLinkIcon />
                 </ToolbarItem>
                 {hasAtLeastOneTeam && (
                   <>
-                    <ToolbarItemStyledLikeDropdown
-                      isDark={isDark}
-                      variant="separator"
-                    />
+                    <ToolbarItem variant="separator" />
                     <ToolbarItem>
                       <Button
                         variant="plain"
@@ -264,7 +251,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                           cursor: hasMultipleTeams ? "cursor" : "default",
                         }}
                       >
-                        {identity.team?.name}
+                        {currentUser.team?.name}
                       </Button>
                     </ToolbarItem>
                   </>
@@ -307,10 +294,10 @@ interface SidebarProps {
 }
 
 function Sidebar({ isNavOpen }: SidebarProps) {
-  const { identity } = useAuth();
+  const { currentUser } = useAuth();
   const { isDark } = useTheme();
-  if (identity === null) return null;
-  const identityTeams = values(identity.teams);
+  if (currentUser === null) return null;
+  const currentUserTeams = values(currentUser.teams);
   const PageNav = (
     <Nav aria-label="Nav" theme={isDark ? "dark" : "light"}>
       <NavGroup
@@ -323,7 +310,8 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         <DCINavItem to="/jobs">Jobs</DCINavItem>
         <DCINavItem to="/products">Products</DCINavItem>
         <DCINavItem to="/topics">Topics</DCINavItem>
-        {isEmpty(identityTeams) ? null : (
+        <DCINavItem to="/components">Components</DCINavItem>
+        {isEmpty(currentUserTeams) ? null : (
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         )}
       </NavGroup>
@@ -338,7 +326,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         <DCINavItem to="/currentUser/settings">My profile</DCINavItem>
         <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
       </NavGroup>
-      {identity.hasEPMRole && (
+      {currentUser.hasEPMRole && (
         <NavGroup
           // @ts-ignore
           title={
@@ -349,7 +337,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         >
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
-          {identity.isSuperAdmin && (
+          {currentUser.isSuperAdmin && (
             <DCINavItem to="/feeders">Feeders</DCINavItem>
           )}
         </NavGroup>
@@ -365,10 +353,10 @@ function Sidebar({ isNavOpen }: SidebarProps) {
 
 export default function AuthenticatedLayout({ ...props }) {
   const [isNavOpen, setIsNavOpen] = useState(window.innerWidth >= 1450);
-  const { identity } = useAuth();
+  const { currentUser } = useAuth();
   const location = useLocation();
 
-  if (identity === null) {
+  if (currentUser === null) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

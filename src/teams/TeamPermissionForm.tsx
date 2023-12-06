@@ -1,8 +1,3 @@
-import { useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProducts, isFetchingProducts } from "products/productsSelectors";
-import productsActions from "products/productsActions";
-import { AppDispatch } from "store";
 import {
   Checkbox,
   FormGroup,
@@ -14,6 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { useFormikContext } from "formik";
 import { IProduct } from "types";
+import { useListProductsQuery } from "products/productsApi";
 
 export interface TeamPermissionValues {
   permissions: {
@@ -23,17 +19,7 @@ export interface TeamPermissionValues {
 
 export default function TeamPermission() {
   const { values, setFieldValue } = useFormikContext<TeamPermissionValues>();
-  const products = useSelector(getProducts);
-  const isFetching = useSelector(isFetchingProducts);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const getAllProducts = useCallback(() => {
-    dispatch(productsActions.all());
-  }, [dispatch]);
-
-  useEffect(() => {
-    getAllProducts();
-  }, [getAllProducts]);
+  const { data, isLoading } = useListProductsQuery();
 
   return (
     <>
@@ -43,10 +29,10 @@ export default function TeamPermission() {
           Select the product the team has access to:
         </HelperTextItem>
       </HelperText>
-      {isFetching ? (
+      {isLoading ? (
         <Skeleton width="25%" />
-      ) : (
-        products.map((product) => {
+      ) : data ? (
+        data.products.map((product) => {
           const id = `team_permissions_form__checkbox${product.name}`;
           const isChecked = values.permissions.hasOwnProperty(product.id);
           return (
@@ -73,7 +59,7 @@ export default function TeamPermission() {
             </FormGroup>
           );
         })
-      )}
+      ) : null}
     </>
   );
 }

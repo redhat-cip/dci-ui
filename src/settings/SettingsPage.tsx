@@ -1,18 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
-import { updateCurrentUser } from "../currentUser/currentUserActions";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import MainPage from "pages/MainPage";
-import { AppDispatch } from "store";
 import { useAuth } from "auth/authContext";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { Breadcrumb } from "ui";
 
 export default function SettingsPage() {
-  const { refreshIdentity } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
-  const currentUser = useSelector(getCurrentUser);
+  const { currentUser, updateCurrentUser, changePassword } = useAuth();
   if (currentUser === null) return null;
   return (
     <MainPage
@@ -31,11 +25,7 @@ export default function SettingsPage() {
               <SettingsForm
                 key={`SettingsForm.${currentUser.id}.${currentUser.etag}`}
                 currentUser={currentUser}
-                onSubmit={(newCurrentUser) =>
-                  dispatch(updateCurrentUser(newCurrentUser)).then(
-                    refreshIdentity,
-                  )
-                }
+                onSubmit={updateCurrentUser}
               />
             </CardBody>
           </Card>
@@ -47,11 +37,7 @@ export default function SettingsPage() {
                 <ChangePasswordForm
                   key={`ChangePasswordForm.${currentUser.id}.${currentUser.etag}`}
                   currentUser={currentUser}
-                  onSubmit={(newCurrentUser) => {
-                    dispatch(updateCurrentUser(newCurrentUser)).then(
-                      refreshIdentity,
-                    );
-                  }}
+                  onSubmit={changePassword}
                 />
               </CardBody>
             </Card>

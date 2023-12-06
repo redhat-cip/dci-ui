@@ -14,16 +14,18 @@ import { useFormikContext } from "formik";
 import { useEffect, useState } from "react";
 import { TeamCreationWizardValues } from "./TeamCreationWizardTypes";
 import { useNavigate } from "react-router-dom";
-import { getOrCreateTeam, grantTeamPermission } from "./teamsActions";
-import { addUserToTeam, getOrCreateUser } from "users/usersActions";
 import { splitTeamMembersString } from "./TeamMembersForm";
 import { ITeam } from "types";
+import { getOrCreateTeam, useAddProductToTeamMutation } from "./teamsApi";
+import { getOrCreateUser, useAddUserToTeamMutation } from "users/usersApi";
 
 export default function CreateTeamWithMembers({
   close,
 }: {
   close: () => void;
 }) {
+  const [addUserToTeam] = useAddUserToTeamMutation();
+  const [addProductToTeam] = useAddProductToTeamMutation();
   const { values } = useFormikContext<TeamCreationWizardValues>();
   const [teamCreated, setTeamCreated] = useState<ITeam | null>(null);
   const [percent, setPercent] = useState(0);
@@ -44,20 +46,22 @@ export default function CreateTeamWithMembers({
         setPercent(25);
         const createUsersPromises = splitTeamMembersString(
           values.teamMembers,
-        ).map(getOrCreateUser);
+        ).map((sso_username) => getOrCreateUser({ sso_username }));
 
         Promise.all(createUsersPromises)
           .then((users) => {
             setPercent(50);
             const associateUsersToTeamPromises = users.map((user) =>
-              addUserToTeam(user.id, newTeam),
+              addUserToTeam({ user, team: newTeam }),
             );
             Promise.all(associateUsersToTeamPromises)
               .then(() => {
                 setPercent(75);
                 const productPermissionPromises = Object.values(
                   values.permissions,
-                ).map((product) => grantTeamPermission(newTeam, product));
+                ).map((product) =>
+                  addProductToTeam({ team: newTeam, product }),
+                );
                 Promise.all(productPermissionPromises)
                   .then(() => {
                     setPercent(100);

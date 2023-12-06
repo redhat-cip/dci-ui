@@ -7,7 +7,7 @@ import {
 } from "@patternfly/react-core";
 import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
-import { searchUserBy } from "users/usersActions";
+import { searchUserBy } from "users/usersApi";
 import { Link } from "react-router-dom";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
@@ -37,6 +37,7 @@ export default function AddUserToTeamModal({
     <>
       <Modal
         id="add_user_to_team_modal"
+        aria-label="Add user to team modal"
         variant={ModalVariant.medium}
         title={`Add a user to ${team.name} team`}
         isOpen={isOpen}

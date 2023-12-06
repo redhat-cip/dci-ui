@@ -33,6 +33,8 @@ export default function QLToolbar({
   return (
     <>
       <Modal
+        id="advanced-search-modal"
+        aria-label="Advanced search modal"
         variant={ModalVariant.medium}
         title="Advanced searching"
         isOpen={showHelperModal}

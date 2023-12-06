@@ -1,5 +1,3 @@
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "store";
 import {
   Button,
   PageSection,
@@ -10,9 +8,9 @@ import {
 import styled from "styled-components";
 import { global_danger_color_100 } from "@patternfly/react-tokens";
 import { ConfirmDeleteModal } from "ui";
-import jobsActions from "jobs/jobsActions";
 import { useNavigate } from "react-router-dom";
 import { useJob } from "../jobContext";
+import { useDeleteJobMutation } from "jobs/jobsApi";
 
 const DangerZone = styled.div`
   border: 1px solid ${global_danger_color_100.value};
@@ -27,10 +25,9 @@ const DangerZoneRow = styled.div`
 `;
 
 export default function JobSettingsPage() {
-  const { job } = useJob();
-
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [deleteJob] = useDeleteJobMutation();
+  const { job } = useJob();
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -52,9 +49,7 @@ export default function JobSettingsPage() {
             <ConfirmDeleteModal
               title="Delete Job"
               message="Are you sure you want to delete this job?"
-              onOk={() =>
-                dispatch(jobsActions.delete(job)).then(() => navigate("/jobs"))
-              }
+              onOk={() => deleteJob(job).then(() => navigate("/jobs"))}
             >
               {(openModal) => (
                 <Button variant="danger" onClick={openModal}>

@@ -55,6 +55,8 @@ export function SeeAuthentificationFileModal({
   return (
     <>
       <Modal
+        id="dci-credential-modal"
+        aria-label="DCI credential modal"
         title={`DCI credentials for ${resource.name}`}
         isOpen={show}
         onClose={() => setShow(false)}

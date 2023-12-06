@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getProducts, getProductById } from "products/productsSelectors";
+import { useState } from "react";
 import { IProduct } from "types";
-import productsActions from "products/productsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
 } from "@patternfly/react-core/deprecated";
-import { AppDispatch } from "store";
+import { useListProductsQuery } from "products/productsApi";
+import { useGetUserQuery } from "users/usersApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 type ProductFilterProps = {
   product_id: string | null;
@@ -28,18 +27,15 @@ export default function ProductFilter({
   placeholderText = "Search by name",
   categoryName = "Product",
 }: ProductFilterProps) {
-  const products = useSelector(getProducts);
-  const product = useSelector(getProductById(product_id));
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(productsActions.all());
-  }, [dispatch]);
-
+  const { data: product } = useGetUserQuery(
+    product_id ? product_id : skipToken,
+  );
+  const { data } = useListProductsQuery();
+  if (!data) return null;
   return (
     <ToolbarFilter
-      chips={product === null ? [] : [product.name]}
+      chips={product === undefined ? [] : [product.name]}
       deleteChip={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
@@ -53,12 +49,12 @@ export default function ProductFilter({
           const s = selection as IProduct;
           onSelect(s);
         }}
-        selections={product === null ? "" : product.name}
+        selections={product === undefined ? "" : product.name}
         isOpen={isOpen}
         aria-labelledby="select"
         placeholderText={placeholderText}
       >
-        {products
+        {data.products
           .map((p) => ({ ...p, toString: () => p.name }))
           .map((product) => (
             <SelectOption key={product.id} value={product} />

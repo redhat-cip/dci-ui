@@ -1,8 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import topicsActions from "./topicsActions";
+import { useState } from "react";
 import { isEmpty } from "lodash";
-import MainPage from "pages/MainPage";
 import {
   Card,
   CardBody,
@@ -14,19 +11,20 @@ import {
   CodeBlockAction,
   CardTitle,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
-import { AppDispatch } from "store";
-import { IEnhancedTopic } from "types";
+import { Breadcrumb, CopyButton, EmptyState, StateLabel } from "ui";
+import { ITopic } from "types";
 import { useParams } from "react-router-dom";
-import EditTopicModal from "./EditTopicModal";
-import productsActions from "products/productsActions";
-import { getProducts } from "products/productsSelectors";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
 import CardLine from "ui/CardLine";
-import { getTopicById } from "./topicsSelectors";
+import { useGetTopicQuery, useUpdateTopicMutation } from "./topicsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
+import MainPage from "pages/MainPage";
+import EditTopicModal from "./EditTopicModal";
+import { useListProductsQuery } from "products/productsApi";
 import ComponentsTableWithToolbar from "./ComponentsTableWithToolbar";
+import { fromNow } from "services/date";
+import { useAuth } from "auth/authContext";
 
-function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
+function TopicDetails({ topic }: { topic: ITopic }) {
   const [seeData, setSeeData] = useState(false);
   const topicData = isEmpty(topic.data)
     ? "{}"
@@ -68,7 +66,7 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
           field="Created"
           value={
             <time dateTime={topic.created_at} title={topic.created_at}>
-              {topic.from_now}
+              {fromNow(topic.created_at)}
             </time>
           }
         />
@@ -101,21 +99,13 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
         {seeData && (
           <CodeBlock
             actions={[
-              <CodeBlockAction>
+              <CodeBlockAction key="code-block-1">
                 <CopyButton text={topicData} variant="plain" />
               </CodeBlockAction>,
             ]}
           >
             <CodeBlockCode id="topic.data">{topicData}</CodeBlockCode>
           </CodeBlock>
-        )}
-        <Divider />
-        {topic.product && (
-          <CardLine
-            className="pf-v5-u-p-md"
-            field="Product"
-            value={topic.product.name}
-          />
         )}
         <Divider />
         <CardLine
@@ -129,25 +119,17 @@ function TopicDetails({ topic }: { topic: IEnhancedTopic }) {
 }
 
 export default function TopicPage() {
-  const currentUser = useSelector(getCurrentUser);
-  const dispatch = useDispatch<AppDispatch>();
+  const { currentUser } = useAuth();
   const { topic_id } = useParams();
-  const topic = useSelector(getTopicById(topic_id));
-  const [isFetching, setIsFetching] = useState(true);
-  const products = useSelector(getProducts);
 
-  const getTopicCallback = useCallback(() => {
-    if (topic_id) {
-      dispatch(topicsActions.one(topic_id)).finally(() => setIsFetching(false));
-    }
-  }, [dispatch, topic_id, setIsFetching]);
+  const [updateTopic, { isLoading: isUpdating }] = useUpdateTopicMutation();
+  const { data: topic, isLoading } = useGetTopicQuery(
+    topic_id ? topic_id : skipToken,
+  );
+  const { data: dataProducts, isLoading: isLoadingProducts } =
+    useListProductsQuery();
 
-  useEffect(() => {
-    getTopicCallback();
-    dispatch(productsActions.all());
-  }, [dispatch, getTopicCallback]);
-
-  if (!topic_id) return null;
+  if (!topic_id || !topic || !dataProducts) return null;
 
   return (
     <MainPage
@@ -155,19 +137,14 @@ export default function TopicPage() {
       description={
         topic ? `Details page for topic ${topic.name}` : "Details page"
       }
-      loading={isFetching && topic === null}
-      empty={!isFetching && topic === null}
+      loading={isLoading && isLoadingProducts}
       HeaderButton={
         currentUser?.isSuperAdmin && topic ? (
           <EditTopicModal
-            key={`${topic.id}:${topic.etag}`}
-            products={products}
+            products={dataProducts.products}
             topic={topic}
-            onSubmit={(editedProduct) => {
-              dispatch(topicsActions.update(editedProduct)).then(
-                getTopicCallback,
-              );
-            }}
+            onSubmit={updateTopic}
+            isDisabled={isUpdating}
           />
         ) : null
       }

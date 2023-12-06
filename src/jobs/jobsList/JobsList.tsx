@@ -2,7 +2,7 @@ import { global_Color_light_200 } from "@patternfly/react-tokens";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
 import JobsListRow from "./JobsListRow";
-import { IEnhancedJob, IJobFilters } from "types";
+import { IJob, Filters } from "types";
 import { useTheme } from "ui/Theme/themeContext";
 
 const JobUl = styled.ul<{ isDark: boolean }>`
@@ -24,14 +24,15 @@ const JobLi = styled.li<{ isDark: boolean }>`
 `;
 
 interface JobsListProps {
-  jobs: IEnhancedJob[];
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  jobs: IJob[];
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
 }
 
 export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
   const { isDark } = useTheme();
   if (isEmpty(jobs)) return null;
+
   return (
     <JobUl aria-label="job list" isDark={isDark}>
       {jobs.map((job) => (
@@ -39,9 +40,10 @@ export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
           <JobsListRow
             job={job}
             onTagClicked={(tag) => {
+              const tags = filters.tags ?? [];
               setFilters({
                 ...filters,
-                tags: [...filters.tags, tag],
+                tags: [...tags, tag],
               });
             }}
             onRemoteciClicked={(remoteci) => {
@@ -65,7 +67,7 @@ export default function JobsList({ jobs, filters, setFilters }: JobsListProps) {
             onConfigurationClicked={(configuration) => {
               setFilters({
                 ...filters,
-                configuration: configuration,
+                configuration,
               });
             }}
           />

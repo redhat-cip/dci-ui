@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { fetchComponents } from "./topicsActions";
+import { fetchComponents } from "./topicsApi";
 import {
   Card,
   CardBody,
@@ -18,7 +18,7 @@ import {
   DropdownItem,
 } from "@patternfly/react-core/deprecated";
 import { EmptyState, CopyButton, BlinkLogo, StateLabel } from "ui";
-import { IComponent, IEnhancedTopic } from "types";
+import { IComponent, ITopic } from "types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
@@ -229,7 +229,7 @@ type Category = (typeof Categories)[number];
 export default function ComponentsTableWithToolbar({
   topic,
 }: {
-  topic: IEnhancedTopic;
+  topic: ITopic;
 }) {
   const location = useLocation();
   const navigate = useNavigate();

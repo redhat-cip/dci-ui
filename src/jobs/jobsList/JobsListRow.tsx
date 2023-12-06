@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Label, LabelGroup } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import {
@@ -17,14 +16,11 @@ import {
   InfoCircleIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IRemoteci, ITeam, ITopic } from "types";
+import { IJob, IRemoteci, ITeam, ITopic } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { CopyIconButton } from "ui";
 import TextAreaEditableOnHover from "./TextAreaEditableOnHover";
 import { Markup } from "interweave";
-import { updateJobComment } from "../jobsActions";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "store";
 import { sortByOldestFirst } from "services/sort";
 import { getTopicIcon } from "ui/icons";
 import JobConfiguration from "./JobConfiguration";
@@ -36,6 +32,7 @@ import {
 } from "../jobUtils";
 import { ComponentsListInJobRow, TestLabels } from "jobs/components";
 import { useTheme } from "ui/Theme/themeContext";
+import { useUpdateJobMutation } from "jobs/jobsApi";
 
 const Job = styled.div<{ status: string; isDark: boolean }>`
   background: ${({ status, isDark }) =>
@@ -180,7 +177,7 @@ const Pad = styled.div`
 `;
 
 interface JobsListRowProps {
-  job: IEnhancedJob;
+  job: IJob;
   onTagClicked?: (tag: string) => void;
   onRemoteciClicked?: (remoteci: IRemoteci) => void;
   onTeamClicked?: (team: ITeam) => void;
@@ -196,41 +193,40 @@ export default function JobsListRow({
   onTopicClicked,
   onConfigurationClicked,
 }: JobsListRowProps) {
+  const [updateJob] = useUpdateJobMutation();
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
-  const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
-  const dispatch = useDispatch<AppDispatch>();
-  const TopicIcon = getTopicIcon(innerJob.topic?.name);
+  const TopicIcon = getTopicIcon(job.topic?.name);
   const { isDark } = useTheme();
   return (
-    <Job status={innerJob.status} isDark={isDark}>
-      <JobIcon title={`job status ${innerJob.status}`}>
-        <span style={{ color: getColor(innerJob.status), fontSize: "2em" }}>
-          {getIcon(innerJob.status)}
+    <Job status={job.status} isDark={isDark}>
+      <JobIcon title={`job status ${job.status}`}>
+        <span style={{ color: getColor(job.status), fontSize: "2em" }}>
+          {getIcon(job.status)}
         </span>
       </JobIcon>
       <JobTitle>
-        <TopicName tabIndex={-1} to={`/jobs/${innerJob.id}/jobStates`}>
-          {innerJob.name || innerJob.topic?.name}
+        <TopicName tabIndex={-1} to={`/jobs/${job.id}/jobStates`}>
+          {job.name || job.topic?.name}
         </TopicName>
         <JobId className="pf-v5-u-mt-xs">
           <CopyIconButton
-            text={innerJob.id}
+            text={job.id}
             textOnSuccess="copied"
             className="pf-v5-u-mr-xs pointer"
           />
-          {innerJob.id}
+          {job.id}
         </JobId>
         <div className="pf-v5-u-mt-xs">
           <span
             role="button"
             tabIndex={0}
             className={onTeamClicked && "pointer"}
-            onClick={() => onTeamClicked && onTeamClicked(innerJob.team)}
-            onKeyDown={() => onTeamClicked && onTeamClicked(innerJob.team)}
+            onClick={() => onTeamClicked && onTeamClicked(job.team)}
+            onKeyDown={() => onTeamClicked && onTeamClicked(job.team)}
           >
             <UsersIcon className="pf-v5-u-mr-xs" />
-            {innerJob.team?.name}
+            {job.team?.name}
           </span>
         </div>
         <div className="pf-v5-u-mt-xs">
@@ -238,15 +234,13 @@ export default function JobsListRow({
             role="button"
             tabIndex={0}
             className={onRemoteciClicked && "pointer"}
-            onClick={() =>
-              onRemoteciClicked && onRemoteciClicked(innerJob.remoteci)
-            }
+            onClick={() => onRemoteciClicked && onRemoteciClicked(job.remoteci)}
             onKeyDown={() =>
-              onRemoteciClicked && onRemoteciClicked(innerJob.remoteci)
+              onRemoteciClicked && onRemoteciClicked(job.remoteci)
             }
           >
             <ServerIcon className="pf-v5-u-mr-xs" />
-            {innerJob.remoteci?.name}
+            {job.remoteci?.name}
           </span>
         </div>
         <div className="pf-v5-u-mt-xs">
@@ -254,24 +248,24 @@ export default function JobsListRow({
             role="button"
             tabIndex={0}
             className={onTopicClicked && "pointer"}
-            onClick={() => onTopicClicked && onTopicClicked(innerJob.topic)}
-            onKeyDown={() => onTopicClicked && onTopicClicked(innerJob.topic)}
+            onClick={() => onTopicClicked && onTopicClicked(job.topic)}
+            onKeyDown={() => onTopicClicked && onTopicClicked(job.topic)}
           >
             <TopicIcon className="pf-v5-u-mr-xs" />
-            {innerJob.topic?.name}
+            {job.topic?.name}
           </span>
         </div>
-        {innerJob.configuration === null ? null : (
+        {job.configuration === null ? null : (
           <JobConfiguration
-            configuration={innerJob.configuration}
+            configuration={job.configuration}
             onClick={onConfigurationClicked}
           />
         )}
       </JobTitle>
-      {innerJob.tags?.length === 0 ? null : (
+      {job.tags?.length === 0 ? null : (
         <JobTags>
           <LabelGroup numLabels={8}>
-            {innerJob.tags?.map((tag, index) => (
+            {job.tags?.map((tag, index) => (
               <Label
                 key={index}
                 color="blue"
@@ -285,71 +279,69 @@ export default function JobsListRow({
         </JobTags>
       )}
       <JobComponents>
-        <ComponentsListInJobRow components={innerJob.components} />
+        <ComponentsListInJobRow components={job.components} />
       </JobComponents>
       <JobDate>
         <div>
-          <span title={`Created at ${innerJob.created_at}`}>
+          <span title={`Created at ${job.created_at}`}>
             <CalendarAltIcon className="pf-v5-u-mr-xs" />
-            {formatDate(innerJob.created_at)}
+            {formatDate(job.created_at)}
           </span>
         </div>
         <div className="pf-v5-u-mt-xs">
-          {innerJob.status === "new" ||
-          innerJob.status === "pre-run" ||
-          innerJob.status === "running" ? (
-            <span title={`Job duration in seconds ${innerJob.duration}`}>
+          {job.status === "new" ||
+          job.status === "pre-run" ||
+          job.status === "running" ? (
+            <span title={`Job duration in seconds ${job.duration}`}>
               <ClockIcon className="pf-v5-u-mr-xs" />
               Started {startedSince}
             </span>
           ) : (
-            <span title={`Job duration in seconds ${innerJob.duration}`}>
+            <span title={`Job duration in seconds ${job.duration}`}>
               <ClockIcon className="pf-v5-u-mr-xs" />
               Ran for {jobDuration}
             </span>
           )}
         </div>
-        {innerJob.url !== null && (
+        {job.url !== null && (
           <div className="pf-v5-u-mt-xs">
             <LinkIcon className="pf-v5-u-mr-xs" />
-            <a href={innerJob.url}>{innerJob.url}</a>
+            <a href={job.url}>{job.url}</a>
           </div>
         )}
         <div className="pf-v5-u-mt-xs">
-          <span style={{ color: getColor(innerJob.status) }}>
+          <span style={{ color: getColor(job.status) }}>
             <InfoCircleIcon className="pf-v5-u-mr-xs" />
-            {`${innerJob.status} ${
-              innerJob.status_reason !== null ? innerJob.status_reason : ""
+            {`${job.status} ${
+              job.status_reason !== null ? job.status_reason : ""
             }`}
           </span>
         </div>
         <JobComment className="pf-v5-u-mt-xs">
           <TextAreaEditableOnHover
-            text={innerJob.comment || ""}
+            text={job.comment || ""}
             onSubmit={(comment) => {
-              dispatch(
-                updateJobComment({
-                  ...innerJob,
-                  comment,
-                }),
-              ).then(setInnerJob);
+              updateJob({
+                ...job,
+                comment,
+              });
             }}
             style={{ minHeight: "25px" }}
           >
             <CommentBloc>
-              <Markup content={convertLinksToHtml(innerJob.comment)} />
+              <Markup content={convertLinksToHtml(job.comment)} />
             </CommentBloc>
           </TextAreaEditableOnHover>
         </JobComment>
       </JobDate>
       <JobNav isDark={isDark}>
-        <JobLink to={`/jobs/${innerJob.id}/jobStates`}>
+        <JobLink to={`/jobs/${job.id}/jobStates`}>
           <CaretRightIcon />
         </JobLink>
       </JobNav>
-      {innerJob.results.length === 0 ? null : (
+      {job.results.length === 0 ? null : (
         <JobTests>
-          {sortByOldestFirst(innerJob.results).map((result, i) => (
+          {sortByOldestFirst(job.results).map((result, i) => (
             <LabelGroup
               categoryName={result.name}
               numLabels={5}

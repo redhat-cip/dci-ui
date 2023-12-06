@@ -1,7 +1,7 @@
 import { Label, LabelGroup } from "@patternfly/react-core";
 import { createSearchParams, Link } from "react-router-dom";
 import {
-  IEnhancedJob,
+  IJob,
   IJobStatus,
   IRemoteci,
   ITeam,
@@ -25,7 +25,7 @@ import { useTheme } from "ui/Theme/themeContext";
 import { global_Color_light_100 } from "@patternfly/react-tokens";
 
 interface JobTableSummaryProps {
-  job: IEnhancedJob;
+  job: IJob;
   isPipelineJob: boolean;
   isTheLastPipelineJob: boolean;
   isPipelineRoot: boolean;

@@ -1,16 +1,12 @@
-import http from "services/http";
 import { DateTime } from "luxon";
 import {
-  IJob,
   IJobState,
   IJobStateWithDuration,
   IFileWithDuration,
-  IGetJobStates,
   IJobStatus,
   IPipelineStatus,
   FinalJobStatuses,
 } from "types";
-import { AxiosPromise } from "axios";
 import { sortByOldestFirst } from "services/sort";
 
 export function addDuration(jobStates: IJobState[]) {
@@ -49,13 +45,6 @@ export function addDuration(jobStates: IJobState[]) {
     },
   );
   return newJobStates;
-}
-
-export function getJobStatesWithFiles(job: IJob): AxiosPromise<IGetJobStates> {
-  return http({
-    method: "get",
-    url: `/api/v1/jobs/${job.id}/jobstates`,
-  });
 }
 
 function getFinalPipelineStatus(status: IJobStatus): IPipelineStatus {

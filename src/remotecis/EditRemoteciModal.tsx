@@ -3,13 +3,13 @@ import { FormikProps } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
-import { INewRemoteci, IRemoteci, IEditRemoteci, ITeam } from "types";
+import { IRemoteci, ITeam } from "types";
 import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditRemoteciModalProps {
   teams: ITeam[];
   remoteci: IRemoteci;
-  onSubmit: (remoteci: IEditRemoteci) => void;
+  onSubmit: (remoteci: Partial<IRemoteci>) => void;
   [x: string]: any;
 }
 
@@ -20,11 +20,12 @@ export default function EditRemoteciModal({
   ...props
 }: EditRemoteciModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<INewRemoteci | IEditRemoteci>>(null);
+  const formRef = useRef<FormikProps<IRemoteci | Partial<IRemoteci>>>(null);
   return (
     <>
       <Modal
         id="edit_remoteci_modal"
+        aria-label="Edit remoteci modal"
         variant={ModalVariant.medium}
         title={`Edit ${remoteci.name}`}
         isOpen={isOpen}
@@ -55,7 +56,8 @@ export default function EditRemoteciModal({
           remoteci={remoteci}
           onSubmit={(editedRemoteci) => {
             // why ? dci-control-server api doesnt accept extra field like from_now
-            const { id, etag, name, team_id } = editedRemoteci as IEditRemoteci;
+            const { id, etag, name, team_id } =
+              editedRemoteci as Partial<IRemoteci>;
             onSubmit({
               id,
               etag,

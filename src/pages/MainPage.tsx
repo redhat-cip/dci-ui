@@ -1,5 +1,4 @@
 import * as React from "react";
-import { isEmpty } from "lodash";
 import {
   PageSection,
   PageSectionVariants,
@@ -15,6 +14,7 @@ interface PageProps {
   HeaderButton?: React.ReactNode;
   title: string;
   description: React.ReactNode;
+  Toolbar?: React.ReactNode;
   loading?: boolean;
   empty?: boolean;
   EmptyComponent?: React.ReactNode;
@@ -30,6 +30,7 @@ export default function MainPage({
   description,
   loading,
   empty,
+  Toolbar,
   EmptyComponent,
   Breadcrumb,
   children,
@@ -43,7 +44,7 @@ export default function MainPage({
           {Breadcrumb}
         </section>
       )}
-      {isEmpty(HeaderSection) ? (
+      {HeaderSection === undefined ? (
         <PageSection variant={PageSectionVariants.light}>
           <TextContent>
             <Text component="h1">{title}</Text>
@@ -54,29 +55,18 @@ export default function MainPage({
       ) : (
         HeaderSection
       )}
-      {loading ? (
-        <PageSection
-          variant={PageSectionVariants.default}
-          style={{ height: "80vh" }}
-          isFilled={true}
-        >
+      <PageSection variant={PageSectionVariants.default} isFilled={true}>
+        {Toolbar}
+        {loading ? (
           <Bullseye>
             <BlinkLogo />
           </Bullseye>
-        </PageSection>
-      ) : null}
-
-      {!loading && empty ? (
-        <PageSection variant={PageSectionVariants.light}>
+        ) : empty ? (
           <Bullseye>{EmptyComponent}</Bullseye>
-        </PageSection>
-      ) : null}
-
-      {!loading && !empty ? (
-        <PageSection variant={PageSectionVariants.default}>
-          {children}
-        </PageSection>
-      ) : null}
+        ) : (
+          children
+        )}
+      </PageSection>
     </div>
   );
 }

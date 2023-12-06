@@ -29,7 +29,7 @@ export function sortByNewestFirst<
   items: T[],
   key: "created_at" | "updated_at" | "released_at" = "created_at",
 ): T[] {
-  return items.sort((i1, i2) => {
+  return [...items].sort((i1, i2) => {
     const iso1 = i1[key];
     const iso2 = i2[key];
     if (iso1 === undefined || iso2 === undefined) {

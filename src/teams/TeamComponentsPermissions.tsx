@@ -15,7 +15,7 @@ import {
   addRemoteTeamPermissionForTheTeam,
   getComponentsPermissions,
   removeRemoteTeamPermissionForTheTeam,
-} from "./teamsActions";
+} from "./teamsApi";
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal } from "ui";
 import { AppDispatch } from "store";

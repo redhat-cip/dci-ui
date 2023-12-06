@@ -30,6 +30,8 @@ export default function ConfirmDeleteModal({
   return (
     <>
       <Modal
+        id="confirm-delete-modal"
+        aria-label="Confirm delete modal"
         title="Confirm delete modal"
         isOpen={isOpen}
         header={

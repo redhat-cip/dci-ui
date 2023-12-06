@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getRemotecis,
-  getRemoteciById,
-  isFetchingRemotecis,
-} from "remotecis/remotecisSelectors";
+import { useState } from "react";
 import { IRemoteci } from "types";
-import remotecisActions from "remotecis/remotecisActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
 } from "@patternfly/react-core/deprecated";
-import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
+import {
+  useListRemotecisQuery,
+  useGetRemoteciQuery,
+} from "remotecis/remotecisApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export function RemoteciSelect({
   remoteciId,
@@ -29,28 +26,17 @@ export function RemoteciSelect({
   placeholderText?: string;
   categoryName?: string;
 }) {
-  const [searchValue, setSearchValue] = useState("");
-  const remotecis = useSelector(getRemotecis);
-  const isFetching = useSelector(isFetchingRemotecis);
-  const remoteci = useSelector(getRemoteciById(remoteciId));
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-
+  const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+  const { data, isLoading } = useListRemotecisQuery({
+    name: debouncedSearchValue,
+  });
+  const { data: remoteci } = useGetRemoteciQuery(
+    remoteciId ? remoteciId : skipToken,
+  );
 
-  useEffect(() => {
-    if (debouncedSearchValue) {
-      dispatch(
-        remotecisActions.all({ where: `name:${debouncedSearchValue}*` }),
-      );
-    }
-  }, [debouncedSearchValue, dispatch]);
-
-  useEffect(() => {
-    if (remoteciId) {
-      dispatch(remotecisActions.one(remoteciId));
-    }
-  }, [remoteciId, dispatch]);
+  if (!data) return null;
 
   return (
     <Select
@@ -63,7 +49,7 @@ export function RemoteciSelect({
         onSelect(s.id);
       }}
       onClear={onClear}
-      selections={remoteci === null ? "" : remoteci.name}
+      selections={remoteci === undefined ? "" : remoteci.name}
       isOpen={isOpen}
       aria-labelledby="select"
       placeholderText={placeholderText}
@@ -72,12 +58,12 @@ export function RemoteciSelect({
       noResultsFoundText={
         debouncedSearchValue === ""
           ? "Search a remoteci by name"
-          : isFetching
+          : isLoading
             ? "Searching..."
             : "No remoteci matching this name"
       }
     >
-      {remotecis
+      {data.remotecis
         .map((p) => ({ ...p, toString: () => p.name }))
         .map((remoteci) => (
           <SelectOption key={remoteci.id} value={remoteci} />
@@ -103,10 +89,12 @@ export default function RemoteciFilter({
   placeholderText = "Search a name",
   categoryName = "Remoteci",
 }: RemoteciFilterProps) {
-  const remoteci = useSelector(getRemoteciById(remoteciId));
+  const { data: remoteci } = useGetRemoteciQuery(
+    remoteciId ? remoteciId : skipToken,
+  );
   return (
     <ToolbarFilter
-      chips={remoteci === null ? [] : [remoteci.name]}
+      chips={remoteci === undefined ? [] : [remoteci.name]}
       deleteChip={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}

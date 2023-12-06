@@ -35,13 +35,10 @@ import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponen
 import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
 import { useAuth } from "auth/authContext";
-import { useDispatch, useSelector } from "react-redux";
-import { getTopicById } from "topics/topicsSelectors";
-import topicsActions from "topics/topicsActions";
-import { AppDispatch } from "store";
 import { getTopicIcon } from "ui/icons";
-import { getTeamById } from "teams/teamsSelectors";
-import teamsActions from "teams/teamsActions";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetTeamQuery } from "teams/teamsApi";
+import { useGetTopicQuery } from "topics/topicsApi";
 
 interface IEmbedJobProps {
   job: IJob;
@@ -90,17 +87,14 @@ function EmbedJob({ job }: IEmbedJobProps) {
 }
 
 function TopicLink({ topic_id }: { topic_id: string }) {
-  const topic = useSelector(getTopicById(topic_id));
+  const { data: topic, isLoading } = useGetTopicQuery(topic_id);
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(topicsActions.one(topic_id));
-  }, [dispatch, topic_id]);
-
-  if (topic === null) {
+  if (isLoading) {
     return <Skeleton screenreaderText="Loading topic name" />;
   }
+
+  if (!topic) return null;
+
   const TopicIcon = getTopicIcon(topic.name);
   return (
     <Link to={`/topics/${topic.id}/components`}>
@@ -111,17 +105,12 @@ function TopicLink({ topic_id }: { topic_id: string }) {
 }
 
 function ComponentDetails({ component }: { component: IComponentWithJobs }) {
-  const dispatch = useDispatch<AppDispatch>();
   const [seeData, setSeeData] = useState(false);
-  const team = useSelector(getTeamById(component.team_id));
-  const { identity } = useAuth();
+  const { data: team } = useGetTeamQuery(
+    component.team_id ? component.team_id : skipToken,
+  );
+  const { currentUser } = useAuth();
   const componentData = JSON.stringify(component.data, null, 2);
-
-  useEffect(() => {
-    if (component.team_id) {
-      dispatch(teamsActions.one(component.team_id));
-    }
-  }, [component.team_id, dispatch]);
 
   return (
     <div>
@@ -159,7 +148,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
         value={<TopicLink topic_id={component.topic_id} />}
       />
       <Divider />
-      {identity?.hasReadOnlyRole && component.url !== "" && (
+      {currentUser?.hasReadOnlyRole && component.url !== "" && (
         <>
           <CardLine
             className="pf-v5-u-p-md"
@@ -200,7 +189,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
           )
         }
       />
-      {team !== null && (
+      {team !== undefined && (
         <>
           <Divider />
           <CardLine
@@ -417,11 +406,11 @@ export default function ComponentPage() {
                   <Divider /> There is no job attached to this component
                 </div>
               ) : (
-                sortByNewestFirst(component.jobs).map((j) => (
-                  <div>
+                sortByNewestFirst(component.jobs).map((job, index) => (
+                  <div key={index}>
                     <Divider />
                     <div className="pf-v5-u-p-md">
-                      <EmbedJob job={j} />
+                      <EmbedJob job={job} />
                     </div>
                   </div>
                 ))

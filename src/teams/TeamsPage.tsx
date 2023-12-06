@@ -1,32 +1,53 @@
-import { useEffect } from "react";
-import { isEmpty } from "lodash";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import MainPage from "pages/MainPage";
-import teamsActions from "./teamsActions";
-import { EmptyState, Breadcrumb, CopyButton } from "ui";
-import { getTeams, isFetchingTeams } from "./teamsSelectors";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
-import { AppDispatch } from "store";
+import { EmptyState, Breadcrumb, CopyButton, InputFilter } from "ui";
 import CreateTeamModal from "./CreateTeamModal";
-import { Button, Flex, FlexItem, Label } from "@patternfly/react-core";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Button,
+  Flex,
+  FlexItem,
+  Label,
+  Pagination,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+} from "@patternfly/react-core";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import TeamCreationWizard from "./TeamCreationWizard";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { useAuth } from "auth/authContext";
+import { Filters } from "types";
+import {
+  createSearchFromFilters,
+  offsetAndLimitToPage,
+  pageAndLimitToOffset,
+  parseFiltersFromSearch,
+} from "api/filters";
+import { useCreateTeamMutation, useListTeamsQuery } from "./teamsApi";
+import { fromNow } from "services/date";
 
 export default function TeamsPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const teams = useSelector(getTeams);
-  const currentUser = useSelector(getCurrentUser);
-  const isFetching = useSelector(isFetchingTeams);
+  const { currentUser } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search),
+  );
 
   useEffect(() => {
-    dispatch(teamsActions.all());
-  }, [dispatch]);
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/teams${newSearch}`, { replace: true });
+  }, [navigate, filters]);
 
-  if (currentUser === null) return null;
+  const { data, isLoading } = useListTeamsQuery(filters);
+  const [createTeam, { isLoading: isCreating }] = useCreateTeamMutation();
 
-  const partners = teams.filter((t) => t.external && t.state === "active");
+  if (!data || currentUser === null) return null;
+
+  const count = data._meta.count;
+
+  const partners = data.teams.filter((t) => t.external && t.state === "active");
 
   return (
     <MainPage
@@ -36,23 +57,30 @@ export default function TeamsPage() {
           ? `List of DCI teams. There are ${partners.length} active partners.`
           : "List of DCI teams."
       }
-      loading={isFetching && isEmpty(teams)}
-      empty={!isFetching && isEmpty(teams)}
+      loading={isLoading}
+      empty={data.teams.length === 0}
       HeaderButton={
         currentUser.hasEPMRole ? (
           <Flex>
             <Flex>
               <FlexItem>
                 <CreateTeamModal
-                  onSubmit={(team) =>
-                    dispatch(teamsActions.create(team)).then((response) => {
-                      const newTeam = response.data.team;
+                  onSubmit={async (team) => {
+                    try {
+                      const newTeam = await createTeam(team).unwrap();
+                      console.log(newTeam);
                       navigate(`/teams/${newTeam.id}`);
-                    })
-                  }
+                    } catch (error) {
+                      console.error("rejected", error);
+                    }
+                  }}
                 >
                   {(openModal) => (
-                    <Button variant="primary" onClick={openModal}>
+                    <Button
+                      variant="primary"
+                      onClick={openModal}
+                      isDisabled={isCreating}
+                    >
                       Create a new team
                     </Button>
                   )}
@@ -74,6 +102,49 @@ export default function TeamsPage() {
       Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
       }
+      Toolbar={
+        <Toolbar id="toolbar-teams" collapseListedFiltersBreakpoint="xl">
+          <ToolbarContent>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <InputFilter
+                  search={filters.name || ""}
+                  placeholder="Search a team"
+                  onSearch={(name) => {
+                    setFilters({
+                      ...filters,
+                      name,
+                    });
+                  }}
+                />
+              </ToolbarItem>
+            </ToolbarGroup>
+            <ToolbarGroup style={{ flex: "1" }}>
+              <ToolbarItem
+                variant="pagination"
+                align={{ default: "alignRight" }}
+              >
+                {count === 0 ? null : (
+                  <Pagination
+                    perPage={filters.limit}
+                    page={offsetAndLimitToPage(filters.offset, filters.limit)}
+                    itemCount={count}
+                    onSetPage={(e, newPage) => {
+                      setFilters({
+                        ...filters,
+                        offset: pageAndLimitToOffset(newPage, filters.limit),
+                      });
+                    }}
+                    onPerPageSelect={(e, newPerPage) => {
+                      setFilters({ ...filters, limit: newPerPage });
+                    }}
+                  />
+                )}
+              </ToolbarItem>
+            </ToolbarGroup>
+          </ToolbarContent>
+        </Toolbar>
+      }
     >
       <Table
         className="pf-v5-c-table pf-m-compact pf-m-grid-md"
@@ -91,7 +162,7 @@ export default function TeamsPage() {
           </Tr>
         </Thead>
         <Tbody>
-          {teams.map((team) => (
+          {data.teams.map((team) => (
             <Tr key={team.id}>
               <Th>
                 <CopyButton text={team.id} />
@@ -109,7 +180,7 @@ export default function TeamsPage() {
                   <Label color="red">inactive</Label>
                 )}
               </Td>
-              <Td>{team.from_now}</Td>
+              <Td>{fromNow(team.created_at)}</Td>
             </Tr>
           ))}
         </Tbody>

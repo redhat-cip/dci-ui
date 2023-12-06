@@ -2,20 +2,15 @@ import { Button } from "@patternfly/react-core";
 import { Input } from "ui/formik";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { ICurrentUser } from "types";
+import { ICurrentUser, ICurrentUserWithPasswordsFields } from "types";
 
 const ChangePasswordSchema = Yup.object().shape({
   current_password: Yup.string().required("Current password is required"),
   new_password: Yup.string().required("New password is required"),
 });
 
-type currentUserWithPasswordsFields = ICurrentUser & {
-  current_password: string;
-  new_password: string;
-};
-
 interface ChangePasswordFormProps {
-  onSubmit: (user: currentUserWithPasswordsFields) => void;
+  onSubmit: (user: ICurrentUserWithPasswordsFields) => void;
   currentUser: ICurrentUser;
 }
 

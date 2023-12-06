@@ -1,46 +1,64 @@
-import { useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { isEmpty } from "lodash";
+import { useEffect, useState } from "react";
 import MainPage from "pages/MainPage";
-import productsActions from "./productsActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
+import {
+  CopyButton,
+  EmptyState,
+  ConfirmDeleteModal,
+  Breadcrumb,
+  InputFilter,
+} from "ui";
 import CreateProductModal from "./CreateProductModal";
 import EditProductModal from "./EditProductModal";
-import { getProducts, isFetchingProducts } from "./productsSelectors";
-import { Button } from "@patternfly/react-core";
+import {
+  Button,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+} from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
-import { AppDispatch } from "store";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Filters } from "types";
+import { createSearchFromFilters, parseFiltersFromSearch } from "api/filters";
+import {
+  useCreateProductMutation,
+  useDeleteProductMutation,
+  useListProductsQuery,
+  useUpdateProductMutation,
+} from "./productsApi";
+import { useAuth } from "auth/authContext";
 
 export default function ProductsPage() {
-  const currentUser = useSelector(getCurrentUser);
-  const products = useSelector(getProducts);
-  const isFetching = useSelector(isFetchingProducts);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const getAllProducts = useCallback(() => {
-    dispatch(productsActions.all());
-  }, [dispatch]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search),
+  );
+  const { currentUser } = useAuth();
+  const { data, isLoading } = useListProductsQuery(filters);
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
   useEffect(() => {
-    getAllProducts();
-  }, [getAllProducts]);
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/products${newSearch}`, { replace: true });
+  }, [navigate, filters]);
 
-  if (currentUser === null) return null;
+  if (!data || currentUser === null) return null;
 
   return (
     <MainPage
       title="Products"
       description="A product is the main abstraction that describe a Red Hat product (RHEL, OpenStack, Openshift)."
-      loading={isFetching && isEmpty(products)}
-      empty={!isFetching && isEmpty(products)}
+      loading={isLoading}
+      empty={data.products.length === 0}
       HeaderButton={
         currentUser.isSuperAdmin ? (
           <CreateProductModal
-            onSubmit={(product) => {
-              dispatch(productsActions.create(product));
-            }}
+            onSubmit={createProduct}
+            isDisabled={isCreating}
           />
         ) : null
       }
@@ -55,6 +73,26 @@ export default function ProductsPage() {
           links={[{ to: "/", title: "DCI" }, { title: "Products" }]}
         />
       }
+      Toolbar={
+        <Toolbar id="toolbar-products" collapseListedFiltersBreakpoint="xl">
+          <ToolbarContent>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <InputFilter
+                  search={filters.name || ""}
+                  placeholder="Search a product"
+                  onSearch={(name) => {
+                    setFilters({
+                      ...filters,
+                      name,
+                    });
+                  }}
+                />
+              </ToolbarItem>
+            </ToolbarGroup>
+          </ToolbarContent>
+        </Toolbar>
+      }
     >
       <Table aria-label="Products table" variant="compact">
         <Thead>
@@ -67,7 +105,7 @@ export default function ProductsPage() {
           </Tr>
         </Thead>
         <Tbody>
-          {products.map((product) => (
+          {data.products.map((product) => (
             <Tr key={`${product.id}.${product.etag}`}>
               <Td dataLabel="ID">
                 <CopyButton text={product.id} />
@@ -80,19 +118,14 @@ export default function ProductsPage() {
                   <>
                     <EditProductModal
                       className="pf-v5-u-mr-xs"
-                      onSubmit={(editedProduct) => {
-                        dispatch(productsActions.update(editedProduct)).finally(
-                          () => {
-                            getAllProducts();
-                          },
-                        );
-                      }}
+                      onSubmit={updateProduct}
                       product={product}
+                      isDisabled={isUpdating}
                     />
                     <ConfirmDeleteModal
                       title={`Delete product ${product.name}`}
                       message={`Are you sure you want to delete ${product.name}?`}
-                      onOk={() => dispatch(productsActions.delete(product))}
+                      onOk={() => deleteProduct(product)}
                     >
                       {(openModal) => (
                         <Button variant="danger" onClick={openModal}>

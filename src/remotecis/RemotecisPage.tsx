@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { isEmpty } from "lodash";
 import MainPage from "pages/MainPage";
-import remotecisActions from "./remotecisActions";
-import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import {
-  getNbOfRemotecis,
-  getRemotecisForTeam,
-  isFetchingRemotecis,
-} from "./remotecisSelectors";
+  CopyButton,
+  EmptyState,
+  ConfirmDeleteModal,
+  Breadcrumb,
+  InputFilter,
+} from "ui";
 import { SeeAuthentificationFileModal } from "ui/Credentials";
 import {
   Button,
@@ -20,53 +18,106 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
-import { AppDispatch } from "store";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
 import { useAuth } from "auth/authContext";
-import { IPaginationFilters } from "types";
-import { getLimitAndOffset } from "jobs/toolbar/filters";
-import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-
-const initialRemoteciFilter = {
-  page: 1,
-  perPage: 20,
-};
+import { Filters, ITeam } from "types";
+import {
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  ThProps,
+} from "@patternfly/react-table";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  createSearchFromFilters,
+  offsetAndLimitToPage,
+  pageAndLimitToOffset,
+  parseFiltersFromSearch,
+} from "api/filters";
+import {
+  useCreateRemoteciMutation,
+  useDeleteRemoteciMutation,
+  useListRemotecisQuery,
+  useUpdateRemoteciMutation,
+} from "./remotecisApi";
+import { fromNow } from "services/date";
 
 export default function RemotecisPage() {
-  const { identity } = useAuth();
-  const remotecis = useSelector(getRemotecisForTeam(identity?.team));
-  const nbOfRemotecis = useSelector(getNbOfRemotecis);
-  const isFetching = useSelector(isFetchingRemotecis);
-  const dispatch = useDispatch<AppDispatch>();
-  const [filters, setFilters] = useState<IPaginationFilters>({
-    ...initialRemoteciFilter,
-  });
+  const { currentUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search),
+  );
+
+  const sort = (column: string): ThProps["sort"] => {
+    const sortColumns: { [key: string]: number } = {
+      name: 1,
+      created_at: 2,
+    };
+    const sortColumnKey = filters.sort.replace("-", "");
+    const sortByIndex =
+      sortColumnKey in sortColumns ? sortColumns[sortColumnKey] : undefined;
+    const sortDirection = filters.sort.indexOf("-") === -1 ? "asc" : "desc";
+    return {
+      sortBy: {
+        index: sortByIndex,
+        direction: sortDirection,
+      },
+      onSort: (_event, index, direction) => {
+        const sort = `${sortDirection === "asc" ? "-" : ""}${column}`;
+        setFilters({ ...filters, sort });
+      },
+      columnIndex: sortColumns[column],
+    };
+  };
 
   useEffect(() => {
-    const params = {
-      where: `team_id:${identity?.team?.id}`,
-      ...getLimitAndOffset(filters),
-    };
-    dispatch(remotecisActions.clear());
-    dispatch(remotecisActions.all(params));
-  }, [dispatch, filters, identity?.team]);
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/remotecis${newSearch}`, { replace: true });
+  }, [navigate, filters]);
 
-  if (identity === null) return null;
+  useEffect(() => {
+    setFilters((f) => {
+      if (currentUser && currentUser.team) {
+        return {
+          ...f,
+          team_id: currentUser.team.id,
+        };
+      }
+      return f;
+    });
+  }, [currentUser]);
+
+  const { data, isLoading } = useListRemotecisQuery(filters, {
+    skip: filters.team_id === null,
+  });
+  const [createRemoteci, { isLoading: isCreating }] =
+    useCreateRemoteciMutation();
+  const [updateRemoteci, { isLoading: isUpdating }] =
+    useUpdateRemoteciMutation();
+  const [deleteRemoteci] = useDeleteRemoteciMutation();
+
+  if (!data || currentUser === null) return null;
+
+  const count = data._meta.count;
 
   return (
     <MainPage
       title="Remotecis"
       description="The remote ci will host the agent. It is recommended to create a remote ci per lab."
-      loading={isFetching && isEmpty(remotecis)}
-      empty={!isFetching && isEmpty(remotecis)}
+      loading={isLoading}
+      empty={data.remotecis.length === 0}
       HeaderButton={
-        identity.team && (
+        currentUser.team && (
           <CreateRemoteciModal
-            teams={Object.values(identity.teams)}
-            onSubmit={(newRemoteci) => {
-              dispatch(remotecisActions.create(newRemoteci));
-            }}
+            teams={Object.values(currentUser.teams) as ITeam[]}
+            onSubmit={createRemoteci}
+            isDisabled={isCreating}
           />
         )
       }
@@ -74,8 +125,8 @@ export default function RemotecisPage() {
         <EmptyState
           title="There is no remotecis"
           info={
-            identity.team
-              ? `There is no remotecis in ${identity.team.name} team. Do you want to create one?`
+            currentUser.team
+              ? `There is no remotecis in ${currentUser.team.name} team. Do you want to create one?`
               : "Apparently you are not on any team. Contact your EPM or DCI team if you think this is an error."
           }
         />
@@ -85,50 +136,65 @@ export default function RemotecisPage() {
           links={[{ to: "/", title: "DCI" }, { title: "Remotecis" }]}
         />
       }
-    >
-      <Toolbar id="toolbar-remotecis" collapseListedFiltersBreakpoint="xl">
-        <ToolbarContent>
-          <ToolbarGroup style={{ flex: "1" }}>
-            <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
-              {nbOfRemotecis === 0 ? null : (
-                <Pagination
-                  perPage={filters.perPage}
-                  page={filters.page}
-                  itemCount={nbOfRemotecis}
-                  onSetPage={(e, newPage) => {
+      Toolbar={
+        <Toolbar id="toolbar-remotecis" collapseListedFiltersBreakpoint="xl">
+          <ToolbarContent>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <InputFilter
+                  search={filters.name || ""}
+                  placeholder="Search a remoteci"
+                  onSearch={(name) => {
                     setFilters({
                       ...filters,
-                      page: newPage,
-                    });
-                  }}
-                  onPerPageSelect={(e, newPerPage) => {
-                    setFilters({
-                      ...filters,
-                      perPage: newPerPage,
+                      name,
                     });
                   }}
                 />
-              )}
-            </ToolbarItem>
-          </ToolbarGroup>
-        </ToolbarContent>
-      </Toolbar>
+              </ToolbarItem>
+            </ToolbarGroup>
+            <ToolbarGroup style={{ flex: "1" }}>
+              <ToolbarItem
+                variant="pagination"
+                align={{ default: "alignRight" }}
+              >
+                {count === 0 ? null : (
+                  <Pagination
+                    perPage={filters.limit}
+                    page={offsetAndLimitToPage(filters.offset, filters.limit)}
+                    itemCount={count}
+                    onSetPage={(e, newPage) => {
+                      setFilters({
+                        ...filters,
+                        offset: pageAndLimitToOffset(newPage, filters.limit),
+                      });
+                    }}
+                    onPerPageSelect={(e, newPerPage) => {
+                      setFilters({ ...filters, limit: newPerPage });
+                    }}
+                  />
+                )}
+              </ToolbarItem>
+            </ToolbarGroup>
+          </ToolbarContent>
+        </Toolbar>
+      }
+    >
       <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
         <Thead>
           <Tr>
             <Th className="text-center">ID</Th>
-            <Th>Name</Th>
+            <Th sort={sort("name")}>Name</Th>
             <Th className="text-center">Status</Th>
             <Th className="text-center" title="Authentication">
               <UserSecretIcon className="pf-v5-u-mr-xs" /> Authentication
             </Th>
-            <Th className="text-center">Team</Th>
-            <Th>Created</Th>
+            <Th sort={sort("created_at")}>Created</Th>
             <Th className="text-center">Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {remotecis.map((remoteci) => (
+          {data.remotecis.map((remoteci) => (
             <Tr key={`${remoteci.id}.${remoteci.etag}`}>
               <Td className="text-center">
                 <CopyButton text={remoteci.id} />
@@ -154,21 +220,19 @@ export default function RemotecisPage() {
                   resource={remoteci}
                 />
               </Td>
-              <Td className="text-center">{remoteci?.team?.name}</Td>
-              <Td>{remoteci.from_now}</Td>
+              <Td>{fromNow(remoteci.created_at)}</Td>
               <Td className="text-center">
                 <EditRemoteciModal
                   className="pf-v5-u-mr-xs"
                   remoteci={remoteci}
-                  teams={Object.values(identity.teams)}
-                  onSubmit={(editedRemoteci) => {
-                    dispatch(remotecisActions.update(editedRemoteci));
-                  }}
+                  teams={Object.values(currentUser.teams) as ITeam[]}
+                  onSubmit={updateRemoteci}
+                  isDisabled={isUpdating}
                 />
                 <ConfirmDeleteModal
                   title={`Delete remoteci ${remoteci.name} ?`}
                   message={`Are you sure you want to delete ${remoteci.name}?`}
-                  onOk={() => dispatch(remotecisActions.delete(remoteci))}
+                  onOk={() => deleteRemoteci(remoteci)}
                 >
                   {(openModal) => (
                     <Button size="sm" variant="danger" onClick={openModal}>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IJobFilters, JobsTableListColumn } from "types";
+import { Filters, JobsTableListColumn } from "types";
 import {
   ToolbarItem,
   ToolbarGroup,
@@ -32,6 +32,7 @@ import NameFilter from "./NameFilter";
 import { useHotkeys } from "react-hotkeys-hook";
 import QLToolbar from "./QLToolbar";
 import TableViewColumnsFilter from "./TableViewColumnsFilter";
+import { offsetAndLimitToPage, pageAndLimitToOffset } from "api/filters";
 
 export const Categories = [
   "Remoteci",
@@ -47,8 +48,8 @@ export type Category = (typeof Categories)[number];
 
 type JobsToolbarProps = {
   jobsCount: number;
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
   clearAllFilters: () => void;
   refresh: () => void;
   tableViewActive: boolean;
@@ -154,7 +155,7 @@ export default function JobsToolbar({
               />
               <TagsFilter
                 showToolbarItem={currentCategory === "Tag"}
-                tags={filters.tags}
+                tags={filters.tags ?? []}
                 onSubmit={(tags) => setFilters({ ...filters, tags })}
               />
               <ConfigurationFilter
@@ -239,21 +240,18 @@ export default function JobsToolbar({
           <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
             {jobsCount === 0 ? null : (
               <Pagination
-                perPage={filters.perPage}
-                page={filters.page}
+                perPage={filters.limit}
+                page={offsetAndLimitToPage(filters.offset, filters.limit)}
                 itemCount={jobsCount}
-                onSetPage={(e, page) =>
+                onSetPage={(e, newPage) =>
                   setFilters({
                     ...filters,
-                    page,
+                    offset: pageAndLimitToOffset(newPage, filters.limit),
                   })
                 }
-                onPerPageSelect={(e, perPage) =>
-                  setFilters({
-                    ...filters,
-                    perPage,
-                  })
-                }
+                onPerPageSelect={(e, newPerPage) => {
+                  setFilters({ ...filters, limit: newPerPage });
+                }}
               />
             )}
           </ToolbarItem>

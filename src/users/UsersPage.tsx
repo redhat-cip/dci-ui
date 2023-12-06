@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   ToolbarGroup,
@@ -9,60 +8,54 @@ import {
   Toolbar,
 } from "@patternfly/react-core";
 import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
-import usersActions from "./usersActions";
 import { EmptyState, Breadcrumb } from "ui";
-import { getUsers, getNbOfUsers, isFetchingUsers } from "./usersSelectors";
-import { getParamsFromFilters } from "jobs/toolbar/filters";
 import EmailsFilter from "./EmailsFilter";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
-import { IUserFilters } from "types";
-import { AppDispatch } from "store";
-import CreateUserModal from "./create/CreateUserModal";
+import { Filters } from "types";
+import CreateUserModal from "./CreateUserModal";
 import UsersTable from "./UsersTable";
 import MainPage from "pages/MainPage";
-import { isEmpty } from "lodash";
-
-const initialUserFilter = {
-  page: 1,
-  perPage: 20,
-  email: null,
-  sort: "-created_at",
-};
+import {
+  createSearchFromFilters,
+  offsetAndLimitToPage,
+  pageAndLimitToOffset,
+  parseFiltersFromSearch,
+} from "api/filters";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCreateUserMutation, useListUsersQuery } from "./usersApi";
+import { useAuth } from "auth/authContext";
 
 export default function UsersPage() {
-  const currentUser = useSelector(getCurrentUser);
-  const users = useSelector(getUsers);
-  const numOfUsers = useSelector(getNbOfUsers);
-  const isFetching = useSelector(isFetchingUsers);
-  const [filters, setFilters] = useState<IUserFilters>({
-    ...initialUserFilter,
-  });
-  const dispatch = useDispatch<AppDispatch>();
-
+  const { currentUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search),
+  );
   useEffect(() => {
-    const params = getParamsFromFilters(filters);
-    dispatch(usersActions.clear());
-    dispatch(usersActions.all(params));
-  }, [dispatch, filters]);
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/users${newSearch}`, { replace: true });
+  }, [navigate, filters]);
 
-  if (currentUser === null) return null;
+  const { data, isLoading } = useListUsersQuery(filters);
+  const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+
+  if (!data || currentUser === null) return null;
+  const count = data._meta.count;
 
   return (
     <MainPage
       title="Users"
       description="List of DCI users"
-      loading={isFetching && isEmpty(users)}
+      loading={isLoading}
       HeaderButton={
         currentUser.isSuperAdmin ? (
-          <CreateUserModal
-            onSubmit={(user) => {
-              dispatch(usersActions.create(user)).then(() =>
-                setFilters({ ...initialUserFilter }),
-              );
-            }}
-          >
+          <CreateUserModal onSubmit={createUser}>
             {(openModal) => (
-              <Button variant="primary" onClick={openModal}>
+              <Button
+                variant="primary"
+                onClick={openModal}
+                isDisabled={isCreating}
+              >
                 <PlusCircleIcon className="pf-v5-u-mr-xs" />
                 Create a new user
               </Button>
@@ -76,39 +69,50 @@ export default function UsersPage() {
       Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
       }
-    >
-      <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
-        <ToolbarContent>
-          <ToolbarGroup>
-            <ToolbarItem>
-              <EmailsFilter
-                search={filters.email || ""}
-                onSearch={(email) => {
-                  setFilters({ ...initialUserFilter, email });
-                }}
-              />
-            </ToolbarItem>
-          </ToolbarGroup>
-          <ToolbarGroup style={{ flex: "1" }}>
-            <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
-              {numOfUsers === 0 ? null : (
-                <Pagination
-                  perPage={filters.perPage}
-                  page={filters.page}
-                  itemCount={numOfUsers}
-                  onSetPage={(e, newPage) => {
-                    setFilters({ ...filters, page: newPage });
-                  }}
-                  onPerPageSelect={(e, newPerPage) => {
-                    setFilters({ ...filters, perPage: newPerPage });
+      Toolbar={
+        <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
+          <ToolbarContent>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <EmailsFilter
+                  search={filters.email || ""}
+                  onSearch={(email) => {
+                    setFilters({
+                      ...filters,
+                      email,
+                    });
                   }}
                 />
-              )}
-            </ToolbarItem>
-          </ToolbarGroup>
-        </ToolbarContent>
-      </Toolbar>
-      {!isFetching && users.length === 0 ? (
+              </ToolbarItem>
+            </ToolbarGroup>
+            <ToolbarGroup style={{ flex: "1" }}>
+              <ToolbarItem
+                variant="pagination"
+                align={{ default: "alignRight" }}
+              >
+                {count === 0 ? null : (
+                  <Pagination
+                    perPage={filters.limit}
+                    page={offsetAndLimitToPage(filters.offset, filters.limit)}
+                    itemCount={count}
+                    onSetPage={(e, newPage) => {
+                      setFilters({
+                        ...filters,
+                        offset: pageAndLimitToOffset(newPage, filters.limit),
+                      });
+                    }}
+                    onPerPageSelect={(e, newPerPage) => {
+                      setFilters({ ...filters, limit: newPerPage });
+                    }}
+                  />
+                )}
+              </ToolbarItem>
+            </ToolbarGroup>
+          </ToolbarContent>
+        </Toolbar>
+      }
+    >
+      {!isLoading && data.users.length === 0 ? (
         filters.email === "" ? (
           <EmptyState
             title="There is no users"
@@ -124,7 +128,10 @@ export default function UsersPage() {
                 <Button
                   variant="link"
                   onClick={() =>
-                    setFilters({ ...filters, email: `${filters.email}*` })
+                    setFilters({
+                      ...filters,
+                      email: `${filters.email}*`,
+                    })
                   }
                 >
                   Try {filters.email}* instead
@@ -134,7 +141,7 @@ export default function UsersPage() {
           />
         )
       ) : (
-        <UsersTable users={users} />
+        <UsersTable users={data.users} />
       )}
     </MainPage>
   );

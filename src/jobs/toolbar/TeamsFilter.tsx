@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToolbarFilter, ToolbarChip } from "@patternfly/react-core";
 import {
   Select,
   SelectVariant,
   SelectOption,
 } from "@patternfly/react-core/deprecated";
-import { useDispatch, useSelector } from "react-redux";
-import { getTeams, isFetchingTeams } from "teams/teamsSelectors";
-import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
-import teamsActions from "teams/teamsActions";
 import { ITeam } from "types";
+import { useListTeamsQuery } from "teams/teamsApi";
 
 type TeamsFilterProps = {
   teamsIds: string[];
@@ -31,29 +28,21 @@ export default function TeamsFilter({
   placeholderText = "Search team by name",
   categoryName = "Teams",
 }: TeamsFilterProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const [searchValue, setSearchValue] = useState("");
-  const teams = useSelector(getTeams).map((t) => ({
+  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+  const { data, isLoading } = useListTeamsQuery({ name: debouncedSearchValue });
+
+  if (!data) return null;
+
+  const teamsOptions = data.teams.map((t) => ({
     ...t,
     toString: () => t.name,
   }));
-  const selectedTeams = teams
+  const selectedTeams = teamsOptions
     .filter((t) => teamsIds.indexOf(t.id) !== -1)
     .map((t) => ({ ...t, toString: () => t.name }));
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const isFetching = useSelector(isFetchingTeams);
-
-  const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
-
-  useEffect(() => {
-    if (debouncedSearchValue) {
-      dispatch(teamsActions.all({ where: `name:${debouncedSearchValue}*` }));
-    }
-  }, [debouncedSearchValue, dispatch]);
-
-  useEffect(() => {
-    dispatch(teamsActions.all());
-  }, [dispatch]);
 
   return (
     <ToolbarFilter
@@ -96,12 +85,12 @@ export default function TeamsFilter({
         noResultsFoundText={
           debouncedSearchValue === ""
             ? "Search a team by name"
-            : isFetching
+            : isLoading
               ? "Searching..."
               : "No team matching this name"
         }
       >
-        {teams.map((team) => (
+        {teamsOptions.map((team) => (
           <SelectOption key={team.id} value={team} />
         ))}
       </Select>

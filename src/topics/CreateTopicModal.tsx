@@ -1,25 +1,25 @@
-import { useRef } from "react";
-import { FormikProps } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
-import { INewTopic, IProduct, ITopicForm } from "types";
+import { IProduct, ITopic } from "types";
 
 interface CreateTopicModalProps {
   products: IProduct[];
-  onSubmit: (topic: INewTopic) => void;
+  onSubmit: (topic: Partial<ITopic>) => void;
+  [x: string]: any;
 }
 
 export default function CreateTopicModal({
   products,
   onSubmit,
+  ...props
 }: CreateTopicModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<ITopicForm>>(null);
   return (
     <>
       <Modal
         id="create_topic_modal"
+        aria-label="Create topic modal"
         variant={ModalVariant.medium}
         title="Create a new topic"
         isOpen={isOpen}
@@ -28,14 +28,8 @@ export default function CreateTopicModal({
           <Button
             key="create"
             variant="primary"
-            onClick={() => {
-              if (formRef.current) {
-                if (formRef.current.isValid) {
-                  hide();
-                }
-                formRef.current.handleSubmit();
-              }
-            }}
+            type="submit"
+            form="create-topic-form"
           >
             Create
           </Button>,
@@ -44,9 +38,16 @@ export default function CreateTopicModal({
           </Button>,
         ]}
       >
-        <TopicForm ref={formRef} products={products} onSubmit={onSubmit} />
+        <TopicForm
+          id="create-topic-form"
+          products={products}
+          onSubmit={(topic) => {
+            hide();
+            onSubmit(topic);
+          }}
+        />
       </Modal>
-      <Button variant="primary" onClick={show}>
+      <Button variant="primary" onClick={show} {...props}>
         Create a new topic
       </Button>
     </>

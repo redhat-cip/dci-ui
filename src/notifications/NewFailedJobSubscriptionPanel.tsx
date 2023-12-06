@@ -1,15 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import remotecisActions from "remotecis/remotecisActions";
+import { useState } from "react";
 import { ICurrentUser, IRemoteci } from "types";
-import {
-  getSubscribedRemotecis,
-  subscribeToARemoteci,
-  unsubscribeFromARemoteci,
-} from "currentUser/currentUserActions";
-import { getRemotecis } from "remotecis/remotecisSelectors";
-import { AppDispatch } from "store";
-import { showError, showSuccess } from "alerts/alertsActions";
 import "@patternfly/patternfly/components/DualListSelector/dual-list-selector.css";
 import {
   DualListSelector,
@@ -21,6 +11,12 @@ import {
   SearchInput,
 } from "@patternfly/react-core";
 import { AngleLeftIcon, AngleRightIcon } from "@patternfly/react-icons";
+import {
+  useListRemotecisQuery,
+  useListSubscribedRemotecisQuery,
+  useSubscribeToARemoteciMutation,
+  useUnsubscribeFromARemoteciMutation,
+} from "remotecis/remotecisApi";
 
 export default function NewFailedJobSubscriptionPanel({
   currentUser,
@@ -28,54 +24,37 @@ export default function NewFailedJobSubscriptionPanel({
   currentUser: ICurrentUser;
 }) {
   const [searchRemotecis, setSearchRemotecis] = useState("");
+  const [searchSubscribedRemotecis, setSearchSubscribedRemotecis] =
+    useState("");
   const [selectedRemoteci, setSelectedRemoteci] = useState<IRemoteci | null>(
     null,
   );
-  const remotecis = useSelector(getRemotecis);
 
-  const [searchSubscribedRemotecis, setSearchSubscribedRemotecis] =
-    useState("");
-  const [subscribedRemotecis, setSubscribedRemotecis] = useState<IRemoteci[]>(
-    [],
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const { data: remotecisData } = useListRemotecisQuery({
+    team_id: currentUser.team?.id,
+  });
 
-  useEffect(() => {
-    dispatch(remotecisActions.allPaginated(`team_id:${currentUser.team?.id}`));
-  }, [dispatch, currentUser]);
+  const { data: subscribedRemotecisData } =
+    useListSubscribedRemotecisQuery(currentUser);
+  const [subscribeToARemoteci] = useSubscribeToARemoteciMutation();
+  const [unsubscribeFromARemoteci] = useUnsubscribeFromARemoteciMutation();
 
-  const memoizedGetSubscribedRemotecis = useCallback(() => {
-    getSubscribedRemotecis(currentUser).then((response) => {
-      setSubscribedRemotecis(response.data.remotecis);
-    });
-  }, [currentUser]);
+  if (!remotecisData || !subscribedRemotecisData) return null;
 
-  useEffect(() => {
-    memoizedGetSubscribedRemotecis();
-  }, [memoizedGetSubscribedRemotecis]);
-
-  const subscribedRemotecisIds = subscribedRemotecis.map(
+  const subscribedRemotecisIds = subscribedRemotecisData.remotecis.map(
     (remoteci) => remoteci.id,
   );
-  const nbSubscribedRemotecis = subscribedRemotecis.length;
-  const visibleRemotecis = useMemo(() => {
-    return remotecis
-      .filter((remoteci) =>
-        remoteci.name.toLowerCase().includes(searchRemotecis.toLowerCase()),
-      )
-      .filter((remoteci) => {
-        if (nbSubscribedRemotecis === 0) {
-          return true;
-        }
-        return !subscribedRemotecisIds.includes(remoteci.id);
-      });
-  }, [
-    remotecis,
-    subscribedRemotecisIds,
-    searchRemotecis,
-    nbSubscribedRemotecis,
-  ]);
-
+  const nbSubscribedRemotecis = subscribedRemotecisIds.length;
+  const visibleRemotecis = remotecisData.remotecis
+    .filter((remoteci) =>
+      remoteci.name.toLowerCase().includes(searchRemotecis.toLowerCase()),
+    )
+    .filter((remoteci) => {
+      if (nbSubscribedRemotecis === 0) {
+        return true;
+      }
+      return !subscribedRemotecisIds.includes(remoteci.id);
+    });
   const canSubscribeToSelectedRemoteci =
     selectedRemoteci !== null &&
     subscribedRemotecisIds.includes(selectedRemoteci.id);
@@ -111,26 +90,7 @@ export default function NewFailedJobSubscriptionPanel({
           isDisabled={canSubscribeToSelectedRemoteci}
           onClick={() => {
             if (selectedRemoteci) {
-              setSubscribedRemotecis([
-                ...subscribedRemotecis,
-                selectedRemoteci,
-              ]);
-              subscribeToARemoteci(selectedRemoteci, currentUser)
-                .then(() =>
-                  dispatch(
-                    showSuccess(
-                      `You are subscribed to remoteci ${selectedRemoteci?.name}. You will receive an email when a job fails on this remoteci.`,
-                    ),
-                  ),
-                )
-                .catch(() => {
-                  dispatch(
-                    showError(
-                      "We are sorry, we are unable to subscribe to this remoteci. Can you try again in a few minutes or contact an administrator?",
-                    ),
-                  );
-                  memoizedGetSubscribedRemotecis();
-                });
+              subscribeToARemoteci({ remoteci: selectedRemoteci, currentUser });
             }
           }}
           aria-label="Subscribe to remoteci"
@@ -142,26 +102,10 @@ export default function NewFailedJobSubscriptionPanel({
           isDisabled={!canSubscribeToSelectedRemoteci}
           onClick={() => {
             if (selectedRemoteci) {
-              setSubscribedRemotecis(
-                subscribedRemotecis.filter(
-                  (remoteci) => remoteci.id !== selectedRemoteci.id,
-                ),
-              );
-              unsubscribeFromARemoteci(selectedRemoteci, currentUser)
-                .then(() =>
-                  dispatch(
-                    showSuccess(
-                      `Unsubscription confirmed. You will no longer receive emails for failed jobs on the ${selectedRemoteci?.name} remoteci.`,
-                    ),
-                  ),
-                )
-                .catch(() => {
-                  dispatch(
-                    showError(
-                      "We are sorry, we are unable to unsubscribe from this remoteci. Can you try again in a few minutes or contact an administrator?",
-                    ),
-                  );
-                });
+              unsubscribeFromARemoteci({
+                remoteci: selectedRemoteci,
+                currentUser,
+              });
             }
           }}
           aria-label="Unsubscribe to remoteci"
@@ -183,7 +127,7 @@ export default function NewFailedJobSubscriptionPanel({
         }
       >
         <DualListSelectorList>
-          {subscribedRemotecis
+          {subscribedRemotecisData.remotecis
             .filter((remoteci) =>
               remoteci.name
                 .toLowerCase()

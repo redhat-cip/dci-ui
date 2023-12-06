@@ -1,13 +1,12 @@
 import MainPage from "pages/MainPage";
 import { Card, CardBody, CardHeader, CardTitle } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { useSelector } from "react-redux";
-import { getCurrentUser } from "currentUser/currentUserSelectors";
 import NewFailedJobSubscriptionPanel from "./NewFailedJobSubscriptionPanel";
 import NewComponentSubscriptionPanel from "./NewComponentSubscriptionPanel";
+import { useAuth } from "auth/authContext";
 
 export default function NotificationsPage() {
-  const currentUser = useSelector(getCurrentUser);
+  const { currentUser } = useAuth();
 
   if (currentUser === null) {
     return null;

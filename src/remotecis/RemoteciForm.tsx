@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input, SelectWithTypeahead } from "ui/formik";
-import { INewRemoteci, IRemoteci, ITeam, IEditRemoteci } from "types";
+import { IRemoteci, ITeam } from "types";
 
 const RemoteciSchema = Yup.object().shape({
   name: Yup.string()
@@ -14,11 +14,11 @@ const RemoteciSchema = Yup.object().shape({
 interface RemoteciFormProps {
   remoteci?: IRemoteci;
   teams: ITeam[];
-  onSubmit: (remoteci: INewRemoteci | IEditRemoteci) => void;
+  onSubmit: (remoteci: IRemoteci | Partial<IRemoteci>) => void;
 }
 
 const RemoteciForm = forwardRef<
-  FormikProps<INewRemoteci | IEditRemoteci>,
+  FormikProps<IRemoteci | Partial<IRemoteci>>,
   RemoteciFormProps
 >(({ remoteci, teams, onSubmit }, formRef) => (
   <Formik

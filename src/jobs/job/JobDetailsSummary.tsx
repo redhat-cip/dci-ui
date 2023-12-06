@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Button,
   DescriptionList,
@@ -22,18 +21,16 @@ import {
   ExternalLinkAltIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent, IResult, IJob } from "types";
+import { IEnhancedJob, IComponent, IResult } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import TextAreaEditableOnHover from "./TextAreaEditableOnHover";
 import { Markup } from "interweave";
-import { getJobSilently, updateJobComment } from "jobs/jobsActions";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "store";
 import { sortByName, sortByOldestFirst } from "services/sort";
 import { getTopicIcon } from "ui/icons";
 import { convertLinksToHtml, getColor, getIcon } from "jobs/jobUtils";
 import { TestLabels } from "jobs/components";
+import { useGetJobQuery, useUpdateJobMutation } from "jobs/jobsApi";
 
 const CommentBloc = styled.div`
   display: flex;
@@ -55,6 +52,7 @@ function Tests({ jobId, tests }: TestsProps) {
   if (tests.length === 0) {
     return <div>no tests</div>;
   }
+  console.log(tests);
   return (
     <div>
       {sortByOldestFirst(tests).map((test, i) => (
@@ -131,27 +129,18 @@ export function JobConfiguration({ configuration }: JobConfigurationProps) {
 }
 
 function JobName({ jobId }: { jobId: string }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [job, setJob] = useState<IJob | null>(null);
-  useEffect(() => {
-    getJobSilently(jobId)
-      .then(setJob)
-      .catch(() => setJob(null))
-      .finally(() => setIsLoading(false));
-  }, [jobId]);
+  const { data: job, isLoading } = useGetJobQuery(jobId);
   if (isLoading) return null;
-  if (job) {
-    return (
-      <Button
-        variant="link"
-        onClick={() => window.open(`/jobs/${jobId}/jobStates`, "_blank")}
-        isInline
-      >
-        {job.name} <ExternalLinkAltIcon style={{ fontSize: "0.7rem" }} />
-      </Button>
-    );
-  }
-  return <span>{jobId}</span>;
+  if (!job) return <span>{jobId}</span>;
+  return (
+    <Button
+      variant="link"
+      onClick={() => window.open(`/jobs/${job.id}/jobStates`, "_blank")}
+      isInline
+    >
+      {job.name} <ExternalLinkAltIcon style={{ fontSize: "0.7rem" }} />
+    </Button>
+  );
 }
 
 interface JobDetailsSummaryProps {
@@ -159,11 +148,10 @@ interface JobDetailsSummaryProps {
 }
 
 export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
+  const [updateJob] = useUpdateJobMutation();
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
-  const [innerJob, setInnerJob] = useState<IEnhancedJob>(job);
-  const dispatch = useDispatch<AppDispatch>();
-  const TopicIcon = getTopicIcon(innerJob.topic?.name);
+  const TopicIcon = getTopicIcon(job.topic?.name);
   const navigate = useNavigate();
   return (
     <div>
@@ -172,27 +160,27 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
           isFillColumns
           columnModifier={{ default: "2Col", lg: "3Col" }}
         >
-          {innerJob.previous_job_id !== null && (
+          {job.previous_job_id !== null && (
             <DescriptionListGroup>
               <DescriptionListTerm>Previous job</DescriptionListTerm>
               <DescriptionListDescription>
-                <JobName jobId={innerJob.previous_job_id} />
+                <JobName jobId={job.previous_job_id} />
               </DescriptionListDescription>
             </DescriptionListGroup>
           )}
           <DescriptionListGroup>
             <DescriptionListTerm>Name</DescriptionListTerm>
             <DescriptionListDescription>
-              {innerJob.name ? (
+              {job.name ? (
                 <Button
                   variant="link"
-                  onClick={() => navigate(`/jobs?where=name:${innerJob.name}`)}
+                  onClick={() => navigate(`/jobs?where=name:${job.name}`)}
                   isInline
                 >
-                  {innerJob.name}
+                  {job.name}
                 </Button>
               ) : (
-                innerJob.topic?.name
+                job.topic?.name
               )}
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -201,23 +189,23 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
             <DescriptionListDescription>
               <span
                 style={{
-                  color: getColor(innerJob.status),
+                  color: getColor(job.status),
                 }}
               >
-                {getIcon(innerJob.status)} {innerJob.status}
+                {getIcon(job.status)} {job.status}
               </span>
             </DescriptionListDescription>
           </DescriptionListGroup>
-          {innerJob.status_reason && (
+          {job.status_reason && (
             <DescriptionListGroup>
               <DescriptionListTerm>Status reason</DescriptionListTerm>
               <DescriptionListDescription>
                 <span
                   style={{
-                    color: getColor(innerJob.status),
+                    color: getColor(job.status),
                   }}
                 >
-                  {innerJob.status_reason}
+                  {job.status_reason}
                 </span>
               </DescriptionListDescription>
             </DescriptionListGroup>
@@ -227,12 +215,10 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
             <DescriptionListDescription>
               <Button
                 variant="link"
-                onClick={() =>
-                  navigate(`/jobs?where=team_id:${innerJob.team.id}`)
-                }
+                onClick={() => navigate(`/jobs?where=team_id:${job.team.id}`)}
                 isInline
               >
-                {innerJob.team?.name}
+                {job.team?.name}
               </Button>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -244,11 +230,11 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
               <Button
                 variant="link"
                 onClick={() =>
-                  navigate(`/jobs?where=remoteci_id:${innerJob.remoteci.id}`)
+                  navigate(`/jobs?where=remoteci_id:${job.remoteci.id}`)
                 }
                 isInline
               >
-                {innerJob.remoteci?.name}
+                {job.remoteci?.name}
               </Button>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -259,43 +245,39 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
             <DescriptionListDescription>
               <Button
                 variant="link"
-                onClick={() =>
-                  navigate(`/jobs?where=topic_id:${innerJob.topic.id}`)
-                }
+                onClick={() => navigate(`/jobs?where=topic_id:${job.topic.id}`)}
                 isInline
               >
-                {innerJob.topic?.name}
+                {job.topic?.name}
               </Button>
             </DescriptionListDescription>
           </DescriptionListGroup>
-          {innerJob.configuration && (
+          {job.configuration && (
             <DescriptionListGroup>
               <DescriptionListTerm icon={<CogIcon />}>
                 Configuration
               </DescriptionListTerm>
               <DescriptionListDescription>
-                {innerJob.configuration === null ? null : (
-                  <JobConfiguration configuration={innerJob.configuration} />
+                {job.configuration === null ? null : (
+                  <JobConfiguration configuration={job.configuration} />
                 )}
               </DescriptionListDescription>
             </DescriptionListGroup>
           )}
-          {innerJob.url && (
+          {job.url && (
             <DescriptionListGroup>
               <DescriptionListTerm icon={<LinkIcon />}>Url</DescriptionListTerm>
               <DescriptionListDescription>
-                {innerJob.url === null ? null : (
-                  <a href={innerJob.url}>{innerJob.url}</a>
-                )}
+                {job.url === null ? null : <a href={job.url}>{job.url}</a>}
               </DescriptionListDescription>
             </DescriptionListGroup>
           )}
           <DescriptionListGroup>
             <DescriptionListTerm>Tags</DescriptionListTerm>
             <DescriptionListDescription>
-              {isEmpty(innerJob.tags)
+              {isEmpty(job.tags)
                 ? null
-                : innerJob.tags?.map((tag, index) => (
+                : job.tags?.map((tag, index) => (
                     <Label
                       key={index}
                       color="blue"
@@ -319,11 +301,11 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
                   ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
-          {isEmpty(innerJob.keys_values) ? null : (
+          {isEmpty(job.keys_values) ? null : (
             <DescriptionListGroup>
               <DescriptionListTerm>Keys values</DescriptionListTerm>
               <DescriptionListDescription>
-                {innerJob.keys_values.map((kv, index) => (
+                {job.keys_values.map((kv, index) => (
                   <Label
                     key={index}
                     color="blue"
@@ -350,13 +332,13 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
               Components
             </DescriptionListTerm>
             <DescriptionListDescription>
-              <Components components={innerJob.components} />
+              <Components components={job.components} />
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTerm>Tests</DescriptionListTerm>
             <DescriptionListDescription>
-              <Tests jobId={innerJob.id} tests={innerJob.results} />
+              <Tests jobId={job.id} tests={job.results} />
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
@@ -364,8 +346,8 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
               Created at
             </DescriptionListTerm>
             <DescriptionListDescription>
-              <span title={`Created at ${innerJob.created_at}`}>
-                {formatDate(innerJob.created_at)}
+              <span title={`Created at ${job.created_at}`}>
+                {formatDate(job.created_at)}
               </span>
             </DescriptionListDescription>
           </DescriptionListGroup>
@@ -374,14 +356,14 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
               Duration
             </DescriptionListTerm>
             <DescriptionListDescription>
-              {innerJob.status === "new" ||
-              innerJob.status === "pre-run" ||
-              innerJob.status === "running" ? (
-                <span title={`Job duration in seconds ${innerJob.duration}`}>
+              {job.status === "new" ||
+              job.status === "pre-run" ||
+              job.status === "running" ? (
+                <span title={`Job duration in seconds ${job.duration}`}>
                   Started {startedSince}
                 </span>
               ) : (
-                <span title={`Job duration in seconds ${innerJob.duration}`}>
+                <span title={`Job duration in seconds ${job.duration}`}>
                   Ran for {jobDuration}
                 </span>
               )}
@@ -393,18 +375,16 @@ export default function JobDetailsSummary({ job }: JobDetailsSummaryProps) {
             </DescriptionListTerm>
             <DescriptionListDescription>
               <TextAreaEditableOnHover
-                text={innerJob.comment || ""}
+                text={job.comment || ""}
                 onSubmit={(comment) => {
-                  dispatch(
-                    updateJobComment({
-                      ...innerJob,
-                      comment,
-                    }),
-                  ).then(setInnerJob);
+                  updateJob({
+                    ...job,
+                    comment,
+                  });
                 }}
               >
                 <CommentBloc>
-                  <Markup content={convertLinksToHtml(innerJob.comment)} />
+                  <Markup content={convertLinksToHtml(job.comment)} />
                 </CommentBloc>
               </TextAreaEditableOnHover>
             </DescriptionListDescription>

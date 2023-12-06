@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getActiveTopics, getTopicById } from "topics/topicsSelectors";
+import { useState } from "react";
 import { ITopic } from "types";
-import topicsActions from "topics/topicsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
 } from "@patternfly/react-core/deprecated";
-import { AppDispatch } from "store";
+import { useGetTopicQuery, useListTopicsQuery } from "topics/topicsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export function TopicSelect({
   topicId,
@@ -22,14 +20,11 @@ export function TopicSelect({
   onSelect: (topicId: string) => void;
   onClear: () => void;
 }) {
-  const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
-  const topics = useSelector(getActiveTopics);
-  const topic = useSelector(getTopicById(topicId));
+  const { data } = useListTopicsQuery();
+  const { data: topic } = useGetTopicQuery(topicId ? topicId : skipToken);
 
-  useEffect(() => {
-    dispatch(topicsActions.all());
-  }, [dispatch]);
+  if (!data) return null;
 
   return (
     <Select
@@ -42,13 +37,13 @@ export function TopicSelect({
         onSelect(s.id);
       }}
       onClear={onClear}
-      selections={topic === null ? "" : topic.name}
+      selections={topic === undefined ? "" : topic.name}
       isOpen={isOpen}
       aria-labelledby="select"
       placeholderText={placeholderText}
       maxHeight="220px"
     >
-      {topics
+      {data.topics
         .map((t) => ({ ...t, toString: () => t.name }))
         .map((topic) => (
           <SelectOption key={topic.id} value={topic} />
@@ -74,10 +69,10 @@ export default function TopicFilter({
   placeholderText = "Search by name",
   categoryName = "Topic",
 }: TopicFilterProps) {
-  const topic = useSelector(getTopicById(topicId));
+  const { data: topic } = useGetTopicQuery(topicId ? topicId : skipToken);
   return (
     <ToolbarFilter
-      chips={topic === null ? [] : [topic.name]}
+      chips={topic === undefined ? [] : [topic.name]}
       deleteChip={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}

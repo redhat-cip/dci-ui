@@ -1,10 +1,11 @@
 import { CopyButton } from "ui";
 import { Link } from "react-router-dom";
-import { IEnhancedUser } from "types";
+import { IUser } from "types";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { fromNow } from "services/date";
 
 interface UsersTableProps {
-  users: IEnhancedUser[];
+  users: IUser[];
 }
 
 export default function UsersTable({ users }: UsersTableProps) {
@@ -32,7 +33,11 @@ export default function UsersTable({ users }: UsersTableProps) {
             <Td dataLabel="Full name">{user.fullname}</Td>
             <Td dataLabel="Email">{user.email}</Td>
             <Td dataLabel="Red Hat login">{user.sso_username}</Td>
-            <Td dataLabel="Created">{user.from_now}</Td>
+            <Td dataLabel="Created">
+              <time title={user.created_at} dateTime={user.created_at}>
+                {fromNow(user.created_at)}
+              </time>
+            </Td>
           </Tr>
         ))}
       </Tbody>

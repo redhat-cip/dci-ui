@@ -26,6 +26,7 @@ export default function AddRemoteTeamPermissionModal({
     <>
       <Modal
         id="add_remote_team_permission_modal"
+        aria-label="Add remote team permission modal"
         variant={ModalVariant.medium}
         title={`Select the teams for which the ${team.name} team can see the components`}
         isOpen={isOpen}

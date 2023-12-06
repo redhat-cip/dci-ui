@@ -1,34 +1,49 @@
 import { renderWithProviders } from "utils/test-utils";
 import TeamCreationWizard from "./TeamCreationWizard";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, waitFor } from "@testing-library/react";
 
 test("team creation wizard", async () => {
-  const { user } = renderWithProviders(<TeamCreationWizard />);
-  expect(
-    screen.queryByRole("button", { name: /Next/i }),
-  ).not.toBeInTheDocument();
-  fireEvent.click(
-    screen.getByRole("button", { name: /Onboarding a new team/i }),
+  const { user, findByRole, getByText, getByRole } = renderWithProviders(
+    <TeamCreationWizard />,
   );
-  expect(screen.getByRole("button", { name: /Next/i })).toBeInTheDocument();
-  await user.type(screen.getByRole("textbox", { name: /Name/i }), "Red Hat");
-  fireEvent.click(screen.getByRole("button", { name: /Next/i }));
-  await user.type(
-    screen.getByRole("textbox", { name: /Team members/i }),
-    "rh-login-1\nrh-login-2",
+
+  const onboardingANewTeamButton = await findByRole("button", {
+    name: /Onboarding a new team/i,
+  });
+  user.click(onboardingANewTeamButton);
+
+  const nameTextbox = await findByRole("textbox", { name: /Name/i });
+  await act(async () => {
+    user.type(nameTextbox, "DCI team");
+  });
+  await waitFor(() => expect(nameTextbox).toHaveValue("DCI team"));
+
+  const nextButton = await findByRole("button", { name: /Next/i });
+  await waitFor(() => expect(nextButton).not.toBeDisabled());
+  user.click(nextButton);
+  await waitFor(() => expect(getByText("Team members")).toBeInTheDocument());
+  const teamMembersTextarea = await findByRole("textbox", {
+    name: /Team members/i,
+  });
+  user.type(teamMembersTextarea, "rh-login-1\nrh-login-2");
+  await waitFor(() =>
+    expect(teamMembersTextarea).toHaveValue("rh-login-1\nrh-login-2"),
   );
-  fireEvent.click(screen.getByRole("button", { name: /Next/i }));
+  user.click(nextButton);
+  await waitFor(() =>
+    expect(getByText("Product permissions")).toBeInTheDocument(),
+  );
+  const checkboxOpenShift = await findByRole("checkbox", {
+    name: /OpenShift/i,
+  });
+  user.click(checkboxOpenShift);
+  await waitFor(() => expect(checkboxOpenShift).toBeChecked());
+  user.click(nextButton);
 
   await waitFor(() => {
-    expect(
-      screen.getByRole("checkbox", { name: /OpenShift/i }),
-    ).toBeInTheDocument();
+    expect(getByText("DCI team")).toBeInTheDocument();
+    expect(getByText("rh-login-1")).toBeInTheDocument();
+    expect(getByText("rh-login-2")).toBeInTheDocument();
+    expect(getByRole("button", { name: "Create" })).toBeInTheDocument();
   });
-
-  fireEvent.click(screen.getByRole("checkbox", { name: /OpenShift/i }));
-  fireEvent.click(screen.getByRole("button", { name: /Next/i }));
-  expect(screen.getByText("Red Hat")).toBeInTheDocument();
-  expect(screen.getByText("rh-login-1")).toBeInTheDocument();
-  expect(screen.getByText("rh-login-2")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
 });

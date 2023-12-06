@@ -1,34 +1,21 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
 import MainPage from "pages/MainPage";
-import feedersActions from "../feedersActions";
 import EditFeederForm from "./EditFeederForm";
-import { AppDispatch } from "store";
 import { useNavigate, useParams } from "react-router-dom";
-import teamsActions from "teams/teamsActions";
-import { getTeams } from "teams/teamsSelectors";
-import { IFeeder } from "types";
 import { Breadcrumb } from "ui";
 import LoadingPage from "pages/LoadingPage";
+import { useListTeamsQuery } from "teams/teamsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetFeederQuery, useUpdateFeederMutation } from "feeders/feedersApi";
 
 export default function EditFeederPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const teams = useSelector(getTeams);
   const navigate = useNavigate();
-  const [feeder, setFeeder] = useState<IFeeder | null>(null);
   const { feeder_id } = useParams();
-
-  useEffect(() => {
-    if (feeder_id) {
-      dispatch(teamsActions.all());
-      dispatch(feedersActions.one(feeder_id)).then((response) => {
-        setFeeder(response.data.feeder);
-      });
-    }
-  }, [dispatch, feeder_id]);
-
-  if (!feeder_id) return null;
+  const { data: feeder, isLoading } = useGetFeederQuery(
+    feeder_id ? feeder_id : skipToken,
+  );
+  const [updateFeeder] = useUpdateFeederMutation();
+  const { data: dataTeam, isLoading: isLoadingTeams } = useListTeamsQuery();
 
   const breadcrumb = (
     <Breadcrumb
@@ -49,20 +36,21 @@ export default function EditFeederPage() {
       title="Edit a feeder"
       description="A feeder is a script in charge of uploading newer versions of components to the control server."
       Breadcrumb={breadcrumb}
+      isLoading={isLoading || isLoadingTeams}
     >
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>
             <CardBody>
-              <EditFeederForm
-                feeder={feeder}
-                teams={teams}
-                onSubmit={(feeder) => {
-                  dispatch(feedersActions.update(feeder)).then(() =>
-                    navigate("/feeders"),
-                  );
-                }}
-              />
+              {!feeder || !dataTeam ? null : (
+                <EditFeederForm
+                  feeder={feeder}
+                  teams={dataTeam.teams}
+                  onSubmit={(feeder) => {
+                    updateFeeder(feeder).then(() => navigate("/feeders"));
+                  }}
+                />
+              )}
             </CardBody>
           </Card>
         </GridItem>

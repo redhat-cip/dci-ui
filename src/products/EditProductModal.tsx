@@ -3,12 +3,12 @@ import { FormikProps } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import ProductForm from "./ProductForm";
-import { IProduct, IEditProduct, INewProduct } from "types";
+import { IProduct } from "types";
 import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditProductModalProps {
   product: IProduct;
-  onSubmit: (product: IEditProduct) => void;
+  onSubmit: (product: IProduct | Partial<IProduct>) => void;
   [x: string]: any;
 }
 
@@ -18,11 +18,12 @@ export default function EditProductModal({
   ...props
 }: EditProductModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<INewProduct | IEditProduct>>(null);
+  const formRef = useRef<FormikProps<IProduct | Partial<IProduct>>>(null);
   return (
     <>
       <Modal
         id="edit_product_modal"
+        aria-label="Edit product modal"
         variant={ModalVariant.medium}
         title={`Edit ${product.name}`}
         isOpen={isOpen}
@@ -53,7 +54,7 @@ export default function EditProductModal({
           onSubmit={(editedProduct) => {
             // why ? dci-control-server api doesnt accept extra field like from_now
             const { id, etag, name, description } =
-              editedProduct as IEditProduct;
+              editedProduct as Partial<IProduct>;
             onSubmit({
               id,
               etag,

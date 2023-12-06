@@ -1,13 +1,13 @@
-import { IEnhancedJob, IJobFilters, JobsTableListColumn } from "types";
+import { IJob, Filters, JobsTableListColumn } from "types";
 import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
-import { groupJobsByPipeline } from "../jobsSelectors";
+import { groupJobsByPipeline } from "./pipelineJobs";
 import JobsTableListRow from "./JobsTableListRow";
 import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsFilter";
 
 interface JobsTableListProps {
-  jobs: IEnhancedJob[];
-  filters: IJobFilters;
-  setFilters: (filters: IJobFilters) => void;
+  jobs: IJob[];
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
   columns: JobsTableListColumn[];
 }
 
@@ -46,9 +46,10 @@ export default function JobsTableList({
                 });
               }}
               onTagClicked={(tag) => {
+                const tags = filters.tags ?? [];
                 setFilters({
                   ...filters,
-                  tags: [...filters.tags, tag],
+                  tags: [...tags, tag],
                 });
               }}
               onRemoteciClicked={(remoteci) => {
@@ -72,7 +73,7 @@ export default function JobsTableList({
               onConfigurationClicked={(configuration) => {
                 setFilters({
                   ...filters,
-                  configuration: configuration,
+                  configuration,
                 });
               }}
             />

@@ -1,14 +1,12 @@
-import { useRef } from "react";
 import * as React from "react";
-import { FormikProps } from "formik";
 import { Button, Modal, ModalVariant } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamForm from "./TeamForm";
-import { INewTeam, ITeam } from "types";
+import { ITeam } from "types";
 
 interface EditTeamModalProps {
   team: ITeam;
-  onSubmit: (team: ITeam) => void;
+  onSubmit: (team: ITeam | Partial<ITeam>) => void;
   children: (open: () => void) => React.ReactNode;
 }
 
@@ -18,11 +16,11 @@ export default function EditTeamModal({
   children,
 }: EditTeamModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<INewTeam>>(null);
   return (
     <>
       <Modal
         id="edit_team_modal"
+        aria-label="Edit team modal"
         variant={ModalVariant.medium}
         title={`Edit ${team.name}`}
         isOpen={isOpen}
@@ -31,12 +29,8 @@ export default function EditTeamModal({
           <Button
             key="edit"
             variant="primary"
-            onClick={() => {
-              hide();
-              if (formRef.current) {
-                formRef.current.handleSubmit();
-              }
-            }}
+            type="submit"
+            form="edit-team-form"
           >
             Edit
           </Button>,
@@ -46,10 +40,11 @@ export default function EditTeamModal({
         ]}
       >
         <TeamForm
-          ref={formRef}
+          id="edit-team-form"
           team={team}
           onSubmit={(editedTeam) => {
-            onSubmit(editedTeam as ITeam);
+            onSubmit(editedTeam);
+            hide();
           }}
         />
       </Modal>

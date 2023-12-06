@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import { ITeam } from "types";
-import { getTeams, getTeamById, isFetchingTeams } from "teams/teamsSelectors";
-import teamsActions from "teams/teamsActions";
 import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectVariant,
 } from "@patternfly/react-core/deprecated";
-import { AppDispatch } from "store";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetTeamQuery, useListTeamsQuery } from "teams/teamsApi";
 
 export function TeamSelect({
   teamId,
@@ -28,24 +26,12 @@ export function TeamSelect({
   [k: string]: any;
 }) {
   const [searchValue, setSearchValue] = useState("");
-  const isFetching = useSelector(isFetchingTeams);
-
-  const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
-  const teams = useSelector(getTeams);
-  const team = useSelector(getTeamById(teamId));
-
   const debouncedSearchValue = useDebouncedValue(searchValue, 1000);
+  const { data, isLoading } = useListTeamsQuery({ name: debouncedSearchValue });
+  const { data: team } = useGetTeamQuery(teamId ? teamId : skipToken);
 
-  useEffect(() => {
-    if (debouncedSearchValue) {
-      dispatch(teamsActions.all({ where: `name:${debouncedSearchValue}*` }));
-    }
-  }, [debouncedSearchValue, dispatch]);
-
-  useEffect(() => {
-    dispatch(teamsActions.all());
-  }, [dispatch]);
+  if (!data) return null;
 
   return (
     <Select
@@ -58,7 +44,7 @@ export function TeamSelect({
         onSelect(s);
       }}
       onClear={onClear}
-      selections={team === null ? "" : team.name}
+      selections={team === undefined || teamId === null ? "" : team.name}
       isOpen={isOpen}
       aria-labelledby="select"
       placeholderText={placeholderText}
@@ -67,13 +53,13 @@ export function TeamSelect({
       noResultsFoundText={
         debouncedSearchValue === ""
           ? "Search a team by name"
-          : isFetching
+          : isLoading
             ? "Searching..."
             : "No team matching this name"
       }
       {...props}
     >
-      {teams
+      {data.teams
         .filter((t) => filteredTeamsIds.indexOf(t.id) === -1)
         .map((t) => ({ ...t, toString: () => t.name }))
         .map((team) => (
@@ -100,10 +86,11 @@ export default function TeamFilter({
   placeholderText = "Search by name",
   categoryName = "Team",
 }: TeamFilterProps) {
-  const team = useSelector(getTeamById(teamId));
+  const { data: team } = useGetTeamQuery(teamId ? teamId : skipToken);
+
   return (
     <ToolbarFilter
-      chips={team === null ? [] : [team.name]}
+      chips={team === undefined || teamId === null ? [] : [team.name]}
       deleteChip={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}

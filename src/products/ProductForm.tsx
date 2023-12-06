@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik, FormikProps } from "formik";
 import { Input } from "ui/formik";
-import { INewProduct, IProduct, IEditProduct } from "types";
+import { IProduct } from "types";
 
 const ProductSchema = Yup.object().shape({
   name: Yup.string()
@@ -13,11 +13,11 @@ const ProductSchema = Yup.object().shape({
 
 interface ProductFormProps {
   product?: IProduct;
-  onSubmit: (product: INewProduct | IEditProduct) => void;
+  onSubmit: (product: IProduct | Partial<IProduct>) => void;
 }
 
 const ProductForm = forwardRef<
-  FormikProps<INewProduct | IEditProduct>,
+  FormikProps<IProduct | Partial<IProduct>>,
   ProductFormProps
 >(({ product, onSubmit }, formRef) => (
   <Formik
