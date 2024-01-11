@@ -41,7 +41,9 @@ const Topic = styled(Card)`
 export default function TopicsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [filters] = useState<Filters>(parseFiltersFromSearch(location.search));
+  const [filters] = useState<Filters>(
+    parseFiltersFromSearch(location.search, { limit: 100 }),
+  );
 
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
