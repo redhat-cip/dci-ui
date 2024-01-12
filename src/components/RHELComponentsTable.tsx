@@ -1,0 +1,131 @@
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { CopyButton, StateLabel } from "ui";
+import { Link } from "react-router-dom";
+import { Label } from "@patternfly/react-core";
+import { formatDate } from "services/date";
+import { DateTime } from "luxon";
+import { Filters, IComponent } from "types";
+
+export function findChannelInTags(tags: string[] | undefined | null) {
+  if (!tags) {
+    return "";
+  }
+
+  const channelsOrdered = ["nightly", "candidate", "milestone"];
+
+  let maxWeight = 0;
+  let channel = null;
+
+  for (var tag of tags) {
+    const tagIndex = channelsOrdered.indexOf(tag);
+    if (tagIndex >= maxWeight) {
+      maxWeight = tagIndex;
+      channel = channelsOrdered[tagIndex];
+    }
+  }
+
+  return channel;
+}
+
+export default function RHELComponentsTable({
+  filters,
+  setFilters,
+  components,
+}: {
+  components: IComponent[];
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
+}) {
+  function onTagClicked(tag: string) {
+    if (filters.tags && filters.tags.indexOf(tag) === -1) {
+      setFilters({
+        ...filters,
+        tags: [...filters.tags, tag],
+      });
+    }
+  }
+
+  return (
+    <Table aria-label="RHEL components table" variant="compact">
+      <Thead>
+        <Tr>
+          <Th className="text-center pf-m-width-10">ID</Th>
+          <Th className="pf-m-width-40">Name</Th>
+          <Th className="pf-m-width-10">Channel</Th>
+          <Th className="pf-m-width-10">Kernel</Th>
+          <Th className="pf-m-width-10">Released at</Th>
+          <Th className="pf-m-width-10">Type</Th>
+          <Th className="pf-m-width-10">State</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {components.map((component) => {
+          const kernel = component.tags.find((tag) =>
+            tag.toLowerCase().startsWith("kernel"),
+          );
+
+          const channel = findChannelInTags(component.tags);
+
+          return (
+            <Tr key={`${component.id}.${component.etag}`}>
+              <Td className="text-center">
+                <CopyButton text={component.id} />
+              </Td>
+              <Td>
+                <Link
+                  to={`/topics/${component.topic_id}/components/${component.id}`}
+                >
+                  {component.display_name}
+                </Link>
+              </Td>
+
+              <Td>
+                {channel !== null && (
+                  <Label
+                    isCompact
+                    className="pf-v5-u-mt-xs pf-v5-u-mr-xs pointer"
+                    color="blue"
+                    onClick={() => {
+                      onTagClicked(channel);
+                    }}
+                  >
+                    {channel}
+                  </Label>
+                )}
+              </Td>
+              <Td>
+                {kernel !== undefined && (
+                  <Label
+                    isCompact
+                    className="pf-v5-u-mt-xs pf-v5-u-mr-xs pointer"
+                    color="blue"
+                    onClick={() => {
+                      onTagClicked(kernel);
+                    }}
+                  >
+                    {kernel.replace("kernel:", "")}
+                  </Label>
+                )}
+              </Td>
+              <Td>{formatDate(component.released_at, DateTime.DATE_MED)}</Td>
+              <Td>
+                <Label
+                  isCompact
+                  className="pointer"
+                  onClick={() => {
+                    setFilters({ ...filters, type: component.type });
+                  }}
+                >
+                  {component.type}
+                </Label>
+              </Td>
+              <Td>
+                <StateLabel isCompact state={component.state} />
+              </Td>
+            </Tr>
+          );
+        })}
+      </Tbody>
+    </Table>
+  );
+}

@@ -29,6 +29,7 @@ function _parseWhere(
         case "topic_id":
         case "configuration":
         case "status":
+        case "type":
           acc[key] = value;
           break;
         case "tags":
@@ -72,6 +73,7 @@ export function getDefaultFilters(): Filters {
     tags: [],
     configuration: null,
     status: null,
+    type: null,
     state: "active" as state,
   };
 }
@@ -140,6 +142,7 @@ function _getWhereFromFilters(filters: Filters) {
         "topic_id",
         "configuration",
         "status",
+        "type",
       ].includes(key) &&
       value
     ) {

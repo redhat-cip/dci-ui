@@ -716,6 +716,7 @@ export interface Filters {
   tags: string[] | undefined;
   configuration: string | null;
   status: string | null;
+  type: string | null;
   state: state;
 }
 
@@ -733,4 +734,5 @@ export type WhereFilters = Pick<
   | "status"
   | "tags"
   | "state"
+  | "type"
 >;

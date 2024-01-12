@@ -64,6 +64,7 @@ describe("parseFiltersFromSearch", () => {
       tags: [],
       configuration: null,
       status: null,
+      type: null,
     });
   });
   test("parse name from search", () => {

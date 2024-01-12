@@ -1,4 +1,4 @@
-import { findChannelInTags } from "./ComponentsTableWithToolbar";
+import { findChannelInTags } from "./RHELComponentsTable";
 
 test("findChannelInTags", () => {
   expect(findChannelInTags([])).toBe(null);
