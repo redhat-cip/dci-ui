@@ -18,7 +18,7 @@ export const { useDeleteJobMutation } = injectDeleteEndpoint<IJob>(resource);
 export const { useListJobsQuery } = injectListEndpoint<IJob>(resource);
 export const { useUpdateJobMutation } = injectUpdateEndpoint<IJob>(resource);
 export const { useGetEnhancedJobQuery } = Api.enhanceEndpoints({
-  addTagTypes: ["EnhancedJob"],
+  addTagTypes: ["EnhancedJob", resource],
 }).injectEndpoints({
   endpoints: (builder) => ({
     getEnhancedJob: builder.query<IEnhancedJob, string>({
@@ -46,7 +46,7 @@ export const { useGetEnhancedJobQuery } = Api.enhanceEndpoints({
           };
         }
       },
-      providesTags: (result, error, id) => [{ type: "EnhancedJob", id }],
+      providesTags: (result, error, id) => [{ type: "EnhancedJob", id }, { type: resource, id }],
     }),
   }),
 });

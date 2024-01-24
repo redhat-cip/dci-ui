@@ -20,6 +20,7 @@ import {
   ModalVariant,
 } from "@patternfly/react-core";
 import { showError, showSuccess } from "alerts/alertsActions";
+import { AxiosError } from "axios";
 
 interface AuthContextType {
   currentUser: ICurrentUser | null;
@@ -54,9 +55,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       authApi
         .getCurrentUser()
         .then(setCurrentUser)
-        .catch((error) => {
+        .catch((error: AxiosError) => {
           console.log(error);
-          if (error.response.status === 400) {
+          if (error?.response?.status === 400) {
             dispatch(
               showError(
                 "Something went wrong during the SSO connection, please contact a DCI administrator.",
@@ -105,8 +106,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           );
           logout();
         })
-        .catch((error) => {
-          if (error.response.status === 400) {
+        .catch((error: AxiosError) => {
+          if (error?.response?.status === 400) {
             dispatch(
               showError("Your current password is invalid, please check again"),
             );
