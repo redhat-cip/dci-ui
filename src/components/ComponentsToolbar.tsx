@@ -44,7 +44,7 @@ export default function ComponentsToolbar({
     setFilters(getDefaultFilters());
   }
 
-  const { data, isLoading } = useListComponentsQuery(filters);
+  const { data } = useListComponentsQuery(filters);
   if (!data) return null;
   const count = data._meta.count;
   return (

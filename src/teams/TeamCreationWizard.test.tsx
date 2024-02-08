@@ -12,6 +12,10 @@ test("team creation wizard", async () => {
   });
   user.click(onboardingANewTeamButton);
 
+  await waitFor(() => {
+    expect(getByRole("textbox", { name: /Name/i })).toBeInTheDocument();
+  });
+
   const nameTextbox = await findByRole("textbox", { name: /Name/i });
   await act(async () => {
     user.type(nameTextbox, "DCI team");

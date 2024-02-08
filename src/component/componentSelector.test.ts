@@ -55,3 +55,17 @@ test("getPrincipalComponent RHEL", () => {
     display_name: "RHEL-8.2.0-20220311.1",
   });
 });
+
+test("getPrincipalComponent Microshift", () => {
+  const components = [
+    {
+      id: "c1",
+      display_name: "Microshift 4.16.0 ec.2",
+    },
+  ] as IComponent[];
+
+  expect(getPrincipalComponent(components)).toEqual({
+    id: "c1",
+    display_name: "Microshift 4.16.0 ec.2",
+  });
+});

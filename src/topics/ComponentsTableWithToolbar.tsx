@@ -30,7 +30,7 @@ export default function ComponentsTableWithToolbar({
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/topics/${topic.id}/components${newSearch}`, { replace: true });
-  }, [navigate, filters]);
+  }, [navigate, filters, topic.id]);
 
   const { data } = useListComponentsQuery(filters);
   if (!data) return null;
