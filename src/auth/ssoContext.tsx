@@ -13,6 +13,7 @@ const SSOContext = React.createContext({} as SSOContextProps);
 const SSOUrl = process.env.REACT_APP_SSO_URL || "https://sso.redhat.com";
 const SSORealm = process.env.REACT_APP_SSO_REALM || "redhat-external";
 const SSOClientId = process.env.REACT_APP_SSO_CLIENT_ID || "dci";
+const SSOScope = process.env.REACT_APP_SSO_SCOPE || "api.dci";
 
 function signinSilent(manager: UserManager) {
   manager
@@ -35,6 +36,7 @@ export function getSSOUserManager() {
     silent_redirect_uri: `${origin}/silent_redirect`,
     response_type: "code",
     automaticSilentRenew: true,
+    scope: SSOScope,
   };
   const manager = new UserManager(settings);
   manager.events.addAccessTokenExpiring(() => {
