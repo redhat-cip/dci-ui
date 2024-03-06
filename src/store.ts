@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import alertsReducer from "./alerts/alertsReducer";
 import Api from "api";
+import { rtkQueryErrorLogger } from "middleware";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
@@ -20,7 +21,7 @@ export function setupStore(preloadedState?: PreloadedState<RootState>) {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(Api.middleware),
+      getDefaultMiddleware().concat(Api.middleware).concat(rtkQueryErrorLogger),
   });
 }
 

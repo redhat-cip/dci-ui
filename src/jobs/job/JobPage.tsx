@@ -1,10 +1,10 @@
+import { Outlet } from "react-router-dom";
 import { JobProvider } from "./jobContext";
-import JobPageWithMenu from "./JobPageWithMenu";
 
 export default function JobPage() {
   return (
     <JobProvider>
-      <JobPageWithMenu />
+      <Outlet />
     </JobProvider>
   );
 }

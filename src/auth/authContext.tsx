@@ -56,7 +56,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .getCurrentUser()
         .then(setCurrentUser)
         .catch((error: AxiosError) => {
-          console.log(error);
           if (error?.response?.status === 400) {
             dispatch(
               showError(

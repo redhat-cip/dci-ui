@@ -70,7 +70,6 @@ export function fetchUserTeams(user: IUser): AxiosPromise<{
 export function getOrCreateUser(user: Partial<IUser>) {
   return searchUserBy("sso_username", user.sso_username || "").then(
     (response) => {
-      console.log(response);
       if (response.data.users.length > 0) {
         return response.data.users[0];
       } else {

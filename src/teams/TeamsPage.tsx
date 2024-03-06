@@ -68,7 +68,6 @@ export default function TeamsPage() {
                   onSubmit={async (team) => {
                     try {
                       const newTeam = await createTeam(team).unwrap();
-                      console.log(newTeam);
                       navigate(`/teams/${newTeam.id}`);
                     } catch (error) {
                       console.error("rejected", error);

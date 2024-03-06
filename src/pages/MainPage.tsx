@@ -19,7 +19,7 @@ interface PageProps {
   empty?: boolean;
   EmptyComponent?: React.ReactNode;
   Breadcrumb?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   [x: string]: any;
 }
 
@@ -33,7 +33,7 @@ export default function MainPage({
   Toolbar,
   EmptyComponent,
   Breadcrumb,
-  children,
+  children="",
   ...props
 }: PageProps) {
   useTitle(`DCI > ${title}`);

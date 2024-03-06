@@ -9,9 +9,10 @@ test("humanizeDuration", () => {
 });
 
 test("formatDate", () => {
-  expect(date.formatDate("2018-06-14T15:30:39.139451")).toBe(
-    "Jun 14, 2018, 3:30:39 PM",
-  );
+  // Replace \u202f space issue https://github.com/nodejs/node/issues/46123
+  expect(
+    date.formatDate("2018-06-14T15:30:39.139451").replace("\u202f", " "),
+  ).toBe(`Jun 14, 2018, 3:30:39 PM`);
 });
 
 test("getRangeDates", () => {

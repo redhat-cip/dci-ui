@@ -1,7 +1,6 @@
 import MainPage from "pages/MainPage";
 import { Breadcrumb, CopyIconButton } from "ui";
-import { useJob } from "./jobContext";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
   PageSection,
   PageSectionVariants,
@@ -20,24 +19,29 @@ const endpoints = [
   { title: "Settings", value: "settings" },
 ];
 
-export default function JobPageWithMenu() {
-  const { job } = useJob();
+export default function JobDetailsEnvelope({
+  job_id,
+  children = "",
+}: {
+  job_id: string;
+  children?: React.ReactNode;
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTabKey, setActiveTabKey] = useState<number>(0);
 
   useEffect(() => {
     const endpointIndex = endpoints.findIndex((e) =>
-      location.pathname.includes(`${job.id}/${e.value}`),
+      location.pathname.includes(`${job_id}/${e.value}`),
     );
     if (endpointIndex !== -1) {
       setActiveTabKey(endpointIndex);
     }
-  }, [location, job.id]);
+  }, [location, job_id]);
 
   return (
     <MainPage
-      title={`Job ${job.id}`}
+      title={`Job ${job_id}`}
       description=""
       HeaderSection={
         <PageSection
@@ -53,7 +57,7 @@ export default function JobPageWithMenu() {
               if (tabIndex !== undefined) {
                 const newTabIndex = parseInt(tabIndex as string, 10);
                 setActiveTabKey(newTabIndex);
-                navigate(`/jobs/${job.id}/${endpoints[newTabIndex].value}`);
+                navigate(`/jobs/${job_id}/${endpoints[newTabIndex].value}`);
               }
             }}
           >
@@ -73,12 +77,12 @@ export default function JobPageWithMenu() {
             { to: "/", title: "DCI" },
             { to: "/jobs", title: "Jobs" },
             {
-              to: `/jobs/${job.id}`,
+              to: `/jobs/${job_id}`,
               title: (
                 <span>
-                  {job.id}
+                  {job_id}
                   <CopyIconButton
-                    text={job.id}
+                    text={job_id}
                     textOnSuccess="copied"
                     className="pf-v5-u-ml-xs pointer"
                   />
@@ -89,7 +93,7 @@ export default function JobPageWithMenu() {
         />
       }
     >
-      <Outlet />
+      {children}
     </MainPage>
   );
 }
