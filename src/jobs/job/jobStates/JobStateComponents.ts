@@ -12,11 +12,10 @@ import {
   global_palette_black_600,
   global_palette_black_800,
 } from "@patternfly/react-tokens";
-import { Button } from "@patternfly/react-core";
 import { IFileStatus } from "types";
 
 export const JobStates = styled.div<{ isDark: boolean }>`
-  padding: 1rem 0;
+  padding-bottom: 24px;
   background-color: #1b1d21;
   background-color: ${({ isDark }) =>
     isDark ? "#1b1d21" : global_BackgroundColor_dark_200.value};
@@ -24,16 +23,14 @@ export const JobStates = styled.div<{ isDark: boolean }>`
 
 export const RawLogRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.5rem;
 `;
 
-export const RawLogButton = styled(Button)`
-  color: ${global_palette_black_200.value} !important;
-  &:after {
-    border-color: ${global_palette_black_200.value} !important;
-  }
+export const JobStateHR = styled.div`
+  height: 1px;
+  border-bottom: 1px solid ${global_BackgroundColor_dark_400.value};
 `;
 
 export const JobStateRow = styled.div`
@@ -56,6 +53,13 @@ export const LabelBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 0.5em;
+`;
+
+export const Timetamp = styled.span`
+  color: ${global_palette_black_500.value};
+  font-size: 12px;
+  font-family: monospace;
 `;
 
 export const Label = styled.span`

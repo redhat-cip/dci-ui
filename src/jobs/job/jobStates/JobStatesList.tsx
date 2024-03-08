@@ -14,7 +14,7 @@ import {
   JobStateName,
   FileContent,
   RawLogRow,
-  RawLogButton,
+  JobStateHR,
 } from "./JobStateComponents";
 import { EmptyState } from "ui";
 import { getFileContent } from "jobs/job/files/filesActions";
@@ -25,14 +25,17 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownItem,
+  DropdownPosition,
 } from "@patternfly/react-core/deprecated";
 import {
   SortAmountDownIcon,
   SortAmountDownAltIcon,
+  CogIcon,
+  CheckIcon,
 } from "@patternfly/react-icons";
 import {
-  global_palette_black_200,
   global_Color_light_100,
+  global_palette_black_500,
 } from "@patternfly/react-tokens";
 import { useTheme } from "ui/Theme/themeContext";
 
@@ -48,16 +51,16 @@ function JobStateFilterButton({
     <Dropdown
       onSelect={() => {
         setIsOpen(false);
-        const element = document.getElementById("toggle-icon-only");
+        const element = document.getElementById("toggle-sort-job-tasks");
         element && element.focus();
       }}
+      position={DropdownPosition.right}
       toggle={
         <DropdownToggle
           toggleIndicator={null}
           onToggle={(_event, isOpen: boolean) => setIsOpen(isOpen)}
-          aria-label="Applications"
-          id="toggle-icon-only"
-          style={{ color: global_palette_black_200.value }}
+          id="toggle-sort-job-tasks"
+          style={{ color: global_palette_black_500.value }}
         >
           <SortAmountDownIcon />
         </DropdownToggle>
@@ -86,6 +89,73 @@ function JobStateFilterButton({
   );
 }
 
+function JobSettingsDropdown({
+  seeRawLog,
+  setSeeRawLog,
+  seeTimestamp,
+  setSeeTimestamp,
+}: {
+  seeRawLog: boolean;
+  setSeeRawLog: () => void;
+  seeTimestamp: boolean;
+  setSeeTimestamp: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Dropdown
+      onSelect={() => {
+        setIsOpen(false);
+        const element = document.getElementById("toggle-settings-primary");
+        element && element.focus();
+      }}
+      position={DropdownPosition.right}
+      isPlain
+      toggle={
+        <DropdownToggle
+          toggleIndicator={null}
+          id="toggle-settings-primary"
+          onToggle={(_event, isOpen: boolean) => setIsOpen(isOpen)}
+        >
+          <CogIcon style={{ color: global_palette_black_500.value }} />
+        </DropdownToggle>
+      }
+      isOpen={isOpen}
+      dropdownItems={[
+        <DropdownItem
+          key="action"
+          component="button"
+          onClick={setSeeRawLog}
+          icon={
+            seeRawLog ? (
+              <CheckIcon />
+            ) : (
+              <span className="pf-v5-c-dropdown__menu-item-icon"></span>
+            )
+          }
+        >
+          View raw logs
+        </DropdownItem>,
+        <DropdownItem
+          key="action"
+          component="button"
+          onClick={setSeeTimestamp}
+          disabled={seeRawLog}
+          icon={
+            seeTimestamp ? (
+              <CheckIcon />
+            ) : (
+              <span className="pf-v5-c-dropdown__menu-item-icon"></span>
+            )
+          }
+        >
+          Show timestamps
+        </DropdownItem>,
+      ]}
+    />
+  );
+}
+
 interface JobStatesListProps {
   job: IEnhancedJob;
 }
@@ -99,8 +169,8 @@ export default function JobStatesList({ job }: JobStatesListProps) {
     searchParams.get("task"),
   );
   const [seeRawLog, setSeeRawLog] = useState(false);
-  const [loadingRawLog, setLoadingRawLog] = useState(false);
-  const [rawLog, setRawLog] = useState("");
+  const [seeTimestamp, setSeeTimestamp] = useState(false);
+  const [rawLog, setRawLog] = useState("Loading raw log");
   const { isDark } = useTheme();
 
   useEffect(() => {
@@ -164,30 +234,29 @@ export default function JobStatesList({ job }: JobStatesListProps) {
               setSelectedTaskId(null);
             }}
           />
-          {rawLogFile && (
-            <RawLogButton
-              variant="tertiary"
-              size="sm"
-              onClick={() => {
-                setLoadingRawLog(true);
+          {rawLogFile !== undefined && (
+            <JobSettingsDropdown
+              seeRawLog={seeRawLog}
+              setSeeRawLog={() => {
+                setSeeRawLog(!seeRawLog);
                 getFileContent(rawLogFile)
                   .then((content) => {
                     setRawLog(content);
-                    setSeeRawLog(!seeRawLog);
                   })
-                  .catch(console.error)
-                  .then(() => setLoadingRawLog(false));
+                  .catch(() =>
+                    setRawLog(
+                      "We can't get the raw log. Can you try again in a few minutes or contact an administrator? ",
+                    ),
+                  );
               }}
-            >
-              {loadingRawLog
-                ? "Loading"
-                : seeRawLog
-                  ? "Hide Raw log"
-                  : "Raw Log"}
-            </RawLogButton>
+              seeTimestamp={seeTimestamp}
+              setSeeTimestamp={() => setSeeTimestamp(!seeTimestamp)}
+            />
           )}
         </RawLogRow>
-        {seeRawLog && !loadingRawLog ? (
+        <JobStateHR />
+
+        {seeRawLog ? (
           <div>
             <FileContent>
               <JobStatePre>{rawLog}</JobStatePre>
@@ -210,6 +279,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
                   key={j}
                   file={file}
                   isSelected={selectedTaskId === file.id}
+                  seeTimestamp={seeTimestamp}
                   onClick={(seeDetails) => {
                     if (seeDetails) {
                       setSelectedTaskId(file.id);
@@ -227,6 +297,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
               <JobStateFile
                 key={k}
                 file={file}
+                seeTimestamp={seeTimestamp}
                 isSelected={selectedTaskId === file.id}
                 onClick={(seeDetails) => {
                   if (seeDetails) {

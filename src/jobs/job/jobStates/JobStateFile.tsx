@@ -9,6 +9,7 @@ import {
   JobStatePre,
   Label,
   LabelBox,
+  Timetamp,
 } from "./JobStateComponents";
 import { IFileWithDuration } from "types";
 import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
@@ -16,12 +17,14 @@ import { useTheme } from "ui/Theme/themeContext";
 
 interface JobStateFileProps {
   file: IFileWithDuration;
+  seeTimestamp: boolean;
   isSelected: boolean;
   onClick: (seeDetails: boolean) => void;
 }
 
 export default function JobStateFile({
   file,
+  seeTimestamp,
   isSelected,
   onClick,
 }: JobStateFileProps) {
@@ -80,6 +83,7 @@ export default function JobStateFile({
         </IconContainer>
         <FileName>{title}</FileName>
         <LabelBox className="pf-v5-u-mr-md">
+          {seeTimestamp && <Timetamp>{file.created_at}</Timetamp>}
           <Label>{fileDuration}</Label>
         </LabelBox>
       </FileRow>
