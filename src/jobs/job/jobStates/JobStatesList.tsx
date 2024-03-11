@@ -90,18 +90,54 @@ function JobStateFilterButton({
 }
 
 function JobSettingsDropdown({
+  hasRawLogFile,
   seeRawLog,
   setSeeRawLog,
   seeTimestamp,
   setSeeTimestamp,
 }: {
+  hasRawLogFile: boolean;
   seeRawLog: boolean;
   setSeeRawLog: () => void;
   seeTimestamp: boolean;
   setSeeTimestamp: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const dropdownItems = hasRawLogFile
+    ? [
+        <DropdownItem
+          key="action"
+          component="button"
+          onClick={setSeeRawLog}
+          icon={
+            seeRawLog ? (
+              <CheckIcon />
+            ) : (
+              <span className="pf-v5-c-dropdown__menu-item-icon"></span>
+            )
+          }
+        >
+          View raw logs
+        </DropdownItem>,
+      ]
+    : [];
+  dropdownItems.push(
+    <DropdownItem
+      key="action"
+      component="button"
+      onClick={setSeeTimestamp}
+      disabled={seeRawLog}
+      icon={
+        seeTimestamp ? (
+          <CheckIcon />
+        ) : (
+          <span className="pf-v5-c-dropdown__menu-item-icon"></span>
+        )
+      }
+    >
+      Show timestamps
+    </DropdownItem>,
+  );
   return (
     <Dropdown
       onSelect={() => {
@@ -121,37 +157,7 @@ function JobSettingsDropdown({
         </DropdownToggle>
       }
       isOpen={isOpen}
-      dropdownItems={[
-        <DropdownItem
-          key="action"
-          component="button"
-          onClick={setSeeRawLog}
-          icon={
-            seeRawLog ? (
-              <CheckIcon />
-            ) : (
-              <span className="pf-v5-c-dropdown__menu-item-icon"></span>
-            )
-          }
-        >
-          View raw logs
-        </DropdownItem>,
-        <DropdownItem
-          key="action"
-          component="button"
-          onClick={setSeeTimestamp}
-          disabled={seeRawLog}
-          icon={
-            seeTimestamp ? (
-              <CheckIcon />
-            ) : (
-              <span className="pf-v5-c-dropdown__menu-item-icon"></span>
-            )
-          }
-        >
-          Show timestamps
-        </DropdownItem>,
-      ]}
+      dropdownItems={dropdownItems}
     />
   );
 }
@@ -188,6 +194,8 @@ export default function JobStatesList({ job }: JobStatesListProps) {
   const rawLogFile = job.files.find(
     (f) => f.name.toLowerCase() === "ansible.log",
   );
+  const hasRawLogFile = rawLogFile !== undefined;
+
   if (isEmpty(job.jobstates)) {
     return <EmptyState title="No logs" info="There is no logs for this job" />;
   }
@@ -234,10 +242,11 @@ export default function JobStatesList({ job }: JobStatesListProps) {
               setSelectedTaskId(null);
             }}
           />
-          {rawLogFile !== undefined && (
-            <JobSettingsDropdown
-              seeRawLog={seeRawLog}
-              setSeeRawLog={() => {
+          <JobSettingsDropdown
+            hasRawLogFile={hasRawLogFile}
+            seeRawLog={seeRawLog}
+            setSeeRawLog={() => {
+              if (hasRawLogFile) {
                 setSeeRawLog(!seeRawLog);
                 getFileContent(rawLogFile)
                   .then((content) => {
@@ -248,14 +257,13 @@ export default function JobStatesList({ job }: JobStatesListProps) {
                       "We can't get the raw log. Can you try again in a few minutes or contact an administrator? ",
                     ),
                   );
-              }}
-              seeTimestamp={seeTimestamp}
-              setSeeTimestamp={() => setSeeTimestamp(!seeTimestamp)}
-            />
-          )}
+              }
+            }}
+            seeTimestamp={seeTimestamp}
+            setSeeTimestamp={() => setSeeTimestamp(!seeTimestamp)}
+          />
         </RawLogRow>
         <JobStateHR />
-
         {seeRawLog ? (
           <div>
             <FileContent>
