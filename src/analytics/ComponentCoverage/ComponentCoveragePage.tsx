@@ -32,7 +32,7 @@ import http from "services/http";
 import { useDispatch } from "react-redux";
 import { showAPIError } from "alerts/alertsActions";
 import MainPage from "pages/MainPage";
-import TopicFilter from "jobs/toolbar/TopicFilter";
+import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
 import {
   InfoCircleIcon,
   SearchIcon,
@@ -44,7 +44,7 @@ import { formatDate } from "services/date";
 import { JobStatusLabel } from "jobs/components";
 import TypesFilter from "./TypesFilter";
 import qs from "qs";
-import TeamFilter from "jobs/toolbar/TeamFilter";
+import TeamToolbarFilter from "jobs/toolbar/TeamToolbarFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 import { AppDispatch } from "store";
 import {
@@ -192,18 +192,18 @@ export default function ComponentCoveragePage() {
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
-              <ToolbarItem>Choose a topic</ToolbarItem>
+              <ToolbarItem variant="label">Choose a topic</ToolbarItem>
               <ToolbarItem>
-                <TopicFilter
-                  topicId={topicId}
+                <TopicToolbarFilter
+                  id={topicId}
                   onClear={() => setTopicId(null)}
-                  onSelect={setTopicId}
+                  onSelect={(topic) => setTopicId(topic.id)}
                 />
               </ToolbarItem>
-              <ToolbarItem>Filter by team</ToolbarItem>
+              <ToolbarItem variant="label">Filter by team</ToolbarItem>
               <ToolbarItem>
-                <TeamFilter
-                  teamId={teamId}
+                <TeamToolbarFilter
+                  id={teamId}
                   onClear={() => setTeamId(null)}
                   onSelect={(team) => setTeamId(team.id)}
                 />

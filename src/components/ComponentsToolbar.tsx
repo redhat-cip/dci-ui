@@ -20,8 +20,8 @@ import {
   pageAndLimitToOffset,
 } from "../api/filters";
 import { Filters } from "types";
-import TagsFilter from "jobs/toolbar/TagsFilter";
-import NameFilter from "jobs/toolbar/NameFilter";
+import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
+import TextInputToolbarFilter from "jobs/toolbar/TextInputToolbarFilter";
 
 const Categories = ["Name", "Type", "Tag"] as const;
 
@@ -93,32 +93,27 @@ export default function ComponentsToolbar({
               </Dropdown>
             </InputGroupItem>
             <InputGroupItem isFill>
-              <NameFilter
+              <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Name"}
+                categoryName="Name"
                 name={filters.display_name}
                 onSubmit={(display_name) =>
-                  setFilters({
-                    ...filters,
-                    display_name,
-                  })
+                  setFilters({ ...filters, display_name })
                 }
-                onClear={() =>
-                  setFilters({
-                    ...filters,
-                    display_name: null,
-                  })
-                }
+                onClear={() => setFilters({ ...filters, display_name: null })}
               />
-              <NameFilter
-                categoryName="Type"
+              <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Type"}
+                categoryName="Type"
                 name={filters.type}
                 onSubmit={(type) => setFilters({ ...filters, type })}
                 onClear={() => setFilters({ ...filters, type: null })}
               />
-              <TagsFilter
+              <ListToolbarFilter
                 showToolbarItem={currentCategory === "Tag"}
-                tags={filters.tags || []}
+                categoryName="Tag"
+                placeholderText="Search by tag"
+                items={filters.tags ?? []}
                 onSubmit={(tags) => setFilters({ ...filters, tags })}
               />
             </InputGroupItem>

@@ -46,7 +46,10 @@ export const { useGetEnhancedJobQuery } = Api.enhanceEndpoints({
           };
         }
       },
-      providesTags: (result, error, id) => [{ type: "EnhancedJob", id }, { type: resource, id }],
+      providesTags: (result, error, id) => [
+        { type: "EnhancedJob", id },
+        { type: resource, id },
+      ],
     }),
   }),
 });

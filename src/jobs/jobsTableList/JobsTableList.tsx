@@ -2,7 +2,7 @@ import { IJob, Filters, JobsTableListColumn } from "types";
 import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
 import { groupJobsByPipeline } from "./pipelineJobs";
 import JobsTableListRow from "./JobsTableListRow";
-import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsFilter";
+import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsSelect";
 
 interface JobsTableListProps {
   jobs: IJob[];

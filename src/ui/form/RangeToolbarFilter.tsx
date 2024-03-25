@@ -31,7 +31,7 @@ type RangeOption = {
   label: string;
 };
 
-interface IRangeFilterProps {
+interface RangeToolbarFilterProps {
   range: RangeOptionValue;
   ranges?: RangeOptionValue[];
   after: string;
@@ -41,7 +41,7 @@ interface IRangeFilterProps {
   onChange: (range: RangeOptionValue, after: string, before: string) => void;
 }
 
-export default function RangeFilter({
+export default function RangeToolbarFilter({
   range,
   after,
   before,
@@ -49,7 +49,7 @@ export default function RangeFilter({
   ranges = Object.keys(labels) as Array<keyof typeof labels>,
   categoryName = "Range",
   showToolbarItem = true,
-}: IRangeFilterProps) {
+}: RangeToolbarFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const label = labels[range];
   const seeDatePicker = range === "custom";

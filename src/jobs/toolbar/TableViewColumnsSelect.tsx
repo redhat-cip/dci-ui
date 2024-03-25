@@ -24,15 +24,15 @@ export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
   started: "Started",
 };
 
-type TableViewColumnsFilterProps = {
+type TableViewColumnsSelectProps = {
   columns: JobsTableListColumn[];
   onSelect: (newColumns: JobsTableListColumn[]) => void;
 };
 
-export default function TableViewColumnsFilter({
+export default function TableViewColumnsSelect({
   columns,
   onSelect,
-}: TableViewColumnsFilterProps) {
+}: TableViewColumnsSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Select

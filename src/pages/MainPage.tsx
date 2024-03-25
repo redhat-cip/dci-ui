@@ -33,7 +33,7 @@ export default function MainPage({
   Toolbar,
   EmptyComponent,
   Breadcrumb,
-  children="",
+  children = "",
   ...props
 }: PageProps) {
   useTitle(`DCI > ${title}`);

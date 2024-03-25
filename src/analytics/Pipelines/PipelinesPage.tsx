@@ -38,17 +38,17 @@ import {
   humanizeDurationShort,
 } from "services/date";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import TeamsFilter from "jobs/toolbar/TeamsFilter";
-import ListFilter from "jobs/toolbar/ListFilter";
+import TeamsToolbarFilter from "jobs/toolbar/TeamsToolbarFilter";
+import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
 import { Link, useSearchParams } from "react-router-dom";
 import http from "services/http";
 import { showAPIError } from "alerts/alertsActions";
 import { useDispatch } from "react-redux";
 import { IJobStatus, IPipelines, RangeOptionValue } from "types";
-import RangeFilter from "jobs/toolbar/RangeFilter";
+import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
 import { getColor, getIcon } from "jobs/jobUtils";
 import { Components } from "jobs/job/JobDetailsHeader";
-import { notEmpty } from "../../services/utils";
+import { notEmpty } from "services/utils";
 import { AppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
@@ -445,42 +445,31 @@ export default function PipelinesPage() {
                 <span style={{ color: global_palette_red_100.value }}>*</span>
               </ToolbarItem>
               <ToolbarItem>
-                <TeamsFilter
-                  teamsIds={teamsIds}
-                  onClear={(team) =>
+                <TeamsToolbarFilter
+                  ids={teamsIds}
+                  onClear={(teamId) =>
                     setTeamsIds((oldTeamsIds) =>
-                      oldTeamsIds.filter((t) => t !== team.id),
+                      oldTeamsIds.filter((t) => t !== teamId),
                     )
                   }
-                  onClearAll={() => setTeamsIds([])}
                   onSelect={(team) =>
                     setTeamsIds((oldTeamsIds) => [...oldTeamsIds, team.id])
                   }
                 />
               </ToolbarItem>
               <ToolbarItem>
-                <ListFilter
+                <ListToolbarFilter
                   items={pipelinesNames}
                   categoryName="Pipelines names"
                   placeholderText="Pipelines names"
-                  onClear={(item) =>
-                    setPipelinesNames((oldPipelinesNames) =>
-                      oldPipelinesNames.filter((p) => p !== item),
-                    )
-                  }
-                  onSearch={(item) =>
-                    setPipelinesNames((oldPipelinesNames) => [
-                      ...oldPipelinesNames,
-                      item,
-                    ])
-                  }
+                  onSubmit={setPipelinesNames}
                 />
               </ToolbarItem>
               <ToolbarItem variant="label" id="range-label-toolbar">
                 Range
               </ToolbarItem>
               <ToolbarItem>
-                <RangeFilter
+                <RangeToolbarFilter
                   range={range}
                   onChange={(range, after, before) => {
                     if (range === "custom") {

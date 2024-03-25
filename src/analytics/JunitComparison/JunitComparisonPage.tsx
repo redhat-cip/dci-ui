@@ -31,11 +31,11 @@ import {
   LineChart,
 } from "recharts";
 import http from "services/http";
-import { TopicSelect } from "jobs/toolbar/TopicFilter";
+import TopicSelect from "jobs/toolbar/TopicSelect";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showAPIError, showError } from "alerts/alertsActions";
-import { RemoteciSelect } from "jobs/toolbar/RemoteciFilter";
+import RemoteciSelect from "jobs/toolbar/RemoteciSelect";
 import { DateTime } from "luxon";
 import { round } from "lodash";
 import {
@@ -48,7 +48,7 @@ import {
   global_danger_color_100,
   global_primary_color_100,
 } from "@patternfly/react-tokens";
-import { TagsInput } from "jobs/toolbar/TagsFilter";
+import ListInputWithChip from "ui/form/ListInputWithChip";
 import { useSearchParams } from "react-router-dom";
 import { AppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
@@ -129,19 +129,19 @@ function JunitComparisonForm({
             <Form>
               <FormGroup label="Reference topic" isRequired fieldId="topic1">
                 <TopicSelect
-                  topicId={topicId1}
+                  id={topicId1}
                   onClear={() => setTopicId1(null)}
-                  onSelect={setTopicId1}
+                  onSelect={(topic) => setTopicId1(topic.id)}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  remoteciId={remoteciId1}
+                  id={remoteciId1}
                   onClear={() => setRemoteciId1(null)}
-                  onSelect={(remoteciId) => {
-                    setRemoteciId1(remoteciId);
+                  onSelect={(remoteci) => {
+                    setRemoteciId1(remoteci.id);
                     if (remoteciId2 === null) {
-                      setRemoteciId2(remoteciId);
+                      setRemoteciId2(remoteci.id);
                     }
                   }}
                 />
@@ -171,10 +171,11 @@ function JunitComparisonForm({
                 </GridItem>
                 <GridItem span={6}>
                   <FormGroup label="Tags" fieldId="tags_1">
-                    <TagsInput
+                    <ListInputWithChip
                       id="tags_1"
-                      tags={tags1}
-                      setTags={(tags) => setTags1(tags)}
+                      placeholder="Tags"
+                      items={tags1}
+                      setItems={(tags) => setTags1(tags)}
                     />
                   </FormGroup>
                 </GridItem>
@@ -246,19 +247,19 @@ function JunitComparisonForm({
             <Form>
               <FormGroup label="Target topic" isRequired fieldId="topic2">
                 <TopicSelect
-                  topicId={topicId2}
+                  id={topicId2}
                   onClear={() => setTopicId2(null)}
-                  onSelect={setTopicId2}
+                  onSelect={(topic) => setTopicId2(topic.id)}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  remoteciId={remoteciId2}
+                  id={remoteciId2}
                   onClear={() => setRemoteciId2(null)}
-                  onSelect={(remoteciId) => {
-                    setRemoteciId2(remoteciId);
+                  onSelect={(remoteci) => {
+                    setRemoteciId2(remoteci.id);
                     if (remoteciId1 === null) {
-                      setRemoteciId1(remoteciId);
+                      setRemoteciId1(remoteci.id);
                     }
                   }}
                 />
@@ -288,10 +289,11 @@ function JunitComparisonForm({
                 </GridItem>
                 <GridItem span={6}>
                   <FormGroup label="Tags" fieldId="tags_2">
-                    <TagsInput
+                    <ListInputWithChip
                       id="tags_2"
-                      tags={tags2}
-                      setTags={(tags) => setTags2(tags)}
+                      placeholder="Tags"
+                      items={tags2}
+                      setItems={(tags) => setTags2(tags)}
                     />
                   </FormGroup>
                 </GridItem>

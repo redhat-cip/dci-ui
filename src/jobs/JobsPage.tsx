@@ -51,7 +51,7 @@ export default function JobsPage() {
   const jobsPageDivRef = useRef<HTMLInputElement>(null);
   const [tableViewActive, setTableViewActive] = useLocalStorage(
     "tableViewActive",
-    false,
+    true,
   );
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]

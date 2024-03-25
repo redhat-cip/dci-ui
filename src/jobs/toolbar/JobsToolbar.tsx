@@ -21,17 +21,16 @@ import {
   SyncAltIcon,
   TableIcon,
 } from "@patternfly/react-icons";
-import RemoteciFilter from "./RemoteciFilter";
-import ProductFilter from "./ProductFilter";
-import TopicFilter from "./TopicFilter";
-import TeamFilter from "./TeamFilter";
-import StatusFilter from "./StatusFilter";
-import TagsFilter from "./TagsFilter";
-import ConfigurationFilter from "./ConfigurationFilter";
-import NameFilter from "./NameFilter";
+import RemoteciToolbarFilter from "./RemoteciToolbarFilter";
+import ProductToolbarFilter from "./ProductToolbarFilter";
+import TopicToolbarFilter from "./TopicToolbarFilter";
+import TeamToolbarFilter from "./TeamToolbarFilter";
+import StatusToolbarFilter from "./StatusToolbarFilter";
+import ListToolbarFilter from "./ListToolbarFilter";
+import TextInputToolbarFilter from "./TextInputToolbarFilter";
 import { useHotkeys } from "react-hotkeys-hook";
 import QLToolbar from "./QLToolbar";
-import TableViewColumnsFilter from "./TableViewColumnsFilter";
+import TableViewColumnsSelect from "./TableViewColumnsSelect";
 import { offsetAndLimitToPage, pageAndLimitToOffset } from "api/filters";
 
 export const Categories = [
@@ -40,7 +39,7 @@ export const Categories = [
   "Product",
   "Topic",
   "Tag",
-  "Configuration",
+  "Config",
   "Name",
 ] as const;
 
@@ -121,52 +120,56 @@ export default function JobsToolbar({
               ></Dropdown>
             </ToolbarItem>
             <ToolbarItem>
-              <TeamFilter
+              <TeamToolbarFilter
                 showToolbarItem={currentCategory === "Team"}
-                teamId={filters.team_id}
+                id={filters.team_id}
                 onClear={() => setFilters({ ...filters, team_id: null })}
                 onSelect={(team) =>
                   setFilters({ ...filters, team_id: team.id })
                 }
               />
-              <RemoteciFilter
+              <RemoteciToolbarFilter
                 showToolbarItem={currentCategory === "Remoteci"}
-                remoteciId={filters.remoteci_id}
+                id={filters.remoteci_id}
                 onClear={() => setFilters({ ...filters, remoteci_id: null })}
-                onSelect={(remoteciId) =>
-                  setFilters({ ...filters, remoteci_id: remoteciId })
+                onSelect={(remoteci) =>
+                  setFilters({ ...filters, remoteci_id: remoteci.id })
                 }
               />
-              <ProductFilter
+              <ProductToolbarFilter
                 showToolbarItem={currentCategory === "Product"}
-                product_id={filters.product_id}
+                id={filters.product_id}
                 onClear={() => setFilters({ ...filters, product_id: null })}
                 onSelect={(product) =>
                   setFilters({ ...filters, product_id: product.id })
                 }
               />
-              <TopicFilter
+              <TopicToolbarFilter
                 showToolbarItem={currentCategory === "Topic"}
-                topicId={filters.topic_id}
+                id={filters.topic_id}
                 onClear={() => setFilters({ ...filters, topic_id: null })}
-                onSelect={(topicId) =>
-                  setFilters({ ...filters, topic_id: topicId })
+                onSelect={(topic) =>
+                  setFilters({ ...filters, topic_id: topic.id })
                 }
               />
-              <TagsFilter
+              <ListToolbarFilter
                 showToolbarItem={currentCategory === "Tag"}
-                tags={filters.tags ?? []}
+                categoryName="Tag"
+                placeholderText="Search by tag"
+                items={filters.tags ?? []}
                 onSubmit={(tags) => setFilters({ ...filters, tags })}
               />
-              <ConfigurationFilter
-                showToolbarItem={currentCategory === "Configuration"}
-                configuration={filters.configuration}
-                onClear={() => setFilters({ ...filters, configuration: null })}
+              <TextInputToolbarFilter
+                showToolbarItem={currentCategory === "Config"}
+                categoryName="Config"
+                name={filters.configuration}
                 onSubmit={(configuration) =>
                   setFilters({ ...filters, configuration })
                 }
+                onClear={() => setFilters({ ...filters, configuration: null })}
               />
-              <NameFilter
+              <TextInputToolbarFilter
+                categoryName="Name"
                 showToolbarItem={currentCategory === "Name"}
                 name={filters.name}
                 onSubmit={(name) => setFilters({ ...filters, name })}
@@ -178,7 +181,7 @@ export default function JobsToolbar({
         {!showQLToolbar && (
           <ToolbarGroup>
             <ToolbarItem>
-              <StatusFilter
+              <StatusToolbarFilter
                 status={filters.status}
                 onSelect={(status) => setFilters({ ...filters, status })}
                 onClear={() => setFilters({ ...filters, status: null })}
@@ -230,7 +233,7 @@ export default function JobsToolbar({
         </ToolbarGroup>
         {tableViewActive && (
           <ToolbarItem>
-            <TableViewColumnsFilter
+            <TableViewColumnsSelect
               columns={tableViewColumns}
               onSelect={setTableViewColumns}
             />

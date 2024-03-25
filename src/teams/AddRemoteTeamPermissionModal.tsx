@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, ModalVariant } from "@patternfly/react-core";
 import { ITeam } from "types";
 import useModal from "hooks/useModal";
-import { TeamSelect } from "jobs/toolbar/TeamFilter";
+import TeamSelect from "jobs/toolbar/TeamSelect";
 
 interface AddRemoteTeamPermissionModalProps {
   team: ITeam;
@@ -36,14 +36,12 @@ export default function AddRemoteTeamPermissionModal({
         }}
       >
         <TeamSelect
-          teamId={teamId}
-          filteredTeamsIds={[team.id]}
+          id={teamId}
           onClear={() => onClear()}
           onSelect={(team) => {
             hide();
             onTeamSelected(team);
           }}
-          menuAppendTo={() => document.body}
         />
       </Modal>
       {children(show)}

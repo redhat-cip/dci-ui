@@ -736,3 +736,11 @@ export type WhereFilters = Pick<
   | "state"
   | "type"
 >;
+
+export interface SelectProps<T> {
+  id: string | null;
+  onSelect: (item: T) => void;
+  onClear: () => void;
+  placeholder?: string;
+  showToolbarItem?: boolean;
+}

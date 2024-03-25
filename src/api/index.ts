@@ -108,9 +108,10 @@ export const injectGetEndpoint = <T extends { id: string }>(
   const enhancedApi = Api.enhanceEndpoints({ addTagTypes: [resourceName] });
   const entityApi = enhancedApi.injectEndpoints({
     endpoints: (builder) => ({
-      [`get${resourceName}`]: builder.query<T, string | undefined>({
+      [`get${resourceName}`]: builder.query<T, string | null>({
         query: (id) => `/${route}/${id}`,
-        providesTags: (result, error, id) => [{ type: resourceName, id }],
+        providesTags: (result, error, id) =>
+          id === null ? [] : [{ type: resourceName, id }],
         transformResponse: (response: ApiGet<T>, meta, arg) =>
           response[resourceNameLowercase],
       }),
