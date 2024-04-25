@@ -442,6 +442,10 @@ export interface IEnhancedJob extends IJob {
   files: IFile[];
 }
 
+export interface JobNode extends IJob {
+  children: JobNode[];
+}
+
 export interface IJobsById {
   [id: string]: IJob;
 }

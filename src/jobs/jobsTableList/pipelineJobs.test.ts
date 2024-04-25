@@ -1,162 +1,69 @@
 import { IJob } from "types";
 import { groupJobsByPipeline } from "./pipelineJobs";
 
-test("groupJobByPipeline", () => {
-  const jobs = [
-    {
-      id: "j5",
-      previous_job_id: "j1",
-      created_at: "2018-06-14T15:30:50.139451",
-    },
-    {
-      id: "j4",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:40.139451",
-    },
-    {
-      id: "j3",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:30.139451",
-    },
-    {
-      id: "j2",
-      previous_job_id: "j1",
-      created_at: "2018-06-14T15:30:20.139451",
-    },
-    {
-      id: "j1",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:10.139451",
-    },
-  ] as unknown as IJob[];
-  const expectedJobs = [
-    [
-      {
-        id: "j1",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:10.139451",
-      },
-      {
-        id: "j2",
-        previous_job_id: "j1",
-        created_at: "2018-06-14T15:30:20.139451",
-      },
-      {
-        id: "j5",
-        previous_job_id: "j1",
-        created_at: "2018-06-14T15:30:50.139451",
-      },
-    ],
-    [
-      {
-        id: "j4",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:40.139451",
-      },
-    ],
-    [
-      {
-        id: "j3",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:30.139451",
-      },
-    ],
-  ] as unknown as IJob[][];
-  expect(groupJobsByPipeline(jobs)).toEqual(expectedJobs);
-});
-
-test("groupJobByPipeline no pipeline", () => {
-  const jobs = [
-    {
-      id: "j2",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:20.139451",
-    },
-    {
-      id: "j1",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:10.139451",
-    },
-  ] as unknown as IJob[];
-  const expectedJobs = [
-    [
-      {
-        id: "j2",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:20.139451",
-      },
-    ],
-    [
-      {
-        id: "j1",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:10.139451",
-      },
-    ],
-  ] as unknown as IJob[][];
-  expect(groupJobsByPipeline(jobs)).toEqual(expectedJobs);
-});
-
-test("groupJobByPipeline with jobs sequence", () => {
-  const jobs = [
-    {
-      id: "j5",
-      previous_job_id: "j3",
-      created_at: "2018-06-14T15:30:50.139451",
-    },
-    {
-      id: "j4",
-      previous_job_id: "j2",
-      created_at: "2018-06-14T15:30:40.139451",
-    },
-    {
-      id: "j3",
-      previous_job_id: "j2",
-      created_at: "2018-06-14T15:30:30.139451",
-    },
-    {
-      id: "j2",
-      previous_job_id: "j1",
-      created_at: "2018-06-14T15:30:20.139451",
-    },
-    {
-      id: "j1",
-      previous_job_id: null,
-      created_at: "2018-06-14T15:30:10.139451",
-    },
-  ] as unknown as IJob[];
-  const expectedJobs = [
-    [
-      {
-        id: "j1",
-        previous_job_id: null,
-        created_at: "2018-06-14T15:30:10.139451",
-      },
-      {
-        id: "j2",
-        previous_job_id: "j1",
-        created_at: "2018-06-14T15:30:20.139451",
-      },
-      {
-        id: "j3",
-        previous_job_id: "j2",
-        created_at: "2018-06-14T15:30:30.139451",
-      },
-      {
-        id: "j4",
-        previous_job_id: "j2",
-        created_at: "2018-06-14T15:30:40.139451",
-      },
-      {
-        id: "j5",
-        previous_job_id: "j3",
-        created_at: "2018-06-14T15:30:50.139451",
-      },
-    ],
-  ];
-  expect(groupJobsByPipeline(jobs)).toEqual(expectedJobs);
-});
-
-test("groupJobByPipeline no jobs", () => {
+test("groupJobByPipeline of jobs with no jobs", () => {
   expect(groupJobsByPipeline([])).toEqual([]);
+});
+
+test("groupJobByPipeline with jobs", () => {
+  const jobs = [
+    {
+      id: "j1",
+      previous_job_id: null,
+    },
+    {
+      id: "j2",
+      previous_job_id: "j1",
+    },
+    {
+      id: "j3",
+      previous_job_id: "j1",
+    },
+    {
+      id: "j4",
+      previous_job_id: null,
+    },
+    {
+      id: "j5",
+      previous_job_id: "j2",
+    },
+    {
+      id: "j6",
+      previous_job_id: null,
+    },
+  ] as unknown as IJob[];
+  expect(groupJobsByPipeline(jobs)).toEqual([
+    {
+      id: "j1",
+      previous_job_id: null,
+      children: [
+        {
+          id: "j2",
+          previous_job_id: "j1",
+          children: [
+            {
+              id: "j5",
+              previous_job_id: "j2",
+              children: [],
+            },
+          ],
+        },
+        {
+          id: "j3",
+          previous_job_id: "j1",
+          children: [],
+        },
+      ],
+    },
+    {
+      id: "j4",
+      previous_job_id: null,
+      children: [],
+    },
+    {
+      id: "j6",
+      previous_job_id: null,
+      children: [],
+    },
+  ]);
 });

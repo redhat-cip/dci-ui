@@ -1,26 +1,24 @@
-import { IJob } from "types";
+import { JobNode, IJob } from "types";
 
-export function groupJobsByPipeline(jobs: IJob[]) {
-  const jobsWithPipelinesPerIds: { [id: string]: IJob[] } = {};
+export function groupJobsByPipeline(jobs: IJob[]): JobNode[] {
+  const jobWithChildrenMap: { [id: string]: JobNode } = {};
+  const jobNodes: JobNode[] = [];
 
   for (let i = 0; i < jobs.length; i++) {
     const job = jobs[i];
-    const previous_job_id = job.previous_job_id;
-    const jobId = job.id;
-    const key = previous_job_id || jobId;
-    const jobsWithPipelines = jobsWithPipelinesPerIds[key] || [];
-    jobsWithPipelinesPerIds[key] = jobsWithPipelines;
-    if (previous_job_id === null) {
-      jobsWithPipelinesPerIds[key].unshift(job);
+    jobWithChildrenMap[job.id] = { ...job, children: [] };
+  }
+
+  for (let i = 0; i < jobs.length; i++) {
+    const job = jobs[i];
+    const node = jobWithChildrenMap[job.id];
+    if (job.previous_job_id) {
+      const parentNode = jobWithChildrenMap[job.previous_job_id];
+      parentNode?.children.push(node);
     } else {
-      let childrenJobs: IJob[] = [];
-      if (jobId in jobsWithPipelinesPerIds) {
-        childrenJobs = jobsWithPipelinesPerIds[jobId];
-        delete jobsWithPipelinesPerIds[jobId];
-      }
-      const siblingJobs = jobsWithPipelinesPerIds[key];
-      jobsWithPipelinesPerIds[key] = [job, ...siblingJobs, ...childrenJobs];
+      jobNodes.push(node);
     }
   }
-  return Object.values(jobsWithPipelinesPerIds);
+
+  return jobNodes;
 }

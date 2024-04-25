@@ -1,7 +1,7 @@
 import { Label, LabelGroup } from "@patternfly/react-core";
 import { createSearchParams, Link } from "react-router-dom";
 import {
-  IJob,
+  JobNode,
   IJobStatus,
   IRemoteci,
   ITeam,
@@ -25,10 +25,10 @@ import { useTheme } from "ui/Theme/themeContext";
 import { global_Color_light_100 } from "@patternfly/react-tokens";
 
 interface JobTableSummaryProps {
-  job: IJob;
-  isPipelineJob: boolean;
+  job: JobNode;
+  level: number;
   isTheLastPipelineJob: boolean;
-  isPipelineRoot: boolean;
+  isTheLastJobInTheLevel: boolean;
   onTagClicked: (tag: string) => void;
   onRemoteciClicked: (remoteci: IRemoteci) => void;
   onTeamClicked: (team: ITeam) => void;
@@ -40,9 +40,9 @@ interface JobTableSummaryProps {
 
 export default function JobTableSummary({
   job,
-  isPipelineJob,
+  level,
   isTheLastPipelineJob,
-  isPipelineRoot,
+  isTheLastJobInTheLevel,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
@@ -190,15 +190,26 @@ export default function JobTableSummary({
       </span>
     ),
   };
+  const distanceBetweenLeftAndStatusLabelIcon = 13;
+  const maxSizeStatusLabel = 72;
+  const statusLabelIndent = 21;
+  const statusLabelIndentWithSibling = isTheLastJobInTheLevel
+    ? statusLabelIndent
+    : 0;
+  const horizontalPadding = statusLabelIndent * 2;
 
   const VerticalHalfLine = () => (
     <div
       style={{
         position: "absolute",
-        left: "34px",
+        left: `${
+          statusLabelIndent * level +
+          statusLabelIndentWithSibling +
+          distanceBetweenLeftAndStatusLabelIcon
+        }px`,
         top: "50%",
-        right: "0",
-        bottom: "0",
+        width: "15px",
+        bottom: 0,
         borderLeft: "1px solid #6A6E73",
       }}
     ></div>
@@ -208,75 +219,86 @@ export default function JobTableSummary({
     <div
       style={{
         position: "absolute",
-        left: "34px",
-        top: "0",
-        right: "72px",
+        left: `${
+          statusLabelIndent * level + distanceBetweenLeftAndStatusLabelIcon
+        }px`,
+        top: 0,
+        width: "15px",
         bottom: "50%",
-        borderLeft: "1px solid #6A6E73",
         borderBottom: "1px solid #6A6E73",
+        borderLeft: "1px solid #6A6E73",
       }}
     ></div>
   );
 
   return (
-    <Tr
-      key={`${job.id}.${job.etag}`}
-      style={{
-        background: getBackground(
-          job.status,
-          isDark ? "#1f1d21" : global_Color_light_100.value,
-        ),
-        borderBottom: isPipelineJob
-          ? isTheLastPipelineJob
-            ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}`
-            : "0"
-          : `1px solid ${isDark ? "#444548" : "#d2d2d2"}`,
-      }}
-    >
-      <Td
+    <>
+      <Tr
+        key={`${job.id}.${job.etag}`}
         style={{
-          padding: 0,
-          width: "135px",
-          position: "relative",
+          background: getBackground(
+            job.status,
+            isDark ? "#1f1d21" : global_Color_light_100.value,
+          ),
+          borderBottom: isTheLastPipelineJob
+            ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}`
+            : "0",
         }}
       >
-        {isPipelineJob ? (
-          isPipelineRoot ? (
-            <VerticalHalfLine />
-          ) : isTheLastPipelineJob ? (
-            <BottomRightLine />
-          ) : (
-            <>
-              <VerticalHalfLine />
-              <BottomRightLine />
-            </>
-          )
-        ) : null}
-
-        <div
-          style={{
-            position: "absolute",
-            left: isPipelineRoot ? "21px" : "42px",
-            top: "calc(50% - 12px)",
-          }}
-        >
-          <JobStatusLabel
-            status={job.status}
-            className="pointer"
-            onClick={() => onStatusClicked(job.status)}
-          />
-        </div>
-      </Td>
-      {columns.map((column, i) => (
         <Td
-          key={i}
           style={{
-            verticalAlign: "middle",
+            padding: 0,
+            width: `${
+              statusLabelIndent * level + maxSizeStatusLabel + horizontalPadding
+            }px`,
+            position: "relative",
           }}
         >
-          {columnTds[column]}
+          {level !== 0 && <BottomRightLine />}
+          {!isTheLastPipelineJob && <VerticalHalfLine />}
+          <div
+            style={{
+              position: "absolute",
+              left: `${statusLabelIndent * (level + 1)}px`,
+              top: "calc(50% - 12px)",
+            }}
+          >
+            <JobStatusLabel
+              status={job.status}
+              className="pointer"
+              onClick={() => onStatusClicked(job.status)}
+            />
+          </div>
         </Td>
+        {columns.map((column, i) => (
+          <Td
+            key={i}
+            style={{
+              verticalAlign: "middle",
+            }}
+          >
+            {columnTds[column]}
+          </Td>
+        ))}
+      </Tr>
+      {job.children.map((child, i, arr) => (
+        <JobTableSummary
+          key={child.id}
+          job={child}
+          level={level + 1}
+          isTheLastPipelineJob={
+            child.children.length === 0 && arr.length - 1 === i
+          }
+          isTheLastJobInTheLevel={arr.length - 1 === i}
+          columns={columns}
+          onStatusClicked={onStatusClicked}
+          onTagClicked={onTagClicked}
+          onRemoteciClicked={onRemoteciClicked}
+          onTeamClicked={onTeamClicked}
+          onTopicClicked={onTopicClicked}
+          onConfigurationClicked={onConfigurationClicked}
+        />
       ))}
-    </Tr>
+    </>
   );
 }

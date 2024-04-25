@@ -30,55 +30,53 @@ export default function JobsTableList({
         </Tr>
       </Thead>
       <Tbody>
-        {jobsGroupedByPipeline.map((jobsInTheSamePipeline) =>
-          jobsInTheSamePipeline.map((job, i, arr) => (
-            <JobsTableListRow
-              key={`${job.id}:${job.etag}`}
-              isPipelineJob={arr.length > 1}
-              isTheLastPipelineJob={arr.length - 1 === i}
-              isPipelineRoot={i === 0}
-              columns={columns}
-              job={job}
-              onStatusClicked={(status) => {
-                setFilters({
-                  ...filters,
-                  status,
-                });
-              }}
-              onTagClicked={(tag) => {
-                const tags = filters.tags ?? [];
-                setFilters({
-                  ...filters,
-                  tags: [...tags, tag],
-                });
-              }}
-              onRemoteciClicked={(remoteci) => {
-                setFilters({
-                  ...filters,
-                  remoteci_id: remoteci.id,
-                });
-              }}
-              onTeamClicked={(team) => {
-                setFilters({
-                  ...filters,
-                  team_id: team.id,
-                });
-              }}
-              onTopicClicked={(topic) => {
-                setFilters({
-                  ...filters,
-                  topic_id: topic.id,
-                });
-              }}
-              onConfigurationClicked={(configuration) => {
-                setFilters({
-                  ...filters,
-                  configuration,
-                });
-              }}
-            />
-          )),
-        )}
+        {jobsGroupedByPipeline.map((job) => (
+          <JobsTableListRow
+            key={`${job.id}:${job.etag}`}
+            job={job}
+            level={0}
+            isTheLastPipelineJob={job.children.length === 0}
+            isTheLastJobInTheLevel
+            columns={columns}
+            onStatusClicked={(status) => {
+              setFilters({
+                ...filters,
+                status,
+              });
+            }}
+            onTagClicked={(tag) => {
+              const tags = filters.tags ?? [];
+              setFilters({
+                ...filters,
+                tags: [...tags, tag],
+              });
+            }}
+            onRemoteciClicked={(remoteci) => {
+              setFilters({
+                ...filters,
+                remoteci_id: remoteci.id,
+              });
+            }}
+            onTeamClicked={(team) => {
+              setFilters({
+                ...filters,
+                team_id: team.id,
+              });
+            }}
+            onTopicClicked={(topic) => {
+              setFilters({
+                ...filters,
+                topic_id: topic.id,
+              });
+            }}
+            onConfigurationClicked={(configuration) => {
+              setFilters({
+                ...filters,
+                configuration,
+              });
+            }}
+          />
+        ))}
       </Tbody>
     </Table>
   );
