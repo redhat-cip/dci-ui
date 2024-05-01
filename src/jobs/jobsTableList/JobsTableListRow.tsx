@@ -11,7 +11,7 @@ import {
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { getTopicIcon } from "ui/icons";
-import { getBackground } from "jobs/jobUtils";
+import { getBackgroundColor } from "jobs/jobUtils";
 import {
   TestsLabels,
   JobStatusLabel,
@@ -22,13 +22,10 @@ import { getPrincipalComponent } from "component/componentSelector";
 import { DateTime } from "luxon";
 import { Tr, Td } from "@patternfly/react-table";
 import { useTheme } from "ui/Theme/themeContext";
-import { global_Color_light_100 } from "@patternfly/react-tokens";
 
 interface JobTableSummaryProps {
   job: JobNode;
   level: number;
-  isTheLastPipelineJob: boolean;
-  isTheLastJobInTheLevel: boolean;
   onTagClicked: (tag: string) => void;
   onRemoteciClicked: (remoteci: IRemoteci) => void;
   onTeamClicked: (team: ITeam) => void;
@@ -41,8 +38,6 @@ interface JobTableSummaryProps {
 export default function JobTableSummary({
   job,
   level,
-  isTheLastPipelineJob,
-  isTheLastJobInTheLevel,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
@@ -82,11 +77,6 @@ export default function JobTableSummary({
         }}
       >
         <span>{job.pipeline?.name}</span>
-      </Link>
-    ),
-    name: (
-      <Link to={`/jobs/${job.id}/jobStates`}>
-        <span>{job.name || job.topic?.name}</span>
       </Link>
     ),
     config: config ? (
@@ -193,27 +183,7 @@ export default function JobTableSummary({
   const distanceBetweenLeftAndStatusLabelIcon = 13;
   const maxSizeStatusLabel = 72;
   const statusLabelIndent = 21;
-  const statusLabelIndentWithSibling = isTheLastJobInTheLevel
-    ? statusLabelIndent
-    : 0;
   const horizontalPadding = statusLabelIndent * 2;
-
-  const VerticalHalfLine = () => (
-    <div
-      style={{
-        position: "absolute",
-        left: `${
-          statusLabelIndent * level +
-          statusLabelIndentWithSibling +
-          distanceBetweenLeftAndStatusLabelIcon
-        }px`,
-        top: "50%",
-        width: "15px",
-        bottom: 0,
-        borderLeft: "1px solid #6A6E73",
-      }}
-    ></div>
-  );
 
   const BottomRightLine = () => (
     <div
@@ -222,11 +192,11 @@ export default function JobTableSummary({
         left: `${
           statusLabelIndent * level + distanceBetweenLeftAndStatusLabelIcon
         }px`,
-        top: 0,
         width: "15px",
         bottom: "50%",
         borderBottom: "1px solid #6A6E73",
         borderLeft: "1px solid #6A6E73",
+        height: "100%",
       }}
     ></div>
   );
@@ -236,13 +206,9 @@ export default function JobTableSummary({
       <Tr
         key={`${job.id}.${job.etag}`}
         style={{
-          background: getBackground(
-            job.status,
-            isDark ? "#1f1d21" : global_Color_light_100.value,
-          ),
-          borderBottom: isTheLastPipelineJob
-            ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}`
-            : "0",
+          position: "relative",
+          borderTop:
+            level === 0 ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}` : "0",
         }}
       >
         <Td
@@ -251,11 +217,19 @@ export default function JobTableSummary({
             width: `${
               statusLabelIndent * level + maxSizeStatusLabel + horizontalPadding
             }px`,
-            position: "relative",
           }}
         >
+          <div
+            style={{
+              width: 5,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              backgroundColor: getBackgroundColor(job.status),
+            }}
+          ></div>
           {level !== 0 && <BottomRightLine />}
-          {!isTheLastPipelineJob && <VerticalHalfLine />}
           <div
             style={{
               position: "absolute",
@@ -267,8 +241,18 @@ export default function JobTableSummary({
               status={job.status}
               className="pointer"
               onClick={() => onStatusClicked(job.status)}
+              style={{ zIndex: 1 }}
             />
           </div>
+        </Td>
+        <Td
+          style={{
+            verticalAlign: "middle",
+          }}
+        >
+          <Link to={`/jobs/${job.id}/jobStates`}>
+            <span>{job.name || job.topic?.name}</span>
+          </Link>
         </Td>
         {columns.map((column, i) => (
           <Td
@@ -286,10 +270,6 @@ export default function JobTableSummary({
           key={child.id}
           job={child}
           level={level + 1}
-          isTheLastPipelineJob={
-            child.children.length === 0 && arr.length - 1 === i
-          }
-          isTheLastJobInTheLevel={arr.length - 1 === i}
           columns={columns}
           onStatusClicked={onStatusClicked}
           onTagClicked={onTagClicked}

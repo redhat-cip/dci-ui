@@ -8,11 +8,23 @@ test("groupJobByPipeline of jobs with no jobs", () => {
 test("groupJobByPipeline with jobs", () => {
   const jobs = [
     {
-      id: "j1",
+      id: "j8",
       previous_job_id: null,
     },
     {
-      id: "j2",
+      id: "j7",
+      previous_job_id: "j6",
+    },
+    {
+      id: "j6",
+      previous_job_id: "j5",
+    },
+    {
+      id: "j5",
+      previous_job_id: "j1",
+    },
+    {
+      id: "j4",
       previous_job_id: "j1",
     },
     {
@@ -20,15 +32,11 @@ test("groupJobByPipeline with jobs", () => {
       previous_job_id: "j1",
     },
     {
-      id: "j4",
-      previous_job_id: null,
+      id: "j2",
+      previous_job_id: "j1",
     },
     {
-      id: "j5",
-      previous_job_id: "j2",
-    },
-    {
-      id: "j6",
+      id: "j1",
       previous_job_id: null,
     },
   ] as unknown as IJob[];
@@ -40,28 +48,39 @@ test("groupJobByPipeline with jobs", () => {
         {
           id: "j2",
           previous_job_id: "j1",
-          children: [
-            {
-              id: "j5",
-              previous_job_id: "j2",
-              children: [],
-            },
-          ],
+          children: [],
         },
         {
           id: "j3",
           previous_job_id: "j1",
           children: [],
         },
+        {
+          id: "j4",
+          previous_job_id: "j1",
+          children: [],
+        },
+        {
+          id: "j5",
+          previous_job_id: "j1",
+          children: [
+            {
+              id: "j6",
+              previous_job_id: "j5",
+              children: [
+                {
+                  id: "j7",
+                  previous_job_id: "j6",
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
     {
-      id: "j4",
-      previous_job_id: null,
-      children: [],
-    },
-    {
-      id: "j6",
+      id: "j8",
       previous_job_id: null,
       children: [],
     },

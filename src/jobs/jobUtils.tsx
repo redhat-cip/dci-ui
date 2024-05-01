@@ -30,6 +30,22 @@ export function getBackground(
   }
 }
 
+export function getBackgroundColor(
+  status: string,
+) {
+  switch (status) {
+    case "success":
+      return global_success_color_100.value;
+    case "failure":
+    case "error":
+      return global_danger_color_100.value;
+    case "killed":
+      return global_warning_color_100.value;
+    default:
+      return global_active_color_100.value;
+  }
+}
+
 export function getIcon(status: string) {
   switch (status) {
     case "success":

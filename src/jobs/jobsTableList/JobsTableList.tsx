@@ -3,6 +3,8 @@ import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
 import { groupJobsByPipeline } from "./pipelineJobs";
 import JobsTableListRow from "./JobsTableListRow";
 import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsSelect";
+import { styled } from "styled-components";
+import { useTheme } from "ui/Theme/themeContext";
 
 interface JobsTableListProps {
   jobs: IJob[];
@@ -11,19 +13,36 @@ interface JobsTableListProps {
   columns: JobsTableListColumn[];
 }
 
+const TableWithTrStyled = styled(Table)<{ isDark: boolean }>`
+  tbody > tr {
+    border-bottom: 0 !important;
+    &:last-child {
+      border-bottom: 1px solid
+        ${(props) => (props.isDark ? "#444548" : "#d2d2d2")} !important;
+    }
+  }
+`;
+
 export default function JobsTableList({
   jobs,
   filters,
   setFilters,
   columns,
 }: JobsTableListProps) {
+  const { isDark } = useTheme();
+
   if (jobs.length === 0) return null;
   const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
+
   return (
-    <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+    <TableWithTrStyled
+      isDark={isDark}
+      className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+    >
       <Thead>
         <Tr>
           <Th></Th>
+          <Th>Name</Th>
           {columns.map((column, i) => (
             <Th key={i}>{tableViewColumnLabels[column]}</Th>
           ))}
@@ -35,8 +54,6 @@ export default function JobsTableList({
             key={`${job.id}:${job.etag}`}
             job={job}
             level={0}
-            isTheLastPipelineJob={job.children.length === 0}
-            isTheLastJobInTheLevel
             columns={columns}
             onStatusClicked={(status) => {
               setFilters({
@@ -78,6 +95,6 @@ export default function JobsTableList({
           />
         ))}
       </Tbody>
-    </Table>
+    </TableWithTrStyled>
   );
 }

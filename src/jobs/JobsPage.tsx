@@ -46,7 +46,6 @@ export default function JobsPage() {
       ? { ...filters }
       : { ...filters, team_id: currentUser.team?.id };
   const { data, isLoading, refetch } = useListJobsQuery(filtersWithTeamId);
-  // const [trigger] = useListJobsLazyQuery()
 
   const jobsPageDivRef = useRef<HTMLInputElement>(null);
   const [tableViewActive, setTableViewActive] = useLocalStorage(
@@ -57,8 +56,17 @@ export default function JobsPage() {
     JobsTableListColumn[]
   >(
     "tableViewColumns",
-    ["name", "team", "remoteci", "topic", "component", "duration", "started"],
-    4,
+    [
+      "pipeline",
+      "team",
+      "remoteci",
+      "topic",
+      "component",
+      "tests",
+      "duration",
+      "started",
+    ],
+    5,
   );
   useTitle("DCI > Jobs");
 

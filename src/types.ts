@@ -598,7 +598,6 @@ export interface IComponentCoverageESData {
 
 const JobsTableListColumns = [
   "id",
-  "name",
   "pipeline",
   "config",
   "team",

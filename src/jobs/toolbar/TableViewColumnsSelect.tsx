@@ -8,7 +8,6 @@ import {
 
 export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
   id: "Id",
-  name: "Name",
   pipeline: "Pipeline",
   config: "Config",
   team: "Team",
