@@ -444,6 +444,7 @@ export interface IEnhancedJob extends IJob {
 
 export interface JobNode extends IJob {
   children: JobNode[];
+  index: number;
 }
 
 export interface IJobsById {

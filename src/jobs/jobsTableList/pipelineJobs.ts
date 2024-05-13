@@ -6,7 +6,7 @@ export function groupJobsByPipeline(jobs: IJob[]): JobNode[] {
 
   for (let i = 0; i < jobs.length; i++) {
     const job = jobs[i];
-    jobWithChildrenMap[job.id] = { ...job, children: [] };
+    jobWithChildrenMap[job.id] = { ...job, index: i, children: [] };
   }
 
   for (let i = jobs.length - 1; i >= 0; --i) {
@@ -19,6 +19,5 @@ export function groupJobsByPipeline(jobs: IJob[]): JobNode[] {
       jobNodes.push(node);
     }
   }
-
-  return jobNodes;
+  return jobNodes.sort((j1, j2) => j1.index - j2.index);
 }
