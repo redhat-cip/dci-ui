@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle } from "@patternfly/react-core";
+import { Card, CardBody } from "@patternfly/react-core";
 import TestsList from "jobs/job/tests/TestsList";
 import { useJob } from "../jobContext";
 
@@ -7,7 +7,6 @@ export default function JobTestsPage() {
 
   return (
     <Card>
-      <CardTitle>Tests</CardTitle>
       <CardBody>
         <TestsList tests={job.tests} />
       </CardBody>

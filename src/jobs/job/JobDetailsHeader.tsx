@@ -61,6 +61,9 @@ function Tests({ jobId, tests }: TestsProps) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            gap: "1em",
+            borderBottom:
+              tests.length === i + 1 ? "none" : "1px dashed rgb(210, 210, 210)",
           }}
         >
           <div
@@ -73,7 +76,7 @@ function Tests({ jobId, tests }: TestsProps) {
           >
             <Link to={`/jobs/${jobId}/tests/${test.file_id}`}>{test.name}</Link>
           </div>
-          <div style={{ flex: "0 0 auto", marginLeft: "1em" }}>
+          <div style={{ flex: "0 0 auto" }}>
             <TestLabels
               success={test.success}
               skips={test.skips}

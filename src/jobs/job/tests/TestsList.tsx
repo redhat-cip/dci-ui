@@ -4,6 +4,7 @@ import { ITest } from "types";
 import { humanizeDuration } from "services/date";
 import { Label } from "@patternfly/react-core";
 import {
+  BugIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
@@ -20,12 +21,13 @@ export default function TestsList({ tests }: TestsListProps) {
     return (
       <EmptyState title="No tests" info="There is no tests for this job" />
     );
+  const reversedTests = [...tests].reverse();
   return (
     <Table
-      className="pf-v5-c-table pf-m-grid-md"
       role="grid"
       aria-label="List of tests"
       id="tests-list"
+      variant="compact"
     >
       <Thead>
         <Tr role="row">
@@ -35,10 +37,31 @@ export default function TestsList({ tests }: TestsListProps) {
           <Th role="columnheader" scope="col">
             Duration
           </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Nb of tests
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Successful tests
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Tests in error
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Failed tests
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Skipped tests
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Tests fixed
+          </Th>
+          <Th textCenter role="columnheader" scope="col" width={10}>
+            Regressions
+          </Th>
         </Tr>
       </Thead>
       <Tbody>
-        {tests.map((test, i) => (
+        {reversedTests.map((test, i) => (
           <Tr role="row">
             <Td role="cell" data-label="Test name">
               <Link to={test.file_id}>{test.name || "Test"}</Link>
@@ -50,70 +73,54 @@ export default function TestsList({ tests }: TestsListProps) {
             >
               {humanizeDuration(test.time)}
             </Td>
-            <Td role="cell" data-label="Number of tests">
-              <Label color="blue" className="pf-v5-u-mr-xs">
-                {test.total} tests
+            <Td textCenter role="cell" data-label="Number of tests">
+              <Label isCompact color="blue">
+                {test.total} {`test${test.total > 1 ? "s" : ""}`}
               </Label>
             </Td>
-            <Td role="cell" data-label="Success">
+            <Td textCenter role="cell" data-label="Success">
               {test.success ? (
-                <Label
-                  icon={<CheckCircleIcon />}
-                  color="green"
-                  className="pf-v5-u-mr-xs"
-                >
-                  {test.success} success
+                <Label isCompact icon={<CheckCircleIcon />} color="green">
+                  {test.success} passed
                 </Label>
               ) : null}
             </Td>
-            <Td role="cell" data-label="Skipped">
+            <Td textCenter role="cell" data-label="Error">
+              {test.errors ? (
+                <Label isCompact icon={<ExclamationCircleIcon />} color="red">
+                  {test.errors} in error
+                </Label>
+              ) : null}
+            </Td>
+            <Td textCenter role="cell" data-label="Failed">
+              {test.failures ? (
+                <Label isCompact icon={<BugIcon />} color="red">
+                  {test.failures} failed
+                </Label>
+              ) : null}
+            </Td>
+            <Td textCenter role="cell" data-label="Skipped">
               {test.skips ? (
                 <Label
+                  isCompact
                   icon={<ExclamationTriangleIcon />}
                   color="orange"
-                  className="pf-v5-u-mr-xs"
                 >
                   {test.skips} skipped
                 </Label>
               ) : null}
             </Td>
-            <Td role="cell" data-label="Error">
-              {test.errors ? (
-                <Label
-                  icon={<ExclamationCircleIcon />}
-                  color="red"
-                  className="pf-v5-u-mr-xs"
-                >
-                  {test.errors} errors
-                </Label>
-              ) : null}
-            </Td>
-            <Td role="cell" data-label="Failed">
-              {test.failures ? (
-                <Label
-                  icon={<ExclamationCircleIcon />}
-                  color="red"
-                  className="pf-v5-u-mr-xs"
-                >
-                  {test.failures} failures
-                </Label>
-              ) : null}
-            </Td>
-            <Td role="cell" data-label="Success fixes">
+            <Td textCenter role="cell" data-label="Success fixes">
               {test.successfixes ? (
-                <Label
-                  icon={<CheckCircleIcon />}
-                  color="green"
-                  className="pf-v5-u-mr-xs"
-                >
-                  {test.successfixes} fixes
+                <Label isCompact icon={<CheckCircleIcon />} color="green">
+                  {test.successfixes} fixed
                 </Label>
               ) : null}
             </Td>
-            <Td role="cell" data-label="Regression">
+            <Td textCenter role="cell" data-label="Regression">
               {test.regressions ? (
-                <Label icon={<ExclamationCircleIcon />} color="red">
-                  {test.regressions} regressions
+                <Label isCompact icon={<ExclamationCircleIcon />} color="red">
+                  {test.regressions} with a regression
                 </Label>
               ) : null}
             </Td>

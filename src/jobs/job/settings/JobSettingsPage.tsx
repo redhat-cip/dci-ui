@@ -31,9 +31,6 @@ export default function JobSettingsPage() {
 
   return (
     <PageSection variant={PageSectionVariants.light}>
-      <TextContent>
-        <Text component="h1">Danger Zone</Text>
-      </TextContent>
       <DangerZone className="pf-v5-u-mt-md">
         <DangerZoneRow>
           <div>

@@ -273,27 +273,6 @@ export interface IGetTestsResults {
   results: ITest[];
 }
 
-export type TestCaseActionType = "passed" | "skipped" | "failure" | "error";
-
-export interface ITestsCase {
-  action: TestCaseActionType;
-  classname: string;
-  message: string;
-  name: string;
-  regression: boolean;
-  successfix: boolean;
-  time: number;
-  type: string;
-  value: string;
-  stdout: string | null;
-  stderr: string | null;
-  properties: { name: string; value: string }[];
-}
-
-export interface IGetTestsCases {
-  testscases: ITestsCase[];
-}
-
 export type ITestCaseActionType = "success" | "skipped" | "failure" | "error";
 
 export interface ITestCase {
@@ -301,7 +280,6 @@ export interface ITestCase {
   classname: string;
   message: string | null;
   name: string;
-  properties: { name: string; value: string }[];
   stderr: string | null;
   stdout: string | null;
   time: number;
@@ -323,6 +301,7 @@ export interface ITestSuite {
   testcases: ITestCase[];
   tests: number;
   time: number;
+  properties: { name: string; value: string }[];
 }
 
 export interface IGetJunitTestSuites {

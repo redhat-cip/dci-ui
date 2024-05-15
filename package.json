@@ -9,11 +9,11 @@
     "url": "https://github.com/redhat-cip/dci-ui"
   },
   "dependencies": {
-    "@patternfly/patternfly": "^5.1.0",
-    "@patternfly/react-core": "^5.1.1",
-    "@patternfly/react-icons": "^5.1.1",
-    "@patternfly/react-table": "^5.1.1",
-    "@patternfly/react-tokens": "^5.1.1",
+    "@patternfly/patternfly": "^5.3.1",
+    "@patternfly/react-core": "^5.3.3",
+    "@patternfly/react-icons": "^5.3.2",
+    "@patternfly/react-table": "^5.3.3",
+    "@patternfly/react-tokens": "^5.3.1",
     "axios": "^1.6.2",
     "file-saver": "^2.0.5",
     "formik": "^2.4.5",
