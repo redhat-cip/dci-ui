@@ -8,7 +8,7 @@ import {
   DescriptionListTerm,
   Label,
 } from "@patternfly/react-core";
-import { Td, Tr } from "@patternfly/react-table";
+import { Tbody, Td, Tr } from "@patternfly/react-table";
 import { useState } from "react";
 import { ITestCase, ITestCaseActionType } from "types";
 import { CopyButton } from "ui";
@@ -49,7 +49,7 @@ export function getTestCaseIcon(action: ITestCaseActionType) {
 export default function TestCase({ testcase, index }: TestCaseProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <>
+    <Tbody isExpanded={isExpanded}>
       <Tr>
         <Td
           expand={{
@@ -129,7 +129,6 @@ export default function TestCase({ testcase, index }: TestCaseProps) {
                 </DescriptionListDescription>
               </DescriptionListGroup>
             ) : null}
-
             {testcase.stderr ? (
               <DescriptionListGroup>
                 <DescriptionListTerm>Standard error</DescriptionListTerm>
@@ -151,6 +150,6 @@ export default function TestCase({ testcase, index }: TestCaseProps) {
           </DescriptionList>
         </Td>
       </Tr>
-    </>
+    </Tbody>
   );
 }

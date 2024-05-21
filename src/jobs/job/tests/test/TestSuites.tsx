@@ -1,4 +1,5 @@
 import {
+  Banner,
   Card,
   CardBody,
   CardTitle,
@@ -6,10 +7,13 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Flex,
+  FlexItem,
 } from "@patternfly/react-core";
 import { ITestCaseActionType, ITestSuite } from "types";
-import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
+import { Table, Thead, Tr, Th } from "@patternfly/react-table";
 import TestCase from "./TestCase";
+import { InfoCircleIcon } from "@patternfly/react-icons";
 
 interface TestsCasesProps {
   testsuites: ITestSuite[];
@@ -41,31 +45,36 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
                 ))}
               </DescriptionList>
             )}
-            <Table role="grid" aria-label="Testsuite table" variant="compact">
-              <Thead>
-                <Tr role="row">
-                  <Th screenReaderText="Row expansion" />
-                  <Th screenReaderText="Testcase action" />
-                  <Th width={70}>Name</Th>
-                  <Th width={20}>Duration</Th>
-                </Tr>
-              </Thead>
-              <Tbody isExpanded>
-                {testsuite.testcases.length === 0 ? (
-                  <div>There is no test case in this test suite</div>
-                ) : (
-                  testsuite.testcases
-                    .sort(
-                      (tc1, tc2) =>
-                        testscaseActions.indexOf(tc1.action) -
-                        testscaseActions.indexOf(tc2.action),
-                    )
-                    .map((testcase, i) => (
-                      <TestCase key={i} index={i} testcase={testcase} />
-                    ))
-                )}
-              </Tbody>
-            </Table>
+            {testsuite.testcases.length === 0 ? (
+              <Banner screenReaderText="No test case banner" variant="blue">
+                <Flex spaceItems={{ default: "spaceItemsSm" }}>
+                  <FlexItem>
+                    <InfoCircleIcon />
+                  </FlexItem>
+                  <FlexItem>There is no test case in this test suite</FlexItem>
+                </Flex>
+              </Banner>
+            ) : (
+              <Table role="grid" aria-label="Testsuite table" variant="compact">
+                <Thead>
+                  <Tr role="row">
+                    <Th screenReaderText="Row expansion" />
+                    <Th screenReaderText="Testcase action" />
+                    <Th width={70}>Name</Th>
+                    <Th width={20}>Duration</Th>
+                  </Tr>
+                </Thead>
+                {testsuite.testcases
+                  .sort(
+                    (tc1, tc2) =>
+                      testscaseActions.indexOf(tc1.action) -
+                      testscaseActions.indexOf(tc2.action),
+                  )
+                  .map((testcase, i) => (
+                    <TestCase key={i} index={i} testcase={testcase} />
+                  ))}
+              </Table>
+            )}
           </CardBody>
         </Card>
       ))}
