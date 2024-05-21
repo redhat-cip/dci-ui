@@ -22,6 +22,7 @@ function _parseWhere(
         case "name":
         case "display_name":
         case "team_id":
+        case "pipeline_id":
         case "email":
         case "sso_username":
         case "remoteci_id":
@@ -66,6 +67,7 @@ export function getDefaultFilters(): Filters {
     display_name: null,
     sso_username: null,
     team_id: null,
+    pipeline_id: null,
     email: null,
     remoteci_id: null,
     product_id: null,
@@ -136,6 +138,7 @@ function _getWhereFromFilters(filters: Filters) {
         "email",
         "sso_username",
         "team_id",
+        "pipeline_id",
         "state",
         "remoteci_id",
         "product_id",

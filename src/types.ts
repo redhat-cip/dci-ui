@@ -692,6 +692,7 @@ export interface Filters {
   sso_username: string | null;
   display_name: string | null;
   team_id: string | null;
+  pipeline_id: string | null;
   email: string | null;
   remoteci_id: string | null;
   product_id: string | null;
@@ -708,6 +709,7 @@ export type WhereFilters = Pick<
   | "name"
   | "display_name"
   | "team_id"
+  | "pipeline_id"
   | "email"
   | "sso_username"
   | "remoteci_id"

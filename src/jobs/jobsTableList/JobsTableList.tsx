@@ -92,6 +92,12 @@ export default function JobsTableList({
                 configuration,
               });
             }}
+            onPipelineClicked={(pipeline) => {
+              setFilters({
+                ...filters,
+                pipeline_id: pipeline.id,
+              });
+            }}
           />
         ))}
       </Tbody>

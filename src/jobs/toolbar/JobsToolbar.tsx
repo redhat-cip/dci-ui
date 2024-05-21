@@ -32,6 +32,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import QLToolbar from "./QLToolbar";
 import TableViewColumnsSelect from "./TableViewColumnsSelect";
 import { offsetAndLimitToPage, pageAndLimitToOffset } from "api/filters";
+import { isUUID } from "services/utils";
 
 export const Categories = [
   "Remoteci",
@@ -41,6 +42,7 @@ export const Categories = [
   "Tag",
   "Config",
   "Name",
+  "Pipeline id",
 ] as const;
 
 export type Category = (typeof Categories)[number];
@@ -174,6 +176,17 @@ export default function JobsToolbar({
                 name={filters.name}
                 onSubmit={(name) => setFilters({ ...filters, name })}
                 onClear={() => setFilters({ ...filters, name: null })}
+              />
+              <TextInputToolbarFilter
+                categoryName="Pipeline id"
+                showToolbarItem={currentCategory === "Pipeline id"}
+                name={filters.pipeline_id}
+                onSubmit={(pipeline_id) => {
+                  if (isUUID(pipeline_id)) {
+                    setFilters({ ...filters, pipeline_id });
+                  }
+                }}
+                onClear={() => setFilters({ ...filters, pipeline_id: null })}
               />
             </ToolbarItem>
           </ToolbarGroup>

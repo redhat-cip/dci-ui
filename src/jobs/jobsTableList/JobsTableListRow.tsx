@@ -8,6 +8,7 @@ import {
   ITopic,
   JobsTableListColumn,
   RangeOptionValue,
+  IPipeline,
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { getTopicIcon } from "ui/icons";
@@ -22,6 +23,7 @@ import { getPrincipalComponent } from "component/componentSelector";
 import { DateTime } from "luxon";
 import { Tr, Td } from "@patternfly/react-table";
 import { useTheme } from "ui/Theme/themeContext";
+import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 interface JobTableSummaryProps {
   job: JobNode;
@@ -31,6 +33,7 @@ interface JobTableSummaryProps {
   onTeamClicked: (team: ITeam) => void;
   onTopicClicked: (topic: ITopic) => void;
   onConfigurationClicked: (configuration: string) => void;
+  onPipelineClicked: (pipeline: IPipeline) => void;
   onStatusClicked: (status: IJobStatus) => void;
   columns: JobsTableListColumn[];
 }
@@ -43,6 +46,7 @@ export default function JobTableSummary({
   onTeamClicked,
   onTopicClicked,
   onConfigurationClicked,
+  onPipelineClicked,
   onStatusClicked,
   columns,
 }: JobTableSummaryProps) {
@@ -50,6 +54,7 @@ export default function JobTableSummary({
   const TopicIcon = getTopicIcon(job.topic?.name);
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
+  const pipeline = job.pipeline;
   const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
   const { isDark } = useTheme();
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
@@ -63,22 +68,33 @@ export default function JobTableSummary({
         {job.id}
       </span>
     ),
-    pipeline: (
-      <Link
-        to={{
-          pathname: "/analytics/pipelines",
-          search: createSearchParams({
-            teams_ids: [job.team_id],
-            range: "custom" as RangeOptionValue,
-            start_date: jobCreatedAt.startOf("day").toISODate() || "",
-            end_date: jobCreatedAt.endOf("day").toISODate() || "",
-            pipelines_names: job.pipeline === null ? [] : [job.pipeline.name],
-          }).toString(),
-        }}
-      >
-        <span>{job.pipeline?.name}</span>
-      </Link>
-    ),
+    pipeline: pipeline ? (
+      <>
+        <Label
+          isCompact
+          color="grey"
+          className="pointer"
+          onClick={() => onPipelineClicked(pipeline)}
+        >
+          {pipeline.name}
+        </Label>
+        <Link
+          className="pf-v5-u-ml-xs"
+          to={{
+            pathname: "/analytics/pipelines",
+            search: createSearchParams({
+              teams_ids: [job.team_id],
+              range: "custom" as RangeOptionValue,
+              start_date: jobCreatedAt.startOf("day").toISODate() || "",
+              end_date: jobCreatedAt.endOf("day").toISODate() || "",
+              pipelines_names: [pipeline.name],
+            }).toString(),
+          }}
+        >
+          <ExternalLinkAltIcon />
+        </Link>
+      </>
+    ) : null,
     config: config ? (
       <Label
         isCompact
@@ -277,6 +293,7 @@ export default function JobTableSummary({
           onTeamClicked={onTeamClicked}
           onTopicClicked={onTopicClicked}
           onConfigurationClicked={onConfigurationClicked}
+          onPipelineClicked={onPipelineClicked}
         />
       ))}
     </>

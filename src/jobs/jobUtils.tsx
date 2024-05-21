@@ -30,9 +30,7 @@ export function getBackground(
   }
 }
 
-export function getBackgroundColor(
-  status: string,
-) {
+export function getBackgroundColor(status: string) {
   switch (status) {
     case "success":
       return global_success_color_100.value;

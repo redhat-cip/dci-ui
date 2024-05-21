@@ -19,9 +19,10 @@ import {
   CogIcon,
   CommentIcon,
   ExternalLinkAltIcon,
+  CodeBranchIcon,
 } from "@patternfly/react-icons";
 import styled from "styled-components";
-import { IEnhancedJob, IComponent, IResult } from "types";
+import { IEnhancedJob, IComponent, IResult, IPipeline } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
 import { isEmpty } from "lodash";
 import TextAreaEditableOnHover from "./TextAreaEditableOnHover";
@@ -130,6 +131,23 @@ export function JobConfiguration({ configuration }: JobConfigurationProps) {
   );
 }
 
+interface JobPipelineProps {
+  pipeline: IPipeline;
+}
+
+export function JobPipeline({ pipeline }: JobPipelineProps) {
+  const navigate = useNavigate();
+  return (
+    <Button
+      variant="link"
+      isInline
+      onClick={() => navigate(`/jobs?where=pipeline_id:${pipeline.id}`)}
+    >
+      {pipeline.name}
+    </Button>
+  );
+}
+
 function JobName({ jobId }: { jobId: string }) {
   const { data: job, isLoading } = useGetJobQuery(jobId);
   if (isLoading) return null;
@@ -185,6 +203,18 @@ export default function JobDetailsHeader({ job }: JobDetailsHeaderProps) {
             )}
           </DescriptionListDescription>
         </DescriptionListGroup>
+        {job.pipeline === null ? null : (
+          <DescriptionListGroup>
+            <DescriptionListTerm
+              icon={<CodeBranchIcon style={{ transform: "rotate(90deg)" }} />}
+            >
+              Pipeline
+            </DescriptionListTerm>
+            <DescriptionListDescription>
+              <JobPipeline pipeline={job.pipeline} />
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+        )}
         <DescriptionListGroup>
           <DescriptionListTerm>Status</DescriptionListTerm>
           <DescriptionListDescription>

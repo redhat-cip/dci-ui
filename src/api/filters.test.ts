@@ -58,6 +58,7 @@ describe("parseFiltersFromSearch", () => {
       sso_username: null,
       email: null,
       team_id: null,
+      pipeline_id: null,
       remoteci_id: null,
       product_id: null,
       topic_id: null,
@@ -102,6 +103,12 @@ describe("parseFiltersFromSearch", () => {
       "?where=team_id:e5147a96-7c76-4415-b01e-edefba96a9c8",
     );
     expect(team_id).toBe("e5147a96-7c76-4415-b01e-edefba96a9c8");
+  });
+  test("parse pipeline_id from search", () => {
+    const { pipeline_id } = parseFiltersFromSearch(
+      "?where=pipeline_id:e5147a96-7c76-4415-b01e-edefba96a9c8",
+    );
+    expect(pipeline_id).toBe("e5147a96-7c76-4415-b01e-edefba96a9c8");
   });
   test("parse remoteci_id from search", () => {
     const { remoteci_id } = parseFiltersFromSearch(
@@ -210,6 +217,7 @@ describe("createSearchFromFilters", () => {
         sso_username: null,
         email: null,
         team_id: null,
+        pipeline_id: null,
         state: "active",
       }),
     ).toBe("?limit=100&offset=0&sort=-created_at&where=state:active");
@@ -244,13 +252,14 @@ describe("createSearchFromFilters", () => {
         remoteci_id: "4aa1a4bb-6bb1-4953-a5c7-a3eef7b7f4e3",
         product_id: "a129df80-50ae-47bd-a3fe-fa783f894531",
         topic_id: "6ec27949-ecdc-4d93-9056-425b4d9f2020",
+        pipeline_id: "95491621-dd38-4ffe-8c90-88151883f559",
         tags: ["tag1", "tag2"],
         configuration: "config1",
         status: "success" as state,
         email: "test@example.org",
       }),
     ).toEqual(
-      "?limit=200&offset=20&sort=-released_at&where=name:name1,display_name:display_name2,sso_username:sso_username1,team_id:e5147a96-7c76-4415-b01e-edefba96a9c8,email:test@example.org,remoteci_id:4aa1a4bb-6bb1-4953-a5c7-a3eef7b7f4e3,product_id:a129df80-50ae-47bd-a3fe-fa783f894531,topic_id:6ec27949-ecdc-4d93-9056-425b4d9f2020,tags:tag1,tags:tag2,configuration:config1,status:success,state:active",
+      "?limit=200&offset=20&sort=-released_at&where=name:name1,display_name:display_name2,sso_username:sso_username1,team_id:e5147a96-7c76-4415-b01e-edefba96a9c8,pipeline_id:95491621-dd38-4ffe-8c90-88151883f559,email:test@example.org,remoteci_id:4aa1a4bb-6bb1-4953-a5c7-a3eef7b7f4e3,product_id:a129df80-50ae-47bd-a3fe-fa783f894531,topic_id:6ec27949-ecdc-4d93-9056-425b4d9f2020,tags:tag1,tags:tag2,configuration:config1,status:success,state:active",
     );
   });
 });
