@@ -125,6 +125,7 @@ export default function JobsPage() {
             filters={filters}
             setFilters={setFilters}
             jobs={data.jobs}
+            setTableViewActive={setTableViewActive}
           />
         )}
         {count > 0 && (
