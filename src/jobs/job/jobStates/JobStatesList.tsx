@@ -23,10 +23,11 @@ import { humanizeDuration } from "services/date";
 import { ProgressStepper, ProgressStep, Button } from "@patternfly/react-core";
 import {
   Dropdown,
-  DropdownToggle,
   DropdownItem,
-  DropdownPosition,
-} from "@patternfly/react-core/deprecated";
+  DropdownList,
+  MenuToggle,
+  MenuToggleElement,
+} from "@patternfly/react-core";
 import {
   SortAmountDownIcon,
   SortAmountDownAltIcon,
@@ -49,25 +50,28 @@ function JobStateFilterButton({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Dropdown
+      isPlain
+      isOpen={isOpen}
       onSelect={() => {
         setIsOpen(false);
         const element = document.getElementById("toggle-sort-job-tasks");
         element && element.focus();
       }}
-      position={DropdownPosition.right}
-      toggle={
-        <DropdownToggle
-          toggleIndicator={null}
-          onToggle={(_event, isOpen: boolean) => setIsOpen(isOpen)}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
           id="toggle-sort-job-tasks"
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
           style={{ color: global_palette_black_500.value }}
+          variant="plain"
         >
           <SortAmountDownIcon />
-        </DropdownToggle>
-      }
-      isOpen={isOpen}
-      isPlain
-      dropdownItems={[
+        </MenuToggle>
+      )}
+      popperProps={{ position: "right" }}
+    >
+      <DropdownList>
         <DropdownItem
           key="action"
           component="button"
@@ -75,7 +79,7 @@ function JobStateFilterButton({
           icon={<SortAmountDownAltIcon />}
         >
           Filter by date
-        </DropdownItem>,
+        </DropdownItem>
         <DropdownItem
           key="action"
           component="button"
@@ -83,9 +87,9 @@ function JobStateFilterButton({
           icon={<SortAmountDownIcon />}
         >
           Filter by duration
-        </DropdownItem>,
-      ]}
-    />
+        </DropdownItem>
+      </DropdownList>
+    </Dropdown>
   );
 }
 
@@ -140,25 +144,28 @@ function JobSettingsDropdown({
   );
   return (
     <Dropdown
+      isPlain
+      isOpen={isOpen}
       onSelect={() => {
         setIsOpen(false);
         const element = document.getElementById("toggle-settings-primary");
         element && element.focus();
       }}
-      position={DropdownPosition.right}
-      isPlain
-      toggle={
-        <DropdownToggle
-          toggleIndicator={null}
+      popperProps={{ position: "right" }}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
           id="toggle-settings-primary"
-          onToggle={(_event, isOpen: boolean) => setIsOpen(isOpen)}
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+          variant="plain"
         >
           <CogIcon style={{ color: global_palette_black_500.value }} />
-        </DropdownToggle>
-      }
-      isOpen={isOpen}
-      dropdownItems={dropdownItems}
-    />
+        </MenuToggle>
+      )}
+    >
+      <DropdownList>{dropdownItems}</DropdownList>
+    </Dropdown>
   );
 }
 

@@ -18,11 +18,6 @@ import {
   Truncate,
   EmptyStateHeader,
 } from "@patternfly/react-core";
-import {
-  Dropdown,
-  KebabToggle,
-  DropdownItem,
-} from "@patternfly/react-core/deprecated";
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
 import {
@@ -187,40 +182,21 @@ function PipelineCard({
   };
 }) {
   const [seeJobComponents, setSeeJobComponents] = useState(false);
-  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   return (
     <Card className="pf-v5-u-mt-xs">
       <CardHeader
         actions={{
           actions: (
-            <>
-              <Dropdown
-                onSelect={() => {
-                  setSeeJobComponents(!seeJobComponents);
-                }}
-                toggle={
-                  <KebabToggle
-                    id={`${pipelineDay.date}-dropdown-toggle`}
-                    onToggle={(_event, isOpen) => {
-                      setDropdownIsOpen(isOpen);
-                    }}
-                  />
-                }
-                isOpen={dropdownIsOpen}
-                isPlain
-                dropdownItems={[
-                  <DropdownItem
-                    key={`${pipelineDay.date}-dropdown-item`}
-                    component="button"
-                  >
-                    {seeJobComponents
-                      ? "Hide job components"
-                      : "See job components"}
-                  </DropdownItem>,
-                ]}
-                position={"right"}
-              />
-            </>
+            <Button
+              type="button"
+              variant="tertiary"
+              size="sm"
+              onClick={() => {
+                setSeeJobComponents(!seeJobComponents);
+              }}
+            >
+              {seeJobComponents ? "Hide job components" : "See job components"}
+            </Button>
           ),
           hasNoOffset: false,
           className: undefined,

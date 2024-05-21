@@ -31,11 +31,12 @@ import {
 } from "@patternfly/react-core";
 import {
   Dropdown,
-  DropdownToggle,
   DropdownItem,
-  DropdownSeparator,
-  DropdownPosition,
-} from "@patternfly/react-core/deprecated";
+  DropdownList,
+  Divider,
+  MenuToggle,
+  MenuToggleElement,
+} from "@patternfly/react-core";
 import Logo from "logo.min.svg";
 import {
   BarsIcon,
@@ -55,25 +56,26 @@ function UserDropdownMenuMobile() {
   return (
     <Dropdown
       isPlain
-      position={DropdownPosition.right}
-      onSelect={() => setIsOpen(!isOpen)}
-      toggle={
-        <DropdownToggle
-          toggleIndicator={null}
-          onToggle={(_event, val) => setIsOpen(val)}
+      isOpen={isOpen}
+      onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
         >
           <UserIcon />
-        </DropdownToggle>
-      }
-      isOpen={isOpen}
-      dropdownItems={[
+        </MenuToggle>
+      )}
+    >
+      <DropdownList>
         <DropdownItem
           key="dropdown_kebab_settings"
           component="button"
           onClick={() => navigate("/currentUser/settings")}
         >
           My profile
-        </DropdownItem>,
+        </DropdownItem>
         <DropdownItem
           key="dropdown_kebab_logout"
           component="button"
@@ -82,9 +84,9 @@ function UserDropdownMenuMobile() {
           }}
         >
           Log out
-        </DropdownItem>,
-      ]}
-    />
+        </DropdownItem>
+      </DropdownList>
+    </Dropdown>
   );
 }
 
@@ -98,39 +100,43 @@ function UserDropdownMenu() {
 
   return (
     <Dropdown
-      isFullHeight
       isOpen={isOpen}
-      position={DropdownPosition.right}
-      onSelect={() => setIsOpen(!isOpen)}
-      toggle={
-        <DropdownToggle onToggle={(_event, val) => setIsOpen(val)}>
+      onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
+          isFullHeight
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+        >
           {currentUser.fullname || currentUser.name}
-        </DropdownToggle>
-      }
-      dropdownItems={[
-        <DropdownItem key="email" component="div" isPlainText>
+        </MenuToggle>
+      )}
+    >
+      <DropdownList>
+        <DropdownItem key="email" component="div" isDisabled>
           <Text component={TextVariants.small}>Email:</Text>
           <Text>{currentUser.email}</Text>
-        </DropdownItem>,
+        </DropdownItem>
         <DropdownItem
           key="team"
           onClick={() => hasMultipleTeams && openChangeTeamModal()}
-          isPlainText={!hasMultipleTeams}
+          isDisabled={!hasMultipleTeams}
           style={{
             cursor: hasMultipleTeams ? "cursor" : "default",
           }}
         >
           <Text component={TextVariants.small}>Team:</Text>
           <Text>{currentUser.team ? currentUser.team.name : ""}</Text>
-        </DropdownItem>,
-        <DropdownSeparator key="dropdown_user_separator" />,
+        </DropdownItem>
+        <Divider component="li" />
         <DropdownItem
           key="dropdown_user_settings"
           component="button"
           onClick={() => navigate("/currentUser/settings")}
         >
           My profile
-        </DropdownItem>,
+        </DropdownItem>
         <DropdownItem
           key="dropdown_user_logout"
           component="button"
@@ -139,9 +145,9 @@ function UserDropdownMenu() {
           }}
         >
           Log out
-        </DropdownItem>,
-      ]}
-    />
+        </DropdownItem>
+      </DropdownList>
+    </Dropdown>
   );
 }
 

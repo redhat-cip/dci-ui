@@ -11,10 +11,11 @@ import {
 } from "@patternfly/react-core";
 import {
   Dropdown,
-  DropdownPosition,
-  DropdownToggle,
   DropdownItem,
-} from "@patternfly/react-core/deprecated";
+  DropdownList,
+  MenuToggle,
+  MenuToggleElement,
+} from "@patternfly/react-core";
 import {
   ArrowsAltVIcon,
   ListIcon,
@@ -103,23 +104,25 @@ export default function JobsToolbar({
                   }
                   setIsCategoryDropdownOpen(false);
                 }}
-                position={DropdownPosition.left}
-                toggle={
-                  <DropdownToggle
-                    onToggle={(_event, isOpen) =>
-                      setIsCategoryDropdownOpen(isOpen)
+                toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() =>
+                      setIsCategoryDropdownOpen(!isCategoryDropdownOpen)
                     }
-                    style={{ width: "100%" }}
+                    isExpanded={isCategoryDropdownOpen}
                   >
                     {currentCategory}
-                  </DropdownToggle>
-                }
+                  </MenuToggle>
+                )}
                 isOpen={isCategoryDropdownOpen}
-                dropdownItems={Categories.map((category) => (
-                  <DropdownItem key={category}>{category}</DropdownItem>
-                ))}
-                style={{ width: "100%" }}
-              ></Dropdown>
+              >
+                <DropdownList>
+                  {Categories.map((category) => (
+                    <DropdownItem key={category}>{category}</DropdownItem>
+                  ))}
+                </DropdownList>
+              </Dropdown>
             </ToolbarItem>
             <ToolbarItem>
               <TeamToolbarFilter
