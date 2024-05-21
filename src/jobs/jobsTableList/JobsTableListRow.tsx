@@ -69,7 +69,7 @@ export default function JobTableSummary({
       </span>
     ),
     pipeline: pipeline ? (
-      <>
+      <span style={{ whiteSpace: "nowrap" }}>
         <Label
           isCompact
           color="grey"
@@ -93,7 +93,7 @@ export default function JobTableSummary({
         >
           <ExternalLinkAltIcon />
         </Link>
-      </>
+      </span>
     ) : null,
     config: config ? (
       <Label
