@@ -1,9 +1,10 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import CreateFeederForm from "./CreateFeederForm";
 import { ITeam } from "types";
+import { vi } from "vitest";
 
 test("test create feeder form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const teams = [
     { id: "t1", name: "team 1" },

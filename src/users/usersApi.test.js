@@ -1,28 +1,38 @@
-import axios from "axios";
-import axiosMockAdapter from "axios-mock-adapter";
 import { fetchUserTeams, addUserToTeam, deleteUserFromTeam } from "./usersApi";
-
-const axiosMock = new axiosMockAdapter(axios);
+import { server } from "mocks/node";
+import { HttpResponse, http } from "msw";
 
 test("fetchUserTeams", () => {
-  axiosMock
-    .onGet("https://api.distributed-ci.io/api/v1/users/abc/teams")
-    .reply(200);
+  server.use(
+    http.get("https://api.distributed-ci.io/api/v1/users/abc/teams", () => {
+      return HttpResponse.json({ teams: [], _meta: { count: 1 } });
+    }),
+  );
   return fetchUserTeams({ id: "abc" });
 });
 
 test("addUserToTeam", () => {
-  axiosMock
-    .onPost("https://api.distributed-ci.io/api/v1/teams/def/users/abc", {})
-    .reply(201);
+  server.use(
+    http.post(
+      "https://api.distributed-ci.io/api/v1/teams/def/users/abc",
+      () => {
+        return new HttpResponse(null, { status: 201 });
+      },
+    ),
+  );
   const team = { id: "def" };
   return addUserToTeam("abc", team);
 });
 
 test("deleteUserFromTeam", () => {
-  axiosMock
-    .onDelete("https://api.distributed-ci.io/api/v1/teams/def/users/abc")
-    .reply(204);
+  server.use(
+    http.delete(
+      "https://api.distributed-ci.io/api/v1/teams/def/users/abc",
+      () => {
+        return new HttpResponse(null, { status: 204 });
+      },
+    ),
+  );
   const user = { id: "abc" };
   const team = { id: "def" };
   return deleteUserFromTeam(user, team);

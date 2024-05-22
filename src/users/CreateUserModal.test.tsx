@@ -2,9 +2,10 @@ import { act } from "react";
 import { waitFor } from "@testing-library/react";
 import { render } from "utils/test-utils";
 import CreateUserModal from "./CreateUserModal";
+import { vi } from "vitest";
 
 test("test create user form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
   const { user, getByRole, getByTestId } = render(
     <CreateUserModal onSubmit={mockOnSubmit}>
       {(openModal) => <button onClick={openModal}>Create a new user</button>}

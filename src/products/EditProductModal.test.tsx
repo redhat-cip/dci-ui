@@ -1,9 +1,10 @@
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import EditProductModal from "./EditProductModal";
 import { IProduct } from "types";
+import { vi } from "vitest";
 
 test("test edit product form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const product = {
     id: "p1",

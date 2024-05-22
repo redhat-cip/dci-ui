@@ -2,9 +2,10 @@ import { waitFor } from "@testing-library/react";
 import { ITeam } from "types";
 import { render } from "utils/test-utils";
 import TeamForm from "./TeamForm";
+import { vi } from "vitest";
 
 test("test create team form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const { user, getByRole, getByTestId } = render(
     <div>
@@ -47,7 +48,7 @@ test("test create team form submit the correct values", async () => {
 });
 
 test("test edit team form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const { user, getByRole, getByTestId } = render(
     <div>

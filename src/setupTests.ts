@@ -1,9 +1,16 @@
 import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { beforeAll, afterEach, afterAll, vi } from "vitest";
+
 import { server } from "mocks/node";
 
 beforeAll(() => server.listen());
 
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  cleanup();
+});
 
 afterAll(() => server.close());
 
@@ -39,7 +46,7 @@ window.matchMedia =
   function () {
     return {
       matches: false,
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
     };
   };

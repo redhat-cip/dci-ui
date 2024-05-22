@@ -1,9 +1,10 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import { ITeam } from "types";
+import { vi } from "vitest";
 
 test("test create remoteci form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
   const teams = [
     { id: "t1", name: "team 1" },
     { id: "t2", name: "team 2" },

@@ -2,9 +2,10 @@ import { waitFor } from "@testing-library/react";
 import { render } from "utils/test-utils";
 import UserForm from "./UserForm";
 import { IUser } from "types";
+import { vi } from "vitest";
 
 test("test UserForm with existing user", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
   const { user, getByRole, getByTestId } = render(
     <div>
       <UserForm

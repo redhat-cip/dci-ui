@@ -1,9 +1,10 @@
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { ICurrentUser } from "types";
+import { vi } from "vitest";
 
 test("test change password form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
   const { container, getByRole, getByTestId } = render(
     <ChangePasswordForm
       onSubmit={mockOnSubmit}

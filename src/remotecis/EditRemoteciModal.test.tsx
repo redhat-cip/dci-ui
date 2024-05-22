@@ -1,9 +1,10 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import EditRemoteciModal from "./EditRemoteciModal";
 import { IRemoteci, ITeam } from "types";
+import { vi } from "vitest";
 
 test("test edit remoteci form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const remoteci = {
     id: "r1",

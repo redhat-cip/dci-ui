@@ -2,9 +2,10 @@ import { waitFor } from "@testing-library/react";
 import EditTopicModal from "./EditTopicModal";
 import { ITopic, IProduct } from "types";
 import { render } from "utils/test-utils";
+import { vi } from "vitest";
 
 test("test edit topic form submit the correct values", async () => {
-  const mockOnSubmit = jest.fn();
+  const mockOnSubmit = vi.fn();
 
   const topic = {
     id: "t1",

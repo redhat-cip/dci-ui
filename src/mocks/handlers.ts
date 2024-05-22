@@ -1,8 +1,8 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { IIdentity, IProduct, ITeam } from "types";
 
 export const handlers = [
-  rest.get("https://api.distributed-ci.io/api/v1/products", (req, res, ctx) => {
+  http.get("https://api.distributed-ci.io/api/v1/products", () => {
     const products: {
       _meta: { count: number };
       products: IProduct[];
@@ -46,9 +46,9 @@ export const handlers = [
         },
       ],
     };
-    return res(ctx.json(products));
+    return HttpResponse.json(products);
   }),
-  rest.get("https://api.distributed-ci.io/api/v1/identity", (req, res, ctx) => {
+  http.get("https://api.distributed-ci.io/api/v1/identity", () => {
     const identity: {
       identity: IIdentity;
     } = {
@@ -68,7 +68,7 @@ export const handlers = [
         timezone: "Europe/Paris",
       },
     };
-    return res(ctx.json(identity));
+    return HttpResponse.json(identity);
   }),
 ];
 

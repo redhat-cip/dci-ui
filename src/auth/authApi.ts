@@ -1,7 +1,7 @@
-import http from "services/http";
+import http from "../services/http";
 import { ICurrentUser, IIdentity, IIdentityTeam } from "types";
 import { values } from "lodash";
-import { readValue, saveValue } from "services/localStorage";
+import { readValue, saveValue } from "../services/localStorage";
 
 function buildShortcut(team: IIdentityTeam | null) {
   if (team === null) {
