@@ -1,6 +1,7 @@
+import { act } from "react";
 import { renderWithProviders } from "utils/test-utils";
 import TeamCreationWizard from "./TeamCreationWizard";
-import { act, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 test("team creation wizard", async () => {
   const { user, findByRole, getByText, getByRole } = renderWithProviders(

@@ -1,4 +1,5 @@
-import { act, waitFor } from "@testing-library/react";
+import { act } from "react";
+import { waitFor } from "@testing-library/react";
 import CreateTopicModal from "./CreateTopicModal";
 import { IProduct } from "types";
 import { render } from "utils/test-utils";

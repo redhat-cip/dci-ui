@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   Card,
   CardBody,
@@ -10,14 +9,14 @@ import {
 import { fetchUsersForTeam } from "./teamsApi";
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, CopyButton } from "ui";
-import { AppDispatch } from "store";
 import { ITeam, IUser } from "types";
 import { Link } from "react-router-dom";
 import { addUserToTeam, deleteUserFromTeam } from "users/usersApi";
 import AddUserToTeamModal from "./AddUserToTeamModal";
 import { sortByName } from "services/sort";
-import { showError, showSuccess } from "alerts/alertsActions";
+import { showError, showSuccess } from "alerts/alertsSlice";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { useAppDispatch } from "store";
 
 export default function TeamMembers({
   team,
@@ -26,7 +25,7 @@ export default function TeamMembers({
   team: ITeam;
   className?: string;
 }) {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
 

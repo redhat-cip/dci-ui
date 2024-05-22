@@ -1,6 +1,6 @@
 import { isRejectedWithValue } from "@reduxjs/toolkit";
 import type { MiddlewareAPI, Middleware } from "@reduxjs/toolkit";
-import { hideAlert, showAlert } from "alerts/alertsActions";
+import { hideAlert, showAlert } from "alerts/alertsSlice";
 import { getAlertFromBaseQueryError } from "services/errorHelpers";
 
 export const rtkQueryErrorLogger: Middleware =

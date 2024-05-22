@@ -1,14 +1,13 @@
 import { Button, ActionGroup } from "@patternfly/react-core";
 import { useSSO } from "./ssoContext";
 import { useLocation } from "react-router-dom";
-import { showError } from "alerts/alertsActions";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "store";
+import { showError } from "alerts/alertsSlice";
+import { useAppDispatch } from "store";
 
 export default function SSOForm() {
   const { sso } = useSSO();
   const location = useLocation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const errorMessage =
     "We are sorry! We can't connect to sso.redhat.com. Can you try later ?";
   return (

@@ -1,8 +1,5 @@
-import { createActions } from "api/apiActions";
 import { IEnhancedTopic, IProduct, ITopic } from "types";
 import { padStart } from "lodash";
-
-export default createActions("topic");
 
 export function sortTopicWithSemver(t1: ITopic, t2: ITopic): number {
   const paddedName1 = t1.name.replace(/\d+/g, (n) => padStart(n, 6));

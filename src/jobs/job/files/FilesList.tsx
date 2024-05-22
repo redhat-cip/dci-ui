@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import { EmptyState, RotatingSpinnerIcon } from "ui";
 import File from "./File";
 import { FileArchiveIcon, FileDownloadIcon } from "@patternfly/react-icons";
@@ -12,8 +11,7 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import fuzzysort from "fuzzysort";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getFileContent } from "./filesActions";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
@@ -30,7 +28,22 @@ export default function FilesList({ job }: FilesListProps) {
   );
   const [textSearch, setTextSearch] = useState("");
   const [isDownloading, setIsDownloading] = useState(false);
-  if (isEmpty(filesNotAssociatedWithJobState)) {
+
+  const filesFiltered = useMemo(() => {
+    if (!textSearch) return filesNotAssociatedWithJobState;
+    return filesNotAssociatedWithJobState.filter((file) =>
+      file.name.toLowerCase().includes(textSearch.toLowerCase()),
+    );
+  }, [textSearch, filesNotAssociatedWithJobState]);
+
+  const filesFilteredSize = useMemo(() => {
+    return filesFiltered.reduce((acc, file) => {
+      acc += file.size;
+      return acc;
+    }, 0);
+  }, [filesFiltered]);
+
+  if (filesNotAssociatedWithJobState.length === 0) {
     return (
       <EmptyState
         icon={FileArchiveIcon}
@@ -40,23 +53,12 @@ export default function FilesList({ job }: FilesListProps) {
     );
   }
 
-  const filesFiltered =
-    textSearch === ""
-      ? filesNotAssociatedWithJobState
-      : fuzzysort
-          .go(textSearch, filesNotAssociatedWithJobState, { key: "name" })
-          .map((result) => result.obj);
-
-  const filesFilteredSize = filesFiltered.reduce((acc, file) => {
-    acc += file.size;
-    return acc;
-  }, 0);
   return (
     <div>
       <Toolbar clearAllFilters={() => {}} collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup>
-            <ToolbarItem>Search a file</ToolbarItem>
+            <ToolbarItem variant="label">Search a file</ToolbarItem>
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarItem>

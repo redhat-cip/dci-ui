@@ -29,8 +29,7 @@ import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
 import { IComponentCoverageESData, ITopic, IComponentCoverage } from "types";
 import { buildComponentCoverage } from "./componentCoverage";
 import http from "services/http";
-import { useDispatch } from "react-redux";
-import { showAPIError } from "alerts/alertsActions";
+import { showAPIError } from "alerts/alertsSlice";
 import MainPage from "pages/MainPage";
 import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
 import {
@@ -46,7 +45,7 @@ import TypesFilter from "./TypesFilter";
 import qs from "qs";
 import TeamToolbarFilter from "jobs/toolbar/TeamToolbarFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import {
   Table,
   Caption,
@@ -89,7 +88,7 @@ export function getAllComponentTypes(topic: ITopic) {
 }
 
 export default function ComponentCoveragePage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [topicId, setTopicId] = useState<string | null>(
     searchParams.get("topic_id"),

@@ -1,13 +1,8 @@
-import { Action } from "redux";
-import { ThunkAction } from "redux-thunk";
-import {
-  combineReducers,
-  configureStore,
-  PreloadedState,
-} from "@reduxjs/toolkit";
-import alertsReducer from "./alerts/alertsReducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import alertsReducer from "./alerts/alertsSlice";
 import Api from "api";
 import { rtkQueryErrorLogger } from "middleware";
+import { useDispatch, useSelector } from "react-redux";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
@@ -16,7 +11,7 @@ export const rootReducer = combineReducers({
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
@@ -26,10 +21,12 @@ export function setupStore(preloadedState?: PreloadedState<RootState>) {
 }
 
 export type AppStore = ReturnType<typeof setupStore>;
-export type AppThunk<R = void> = ThunkAction<R, RootState, unknown, Action>;
 
 const store = setupStore();
 
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
 
 export default store;

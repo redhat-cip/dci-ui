@@ -3,11 +3,10 @@ import { Input } from "ui/formik";
 import { Button } from "@patternfly/react-core";
 import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
-import { hideAllAlerts, showError } from "alerts/alertsActions";
-import { useDispatch } from "react-redux";
+import { hideAllAlerts, showError } from "alerts/alertsSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 
 const LogInSchema = Yup.object().shape({
   username: Yup.string()
@@ -24,7 +23,7 @@ interface ILocationState {
 
 export default function LoginForm() {
   const { refreshIdentity } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   return (

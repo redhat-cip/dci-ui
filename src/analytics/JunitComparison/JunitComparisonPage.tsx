@@ -33,8 +33,7 @@ import {
 import http from "services/http";
 import TopicSelect from "jobs/toolbar/TopicSelect";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { showAPIError, showError } from "alerts/alertsActions";
+import { showAPIError, showError } from "alerts/alertsSlice";
 import RemoteciSelect from "jobs/toolbar/RemoteciSelect";
 import { DateTime } from "luxon";
 import { round } from "lodash";
@@ -50,7 +49,7 @@ import {
 } from "@patternfly/react-tokens";
 import ListInputWithChip from "ui/form/ListInputWithChip";
 import { useSearchParams } from "react-router-dom";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 type JunitComputationMode = "mean" | "median";
@@ -679,7 +678,7 @@ export default function JunitComparisonPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<JunitData | null>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   return (
     <MainPage
       title="Junit comparison"

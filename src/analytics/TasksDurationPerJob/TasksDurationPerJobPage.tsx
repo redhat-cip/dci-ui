@@ -16,8 +16,7 @@ import RemoteciToolbarFilter from "jobs/toolbar/RemoteciToolbarFilter";
 import { useEffect, useState } from "react";
 import { IDataFromES, IGraphData, IRefArea } from "types";
 import http from "services/http";
-import { useDispatch } from "react-redux";
-import { showAPIError } from "alerts/alertsActions";
+import { showAPIError } from "alerts/alertsSlice";
 import {
   LineChart,
   Line,
@@ -32,7 +31,7 @@ import { getDomain, transform } from "./tasksDurationPerJob";
 import { Link } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -163,7 +162,7 @@ function Graph({ data }: { data: IGraphData[] }) {
 }
 
 export default function TasksDurationPerJobPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [topicId, setTopicId] = useState<string | null>(null);
   const [remoteciId, setRemoteciId] = useState<string | null>(null);
   const [data, setData] = useState<IGraphData[]>([]);

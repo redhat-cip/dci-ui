@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import * as React from "react";
-import { useDispatch } from "react-redux";
 import { removeToken, getToken } from "services/localStorage";
 import {
   ITeam,
@@ -10,7 +9,7 @@ import {
 } from "types";
 import { useSSO } from "./ssoContext";
 import * as authApi from "./authApi";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import {
   Button,
@@ -19,7 +18,7 @@ import {
   Modal,
   ModalVariant,
 } from "@patternfly/react-core";
-import { showError, showSuccess } from "alerts/alertsActions";
+import { showError, showSuccess } from "alerts/alertsSlice";
 import { AxiosError } from "axios";
 
 interface AuthContextType {
@@ -45,7 +44,7 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const { sso } = useSSO();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [currentUser, setCurrentUser] = useState<ICurrentUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

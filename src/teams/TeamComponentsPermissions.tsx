@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   Card,
   CardBody,
@@ -18,12 +17,12 @@ import {
 } from "./teamsApi";
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal } from "ui";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import { ITeam } from "types";
 import { Link } from "react-router-dom";
 import AddRemoteTeamPermissionModal from "./AddRemoteTeamPermissionModal";
 import { sortByName } from "services/sort";
-import { showError, showSuccess } from "alerts/alertsActions";
+import { showError, showSuccess } from "alerts/alertsSlice";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 export default function TeamComponentsPermissions({
@@ -33,7 +32,7 @@ export default function TeamComponentsPermissions({
   team: ITeam;
   className?: string;
 }) {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [teamsTheTeamHasAccessTo, setTeamsTheTeamHasAccessTo] = useState<
     ITeam[]

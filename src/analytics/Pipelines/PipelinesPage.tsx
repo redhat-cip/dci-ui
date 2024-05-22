@@ -37,14 +37,13 @@ import TeamsToolbarFilter from "jobs/toolbar/TeamsToolbarFilter";
 import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
 import { Link, useSearchParams } from "react-router-dom";
 import http from "services/http";
-import { showAPIError } from "alerts/alertsActions";
-import { useDispatch } from "react-redux";
+import { showAPIError } from "alerts/alertsSlice";
 import { IJobStatus, IPipelines, RangeOptionValue } from "types";
 import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
 import { getColor, getIcon } from "jobs/jobUtils";
 import { Components } from "jobs/job/JobDetailsHeader";
 import { notEmpty } from "services/utils";
-import { AppDispatch } from "store";
+import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 function jobStatusToVariant(status: IJobStatus) {
@@ -306,7 +305,7 @@ function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
 }
 
 export default function PipelinesPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [pipelinesNames, setPipelinesNames] = useState<string[]>(
