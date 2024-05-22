@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useField, useFormikContext } from "formik";
 import {
   FormGroup,
@@ -6,12 +5,8 @@ import {
   HelperText,
   HelperTextItem,
 } from "@patternfly/react-core";
-import {
-  Select,
-  SelectVariant,
-  SelectOption,
-} from "@patternfly/react-core/deprecated";
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
+import TypeheadSelect from "ui/form/TypeheadSelect";
 
 type SelectOptionType = {
   label: string;
@@ -25,7 +20,6 @@ interface SelectWithTypeaheadProps {
   name: string;
   options: SelectOptionType[];
   isRequired?: boolean;
-  [x: string]: any;
 }
 
 export default function SelectWithTypeahead({
@@ -35,9 +29,7 @@ export default function SelectWithTypeahead({
   name,
   options,
   isRequired = false,
-  ...props
 }: SelectWithTypeaheadProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [field] = useField(name);
   const { touched, errors, setFieldValue } = useFormikContext<{
     [k: string]: string;
@@ -45,38 +37,18 @@ export default function SelectWithTypeahead({
   const hasError = errors[name] && touched[name];
   return (
     <FormGroup label={label} isRequired={isRequired} fieldId={id}>
-      <Select
-        {...field}
-        {...props}
-        variant={SelectVariant.typeahead}
-        typeAheadAriaLabel={placeholder}
-        onToggle={(_event, val) => setIsOpen(val)}
-        onSelect={(event, selection) => {
-          const s = selection as SelectOptionType;
-          setIsOpen(false);
-          setFieldValue(name, s.value);
-        }}
+      <TypeheadSelect
+        id={id}
+        placeholder={placeholder}
         onClear={() => setFieldValue(name, null)}
-        selections={
-          field.value ? options.find((o) => o.value === field.value)?.label : ""
-        }
-        isOpen={isOpen}
-        aria-labelledby={id}
-        placeholderText={placeholder}
-        menuAppendTo="parent"
-        maxHeight="220px"
-      >
-        {options
-          .map((o) => ({ ...o, toString: () => o.label }))
-          .map((option, i) => (
-            <SelectOption
-              key={i}
-              id={`${id}[${i}]`}
-              data-testid={`${id}[${i}]`}
-              value={option}
-            />
-          ))}
-      </Select>
+        onSelect={(item) => {
+          if (item) {
+            setFieldValue(name, item.value);
+          }
+        }}
+        item={options.find((option) => option.value === field.value)}
+        items={options}
+      />
       {hasError && (
         <FormHelperText>
           <HelperText>

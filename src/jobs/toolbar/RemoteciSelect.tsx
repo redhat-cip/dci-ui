@@ -26,6 +26,7 @@ export default function RemoteciSelect({
       : getRemoteciData;
   return (
     <TypeheadSelect
+      id="select-remoteci"
       placeholder={placeholder}
       onClear={onClear}
       onSelect={(item) => {

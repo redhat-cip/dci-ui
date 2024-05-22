@@ -1,10 +1,5 @@
 import { DatePicker, ToolbarFilter } from "@patternfly/react-core";
-import {
-  Select,
-  SelectOption,
-  SelectVariant,
-} from "@patternfly/react-core/deprecated";
-import { useState } from "react";
+import Select from "ui/form/Select";
 import { RangeOptionValue } from "types";
 
 const labels: { [k in RangeOptionValue]: string } = {
@@ -26,11 +21,6 @@ const labels: { [k in RangeOptionValue]: string } = {
   custom: "Custom period",
 };
 
-type RangeOption = {
-  value: RangeOptionValue;
-  label: string;
-};
-
 interface RangeToolbarFilterProps {
   range: RangeOptionValue;
   ranges?: RangeOptionValue[];
@@ -50,10 +40,7 @@ export default function RangeToolbarFilter({
   categoryName = "Range",
   showToolbarItem = true,
 }: RangeToolbarFilterProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const label = labels[range];
   const seeDatePicker = range === "custom";
-
   return (
     <div>
       <ToolbarFilter
@@ -64,26 +51,18 @@ export default function RangeToolbarFilter({
         <div>
           <div>
             <Select
-              onToggle={(_event, val) => setIsOpen(val)}
-              isOpen={isOpen}
-              variant={SelectVariant.single}
-              selections={label}
-              onSelect={(event, selectedRange) => {
-                const newRange = (selectedRange as RangeOption).value;
-                onChange(newRange, after, before);
-                setIsOpen(false);
+              onSelect={(item) => {
+                if (item) {
+                  const newRange = item.value as RangeOptionValue;
+                  onChange(newRange, after, before);
+                }
               }}
-            >
-              {ranges
-                .map((value) => ({
-                  value,
-                  label: labels[value],
-                  toString: () => labels[value],
-                }))
-                .map((option) => (
-                  <SelectOption key={option.value} value={option} />
-                ))}
-            </Select>
+              item={{ value: range, label: labels[range] }}
+              items={ranges.map((range) => ({
+                value: range,
+                label: labels[range],
+              }))}
+            />
           </div>
           {seeDatePicker && (
             <div>

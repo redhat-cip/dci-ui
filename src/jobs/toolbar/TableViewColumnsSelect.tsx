@@ -3,8 +3,10 @@ import { JobsTableListColumn } from "types";
 import {
   Select,
   SelectOption,
-  SelectVariant,
-} from "@patternfly/react-core/deprecated";
+  SelectList,
+  MenuToggle,
+  MenuToggleElement,
+} from "@patternfly/react-core";
 
 export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {
   id: "Id",
@@ -35,9 +37,11 @@ export default function TableViewColumnsSelect({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Select
-      variant={SelectVariant.checkbox}
-      onToggle={() => setIsOpen(!isOpen)}
-      onSelect={(event, newSelection) => {
+      role="menu"
+      id="tableview-columns-select"
+      isOpen={isOpen}
+      selected={columns}
+      onSelect={(e, newSelection) => {
         const newColumns = (
           Object.keys(tableViewColumnLabels) as JobsTableListColumn[]
         ).reduce((acc, column) => {
@@ -52,18 +56,30 @@ export default function TableViewColumnsSelect({
         }, [] as JobsTableListColumn[]);
         onSelect(newColumns);
       }}
-      selections={columns}
-      isOpen={isOpen}
-      placeholderText="Filter columns"
-      menuAppendTo={() => document.body}
-    >
-      {(Object.keys(tableViewColumnLabels) as JobsTableListColumn[]).map(
-        (column, i) => (
-          <SelectOption key={i} value={column}>
-            {tableViewColumnLabels[column]}
-          </SelectOption>
-        ),
+      onOpenChange={(nextOpen: boolean) => setIsOpen(nextOpen)}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        <MenuToggle
+          ref={toggleRef}
+          onClick={() => setIsOpen(!isOpen)}
+          isExpanded={isOpen}
+        >
+          Filter columns
+        </MenuToggle>
       )}
+    >
+      <SelectList>
+        {(Object.keys(tableViewColumnLabels) as JobsTableListColumn[]).map(
+          (column, i) => (
+            <SelectOption
+              hasCheckbox
+              value={column}
+              isSelected={columns.includes(column)}
+            >
+              {tableViewColumnLabels[column]}
+            </SelectOption>
+          ),
+        )}
+      </SelectList>
     </Select>
   );
 }

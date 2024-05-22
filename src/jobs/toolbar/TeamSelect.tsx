@@ -21,6 +21,7 @@ export default function TeamSelect({
   const team = isFetchingTeam || getTeamData === undefined ? null : getTeamData;
   return (
     <TypeheadSelect
+      id="select-team"
       placeholder={placeholder}
       onClear={onClear}
       onSelect={(item) => {

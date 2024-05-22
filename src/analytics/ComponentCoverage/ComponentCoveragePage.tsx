@@ -208,32 +208,23 @@ export default function ComponentCoveragePage() {
                   onSelect={(team) => setTeamId(team.id)}
                 />
               </ToolbarItem>
-              {types.length === 0 ? null : (
-                <>
-                  <ToolbarItem>Filter by types</ToolbarItem>
-                  <ToolbarItem>
-                    <TypesFilter
-                      types={types}
-                      typesSelected={selectedTypes}
-                      onClear={() => setSelectedTypes([])}
-                      deleteChip={(type) =>
-                        setSelectedTypes(
-                          selectedTypes.filter((t) => t !== type),
-                        )
-                      }
-                      onSelect={(type) => {
-                        if (selectedTypes.indexOf(type) === -1) {
-                          setSelectedTypes([...selectedTypes, type]);
-                        } else {
-                          setSelectedTypes(
-                            selectedTypes.filter((t) => t !== type),
-                          );
-                        }
-                      }}
-                    />
-                  </ToolbarItem>
-                </>
-              )}
+              <ToolbarItem variant="label">Filter by types</ToolbarItem>
+              <ToolbarItem>
+                <TypesFilter
+                  types={types}
+                  typesSelected={selectedTypes}
+                  deleteChip={(type) =>
+                    setSelectedTypes(selectedTypes.filter((t) => t !== type))
+                  }
+                  onSelect={(type) => {
+                    if (selectedTypes.indexOf(type) === -1) {
+                      setSelectedTypes([...selectedTypes, type]);
+                    } else {
+                      setSelectedTypes(selectedTypes.filter((t) => t !== type));
+                    }
+                  }}
+                />
+              </ToolbarItem>
               <ToolbarItem>
                 <Button
                   variant="primary"

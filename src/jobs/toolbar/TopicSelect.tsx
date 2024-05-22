@@ -22,6 +22,7 @@ export default function TopicSelect({
     isFetchingTopic || getTopicData === undefined ? null : getTopicData;
   return (
     <TypeheadSelect
+      id="select-topic"
       placeholder={placeholder}
       onClear={onClear}
       onSelect={(item) => {

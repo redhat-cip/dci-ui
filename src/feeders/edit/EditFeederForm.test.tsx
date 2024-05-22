@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import EditFeederForm from "./EditFeederForm";
 import { ITeam, IFeeder } from "types";
 
@@ -26,15 +26,14 @@ test("test edit feeder form submit the correct values", async () => {
   const teams_select = getByPlaceholderText(
     "Select a team",
   ) as HTMLSelectElement;
-  fireEvent.change(teams_select, {
-    target: { value: teams[0].name },
-  });
-  const option_1 = getByTestId(
-    "edit_feeder_form__team_id[0]",
-  ) as HTMLButtonElement;
-  fireEvent.click(option_1);
+  fireEvent.click(teams_select);
+  const option_1 = getByTestId("edit_feeder_form__team_id[0]");
+  await waitFor(() => expect(option_1).toBeInTheDocument());
+  const team1 = within(option_1).getByRole("option") as HTMLButtonElement;
+  fireEvent.click(team1);
 
   const editButton = getByRole("button", { name: /Edit/i });
+  await waitFor(() => expect(editButton).not.toBeDisabled());
   fireEvent.click(editButton);
 
   await waitFor(() => {

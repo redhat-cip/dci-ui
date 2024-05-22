@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import EditRemoteciModal from "./EditRemoteciModal";
 import { IRemoteci, ITeam } from "types";
 
@@ -47,13 +47,11 @@ test("test edit remoteci form submit the correct values", async () => {
 
   const teams_select = getByPlaceholderText("Team Owner") as HTMLSelectElement;
   expect(teams_select.value).toBe("team 2");
-  fireEvent.change(teams_select, {
-    target: { value: teams[0].name },
-  });
-  const option_1 = getByTestId(
-    "remoteci_form__team_id[0]",
-  ) as HTMLButtonElement;
-  fireEvent.click(option_1);
+  fireEvent.click(teams_select);
+  const option1 = getByTestId("remoteci_form__team_id[0]");
+  await waitFor(() => expect(option1).toBeInTheDocument());
+  const team1 = within(option1).getByRole("option") as HTMLButtonElement;
+  fireEvent.click(team1);
 
   const editButton = getByRole("button", { name: /Edit/i });
   fireEvent.click(editButton);

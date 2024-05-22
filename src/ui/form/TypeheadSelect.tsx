@@ -21,11 +21,11 @@ type Item = {
 };
 
 export default function TypeheadSelect<T extends Item>({
+  id,
   item,
   items,
   onClear,
   onSelect,
-  toolbarId = "search-select-input",
   placeholder = "",
   isLoading = false,
   filterItems = (item: T, inputValue: string) =>
@@ -34,11 +34,11 @@ export default function TypeheadSelect<T extends Item>({
       .includes(inputValue.replace(/\*$/, "").toLowerCase()),
   search = (_inputSearch: string) => void 0,
 }: {
+  id: string;
   item?: T | undefined | null;
   items: T[];
   onSelect: (item: T | null) => void;
   onClear: () => void;
-  toolbarId?: string;
   placeholder?: string;
   isLoading?: boolean;
   filterItems?: (item: T, inputValue: string) => boolean;
@@ -148,7 +148,7 @@ export default function TypeheadSelect<T extends Item>({
             setSearchValue(v);
           }}
           onKeyDown={onInputKeyDown}
-          id={toolbarId}
+          id={`toggle-${id}`}
           autoComplete="off"
           ref={textInputRef}
         />
@@ -174,6 +174,7 @@ export default function TypeheadSelect<T extends Item>({
 
   return (
     <Select
+      id={id}
       isOpen={isOpen}
       selected={item?.value}
       onSelect={(e, v) => {
@@ -200,6 +201,8 @@ export default function TypeheadSelect<T extends Item>({
         <SelectList style={{ maxHeight: 320, overflowY: "auto" }}>
           {filteredItems.map((filteredItem, index) => (
             <SelectOption
+              id={`${id}[${index}]`}
+              data-testid={`${id}[${index}]`}
               key={filteredItem.value}
               value={filteredItem.value}
               isFocused={focusedItemIndex === index}

@@ -42,7 +42,6 @@ export default function AddUserToTeamForm({
                 <SelectWithTypeahead
                   id="add_user_to_team_formadd_user_to_team_form__team_id"
                   name="team_id"
-                  option={""}
                   options={data.teams.map((t) => ({
                     label: t.name,
                     value: t.id,

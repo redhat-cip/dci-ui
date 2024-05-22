@@ -3,15 +3,16 @@ import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
-  SelectVariant,
-} from "@patternfly/react-core/deprecated";
+  SelectList,
+  MenuToggle,
+  MenuToggleElement,
+} from "@patternfly/react-core";
 
 type TypesFilterProps = {
   types: string[];
   typesSelected: string[];
   onSelect: (type: string) => void;
   deleteChip: (type: string) => void;
-  onClear: () => void;
   showToolbarItem?: boolean;
 };
 
@@ -20,7 +21,6 @@ export default function TypesFilter({
   typesSelected,
   onSelect,
   deleteChip,
-  onClear,
   showToolbarItem = true,
 }: TypesFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,21 +32,35 @@ export default function TypesFilter({
       showToolbarItem={showToolbarItem}
     >
       <Select
-        variant={SelectVariant.typeaheadMulti}
-        onToggle={(_event, val) => setIsOpen(val)}
-        onSelect={(event, selection) => {
-          setIsOpen(false);
-          onSelect(selection as string);
-        }}
-        onClear={onClear}
-        selections={typesSelected}
+        role="menu"
+        id="multi-type-select"
         isOpen={isOpen}
-        aria-labelledby="select"
-        placeholderText="Filter by types"
+        selected={typesSelected}
+        onSelect={(e, newTypeSelected) => {
+          onSelect(newTypeSelected as string);
+        }}
+        onOpenChange={(nextOpen: boolean) => setIsOpen(nextOpen)}
+        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          <MenuToggle
+            ref={toggleRef}
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
+          >
+            Filter by types
+          </MenuToggle>
+        )}
       >
-        {types.map((s, index) => (
-          <SelectOption key={index} value={s} />
-        ))}
+        <SelectList>
+          {types.map((type, i) => (
+            <SelectOption
+              hasCheckbox
+              value={type}
+              isSelected={typesSelected.includes(type)}
+            >
+              {type}
+            </SelectOption>
+          ))}
+        </SelectList>
       </Select>
     </ToolbarFilter>
   );

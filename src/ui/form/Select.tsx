@@ -26,7 +26,7 @@ export default function DCISelect<T extends Item>({
   item?: T | undefined | null;
   items: T[];
   onSelect: (item: T | null) => void;
-  onClear: () => void;
+  onClear?: () => void | undefined;
   placeholder?: string;
   isLoading?: boolean;
 }) {
@@ -48,7 +48,8 @@ export default function DCISelect<T extends Item>({
       onClick={toggleSetIsOpen}
       isFullWidth
       badge={
-        !!item && (
+        !!item &&
+        onClear !== undefined && (
           <Button
             variant="plain"
             onClick={() => {
