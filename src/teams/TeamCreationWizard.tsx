@@ -1,5 +1,5 @@
-import { Button } from "@patternfly/react-core";
-import { Wizard } from "@patternfly/react-core/deprecated";
+import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Wizard, WizardStep } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamMembersForm, { TeamMembersFormSchema } from "./TeamMembersForm";
 import TeamPermissionForm from "./TeamPermissionForm";
@@ -30,41 +30,52 @@ export default function TeamCreationWizard() {
         onSubmit={() => {}}
       >
         {({ isValid, dirty }) => (
-          <Wizard
-            title="Team creation"
-            description="Create a team, add users and set permissions."
-            descriptionComponent="div"
-            steps={[
-              {
-                name: "Create team",
-                component: <CreateTeamForm />,
-                enableNext: isValid && dirty,
-              },
-              {
-                name: "Add users",
-                component: <TeamMembersForm />,
-                enableNext: isValid && dirty,
-              },
-              {
-                name: "Set permissions",
-                component: <TeamPermissionForm />,
-                enableNext: isValid && dirty,
-              },
-              {
-                name: "Review",
-                component: <TeamCreationWizardReviewStep />,
-                enableNext: isValid && dirty,
-                nextButtonText: "Create",
-              },
-              {
-                name: "Finish",
-                component: <CreateTeamWithMembers close={hide} />,
-                isFinishedStep: true,
-              },
-            ]}
-            onClose={hide}
+          <Modal
             isOpen={isOpen}
-          />
+            showClose={false}
+            aria-label="Team creation wizard modal"
+            hasNoBodyWrapper
+            onEscapePress={() => show()}
+            variant={ModalVariant.medium}
+          >
+            <Wizard title="Team creation" onClose={hide}>
+              <WizardStep
+                id="wizard-step-create-team"
+                name="Create team"
+                footer={{ isNextDisabled: !(isValid && dirty) }}
+              >
+                <CreateTeamForm />
+              </WizardStep>
+              <WizardStep
+                id="wizard-step-add-user"
+                name="Add users"
+                footer={{ isNextDisabled: !(isValid && dirty) }}
+              >
+                <TeamMembersForm />
+              </WizardStep>
+              <WizardStep
+                id="wizard-step-set-permissions"
+                name="Set permissions"
+                footer={{ isNextDisabled: !(isValid && dirty) }}
+              >
+                <TeamPermissionForm />
+              </WizardStep>
+              <WizardStep
+                id="wizard-step-review"
+                name="Review"
+                footer={{ isNextDisabled: !(isValid && dirty) }}
+              >
+                <TeamCreationWizardReviewStep />
+              </WizardStep>
+              <WizardStep
+                id="wizard-step-finish"
+                name="Finish"
+                footer={{ nextButtonText: "Finish" }}
+              >
+                <CreateTeamWithMembers close={hide} />
+              </WizardStep>
+            </Wizard>
+          </Modal>
         )}
       </Formik>
     </div>
