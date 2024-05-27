@@ -218,29 +218,30 @@ export default function JobDetailsHeader({ job }: JobDetailsHeaderProps) {
         <DescriptionListGroup>
           <DescriptionListTerm>Status</DescriptionListTerm>
           <DescriptionListDescription>
-            <span
-              style={{
-                color: getColor(job.status),
-              }}
-            >
-              {getIcon(job.status)} {job.status}
-            </span>
+            <div>
+              <div>
+                <span
+                  style={{
+                    color: getColor(job.status),
+                  }}
+                >
+                  {getIcon(job.status)} {job.status}
+                </span>
+              </div>
+              {job.status_reason && (
+                <div className="pf-v5-u-mt-sm">
+                  <span
+                    style={{
+                      color: getColor(job.status),
+                    }}
+                  >
+                    {job.status_reason}
+                  </span>
+                </div>
+              )}
+            </div>
           </DescriptionListDescription>
         </DescriptionListGroup>
-        {job.status_reason && (
-          <DescriptionListGroup>
-            <DescriptionListTerm>Status reason</DescriptionListTerm>
-            <DescriptionListDescription>
-              <span
-                style={{
-                  color: getColor(job.status),
-                }}
-              >
-                {job.status_reason}
-              </span>
-            </DescriptionListDescription>
-          </DescriptionListGroup>
-        )}
         <DescriptionListGroup>
           <DescriptionListTerm icon={<UsersIcon />}>Team</DescriptionListTerm>
           <DescriptionListDescription>
