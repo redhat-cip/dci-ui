@@ -131,3 +131,30 @@ test("nrt groupJobByPipeline with jobs keep job order", () => {
     },
   ]);
 });
+
+test("nrt groupJobByPipeline keep all jobs if previous_job_id not null but not present in the list", () => {
+  const jobs = [
+    {
+      id: "j1",
+      previous_job_id: "j2",
+    },
+    {
+      id: "j3",
+      previous_job_id: "j4",
+    },
+  ] as unknown as IJob[];
+  expect(groupJobsByPipeline(jobs)).toEqual([
+    {
+      id: "j1",
+      previous_job_id: "j2",
+      children: [],
+      index: 0,
+    },
+    {
+      id: "j3",
+      previous_job_id: "j4",
+      children: [],
+      index: 1,
+    },
+  ]);
+});

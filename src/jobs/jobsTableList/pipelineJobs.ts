@@ -12,7 +12,7 @@ export function groupJobsByPipeline(jobs: IJob[]): JobNode[] {
   for (let i = jobs.length - 1; i >= 0; --i) {
     const job = jobs[i];
     const node = jobWithChildrenMap[job.id];
-    if (job.previous_job_id) {
+    if (job.previous_job_id && jobWithChildrenMap[job.previous_job_id]) {
       const parentNode = jobWithChildrenMap[job.previous_job_id];
       parentNode?.children.push(node);
     } else {

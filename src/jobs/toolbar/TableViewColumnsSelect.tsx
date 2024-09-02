@@ -71,6 +71,7 @@ export default function TableViewColumnsSelect({
         {(Object.keys(tableViewColumnLabels) as JobsTableListColumn[]).map(
           (column, i) => (
             <SelectOption
+              key={i}
               hasCheckbox
               value={column}
               isSelected={columns.includes(column)}
