@@ -14,9 +14,14 @@ import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
 import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";
 import LatestJobsStatusHeaderImage from "./LatestJobStatus/latest_jos_status.png";
 import PipelinesHeaderImages from "./Pipelines/pipelines.png";
+import KeyValuesHeaderImages from "./KeyValues/keyvalues.png";
+import { useAuth } from "auth/authContext";
 
 export default function AnalyticsPage() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  if (currentUser === null) return null;
 
   return (
     <MainPage
@@ -29,6 +34,27 @@ export default function AnalyticsPage() {
       }
     >
       <Gallery hasGutter>
+        {currentUser.hasEPMRole && (
+          <GalleryItem>
+            <Card
+              className="pointer"
+              onClick={() => {
+                navigate("/analytics/keyvalues");
+              }}
+            >
+              <CardHeader>
+                <img
+                  src={KeyValuesHeaderImages}
+                  alt="Key values"
+                  height={100}
+                  width="auto"
+                />
+              </CardHeader>
+              <CardTitle>Key values</CardTitle>
+              <CardBody>Graph key values attached to your jobs</CardBody>
+            </Card>
+          </GalleryItem>
+        )}
         <GalleryItem>
           <Card
             className="pointer"

@@ -36,6 +36,7 @@ import Alerts from "alerts/Alerts";
 import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import JobTestPage from "jobs/job/tests/test/JobTestPage";
 import PipelinesPage from "analytics/Pipelines/PipelinesPage";
+import KeyValuesPage from "analytics/KeyValues/KeyValuesPage";
 import ComponentsPage from "components/ComponentsPage";
 
 export default function App() {
@@ -74,6 +75,7 @@ export default function App() {
                 element={<LatestJobStatusDetailsPage />}
               />
               <Route path="pipelines" element={<PipelinesPage />} />
+              <Route path="keyvalues" element={<KeyValuesPage />} />
             </Route>
             <Route path="jobs">
               <Route index element={<JobsPage />} />
