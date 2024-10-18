@@ -9,33 +9,37 @@ import {
 } from "@patternfly/react-core";
 
 type MultiSelectFilterProps = {
-  keys: string[];
-  keysSelected: string[];
+  items: string[];
+  itemsSelected: string[];
   onSelect: (type: string) => void;
-  keyRemoved: (type: string) => void;
+  itemRemoved: (type: string) => void;
+  categoryName: string;
   showToolbarItem?: boolean;
+  placeholder?: string;
 };
 
 export default function MultiSelectFilter({
-  keys,
-  keysSelected,
+  items,
+  itemsSelected,
   onSelect,
-  keyRemoved,
+  itemRemoved,
+  categoryName,
   showToolbarItem = true,
+  placeholder = "Filter by",
 }: MultiSelectFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <ToolbarFilter
-      chips={keysSelected}
-      deleteChip={(cat, key) => keyRemoved(key as string)}
-      categoryName="Keys"
+      chips={itemsSelected}
+      deleteChip={(cat, key) => itemRemoved(key as string)}
+      categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
       <Select
         role="menu"
-        id="multi-keys-select"
+        id={`multi-${categoryName}-select`}
         isOpen={isOpen}
-        selected={keysSelected}
+        selected={itemsSelected}
         onSelect={(e, newTypeSelected) => {
           onSelect(newTypeSelected as string);
         }}
@@ -46,16 +50,16 @@ export default function MultiSelectFilter({
             onClick={() => setIsOpen(!isOpen)}
             isExpanded={isOpen}
           >
-            Filter by key
+            {placeholder}
           </MenuToggle>
         )}
       >
         <SelectList>
-          {keys.map((type, i) => (
+          {items.map((type, i) => (
             <SelectOption
               hasCheckbox
               value={type}
-              isSelected={keysSelected.includes(type)}
+              isSelected={itemsSelected.includes(type)}
             >
               {type}
             </SelectOption>

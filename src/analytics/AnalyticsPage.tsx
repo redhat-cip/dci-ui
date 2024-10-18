@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
       }
     >
       <Gallery hasGutter>
-        {currentUser.hasEPMRole && (
+        {currentUser.hasReadOnlyRole && (
           <GalleryItem>
             <Card
               className="pointer"

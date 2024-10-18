@@ -12,14 +12,18 @@ import {
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
 import { global_palette_red_100 } from "@patternfly/react-tokens";
-import { getRangeDates } from "services/date";
-import { useEffect, useState } from "react";
+import { formatDate, getRangeDates } from "services/date";
+import { useCallback, useEffect, useState } from "react";
 import { RangeOptionValue } from "types";
 import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
 import http from "services/http";
 import qs from "qs";
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
@@ -27,65 +31,67 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { DateTime } from "luxon";
 import MultiSelectFilter from "./MultiSelectFilter";
 import { useSearchParams } from "react-router-dom";
+import {
+  extractKeyValues,
+  IGraphKeyValue,
+  IGraphKeyValues,
+  IKeyValueResponse,
+} from "./keyvalues";
+import { DateTime } from "luxon";
+import SelectFilter from "./SelectFilter";
 
-interface IKeyValue {
-  job_id: string;
-  key: string;
-  value: number;
-}
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const jobName = payload[0].payload.job.name;
+    return (
+      <div
+        style={{
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          padding: "1em",
+        }}
+      >
+        <p>{`Job ${jobName}`}</p>
+        {payload.map(
+          (p: { name: string; value: number; payload: IGraphKeyValue }) => (
+            <div key={p.name}>
+              <p>
+                {p.name === "created_at"
+                  ? `Created on ${formatDate(DateTime.fromMillis(p.value), DateTime.DATE_MED)}`
+                  : `${p.payload.key}: ${p.value}`}
+              </p>
+            </div>
+          ),
+        )}
+      </div>
+    );
+  }
 
-interface IKeyValueResponse {
-  _shards: {
-    failed: number;
-    skipped: number;
-    successful: number;
-    total: number;
-  };
-  hits: {
-    hits: [
-      {
-        _id: string;
-        _index: string;
-        _score: number | null;
-        _source: {
-          id: string;
-          created_at: string;
-          keys_values: IKeyValue[];
-        };
-        _type: string;
-        sort: string[];
-      },
-    ];
-    max_score: number | null;
-    total: {
-      relation: string;
-      value: number;
-    };
-  };
-  timed_out: boolean;
-  took: number;
-}
+  return null;
+};
 
-interface IGraphKeyValue {
-  created_at: number;
-  value: number;
-  job_id: string;
-  key: string;
-}
-
-interface IGraphKeyValues {
-  [key: string]: IGraphKeyValue[];
-}
+type IGraphType = "bar" | "line" | "scatter";
+type IGraphTypeItem = { label: string; value: IGraphType };
 
 export default function KeyValuesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState(searchParams.get("query") || "");
   const [keyValues, setKeyValues] = useState<IGraphKeyValues | null>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const graphTypes: IGraphTypeItem[] = [
+    { label: "scatter chart", value: "scatter" },
+    { label: "line chart", value: "line" },
+    { label: "bar chart", value: "bar" },
+  ];
+  const [graphType, setGraphType] = useState<IGraphTypeItem>(
+    graphTypes.find((gt) => gt.value === searchParams.get("graph_type")) ||
+      graphTypes[0],
+  );
+  const [selectedKeys, setSelectedKeys] = useState<string[]>(
+    searchParams.get("selected_keys")?.split(",") || [],
+  );
   const defaultRangeValue: RangeOptionValue = "last7Days";
   const [range, setRange] = useState<RangeOptionValue>(
     (searchParams.get("range") as RangeOptionValue) || defaultRangeValue,
@@ -98,8 +104,43 @@ export default function KeyValuesPage() {
     searchParams.get("end_date") || dates.before,
   );
 
+  const memoizedGetKeyValues = useCallback(() => {
+    if (query === "") return;
+    setIsLoading(true);
+    const params = qs.stringify(
+      {
+        query: query,
+        offset: 0,
+        limit: 200,
+        sort: "-created_at",
+        includes: "id,name,created_at,keys_values",
+        from: after,
+        to: before,
+      },
+      {
+        addQueryPrefix: true,
+        encode: true,
+        skipNulls: true,
+      },
+    );
+    http
+      .get(`/api/v1/analytics/jobs${params}`)
+      .then((response) => {
+        setKeyValues(extractKeyValues(response.data as IKeyValueResponse));
+      })
+      .catch(console.error)
+      .then(() => setIsLoading(false));
+  }, [query, after, before]);
+
+  useEffect(() => {
+    memoizedGetKeyValues();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const updateUrlWithParams = () => {
-    searchParams.set("selected_keys", selectedKeys.join(","));
+    if (selectedKeys.length > 0) {
+      searchParams.set("selected_keys", selectedKeys.join(","));
+    }
+    searchParams.set("graph_type", graphType.value);
     searchParams.set("query", query);
     if (after === "" || range !== "custom") {
       searchParams.delete("start_date");
@@ -143,6 +184,10 @@ export default function KeyValuesPage() {
             id="toolbar-select-jobs"
             clearAllFilters={() => {
               setRange(defaultRangeValue);
+              setGraphType(graphTypes[0]);
+              setRange(defaultRangeValue);
+              setSelectedKeys([]);
+              updateUrlWithParams();
             }}
             collapseListedFiltersBreakpoint="xl"
           >
@@ -161,10 +206,6 @@ export default function KeyValuesPage() {
                   isRequired
                   style={{ width: 500 }}
                 />
-              </ToolbarItem>
-
-              <ToolbarItem variant="label" id="range-label-toolbar">
-                Range
               </ToolbarItem>
               <ToolbarItem>
                 <RangeToolbarFilter
@@ -188,84 +229,42 @@ export default function KeyValuesPage() {
                   ]}
                 />
               </ToolbarItem>
-
-              {keyValues !== null && (
-                <>
-                  <ToolbarItem variant="label" id="range-label-toolbar">
-                    Keys
-                  </ToolbarItem>
-                  <ToolbarItem>
-                    <MultiSelectFilter
-                      keys={Object.keys(keyValues)}
-                      keysSelected={selectedKeys}
-                      keyRemoved={(key) =>
-                        setSelectedKeys(selectedKeys.filter((t) => t !== key))
-                      }
-                      onSelect={(type) => {
-                        if (selectedKeys.indexOf(type) === -1) {
-                          setSelectedKeys([...selectedKeys, type]);
-                        } else {
-                          setSelectedKeys(
-                            selectedKeys.filter((t) => t !== type),
-                          );
-                        }
-                      }}
-                    />
-                  </ToolbarItem>
-                </>
-              )}
+              <ToolbarItem>
+                <MultiSelectFilter
+                  categoryName="Keys"
+                  placeholder="Filter by keys"
+                  items={keyValues === null ? [] : Object.keys(keyValues)}
+                  itemsSelected={selectedKeys}
+                  itemRemoved={(key) =>
+                    setSelectedKeys(selectedKeys.filter((t) => t !== key))
+                  }
+                  onSelect={(type) => {
+                    if (selectedKeys.indexOf(type) === -1) {
+                      setSelectedKeys([...selectedKeys, type]);
+                    } else {
+                      setSelectedKeys(selectedKeys.filter((t) => t !== type));
+                    }
+                  }}
+                />
+              </ToolbarItem>
+              <ToolbarItem>
+                <SelectFilter
+                  item={graphType}
+                  items={graphTypes}
+                  categoryName="Graph type"
+                  placeholder="Select graph type"
+                  onSelect={(selectedGraphType) => {
+                    console.log(selectedGraphType);
+                    setGraphType(selectedGraphType as IGraphTypeItem);
+                  }}
+                />
+              </ToolbarItem>
               <ToolbarItem>
                 <Button
                   variant="primary"
                   isDisabled={query === ""}
                   onClick={() => {
-                    setIsLoading(true);
-                    const params = qs.stringify(
-                      {
-                        query: query,
-                        offset: 0,
-                        limit: 200,
-                        sort: "-created_at",
-                        includes: "id,created_at,keys_values",
-                        from: after,
-                        to: before,
-                      },
-                      {
-                        addQueryPrefix: true,
-                        encode: true,
-                        skipNulls: true,
-                      },
-                    );
-                    http
-                      .get(`/api/v1/analytics/jobs${params}`)
-                      .then((response) => {
-                        const data = response.data as IKeyValueResponse;
-                        setKeyValues(
-                          data.hits.hits.reduce((acc, hit) => {
-                            const created_at = DateTime.fromISO(
-                              hit._source.created_at,
-                            ).toMillis();
-                            const keyValues = hit._source.keys_values;
-                            for (let i = 0; i < keyValues.length; i++) {
-                              const keyValue = keyValues[i];
-                              const key = keyValue.key;
-                              const value = keyValue.value;
-                              const job_id = keyValue.job_id;
-                              const tmpKeyValues = acc[key] ?? [];
-                              tmpKeyValues.push({
-                                created_at,
-                                value,
-                                job_id,
-                                key,
-                              });
-                              acc[key] = tmpKeyValues;
-                            }
-                            return acc;
-                          }, {} as IGraphKeyValues),
-                        );
-                      })
-                      .catch(console.error)
-                      .then(() => setIsLoading(false));
+                    memoizedGetKeyValues();
                     updateUrlWithParams();
                   }}
                 >
@@ -296,31 +295,96 @@ export default function KeyValuesPage() {
                 <Card className="pf-v5-u-mt-xs">
                   <CardHeader>{key}</CardHeader>
                   <CardBody>
-                    <ResponsiveContainer width="100%" height={400}>
-                      <ScatterChart
-                        margin={{
-                          top: 20,
-                          right: 20,
-                          bottom: 20,
-                          left: 20,
-                        }}
-                      >
-                        <CartesianGrid />
-                        <XAxis
-                          dataKey="created_at"
-                          type="number"
-                          domain={["auto", "auto"]}
-                          scale="time"
-                          hide
-                        />
-                        <YAxis dataKey="value" />
-                        <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                        <Scatter name={key} data={keyValue} fill="#3E8635" />
-                      </ScatterChart>
-                    </ResponsiveContainer>
+                    {graphType.value === "scatter" && (
+                      <ResponsiveContainer width="100%" height={400}>
+                        <ScatterChart
+                          margin={{
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                          }}
+                        >
+                          <CartesianGrid />
+                          <XAxis
+                            dataKey="created_at"
+                            type="number"
+                            domain={["auto", "auto"]}
+                            scale="time"
+                            hide
+                          />
+                          <YAxis dataKey="value" />
+                          <Tooltip
+                            cursor={{ strokeDasharray: "3 3" }}
+                            content={<CustomTooltip />}
+                          />
+                          <Scatter name={key} data={keyValue} fill="#3E8635" />
+                        </ScatterChart>
+                      </ResponsiveContainer>
+                    )}
+                    {graphType.value === "bar" && (
+                      <ResponsiveContainer width="100%" height={400}>
+                        <BarChart
+                          width={500}
+                          height={400}
+                          margin={{
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                          }}
+                          data={keyValue}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="created_at" hide />
+                          <YAxis />
+                          <Tooltip
+                            cursor={{ strokeDasharray: "3 3" }}
+                            content={<CustomTooltip />}
+                          />
+                          <Bar dataKey="value" fill="#3E8635" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
+                    {graphType.value === "line" && (
+                      <ResponsiveContainer width="100%" height={400}>
+                        <LineChart
+                          width={500}
+                          height={400}
+                          margin={{
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                          }}
+                          data={keyValue}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="created_at" hide />
+                          <YAxis />
+                          <Tooltip
+                            cursor={{ strokeDasharray: "3 3" }}
+                            content={<CustomTooltip />}
+                          />
+                          <Line
+                            dot={false}
+                            type="monotone"
+                            dataKey="value"
+                            fill="#3E8635"
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    )}
                   </CardBody>
                 </Card>
               ))}
+          {keyValues !== null && Object.keys(keyValues).length === 0 && (
+            <Card className="pf-v5-u-mt-xs">
+              <CardBody>
+                There is no key values corresponding to this query: {query}
+              </CardBody>
+            </Card>
+          )}
         </div>
       )}
     </MainPage>
