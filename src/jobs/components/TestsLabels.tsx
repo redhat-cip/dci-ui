@@ -81,27 +81,43 @@ export function TestLabels({
   );
 }
 
+export function sumTests<
+  T extends {
+    success: number;
+    skips: number;
+    failures: number;
+    errors: number;
+    successfixes: number;
+    regressions: number;
+  },
+>(tests: T[]) {
+  return tests.reduce(
+    (acc, test) => {
+      acc.success += test.success;
+      acc.skips += test.skips;
+      acc.failures += test.failures;
+      acc.errors += test.errors;
+      acc.successfixes += test.successfixes;
+      acc.regressions += test.regressions;
+      acc.total += test.success + test.skips + test.failures + test.errors;
+      return acc;
+    },
+    {
+      total: 0,
+      success: 0,
+      skips: 0,
+      failures: 0,
+      errors: 0,
+      successfixes: 0,
+      regressions: 0,
+    },
+  );
+}
+
 export default function TestsLabels({ tests }: { tests: IResult[] }) {
   const { success, skips, errors, failures, successfixes, regressions } =
-    tests.reduce(
-      (acc, test) => {
-        acc.success += test.success;
-        acc.skips += test.skips;
-        acc.failures += test.failures;
-        acc.errors += test.errors;
-        acc.successfixes += test.successfixes;
-        acc.regressions += test.regressions;
-        return acc;
-      },
-      {
-        success: 0,
-        skips: 0,
-        failures: 0,
-        errors: 0,
-        successfixes: 0,
-        regressions: 0,
-      },
-    );
+    sumTests(tests);
+
   return (
     <TestLabels
       success={success}

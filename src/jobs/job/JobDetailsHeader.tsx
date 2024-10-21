@@ -32,6 +32,7 @@ import { getTopicIcon } from "ui/icons";
 import { convertLinksToHtml, getColor, getIcon } from "jobs/jobUtils";
 import { TestLabels } from "jobs/components";
 import { useGetJobQuery, useUpdateJobMutation } from "jobs/jobsApi";
+import { sumTests } from "jobs/components/TestsLabels";
 
 const CommentBloc = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ function Tests({ jobId, tests }: TestsProps) {
   if (tests.length === 0) {
     return <div>no tests</div>;
   }
+  const total = sumTests(tests);
   return (
     <div>
       {sortByOldestFirst(tests).map((test, i) => (
@@ -63,8 +65,7 @@ function Tests({ jobId, tests }: TestsProps) {
             justifyContent: "space-between",
             alignItems: "center",
             gap: "1em",
-            borderBottom:
-              tests.length === i + 1 ? "none" : "1px dashed rgb(210, 210, 210)",
+            borderBottom: "1px dashed rgb(210, 210, 210)",
           }}
         >
           <div
@@ -89,6 +90,35 @@ function Tests({ jobId, tests }: TestsProps) {
           </div>
         </div>
       ))}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          gap: "1em",
+        }}
+      >
+        <div
+          style={{
+            flex: "0 1 auto",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
+          total
+        </div>
+        <div style={{ flex: "0 0 auto" }}>
+          <TestLabels
+            success={total.success}
+            skips={total.skips}
+            failures={total.failures}
+            errors={total.errors}
+            successfixes={total.successfixes}
+            regressions={total.regressions}
+          />
+        </div>
+      </div>
     </div>
   );
 }

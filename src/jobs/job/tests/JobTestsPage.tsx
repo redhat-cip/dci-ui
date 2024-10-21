@@ -10,6 +10,7 @@ import {
   ExclamationTriangleIcon,
 } from "@patternfly/react-icons";
 import humanizeDuration from "humanize-duration";
+import { sumTests } from "jobs/components/TestsLabels";
 
 export default function JobTestsPage() {
   const { job } = useJob();
@@ -23,6 +24,7 @@ export default function JobTestsPage() {
       </Card>
     );
   const reversedTests = [...tests].reverse();
+  const total = sumTests(reversedTests);
   return (
     <Card>
       <CardBody>
@@ -64,6 +66,62 @@ export default function JobTestsPage() {
             </Tr>
           </Thead>
           <Tbody>
+            <Tr role="row">
+              <Td role="cell" colSpan={2}>
+                Total
+              </Td>
+              <Td textCenter role="cell" data-label="Number of tests">
+                <Label isCompact color="blue">
+                  {total.total} {`test${total.total > 1 ? "s" : ""}`}
+                </Label>
+              </Td>
+              <Td textCenter role="cell" data-label="Success">
+                {total.success ? (
+                  <Label isCompact icon={<CheckCircleIcon />} color="green">
+                    {total.success} passed
+                  </Label>
+                ) : null}
+              </Td>
+              <Td textCenter role="cell" data-label="Error">
+                {total.errors ? (
+                  <Label isCompact icon={<ExclamationCircleIcon />} color="red">
+                    {total.errors} in error
+                  </Label>
+                ) : null}
+              </Td>
+              <Td textCenter role="cell" data-label="Failed">
+                {total.failures ? (
+                  <Label isCompact icon={<BugIcon />} color="red">
+                    {total.failures} failed
+                  </Label>
+                ) : null}
+              </Td>
+              <Td textCenter role="cell" data-label="Skipped">
+                {total.skips ? (
+                  <Label
+                    isCompact
+                    icon={<ExclamationTriangleIcon />}
+                    color="orange"
+                  >
+                    {total.skips} skipped
+                  </Label>
+                ) : null}
+              </Td>
+              <Td textCenter role="cell" data-label="Success fixes">
+                {total.successfixes ? (
+                  <Label isCompact icon={<CheckCircleIcon />} color="green">
+                    {total.successfixes} fixed
+                  </Label>
+                ) : null}
+              </Td>
+              <Td textCenter role="cell" data-label="Regression">
+                {total.regressions ? (
+                  <Label isCompact icon={<ExclamationCircleIcon />} color="red">
+                    {total.regressions} with a regression
+                  </Label>
+                ) : null}
+              </Td>
+            </Tr>
             {reversedTests.map((test, i) => (
               <Tr key={i} role="row">
                 <Td

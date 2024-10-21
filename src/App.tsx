@@ -84,7 +84,7 @@ export default function App() {
                 <Route path="jobStates" element={<JobStatesPage />} />
                 <Route path="tests">
                   <Route index element={<JobTestsPage />} />
-                  <Route path=":file_id" element={<JobTestPage />}/>
+                  <Route path=":file_id" element={<JobTestPage />} />
                 </Route>
                 <Route path="files" element={<JobFilesPage />} />
                 <Route path="settings" element={<JobSettingsPage />} />
