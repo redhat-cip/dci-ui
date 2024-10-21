@@ -9,14 +9,10 @@ import {
   Label,
 } from "@patternfly/react-core";
 import { Tbody, Td, Tr } from "@patternfly/react-table";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ITestCase, ITestCaseActionType } from "types";
 import { CopyButton } from "ui";
 
-interface TestCaseProps {
-  testcase: ITestCase;
-  index: number;
-}
 export function getTestCaseIcon(action: ITestCaseActionType) {
   switch (action) {
     case "skipped":
@@ -46,16 +42,40 @@ export function getTestCaseIcon(action: ITestCaseActionType) {
   }
 }
 
-export default function TestCase({ testcase, index }: TestCaseProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface TestCaseProps {
+  isExpanded?: boolean;
+  expand: (isExpanded: boolean) => void;
+  testcase: ITestCase;
+  index: number;
+}
+
+export default function TestCase({
+  testcase,
+  index,
+  expand,
+  isExpanded: defaultIsExpanded = false,
+}: TestCaseProps) {
+  const divRef = useRef<HTMLTableRowElement>(null);
+  const [isExpanded, setIsExpanded] = useState(defaultIsExpanded);
+
+  useEffect(() => {
+    if (defaultIsExpanded) {
+      divRef.current?.scrollIntoView();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Tbody isExpanded={isExpanded}>
-      <Tr>
+      <Tr ref={divRef}>
         <Td
           expand={{
             rowIndex: index,
             isExpanded,
-            onToggle: () => setIsExpanded(!isExpanded),
+            onToggle: () => {
+              const newIsExpanded = !isExpanded;
+              setIsExpanded(newIsExpanded);
+              expand(newIsExpanded);
+            },
             expandId: `${testcase.classname}:${testcase.name}:${index}`,
           }}
         />

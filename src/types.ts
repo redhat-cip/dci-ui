@@ -310,20 +310,20 @@ export interface IGetJunitTestSuites {
 
 export type state = "active" | "inactive" | "archived";
 
-export interface IFile {
-  id: string;
-  etag: string;
+export interface IFile extends Resource {
   created_at: string;
   updated_at: string;
   job_id: string;
   jobstate_id: string | null;
   md5: string | null;
   mime: string | null;
-  name: string;
   size: number;
   state: state;
   team_id: string;
-  test_id: string | null;
+}
+
+export interface IGetFile {
+  file: IFile;
 }
 
 export interface IFileWithDuration extends IFile {

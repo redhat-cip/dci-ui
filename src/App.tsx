@@ -82,8 +82,10 @@ export default function App() {
               <Route path=":job_id" element={<JobPage />}>
                 <Route index element={<JobStatesPage />} />
                 <Route path="jobStates" element={<JobStatesPage />} />
-                <Route path="tests/:file_id" element={<JobTestPage />} />
-                <Route path="tests" element={<JobTestsPage />} />
+                <Route path="tests">
+                  <Route index element={<JobTestsPage />} />
+                  <Route path=":file_id" element={<JobTestPage />}/>
+                </Route>
                 <Route path="files" element={<JobFilesPage />} />
                 <Route path="settings" element={<JobSettingsPage />} />
               </Route>

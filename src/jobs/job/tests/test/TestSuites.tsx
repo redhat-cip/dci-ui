@@ -1,19 +1,19 @@
 import {
   Banner,
-  Card,
-  CardBody,
-  CardTitle,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
   Flex,
   FlexItem,
+  Text,
+  TextVariants,
 } from "@patternfly/react-core";
 import { ITestCaseActionType, ITestSuite } from "types";
 import { Table, Thead, Tr, Th } from "@patternfly/react-table";
 import TestCase from "./TestCase";
 import { InfoCircleIcon } from "@patternfly/react-icons";
+import { useSearchParams } from "react-router-dom";
 
 interface TestsCasesProps {
   testsuites: ITestSuite[];
@@ -27,12 +27,17 @@ const testscaseActions: ITestCaseActionType[] = [
 ];
 
 export default function TestSuites({ testsuites }: TestsCasesProps) {
+  const [searchParams] = useSearchParams();
+  const testCaseParamName = "testcase";
+  const testcaseToExpand = searchParams.get(testCaseParamName);
   return (
     <div>
       {testsuites.map((testsuite, i) => (
-        <Card key={i} className="pf-v5-u-mb-md">
-          <CardTitle>{testsuite.name || `test suite ${i + 1}`}</CardTitle>
-          <CardBody>
+        <div key={i}>
+          <Text component={TextVariants.h2}>
+            {testsuite.name || `test suite ${i + 1}`}
+          </Text>
+          <div>
             {testsuite.properties.length > 0 && (
               <DescriptionList isHorizontal isFluid>
                 {testsuite.properties.map((property, i) => (
@@ -46,7 +51,11 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
               </DescriptionList>
             )}
             {testsuite.testcases.length === 0 ? (
-              <Banner screenReaderText="No test case banner" variant="blue">
+              <Banner
+                screenReaderText="No test case banner"
+                variant="blue"
+                className="pf-v5-u-mt-sm"
+              >
                 <Flex spaceItems={{ default: "spaceItemsSm" }}>
                   <FlexItem>
                     <InfoCircleIcon />
@@ -71,12 +80,27 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
                       testscaseActions.indexOf(tc2.action),
                   )
                   .map((testcase, i) => (
-                    <TestCase key={i} index={i} testcase={testcase} />
+                    <TestCase
+                      key={i}
+                      index={i}
+                      testcase={testcase}
+                      isExpanded={testcaseToExpand === testcase.name}
+                      expand={(isExpanded) => {
+                        if (isExpanded) {
+                          searchParams.set(testCaseParamName, testcase.name);
+                        }
+                        window.history.replaceState(
+                          {},
+                          "",
+                          `?${searchParams.toString()}`,
+                        );
+                      }}
+                    />
                   ))}
               </Table>
             )}
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       ))}
     </div>
   );

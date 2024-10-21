@@ -21,13 +21,6 @@ export default function JobDetailsSkeleton({
       >
         {children}
       </PageSection>
-      <PageSection
-        variant={PageSectionVariants.light}
-        style={{
-          minHeight: "136px",
-          margin: "0.5rem 0",
-        }}
-      ></PageSection>
     </>
   );
 }
