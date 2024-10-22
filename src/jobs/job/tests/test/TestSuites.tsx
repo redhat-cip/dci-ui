@@ -6,6 +6,7 @@ import {
   DescriptionListTerm,
   Flex,
   FlexItem,
+  SearchInput,
   Text,
   TextVariants,
 } from "@patternfly/react-core";
@@ -14,6 +15,7 @@ import { Table, Thead, Tr, Th } from "@patternfly/react-table";
 import TestCase from "./TestCase";
 import { InfoCircleIcon } from "@patternfly/react-icons";
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 interface TestsCasesProps {
   testsuites: ITestSuite[];
@@ -30,8 +32,17 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
   const [searchParams] = useSearchParams();
   const testCaseParamName = "testcase";
   const testcaseToExpand = searchParams.get(testCaseParamName);
+  const [search, setSearch] = useState("");
   return (
     <div>
+      <div className="pf-v5-u-mb-md text-right" style={{ maxWidth: 300 }}>
+        <SearchInput
+          placeholder="Find test by name"
+          value={search}
+          onChange={(_event, value) => setSearch(value)}
+          onClear={() => setSearch("")}
+        />
+      </div>
       {testsuites.map((testsuite, i) => (
         <div key={i}>
           <Text component={TextVariants.h2}>
@@ -69,8 +80,11 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
                   <Tr role="row">
                     <Th screenReaderText="Row expansion" />
                     <Th screenReaderText="Testcase action" />
-                    <Th width={70}>Name</Th>
-                    <Th width={20}>Duration</Th>
+                    <Th screenReaderText="Testcase success or regression"></Th>
+                    <Th>Name</Th>
+                    <Th style={{ minWidth: 100 }} className="text-center">
+                      Duration
+                    </Th>
                   </Tr>
                 </Thead>
                 {testsuite.testcases
@@ -78,6 +92,9 @@ export default function TestSuites({ testsuites }: TestsCasesProps) {
                     (tc1, tc2) =>
                       testscaseActions.indexOf(tc1.action) -
                       testscaseActions.indexOf(tc2.action),
+                  )
+                  .filter((tc) =>
+                    tc.name.toLowerCase().includes(search.toLowerCase()),
                   )
                   .map((testcase, i) => (
                     <TestCase

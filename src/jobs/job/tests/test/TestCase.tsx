@@ -8,6 +8,10 @@ import {
   DescriptionListTerm,
   Label,
 } from "@patternfly/react-core";
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+} from "@patternfly/react-icons";
 import { Tbody, Td, Tr } from "@patternfly/react-table";
 import { useEffect, useRef, useState } from "react";
 import { ITestCase, ITestCaseActionType } from "types";
@@ -79,9 +83,21 @@ export default function TestCase({
             expandId: `${testcase.classname}:${testcase.name}:${index}`,
           }}
         />
-        <Td>{getTestCaseIcon(testcase.action)}</Td>
+        <Td className="text-center">{getTestCaseIcon(testcase.action)}</Td>
+        <Td className="text-center">
+          {testcase.regression && (
+            <Label isCompact icon={<ExclamationCircleIcon />} color="red">
+              regression
+            </Label>
+          )}
+          {testcase.successfix && (
+            <Label isCompact icon={<CheckCircleIcon />} color="green">
+              fix
+            </Label>
+          )}
+        </Td>
         <Td>{testcase.name}</Td>
-        <Td>{testcase.time} s</Td>
+        <Td className="text-center">{testcase.time} s</Td>
       </Tr>
       <Tr isExpanded={isExpanded}>
         <Td></Td>
