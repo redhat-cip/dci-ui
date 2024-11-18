@@ -1,7 +1,14 @@
-import { Bullseye, Card, CardBody, CardTitle } from "@patternfly/react-core";
+import {
+  Bullseye,
+  Card,
+  CardBody,
+  TextContent,
+  Text,
+  TextVariants,
+} from "@patternfly/react-core";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IFile, ITestSuite } from "types";
+import { IFile, IGetJunitTestSuites } from "types";
 import { BlinkLogo, EmptyState } from "ui";
 import { getFile, getJunit } from "./testActions";
 import TestSuites from "./TestSuites";
@@ -10,20 +17,20 @@ export default function JobTestPage() {
   const { file_id } = useParams();
   const [isLoadingTestsCases, setIsLoadingTestsCases] = useState(true);
   const [testFile, setTestFile] = useState<IFile | null>(null);
-  const [testsuites, setTestsuites] = useState<ITestSuite[]>([]);
+  const [junit, setJunit] = useState<IGetJunitTestSuites | null>(null);
 
   const loadTestCases = useCallback(() => {
-    if (file_id && testsuites.length === 0) {
+    if (file_id && junit === null) {
       Promise.all([getFile(file_id), getJunit(file_id)])
         .then((results) => {
           setTestFile(results[0].data.file);
-          setTestsuites(results[1].data.testsuites);
+          setJunit(results[1].data);
         })
         .finally(() => {
           setIsLoadingTestsCases(false);
         });
     }
-  }, [file_id, testsuites]);
+  }, [file_id, junit]);
 
   useEffect(() => {
     loadTestCases();
@@ -56,9 +63,13 @@ export default function JobTestPage() {
 
   return (
     <Card>
-      <CardTitle>Test suites for {testFile.name}</CardTitle>
       <CardBody>
-        <TestSuites testsuites={testsuites} />
+        <TextContent className="pf-v5-u-mb-md">
+          <Text component={TextVariants.h2}>
+            Test suites for {testFile.name}
+          </Text>
+        </TextContent>
+        {junit !== null && <TestSuites junit={junit} />}
       </CardBody>
     </Card>
   );

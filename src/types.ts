@@ -274,9 +274,16 @@ export interface IGetTestsResults {
 }
 
 export type ITestCaseActionType = "success" | "skipped" | "failure" | "error";
+export type ITestCaseActionState =
+  | "RECOVERED"
+  | "REGRESSED"
+  | "UNCHANGED"
+  | "REMOVED"
+  | "ADDED";
 
 export interface ITestCase {
   action: ITestCaseActionType;
+  state: ITestCaseActionState;
   classname: string;
   message: string | null;
   name: string;
@@ -285,11 +292,12 @@ export interface ITestCase {
   time: number;
   type: string;
   value: string;
-  successfix: boolean;
-  regression: boolean;
 }
 
 export interface ITestSuite {
+  additions: number;
+  deletions: number;
+  unchanged: number;
   errors: number;
   failures: number;
   id: number;
@@ -305,6 +313,14 @@ export interface ITestSuite {
 }
 
 export interface IGetJunitTestSuites {
+  job: {
+    id: string;
+    name: string;
+  };
+  previous_job: {
+    id: string;
+    name: string;
+  } | null;
   testsuites: ITestSuite[];
 }
 

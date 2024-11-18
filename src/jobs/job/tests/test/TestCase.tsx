@@ -9,15 +9,18 @@ import {
   Label,
 } from "@patternfly/react-core";
 import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
+  PlusIcon,
+  ThumbsUpIcon,
+  TrashIcon,
+  WarningTriangleIcon,
 } from "@patternfly/react-icons";
 import { Tbody, Td, Tr } from "@patternfly/react-table";
+import humanizeDuration from "humanize-duration";
 import { useEffect, useRef, useState } from "react";
-import { ITestCase, ITestCaseActionType } from "types";
+import { ITestCase, ITestCaseActionState, ITestCaseActionType } from "types";
 import { CopyButton } from "ui";
 
-export function getTestCaseIcon(action: ITestCaseActionType) {
+export function TestCaseIcon({ action }: { action: ITestCaseActionType }) {
   switch (action) {
     case "skipped":
       return (
@@ -45,6 +48,60 @@ export function getTestCaseIcon(action: ITestCaseActionType) {
       );
   }
 }
+
+export function TestCaseState({
+  state,
+  ...props
+}: {
+  state: ITestCaseActionState;
+  [x: string]: any;
+}) {
+  switch (state) {
+    case "ADDED":
+      return (
+        <Label isCompact icon={<PlusIcon />} color="blue" {...props}>
+          New
+        </Label>
+      );
+    case "RECOVERED":
+      return (
+        <Label isCompact icon={<ThumbsUpIcon />} color="green" {...props}>
+          Fix
+        </Label>
+      );
+    case "REGRESSED":
+      return (
+        <Label isCompact icon={<WarningTriangleIcon />} color="red" {...props}>
+          regression
+        </Label>
+      );
+    case "REMOVED":
+      return (
+        <Label isCompact icon={<TrashIcon />} color="orange" {...props}>
+          removed
+        </Label>
+      );
+    case "UNCHANGED":
+      return null;
+  }
+}
+
+const shortEnglishHumanizer = humanizeDuration.humanizer({
+  language: "shortEn",
+  delimiter: " ",
+  languages: {
+    shortEn: {
+      y: () => "y",
+      mo: () => "mo",
+      w: () => "w",
+      d: () => "d",
+      h: () => "h",
+      m: () => "min",
+      s: () => "s",
+      ms: () => "ms",
+    },
+  },
+});
 
 interface TestCaseProps {
   isExpanded?: boolean;
@@ -83,43 +140,40 @@ export default function TestCase({
             expandId: `${testcase.classname}:${testcase.name}:${index}`,
           }}
         />
-        <Td className="text-center">{getTestCaseIcon(testcase.action)}</Td>
-        <Td className="text-center">
-          {testcase.regression && (
-            <Label isCompact icon={<ExclamationCircleIcon />} color="red">
-              regression
-            </Label>
-          )}
-          {testcase.successfix && (
-            <Label isCompact icon={<CheckCircleIcon />} color="green">
-              fix
-            </Label>
-          )}
+        <Td>
+          <span
+            style={{
+              textDecoration:
+                testcase.state === "REMOVED" ? "line-through" : "none",
+            }}
+          >
+            {testcase.name}
+          </span>
         </Td>
-        <Td>{testcase.name}</Td>
-        <Td className="text-center">{testcase.time} s</Td>
+        <Td textCenter modifier="fitContent">
+          <TestCaseState state={testcase.state} />
+        </Td>
+        <Td textCenter modifier="fitContent">
+          <TestCaseIcon action={testcase.action} />
+        </Td>
+        <Td textCenter modifier="fitContent">
+          <Label isCompact title={testcase.time.toString()}>
+            {shortEnglishHumanizer(testcase.time * 1000, {
+              maxDecimalPoints: 2,
+            })}
+          </Label>
+        </Td>
+        <Td modifier="fitContent">{testcase.classname}</Td>
+        <Td>{testcase.type}</Td>
       </Tr>
       <Tr isExpanded={isExpanded}>
         <Td></Td>
-        <Td></Td>
-        <Td colSpan={3} className="pf-v5-u-py-sm">
+        <Td colSpan={99}>
           <DescriptionList
             columnModifier={{
               default: "2Col",
             }}
           >
-            <DescriptionListGroup>
-              <DescriptionListTerm>Class name</DescriptionListTerm>
-              <DescriptionListDescription>
-                {testcase.classname}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
-            <DescriptionListGroup>
-              <DescriptionListTerm>Type</DescriptionListTerm>
-              <DescriptionListDescription>
-                {testcase.type}
-              </DescriptionListDescription>
-            </DescriptionListGroup>
             <DescriptionListGroup>
               <DescriptionListTerm>Message</DescriptionListTerm>
               <DescriptionListDescription>

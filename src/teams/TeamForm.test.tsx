@@ -9,8 +9,8 @@ test("test create team form submit the correct values", async () => {
 
   const { user, getByRole, getByTestId } = render(
     <div>
-      <TeamForm id="create-user-form" onSubmit={mockOnSubmit} />
-      <button type="submit" form="create-user-form">
+      <TeamForm id="create-team-form" onSubmit={mockOnSubmit} />
+      <button type="submit" form="create-team-form">
         Create
       </button>
     </div>,
@@ -53,7 +53,7 @@ test("test edit team form submit the correct values", async () => {
   const { user, getByRole, getByTestId } = render(
     <div>
       <TeamForm
-        id="edit-user-form"
+        id="edit-team-form"
         team={
           {
             id: "t1",
@@ -65,7 +65,7 @@ test("test edit team form submit the correct values", async () => {
         }
         onSubmit={mockOnSubmit}
       />
-      <button type="submit" form="edit-user-form">
+      <button type="submit" form="edit-team-form">
         Edit
       </button>
     </div>,

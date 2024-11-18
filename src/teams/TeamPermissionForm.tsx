@@ -5,6 +5,7 @@ import {
   HelperTextItem,
   Skeleton,
   Text,
+  TextContent,
   TextVariants,
 } from "@patternfly/react-core";
 import { useFormikContext } from "formik";
@@ -23,7 +24,9 @@ export default function TeamPermission() {
 
   return (
     <>
-      <Text component={TextVariants.h3}>Product permissions</Text>
+      <TextContent>
+        <Text component={TextVariants.h3}>Product permissions</Text>
+      </TextContent>
       <HelperText className="pf-v5-u-mb-sm">
         <HelperTextItem>
           Select the product the team has access to:
