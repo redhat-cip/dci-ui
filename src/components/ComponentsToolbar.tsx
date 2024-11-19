@@ -18,7 +18,7 @@ import {
   getDefaultFilters,
   offsetAndLimitToPage,
   pageAndLimitToOffset,
-} from "../api/filters";
+} from "services/filters";
 import { Filters } from "types";
 import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
 import TextInputToolbarFilter from "jobs/toolbar/TextInputToolbarFilter";
@@ -120,7 +120,7 @@ export default function ComponentsToolbar({
           </InputGroup>
         </ToolbarGroup>
         <ToolbarGroup style={{ flex: "1" }}>
-          <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
+          <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
             {count === 0 ? null : (
               <Pagination
                 perPage={filters.limit}

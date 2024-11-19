@@ -45,12 +45,11 @@ export default function DCITextInput({
         </InputGroupItem>
         <InputGroupItem>
           <Button
+            icon={<SearchIcon />}
             variant={ButtonVariant.control}
             aria-label={`Search by ${lowerCategoryName} button`}
             type="submit"
-          >
-            <SearchIcon />
-          </Button>
+          ></Button>
         </InputGroupItem>
       </InputGroup>
     </form>

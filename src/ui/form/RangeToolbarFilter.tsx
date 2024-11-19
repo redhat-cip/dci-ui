@@ -44,7 +44,7 @@ export default function RangeToolbarFilter({
   return (
     <div>
       <ToolbarFilter
-        chips={[after, before]}
+        labels={[after, before]}
         categoryName={categoryName}
         showToolbarItem={showToolbarItem}
       >

@@ -1,12 +1,29 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  configureStore,
+  createListenerMiddleware,
+} from "@reduxjs/toolkit";
 import alertsReducer from "./alerts/alertsSlice";
-import Api from "api";
+import authReducer, { loggedOut } from "auth/authSlice";
+import { api } from "api";
 import { rtkQueryErrorLogger } from "middleware";
 import { useDispatch, useSelector } from "react-redux";
+import { removeToken } from "services/localStorage";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
-  [Api.reducerPath]: Api.reducer,
+  auth: authReducer,
+  [api.reducerPath]: api.reducer,
+});
+
+const loggedOutMiddleware = createListenerMiddleware();
+
+loggedOutMiddleware.startListening({
+  actionCreator: loggedOut,
+  effect: async (action, listenerApi) => {
+    removeToken();
+    listenerApi.cancelActiveListeners();
+  },
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -16,7 +33,10 @@ export function setupStore(preloadedState?: Partial<RootState>) {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(Api.middleware).concat(rtkQueryErrorLogger),
+      getDefaultMiddleware()
+        .concat(api.middleware)
+        .concat(loggedOutMiddleware.middleware)
+        .concat(rtkQueryErrorLogger),
   });
 }
 

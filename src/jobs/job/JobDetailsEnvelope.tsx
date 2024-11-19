@@ -3,12 +3,10 @@ import { Breadcrumb, CopyIconButton } from "ui";
 import { useLocation, useNavigate } from "react-router";
 import {
   PageSection,
-  PageSectionVariants,
   Tab,
   Tabs,
-  Text,
+  Content,
   TabTitleText,
-  TextContent,
 } from "@patternfly/react-core";
 import { useEffect, useState } from "react";
 
@@ -44,13 +42,10 @@ export default function JobDetailsEnvelope({
       title={`Job ${job_id}`}
       description=""
       HeaderSection={
-        <PageSection
-          variant={PageSectionVariants.light}
-          style={{ paddingBottom: 0 }}
-        >
-          <TextContent className="pf-v5-u-mb-md">
-            <Text component="h1">Job details</Text>
-          </TextContent>
+        <PageSection hasBodyWrapper={false} style={{ paddingBottom: 0 }}>
+          <Content className="pf-v6-u-mb-md">
+            <Content component="h1">Job details</Content>
+          </Content>
           <Tabs
             activeKey={activeTabKey}
             onSelect={(event, tabIndex) => {
@@ -84,7 +79,7 @@ export default function JobDetailsEnvelope({
                   <CopyIconButton
                     text={job_id}
                     textOnSuccess="copied"
-                    className="pf-v5-u-ml-xs pointer"
+                    className="pf-v6-u-ml-xs pointer"
                   />
                 </span>
               ),

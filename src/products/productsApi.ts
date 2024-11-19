@@ -3,7 +3,7 @@ import {
   injectDeleteEndpoint,
   injectListEndpoint,
   injectUpdateEndpoint,
-} from "../api";
+} from "api";
 import type { IProduct } from "../types";
 
 const resource = "Product";

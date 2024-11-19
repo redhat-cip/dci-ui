@@ -1,15 +1,11 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import CreateFeederForm from "./CreateFeederForm";
-import { ITeam } from "types";
 import { vi } from "vitest";
+import { teams } from "__tests__/data";
 
 test("test create feeder form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
 
-  const teams = [
-    { id: "t1", name: "team 1" },
-    { id: "t2", name: "team 2" },
-  ] as ITeam[];
   const { container, getByRole, getByTestId, getByPlaceholderText } = render(
     <CreateFeederForm teams={teams} onSubmit={mockOnSubmit} />,
   );
@@ -40,7 +36,7 @@ test("test create feeder form submit the correct values", async () => {
     expect(mockOnSubmit.mock.calls.length).toBe(1);
     expect(mockOnSubmit.mock.calls[0][0]).toEqual({
       name: "test",
-      team_id: "t2",
+      team_id: teams[1].id,
     });
   });
 });

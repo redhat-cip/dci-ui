@@ -1,9 +1,8 @@
 import "@testing-library/jest-dom";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { server } from "__tests__/node";
 import { beforeAll, afterEach, afterAll, vi } from "vitest";
-
-import { server } from "mocks/node";
 
 beforeAll(() => server.listen());
 

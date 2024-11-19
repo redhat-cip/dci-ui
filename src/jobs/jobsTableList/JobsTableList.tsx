@@ -5,6 +5,10 @@ import JobsTableListRow from "./JobsTableListRow";
 import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsSelect";
 import { styled } from "styled-components";
 import { useTheme } from "ui/Theme/themeContext";
+import {
+  t_global_border_color_100,
+  t_global_border_color_200,
+} from "@patternfly/react-tokens";
 
 interface JobsTableListProps {
   jobs: IJob[];
@@ -15,10 +19,12 @@ interface JobsTableListProps {
 
 const TableWithTrStyled = styled(Table)<{ isDark: boolean }>`
   tbody > tr {
-    border-bottom: 0 !important;
     &:last-child {
       border-bottom: 1px solid
-        ${(props) => (props.isDark ? "#444548" : "#d2d2d2")} !important;
+        ${(props) =>
+          props.isDark
+            ? t_global_border_color_200.value
+            : t_global_border_color_100.value} !important;
     }
   }
 `;
@@ -37,7 +43,8 @@ export default function JobsTableList({
   return (
     <TableWithTrStyled
       isDark={isDark}
-      className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+      variant="compact"
+      className="pf-v6-c-tablepf-m-grid-md"
     >
       <Thead>
         <Tr>

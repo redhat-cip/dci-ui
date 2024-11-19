@@ -1,10 +1,6 @@
 import { useState } from "react";
-import {
-  Button,
-  Modal,
-  ModalVariant,
-  SearchInput,
-} from "@patternfly/react-core";
+import { Button, SearchInput } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
 import { searchUserBy } from "users/usersApi";
@@ -61,7 +57,11 @@ export default function AddUserToTeamModal({
           onClear={onClear}
         />
         {touched && (
-          <Table className="pf-v5-c-table pf-m-compact" style={{ border: "0" }}>
+          <Table
+            variant="compact"
+            className="pf-v6-c-table"
+            style={{ border: "0" }}
+          >
             <Thead>
               <Tr>
                 <Th>Login</Th>
@@ -80,7 +80,7 @@ export default function AddUserToTeamModal({
                   </Td>
                   <Td>{user.fullname}</Td>
                   <Td>{user.email}</Td>
-                  <Td className="pf-v5-c-table__action">
+                  <Td className="pf-v6-c-table__action">
                     <Button
                       size="sm"
                       variant="primary"

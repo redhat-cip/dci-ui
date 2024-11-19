@@ -1,4 +1,5 @@
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
 import { ITopic, IProduct } from "types";
@@ -51,8 +52,12 @@ export default function EditTopicModal({
           }}
         />
       </Modal>
-      <Button variant="primary" onClick={show} {...props}>
-        <EditAltIcon aria-hidden="true" className="pf-v5-u-mr-xs" />
+      <Button
+        icon={<EditAltIcon aria-hidden="true" className="pf-v6-u-mr-xs" />}
+        variant="primary"
+        onClick={show}
+        {...props}
+      >
         Edit {topic.name}
       </Button>
     </>

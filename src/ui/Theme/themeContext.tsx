@@ -50,9 +50,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     if (color === "dark") {
-      document.firstElementChild?.classList.add("pf-v5-theme-dark");
+      document.firstElementChild?.classList.add("pf-v6-theme-dark");
     } else {
-      document.firstElementChild?.classList.remove("pf-v5-theme-dark");
+      document.firstElementChild?.classList.remove("pf-v6-theme-dark");
     }
   }, [color]);
 

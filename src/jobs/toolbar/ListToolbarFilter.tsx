@@ -20,8 +20,8 @@ export default function ListToolbarFilter({
   const uniqItems = [...new Set(items)];
   return (
     <ToolbarFilter
-      chips={uniqItems}
-      deleteChip={(key, value) => {
+      labels={uniqItems}
+      deleteLabel={(key, value) => {
         if (key) {
           onSubmit(uniqItems?.filter((f) => f !== value));
         }

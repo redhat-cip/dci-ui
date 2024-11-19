@@ -1,9 +1,10 @@
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "store";
 import { setJWT } from "services/localStorage";
-import { useAuth } from "./authContext";
-import { useSSO } from "./ssoContext";
+import { showError } from "alerts/alertsSlice";
+import { manager } from "./sso";
 
 interface LocationState {
   from: {
@@ -11,36 +12,35 @@ interface LocationState {
   };
 }
 
-export default function LoginCallbackPage() {
-  const { sso } = useSSO();
-  const { refreshIdentity } = useAuth();
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
-  const [location, setLocation] = useState<LocationState>({
-    from: { pathname: "/jobs" },
-  });
+export default function LoginRedirectPage() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (sso !== null) {
-      sso
-        .signinRedirectCallback()
-        .then((user) => {
-          if (user) {
-            const state = user.state as LocationState;
-            if (state) {
-              setLocation(state);
-            }
-            setJWT(user.access_token);
-          }
-          return refreshIdentity();
-        })
-        .catch(() => undefined)
-        .then(() => setIsLoadingUser(false));
-    }
-  }, [refreshIdentity, sso]);
+    manager
+      .signinRedirectCallback()
+      .then((user) => {
+        if (user?.access_token) {
+          setJWT(user.access_token);
+          const { from } = (user.state as LocationState) || {
+            from: { pathname: "/" },
+          };
+          navigate(from);
+        } else {
+          dispatch(
+            showError("Something went wrong, contact a DCI administrator"),
+          );
+        }
+      })
+      .catch((error) => {
+        dispatch(
+          showError(
+            "Something went wrong, check your connectivity or contact a DCI administrator",
+          ),
+        );
+        console.error(error);
+      });
+  }, [navigate, dispatch]);
 
-  return isLoadingUser ? (
-    <NotAuthenticatedLoadingPage />
-  ) : (
-    <Navigate replace to={location.from} />
-  );
+  return <NotAuthenticatedLoadingPage />;
 }

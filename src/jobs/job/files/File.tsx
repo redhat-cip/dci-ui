@@ -28,7 +28,7 @@ export default function File({ file }: FileProps) {
         {isText ? (
           <SeeFileContentModal file={file}>
             {(show) => (
-              <Button variant="link" className="pf-v5-u-p-0" onClick={show}>
+              <Button variant="link" className="pf-v6-u-p-0" onClick={show}>
                 {file.name}
               </Button>
             )}
@@ -41,6 +41,7 @@ export default function File({ file }: FileProps) {
       <Td>{file.mime}</Td>
       <Td className="text-center">
         <Button
+          size="sm"
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
           onClick={() => {
@@ -55,15 +56,16 @@ export default function File({ file }: FileProps) {
               .catch(console.error)
               .finally(() => setIsDownloading(false));
           }}
-          className="pf-v5-u-mr-xs"
+          className="pf-v6-u-mr-xs"
           isDisabled={isDownloading}
         >
           download
         </Button>
         <Button
+          size="sm"
           variant="secondary"
           icon={<ExternalLinkAltIcon />}
-          className="pf-v5-u-mr-xs"
+          className="pf-v6-u-mr-xs"
           iconPosition="right"
           onClick={() => {
             navigate(`/files/${file.id}`);
@@ -74,6 +76,7 @@ export default function File({ file }: FileProps) {
         <SeeFileContentModal file={file}>
           {(show) => (
             <Button
+              size="sm"
               variant="secondary"
               icon={<EyeIcon />}
               onClick={show}

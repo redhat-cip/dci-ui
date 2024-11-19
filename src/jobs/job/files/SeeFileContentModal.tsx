@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactNode } from "react";
-import { Modal } from "@patternfly/react-core";
+import { Modal } from "@patternfly/react-core/deprecated";
 import { IFile } from "types";
 import useModal from "hooks/useModal";
 import { getFileContent } from "./filesActions";
@@ -42,7 +42,7 @@ export default function SeeFileContentModal({
           "loading...."
         ) : (
           <div
-            className="pf-v5-u-p-md"
+            className="pf-v6-u-p-md"
             style={{ fontSize: "0.7rem", overflow: "auto" }}
           >
             <pre>{fileContent}</pre>

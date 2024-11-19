@@ -11,9 +11,9 @@ export default function TopicToolbarFilter({
 }: SelectProps<ITopic>) {
   return (
     <ToolbarFilter
-      chips={id ? [id] : []}
+      labels={id ? [id] : []}
       categoryName="Topic id"
-      deleteChip={() => onClear()}
+      deleteLabel={() => onClear()}
       showToolbarItem={showToolbarItem}
     >
       <TopicSelect

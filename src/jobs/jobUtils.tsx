@@ -1,76 +1,37 @@
 import {
-  global_danger_color_100,
-  global_success_color_100,
-  global_active_color_100,
-  global_warning_color_100,
-  global_Color_light_100,
+  t_global_color_nonstatus_red_200,
+  t_global_color_nonstatus_green_200,
+  t_global_color_nonstatus_blue_200,
+  t_global_color_nonstatus_orange_200,
 } from "@patternfly/react-tokens";
-import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  BugIcon,
-  StopCircleIcon,
-  InProgressIcon,
-} from "@patternfly/react-icons";
-
-export function getBackground(
-  status: string,
-  backgroundColor: string = global_Color_light_100.value,
-) {
-  switch (status) {
-    case "success":
-      return `linear-gradient(to right,${global_success_color_100.value} 0,${global_success_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
-    case "failure":
-    case "error":
-      return `linear-gradient(to right,${global_danger_color_100.value} 0,${global_danger_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
-    case "killed":
-      return `linear-gradient(to right,${global_warning_color_100.value} 0,${global_warning_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
-    default:
-      return `linear-gradient(to right,${global_active_color_100.value} 0,${global_active_color_100.value} 5px,${backgroundColor} 5px,${backgroundColor} 100%) no-repeat`;
-  }
-}
+import { LabelProps } from "@patternfly/react-core";
 
 export function getBackgroundColor(status: string) {
   switch (status) {
     case "success":
-      return global_success_color_100.value;
+      return t_global_color_nonstatus_green_200.value;
     case "failure":
     case "error":
-      return global_danger_color_100.value;
+      return t_global_color_nonstatus_red_200.value;
     case "killed":
-      return global_warning_color_100.value;
+      return t_global_color_nonstatus_orange_200.value;
     default:
-      return global_active_color_100.value;
+      return t_global_color_nonstatus_blue_200.value;
   }
 }
 
-export function getIcon(status: string) {
+export function getLabelColor(status: string): LabelProps["color"] {
   switch (status) {
     case "success":
-      return <CheckCircleIcon />;
+      return "green";
     case "failure":
-      return <BugIcon />;
+      return "red";
     case "error":
-      return <ExclamationCircleIcon />;
+      return "red";
     case "killed":
-      return <StopCircleIcon />;
+      return "orange";
     default:
-      return <InProgressIcon />;
-  }
-}
-
-export function getColor(status: string) {
-  switch (status) {
-    case "success":
-      return global_success_color_100.value;
-    case "failure":
-      return global_danger_color_100.value;
-    case "error":
-      return global_danger_color_100.value;
-    case "killed":
-      return global_warning_color_100.value;
-    default:
-      return global_active_color_100.value;
+      return "blue";
   }
 }
 

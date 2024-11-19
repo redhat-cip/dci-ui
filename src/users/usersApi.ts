@@ -6,8 +6,8 @@ import {
   injectGetEndpoint,
   injectListEndpoint,
   injectUpdateEndpoint,
-  Api,
-} from "../api";
+  api,
+} from "api";
 import type { ITeam, IUser } from "../types";
 
 const resource = "User";
@@ -22,44 +22,46 @@ export const {
   useAddUserToTeamMutation,
   useRemoveUserFromTeamMutation,
   useListUserTeamsQuery,
-} = Api.enhanceEndpoints({
-  addTagTypes: ["UserTeam"],
-}).injectEndpoints({
-  endpoints: (builder) => ({
-    listUserTeams: builder.query<
-      {
-        _meta: { count: number };
-        teams: ITeam[];
-      },
-      IUser
-    >({
-      query: (user) => `/users/${user.id}/teams`,
-      providesTags: [{ type: "UserTeam", id: "LIST" }],
+} = api
+  .enhanceEndpoints({
+    addTagTypes: ["UserTeam"],
+  })
+  .injectEndpoints({
+    endpoints: (builder) => ({
+      listUserTeams: builder.query<
+        {
+          _meta: { count: number };
+          teams: ITeam[];
+        },
+        IUser
+      >({
+        query: (user) => `/users/${user.id}/teams`,
+        providesTags: [{ type: "UserTeam", id: "LIST" }],
+      }),
+      addUserToTeam: builder.mutation<void, { user: IUser; team: ITeam }>({
+        query({ user, team }) {
+          return {
+            url: `/teams/${team.id}/users/${user.id}`,
+            method: "POST",
+            body: {},
+          };
+        },
+        invalidatesTags: ["UserTeam"],
+      }),
+      removeUserFromTeam: builder.mutation<
+        { success: boolean; id: string },
+        { user: IUser; team: ITeam }
+      >({
+        query({ user, team }) {
+          return {
+            url: `/teams/${team.id}/users/${user.id}`,
+            method: "DELETE",
+          };
+        },
+        invalidatesTags: ["UserTeam"],
+      }),
     }),
-    addUserToTeam: builder.mutation<void, { user: IUser; team: ITeam }>({
-      query({ user, team }) {
-        return {
-          url: `/teams/${team.id}/users/${user.id}`,
-          method: "POST",
-          body: {},
-        };
-      },
-      invalidatesTags: ["UserTeam"],
-    }),
-    removeUserFromTeam: builder.mutation<
-      { success: boolean; id: string },
-      { user: IUser; team: ITeam }
-    >({
-      query({ user, team }) {
-        return {
-          url: `/teams/${team.id}/users/${user.id}`,
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: ["UserTeam"],
-    }),
-  }),
-});
+  });
 
 export function fetchUserTeams(user: IUser): AxiosPromise<{
   teams: ITeam[];

@@ -30,8 +30,8 @@ export default function MultiSelectFilter({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <ToolbarFilter
-      chips={itemsSelected}
-      deleteChip={(cat, key) => itemRemoved(key as string)}
+      labels={itemsSelected}
+      deleteLabel={(cat, key) => itemRemoved(key as string)}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >

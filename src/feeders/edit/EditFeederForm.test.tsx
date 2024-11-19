@@ -1,16 +1,10 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import EditFeederForm from "./EditFeederForm";
-import { ITeam, IFeeder } from "types";
 import { vi } from "vitest";
+import { teams, feeder } from "__tests__/data";
 
 test("test edit feeder form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
-
-  const teams = [
-    { id: "t1", name: "team 1" },
-    { id: "t2", name: "team 2" },
-  ] as ITeam[];
-  const feeder = { id: "f1", name: "feeder", team_id: "t2" } as IFeeder;
   const { container, getByRole, getByTestId, getByPlaceholderText } = render(
     <EditFeederForm feeder={feeder} teams={teams} onSubmit={mockOnSubmit} />,
   );
@@ -40,9 +34,9 @@ test("test edit feeder form submit the correct values", async () => {
   await waitFor(() => {
     expect(mockOnSubmit.mock.calls.length).toBe(1);
     expect(mockOnSubmit.mock.calls[0][0]).toEqual({
-      id: "f1",
+      ...feeder,
       name: "updated",
-      team_id: "t1",
+      team_id: teams[0].id,
     });
   });
 });

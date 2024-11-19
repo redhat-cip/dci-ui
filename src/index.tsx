@@ -6,8 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 import "@patternfly/react-core/dist/styles/base.css";
 import "./index.css";
 import App from "./App";
-import { SSOProvider } from "auth/ssoContext";
-import { AuthProvider } from "auth/authContext";
 import { ThemeProvider } from "ui/Theme/themeContext";
 
 const root = ReactDOM.createRoot(
@@ -17,13 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider>
     <Provider store={store}>
-      <SSOProvider>
-        <AuthProvider>
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <App />
-          </BrowserRouter>
-        </AuthProvider>
-      </SSOProvider>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <App />
+      </BrowserRouter>
     </Provider>
   </ThemeProvider>,
 );

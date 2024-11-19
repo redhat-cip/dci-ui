@@ -231,9 +231,7 @@ export default function TasksDurationPerJobPage() {
           >
             <ToolbarContent>
               <ToolbarGroup>
-                <ToolbarItem>Filter Jobs</ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
+                <ToolbarItem variant="label">Filter Jobs</ToolbarItem>
                 <ToolbarItem>
                   <TopicToolbarFilter
                     id={topicId}
@@ -249,12 +247,10 @@ export default function TasksDurationPerJobPage() {
                     placeholder="Search by remoteci"
                   />
                 </ToolbarItem>
-              </ToolbarGroup>
-              <ToolbarGroup>
                 <ToolbarItem>
                   <ToolbarFilter
-                    chips={after === null ? [] : [after]}
-                    deleteChip={() => setAfter(null)}
+                    labels={after === null ? [] : [after]}
+                    deleteLabel={() => setAfter(null)}
                     categoryName="Created after"
                     showToolbarItem
                   >
@@ -267,8 +263,8 @@ export default function TasksDurationPerJobPage() {
                 </ToolbarItem>
                 <ToolbarItem>
                   <ToolbarFilter
-                    chips={before === null ? [] : [before]}
-                    deleteChip={() => setBefore(null)}
+                    labels={before === null ? [] : [before]}
+                    deleteLabel={() => setBefore(null)}
                     categoryName="Created before"
                     showToolbarItem
                   >
@@ -284,7 +280,7 @@ export default function TasksDurationPerJobPage() {
           </Toolbar>
         </CardBody>
       </Card>
-      <Card className="pf-v5-u-mt-lg">
+      <Card className="pf-v6-u-mt-lg">
         <CardBody>
           {filteredData.length === 0 ? null : (
             <>
@@ -293,9 +289,10 @@ export default function TasksDurationPerJobPage() {
               >
                 <Graph data={filteredData} />
               </div>
-              <div className="pf-v5-u-p-xl">
+              <div className="pf-v6-u-p-xl">
                 <Table
-                  className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+                  variant="compact"
+                  className="pf-v6-c-tablepf-m-grid-md"
                   role="grid"
                   aria-label="Job Legend"
                 >

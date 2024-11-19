@@ -25,8 +25,11 @@ export default function FeedersPage() {
       loading={isLoading || isLoadingTeams}
       empty={data.feeders.length === 0}
       HeaderButton={
-        <Button variant="primary" onClick={() => navigate("/feeders/create")}>
-          <PlusCircleIcon className="pf-v5-u-mr-xs" />
+        <Button
+          icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
+          variant="primary"
+          onClick={() => navigate("/feeders/create")}
+        >
           Create a new feeder
         </Button>
       }
@@ -40,7 +43,7 @@ export default function FeedersPage() {
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Feeders" }]} />
       }
     >
-      <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+      <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
         <Thead>
           <Tr>
             <Th className="text-center">ID</Th>
@@ -72,7 +75,7 @@ export default function FeedersPage() {
                     type="sh"
                     role="feeder"
                     resource={feeder}
-                    className="pf-v5-u-mr-xs"
+                    className="pf-v6-u-mr-xs"
                   />
                   <SeeAuthentificationFileModal
                     type="yaml"
@@ -88,9 +91,11 @@ export default function FeedersPage() {
                     onOk={() => deleteFeeder(feeder)}
                   >
                     {(openModal) => (
-                      <Button variant="danger" onClick={openModal}>
-                        <TrashIcon />
-                      </Button>
+                      <Button
+                        icon={<TrashIcon />}
+                        variant="danger"
+                        onClick={openModal}
+                      ></Button>
                     )}
                   </ConfirmDeleteModal>
                 </Td>

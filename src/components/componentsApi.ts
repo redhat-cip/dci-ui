@@ -1,5 +1,5 @@
-import { injectListEndpoint } from "../api";
-import type { IComponent } from "../types";
+import { injectListEndpoint } from "api";
+import type { IComponent } from "types";
 
 const resource = "Component";
 

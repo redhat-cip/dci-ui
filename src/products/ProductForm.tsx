@@ -26,7 +26,7 @@ const ProductForm = forwardRef<
     validationSchema={ProductSchema}
     onSubmit={onSubmit}
   >
-    <Form id="product_form" className="pf-v5-c-form">
+    <Form id="product_form" className="pf-v6-c-form">
       <Input
         id="product_form__name"
         data-testid="product_form__name"

@@ -155,6 +155,7 @@ export default function TypeheadSelect<T extends Item>({
         <TextInputGroupUtilities>
           {!!inputValue && (
             <Button
+              icon={<TimesIcon aria-hidden />}
               variant="plain"
               onClick={() => {
                 setInputValue("");
@@ -163,9 +164,7 @@ export default function TypeheadSelect<T extends Item>({
                 textInputRef?.current?.focus();
               }}
               aria-label="Clear input value"
-            >
-              <TimesIcon aria-hidden />
-            </Button>
+            />
           )}
         </TextInputGroupUtilities>
       </TextInputGroup>
@@ -192,11 +191,11 @@ export default function TypeheadSelect<T extends Item>({
       shouldFocusToggleOnSelect
     >
       {isLoading || userIsTyping ? (
-        <div className="pf-v5-u-m-md">
+        <div className="pf-v6-u-m-md">
           <Spinner size="md" aria-label="loading" />
         </div>
       ) : filteredItems.length === 0 ? (
-        <div className="pf-v5-u-m-md">No results</div>
+        <div className="pf-v6-u-m-md">No results</div>
       ) : (
         <SelectList style={{ maxHeight: 320, overflowY: "auto" }}>
           {filteredItems.map((filteredItem, index) => (

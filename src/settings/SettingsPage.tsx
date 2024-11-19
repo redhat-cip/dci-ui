@@ -2,11 +2,13 @@ import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import MainPage from "pages/MainPage";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 import { Breadcrumb } from "ui";
+import { useUpdateCurrentUserMutation } from "auth/authApi";
 
 export default function SettingsPage() {
-  const { currentUser, updateCurrentUser, changePassword } = useAuth();
+  const { currentUser } = useAuth();
+  const [updateCurrentUser] = useUpdateCurrentUserMutation();
   if (currentUser === null) return null;
   return (
     <MainPage
@@ -37,7 +39,7 @@ export default function SettingsPage() {
                 <ChangePasswordForm
                   key={`ChangePasswordForm.${currentUser.id}.${currentUser.etag}`}
                   currentUser={currentUser}
-                  onSubmit={changePassword}
+                  onSubmit={updateCurrentUser}
                 />
               </CardBody>
             </Card>

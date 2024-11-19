@@ -37,7 +37,7 @@ export function TestLabels({
           {success}
           <SuccessfixesIcon
             successfixes={successfixes}
-            className="pf-v5-u-ml-xs"
+            className="pf-v6-u-ml-xs"
           />
         </Label>
       </Tooltip>
@@ -73,7 +73,7 @@ export function TestLabels({
           {errors + failures}
           <RegressionsIcon
             regressions={regressions}
-            className="pf-v5-u-ml-xs"
+            className="pf-v6-u-ml-xs"
           />
         </Label>
       </Tooltip>

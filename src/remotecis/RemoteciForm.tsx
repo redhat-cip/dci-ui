@@ -29,7 +29,7 @@ const RemoteciForm = forwardRef<
     validationSchema={RemoteciSchema}
     onSubmit={onSubmit}
   >
-    <Form id="remoteci_form" className="pf-v5-c-form">
+    <Form id="remoteci_form" className="pf-v6-c-form">
       <Input
         id="remoteci_form__name"
         data-testid="remoteci_form__name"

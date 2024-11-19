@@ -7,11 +7,12 @@ import {
   TextInput,
   Toolbar,
   ToolbarContent,
+  ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
-import { global_palette_red_100 } from "@patternfly/react-tokens";
+import { t_global_text_color_required } from "@patternfly/react-tokens";
 import { formatDate, getRangeDates } from "services/date";
 import { useCallback, useEffect, useState } from "react";
 import { RangeOptionValue } from "types";
@@ -192,91 +193,95 @@ export default function KeyValuesPage() {
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
-              <ToolbarItem variant="label" id="team-label-toolbar">
-                Query{" "}
-                <span style={{ color: global_palette_red_100.value }}>*</span>
-              </ToolbarItem>
-              <ToolbarItem>
-                <TextInput
-                  name="query"
-                  id="input-query"
-                  type="search"
-                  onChange={(_event, val) => setQuery(val)}
-                  value={query}
-                  isRequired
-                  style={{ width: 500 }}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <RangeToolbarFilter
-                  range={range}
-                  onChange={(range, after, before) => {
-                    if (range === "custom") {
-                      setAfter(after);
-                      setBefore(before);
+              <ToolbarGroup>
+                <ToolbarItem variant="label" id="team-label-toolbar">
+                  Query
+                  <span style={{ color: t_global_text_color_required.value }}>
+                    *
+                  </span>
+                </ToolbarItem>
+                <ToolbarItem>
+                  <TextInput
+                    name="query"
+                    id="input-query"
+                    type="search"
+                    onChange={(_event, val) => setQuery(val)}
+                    value={query}
+                    isRequired
+                    style={{ width: 500 }}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <RangeToolbarFilter
+                    range={range}
+                    onChange={(range, after, before) => {
+                      if (range === "custom") {
+                        setAfter(after);
+                        setBefore(before);
+                      }
+                      setRange(range);
+                    }}
+                    after={after}
+                    before={before}
+                    ranges={[
+                      defaultRangeValue,
+                      "previousWeek",
+                      "currentWeek",
+                      "yesterday",
+                      "today",
+                      "custom",
+                    ]}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <MultiSelectFilter
+                    categoryName="Keys"
+                    placeholder="Filter by keys"
+                    items={keyValues === null ? [] : Object.keys(keyValues)}
+                    itemsSelected={selectedKeys}
+                    itemRemoved={(key) =>
+                      setSelectedKeys(selectedKeys.filter((t) => t !== key))
                     }
-                    setRange(range);
-                  }}
-                  after={after}
-                  before={before}
-                  ranges={[
-                    defaultRangeValue,
-                    "previousWeek",
-                    "currentWeek",
-                    "yesterday",
-                    "today",
-                    "custom",
-                  ]}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <MultiSelectFilter
-                  categoryName="Keys"
-                  placeholder="Filter by keys"
-                  items={keyValues === null ? [] : Object.keys(keyValues)}
-                  itemsSelected={selectedKeys}
-                  itemRemoved={(key) =>
-                    setSelectedKeys(selectedKeys.filter((t) => t !== key))
-                  }
-                  onSelect={(type) => {
-                    if (selectedKeys.indexOf(type) === -1) {
-                      setSelectedKeys([...selectedKeys, type]);
-                    } else {
-                      setSelectedKeys(selectedKeys.filter((t) => t !== type));
-                    }
-                  }}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <SelectFilter
-                  item={graphType}
-                  items={graphTypes}
-                  categoryName="Graph type"
-                  placeholder="Select graph type"
-                  onSelect={(selectedGraphType) => {
-                    console.log(selectedGraphType);
-                    setGraphType(selectedGraphType as IGraphTypeItem);
-                  }}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <Button
-                  variant="primary"
-                  isDisabled={query === ""}
-                  onClick={() => {
-                    memoizedGetKeyValues();
-                    updateUrlWithParams();
-                  }}
-                >
-                  Graph
-                </Button>
-              </ToolbarItem>
+                    onSelect={(type) => {
+                      if (selectedKeys.indexOf(type) === -1) {
+                        setSelectedKeys([...selectedKeys, type]);
+                      } else {
+                        setSelectedKeys(selectedKeys.filter((t) => t !== type));
+                      }
+                    }}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <SelectFilter
+                    item={graphType}
+                    items={graphTypes}
+                    categoryName="Graph type"
+                    placeholder="Select graph type"
+                    onSelect={(selectedGraphType) => {
+                      console.log(selectedGraphType);
+                      setGraphType(selectedGraphType as IGraphTypeItem);
+                    }}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Button
+                    variant="primary"
+                    isDisabled={query === ""}
+                    onClick={() => {
+                      memoizedGetKeyValues();
+                      updateUrlWithParams();
+                    }}
+                  >
+                    Graph
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
             </ToolbarContent>
           </Toolbar>
         </CardBody>
       </Card>
       {isLoading ? (
-        <Card className="pf-v5-u-mt-xs">
+        <Card className="pf-v6-u-mt-xs">
           <CardBody>
             <Bullseye>
               <BlinkLogo />
@@ -292,7 +297,7 @@ export default function KeyValuesPage() {
                   selectedKeys.length === 0 || selectedKeys.indexOf(key) !== -1,
               )
               .map(([key, keyValue]) => (
-                <Card className="pf-v5-u-mt-xs">
+                <Card className="pf-v6-u-mt-xs">
                   <CardHeader>{key}</CardHeader>
                   <CardBody>
                     {graphType.value === "scatter" && (
@@ -379,7 +384,7 @@ export default function KeyValuesPage() {
                 </Card>
               ))}
           {keyValues !== null && Object.keys(keyValues).length === 0 && (
-            <Card className="pf-v5-u-mt-xs">
+            <Card className="pf-v6-u-mt-xs">
               <CardBody>
                 There is no key values corresponding to this query: {query}
               </CardBody>

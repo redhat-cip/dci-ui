@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Page404() {
   return (
     <div
@@ -9,10 +11,11 @@ export default function Page404() {
         alignItems: "center",
       }}
     >
-      <div style={{ color: "white" }}>
+      <div>
         <h1>Page not found</h1>
         <p>Error 404</p>
         <p>We are looking for your page...but we can't find it.</p>
+        <Link to="/">Go back to the index page</Link>
       </div>
     </div>
   );

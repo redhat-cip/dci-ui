@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, ModalVariant } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { ITeam } from "types";
 import useModal from "hooks/useModal";
 import TeamSelect from "jobs/toolbar/TeamSelect";

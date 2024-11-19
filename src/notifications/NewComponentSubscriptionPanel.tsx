@@ -1,5 +1,4 @@
 import { sortTopicWithSemver } from "topics/topicsActions";
-import "@patternfly/patternfly/components/DualListSelector/dual-list-selector.css";
 import {
   useListSubscribedTopicsQuery,
   useListTopicsQuery,
@@ -7,13 +6,13 @@ import {
   useUnsubscribeFromATopicMutation,
 } from "topics/topicsApi";
 import {
+  SearchInput,
   DualListSelector,
   DualListSelectorControl,
   DualListSelectorControlsWrapper,
   DualListSelectorList,
   DualListSelectorListItem,
   DualListSelectorPane,
-  SearchInput,
 } from "@patternfly/react-core";
 import { useState } from "react";
 import { AngleLeftIcon, AngleRightIcon } from "@patternfly/react-icons";

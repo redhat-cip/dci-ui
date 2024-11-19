@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import {
   createSearchFromFilters,
   parseFiltersFromSearch,
-} from "../api/filters";
+} from "services/filters";
 import { Filters } from "types";
 import ComponentsToolbar from "./ComponentsToolbar";
 import ComponentsTable from "./ComponentsTable";

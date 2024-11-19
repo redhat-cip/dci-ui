@@ -20,7 +20,7 @@ import {
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 import { Filters, ITeam } from "types";
 import {
   Table,
@@ -37,7 +37,7 @@ import {
   offsetAndLimitToPage,
   pageAndLimitToOffset,
   parseFiltersFromSearch,
-} from "api/filters";
+} from "services/filters";
 import {
   useCreateRemoteciMutation,
   useDeleteRemoteciMutation,
@@ -154,10 +154,7 @@ export default function RemotecisPage() {
               </ToolbarItem>
             </ToolbarGroup>
             <ToolbarGroup style={{ flex: "1" }}>
-              <ToolbarItem
-                variant="pagination"
-                align={{ default: "alignRight" }}
-              >
+              <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
                 {count === 0 ? null : (
                   <Pagination
                     perPage={filters.limit}
@@ -180,14 +177,14 @@ export default function RemotecisPage() {
         </Toolbar>
       }
     >
-      <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+      <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
         <Thead>
           <Tr>
             <Th className="text-center">ID</Th>
             <Th sort={sort("name")}>Name</Th>
             <Th className="text-center">Status</Th>
             <Th className="text-center" title="Authentication">
-              <UserSecretIcon className="pf-v5-u-mr-xs" /> Authentication
+              <UserSecretIcon className="pf-v6-u-mr-xs" /> Authentication
             </Th>
             <Th sort={sort("created_at")}>Created</Th>
             <Th className="text-center">Actions</Th>
@@ -212,7 +209,7 @@ export default function RemotecisPage() {
                   type="sh"
                   role="remoteci"
                   resource={remoteci}
-                  className="pf-v5-u-mr-xs"
+                  className="pf-v6-u-mr-xs"
                 />
                 <SeeAuthentificationFileModal
                   type="yaml"
@@ -223,7 +220,7 @@ export default function RemotecisPage() {
               <Td>{fromNow(remoteci.created_at)}</Td>
               <Td className="text-center">
                 <EditRemoteciModal
-                  className="pf-v5-u-mr-xs"
+                  className="pf-v6-u-mr-xs"
                   remoteci={remoteci}
                   teams={Object.values(currentUser.teams) as ITeam[]}
                   onSubmit={updateRemoteci}
@@ -235,9 +232,12 @@ export default function RemotecisPage() {
                   onOk={() => deleteRemoteci(remoteci)}
                 >
                   {(openModal) => (
-                    <Button size="sm" variant="danger" onClick={openModal}>
-                      <TrashIcon />
-                    </Button>
+                    <Button
+                      icon={<TrashIcon />}
+                      size="sm"
+                      variant="danger"
+                      onClick={openModal}
+                    ></Button>
                   )}
                 </ConfirmDeleteModal>
               </Td>

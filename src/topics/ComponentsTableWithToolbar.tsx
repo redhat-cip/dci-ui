@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   createSearchFromFilters,
   parseFiltersFromSearch,
-} from "../api/filters";
+} from "services/filters";
 import { Filters } from "types";
 import { useListComponentsQuery } from "components/componentsApi";
 import RHELComponentsTable from "components/RHELComponentsTable";
@@ -40,7 +40,7 @@ export default function ComponentsTableWithToolbar({
     : DefaultComponentsTable;
 
   return (
-    <Card className="pf-v5-u-mt-md">
+    <Card className="pf-v6-u-mt-md">
       <CardTitle>Components</CardTitle>
       <CardBody>
         <ComponentsToolbar filters={filters} setFilters={setFilters} />

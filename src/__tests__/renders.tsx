@@ -6,8 +6,7 @@ import type { RenderOptions } from "@testing-library/react";
 import type { AppStore, RootState } from "../store";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "auth/authContext";
-import { setBasicToken } from "services/localStorage";
+import { currentUser } from "__tests__/data";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
@@ -17,20 +16,17 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
 export function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState = {},
+    preloadedState = { auth: { currentUser } },
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
-    setBasicToken("dXNlcg==");
     return (
       <Provider store={store}>
-        <AuthProvider>
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
-            {children}
-          </BrowserRouter>
-        </AuthProvider>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+          {children}
+        </BrowserRouter>
       </Provider>
     );
   }

@@ -1,7 +1,7 @@
-import http from "../services/http";
 import { ICurrentUser, IIdentity, IIdentityTeam } from "types";
 import { values } from "lodash";
-import { readValue, saveValue } from "../services/localStorage";
+import { readValue, saveValue } from "services/localStorage";
+import api from "api";
 
 function buildShortcut(team: IIdentityTeam | null) {
   if (team === null) {
@@ -27,40 +27,21 @@ function buildShortcut(team: IIdentityTeam | null) {
 }
 
 export function buildCurrentUser(
-  currentUser: IIdentity,
+  identity: IIdentity,
   defaultTeam: IIdentityTeam | null,
 ): ICurrentUser {
-  const teams = values(currentUser.teams).filter((team) => team.id !== null);
+  const teams = values(identity.teams).filter((team) => team.id !== null);
   const firstTeam = teams.length === 0 ? null : teams[0];
   const team =
-    defaultTeam === null || !(defaultTeam.id in currentUser.teams)
+    defaultTeam === null || !(defaultTeam.id in identity.teams)
       ? firstTeam
       : defaultTeam;
   return {
-    ...currentUser,
+    ...identity,
     teams,
     team,
     ...buildShortcut(team),
   };
-}
-
-export function getCurrentUser(): Promise<ICurrentUser> {
-  // gvincent todo: should be returned by the backend
-  const defaultTeam = readValue<IIdentityTeam | null>("defaultTeam", null);
-  return http.get(`/api/v1/identity`).then((response) => {
-    return buildCurrentUser(response.data.identity, defaultTeam);
-  });
-}
-
-export function updateCurrentUser(
-  currentUser: ICurrentUser,
-): Promise<ICurrentUser> {
-  return http({
-    method: "put",
-    url: "/api/v1/identity",
-    data: currentUser,
-    headers: { "If-Match": currentUser.etag },
-  }).then((response) => response.data.user);
 }
 
 export function changeCurrentTeam(
@@ -74,3 +55,37 @@ export function changeCurrentTeam(
     ...buildShortcut(team),
   };
 }
+
+export const authApi = api
+  .enhanceEndpoints({
+    addTagTypes: ["Auth"],
+  })
+  .injectEndpoints({
+    endpoints: (builder) => ({
+      getCurrentUser: builder.query<ICurrentUser, void>({
+        query: () => "/identity",
+        transformResponse: (response: { identity: IIdentity }, meta, arg) => {
+          const defaultTeam = readValue<IIdentityTeam | null>(
+            "defaultTeam",
+            null,
+          );
+          return buildCurrentUser(response.identity, defaultTeam);
+        },
+        transformErrorResponse: () => undefined,
+      }),
+      updateCurrentUser: builder.mutation<ICurrentUser, ICurrentUser>({
+        query(currentUser) {
+          return {
+            url: `/identity`,
+            method: "PUT",
+            body: currentUser,
+            headers: { "If-Match": currentUser.etag },
+          };
+        },
+        transformResponse: (response: { user: ICurrentUser }, meta, arg) =>
+          response.user,
+      }),
+    }),
+  });
+
+export const { useGetCurrentUserQuery, useUpdateCurrentUserMutation } = authApi;

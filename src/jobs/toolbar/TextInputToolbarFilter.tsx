@@ -18,8 +18,8 @@ export default function TextInputToolbarFilter({
 }: TextInputToolbarFilterProps) {
   return (
     <ToolbarFilter
-      chips={name === null ? [] : [name]}
-      deleteChip={onClear}
+      labels={name === null ? [] : [name]}
+      deleteLabel={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >

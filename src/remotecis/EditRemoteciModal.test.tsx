@@ -1,22 +1,11 @@
 import { render, fireEvent, waitFor, within } from "@testing-library/react";
 import EditRemoteciModal from "./EditRemoteciModal";
-import { IRemoteci, ITeam } from "types";
 import { vi } from "vitest";
+import { teams, remotecis } from "__tests__/data";
 
 test("test edit remoteci form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
-
-  const remoteci = {
-    id: "r1",
-    etag: "e1",
-    name: "Remoteci 1",
-    team_id: "t2",
-    from_now: "",
-  } as unknown as IRemoteci;
-  const teams = [
-    { id: "t1", name: "team 1" },
-    { id: "t2", name: "team 2" },
-  ] as ITeam[];
+  const remoteci = remotecis[0];
   const { baseElement, getByRole, getByTestId, getByPlaceholderText } = render(
     <EditRemoteciModal
       teams={teams}
@@ -25,7 +14,7 @@ test("test edit remoteci form submit the correct values", async () => {
     />,
   );
 
-  const showModal = getByRole("button", { name: /Edit Remoteci 1/i });
+  const showModal = getByRole("button", { name: /Edit remoteci/i });
 
   fireEvent.click(showModal);
 
@@ -39,7 +28,7 @@ test("test edit remoteci form submit the correct values", async () => {
   expect(remoteci_form).toBeInTheDocument();
 
   const name = getByTestId("remoteci_form__name") as HTMLInputElement;
-  expect(name.value).toBe("Remoteci 1");
+  expect(name.value).toBe("Remoteci admin");
   fireEvent.change(name, {
     target: {
       value: "Edited remoteci 1",
@@ -47,7 +36,7 @@ test("test edit remoteci form submit the correct values", async () => {
   });
 
   const teams_select = getByPlaceholderText("Team Owner") as HTMLSelectElement;
-  expect(teams_select.value).toBe("team 2");
+  expect(teams_select.value).toBe("Red Hat");
   fireEvent.click(teams_select);
   const option1 = getByTestId("remoteci_form__team_id[0]");
   await waitFor(() => expect(option1).toBeInTheDocument());
@@ -61,10 +50,10 @@ test("test edit remoteci form submit the correct values", async () => {
     expect(remoteci_form).not.toBeInTheDocument();
     expect(mockOnSubmit.mock.calls.length).toBe(1);
     expect(mockOnSubmit.mock.calls[0][0]).toEqual({
-      id: "r1",
-      etag: "e1",
+      id: remoteci.id,
+      etag: remoteci.etag,
       name: "Edited remoteci 1",
-      team_id: "t1",
+      team_id: teams[0].id,
     });
   });
 });

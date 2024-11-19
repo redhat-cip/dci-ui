@@ -44,8 +44,8 @@ import {
   ArrowUpIcon,
 } from "@patternfly/react-icons";
 import {
-  global_danger_color_100,
-  global_primary_color_100,
+  chart_color_red_orange_300,
+  chart_color_blue_300,
 } from "@patternfly/react-tokens";
 import ListInputWithChip from "ui/form/ListInputWithChip";
 import { useSearchParams } from "react-router-dom";
@@ -118,13 +118,13 @@ function JunitComparisonForm({
       <Flex direction={{ default: "column", lg: "row" }}>
         <FlexItem flex={{ default: "flex_1" }}>
           <div>
-            <h2 className="pf-v5-c-title pf-m-lg">Reference job filters</h2>
-            <div className="pf-v5-c-description-list__text">
+            <h2 className="pf-v6-c-title pf-m-lg">Reference job filters</h2>
+            <div className="pf-v6-c-description-list__text">
               All of the jobs corresponding to these filters will be used as the
               basis for the calculation.
             </div>
           </div>
-          <div className="pf-v5-u-mt-md">
+          <div className="pf-v6-u-mt-md">
             <Form>
               <FormGroup label="Reference topic" isRequired fieldId="topic1">
                 <TopicSelect
@@ -203,6 +203,18 @@ function JunitComparisonForm({
             }}
           >
             <Button
+              icon={
+                <>
+                  <span className="pf-v6-u-display-none pf-v6-u-display-flex-on-lg">
+                    <ArrowLeftIcon />
+                    <ArrowRightIcon />
+                  </span>
+                  <span className="pf-v6-u-display-flex pf-v6-u-display-none-on-lg">
+                    <ArrowUpIcon />
+                    <ArrowDownIcon />
+                  </span>
+                </>
+              }
               variant="plain"
               aria-label="Action"
               onClick={() => {
@@ -222,27 +234,18 @@ function JunitComparisonForm({
                 setTopic1EndDate(tmpTopic2EndDate);
                 setTags1(tmpTags2);
               }}
-            >
-              <span className="pf-v5-u-display-none pf-v5-u-display-flex-on-lg">
-                <ArrowLeftIcon />
-                <ArrowRightIcon />
-              </span>
-              <span className="pf-v5-u-display-flex pf-v5-u-display-none-on-lg">
-                <ArrowUpIcon />
-                <ArrowDownIcon />
-              </span>
-            </Button>
+            />
           </div>
         </FlexItem>
         <FlexItem flex={{ default: "flex_1" }}>
           <div>
-            <h2 className="pf-v5-c-title pf-m-lg">Target job filters</h2>
-            <div className="pf-v5-c-description-list__text">
+            <h2 className="pf-v6-c-title pf-m-lg">Target job filters</h2>
+            <div className="pf-v6-c-description-list__text">
               The test cases of the target jobs will be compared to the test
               cases of the reference jobs.
             </div>
           </div>
-          <div className="pf-v5-u-mt-md">
+          <div className="pf-v6-u-mt-md">
             <Form>
               <FormGroup label="Target topic" isRequired fieldId="topic2">
                 <TopicSelect
@@ -337,7 +340,7 @@ function JunitComparisonForm({
           topic2StartDate === null ||
           topic2EndDate === null
         }
-        className="pf-v5-u-mt-xl"
+        className="pf-v6-u-mt-xl"
         onClick={() => {
           if (
             testName &&
@@ -502,7 +505,7 @@ function JunitBarChart({
                         style={{
                           backgroundColor: "white",
                         }}
-                        className="pf-v5-u-p-sm"
+                        className="pf-v6-u-p-sm"
                       >
                         <p className="desc">{message}</p>
                       </div>
@@ -534,8 +537,8 @@ function JunitBarChart({
                     cursor="pointer"
                     fill={
                       data.intervals[index] >= 0
-                        ? global_danger_color_100.value
-                        : global_primary_color_100.value
+                        ? chart_color_red_orange_300.var
+                        : chart_color_blue_300.var
                     }
                     key={`cell-${index}`}
                   />
@@ -582,7 +585,7 @@ function TrendChart({ data }: { data: TrendPercentageData }) {
               <Line
                 type="monotone"
                 dataKey="y"
-                stroke={global_primary_color_100.value}
+                stroke={chart_color_blue_300.var}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -625,7 +628,8 @@ function TestListDetails({
       </CardTitle>
       <CardBody>
         <Table
-          className="pf-v5-c-table pf-m-compact"
+          variant="compact"
+          className="pf-v6-c-table"
           role="grid"
           aria-label="junit testcase details"
         >
@@ -722,7 +726,7 @@ export default function JunitComparisonPage() {
       </Card>
 
       {isLoading && (
-        <div className="pf-v5-u-mt-md">
+        <div className="pf-v6-u-mt-md">
           <Card>
             <CardBody>
               <Bullseye>
@@ -735,7 +739,7 @@ export default function JunitComparisonPage() {
 
       {data && (
         <>
-          <div className="pf-v5-u-mt-md">
+          <div className="pf-v6-u-mt-md">
             <Grid hasGutter>
               <GridItem span={6}>
                 <JunitBarChart
@@ -751,7 +755,7 @@ export default function JunitComparisonPage() {
               </GridItem>
             </Grid>
           </div>
-          <div className="pf-v5-u-mt-md">
+          <div className="pf-v6-u-mt-md">
             <TestListDetails
               data={data.bar_chart}
               lowerBoundary={testLowerBoundary}

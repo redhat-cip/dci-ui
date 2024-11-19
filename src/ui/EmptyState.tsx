@@ -3,10 +3,8 @@ import { SadTearIcon } from "@patternfly/react-icons";
 import {
   Bullseye,
   EmptyState,
-  EmptyStateIcon,
   EmptyStateBody,
   EmptyStateActions,
-  EmptyStateHeader,
   EmptyStateFooter,
 } from "@patternfly/react-core";
 
@@ -25,12 +23,11 @@ export default function DCIEmptyState({
 }: EmptyStateProps) {
   return (
     <Bullseye>
-      <EmptyState>
-        <EmptyStateHeader
-          titleText={<>{title}</>}
-          icon={<EmptyStateIcon icon={icon ? icon : SadTearIcon} />}
-          headingLevel="h4"
-        />
+      <EmptyState
+        headingLevel="h4"
+        icon={icon ? icon : SadTearIcon}
+        titleText={<>{title}</>}
+      >
         <EmptyStateBody>{info}</EmptyStateBody>
         <EmptyStateFooter>
           {action && <EmptyStateActions>{action}</EmptyStateActions>}

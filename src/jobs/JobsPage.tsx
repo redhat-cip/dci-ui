@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
-import JobsList from "./jobsList/JobsList";
 import JobsTableList from "./jobsTableList/JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -10,12 +9,11 @@ import {
   PageSectionVariants,
   Pagination,
   PaginationVariant,
-  Text,
-  TextContent,
+  Content,
 } from "@patternfly/react-core";
 import { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 import { useTitle } from "hooks/useTitle";
 import {
   createSearchFromFilters,
@@ -23,7 +21,7 @@ import {
   pageAndLimitToOffset,
   parseFiltersFromSearch,
   getDefaultFilters,
-} from "api/filters";
+} from "services/filters";
 import { useListJobsQuery } from "./jobsApi";
 
 export default function JobsPage() {
@@ -48,10 +46,6 @@ export default function JobsPage() {
   const { data, isLoading, refetch } = useListJobsQuery(filtersWithTeamId);
 
   const jobsPageDivRef = useRef<HTMLInputElement>(null);
-  const [tableViewActive, setTableViewActive] = useLocalStorage(
-    "tableViewActive",
-    true,
-  );
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]
   >(
@@ -76,28 +70,27 @@ export default function JobsPage() {
 
   return (
     <div ref={jobsPageDivRef}>
-      <section className="pf-v5-c-page__main-breadcrumb">
+      <section className="pf-v6-c-page__main-breadcrumb">
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
       </section>
-      <PageSection variant={PageSectionVariants.light}>
-        <TextContent>
-          <Text component="h1">Jobs</Text>
-        </TextContent>
+      <PageSection hasBodyWrapper={false}>
+        <Content>
+          <Content component="h1">Jobs</Content>
+        </Content>
       </PageSection>
-      <PageSection variant={PageSectionVariants.default}>
+      <PageSection hasBodyWrapper={false} variant={PageSectionVariants.default}>
         <JobsToolbar
           jobsCount={count}
           filters={filters}
           setFilters={setFilters}
           clearAllFilters={() => setFilters(getDefaultFilters())}
           refresh={refetch}
-          tableViewActive={tableViewActive}
-          setTableViewActive={setTableViewActive}
           tableViewColumns={tableViewColumns}
           setTableViewColumns={setTableViewColumns}
         />
         {isLoading && (
           <PageSection
+            hasBodyWrapper={false}
             variant={PageSectionVariants.default}
             style={{ height: "80vh" }}
             isFilled={true}
@@ -113,25 +106,16 @@ export default function JobsPage() {
             info="There is no job at the moment. Edit your filters to restart a search."
           />
         )}
-        {tableViewActive ? (
-          <JobsTableList
-            filters={filters}
-            setFilters={setFilters}
-            jobs={data.jobs}
-            columns={tableViewColumns}
-          />
-        ) : (
-          <JobsList
-            filters={filters}
-            setFilters={setFilters}
-            jobs={data.jobs}
-            setTableViewActive={setTableViewActive}
-          />
-        )}
+        <JobsTableList
+          filters={filters}
+          setFilters={setFilters}
+          jobs={data.jobs}
+          columns={tableViewColumns}
+        />
         {count > 0 && (
-          <div className="pf-v5-u-background-color-100">
+          <div>
             <Pagination
-              className="pf-v5-u-px-md"
+              className="pf-v6-u-px-md"
               perPage={filters.limit}
               page={offsetAndLimitToPage(filters.offset, filters.limit)}
               itemCount={count}

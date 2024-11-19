@@ -10,8 +10,8 @@ export default function ProductToolbarFilter({
 }: SelectProps<IProduct>) {
   return (
     <ToolbarFilter
-      chips={id ? [id] : []}
-      deleteChip={onClear}
+      labels={id ? [id] : []}
+      deleteLabel={onClear}
       categoryName="Product id"
       showToolbarItem={showToolbarItem}
     >

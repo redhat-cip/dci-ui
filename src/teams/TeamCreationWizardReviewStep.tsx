@@ -19,10 +19,7 @@ export default function TeamCreationWizardReviewStep() {
   return (
     <div>
       {!(isValid && dirty) ? (
-        <Banner
-          screenReaderText="Team creation wizard form error"
-          variant="red"
-        >
+        <Banner screenReaderText="Team creation wizard form error" color="red">
           <Flex spaceItems={{ default: "spaceItemsSm" }}>
             <FlexItem>
               <ExclamationCircleIcon />

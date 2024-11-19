@@ -1,6 +1,6 @@
 import { waitFor } from "@testing-library/react";
 import { ITeam } from "types";
-import { render } from "utils/test-utils";
+import { render } from "__tests__/renders";
 import TeamForm from "./TeamForm";
 import { vi } from "vitest";
 

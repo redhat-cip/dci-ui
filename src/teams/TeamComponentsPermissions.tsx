@@ -86,8 +86,12 @@ export default function TeamComponentsPermissions({
               }}
             >
               {(openModal) => (
-                <Button type="button" variant="secondary" onClick={openModal}>
-                  <PlusCircleIcon className="pf-v5-u-mr-xs" />
+                <Button
+                  icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
+                  type="button"
+                  variant="secondary"
+                  onClick={openModal}
+                >
                   Add access to a team's components
                 </Button>
               )}
@@ -95,7 +99,7 @@ export default function TeamComponentsPermissions({
           </div>
         </div>
         <div>
-          <p className="pf-v5-u-mt-md">
+          <p className="pf-v6-u-mt-md">
             The {team.name} team has access to the following team components:
           </p>
         </div>
@@ -114,7 +118,7 @@ export default function TeamComponentsPermissions({
                 </EmptyState>
               </Bullseye>
             ) : (
-              <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+              <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
                 <Thead>
                   <Tr>
                     <Th>Team name</Th>
@@ -129,7 +133,7 @@ export default function TeamComponentsPermissions({
                           {remoteTeam.name}
                         </Link>
                       </Td>
-                      <Td className="pf-v5-c-table__action">
+                      <Td className="pf-v6-c-table__action">
                         <ConfirmDeleteModal
                           title={`Remove ${remoteTeam.name} access to ${team.name}`}
                           message={`Are you sure you want to remove user ${remoteTeam.name} access? ${team.name} will not be able to see ${remoteTeam.name} component.`}
@@ -142,12 +146,11 @@ export default function TeamComponentsPermissions({
                         >
                           {(openModal) => (
                             <Button
+                              icon={<MinusCircleIcon />}
                               variant="danger"
                               size="sm"
                               onClick={openModal}
-                            >
-                              <MinusCircleIcon />
-                            </Button>
+                            ></Button>
                           )}
                         </ConfirmDeleteModal>
                       </Td>

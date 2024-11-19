@@ -26,8 +26,8 @@ export default function TypesFilter({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <ToolbarFilter
-      chips={typesSelected}
-      deleteChip={(cat, chip) => deleteChip(chip as string)}
+      labels={typesSelected}
+      deleteLabel={(cat, chip) => deleteChip(chip as string)}
       categoryName="Types"
       showToolbarItem={showToolbarItem}
     >

@@ -16,12 +16,7 @@ import {
   MenuToggle,
   MenuToggleElement,
 } from "@patternfly/react-core";
-import {
-  ArrowsAltVIcon,
-  ListIcon,
-  SyncAltIcon,
-  TableIcon,
-} from "@patternfly/react-icons";
+import { SyncAltIcon } from "@patternfly/react-icons";
 import RemoteciToolbarFilter from "./RemoteciToolbarFilter";
 import ProductToolbarFilter from "./ProductToolbarFilter";
 import TopicToolbarFilter from "./TopicToolbarFilter";
@@ -32,7 +27,7 @@ import TextInputToolbarFilter from "./TextInputToolbarFilter";
 import { useHotkeys } from "react-hotkeys-hook";
 import QLToolbar from "./QLToolbar";
 import TableViewColumnsSelect from "./TableViewColumnsSelect";
-import { offsetAndLimitToPage, pageAndLimitToOffset } from "api/filters";
+import { offsetAndLimitToPage, pageAndLimitToOffset } from "services/filters";
 import { isUUID } from "services/utils";
 
 export const Categories = [
@@ -54,8 +49,6 @@ type JobsToolbarProps = {
   setFilters: (filters: Filters) => void;
   clearAllFilters: () => void;
   refresh: () => void;
-  tableViewActive: boolean;
-  setTableViewActive: (tableViewActive: boolean) => void;
   tableViewColumns: JobsTableListColumn[];
   setTableViewColumns: (tableViewColumns: JobsTableListColumn[]) => void;
 };
@@ -66,8 +59,6 @@ export default function JobsToolbar({
   setFilters,
   clearAllFilters,
   refresh,
-  tableViewActive,
-  setTableViewActive,
   tableViewColumns,
   setTableViewColumns,
 }: JobsToolbarProps) {
@@ -215,48 +206,23 @@ export default function JobsToolbar({
             <ToolbarItem variant="separator" />
           </>
         )}
-        <ToolbarGroup variant="icon-button-group">
-          <ToolbarItem>
-            <Button
-              variant={ButtonVariant.plain}
-              aria-label="refresh"
-              type="button"
-              onClick={refresh}
-            >
-              <SyncAltIcon />
-            </Button>
-          </ToolbarItem>
-          <ToolbarItem>
-            <Button
-              variant={ButtonVariant.plain}
-              aria-label={tableViewActive ? "Table view" : "List view"}
-              type="button"
-              onClick={() => setTableViewActive(!tableViewActive)}
-            >
-              {tableViewActive ? (
-                <>
-                  <TableIcon />
-                  <ArrowsAltVIcon />
-                </>
-              ) : (
-                <>
-                  <ListIcon />
-                  <ArrowsAltVIcon />
-                </>
-              )}
-            </Button>
-          </ToolbarItem>
-        </ToolbarGroup>
-        {tableViewActive && (
-          <ToolbarItem>
-            <TableViewColumnsSelect
-              columns={tableViewColumns}
-              onSelect={setTableViewColumns}
-            />
-          </ToolbarItem>
-        )}
+        <ToolbarItem>
+          <TableViewColumnsSelect
+            columns={tableViewColumns}
+            onSelect={setTableViewColumns}
+          />
+        </ToolbarItem>
+        <ToolbarItem>
+          <Button
+            icon={<SyncAltIcon />}
+            variant={ButtonVariant.plain}
+            aria-label="refresh"
+            type="button"
+            onClick={refresh}
+          />
+        </ToolbarItem>
         <ToolbarGroup style={{ flex: "1" }}>
-          <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
+          <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
             {jobsCount === 0 ? null : (
               <Pagination
                 perPage={filters.limit}

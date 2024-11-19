@@ -4,8 +4,7 @@ import {
   Card,
   CardBody,
   Button,
-  TextContent,
-  Text,
+  Content,
   CardTitle,
   Skeleton,
 } from "@patternfly/react-core";
@@ -17,7 +16,7 @@ import { ConfirmDeleteModal, Breadcrumb } from "ui";
 import { ITeam, IUser } from "types";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import { global_danger_color_100 } from "@patternfly/react-tokens";
+import { t_global_color_nonstatus_red_200 } from "@patternfly/react-tokens";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import {
   useAddUserToTeamMutation,
@@ -30,7 +29,7 @@ import {
 import { skipToken } from "@reduxjs/toolkit/query";
 
 const DangerZone = styled.div`
-  border: 1px solid ${global_danger_color_100.value};
+  border: 1px solid ${t_global_color_nonstatus_red_200.value};
   padding: 1rem;
   border-radius: 0.5rem;
 `;
@@ -60,7 +59,7 @@ export function UserTeamsTable({ user }: { user: IUser }) {
         }}
       />
 
-      <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+      <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
         <Thead>
           <Tr>
             <Th>Team name</Th>
@@ -84,7 +83,7 @@ export function UserTeamsTable({ user }: { user: IUser }) {
                 <Td>
                   <Link to={`/teams/${team.id}`}>{team.name}</Link>
                 </Td>
-                <Td className="pf-v5-c-table__action">
+                <Td className="pf-v6-c-table__action">
                   <ConfirmDeleteModal
                     title={`Delete ${user.name} from ${team.name}`}
                     message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
@@ -94,13 +93,12 @@ export function UserTeamsTable({ user }: { user: IUser }) {
                   >
                     {(openModal) => (
                       <Button
+                        icon={<MinusCircleIcon />}
                         variant="danger"
                         size="sm"
                         onClick={openModal}
                         isDisabled={isRemoving || isFetching}
-                      >
-                        <MinusCircleIcon />
-                      </Button>
+                      ></Button>
                     )}
                   </ConfirmDeleteModal>
                 </Td>
@@ -164,19 +162,19 @@ export default function UserPage() {
               <UserTeamsTable user={user} />
             </CardBody>
           </Card>
-          <Card className="pf-v5-u-mt-lg">
+          <Card className="pf-v6-u-mt-lg">
             <CardTitle>Danger Zone</CardTitle>
             <CardBody>
               <DangerZone>
                 <DangerZoneRow>
                   <div>
-                    <TextContent>
-                      <Text component="h2">{`Delete ${user.name} user`}</Text>
-                      <Text component="p">
+                    <Content>
+                      <Content component="h2">{`Delete ${user.name} user`}</Content>
+                      <Content component="p">
                         Once you delete a user, there is no going back. Please
                         be certain.
-                      </Text>
-                    </TextContent>
+                      </Content>
+                    </Content>
                   </div>
                   <div>
                     <ConfirmDeleteModal
@@ -187,8 +185,12 @@ export default function UserPage() {
                       }
                     >
                       {(openModal) => (
-                        <Button variant="danger" size="sm" onClick={openModal}>
-                          <TrashAltIcon className="pf-v5-u-mr-sm" />
+                        <Button
+                          icon={<TrashAltIcon className="pf-v6-u-mr-sm" />}
+                          variant="danger"
+                          size="sm"
+                          onClick={openModal}
+                        >
                           Delete this user
                         </Button>
                       )}

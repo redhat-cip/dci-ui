@@ -57,10 +57,8 @@ export default function FilesList({ job }: FilesListProps) {
     <div>
       <Toolbar clearAllFilters={() => {}} collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
-          <ToolbarGroup>
+          <ToolbarGroup variant="label-group">
             <ToolbarItem variant="label">Search a file</ToolbarItem>
-          </ToolbarGroup>
-          <ToolbarGroup>
             <ToolbarItem>
               <SearchInput
                 placeholder="Find by name"
@@ -69,10 +67,9 @@ export default function FilesList({ job }: FilesListProps) {
                 onClear={() => setTextSearch("")}
               />
             </ToolbarItem>
-          </ToolbarGroup>
-          <ToolbarGroup>
             <ToolbarItem>
               <Button
+                size="sm"
                 variant="primary"
                 icon={
                   isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />
@@ -98,20 +95,18 @@ export default function FilesList({ job }: FilesListProps) {
                     .catch(console.error)
                     .finally(() => setIsDownloading(false));
                 }}
-                className="pf-v5-u-mr-xs"
+                className="pf-v6-u-mr-xs"
                 isDisabled={isDownloading}
               >
                 {textSearch === ""
                   ? `Download all files (${humanFileSize(filesFilteredSize)})`
-                  : `Download these files (${humanFileSize(
-                      filesFilteredSize,
-                    )})`}
+                  : `Download these files (${humanFileSize(filesFilteredSize)})`}
               </Button>
             </ToolbarItem>
           </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
-      <div className="table-responsive">
+      <div>
         {filesFiltered.length === 0 ? (
           <EmptyState
             icon={FileArchiveIcon}
@@ -119,7 +114,7 @@ export default function FilesList({ job }: FilesListProps) {
             info="There are no files attached to this search. Change your search."
           />
         ) : (
-          <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+          <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
             <Thead>
               <Tr>
                 <Th>Filename</Th>

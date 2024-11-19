@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  PageSection,
-  PageSectionVariants,
-  TextContent,
-  Bullseye,
-  Text,
-} from "@patternfly/react-core";
+import { PageSection, Content, Bullseye } from "@patternfly/react-core";
 import { BlinkLogo } from "ui";
 import { useTitle } from "hooks/useTitle";
 
@@ -39,23 +33,17 @@ export default function MainPage({
   useTitle(`DCI > ${title}`);
   return (
     <div {...props}>
-      {Breadcrumb && (
-        <section className="pf-v5-c-page__main-breadcrumb">
-          {Breadcrumb}
-        </section>
-      )}
+      {Breadcrumb && <PageSection>{Breadcrumb}</PageSection>}
       {HeaderSection === undefined ? (
-        <PageSection variant={PageSectionVariants.light}>
-          <TextContent>
-            <Text component="h1">{title}</Text>
-            <Text component="p">{description}</Text>
-            {HeaderButton}
-          </TextContent>
+        <PageSection>
+          <Content component="h1">{title}</Content>
+          <Content component="p">{description}</Content>
+          {HeaderButton}
         </PageSection>
       ) : (
         HeaderSection
       )}
-      <PageSection variant={PageSectionVariants.default} isFilled={true}>
+      <PageSection>
         {Toolbar}
         {loading ? (
           <Bullseye>

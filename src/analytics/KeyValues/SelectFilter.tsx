@@ -44,8 +44,8 @@ export default function SelectFilter<T extends Item>({
 
   return (
     <ToolbarFilter
-      chips={item === null || item === undefined ? [] : [item.label]}
-      deleteChip={onClear}
+      labels={item === null || item === undefined ? [] : [item.label]}
+      deleteLabel={onClear}
       categoryName={categoryName}
       showToolbarItem
     >

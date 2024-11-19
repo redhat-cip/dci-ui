@@ -13,6 +13,8 @@ import {
   CodeBlockCode,
   Button,
   Skeleton,
+  Content,
+  ContentVariants,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
 import {
@@ -32,9 +34,8 @@ import { getPercentageOfSuccessfulJobs } from "./stats";
 import { JobStatusLabel } from "jobs/components";
 import CardLine from "ui/CardLine";
 import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
-import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 import { getTopicIcon } from "ui/icons";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTeamQuery } from "teams/teamsApi";
@@ -62,7 +63,7 @@ function EmbedJob({ job }: IEmbedJobProps) {
                   isCompact
                   key={index}
                   color="blue"
-                  className="pf-v5-u-mr-xs pf-v5-u-mt-xs"
+                  className="pf-v6-u-mr-xs pf-v6-u-mt-xs"
                 >
                   <small>{tag}</small>
                 </Label>
@@ -71,13 +72,13 @@ function EmbedJob({ job }: IEmbedJobProps) {
         </GridItem>
         <GridItem span={2}>
           <span title={`Duration in seconds ${job.duration}`}>
-            <ClockIcon className="pf-v5-u-mr-xs" />
+            <ClockIcon className="pf-v6-u-mr-xs" />
             {humanizeDuration(job.duration * 1000)}
           </span>
         </GridItem>
         <GridItem span={2}>
           <span title={`Created at ${job.created_at}`}>
-            <CalendarAltIcon className="pf-v5-u-mr-xs" />
+            <CalendarAltIcon className="pf-v6-u-mr-xs" />
             {formatDate(job.created_at)}
           </span>
         </GridItem>
@@ -98,7 +99,7 @@ function TopicLink({ topic_id }: { topic_id: string }) {
   const TopicIcon = getTopicIcon(topic.name);
   return (
     <Link to={`/topics/${topic.id}/components`}>
-      <TopicIcon className="pf-v5-u-mr-xs" />
+      <TopicIcon className="pf-v6-u-mr-xs" />
       {topic.name}
     </Link>
   );
@@ -114,20 +115,20 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
 
   return (
     <div>
-      <Title headingLevel="h3" size="xl" className="pf-v5-u-p-md">
+      <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
         Component information
       </Title>
       <Divider />
-      <CardLine className="pf-v5-u-p-md" field="ID" value={component.id} />
+      <CardLine className="pf-v6-u-p-md" field="ID" value={component.id} />
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Name"
         value={component.display_name}
       />
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Version"
         value={component.version}
       />
@@ -135,7 +136,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       {component.uid !== "" && (
         <>
           <CardLine
-            className="pf-v5-u-p-md"
+            className="pf-v6-u-p-md"
             field="Unique id"
             value={component.uid}
           />
@@ -143,7 +144,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
         </>
       )}
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Topic"
         value={<TopicLink topic_id={component.topic_id} />}
       />
@@ -151,7 +152,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       {currentUser?.hasReadOnlyRole && component.url !== "" && (
         <>
           <CardLine
-            className="pf-v5-u-p-md"
+            className="pf-v6-u-p-md"
             field="Url"
             value={
               <a href={component.url} target="_blank" rel="noopener noreferrer">
@@ -162,10 +163,10 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
           <Divider />
         </>
       )}
-      <CardLine className="pf-v5-u-p-md" field="Type" value={component.type} />
+      <CardLine className="pf-v6-u-p-md" field="Type" value={component.type} />
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Data"
         value={
           seeData ? (
@@ -193,7 +194,7 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
         <>
           <Divider />
           <CardLine
-            className="pf-v5-u-p-md"
+            className="pf-v6-u-p-md"
             field="Team"
             value={<Link to={`/teams/${team.id}`}>{team.name}</Link>}
           />
@@ -212,14 +213,14 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       )}
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Tags"
         value={
           component.tags && component.tags.length > 0
             ? component.tags.map((tag, i) => (
                 <Label
                   key={i}
-                  className="pf-v5-u-mt-xs pf-v5-u-mr-xs"
+                  className="pf-v6-u-mt-xs pf-v6-u-mr-xs"
                   color="blue"
                 >
                   {tag}
@@ -230,18 +231,18 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
       />
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="State"
         value={<StateLabel state={component.state} />}
       />
       <Divider />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Created"
         value={fromNow(component.created_at)}
       />
       <CardLine
-        className="pf-v5-u-p-md"
+        className="pf-v6-u-p-md"
         field="Release date"
         value={formatDate(component.released_at, DateTime.DATE_MED)}
       />
@@ -363,14 +364,7 @@ export default function ComponentPage() {
             <GridItem span={3}>
               <Card>
                 <CardBody style={{ paddingBottom: "8px" }}>
-                  <p
-                    style={{
-                      color: global_palette_black_500.value,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Lastest jobs
-                  </p>
+                  <Content component={ContentVariants.h6}>Latest jobs</Content>
                   <LastComponentsJobsBarChart
                     component={convertComponentWithJobInComponentCoverage(
                       component,
@@ -381,18 +375,18 @@ export default function ComponentPage() {
             </GridItem>
           </Grid>
 
-          <Card className="pf-v5-u-mt-md">
+          <Card className="pf-v6-u-mt-md">
             <CardBody>
               <ComponentDetails key={component.etag} component={component} />
             </CardBody>
           </Card>
 
-          <Card className="pf-v5-u-mt-md">
+          <Card className="pf-v6-u-mt-md">
             <CardBody>
-              <Title headingLevel="h3" size="xl" className="pf-v5-u-p-md">
+              <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
                 Jobs
               </Title>
-              <div className="pf-v5-u-p-md">
+              <div className="pf-v6-u-p-md">
                 <Grid hasGutter>
                   <GridItem span={3}>Job name</GridItem>
                   <GridItem span={2}>Status</GridItem>
@@ -402,14 +396,14 @@ export default function ComponentPage() {
                 </Grid>
               </div>
               {component.jobs.length === 0 ? (
-                <div className="pf-v5-u-p-md">
+                <div className="pf-v6-u-p-md">
                   <Divider /> There is no job attached to this component
                 </div>
               ) : (
                 sortByNewestFirst(component.jobs).map((job, index) => (
                   <div key={index}>
                     <Divider />
-                    <div className="pf-v5-u-p-md">
+                    <div className="pf-v6-u-p-md">
                       <EmbedJob job={job} />
                     </div>
                   </div>

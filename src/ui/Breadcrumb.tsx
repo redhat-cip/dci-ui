@@ -12,9 +12,9 @@ interface DCIBreadcrumbProps {
   [key: string]: any;
 }
 
-export default function DCIBreadcrumb({ links }: DCIBreadcrumbProps) {
+export default function DCIBreadcrumb({ links, ...props }: DCIBreadcrumbProps) {
   return (
-    <Breadcrumb>
+    <Breadcrumb {...props}>
       {links.map((link, i) => {
         if (link.to) {
           return (

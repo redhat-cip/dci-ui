@@ -4,7 +4,7 @@ import {
   injectListEndpoint,
   injectUpdateEndpoint,
   injectGetEndpoint,
-} from "../api";
+} from "api";
 import { IFeeder } from "types";
 
 const resource = "Feeder";

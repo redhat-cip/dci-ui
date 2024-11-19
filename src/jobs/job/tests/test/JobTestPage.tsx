@@ -2,9 +2,8 @@ import {
   Bullseye,
   Card,
   CardBody,
-  TextContent,
-  Text,
-  TextVariants,
+  Content,
+  ContentVariants,
 } from "@patternfly/react-core";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -64,11 +63,11 @@ export default function JobTestPage() {
   return (
     <Card>
       <CardBody>
-        <TextContent className="pf-v5-u-mb-md">
-          <Text component={TextVariants.h2}>
+        <Content className="pf-v6-u-mb-md">
+          <Content component={ContentVariants.h2}>
             Test suites for {testFile.name}
-          </Text>
-        </TextContent>
+          </Content>
+        </Content>
         {junit !== null && <TestSuites junit={junit} />}
       </CardBody>
     </Card>

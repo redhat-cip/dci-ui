@@ -1,4 +1,5 @@
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { Wizard, WizardStep } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamMembersForm, { TeamMembersFormSchema } from "./TeamMembersForm";

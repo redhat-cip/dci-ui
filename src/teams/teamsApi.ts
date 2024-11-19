@@ -5,8 +5,8 @@ import {
   injectListEndpoint,
   injectUpdateEndpoint,
   injectGetEndpoint,
-  Api,
-} from "../api";
+  api,
+} from "api";
 import type { IProduct, ITeam, IUser } from "../types";
 import { AxiosPromise } from "axios";
 
@@ -39,37 +39,39 @@ export function getOrCreateTeam(team: Partial<ITeam>) {
 }
 
 export const { useAddProductToTeamMutation, useRemoveProductFromTeamMutation } =
-  Api.enhanceEndpoints({
-    addTagTypes: ["Team"],
-  }).injectEndpoints({
-    endpoints: (builder) => ({
-      addProductToTeam: builder.mutation<
-        void,
-        { product: IProduct; team: ITeam }
-      >({
-        query({ product, team }) {
-          return {
-            url: `/products/${product.id}/teams`,
-            method: "POST",
-            body: { team_id: team.id },
-          };
-        },
-        invalidatesTags: [{ type: "Team", id: "LIST" }],
+  api
+    .enhanceEndpoints({
+      addTagTypes: ["Team"],
+    })
+    .injectEndpoints({
+      endpoints: (builder) => ({
+        addProductToTeam: builder.mutation<
+          void,
+          { product: IProduct; team: ITeam }
+        >({
+          query({ product, team }) {
+            return {
+              url: `/products/${product.id}/teams`,
+              method: "POST",
+              body: { team_id: team.id },
+            };
+          },
+          invalidatesTags: [{ type: "Team", id: "LIST" }],
+        }),
+        removeProductFromTeam: builder.mutation<
+          { success: boolean; id: string },
+          { product: IProduct; team: ITeam }
+        >({
+          query({ product, team }) {
+            return {
+              url: `/products/${product.id}/teams/${team.id}`,
+              method: "DELETE",
+            };
+          },
+          invalidatesTags: [{ type: "Team", id: "LIST" }],
+        }),
       }),
-      removeProductFromTeam: builder.mutation<
-        { success: boolean; id: string },
-        { product: IProduct; team: ITeam }
-      >({
-        query({ product, team }) {
-          return {
-            url: `/products/${product.id}/teams/${team.id}`,
-            method: "DELETE",
-          };
-        },
-        invalidatesTags: [{ type: "Team", id: "LIST" }],
-      }),
-    }),
-  });
+    });
 
 export function getProductsTeamHasAccessTo(
   team: ITeam,

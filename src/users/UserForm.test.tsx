@@ -1,5 +1,5 @@
 import { waitFor } from "@testing-library/react";
-import { render } from "utils/test-utils";
+import { render } from "__tests__/renders";
 import UserForm from "./UserForm";
 import { IUser } from "types";
 import { vi } from "vitest";

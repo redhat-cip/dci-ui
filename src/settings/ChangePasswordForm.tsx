@@ -26,7 +26,7 @@ export default function ChangePasswordForm({
       onSubmit={onSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form id="change_password_form" className="pf-v5-c-form">
+        <Form id="change_password_form" className="pf-v6-c-form">
           <Input
             id="change_password_form__current_password"
             data-testid="change_password_form__current_password"

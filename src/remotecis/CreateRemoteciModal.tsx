@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
 import { IRemoteci, ITeam } from "types";

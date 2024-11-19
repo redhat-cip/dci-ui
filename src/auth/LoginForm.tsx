@@ -5,7 +5,6 @@ import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
 import { hideAllAlerts, showError } from "alerts/alertsSlice";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "./authContext";
 import { useAppDispatch } from "store";
 
 const LogInSchema = Yup.object().shape({
@@ -22,7 +21,6 @@ interface ILocationState {
 }
 
 export default function LoginForm() {
-  const { refreshIdentity } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,30 +29,23 @@ export default function LoginForm() {
       initialValues={{ username: "", password: "" }}
       validationSchema={LogInSchema}
       onSubmit={(values) => {
-        const token = window.btoa(values.username.concat(":", values.password));
-        setBasicToken(token);
-        dispatch(hideAllAlerts());
-        refreshIdentity()
-          .then(() => {
-            const { from } = (location.state as ILocationState) || {
-              from: { pathname: "/jobs" },
-            };
-            navigate(from);
-          })
-          .catch((error) => {
-            if (error.response && error.response.status) {
-              dispatch(showError("Invalid username or password"));
-            } else {
-              dispatch(
-                showError(
-                  "Network error, check your connectivity or contact a DCI administrator",
-                ),
-              );
-            }
-          });
+        try {
+          const token = window.btoa(
+            values.username.concat(":", values.password),
+          );
+          setBasicToken(token);
+          dispatch(hideAllAlerts());
+          const { from } = (location.state as ILocationState) || {
+            from: { pathname: "/" },
+          };
+          navigate(from);
+        } catch (error) {
+          dispatch(showError("Invalid email or password"));
+          console.error(error);
+        }
       }}
     >
-      <Form className="pf-v5-c-form">
+      <Form className="pf-v6-c-form">
         <Input id="username" label="Username" name="username" isRequired />
         <Input
           id="password"

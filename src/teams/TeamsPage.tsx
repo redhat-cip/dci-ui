@@ -16,14 +16,14 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import TeamCreationWizard from "./TeamCreationWizard";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 import { Filters } from "types";
 import {
   createSearchFromFilters,
   offsetAndLimitToPage,
   pageAndLimitToOffset,
   parseFiltersFromSearch,
-} from "api/filters";
+} from "services/filters";
 import { useCreateTeamMutation, useListTeamsQuery } from "./teamsApi";
 import { fromNow } from "services/date";
 
@@ -119,10 +119,7 @@ export default function TeamsPage() {
               </ToolbarItem>
             </ToolbarGroup>
             <ToolbarGroup style={{ flex: "1" }}>
-              <ToolbarItem
-                variant="pagination"
-                align={{ default: "alignRight" }}
-              >
+              <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
                 {count === 0 ? null : (
                   <Pagination
                     perPage={filters.limit}
@@ -146,7 +143,8 @@ export default function TeamsPage() {
       }
     >
       <Table
-        className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+        variant="compact"
+        className="pf-v6-c-tablepf-m-grid-md"
         role="grid"
         aria-label="Teams table"
         id="teams-table"

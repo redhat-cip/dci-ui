@@ -49,7 +49,7 @@ export default function ComponentsTable({
                     <Label
                       isCompact
                       key={i}
-                      className="pf-v5-u-mt-xs pf-v5-u-mr-xs pointer"
+                      className="pf-v6-u-mt-xs pf-v6-u-mr-xs pointer"
                       color="blue"
                       onClick={() => {
                         if (filters.tags && filters.tags.indexOf(tag) === -1) {

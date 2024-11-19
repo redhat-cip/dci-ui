@@ -1,38 +1,71 @@
-import { useEffect, useState, useCallback, useRef, Fragment } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
 import { getFileContent } from "jobs/job/files/filesActions";
-import {
-  FileRow,
-  FileName,
-  FileContent,
-  IconContainer,
-  JobStatePre,
-  Label,
-  LabelBox,
-  Timetamp,
-} from "./JobStateComponents";
-import { IFileWithDuration } from "types";
+import { IFileStatus, IFileWithDuration } from "types";
 import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
-import { useTheme } from "ui/Theme/themeContext";
+import { Label } from "@patternfly/react-core";
+import styled from "styled-components";
+import {
+  t_global_color_nonstatus_gray_default,
+  t_global_color_nonstatus_gray_hover,
+  t_global_color_nonstatus_green_default,
+  t_global_color_nonstatus_orange_default,
+  t_global_color_nonstatus_purple_default,
+  t_global_color_nonstatus_red_default,
+  t_global_color_nonstatus_blue_default,
+  t_global_text_color_nonstatus_on_blue_default,
+  t_global_text_color_nonstatus_on_purple_default,
+  t_global_text_color_nonstatus_on_green_default,
+  t_global_text_color_nonstatus_on_orange_default,
+  t_global_text_color_nonstatus_on_red_default,
+} from "@patternfly/react-tokens";
 
-interface JobStateFileProps {
+const TaskButton = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  &:hover {
+    background-color: ${t_global_color_nonstatus_gray_hover.var};
+  }
+`;
+
+const backgroundTaskColors: Record<IFileStatus, string> = {
+  failed: t_global_color_nonstatus_red_default.var,
+  unreachable: t_global_color_nonstatus_orange_default.var,
+  skipped: t_global_color_nonstatus_blue_default.var,
+  ignored: t_global_color_nonstatus_blue_default.var,
+  success: t_global_color_nonstatus_green_default.var,
+  withAWarning: t_global_color_nonstatus_purple_default.var,
+};
+
+const textTaskColors: Record<IFileStatus, string> = {
+  failed: t_global_text_color_nonstatus_on_red_default.var,
+  unreachable: t_global_text_color_nonstatus_on_orange_default.var,
+  skipped: t_global_text_color_nonstatus_on_blue_default.var,
+  ignored: t_global_text_color_nonstatus_on_blue_default.var,
+  success: t_global_text_color_nonstatus_on_green_default.var,
+  withAWarning: t_global_text_color_nonstatus_on_purple_default.var,
+};
+
+interface JobStateRowProps {
   file: IFileWithDuration;
-  seeTimestamp: boolean;
   isSelected: boolean;
   onClick: (seeDetails: boolean) => void;
 }
 
-export default function JobStateFile({
+export default function JobStateRow({
   file,
-  seeTimestamp,
   isSelected,
   onClick,
-}: JobStateFileProps) {
+}: JobStateRowProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
-  const { isDark } = useTheme();
   const loadFileContentCallback = useCallback(() => {
     setIsLoading(true);
     getFileContent(file)
@@ -61,47 +94,55 @@ export default function JobStateFile({
   const title = buildFileTitle(file.name);
   const fileDuration = `${Math.round(file.duration)}s`;
   const fileIsEmpty = isFileEmpty(file);
+  const fileStatus = getFileStatus(file);
   return (
     <div id={file.id} ref={divRef}>
-      <FileRow
-        isDark={isDark}
-        status={getFileStatus(file)}
+      <TaskButton
         onClick={() => {
           if (!fileIsEmpty) {
             setSeeDetails(!seeDetails);
             onClick(!seeDetails);
           }
         }}
-        className={fileIsEmpty ? "" : "pointer"}
       >
-        <IconContainer>
-          {fileIsEmpty ? null : seeDetails ? (
-            <CaretDownIcon />
-          ) : (
-            <CaretRightIcon />
-          )}
-        </IconContainer>
-        <FileName>{title}</FileName>
-        <LabelBox className="pf-v5-u-mr-md">
-          {seeTimestamp && <Timetamp>{file.created_at}</Timetamp>}
-          <Label>{fileDuration}</Label>
-        </LabelBox>
-      </FileRow>
+        <div
+          style={{
+            color: textTaskColors[fileStatus],
+            backgroundColor: backgroundTaskColors[fileStatus],
+          }}
+        >
+          <span>
+            {seeDetails ? (
+              <CaretDownIcon className="pf-v6-u-mr-xs" />
+            ) : (
+              <CaretRightIcon className="pf-v6-u-mr-xs" />
+            )}
+          </span>
+          {title}
+        </div>
+        <div>
+          <Label isCompact>{file.created_at}</Label>
+          <Label isCompact className="pf-v6-u-ml-xs">
+            {fileDuration}
+          </Label>
+        </div>
+      </TaskButton>
       {seeDetails ? (
-        <FileContent>
-          <JobStatePre>
-            {isLoading
-              ? "loading"
-              : content === ""
-                ? `no log for "${file.name}"`
-                : content.split("\\n").map((line, i) => (
-                    <Fragment key={i}>
-                      {line}
-                      <br />
-                    </Fragment>
-                  ))}
-          </JobStatePre>
-        </FileContent>
+        <div
+          style={{
+            marginBottom: ".5em",
+            padding: ".5em 1em 0.5em 1.5em",
+            backgroundColor: t_global_color_nonstatus_gray_default.var,
+          }}
+        >
+          {isLoading
+            ? "loading"
+            : content === ""
+              ? `no log for "${file.name}"`
+              : content
+                  .split("\\n")
+                  .map((line, i) => <div key={i}>{line}</div>)}
+        </div>
       ) : null}
     </div>
   );

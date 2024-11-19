@@ -22,7 +22,7 @@ import EditTopicModal from "./EditTopicModal";
 import { useListProductsQuery } from "products/productsApi";
 import ComponentsTableWithToolbar from "./ComponentsTableWithToolbar";
 import { fromNow } from "services/date";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 
 function TopicDetails({ topic }: { topic: ITopic }) {
   const [seeData, setSeeData] = useState(false);
@@ -34,12 +34,12 @@ function TopicDetails({ topic }: { topic: ITopic }) {
     <Card>
       <CardTitle>Topic details</CardTitle>
       <CardBody>
-        <CardLine className="pf-v5-u-p-md" field="ID" value={topic.id} />
+        <CardLine className="pf-v6-u-p-md" field="ID" value={topic.id} />
         <Divider />
-        <CardLine className="pf-v5-u-p-md" field="Name" value={topic.name} />
+        <CardLine className="pf-v6-u-p-md" field="Name" value={topic.name} />
         <Divider />
         <CardLine
-          className="pf-v5-u-p-md"
+          className="pf-v6-u-p-md"
           field="Access restricted"
           help={
             topic.export_control
@@ -56,13 +56,13 @@ function TopicDetails({ topic }: { topic: ITopic }) {
         />
         <Divider />
         <CardLine
-          className="pf-v5-u-p-md"
+          className="pf-v6-u-p-md"
           field="State"
           value={<StateLabel state={topic.state} />}
         />
         <Divider />
         <CardLine
-          className="pf-v5-u-p-md"
+          className="pf-v6-u-p-md"
           field="Created"
           value={
             <time dateTime={topic.created_at} title={topic.created_at}>
@@ -72,7 +72,7 @@ function TopicDetails({ topic }: { topic: ITopic }) {
         />
         <Divider />
         <CardLine
-          className="pf-v5-u-p-md"
+          className="pf-v6-u-p-md"
           field="Data"
           value={
             seeData ? (
@@ -109,7 +109,7 @@ function TopicDetails({ topic }: { topic: ITopic }) {
         )}
         <Divider />
         <CardLine
-          className="pf-v5-u-p-md"
+          className="pf-v6-u-p-md"
           field="Component types"
           value={topic.component_types.join(" - ")}
         />

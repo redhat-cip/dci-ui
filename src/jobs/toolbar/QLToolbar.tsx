@@ -6,13 +6,12 @@ import {
   Form,
   ButtonVariant,
   ToolbarGroup,
-  Modal,
-  ModalVariant,
-  Text,
-  TextVariants,
-  TextContent,
+  Content,
+  ContentVariants,
   CodeBlock,
+  Label,
 } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { QuestionCircleIcon } from "@patternfly/react-icons";
 import { useState } from "react";
 
@@ -40,57 +39,57 @@ export default function QLToolbar({
         isOpen={showHelperModal}
         onClose={() => setShowHelperModal(false)}
       >
-        <TextContent>
-          <Text component={TextVariants.p}>
+        <Content>
+          <Content component={ContentVariants.p}>
             The advanced search allows you to build structured queries using the
             DCI Query Language to search for jobs. You can specify criteria that
             cannot be defined in the basic search.
-          </Text>
-          <Text component={TextVariants.h3}>Constructing queries</Text>
-          <Text component={TextVariants.h4}>Example 1</Text>
-          <Text component={TextVariants.p}>
+          </Content>
+          <Content component={ContentVariants.h3}>Constructing queries</Content>
+          <Content component={ContentVariants.h4}>Example 1</Content>
+          <Content component={ContentVariants.p}>
             Find all job with name
-            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact className="pf-v6-u-mx-xs">
               job-name
-            </span>
-          </Text>
+            </Label>
+          </Content>
           <CodeBlock>eq(name,job-name)</CodeBlock>
-          <Text component={TextVariants.h4}>Example 2</Text>
-          <Text component={TextVariants.p}>
+          <Content component={ContentVariants.h4}>Example 2</Content>
+          <Content component={ContentVariants.p}>
             Find all job with name
-            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact className="pf-v6-u-mx-xs">
               job-name
-            </span>
+            </Label>
             and status
-            <span className="pf-v5-u-background-color-success pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact color="green" className="pf-v6-u-mx-xs">
               success
-            </span>
-          </Text>
+            </Label>
+          </Content>
           <CodeBlock>and( eq(name,job-name), eq(status,success))</CodeBlock>
-          <Text component={TextVariants.h4}>Example 3</Text>
-          <Text component={TextVariants.p}>
+          <Content component={ContentVariants.h4}>Example 3</Content>
+          <Content component={ContentVariants.p}>
             Find all job with name
-            <span className="pf-v5-u-background-color-200 pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact className="pf-v6-u-mx-xs">
               job-name
-            </span>
+            </Label>
             and status
-            <span className="pf-v5-u-background-color-danger pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact color="red" className="pf-v6-u-mx-xs">
               failure
-            </span>
+            </Label>
             or
-            <span className="pf-v5-u-background-color-danger pf-v5-u-px-xs pf-v5-u-mx-xs">
+            <Label isCompact color="red" className="pf-v6-u-mx-xs">
               error
-            </span>
-          </Text>
+            </Label>
+          </Content>
           <CodeBlock>
             and( eq(name,job-name), or( eq(status,failure), eq(status,error) ) )
           </CodeBlock>
-        </TextContent>
+        </Content>
       </Modal>
       <ToolbarItem>
         <ToolbarFilter
-          chips={query === null ? [] : [query]}
-          deleteChip={() => {
+          labels={query === null ? [] : [query]}
+          deleteLabel={() => {
             setValue("");
             onClear();
           }}
@@ -115,7 +114,7 @@ export default function QLToolbar({
           </Form>
         </ToolbarFilter>
       </ToolbarItem>
-      <ToolbarGroup variant="icon-button-group">
+      <ToolbarGroup variant="action-group-plain">
         <ToolbarItem>
           <Button variant="secondary" type="submit" form={formId}>
             Search
@@ -123,13 +122,12 @@ export default function QLToolbar({
         </ToolbarItem>
         <ToolbarItem>
           <Button
+            icon={<QuestionCircleIcon />}
             variant={ButtonVariant.plain}
             aria-label="refresh"
             type="button"
             onClick={() => setShowHelperModal(!showHelperModal)}
-          >
-            <QuestionCircleIcon />
-          </Button>
+          />
         </ToolbarItem>
       </ToolbarGroup>
     </>

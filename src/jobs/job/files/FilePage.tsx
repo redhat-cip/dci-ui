@@ -26,7 +26,7 @@ export default function FilePage() {
 
   if (isLoading) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <p>loading...</p>
       </PageSection>
     );
@@ -34,14 +34,14 @@ export default function FilePage() {
 
   if (!isLoading && fileContent === null) {
     return (
-      <PageSection>
+      <PageSection hasBodyWrapper={false}>
         <p>Something went wrong</p>
       </PageSection>
     );
   }
 
   return (
-    <PageSection>
+    <PageSection hasBodyWrapper={false}>
       <pre style={{ fontSize: "0.8rem" }}>{fileContent}</pre>
     </PageSection>
   );

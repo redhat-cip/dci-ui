@@ -1,11 +1,6 @@
 import { ReactNode } from "react";
-import {
-  Button,
-  Modal,
-  ModalVariant,
-  Title,
-  TitleSizes,
-} from "@patternfly/react-core";
+import { Button, Title, TitleSizes } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import TextRed from "./Text/TextRed";
 
@@ -45,8 +40,8 @@ export default function ConfirmDeleteModal({
         <div>
           <TextRed>{message}</TextRed>
         </div>
-        <div className="pf-v5-u-mt-md">
-          <Button variant="secondary" className="pf-v5-u-mr-xs" onClick={hide}>
+        <div className="pf-v6-u-mt-md">
+          <Button variant="secondary" className="pf-v6-u-mr-xs" onClick={hide}>
             {cancelButton}
           </Button>
           <Button

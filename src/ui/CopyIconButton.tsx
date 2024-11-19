@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import copyToClipboard from "../services/copyToClipboard";
+import copyToClipboard from "services/copyToClipboard";
 import { CopyIcon, ClipboardCheckIcon } from "@patternfly/react-icons";
-import { global_success_color_100 } from "@patternfly/react-tokens";
+import { t_global_color_nonstatus_green_200 } from "@patternfly/react-tokens";
 
 interface CopyIconButtonProps {
   text: string;
@@ -30,7 +30,7 @@ export default function CopyIconButton({
       <span
         {...props}
         style={{
-          color: global_success_color_100.value,
+          color: t_global_color_nonstatus_green_200.value,
         }}
       >
         <ClipboardCheckIcon />

@@ -11,19 +11,17 @@ import {
   DrawerContentBody,
   DrawerHead,
   DrawerPanelContent,
-  Icon,
   Label,
   LabelGroup,
   Toolbar,
   ToolbarContent,
+  ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
-  global_danger_color_100,
-  global_palette_green_100,
-  global_palette_green_500,
-  global_palette_red_100,
-  global_palette_red_50,
+  t_global_color_nonstatus_red_200,
+  chart_color_green_300,
+  chart_color_red_orange_300,
 } from "@patternfly/react-tokens";
 import { BlinkLogo, Breadcrumb, EmptyState } from "ui";
 import { IComponentCoverageESData, ITopic, IComponentCoverage } from "types";
@@ -191,62 +189,62 @@ export default function ComponentCoveragePage() {
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
-              <ToolbarItem variant="label">Choose a topic</ToolbarItem>
-              <ToolbarItem>
-                <TopicToolbarFilter
-                  id={topicId}
-                  onClear={() => setTopicId(null)}
-                  onSelect={(topic) => setTopicId(topic.id)}
-                />
-              </ToolbarItem>
-              <ToolbarItem variant="label">Filter by team</ToolbarItem>
-              <ToolbarItem>
-                <TeamToolbarFilter
-                  id={teamId}
-                  onClear={() => setTeamId(null)}
-                  onSelect={(team) => setTeamId(team.id)}
-                />
-              </ToolbarItem>
-              <ToolbarItem variant="label">Filter by types</ToolbarItem>
-              <ToolbarItem>
-                <TypesFilter
-                  types={types}
-                  typesSelected={selectedTypes}
-                  deleteChip={(type) =>
-                    setSelectedTypes(selectedTypes.filter((t) => t !== type))
-                  }
-                  onSelect={(type) => {
-                    if (selectedTypes.indexOf(type) === -1) {
-                      setSelectedTypes([...selectedTypes, type]);
-                    } else {
-                      setSelectedTypes(selectedTypes.filter((t) => t !== type));
+              <ToolbarGroup>
+                <ToolbarItem variant="label">Choose a topic</ToolbarItem>
+                <ToolbarItem>
+                  <TopicToolbarFilter
+                    id={topicId}
+                    onClear={() => setTopicId(null)}
+                    onSelect={(topic) => setTopicId(topic.id)}
+                  />
+                </ToolbarItem>
+                <ToolbarItem variant="label">Filter by team</ToolbarItem>
+                <ToolbarItem>
+                  <TeamToolbarFilter
+                    id={teamId}
+                    onClear={() => setTeamId(null)}
+                    onSelect={(team) => setTeamId(team.id)}
+                  />
+                </ToolbarItem>
+                <ToolbarItem variant="label">Filter by types</ToolbarItem>
+                <ToolbarItem>
+                  <TypesFilter
+                    types={types}
+                    typesSelected={selectedTypes}
+                    deleteChip={(type) =>
+                      setSelectedTypes(selectedTypes.filter((t) => t !== type))
                     }
-                  }}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <Button
-                  variant="primary"
-                  isDisabled={topicId === null}
-                  onClick={() => {
-                    memoizedGetComponentsCoverage();
-                    updateUrlWithParams();
-                  }}
-                >
-                  Get component coverage
-                </Button>
-              </ToolbarItem>
+                    onSelect={(type) => {
+                      if (selectedTypes.indexOf(type) === -1) {
+                        setSelectedTypes([...selectedTypes, type]);
+                      } else {
+                        setSelectedTypes(
+                          selectedTypes.filter((t) => t !== type),
+                        );
+                      }
+                    }}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Button
+                    variant="primary"
+                    isDisabled={topicId === null}
+                    onClick={() => {
+                      memoizedGetComponentsCoverage();
+                      updateUrlWithParams();
+                    }}
+                  >
+                    Get component coverage
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
             </ToolbarContent>
           </Toolbar>
           {ESData === null ? (
             <EmptyState
               title="Choose a topic"
               info="Select a topic in the topic list to display the components coverage"
-              icon={() => (
-                <Icon size="lg">
-                  <InfoCircleIcon />
-                </Icon>
-              )}
+              icon={InfoCircleIcon}
             />
           ) : isLoading ? (
             <Bullseye>
@@ -334,7 +332,8 @@ export default function ComponentCoveragePage() {
               >
                 <DrawerContentBody>
                   <Table
-                    className="pf-v5-c-table pf-m-compact pf-m-grid-md"
+                    variant="compact"
+                    className="pf-v6-c-table pf-m-grid-md"
                     role="grid"
                     aria-label="component coverage"
                   >
@@ -395,10 +394,10 @@ export default function ComponentCoveragePage() {
                               {component.nbOfJobs === 0 && (
                                 <span
                                   style={{
-                                    color: global_palette_red_100.value,
+                                    color: chart_color_red_orange_300.var,
                                   }}
                                 >
-                                  <WarningTriangleIcon className="pf-v5-u-mr-xs" />
+                                  <WarningTriangleIcon className="pf-v6-u-mr-xs" />
                                   not tested
                                 </span>
                               )}
@@ -417,19 +416,19 @@ export default function ComponentCoveragePage() {
                                   style={{
                                     backgroundColor:
                                       percentageSuccess === 0
-                                        ? global_palette_red_50.value
-                                        : global_palette_green_100.value,
+                                        ? chart_color_red_orange_300.var
+                                        : chart_color_green_300.var,
                                     width: "200px",
                                     display: "block",
                                   }}
-                                  className="pf-v5-u-mr-md"
+                                  className="pf-v6-u-mr-md"
                                 >
                                   <div
                                     style={{
                                       height: "16px",
                                       width: `${percentageSuccess}%`,
                                       backgroundColor:
-                                        global_palette_green_500.value,
+                                        chart_color_green_300.var,
                                     }}
                                   ></div>
                                 </div>
@@ -437,12 +436,12 @@ export default function ComponentCoveragePage() {
                                   style={{
                                     color:
                                       percentageSuccess === 0
-                                        ? global_danger_color_100.value
-                                        : global_palette_green_500.value,
+                                        ? t_global_color_nonstatus_red_200.var
+                                        : chart_color_green_300.var,
                                     width: "35px",
                                     textAlign: "right",
                                   }}
-                                  className="pf-v5-u-mr-md"
+                                  className="pf-v6-u-mr-md"
                                 >
                                   {percentageSuccess}%
                                 </span>
@@ -450,8 +449,8 @@ export default function ComponentCoveragePage() {
                                   style={{
                                     color:
                                       percentageSuccess === 0
-                                        ? global_danger_color_100.value
-                                        : global_palette_green_500.value,
+                                        ? t_global_color_nonstatus_red_200.var
+                                        : chart_color_green_300.var,
                                     fontWeight: "bold",
                                     minWidth: "42px",
                                     textAlign: "right",

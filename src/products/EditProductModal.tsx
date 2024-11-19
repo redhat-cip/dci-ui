@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import ProductForm from "./ProductForm";
 import { IProduct } from "types";
@@ -64,8 +65,13 @@ export default function EditProductModal({
           }}
         />
       </Modal>
-      <Button variant="primary" onClick={show} {...props}>
-        <EditAltIcon aria-hidden="true" />
+      <Button
+        size="sm"
+        icon={<EditAltIcon aria-hidden="true" />}
+        variant="primary"
+        onClick={show}
+        {...props}
+      >
         <span className="sr-only">Edit {product.name}</span>
       </Button>
     </>

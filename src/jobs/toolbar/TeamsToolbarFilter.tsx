@@ -21,8 +21,8 @@ export default function TeamsToolbarFilter({
 }: TeamsToolbarFilterProps) {
   return (
     <ToolbarFilter
-      chips={ids}
-      deleteChip={(category, chip) => {
+      labels={ids}
+      deleteLabel={(category, chip) => {
         const teamId = chip as string;
         if (teamId) {
           onClear(teamId);

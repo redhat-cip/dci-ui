@@ -11,9 +11,9 @@ export default function RemoteciToolbarFilter({
 }: SelectProps<IRemoteci>) {
   return (
     <ToolbarFilter
-      chips={id ? [id] : []}
+      labels={id ? [id] : []}
       categoryName="Remoteci id"
-      deleteChip={() => onClear()}
+      deleteLabel={() => onClear()}
       showToolbarItem={showToolbarItem}
     >
       <RemoteciSelect

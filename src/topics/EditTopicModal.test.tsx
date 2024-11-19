@@ -1,7 +1,7 @@
 import { waitFor } from "@testing-library/react";
 import EditTopicModal from "./EditTopicModal";
 import { ITopic, IProduct } from "types";
-import { render } from "utils/test-utils";
+import { render } from "__tests__/renders";
 import { vi } from "vitest";
 
 test("test edit topic form submit the correct values", async () => {

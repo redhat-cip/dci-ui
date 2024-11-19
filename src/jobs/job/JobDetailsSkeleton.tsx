@@ -1,4 +1,4 @@
-import { PageSection, PageSectionVariants } from "@patternfly/react-core";
+import { PageSection } from "@patternfly/react-core";
 import React from "react";
 
 interface JobDetailsSkeletonProps {
@@ -11,7 +11,7 @@ export default function JobDetailsSkeleton({
   return (
     <>
       <PageSection
-        variant={PageSectionVariants.light}
+        hasBodyWrapper={false}
         style={{
           minHeight: "50vh",
           display: "flex",

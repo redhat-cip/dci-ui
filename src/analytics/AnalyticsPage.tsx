@@ -15,7 +15,7 @@ import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";
 import LatestJobsStatusHeaderImage from "./LatestJobStatus/latest_jos_status.png";
 import PipelinesHeaderImages from "./Pipelines/pipelines.png";
 import KeyValuesHeaderImages from "./KeyValues/keyvalues.png";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 
 export default function AnalyticsPage() {
   const navigate = useNavigate();

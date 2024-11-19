@@ -21,13 +21,16 @@ import {
   Masthead,
   MastheadToggle,
   MastheadMain,
+  MastheadLogo,
   MastheadBrand,
   MastheadContent,
   ToolbarContent,
-  Text,
-  TextVariants,
+  Content,
+  ContentVariants,
   PageSidebarBody,
-  Switch,
+  ToggleGroup,
+  ToggleGroupItem,
+  Brand,
 } from "@patternfly/react-core";
 import {
   Dropdown,
@@ -37,19 +40,23 @@ import {
   MenuToggle,
   MenuToggleElement,
 } from "@patternfly/react-core";
-import Logo from "logo.min.svg";
+import Logo from "logo.black.svg";
+import LogoWhite from "logo.white.svg";
 import {
   BarsIcon,
   QuestionCircleIcon,
   UserIcon,
   UsersIcon,
 } from "@patternfly/react-icons";
-import { global_palette_black_500 } from "@patternfly/react-tokens";
-import { useAuth } from "auth/authContext";
 import { useTheme } from "ui/Theme/themeContext";
+import NotAuthenticatedLoadingPage from "./NotAuthenticatedLoadingPage";
+import { loggedOut } from "auth/authSlice";
+import { useAppDispatch } from "store";
+import { useAuth } from "auth/authSelectors";
+import { useGetCurrentUserQuery } from "auth/authApi";
 
 function UserDropdownMenuMobile() {
-  const { logout } = useAuth();
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -80,7 +87,8 @@ function UserDropdownMenuMobile() {
           key="dropdown_kebab_logout"
           component="button"
           onClick={() => {
-            logout();
+            dispatch(loggedOut());
+            navigate("/login");
           }}
         >
           Log out
@@ -91,12 +99,13 @@ function UserDropdownMenuMobile() {
 }
 
 function UserDropdownMenu() {
-  const { currentUser, logout, openChangeTeamModal, hasMultipleTeams } =
-    useAuth();
+  const dispatch = useAppDispatch();
+  const { currentUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   if (currentUser === null) return null;
+  const hasMultipleTeams = currentUser.teams.length > 1;
 
   return (
     <Dropdown
@@ -115,19 +124,21 @@ function UserDropdownMenu() {
     >
       <DropdownList>
         <DropdownItem key="email" component="div" isDisabled>
-          <Text component={TextVariants.small}>Email:</Text>
-          <Text>{currentUser.email}</Text>
+          <Content component={ContentVariants.small}>Email:</Content>
+          <Content component="p">{currentUser.email}</Content>
         </DropdownItem>
         <DropdownItem
           key="team"
-          onClick={() => hasMultipleTeams && openChangeTeamModal()}
+          onClick={() => hasMultipleTeams && alert("change me")}
           isDisabled={!hasMultipleTeams}
           style={{
             cursor: hasMultipleTeams ? "cursor" : "default",
           }}
         >
-          <Text component={TextVariants.small}>Team:</Text>
-          <Text>{currentUser.team ? currentUser.team.name : ""}</Text>
+          <Content component={ContentVariants.small}>Team:</Content>
+          <Content component="p">
+            {currentUser.team ? currentUser.team.name : ""}
+          </Content>
         </DropdownItem>
         <Divider component="li" />
         <DropdownItem
@@ -141,7 +152,8 @@ function UserDropdownMenu() {
           key="dropdown_user_logout"
           component="button"
           onClick={() => {
-            logout();
+            dispatch(loggedOut());
+            navigate("/login");
           }}
         >
           Log out
@@ -154,15 +166,14 @@ function UserDropdownMenu() {
 function DCIDocLinkIcon() {
   return (
     <Button
+      icon={<QuestionCircleIcon />}
       component="a"
-      variant="link"
+      variant="plain"
       href="https://docs.distributed-ci.io/"
       target="top"
       aria-label="Link to Distributed CI Documentation page"
       style={{ color: "white" }}
-    >
-      <QuestionCircleIcon />
-    </Button>
+    ></Button>
   );
 }
 
@@ -173,41 +184,47 @@ interface HeaderProps {
 function Header({ toggleSidebarVisibility }: HeaderProps) {
   const navigate = useNavigate();
   const { isDark, toggleColor } = useTheme();
-  const {
-    currentUser,
-    openChangeTeamModal,
-    hasAtLeastOneTeam,
-    hasMultipleTeams,
-  } = useAuth();
+  const { currentUser } = useAuth();
 
   if (currentUser === null) {
     return null;
   }
+  const hasAtLeastOneTeam = currentUser.teams.length >= 1;
+  const hasMultipleTeams = currentUser.teams.length > 1;
 
   return (
     <>
       <Masthead id="masthead">
-        <MastheadToggle>
-          <Button
-            variant="plain"
-            onClick={toggleSidebarVisibility}
-            aria-label="Global navigation"
-          >
-            <BarsIcon />
-          </Button>
-        </MastheadToggle>
         <MastheadMain>
-          <MastheadBrand component="a" onClick={() => navigate("/")}>
-            <img src={Logo} alt="DCI Logo" />
+          <MastheadToggle>
+            <Button
+              icon={<BarsIcon />}
+              variant="plain"
+              onClick={toggleSidebarVisibility}
+              aria-label="Global navigation"
+            />
+          </MastheadToggle>
+          <MastheadBrand data-codemods>
+            <MastheadLogo
+              data-codemods
+              component="a"
+              onClick={() => navigate("/")}
+            >
+              <Brand
+                src={isDark ? LogoWhite : Logo}
+                alt="DCI Logo"
+                heights={{ default: "36px" }}
+              />
+            </MastheadLogo>
           </MastheadBrand>
         </MastheadMain>
         <MastheadContent>
           <Toolbar id="toolbar" isFullHeight>
             <ToolbarContent>
               <ToolbarGroup
-                variant="icon-button-group"
-                align={{ default: "alignRight" }}
-                spacer={{ default: "spacerNone" }}
+                variant="action-group-plain"
+                align={{ default: "alignEnd" }}
+                gap={{ default: "gapNone" }}
                 visibility={{ md: "hidden" }}
               >
                 <ToolbarItem>
@@ -216,11 +233,10 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 {hasMultipleTeams && (
                   <ToolbarItem>
                     <Button
+                      icon={<UsersIcon />}
                       variant="plain"
-                      onClick={() => openChangeTeamModal()}
-                    >
-                      <UsersIcon />
-                    </Button>
+                      onClick={() => alert("change me and bottom also v")}
+                    />
                   </ToolbarItem>
                 )}
                 <ToolbarItem>
@@ -228,39 +244,66 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 </ToolbarItem>
               </ToolbarGroup>
               <ToolbarGroup
-                align={{ default: "alignRight" }}
-                spacer={{ default: "spacerMd" }}
+                align={{ default: "alignEnd" }}
+                gap={{ default: "gapMd" }}
                 visibility={{ default: "hidden", md: "visible" }}
               >
                 <ToolbarItem>
-                  <Switch
-                    id="toggle-theme-switch"
-                    label="Dark theme"
-                    isChecked={isDark}
-                    onChange={toggleColor}
-                  />
+                  <ToggleGroup aria-label="toggle-theme-switch">
+                    <ToggleGroupItem
+                      icon={
+                        <svg
+                          className="pf-v6-svg"
+                          viewBox="0 0 512 512"
+                          fill="currentColor"
+                          aria-hidden="true"
+                          role="img"
+                          width="1em"
+                          height="1em"
+                        >
+                          <path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"></path>
+                        </svg>
+                      }
+                      aria-label="light-theme-toggle"
+                      isSelected={!isDark}
+                      onChange={toggleColor}
+                    />
+                    <ToggleGroupItem
+                      icon={
+                        <svg
+                          className="pf-v6-svg"
+                          viewBox="0 0 512 512"
+                          fill="currentColor"
+                          aria-hidden="true"
+                          role="img"
+                          width="1em"
+                          height="1em"
+                        >
+                          <path d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"></path>
+                        </svg>
+                      }
+                      aria-label="dark-theme-toggle"
+                      isSelected={isDark}
+                      onChange={toggleColor}
+                    />
+                  </ToggleGroup>
                 </ToolbarItem>
-                <ToolbarItem variant="separator" />
                 <ToolbarItem>
                   <DCIDocLinkIcon />
                 </ToolbarItem>
                 {hasAtLeastOneTeam && (
-                  <>
-                    <ToolbarItem variant="separator" />
-                    <ToolbarItem>
-                      <Button
-                        variant="plain"
-                        onClick={() =>
-                          hasMultipleTeams && openChangeTeamModal()
-                        }
-                        style={{
-                          cursor: hasMultipleTeams ? "cursor" : "default",
-                        }}
-                      >
-                        {currentUser.team?.name}
-                      </Button>
-                    </ToolbarItem>
-                  </>
+                  <ToolbarItem>
+                    <Button
+                      icon={currentUser.team?.name}
+                      variant="plain"
+                      onClick={() =>
+                        hasMultipleTeams && alert("change me and top also v")
+                      }
+                      style={{
+                        cursor: hasMultipleTeams ? "cursor" : "default",
+                      }}
+                    />
+                  </ToolbarItem>
                 )}
                 <ToolbarItem>
                   <UserDropdownMenu />
@@ -301,17 +344,11 @@ interface SidebarProps {
 
 function Sidebar({ isNavOpen }: SidebarProps) {
   const { currentUser } = useAuth();
-  const { isDark } = useTheme();
   if (currentUser === null) return null;
   const currentUserTeams = values(currentUser.teams);
   const PageNav = (
-    <Nav aria-label="Nav" theme={isDark ? "dark" : "light"}>
-      <NavGroup
-        // @ts-ignore
-        title={
-          <span style={{ color: global_palette_black_500.value }}>DCI</span>
-        }
-      >
+    <Nav aria-label="Nav">
+      <NavGroup title="DCI">
         <DCINavItem to="/analytics">Analytics</DCINavItem>
         <DCINavItem to="/jobs">Jobs</DCINavItem>
         <DCINavItem to="/products">Products</DCINavItem>
@@ -321,26 +358,12 @@ function Sidebar({ isNavOpen }: SidebarProps) {
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         )}
       </NavGroup>
-      <NavGroup
-        // @ts-ignore
-        title={
-          <span style={{ color: global_palette_black_500.value }}>
-            User Preferences
-          </span>
-        }
-      >
+      <NavGroup title=" User Preferences">
         <DCINavItem to="/currentUser/settings">My profile</DCINavItem>
         <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
       </NavGroup>
       {currentUser.hasEPMRole && (
-        <NavGroup
-          // @ts-ignore
-          title={
-            <span style={{ color: global_palette_black_500.value }}>
-              Administration
-            </span>
-          }
-        >
+        <NavGroup title="Administration">
           <DCINavItem to="/teams">Teams</DCINavItem>
           <DCINavItem to="/users">Users</DCINavItem>
           {currentUser.isSuperAdmin && (
@@ -351,7 +374,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
     </Nav>
   );
   return (
-    <PageSidebar theme={isDark ? "dark" : "light"} isSidebarOpen={isNavOpen}>
+    <PageSidebar isSidebarOpen={isNavOpen}>
       <PageSidebarBody>{PageNav}</PageSidebarBody>
     </PageSidebar>
   );
@@ -359,20 +382,16 @@ function Sidebar({ isNavOpen }: SidebarProps) {
 
 export default function AuthenticatedLayout({ ...props }) {
   const [isNavOpen, setIsNavOpen] = useState(window.innerWidth >= 1450);
-  const { currentUser } = useAuth();
+  const { data: currentUser, isLoading } = useGetCurrentUserQuery();
   const location = useLocation();
 
-  if (currentUser === null) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (isLoading) {
+    return <NotAuthenticatedLoadingPage />;
   }
 
-  return (
+  return currentUser ? (
     <Page
-      header={
+      masthead={
         <Header toggleSidebarVisibility={() => setIsNavOpen(!isNavOpen)} />
       }
       sidebar={<Sidebar isNavOpen={isNavOpen} />}
@@ -388,5 +407,7 @@ export default function AuthenticatedLayout({ ...props }) {
     >
       <Outlet />
     </Page>
+  ) : (
+    <Navigate to="/login" state={{ from: location }} />
   );
 }

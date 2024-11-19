@@ -78,8 +78,12 @@ export default function TeamMembers({
               }}
             >
               {(openModal) => (
-                <Button type="button" variant="secondary" onClick={openModal}>
-                  <PlusCircleIcon className="pf-v5-u-mr-xs" />
+                <Button
+                  icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
+                  type="button"
+                  variant="secondary"
+                  onClick={openModal}
+                >
                   Add a user
                 </Button>
               )}
@@ -91,7 +95,7 @@ export default function TeamMembers({
         {isLoading ? (
           <Skeleton screenreaderText="Loading team's users" />
         ) : (
-          <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+          <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
             <Thead>
               <Tr>
                 <Th>ID</Th>
@@ -112,7 +116,7 @@ export default function TeamMembers({
                   </Td>
                   <Td>{user.fullname}</Td>
                   <Td>{user.email}</Td>
-                  <Td className="pf-v5-c-table__action">
+                  <Td className="pf-v6-c-table__action">
                     <ConfirmDeleteModal
                       title={`Delete ${user.name} from ${team.name}`}
                       message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
@@ -123,9 +127,12 @@ export default function TeamMembers({
                       }}
                     >
                       {(openModal) => (
-                        <Button variant="danger" size="sm" onClick={openModal}>
-                          <MinusCircleIcon />
-                        </Button>
+                        <Button
+                          icon={<MinusCircleIcon />}
+                          variant="danger"
+                          size="sm"
+                          onClick={openModal}
+                        ></Button>
                       )}
                     </ConfirmDeleteModal>
                   </Td>

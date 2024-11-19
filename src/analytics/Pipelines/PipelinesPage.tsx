@@ -16,15 +16,15 @@ import {
   Tooltip,
   CardHeader,
   Truncate,
-  EmptyStateHeader,
+  ToolbarGroup,
 } from "@patternfly/react-core";
 import { BlinkLogo, Breadcrumb } from "ui";
 import MainPage from "pages/MainPage";
 import {
-  global_palette_black_400,
-  global_palette_green_50,
-  global_palette_red_100,
-  global_palette_red_50,
+  t_global_border_color_default,
+  t_global_color_nonstatus_green_100,
+  t_global_text_color_required,
+  t_global_color_nonstatus_red_100,
 } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
 import {
@@ -40,11 +40,11 @@ import http from "services/http";
 import { showAPIError } from "alerts/alertsSlice";
 import { IJobStatus, IPipelines, RangeOptionValue } from "types";
 import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
-import { getColor, getIcon } from "jobs/jobUtils";
-import { Components } from "jobs/job/JobDetailsHeader";
+import { ComponentsList } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { JobStatusLabel } from "jobs/components";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -67,31 +67,24 @@ function jobStatusToVariant(status: IJobStatus) {
 type PipelineJob = IPipelines["days"][0]["pipelines"][0]["jobs"][0];
 
 function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
-  const color = getColor(job.status);
   return (
     <>
       <Td
         style={{
           borderLeft:
             index === 0
-              ? `1px solid ${global_palette_black_400.value}`
+              ? `1px solid ${t_global_border_color_default.var}`
               : "none",
           whiteSpace: "nowrap",
-          backgroundColor:
-            job.status === "success"
-              ? global_palette_green_50.value
-              : global_palette_red_50.value,
         }}
       >
         <Link to={`/jobs/${job.id}/jobStates`}>
-          <span
-            style={{
-              color,
-            }}
-            className="pf-v5-u-mr-xs"
-          >
-            {getIcon(job.status)}
-          </span>
+          <JobStatusLabel
+            status={job.status}
+            className="pf-v6-u-mr-xs"
+            style={{ zIndex: 1 }}
+          />
+
           {job.name}
         </Link>
       </Td>
@@ -99,10 +92,6 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
         style={{
           whiteSpace: "nowrap",
           textAlign: "center",
-          backgroundColor:
-            job.status === "success"
-              ? global_palette_green_50.value
-              : global_palette_red_50.value,
         }}
       >
         <Tooltip content={<div>{job.status_reason}</div>}>
@@ -120,17 +109,13 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
       <Td
         style={{
           whiteSpace: "nowrap",
-          backgroundColor:
-            job.status === "success"
-              ? global_palette_green_50.value
-              : global_palette_red_50.value,
         }}
       >
         <Label
           isCompact
           color="green"
           title={`${job?.tests?.success || 0} tests in success`}
-          className="pf-v5-u-mr-xs"
+          className="pf-v6-u-mr-xs"
         >
           {job?.tests?.success || 0}
         </Label>
@@ -138,7 +123,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           isCompact
           color="orange"
           title={`${job?.tests?.skips || 0} skipped tests`}
-          className="pf-v5-u-mr-xs"
+          className="pf-v6-u-mr-xs"
         >
           {job?.tests?.skips || 0}
         </Label>
@@ -156,11 +141,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
         style={{
           whiteSpace: "nowrap",
           textAlign: "center",
-          borderRight: `1px solid ${global_palette_black_400.value}`,
-          backgroundColor:
-            job.status === "success"
-              ? global_palette_green_50.value
-              : global_palette_red_50.value,
+          borderRight: `1px solid ${t_global_border_color_default.var}`,
         }}
       >
         {humanizeDurationShort(job.duration * 1000, {
@@ -182,7 +163,7 @@ function PipelineCard({
 }) {
   const [seeJobComponents, setSeeJobComponents] = useState(false);
   return (
-    <Card className="pf-v5-u-mt-xs">
+    <Card className="pf-v6-u-mt-md">
       <CardHeader
         actions={{
           actions: (
@@ -206,7 +187,7 @@ function PipelineCard({
         </CardTitle>
       </CardHeader>
       <CardBody style={{ overflow: "auto" }}>
-        <Table className="pf-v5-c-table pf-m-compact pf-m-grid-md">
+        <Table variant="compact" className="pf-v6-c-table pf-m-grid-md">
           <Thead>
             <Tr>
               <Th>pipeline</Th>
@@ -217,7 +198,11 @@ function PipelineCard({
           <Tbody>
             {pipelineDay.pipelines.map((pipeline, index) => (
               <Fragment key={index}>
-                <Tr>
+                <Tr
+                  style={{
+                    borderTop: `1px solid ${t_global_border_color_default.var}`,
+                  }}
+                >
                   <Td
                     rowSpan={seeJobComponents ? 2 : 1}
                     style={{ verticalAlign: "middle" }}
@@ -248,16 +233,16 @@ function PipelineCard({
                     {pipeline.jobs.map((job) => (
                       <Td
                         style={{
-                          borderLeft: `1px solid ${global_palette_black_400.value}`,
+                          borderLeft: `1px solid ${t_global_border_color_default.value}`,
                           whiteSpace: "nowrap",
                           backgroundColor:
                             job.status === "success"
-                              ? global_palette_green_50.value
-                              : global_palette_red_50.value,
+                              ? t_global_color_nonstatus_green_100.var
+                              : t_global_color_nonstatus_red_100.value,
                         }}
                         colSpan={4}
                       >
-                        <Components
+                        <ComponentsList
                           components={job.components.filter(notEmpty)}
                         />
                       </Td>
@@ -276,11 +261,11 @@ function PipelineCard({
 function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
   if (pipelines.days.length === 0) {
     return (
-      <EmptyState variant={EmptyStateVariant.xs}>
-        <EmptyStateHeader
-          titleText="No pipeline between these dates"
-          headingLevel="h4"
-        />
+      <EmptyState
+        headingLevel="h4"
+        titleText="No pipeline between these dates"
+        variant={EmptyStateVariant.xs}
+      >
         <EmptyStateBody>
           change your search parameters and try again
         </EmptyStateBody>
@@ -415,74 +400,78 @@ export default function PipelinesPage() {
             collapseListedFiltersBreakpoint="xl"
           >
             <ToolbarContent>
-              <ToolbarItem variant="label" id="team-label-toolbar">
-                Teams{" "}
-                <span style={{ color: global_palette_red_100.value }}>*</span>
-              </ToolbarItem>
-              <ToolbarItem>
-                <TeamsToolbarFilter
-                  ids={teamsIds}
-                  onClear={(teamId) =>
-                    setTeamsIds((oldTeamsIds) =>
-                      oldTeamsIds.filter((t) => t !== teamId),
-                    )
-                  }
-                  onSelect={(team) =>
-                    setTeamsIds((oldTeamsIds) => [...oldTeamsIds, team.id])
-                  }
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <ListToolbarFilter
-                  items={pipelinesNames}
-                  categoryName="Pipelines names"
-                  placeholderText="Pipelines names"
-                  onSubmit={setPipelinesNames}
-                />
-              </ToolbarItem>
-              <ToolbarItem variant="label" id="range-label-toolbar">
-                Range
-              </ToolbarItem>
-              <ToolbarItem>
-                <RangeToolbarFilter
-                  range={range}
-                  onChange={(range, after, before) => {
-                    if (range === "custom") {
-                      setAfter(after);
-                      setBefore(before);
+              <ToolbarGroup>
+                <ToolbarItem variant="label" id="team-label-toolbar">
+                  Teams
+                  <span style={{ color: t_global_text_color_required.var }}>
+                    *
+                  </span>
+                </ToolbarItem>
+                <ToolbarItem>
+                  <TeamsToolbarFilter
+                    ids={teamsIds}
+                    onClear={(teamId) =>
+                      setTeamsIds((oldTeamsIds) =>
+                        oldTeamsIds.filter((t) => t !== teamId),
+                      )
                     }
-                    setRange(range);
-                  }}
-                  after={after}
-                  before={before}
-                  ranges={[
-                    defaultRangeValue,
-                    "previousWeek",
-                    "currentWeek",
-                    "yesterday",
-                    "today",
-                    "custom",
-                  ]}
-                />
-              </ToolbarItem>
-              <ToolbarItem>
-                <Button
-                  variant="primary"
-                  isDisabled={teamsIds.length === 0}
-                  onClick={() => {
-                    memoizedGetPipelines();
-                    updateUrlWithParams();
-                  }}
-                >
-                  Show pipelines
-                </Button>
-              </ToolbarItem>
+                    onSelect={(team) =>
+                      setTeamsIds((oldTeamsIds) => [...oldTeamsIds, team.id])
+                    }
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <ListToolbarFilter
+                    items={pipelinesNames}
+                    categoryName="Pipelines names"
+                    placeholderText="Pipelines names"
+                    onSubmit={setPipelinesNames}
+                  />
+                </ToolbarItem>
+                <ToolbarItem variant="label" id="range-label-toolbar">
+                  Range
+                </ToolbarItem>
+                <ToolbarItem>
+                  <RangeToolbarFilter
+                    range={range}
+                    onChange={(range, after, before) => {
+                      if (range === "custom") {
+                        setAfter(after);
+                        setBefore(before);
+                      }
+                      setRange(range);
+                    }}
+                    after={after}
+                    before={before}
+                    ranges={[
+                      defaultRangeValue,
+                      "previousWeek",
+                      "currentWeek",
+                      "yesterday",
+                      "today",
+                      "custom",
+                    ]}
+                  />
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Button
+                    variant="primary"
+                    isDisabled={teamsIds.length === 0}
+                    onClick={() => {
+                      memoizedGetPipelines();
+                      updateUrlWithParams();
+                    }}
+                  >
+                    Show pipelines
+                  </Button>
+                </ToolbarItem>
+              </ToolbarGroup>
             </ToolbarContent>
           </Toolbar>
         </CardBody>
       </Card>
       {isLoading ? (
-        <Card>
+        <Card className="pf-v6-u-mt-md">
           <CardBody>
             <Bullseye>
               <BlinkLogo />
@@ -490,13 +479,13 @@ export default function PipelinesPage() {
           </CardBody>
         </Card>
       ) : pipelines === null ? (
-        <Card>
+        <Card className="pf-v6-u-mt-md">
           <CardBody>
-            <EmptyState variant={EmptyStateVariant.xs}>
-              <EmptyStateHeader
-                titleText="Display pipeline jobs"
-                headingLevel="h4"
-              />
+            <EmptyState
+              headingLevel="h4"
+              titleText="Display pipeline jobs"
+              variant={EmptyStateVariant.xs}
+            >
               <EmptyStateBody>
                 You can fill in the filters to view your team's pipelines.
               </EmptyStateBody>

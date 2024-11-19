@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Chip } from "@patternfly/react-core";
+import { Label } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
 import { CubesIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
@@ -28,9 +28,9 @@ export default function ComponentsListInJobRow({
   return (
     <div>
       {nFirstComponents.map((component) => (
-        <Component key={component.id} className="pf-v5-u-mt-xs">
+        <Component key={component.id} className="pf-v6-u-mt-xs">
           <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
-            <CubesIcon className="pf-v5-u-mr-xs" />
+            <CubesIcon className="pf-v6-u-mr-xs" />
             {component.display_name}
           </Link>
         </Component>
@@ -38,34 +38,32 @@ export default function ComponentsListInJobRow({
       {showMore ? (
         <>
           {remainingComponents.map((component) => (
-            <Component key={component.id} className="pf-v5-u-mt-xs">
+            <Component key={component.id} className="pf-v6-u-mt-xs">
               <Link
                 to={`/topics/${component.topic_id}/components/${component.id}`}
               >
-                <CubesIcon className="pf-v5-u-mr-xs" />
+                <CubesIcon className="pf-v6-u-mr-xs" />
                 {component.display_name}
               </Link>
             </Component>
           ))}
-          <Chip
-            component="button"
-            onClick={() => setShowMore(false)}
-            isOverflowChip
-            className="pf-v5-u-mt-xs"
+          <Label
+            isCompact
+            onClose={() => setShowMore(false)}
+            className="pf-v6-u-mt-xs"
           >
             show less
-          </Chip>
+          </Label>
         </>
       ) : (
         showMoreButton && (
-          <Chip
-            component="button"
-            onClick={() => setShowMore(true)}
-            isOverflowChip
-            className="pf-v5-u-mt-xs"
+          <Label
+            isCompact
+            onClose={() => setShowMore(true)}
+            className="pf-v6-u-mt-xs"
           >
             {remainingComponents.length} more
-          </Chip>
+          </Label>
         )
       )}
     </div>

@@ -19,12 +19,16 @@ import {
   ComponentsListInJobRow,
 } from "jobs/components";
 import { CopyIconButton } from "ui";
-import { getPrincipalComponent } from "component/componentSelector";
+import { getPrincipalComponent } from "topics/component/componentSelector";
 import { DateTime } from "luxon";
 import { Tr, Td } from "@patternfly/react-table";
 import { useTheme } from "ui/Theme/themeContext";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
-
+import {
+  t_global_border_color_100,
+  t_global_border_color_200,
+  t_global_border_color_300,
+} from "@patternfly/react-tokens";
 interface JobTableSummaryProps {
   job: JobNode;
   level: number;
@@ -63,7 +67,7 @@ export default function JobTableSummary({
         <CopyIconButton
           text={job.id}
           textOnSuccess="copied"
-          className="pf-v5-u-mr-xs pointer"
+          className="pf-v6-u-mr-xs pointer"
         />
         {job.id}
       </span>
@@ -81,7 +85,7 @@ export default function JobTableSummary({
           {pipeline.name}
         </Label>
         <Link
-          className="pf-v5-u-ml-xs"
+          className="pf-v6-u-ml-xs"
           to={{
             pathname: "/analytics/pipelines",
             search: createSearchParams({
@@ -142,7 +146,7 @@ export default function JobTableSummary({
         <Link
           to={`/topics/${principalComponent.topic_id}/components/${principalComponent.id}`}
         >
-          <TopicIcon className="pf-v5-u-mr-xs" />
+          <TopicIcon className="pf-v6-u-mr-xs" />
           {principalComponent.display_name}
         </Link>
       ),
@@ -212,8 +216,8 @@ export default function JobTableSummary({
         }px`,
         width: "15px",
         bottom: "50%",
-        borderBottom: "1px solid #6A6E73",
-        borderLeft: "1px solid #6A6E73",
+        borderBottom: `1px solid ${t_global_border_color_300.value}`,
+        borderLeft: `1px solid ${t_global_border_color_300.value}`,
         height: "100%",
       }}
     ></div>
@@ -225,8 +229,12 @@ export default function JobTableSummary({
         key={`${job.id}.${job.etag}`}
         style={{
           position: "relative",
-          borderTop:
-            level === 0 ? `1px solid ${isDark ? "#444548" : "#d2d2d2"}` : "0",
+          borderTopWidth: "1px",
+          borderTopStyle: level === 0 ? "solid" : "none",
+          borderBlockEndStyle: "none",
+          borderTopColor: isDark
+            ? t_global_border_color_200.value
+            : t_global_border_color_100.value,
         }}
       >
         <Td

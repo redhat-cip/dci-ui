@@ -11,9 +11,9 @@ export default function TeamToolbarFilter({
 }: SelectProps<ITeam>) {
   return (
     <ToolbarFilter
-      chips={id ? [id] : []}
+      labels={id ? [id] : []}
       categoryName="Team id"
-      deleteChip={() => onClear()}
+      deleteLabel={() => onClear()}
       showToolbarItem={showToolbarItem}
     >
       <TeamSelect

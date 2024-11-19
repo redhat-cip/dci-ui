@@ -83,7 +83,7 @@ export default function RHELComponentsTable({
                 {channel !== null && (
                   <Label
                     isCompact
-                    className="pf-v5-u-mt-xs pf-v5-u-mr-xs pointer"
+                    className="pf-v6-u-mt-xs pf-v6-u-mr-xs pointer"
                     color="blue"
                     onClick={() => {
                       onTagClicked(channel);
@@ -97,7 +97,7 @@ export default function RHELComponentsTable({
                 {kernel !== undefined && (
                   <Label
                     isCompact
-                    className="pf-v5-u-mt-xs pf-v5-u-mr-xs pointer"
+                    className="pf-v6-u-mt-xs pf-v6-u-mr-xs pointer"
                     color="blue"
                     onClick={() => {
                       onTagClicked(kernel);

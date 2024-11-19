@@ -1,14 +1,10 @@
 import { useEffect } from "react";
-import { useSSO } from "./ssoContext";
+import { manager } from "./sso";
 
 export default function SilentRedirectPage() {
-  const { sso } = useSSO();
-
   useEffect(() => {
-    if (sso !== null) {
-      sso.signinSilentCallback();
-    }
-  }, [sso]);
+    manager.signinSilentCallback();
+  }, []);
 
   return <></>;
 }

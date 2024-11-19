@@ -5,38 +5,22 @@ import {
   Gallery,
   GalleryItem,
   CardBody,
-  Title,
-  Icon,
+  Content,
+  ContentVariants,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
-import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { groupTopicsPerProduct, sortTopicWithSemver } from "./topicsActions";
 import CreateTopicModal from "./CreateTopicModal";
 import { getProductIcon } from "ui/icons";
 import { Filters } from "types";
-import { createSearchFromFilters, parseFiltersFromSearch } from "api/filters";
+import {
+  createSearchFromFilters,
+  parseFiltersFromSearch,
+} from "services/filters";
 import { useCreateTopicMutation, useListTopicsQuery } from "./topicsApi";
 import { useListProductsQuery } from "products/productsApi";
-import { useAuth } from "auth/authContext";
-
-export const ProductTitle = styled.h3`
-  display: flex;
-  align-items: center;
-  margin-bottom: 1em;
-`;
-
-const TopicId = styled.p`
-  font-size: 0.65em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font: monospace;
-`;
-
-const Topic = styled(Card)`
-  display: flex;
-`;
+import { useAuth } from "auth/authSelectors";
 
 export default function TopicsPage() {
   const location = useLocation();
@@ -88,30 +72,28 @@ export default function TopicsPage() {
       {topicsPerProduct.map((product) => {
         const ProductIcon = getProductIcon(product.name);
         return (
-          <div key={product.id} style={{ marginBottom: "2em" }}>
-            <ProductTitle>
-              <span className="pf-v5-u-mr-xs">
-                <Icon size="md">
-                  <ProductIcon />
-                </Icon>
-              </span>
+          <div key={product.id} className="pf-v6-u-mb-xl">
+            <Content component={ContentVariants.h2}>
+              <ProductIcon className="pf-v6-u-mr-sm" />
               {product.name}
-            </ProductTitle>
+            </Content>
             <Gallery hasGutter key={product.id}>
               {product.topics.sort(sortTopicWithSemver).map((topic) => (
                 <GalleryItem key={topic.id}>
-                  <Topic
+                  <Card
                     onClick={() => navigate(`/topics/${topic.id}/components`)}
                     title="Click to see components"
                     className="pointer"
                   >
                     <CardBody>
-                      <Title headingLevel="h6" size="md">
+                      <Content component={ContentVariants.h4}>
                         {topic.name}
-                      </Title>
-                      <TopicId>{topic.id}</TopicId>
+                      </Content>
+                      <Content component={ContentVariants.p}>
+                        {topic.id}
+                      </Content>
                     </CardBody>
-                  </Topic>
+                  </Card>
                 </GalleryItem>
               ))}
             </Gallery>

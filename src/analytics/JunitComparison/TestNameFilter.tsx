@@ -24,8 +24,8 @@ export default function TestNameFilter({
 }: TestNameFilterProps) {
   return (
     <ToolbarFilter
-      chips={testName === null ? [] : [testName]}
-      deleteChip={onClear}
+      labels={testName === null ? [] : [testName]}
+      deleteLabel={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >

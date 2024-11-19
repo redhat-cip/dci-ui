@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, CardTitle } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import NewFailedJobSubscriptionPanel from "./NewFailedJobSubscriptionPanel";
 import NewComponentSubscriptionPanel from "./NewComponentSubscriptionPanel";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 
 export default function NotificationsPage() {
   const { currentUser } = useAuth();
@@ -29,7 +29,7 @@ export default function NotificationsPage() {
           <NewFailedJobSubscriptionPanel currentUser={currentUser} />
         </CardBody>
       </Card>
-      <Card className="pf-v5-u-mt-md">
+      <Card className="pf-v6-u-mt-md">
         <CardTitle>New component on a topic</CardTitle>
         <CardHeader>
           Get notified when a new component is created for a topic.

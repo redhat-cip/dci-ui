@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button } from "@patternfly/react-core";
+import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
 import { IRemoteci, ITeam } from "types";
@@ -67,9 +68,14 @@ export default function EditRemoteciModal({
           }}
         />
       </Modal>
-      <Button size="sm" variant="primary" onClick={show} {...props}>
-        <EditAltIcon aria-hidden="true" />
-        <span className="sr-only">Edit {remoteci.name}</span>
+      <Button
+        icon={<EditAltIcon aria-hidden="true" />}
+        size="sm"
+        variant="primary"
+        onClick={show}
+        {...props}
+      >
+        Edit remoteci
       </Button>
     </>
   );

@@ -16,8 +16,8 @@ export default function StatusToolbarFilter({
 }: StatusToolbarFilterProps) {
   return (
     <ToolbarFilter
-      chips={status === null ? [] : [status]}
-      deleteChip={onClear}
+      labels={status === null ? [] : [status]}
+      deleteLabel={onClear}
       categoryName="Status"
       showToolbarItem
     >

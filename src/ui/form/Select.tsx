@@ -51,16 +51,15 @@ export default function DCISelect<T extends Item>({
         !!item &&
         onClear !== undefined && (
           <Button
+            icon={<TimesIcon aria-hidden />}
             variant="plain"
             onClick={() => {
               setSelected(placeholder);
               onClear();
             }}
             aria-label="Clear input value"
-            className="pf-v5-u-p-0 pf-v5-u-pl-md"
-          >
-            <TimesIcon aria-hidden />
-          </Button>
+            className="pf-v6-u-p-0 pf-v6-u-pl-md"
+          />
         )
       }
     >
@@ -85,7 +84,7 @@ export default function DCISelect<T extends Item>({
       shouldFocusToggleOnSelect
     >
       {isLoading ? (
-        <div className="pf-v5-u-m-md">
+        <div className="pf-v6-u-m-md">
           <Spinner size="md" aria-label="loading" />
         </div>
       ) : (

@@ -12,8 +12,6 @@ import {
   EmptyStateActions,
   EmptyStateBody,
   EmptyStateFooter,
-  EmptyStateHeader,
-  EmptyStateIcon,
   EmptyStateVariant,
 } from "@patternfly/react-core";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +37,7 @@ function JobProvider({ children }: JobProviderProps) {
     return (
       <JobDetailsEnvelope job_id={job_id}>
         <JobDetailsSkeleton>
-          <EmptyState>
-            <EmptyStateHeader icon={<EmptyStateIcon icon={BlinkLogo} />} />
-          </EmptyState>
+          <EmptyState icon={BlinkLogo}></EmptyState>
         </JobDetailsSkeleton>
       </JobDetailsEnvelope>
     );
@@ -51,8 +47,11 @@ function JobProvider({ children }: JobProviderProps) {
     return (
       <JobDetailsEnvelope job_id={job_id}>
         <JobDetailsSkeleton>
-          <EmptyState variant={EmptyStateVariant.xs}>
-            <EmptyStateHeader titleText="No job" headingLevel="h4" />
+          <EmptyState
+            headingLevel="h4"
+            titleText="No job"
+            variant={EmptyStateVariant.xs}
+          >
             <EmptyStateBody>
               We can't get the job with id {job_id}.
             </EmptyStateBody>

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import {
+  Label,
+  LabelGroup,
   Button,
   TextInputGroup,
   TextInputGroupMain,
-  ChipGroup,
-  Chip,
   TextInputGroupUtilities,
 } from "@patternfly/react-core";
+
 import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 
 export default function ListInputWithChip({
@@ -51,23 +52,22 @@ export default function ListInputWithChip({
           }
         }}
       >
-        <ChipGroup>
+        <LabelGroup>
           {items.map((tag) => (
-            <Chip key={tag} onClick={() => deleteChip(tag)}>
+            <Label variant="outline" key={tag} onClose={() => deleteChip(tag)}>
               {tag}
-            </Chip>
+            </Label>
           ))}
-        </ChipGroup>
+        </LabelGroup>
       </TextInputGroupMain>
       {showClearButton && (
         <TextInputGroupUtilities>
           <Button
+            icon={<TimesIcon />}
             variant="plain"
             onClick={clearChipsAndInput}
             aria-label="clear items"
-          >
-            <TimesIcon />
-          </Button>
+          />
         </TextInputGroupUtilities>
       )}
     </TextInputGroup>

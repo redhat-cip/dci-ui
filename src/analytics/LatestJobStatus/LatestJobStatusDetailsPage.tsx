@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import MainPage from "pages/MainPage";
-import { CardBody, Card, Grid, GridItem, Label } from "@patternfly/react-core";
+import {
+  CardBody,
+  Card,
+  Grid,
+  GridItem,
+  Label,
+  Content,
+  ContentVariants,
+} from "@patternfly/react-core";
 import { useParams, Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { IStat } from "types";
 import { getStat } from "./latestJobStatusActions";
 import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";
-import { global_palette_black_500 } from "@patternfly/react-tokens";
 import { LinkIcon } from "@patternfly/react-icons";
 import {
   Table,
@@ -28,14 +35,7 @@ export function StatHeaderCard({ title, subTitle }: StatHeaderCardProps) {
   return (
     <Card>
       <CardBody>
-        <p
-          style={{
-            color: global_palette_black_500.value,
-            fontWeight: "bold",
-          }}
-        >
-          {subTitle}
-        </p>
+        <Content component={ContentVariants.h6}>{subTitle}</Content>
         <h1
           style={{
             fontSize: "1.875rem",
@@ -60,7 +60,7 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
     <Card>
       <CardBody>
         <Table
-          className="pf-v5-c-table pf-m-grid-md"
+          className="pf-v6-c-table pf-m-grid-md"
           role="grid"
           aria-label="Latest Latest Jobs Status"
           id="latest-jobs-per-remoteci-table"

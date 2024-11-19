@@ -28,7 +28,7 @@ export default function EditFeederPage() {
   );
 
   if (feeder === null) {
-    return <LoadingPage title="Edit a feeder" Breadcrumb={breadcrumb} />;
+    return <LoadingPage />;
   }
 
   return (

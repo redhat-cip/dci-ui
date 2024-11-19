@@ -1,6 +1,6 @@
 import {
-  global_danger_color_100,
-  global_palette_green_500,
+  chart_color_red_orange_300,
+  chart_color_green_300,
 } from "@patternfly/react-tokens";
 import { IComponentCoverage } from "types";
 import { Bar, BarChart, XAxis, Tooltip } from "recharts";
@@ -86,8 +86,8 @@ export default function LastComponentsJobsBarChart({
           }
         }}
       />
-      <Bar dataKey="success" fill={global_palette_green_500.value} />
-      <Bar dataKey="failure" fill={global_danger_color_100.value} />
+      <Bar dataKey="success" fill={chart_color_green_300.var} />
+      <Bar dataKey="failure" fill={chart_color_red_orange_300.var} />
     </BarChart>
   );
 }

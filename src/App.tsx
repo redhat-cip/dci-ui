@@ -10,7 +10,8 @@ import FilePage from "jobs/job/files/FilePage";
 import ProductsPage from "products/ProductsPage";
 import TopicsPage from "topics/TopicsPage";
 import TopicPage from "topics/TopicPage";
-import ComponentPage from "component/ComponentPage";
+import ComponentsPage from "components/ComponentsPage";
+import ComponentPage from "topics/component/ComponentPage";
 import RemotecisPage from "remotecis/RemotecisPage";
 import FeedersPage from "feeders/FeedersPage";
 import TeamsPage from "teams/TeamsPage";
@@ -24,6 +25,7 @@ import NotificationsPage from "notifications/NotificationsPage";
 import LoginPage from "auth/LoginPage";
 import LoginCallbackPage from "auth/LoginCallbackPage";
 import SilentRedirectPage from "auth/SilentRedirectPage";
+import AdminLoginPage from "auth/AdminLoginPage";
 import Page404 from "pages/Page404";
 import TasksDurationPerJobPage from "analytics/TasksDurationPerJob/TasksDurationPerJobPage";
 import AnalyticsPage from "analytics/AnalyticsPage";
@@ -31,13 +33,11 @@ import LatestJobStatusPage from "analytics/LatestJobStatus/LatestJobStatusPage";
 import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
 import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
 import JunitComparisonPage from "analytics/JunitComparison/JunitComparisonPage";
-import NotAuthenticatedLayout from "pages/NotAuthenticatedLayout";
 import Alerts from "alerts/Alerts";
 import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import JobTestPage from "jobs/job/tests/test/JobTestPage";
 import PipelinesPage from "analytics/Pipelines/PipelinesPage";
 import KeyValuesPage from "analytics/KeyValues/KeyValuesPage";
-import ComponentsPage from "components/ComponentsPage";
 
 export default function App() {
   return (
@@ -46,10 +46,11 @@ export default function App() {
       <Routes>
         <Route path="/">
           <Route index element={<Navigate replace to="jobs" />} />
-          <Route element={<NotAuthenticatedLayout />}>
+          <Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="login_callback" element={<LoginCallbackPage />} />
             <Route path="silent_redirect" element={<SilentRedirectPage />} />
+            <Route path="dci-admin" element={<AdminLoginPage />} />
           </Route>
           <Route element={<AuthenticatedLayout />}>
             <Route path="analytics">

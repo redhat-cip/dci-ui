@@ -130,7 +130,7 @@ export interface IFeeder extends Resource {
   updated_at: string;
   api_secret: string;
   data: dataField;
-  state: string;
+  state: state;
 }
 
 export interface IFeedersById {
@@ -360,6 +360,7 @@ export type IFileStatus =
   | "ignored"
   | "success"
   | "withAWarning";
+
 export interface IJobState {
   id: string;
   status: IJobStatus;

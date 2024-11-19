@@ -3,10 +3,8 @@ import {
   Button,
   EmptyState,
   EmptyStateBody,
-  EmptyStateIcon,
   Progress,
   EmptyStateActions,
-  EmptyStateHeader,
   EmptyStateFooter,
 } from "@patternfly/react-core";
 import { CogsIcon } from "@patternfly/react-icons";
@@ -93,14 +91,14 @@ export default function CreateTeamWithMembers({
 
   return (
     <div className="pf-l-bullseye">
-      <EmptyState variant="lg">
-        <EmptyStateHeader
-          titleText={
-            <>{percent === 100 ? "Team creation complete" : "Creating team"}</>
-          }
-          icon={<EmptyStateIcon icon={CogsIcon} />}
-          headingLevel="h4"
-        />
+      <EmptyState
+        headingLevel="h4"
+        icon={CogsIcon}
+        titleText={
+          <>{percent === 100 ? "Team creation complete" : "Creating team"}</>
+        }
+        variant="lg"
+      >
         <EmptyStateBody>
           <Progress
             value={percent}
@@ -115,7 +113,7 @@ export default function CreateTeamWithMembers({
           </EmptyStateBody>
           <EmptyStateBody>
             {hasError && (
-              <Banner variant="red" className="pf-v5-u-mb-xs">
+              <Banner color="red" className="pf-v6-u-mb-xs">
                 {error}
               </Banner>
             )}

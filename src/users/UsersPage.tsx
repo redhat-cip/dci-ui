@@ -19,10 +19,10 @@ import {
   offsetAndLimitToPage,
   pageAndLimitToOffset,
   parseFiltersFromSearch,
-} from "api/filters";
+} from "services/filters";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCreateUserMutation, useListUsersQuery } from "./usersApi";
-import { useAuth } from "auth/authContext";
+import { useAuth } from "auth/authSelectors";
 
 export default function UsersPage() {
   const { currentUser } = useAuth();
@@ -52,19 +52,16 @@ export default function UsersPage() {
           <CreateUserModal onSubmit={createUser}>
             {(openModal) => (
               <Button
+                icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
                 variant="primary"
                 onClick={openModal}
                 isDisabled={isCreating}
               >
-                <PlusCircleIcon className="pf-v5-u-mr-xs" />
                 Create a new user
               </Button>
             )}
           </CreateUserModal>
         ) : null
-      }
-      EmptyComponent={
-        <EmptyState title="No users" info="There is no users at the moment." />
       }
       Breadcrumb={
         <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
@@ -86,10 +83,7 @@ export default function UsersPage() {
               </ToolbarItem>
             </ToolbarGroup>
             <ToolbarGroup style={{ flex: "1" }}>
-              <ToolbarItem
-                variant="pagination"
-                align={{ default: "alignRight" }}
-              >
+              <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
                 {count === 0 ? null : (
                   <Pagination
                     perPage={filters.limit}
