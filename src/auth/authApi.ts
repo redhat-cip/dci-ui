@@ -1,7 +1,7 @@
 import { ICurrentUser, IIdentity, IIdentityTeam } from "types";
 import { values } from "lodash";
 import { readValue, saveValue } from "services/localStorage";
-import api from "api";
+import { api } from "api";
 
 function buildShortcut(team: IIdentityTeam | null) {
   if (team === null) {
@@ -44,16 +44,10 @@ export function buildCurrentUser(
   };
 }
 
-export function changeCurrentTeam(
-  currentUser: ICurrentUser,
-  team: IIdentityTeam,
-): ICurrentUser {
-  saveValue("defaultTeam", team);
-  return {
-    ...currentUser,
-    team,
-    ...buildShortcut(team),
-  };
+const DEFAULT_TEAM_LOCASTORAGE_VALUE = "defaultTeam";
+
+export function changeCurrentTeam(team: IIdentityTeam) {
+  saveValue(DEFAULT_TEAM_LOCASTORAGE_VALUE, team);
 }
 
 export const authApi = api
@@ -66,7 +60,7 @@ export const authApi = api
         query: () => "/identity",
         transformResponse: (response: { identity: IIdentity }, meta, arg) => {
           const defaultTeam = readValue<IIdentityTeam | null>(
-            "defaultTeam",
+            DEFAULT_TEAM_LOCASTORAGE_VALUE,
             null,
           );
           return buildCurrentUser(response.identity, defaultTeam);

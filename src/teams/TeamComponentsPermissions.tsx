@@ -9,6 +9,7 @@ import {
   EmptyState,
   EmptyStateVariant,
   EmptyStateBody,
+  Content,
 } from "@patternfly/react-core";
 import {
   addRemoteTeamPermissionForTheTeam,
@@ -98,11 +99,6 @@ export default function TeamComponentsPermissions({
             </AddRemoteTeamPermissionModal>
           </div>
         </div>
-        <div>
-          <p className="pf-v6-u-mt-md">
-            The {team.name} team has access to the following team components:
-          </p>
-        </div>
       </CardTitle>
       <CardBody>
         {isLoading ? (
@@ -118,46 +114,51 @@ export default function TeamComponentsPermissions({
                 </EmptyState>
               </Bullseye>
             ) : (
-              <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
-                <Thead>
-                  <Tr>
-                    <Th>Team name</Th>
-                    <Th />
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {sortByName(teamsTheTeamHasAccessTo).map((remoteTeam) => (
-                    <Tr key={remoteTeam.id}>
-                      <Td>
-                        <Link to={`/teams/${remoteTeam.id}`}>
-                          {remoteTeam.name}
-                        </Link>
-                      </Td>
-                      <Td className="pf-v6-c-table__action">
-                        <ConfirmDeleteModal
-                          title={`Remove ${remoteTeam.name} access to ${team.name}`}
-                          message={`Are you sure you want to remove user ${remoteTeam.name} access? ${team.name} will not be able to see ${remoteTeam.name} component.`}
-                          onOk={() => {
-                            removeRemoteTeamPermissionForTheTeam(
-                              remoteTeam,
-                              team,
-                            ).then(() => _getComponentsPermissions(team));
-                          }}
-                        >
-                          {(openModal) => (
-                            <Button
-                              icon={<MinusCircleIcon />}
-                              variant="danger"
-                              size="sm"
-                              onClick={openModal}
-                            ></Button>
-                          )}
-                        </ConfirmDeleteModal>
-                      </Td>
+              <>
+                <Content component="p">
+                  The {team.name} team has access to the following team
+                  components:
+                </Content>
+                <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
+                  <Thead>
+                    <Tr>
+                      <Th>Team name</Th>
+                      <Th />
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+                  </Thead>
+                  <Tbody>
+                    {sortByName(teamsTheTeamHasAccessTo).map((remoteTeam) => (
+                      <Tr key={remoteTeam.id}>
+                        <Td>
+                          <Link to={`/teams/${remoteTeam.id}`}>
+                            {remoteTeam.name}
+                          </Link>
+                        </Td>
+                        <Td className="pf-v6-c-table__action">
+                          <ConfirmDeleteModal
+                            title={`Remove ${remoteTeam.name} access to ${team.name}`}
+                            message={`Are you sure you want to remove user ${remoteTeam.name} access? ${team.name} will not be able to see ${remoteTeam.name} component.`}
+                            onOk={() => {
+                              removeRemoteTeamPermissionForTheTeam(
+                                remoteTeam,
+                                team,
+                              ).then(() => _getComponentsPermissions(team));
+                            }}
+                          >
+                            {(openModal) => (
+                              <Button
+                                icon={<MinusCircleIcon />}
+                                variant="danger"
+                                onClick={openModal}
+                              ></Button>
+                            )}
+                          </ConfirmDeleteModal>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </>
             )}
           </>
         )}

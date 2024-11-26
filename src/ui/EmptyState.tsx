@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SadTearIcon } from "@patternfly/react-icons";
+import { SearchIcon } from "@patternfly/react-icons";
 import {
   Bullseye,
   EmptyState,
@@ -10,14 +10,14 @@ import {
 
 interface EmptyStateProps {
   title: string;
-  info: string;
+  info?: string;
   icon?: React.ComponentType<any>;
   action?: React.ReactNode;
 }
 
 export default function DCIEmptyState({
   title,
-  info,
+  info = "Please contact a Distributed CI administrator",
   icon,
   action,
 }: EmptyStateProps) {
@@ -25,8 +25,8 @@ export default function DCIEmptyState({
     <Bullseye>
       <EmptyState
         headingLevel="h4"
-        icon={icon ? icon : SadTearIcon}
-        titleText={<>{title}</>}
+        icon={icon ? icon : SearchIcon}
+        title={title}
       >
         <EmptyStateBody>{info}</EmptyStateBody>
         <EmptyStateFooter>

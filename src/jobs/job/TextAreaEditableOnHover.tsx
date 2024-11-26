@@ -76,7 +76,6 @@ export default function TextAreaEditableOnHover({
                   variant="primary"
                   type="submit"
                   isInline
-                  size="sm"
                   isDisabled={!(isValid && dirty)}
                 ></Button>
               </InputGroupItem>
@@ -86,7 +85,6 @@ export default function TextAreaEditableOnHover({
                   variant="secondary"
                   type="button"
                   isInline
-                  size="sm"
                   onClick={() => setEditModeOne(false)}
                   className="pf-v6-u-ml-xs"
                 ></Button>

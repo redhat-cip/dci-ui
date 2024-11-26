@@ -11,7 +11,7 @@ interface AlertsState {
 
 const initialState: AlertsState = {};
 
-export const alertsSlice = createSlice({
+const alertsSlice = createSlice({
   name: "alerts",
   initialState,
   reducers: {
@@ -52,17 +52,11 @@ export function showSuccess(title: string, message: string = "") {
   return showAndHideAfter10s(title, message, "success");
 }
 
-export function showWarning(title: string, message: string = "") {
-  return showAndHideAfter10s(title, message, "warning");
-}
-
 export function showError(title: string, message: string = "") {
   return showAndHideAfter10s(title, message, "danger");
 }
 
-export function getTitleAndMessageFromAxiosError(
-  axiosError: AxiosError<DCIError>,
-) {
+function getTitleAndMessageFromAxiosError(axiosError: AxiosError<DCIError>) {
   const data = axiosError?.response?.data;
   if (isEmpty(data))
     return {

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export interface IKeyValue {
+interface IKeyValue {
   job_id: string;
   key: string;
   value: number;

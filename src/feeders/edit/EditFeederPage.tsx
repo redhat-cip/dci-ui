@@ -1,12 +1,18 @@
-import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
-import MainPage from "pages/MainPage";
+import {
+  Grid,
+  GridItem,
+  Card,
+  CardBody,
+  PageSection,
+  Content,
+} from "@patternfly/react-core";
 import EditFeederForm from "./EditFeederForm";
 import { useNavigate, useParams } from "react-router-dom";
-import { Breadcrumb } from "ui";
-import LoadingPage from "pages/LoadingPage";
+import { Breadcrumb, EmptyState } from "ui";
 import { useListTeamsQuery } from "teams/teamsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetFeederQuery, useUpdateFeederMutation } from "feeders/feedersApi";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function EditFeederPage() {
   const navigate = useNavigate();
@@ -17,27 +23,32 @@ export default function EditFeederPage() {
   const [updateFeeder] = useUpdateFeederMutation();
   const { data: dataTeam, isLoading: isLoadingTeams } = useListTeamsQuery();
 
-  const breadcrumb = (
-    <Breadcrumb
-      links={[
-        { to: "/", title: "DCI" },
-        { to: "/feeders", title: "Feeders" },
-        { to: `/feeders/${feeder_id}`, title: feeder_id },
-      ]}
-    />
-  );
+  if (isLoading || isLoadingTeams) {
+    return <LoadingPageSection />;
+  }
 
-  if (feeder === null) {
-    return <LoadingPage />;
+  if (!feeder) {
+    return <EmptyState title="There is no feeder" />;
+  }
+
+  if (!dataTeam) {
+    return <EmptyState title="There is no teams" />;
   }
 
   return (
-    <MainPage
-      title="Edit a feeder"
-      description="A feeder is a script in charge of uploading newer versions of components to the control server."
-      Breadcrumb={breadcrumb}
-      isLoading={isLoading || isLoadingTeams}
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/feeders", title: "Feeders" },
+          { to: `/feeders/${feeder_id}`, title: feeder_id },
+        ]}
+      />
+      <Content component="h1">Edit a feeder</Content>
+      <Content component="p">
+        A feeder is a script in charge of uploading newer versions of components
+        to the control server
+      </Content>
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>
@@ -55,6 +66,6 @@ export default function EditFeederPage() {
           </Card>
         </GridItem>
       </Grid>
-    </MainPage>
+    </PageSection>
   );
 }

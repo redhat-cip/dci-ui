@@ -70,7 +70,6 @@ export default function EditRemoteciModal({
       </Modal>
       <Button
         icon={<EditAltIcon aria-hidden="true" />}
-        size="sm"
         variant="primary"
         onClick={show}
         {...props}

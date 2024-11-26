@@ -1,7 +1,13 @@
-import { Card, CardBody, Grid, GridItem } from "@patternfly/react-core";
+import {
+  Card,
+  CardBody,
+  Content,
+  Grid,
+  GridItem,
+  PageSection,
+} from "@patternfly/react-core";
 import SettingsForm from "./SettingsForm";
 import ChangePasswordForm from "./ChangePasswordForm";
-import MainPage from "pages/MainPage";
 import { useAuth } from "auth/authSelectors";
 import { Breadcrumb } from "ui";
 import { useUpdateCurrentUserMutation } from "auth/authApi";
@@ -9,17 +15,16 @@ import { useUpdateCurrentUserMutation } from "auth/authApi";
 export default function SettingsPage() {
   const { currentUser } = useAuth();
   const [updateCurrentUser] = useUpdateCurrentUserMutation();
+
   if (currentUser === null) return null;
+
   return (
-    <MainPage
-      title="My profile"
-      description="Edit your profile"
-      Breadcrumb={
-        <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "My profile" }]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[{ to: "/", title: "DCI" }, { title: "My profile" }]}
+      />
+      <Content component="h1">My profile</Content>
+      <Content component="p">Edit your profile</Content>
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>
@@ -46,6 +51,6 @@ export default function SettingsPage() {
           </GridItem>
         )}
       </Grid>
-    </MainPage>
+    </PageSection>
   );
 }

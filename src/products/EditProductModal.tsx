@@ -66,7 +66,6 @@ export default function EditProductModal({
         />
       </Modal>
       <Button
-        size="sm"
         icon={<EditAltIcon aria-hidden="true" />}
         variant="primary"
         onClick={show}

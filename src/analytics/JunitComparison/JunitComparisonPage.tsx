@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardTitle,
+  Content,
   DatePicker,
   Flex,
   FlexItem,
@@ -11,11 +12,11 @@ import {
   FormGroup,
   Grid,
   GridItem,
+  PageSection,
   TextInput,
   ToggleGroup,
   ToggleGroupItem,
 } from "@patternfly/react-core";
-import MainPage from "pages/MainPage";
 import { BlinkLogo, Breadcrumb } from "ui";
 import {
   XAxis,
@@ -683,20 +684,17 @@ export default function JunitComparisonPage() {
   const [data, setData] = useState<JunitData | null>(null);
 
   const dispatch = useAppDispatch();
+
   return (
-    <MainPage
-      title="Junit comparison"
-      description=""
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            { title: "Junit comparison" },
-          ]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          { title: "Junit comparison" },
+        ]}
+      />
+      <Content component="h1">Junit comparison</Content>
       <Card>
         <CardBody>
           <JunitComparisonForm
@@ -768,6 +766,6 @@ export default function JunitComparisonPage() {
           </div>
         </>
       )}
-    </MainPage>
+    </PageSection>
   );
 }

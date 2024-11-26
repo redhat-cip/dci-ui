@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import MainPage from "pages/MainPage";
 import {
   Card,
   Gallery,
@@ -7,6 +6,7 @@ import {
   CardBody,
   Content,
   ContentVariants,
+  PageSection,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -21,6 +21,7 @@ import {
 import { useCreateTopicMutation, useListTopicsQuery } from "./topicsApi";
 import { useListProductsQuery } from "products/productsApi";
 import { useAuth } from "auth/authSelectors";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function TopicsPage() {
   const location = useLocation();
@@ -40,7 +41,13 @@ export default function TopicsPage() {
 
   const [createTopic, { isLoading: isCreating }] = useCreateTopicMutation();
 
-  if (!data || !dataProducts || currentUser === null) return null;
+  if (isLoading || isLoadingProducts) {
+    return <LoadingPageSection />;
+  }
+
+  if (!data || !dataProducts) {
+    return <EmptyState title="There is no topics" />;
+  }
 
   const topicsPerProduct = groupTopicsPerProduct(
     data.topics,
@@ -48,27 +55,24 @@ export default function TopicsPage() {
   );
 
   return (
-    <MainPage
-      title="Topics"
-      description="Click on the topic that interests you to see its components."
-      loading={isLoading && isLoadingProducts}
-      empty={data.topics.length === 0}
-      HeaderButton={
-        currentUser.isSuperAdmin ? (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
+      <Content component="h1">Topics</Content>
+      <Content component="p">
+        Click on the topic that interests you to see its components.
+      </Content>
+      {currentUser?.isSuperAdmin && (
+        <div className="pf-v6-u-mb-md">
           <CreateTopicModal
             products={dataProducts.products}
             onSubmit={createTopic}
             isDisabled={isCreating}
           />
-        ) : null
-      }
-      EmptyComponent={
-        <EmptyState title="There is no topics" info="See documentation" />
-      }
-      Breadcrumb={
-        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Topics" }]} />
-      }
-    >
+        </div>
+      )}
+      {topicsPerProduct.length === 0 && (
+        <EmptyState title="There is no topics" />
+      )}
       {topicsPerProduct.map((product) => {
         const ProductIcon = getProductIcon(product.name);
         return (
@@ -100,6 +104,6 @@ export default function TopicsPage() {
           </div>
         );
       })}
-    </MainPage>
+    </PageSection>
   );
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import MainPage from "pages/MainPage";
 import { EmptyState, Breadcrumb, CopyButton, InputFilter } from "ui";
 import CreateTeamModal from "./CreateTeamModal";
 import {
   Button,
+  Content,
   Flex,
   FlexItem,
   Label,
+  PageSection,
   Pagination,
   Toolbar,
   ToolbarContent,
@@ -26,6 +27,7 @@ import {
 } from "services/filters";
 import { useCreateTeamMutation, useListTeamsQuery } from "./teamsApi";
 import { fromNow } from "services/date";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function TeamsPage() {
   const { currentUser } = useAuth();
@@ -43,24 +45,33 @@ export default function TeamsPage() {
   const { data, isLoading } = useListTeamsQuery(filters);
   const [createTeam, { isLoading: isCreating }] = useCreateTeamMutation();
 
-  if (!data || currentUser === null) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (currentUser === null) return null;
+
+  if (!data) {
+    return (
+      <EmptyState title="There is no teams" info="Do you want to create one?" />
+    );
+  }
 
   const count = data._meta.count;
 
   const partners = data.teams.filter((t) => t.external && t.state === "active");
 
   return (
-    <MainPage
-      title="Teams"
-      description={
-        partners.length > 0
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
+      <Content component="h1">Teams</Content>
+      <Content component="p">
+        {partners.length > 0
           ? `List of DCI teams. There are ${partners.length} active partners.`
-          : "List of DCI teams."
-      }
-      loading={isLoading}
-      empty={data.teams.length === 0}
-      HeaderButton={
-        currentUser.hasEPMRole ? (
+          : "List of DCI teams."}
+      </Content>
+      {currentUser.hasEPMRole && (
+        <div className="pf-v6-u-mb-md">
           <Flex>
             <Flex>
               <FlexItem>
@@ -90,98 +101,93 @@ export default function TeamsPage() {
               </FlexItem>
             </Flex>
           </Flex>
-        ) : null
-      }
-      EmptyComponent={
+        </div>
+      )}
+      <Toolbar id="toolbar-teams" collapseListedFiltersBreakpoint="xl">
+        <ToolbarContent>
+          <ToolbarGroup>
+            <ToolbarItem>
+              <InputFilter
+                search={filters.name || ""}
+                placeholder="Search a team"
+                onSearch={(name) => {
+                  setFilters({
+                    ...filters,
+                    name,
+                  });
+                }}
+              />
+            </ToolbarItem>
+          </ToolbarGroup>
+          <ToolbarGroup style={{ flex: "1" }}>
+            <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
+              {count === 0 ? null : (
+                <Pagination
+                  perPage={filters.limit}
+                  page={offsetAndLimitToPage(filters.offset, filters.limit)}
+                  itemCount={count}
+                  onSetPage={(e, newPage) => {
+                    setFilters({
+                      ...filters,
+                      offset: pageAndLimitToOffset(newPage, filters.limit),
+                    });
+                  }}
+                  onPerPageSelect={(e, newPerPage) => {
+                    setFilters({ ...filters, limit: newPerPage });
+                  }}
+                />
+              )}
+            </ToolbarItem>
+          </ToolbarGroup>
+        </ToolbarContent>
+      </Toolbar>
+      {count === 0 ? (
         <EmptyState
           title="There is no teams"
           info="Do you want to create one?"
         />
-      }
-      Breadcrumb={
-        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
-      }
-      Toolbar={
-        <Toolbar id="toolbar-teams" collapseListedFiltersBreakpoint="xl">
-          <ToolbarContent>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <InputFilter
-                  search={filters.name || ""}
-                  placeholder="Search a team"
-                  onSearch={(name) => {
-                    setFilters({
-                      ...filters,
-                      name,
-                    });
-                  }}
-                />
-              </ToolbarItem>
-            </ToolbarGroup>
-            <ToolbarGroup style={{ flex: "1" }}>
-              <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
-                {count === 0 ? null : (
-                  <Pagination
-                    perPage={filters.limit}
-                    page={offsetAndLimitToPage(filters.offset, filters.limit)}
-                    itemCount={count}
-                    onSetPage={(e, newPage) => {
-                      setFilters({
-                        ...filters,
-                        offset: pageAndLimitToOffset(newPage, filters.limit),
-                      });
-                    }}
-                    onPerPageSelect={(e, newPerPage) => {
-                      setFilters({ ...filters, limit: newPerPage });
-                    }}
-                  />
-                )}
-              </ToolbarItem>
-            </ToolbarGroup>
-          </ToolbarContent>
-        </Toolbar>
-      }
-    >
-      <Table
-        variant="compact"
-        className="pf-v6-c-tablepf-m-grid-md"
-        role="grid"
-        aria-label="Teams table"
-        id="teams-table"
-      >
-        <Thead>
-          <Tr>
-            <Th>Id</Th>
-            <Th>Team Name</Th>
-            <Th>Partner</Th>
-            <Th>Active</Th>
-            <Th>Created at</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.teams.map((team) => (
-            <Tr key={team.id}>
-              <Th>
-                <CopyButton text={team.id} />
-              </Th>
-              <Th>
-                <Link to={`/teams/${team.id}`}>{team.name}</Link>
-              </Th>
-              <Td>
-                {team.external ? <Label color="blue">partner</Label> : null}
-              </Td>
-              <Td>
-                {team.state === "active" ? (
-                  <Label color="green">active</Label>
-                ) : (
-                  <Label color="red">inactive</Label>
-                )}
-              </Td>
-              <Td>{fromNow(team.created_at)}</Td>
+      ) : (
+        <Table
+          variant="compact"
+          className="pf-v6-c-tablepf-m-grid-md"
+          role="grid"
+          aria-label="Teams table"
+          id="teams-table"
+        >
+          <Thead>
+            <Tr>
+              <Th>Id</Th>
+              <Th>Team Name</Th>
+              <Th>Partner</Th>
+              <Th>Active</Th>
+              <Th>Created at</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </MainPage>
+          </Thead>
+          <Tbody>
+            {data.teams.map((team) => (
+              <Tr key={team.id}>
+                <Th>
+                  <CopyButton text={team.id} />
+                </Th>
+                <Th>
+                  <Link to={`/teams/${team.id}`}>{team.name}</Link>
+                </Th>
+                <Td>
+                  {team.external ? <Label color="blue">partner</Label> : null}
+                </Td>
+                <Td>
+                  {team.state === "active" ? (
+                    <Label color="green">active</Label>
+                  ) : (
+                    <Label color="red">inactive</Label>
+                  )}
+                </Td>
+                <Td>{fromNow(team.created_at)}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      )}
+    </PageSection>
   );
 }

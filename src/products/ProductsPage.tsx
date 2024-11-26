@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import MainPage from "pages/MainPage";
 import {
   CopyButton,
   EmptyState,
@@ -11,6 +10,8 @@ import CreateProductModal from "./CreateProductModal";
 import EditProductModal from "./EditProductModal";
 import {
   Button,
+  Content,
+  PageSection,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -31,6 +32,7 @@ import {
   useUpdateProductMutation,
 } from "./productsApi";
 import { useAuth } from "auth/authSelectors";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function ProductsPage() {
   const location = useLocation();
@@ -49,103 +51,102 @@ export default function ProductsPage() {
     navigate(`/products${newSearch}`, { replace: true });
   }, [navigate, filters]);
 
-  if (!data || currentUser === null) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (currentUser === null) return null;
+
+  if (!data) {
+    return <EmptyState title="There is no products" />;
+  }
 
   return (
-    <MainPage
-      title="Products"
-      description="A product is the main abstraction that describe a Red Hat product (RHEL, OpenStack, Openshift)."
-      loading={isLoading}
-      empty={data.products.length === 0}
-      HeaderButton={
-        currentUser.isSuperAdmin ? (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Products" }]} />
+      <Content component="h1">Products</Content>
+      <Content component="p">
+        A product is the main abstraction that describe a Red Hat product (RHEL,
+        OpenStack, Openshift).
+      </Content>
+      {currentUser.isSuperAdmin && (
+        <div className="pf-v6-u-mb-md">
           <CreateProductModal
             onSubmit={createProduct}
             isDisabled={isCreating}
           />
-        ) : null
-      }
-      EmptyComponent={
-        <EmptyState
-          title="There is no products"
-          info="Do you want to create one?"
-        />
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "Products" }]}
-        />
-      }
-      Toolbar={
-        <Toolbar id="toolbar-products" collapseListedFiltersBreakpoint="xl">
-          <ToolbarContent>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <InputFilter
-                  search={filters.name || ""}
-                  placeholder="Search a product"
-                  onSearch={(name) => {
-                    setFilters({
-                      ...filters,
-                      name,
-                    });
-                  }}
-                />
-              </ToolbarItem>
-            </ToolbarGroup>
-          </ToolbarContent>
-        </Toolbar>
-      }
-    >
-      <Table aria-label="Products table" variant="compact">
-        <Thead>
-          <Tr>
-            <Th>ID</Th>
-            <Th>Name</Th>
-            <Th>Label</Th>
-            <Th>Description</Th>
-            <Th textCenter> {currentUser.isSuperAdmin ? "Actions" : ""}</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.products.map((product) => (
-            <Tr key={`${product.id}.${product.etag}`}>
-              <Td dataLabel="ID">
-                <CopyButton text={product.id} />
-              </Td>
-              <Td dataLabel="Name">{product.name}</Td>
-              <Td dataLabel="Label">{product.label}</Td>
-              <Td dataLabel="Description">{product.description}</Td>
-              <Td className="text-center">
-                {currentUser.isSuperAdmin ? (
-                  <>
-                    <EditProductModal
-                      className="pf-v6-u-mr-xs"
-                      onSubmit={updateProduct}
-                      product={product}
-                      isDisabled={isUpdating}
-                    />
-                    <ConfirmDeleteModal
-                      title={`Delete product ${product.name}`}
-                      message={`Are you sure you want to delete ${product.name}?`}
-                      onOk={() => deleteProduct(product)}
-                    >
-                      {(openModal) => (
-                        <Button
-                          size="sm"
-                          icon={<TrashIcon />}
-                          variant="danger"
-                          onClick={openModal}
-                        ></Button>
-                      )}
-                    </ConfirmDeleteModal>
-                  </>
-                ) : null}
-              </Td>
+        </div>
+      )}
+      <Toolbar id="toolbar-products" collapseListedFiltersBreakpoint="xl">
+        <ToolbarContent>
+          <ToolbarGroup>
+            <ToolbarItem>
+              <InputFilter
+                search={filters.name || ""}
+                placeholder="Search a product"
+                onSearch={(name) => {
+                  setFilters({
+                    ...filters,
+                    name,
+                  });
+                }}
+              />
+            </ToolbarItem>
+          </ToolbarGroup>
+        </ToolbarContent>
+      </Toolbar>
+      {data.products.length === 0 ? (
+        <EmptyState title="There is no products" />
+      ) : (
+        <Table aria-label="Products table" variant="compact">
+          <Thead>
+            <Tr>
+              <Th>ID</Th>
+              <Th>Name</Th>
+              <Th>Label</Th>
+              <Th>Description</Th>
+              <Th textCenter> {currentUser.isSuperAdmin ? "Actions" : ""}</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </MainPage>
+          </Thead>
+          <Tbody>
+            {data.products.map((product) => (
+              <Tr key={`${product.id}.${product.etag}`}>
+                <Td dataLabel="ID">
+                  <CopyButton text={product.id} />
+                </Td>
+                <Td dataLabel="Name">{product.name}</Td>
+                <Td dataLabel="Label">{product.label}</Td>
+                <Td dataLabel="Description">{product.description}</Td>
+                <Td className="text-center">
+                  {currentUser.isSuperAdmin ? (
+                    <>
+                      <EditProductModal
+                        className="pf-v6-u-mr-xs"
+                        onSubmit={updateProduct}
+                        product={product}
+                        isDisabled={isUpdating}
+                      />
+                      <ConfirmDeleteModal
+                        title={`Delete product ${product.name}`}
+                        message={`Are you sure you want to delete ${product.name}?`}
+                        onOk={() => deleteProduct(product)}
+                      >
+                        {(openModal) => (
+                          <Button
+                            icon={<TrashIcon />}
+                            variant="danger"
+                            onClick={openModal}
+                          ></Button>
+                        )}
+                      </ConfirmDeleteModal>
+                    </>
+                  ) : null}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      )}
+    </PageSection>
   );
 }

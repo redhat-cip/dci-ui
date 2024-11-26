@@ -1,4 +1,3 @@
-import MainPage from "pages/MainPage";
 import { Breadcrumb, CopyIconButton } from "ui";
 import { useLocation, useNavigate } from "react-router";
 import {
@@ -38,57 +37,47 @@ export default function JobDetailsEnvelope({
   }, [location, job_id]);
 
   return (
-    <MainPage
-      title={`Job ${job_id}`}
-      description=""
-      HeaderSection={
-        <PageSection hasBodyWrapper={false} style={{ paddingBottom: 0 }}>
-          <Content className="pf-v6-u-mb-md">
-            <Content component="h1">Job details</Content>
-          </Content>
-          <Tabs
-            activeKey={activeTabKey}
-            onSelect={(event, tabIndex) => {
-              if (tabIndex !== undefined) {
-                const newTabIndex = parseInt(tabIndex as string, 10);
-                setActiveTabKey(newTabIndex);
-                navigate(`/jobs/${job_id}/${endpoints[newTabIndex].value}`);
-              }
-            }}
-          >
-            {endpoints.map((endpoint, i) => (
-              <Tab
-                key={endpoint.value}
-                eventKey={i}
-                title={<TabTitleText>{endpoint.title}</TabTitleText>}
-              ></Tab>
-            ))}
-          </Tabs>
-        </PageSection>
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/jobs", title: "Jobs" },
-            {
-              to: `/jobs/${job_id}`,
-              title: (
-                <span>
-                  {job_id}
-                  <CopyIconButton
-                    text={job_id}
-                    textOnSuccess="copied"
-                    className="pf-v6-u-ml-xs pointer"
-                  />
-                </span>
-              ),
-            },
-          ]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/jobs", title: "Jobs" },
+          {
+            to: `/jobs/${job_id}`,
+            title: (
+              <span>
+                {job_id}
+                <CopyIconButton
+                  text={job_id}
+                  textOnSuccess="copied"
+                  className="pf-v6-u-ml-xs pointer"
+                />
+              </span>
+            ),
+          },
+        ]}
+      />
+      <Content component="h1">Job details</Content>
+      <Tabs
+        activeKey={activeTabKey}
+        onSelect={(event, tabIndex) => {
+          if (tabIndex !== undefined) {
+            const newTabIndex = parseInt(tabIndex as string, 10);
+            setActiveTabKey(newTabIndex);
+            navigate(`/jobs/${job_id}/${endpoints[newTabIndex].value}`);
+          }
+        }}
+        className="pf-v6-u-mb-md"
+      >
+        {endpoints.map((endpoint, i) => (
+          <Tab
+            key={endpoint.value}
+            eventKey={i}
+            title={<TabTitleText>{endpoint.title}</TabTitleText>}
+          ></Tab>
+        ))}
+      </Tabs>
       {children}
-    </MainPage>
+    </PageSection>
   );
 }

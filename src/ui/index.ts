@@ -5,8 +5,6 @@ export { default as CopyIconButton } from "./CopyIconButton";
 export { default as RotatingSpinnerIcon } from "./RotatingSpinnerIcon";
 export { default as BackgroundImage } from "./BackgroundImage";
 export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
-export { default as TextGreen } from "./Text/TextGreen";
-export { default as TextRed } from "./Text/TextRed";
 export { default as Breadcrumb } from "./Breadcrumb";
 export { default as StateLabel } from "./StateLabel";
 export { default as InputFilter } from "./toolbar/InputFilter";

@@ -95,7 +95,11 @@ export default function TeamMembers({
         {isLoading ? (
           <Skeleton screenreaderText="Loading team's users" />
         ) : (
-          <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
+          <Table
+            variant="compact"
+            borders={false}
+            className="pf-v6-c-tablepf-m-grid-md"
+          >
             <Thead>
               <Tr>
                 <Th>ID</Th>
@@ -129,8 +133,8 @@ export default function TeamMembers({
                       {(openModal) => (
                         <Button
                           icon={<MinusCircleIcon />}
-                          variant="danger"
-                          size="sm"
+                          variant="secondary"
+                          isDanger
                           onClick={openModal}
                         ></Button>
                       )}

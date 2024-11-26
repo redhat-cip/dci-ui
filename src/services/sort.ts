@@ -5,10 +5,6 @@ export function sort(items: string[]) {
   return sortBy(items, [(e) => e.toLowerCase()]);
 }
 
-export interface IItemWithName {
-  name: string;
-}
-
 export function sortByName<
   T extends {
     name: string;

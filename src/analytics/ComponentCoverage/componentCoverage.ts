@@ -1,7 +1,7 @@
 import { sortByOldestFirst } from "services/sort";
 import { IComponentCoverageESData, IComponentCoverage } from "types";
 
-export interface ComponentsCoverage {
+interface ComponentsCoverage {
   [componentId: string]: IComponentCoverage;
 }
 

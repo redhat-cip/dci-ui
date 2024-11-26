@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { isEmpty } from "lodash";
 import {
   addDuration,
   addPipelineStatus,
@@ -63,7 +62,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
   );
   const hasRawLogFile = rawLogFile !== undefined;
 
-  if (isEmpty(job.jobstates)) {
+  if (job.jobstates.length === 0) {
     return (
       <Card>
         <CardBody>

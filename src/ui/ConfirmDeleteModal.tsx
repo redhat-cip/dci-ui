@@ -1,8 +1,14 @@
 import { ReactNode } from "react";
-import { Button, Title, TitleSizes } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
-import TextRed from "./Text/TextRed";
+import { t_global_color_status_danger_default } from "@patternfly/react-tokens";
 
 type ConfirmDeleteModalProps = {
   onOk: () => void;
@@ -27,21 +33,22 @@ export default function ConfirmDeleteModal({
       <Modal
         id="confirm-delete-modal"
         aria-label="Confirm delete modal"
-        title="Confirm delete modal"
         isOpen={isOpen}
-        header={
-          <Title headingLevel="h1" size={TitleSizes["2xl"]}>
-            <TextRed>{title}</TextRed>
-          </Title>
-        }
         onClose={hide}
         variant={ModalVariant.small}
       >
-        <div>
-          <TextRed>{message}</TextRed>
-        </div>
-        <div className="pf-v6-u-mt-md">
-          <Button variant="secondary" className="pf-v6-u-mr-xs" onClick={hide}>
+        <ModalHeader>
+          <span style={{ color: t_global_color_status_danger_default.var }}>
+            {title}
+          </span>
+        </ModalHeader>
+        <ModalBody>
+          <span style={{ color: t_global_color_status_danger_default.var }}>
+            {message}
+          </span>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="secondary" onClick={hide}>
             {cancelButton}
           </Button>
           <Button
@@ -53,7 +60,7 @@ export default function ConfirmDeleteModal({
           >
             {okButton}
           </Button>
-        </div>
+        </ModalFooter>
       </Modal>
       {children(show)}
     </>

@@ -1,10 +1,11 @@
-import MainPage from "pages/MainPage";
 import { Breadcrumb } from "ui";
 import {
   Button,
   Card,
   CardBody,
+  Content,
   DatePicker,
+  PageSection,
   Toolbar,
   ToolbarContent,
   ToolbarFilter,
@@ -209,19 +210,18 @@ export default function TasksDurationPerJobPage() {
     .slice(-maxJobs);
 
   return (
-    <MainPage
-      title="Tasks duration per job"
-      description="Select your topic and remoteci to see duration of tasks per job."
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            { title: "Jobs tasks duration" },
-          ]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          { title: "Jobs tasks duration" },
+        ]}
+      />
+      <Content component="h1">Tasks duration per job</Content>
+      <Content component="p">
+        Select your topic and remoteci to see duration of tasks per job
+      </Content>
       <Card>
         <CardBody>
           <Toolbar
@@ -280,84 +280,76 @@ export default function TasksDurationPerJobPage() {
           </Toolbar>
         </CardBody>
       </Card>
-      <Card className="pf-v6-u-mt-lg">
-        <CardBody>
-          {filteredData.length === 0 ? null : (
-            <>
-              <div
-                style={{ width: "100%", minHeight: "400px", height: "400px" }}
+      {filteredData.length === 0 ? null : (
+        <Card className="pf-v6-u-mt-lg">
+          <CardBody>
+            <div style={{ width: "100%", minHeight: "400px", height: "400px" }}>
+              <Graph data={filteredData} />
+            </div>
+            <div className="pf-v6-u-p-xl">
+              <Table
+                variant="compact"
+                className="pf-v6-c-tablepf-m-grid-md"
+                role="grid"
+                aria-label="Job Legend"
               >
-                <Graph data={filteredData} />
-              </div>
-              <div className="pf-v6-u-p-xl">
-                <Table
-                  variant="compact"
-                  className="pf-v6-c-tablepf-m-grid-md"
-                  role="grid"
-                  aria-label="Job Legend"
-                >
-                  <Thead>
-                    <Tr role="row">
-                      <Th role="columnheader" scope="col">
-                        id
-                      </Th>
-                      <Th role="columnheader" scope="col">
-                        name
-                      </Th>
-                      <Th role="columnheader" scope="col">
-                        status
-                      </Th>
-                      <Th role="columnheader" scope="col">
-                        created
-                      </Th>
-                      <Th
-                        className="text-center"
-                        role="columnheader"
-                        scope="col"
+                <Thead>
+                  <Tr role="row">
+                    <Th role="columnheader" scope="col">
+                      id
+                    </Th>
+                    <Th role="columnheader" scope="col">
+                      name
+                    </Th>
+                    <Th role="columnheader" scope="col">
+                      status
+                    </Th>
+                    <Th role="columnheader" scope="col">
+                      created
+                    </Th>
+                    <Th className="text-center" role="columnheader" scope="col">
+                      Job link
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {filteredData.map((d, i) => (
+                    <Tr key={i} role="row">
+                      <Td
+                        role="cell"
+                        data-label="Job id"
+                        style={{ color: colors[i % colors.length] }}
                       >
-                        Job link
-                      </Th>
+                        {d.id}
+                      </Td>
+                      <Td role="cell" data-label="Job name">
+                        {d.name}
+                      </Td>
+                      <Td role="cell" data-label="Job status">
+                        {d.status}
+                      </Td>
+                      <Td role="cell" data-label="Job created at">
+                        <time title={d.created_at} dateTime={d.created_at}>
+                          {formatDate(d.created_at)}
+                        </time>
+                      </Td>
+                      <Td
+                        className="text-center"
+                        role="cell"
+                        data-label="Job status"
+                      >
+                        <Link to={`/jobs/${d.id}/jobStates`}>
+                          <LinkIcon />
+                        </Link>
+                      </Td>
                     </Tr>
-                  </Thead>
-                  <Tbody>
-                    {filteredData.map((d, i) => (
-                      <Tr key={i} role="row">
-                        <Td
-                          role="cell"
-                          data-label="Job id"
-                          style={{ color: colors[i % colors.length] }}
-                        >
-                          {d.id}
-                        </Td>
-                        <Td role="cell" data-label="Job name">
-                          {d.name}
-                        </Td>
-                        <Td role="cell" data-label="Job status">
-                          {d.status}
-                        </Td>
-                        <Td role="cell" data-label="Job created at">
-                          <time title={d.created_at} dateTime={d.created_at}>
-                            {formatDate(d.created_at)}
-                          </time>
-                        </Td>
-                        <Td
-                          className="text-center"
-                          role="cell"
-                          data-label="Job status"
-                        >
-                          <Link to={`/jobs/${d.id}/jobStates`}>
-                            <LinkIcon />
-                          </Link>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </div>
-            </>
-          )}
-        </CardBody>
-      </Card>
-    </MainPage>
+                  ))}
+                </Tbody>
+              </Table>
+            </div>
+          </CardBody>
+        </Card>
+      )}
+    </PageSection>
   );
 }

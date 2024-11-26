@@ -69,7 +69,6 @@ export default function FilesList({ job }: FilesListProps) {
             </ToolbarItem>
             <ToolbarItem>
               <Button
-                size="sm"
                 variant="primary"
                 icon={
                   isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />

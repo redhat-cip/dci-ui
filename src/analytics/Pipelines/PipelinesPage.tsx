@@ -1,5 +1,4 @@
 import {
-  Bullseye,
   Button,
   Card,
   CardBody,
@@ -17,9 +16,10 @@ import {
   CardHeader,
   Truncate,
   ToolbarGroup,
+  PageSection,
+  Content,
 } from "@patternfly/react-core";
-import { BlinkLogo, Breadcrumb } from "ui";
-import MainPage from "pages/MainPage";
+import { Breadcrumb } from "ui";
 import {
   t_global_border_color_default,
   t_global_color_nonstatus_green_100,
@@ -45,6 +45,7 @@ import { notEmpty } from "services/utils";
 import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -170,7 +171,6 @@ function PipelineCard({
             <Button
               type="button"
               variant="tertiary"
-              size="sm"
               onClick={() => {
                 setSeeJobComponents(!seeJobComponents);
               }}
@@ -374,20 +374,20 @@ export default function PipelinesPage() {
     }
   }, [range]);
 
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
   return (
-    <MainPage
-      title="Pipelines"
-      description=""
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            { title: "Pipelines" },
-          ]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          { title: "Pipelines" },
+        ]}
+      />
+      <Content component="h1">Pipelines</Content>
       <Card>
         <CardBody>
           <Toolbar
@@ -470,15 +470,7 @@ export default function PipelinesPage() {
           </Toolbar>
         </CardBody>
       </Card>
-      {isLoading ? (
-        <Card className="pf-v6-u-mt-md">
-          <CardBody>
-            <Bullseye>
-              <BlinkLogo />
-            </Bullseye>
-          </CardBody>
-        </Card>
-      ) : pipelines === null ? (
+      {pipelines === null ? (
         <Card className="pf-v6-u-mt-md">
           <CardBody>
             <EmptyState
@@ -495,6 +487,6 @@ export default function PipelinesPage() {
       ) : (
         <PipelinesTable pipelines={pipelines} />
       )}
-    </MainPage>
+    </PageSection>
   );
 }

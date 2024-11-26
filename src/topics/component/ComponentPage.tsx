@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import MainPage from "pages/MainPage";
 import {
   Card,
   CardBody,
@@ -15,6 +14,7 @@ import {
   Skeleton,
   Content,
   ContentVariants,
+  PageSection,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
 import {
@@ -40,12 +40,13 @@ import { getTopicIcon } from "ui/icons";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTeamQuery } from "teams/teamsApi";
 import { useGetTopicQuery } from "topics/topicsApi";
+import LoadingPageSection from "ui/LoadingPageSection";
 
-interface IEmbedJobProps {
+interface IComponentJobProps {
   job: IJob;
 }
 
-function EmbedJob({ job }: IEmbedJobProps) {
+function ComponentJob({ job }: IComponentJobProps) {
   return (
     <div>
       <Grid hasGutter>
@@ -174,7 +175,6 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
               onClick={() => setSeeData(false)}
               type="button"
               variant="tertiary"
-              size="sm"
             >
               hide content
             </Button>
@@ -183,7 +183,6 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
               onClick={() => setSeeData(true)}
               type="button"
               variant="tertiary"
-              size="sm"
             >
               see content
             </Button>
@@ -288,131 +287,123 @@ function convertComponentWithJobInComponentCoverage(
 
 export default function ComponentPage() {
   const { topic_id, component_id } = useParams();
-  const [isFetching, setIsFetching] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
   const getComponentCallback = useCallback(() => {
     if (component_id) {
       fetchComponent(component_id)
         .then((response) => setComponent(response.data.component))
-        .finally(() => setIsFetching(false));
+        .finally(() => setIsLoading(false));
     }
-  }, [component_id, setIsFetching]);
+  }, [component_id, setIsLoading]);
 
   useEffect(() => {
     getComponentCallback();
   }, [getComponentCallback]);
 
-  if (!component_id || !topic_id) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (!component) {
+    return (
+      <EmptyState
+        title="There is no component"
+        info={`There is not component with id ${component_id}`}
+      />
+    );
+  }
 
   return (
-    <MainPage
-      title={component ? `Component ${component.display_name}` : "Component"}
-      loading={isFetching && component === null}
-      empty={!isFetching && component === null}
-      description={
-        component
-          ? `Details page for component ${component.display_name}`
-          : "Details page"
-      }
-      EmptyComponent={
-        <EmptyState
-          title="There is no component"
-          info={`There is not component with id ${component_id}`}
-        />
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/topics", title: "Topics" },
-            { to: `/topics/${topic_id}/components`, title: topic_id },
-            { to: `/topics/${topic_id}/components`, title: "Components" },
-            {
-              to: `/topics/${topic_id}/components/${component_id}`,
-              title: component_id,
-            },
-          ]}
-        />
-      }
-    >
-      {component === null ? null : (
-        <>
-          <Grid hasGutter>
-            <GridItem span={3}>
-              <StatHeaderCard
-                title={component.jobs.length.toString()}
-                subTitle="Number of jobs"
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/topics", title: "Topics" },
+          { to: `/topics/${topic_id}/components`, title: topic_id },
+          { to: `/topics/${topic_id}/components`, title: "Components" },
+          {
+            to: `/topics/${topic_id}/components/${component_id}`,
+            title: component_id,
+          },
+        ]}
+      />
+      <Content component="h1">{`Component ${component.display_name}`}</Content>
+      <Content component="p">{`Details page for component ${component.display_name}`}</Content>
+      <Grid hasGutter>
+        <GridItem span={3}>
+          <StatHeaderCard
+            title={component.jobs.length.toString()}
+            subTitle="Number of jobs"
+          />
+        </GridItem>
+        <GridItem span={3}>
+          <StatHeaderCard
+            title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
+            subTitle="Percentage of successful jobs"
+          />
+        </GridItem>
+        <GridItem span={3}>
+          <StatHeaderCard
+            title={
+              component.jobs.length === 0
+                ? "no job"
+                : fromNow(component.jobs[0].created_at) || ""
+            }
+            subTitle="Latest run"
+          />
+        </GridItem>
+        <GridItem span={3}>
+          <Card>
+            <CardBody style={{ paddingBottom: "8px" }}>
+              <Content component={ContentVariants.h6}>Latest jobs</Content>
+              <LastComponentsJobsBarChart
+                component={convertComponentWithJobInComponentCoverage(
+                  component,
+                )}
               />
-            </GridItem>
-            <GridItem span={3}>
-              <StatHeaderCard
-                title={`${getPercentageOfSuccessfulJobs(component.jobs)}%`}
-                subTitle="Percentage of successful jobs"
-              />
-            </GridItem>
-            <GridItem span={3}>
-              <StatHeaderCard
-                title={
-                  component.jobs.length === 0
-                    ? "no job"
-                    : fromNow(component.jobs[0].created_at) || ""
-                }
-                subTitle="Latest run"
-              />
-            </GridItem>
-            <GridItem span={3}>
-              <Card>
-                <CardBody style={{ paddingBottom: "8px" }}>
-                  <Content component={ContentVariants.h6}>Latest jobs</Content>
-                  <LastComponentsJobsBarChart
-                    component={convertComponentWithJobInComponentCoverage(
-                      component,
-                    )}
-                  />
-                </CardBody>
-              </Card>
-            </GridItem>
-          </Grid>
-
-          <Card className="pf-v6-u-mt-md">
-            <CardBody>
-              <ComponentDetails key={component.etag} component={component} />
             </CardBody>
           </Card>
+        </GridItem>
+      </Grid>
 
-          <Card className="pf-v6-u-mt-md">
-            <CardBody>
-              <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
-                Jobs
-              </Title>
-              <div className="pf-v6-u-p-md">
-                <Grid hasGutter>
-                  <GridItem span={3}>Job name</GridItem>
-                  <GridItem span={2}>Status</GridItem>
-                  <GridItem span={3}>tags</GridItem>
-                  <GridItem span={2}>Duration</GridItem>
-                  <GridItem span={2}>Created At</GridItem>
-                </Grid>
-              </div>
-              {component.jobs.length === 0 ? (
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <ComponentDetails key={component.etag} component={component} />
+        </CardBody>
+      </Card>
+
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
+            Jobs
+          </Title>
+          <div className="pf-v6-u-p-md">
+            <Grid hasGutter>
+              <GridItem span={3}>Job name</GridItem>
+              <GridItem span={2}>Status</GridItem>
+              <GridItem span={3}>tags</GridItem>
+              <GridItem span={2}>Duration</GridItem>
+              <GridItem span={2}>Created At</GridItem>
+            </Grid>
+          </div>
+          {component.jobs.length === 0 ? (
+            <div className="pf-v6-u-p-md">
+              <Divider /> There is no job attached to this component
+            </div>
+          ) : (
+            sortByNewestFirst(component.jobs).map((job, index) => (
+              <div key={index}>
+                <Divider />
                 <div className="pf-v6-u-p-md">
-                  <Divider /> There is no job attached to this component
+                  <ComponentJob job={job} />
                 </div>
-              ) : (
-                sortByNewestFirst(component.jobs).map((job, index) => (
-                  <div key={index}>
-                    <Divider />
-                    <div className="pf-v6-u-p-md">
-                      <EmbedJob job={job} />
-                    </div>
-                  </div>
-                ))
-              )}
-            </CardBody>
-          </Card>
-        </>
-      )}
-    </MainPage>
+              </div>
+            ))
+          )}
+        </CardBody>
+      </Card>
+    </PageSection>
   );
 }

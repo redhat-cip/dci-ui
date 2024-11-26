@@ -16,7 +16,7 @@ import {
 } from "@patternfly/react-core";
 import { useNavigate } from "react-router-dom";
 
-export type JobContextProps = {
+type JobContextProps = {
   job: IEnhancedJob;
 };
 

@@ -9,11 +9,11 @@ export type JobPerRemoteciStat = {
   stats: IStat[];
 };
 
-export type JobPerRemoteciStats = {
+type JobPerRemoteciStats = {
   [key: string]: JobPerRemoteciStat;
 };
 
-export function getStats(): Promise<JobPerRemoteciStats> {
+export function getStats(): Promise<JobPerRemoteciStat[]> {
   const request = {
     method: "get",
     url: `/api/v1/stats`,
@@ -34,7 +34,7 @@ export function getStats(): Promise<JobPerRemoteciStats> {
       acc[productId] = currentProduct;
       return acc;
     }, {} as JobPerRemoteciStats);
-    return Promise.resolve(productsStats);
+    return Promise.resolve(Object.values(productsStats));
   });
 }
 

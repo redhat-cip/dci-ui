@@ -41,7 +41,7 @@ export const Categories = [
   "Pipeline id",
 ] as const;
 
-export type Category = (typeof Categories)[number];
+type Category = (typeof Categories)[number];
 
 type JobsToolbarProps = {
   jobsCount: number;

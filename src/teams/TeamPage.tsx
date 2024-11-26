@@ -12,17 +12,15 @@ import {
   Skeleton,
   Switch,
   Popover,
+  PageSection,
 } from "@patternfly/react-core";
 import { TrashAltIcon, EditAltIcon, HelpIcon } from "@patternfly/react-icons";
-import { ConfirmDeleteModal, Breadcrumb } from "ui";
+import { ConfirmDeleteModal, Breadcrumb, EmptyState } from "ui";
 import { IProduct, ITeam } from "types";
 import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { t_global_color_nonstatus_red_200 } from "@patternfly/react-tokens";
+import { t_global_color_status_danger_default } from "@patternfly/react-tokens";
 import EditTeamModal from "./EditTeamModal";
 import CardLine from "ui/CardLine";
-import MainPage from "pages/MainPage";
-import LoadingPage from "pages/LoadingPage";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { getProductIcon } from "ui/icons";
 import TeamMembers from "./TeamMembers";
@@ -38,18 +36,7 @@ import {
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useListProductsQuery } from "products/productsApi";
 import { useAuth } from "auth/authSelectors";
-
-const DangerZone = styled.div`
-  border: 1px solid ${t_global_color_nonstatus_red_200.value};
-  padding: 1rem;
-  border-radius: 0.5rem;
-`;
-
-const DangerZoneRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+import LoadingPageSection from "ui/LoadingPageSection";
 
 function ProductsTeamHasAccessTo({ team }: { team: ITeam }) {
   const { data, isLoading } = useListProductsQuery();
@@ -77,25 +64,20 @@ function ProductsTeamHasAccessTo({ team }: { team: ITeam }) {
       <CardTitle>
         Product access
         <Popover bodyContent="If a product is checked, then the team has access to all released components of the product.">
-          <button
+          <Button
             type="button"
+            variant="plain"
+            icon={<HelpIcon />}
             aria-label="More info on product access"
             onClick={(e) => e.preventDefault()}
-            className="pf-v6-c-form__group-label-help pf-v6-u-ml-sm"
-          >
-            <HelpIcon />
-          </button>
+          />
         </Popover>
       </CardTitle>
       <CardBody>
         {isLoading ? (
           <Skeleton screenreaderText="Loading products the team has access to" />
         ) : (
-          <Table
-            variant="compact"
-            className="pf-v6-c-tablepf-m-grid-md"
-            style={{ maxWidth: 400 }}
-          >
+          <Table variant="compact" borders={false}>
             <Thead>
               <Tr>
                 <Th />
@@ -103,6 +85,14 @@ function ProductsTeamHasAccessTo({ team }: { team: ITeam }) {
               </Tr>
             </Thead>
             <Tbody>
+              {data.products.length === 0 && (
+                <Tr>
+                  <Td colSpan={-1}>
+                    There is no product available. Please contact a Distributed
+                    CI administrator
+                  </Td>
+                </Tr>
+              )}
               {data.products.map((product) => {
                 const ProductIcon = getProductIcon(product.name);
                 return (
@@ -158,30 +148,31 @@ export default function TeamPage() {
   const [updateTeam, { isLoading: isUpdating }] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
 
-  if (!team_id || !team) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
 
-  const breadcrumb = (
-    <Breadcrumb
-      links={[
-        { to: "/", title: "DCI" },
-        { to: "/teams", title: "Teams" },
-        { to: `/teams/${team_id}`, title: team_id },
-      ]}
-    />
-  );
+  if (currentUser === null) return null;
 
-  if (team === null) {
-    return <LoadingPage />;
+  if (!team) {
+    return <EmptyState title="No team" info={`Team ${team_id} not found`} />;
   }
 
   return (
-    <MainPage
-      title={`Team ${team.name}`}
-      description={team ? `Details page for team ${team.name}` : "Details page"}
-      isLoading={isLoading}
-      Breadcrumb={breadcrumb}
-      HeaderButton={
-        currentUser?.isSuperAdmin && team ? (
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/teams", title: "Teams" },
+          { to: `/teams/${team_id}`, title: team_id },
+        ]}
+      />
+      <Content component="h1">{`Team ${team.name}`}</Content>
+      <Content component="p">
+        {team ? `Details page for team ${team.name}` : "Details page"}
+      </Content>
+      {currentUser.isSuperAdmin && (
+        <div className="pf-v6-u-mb-md">
           <EditTeamModal team={team} onSubmit={updateTeam}>
             {(openModal) => (
               <Button
@@ -194,9 +185,8 @@ export default function TeamPage() {
               </Button>
             )}
           </EditTeamModal>
-        ) : null
-      }
-    >
+        </div>
+      )}
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>
@@ -241,41 +231,37 @@ export default function TeamPage() {
           </Card>
           <TeamMembers team={team} className="pf-v6-u-mt-lg" />
           <Card className="pf-v6-u-mt-lg">
-            <CardTitle>Danger Zone</CardTitle>
+            <CardTitle>
+              <span
+                style={{ color: t_global_color_status_danger_default.value }}
+              >
+                {`Delete ${team.name} team`}
+              </span>
+            </CardTitle>
             <CardBody>
-              <DangerZone>
-                <DangerZoneRow>
-                  <div>
-                    <Content>
-                      <Content component="h2">{`Delete ${team.name} team`}</Content>
-                      <Content component="p">
-                        Once you delete a team, there is no going back. Please
-                        be certain.
-                      </Content>
-                    </Content>
-                  </div>
-                  <div>
-                    <ConfirmDeleteModal
-                      title={`Delete team ${team.name}`}
-                      message={`Are you sure you want to delete ${team.name} team?`}
-                      onOk={() =>
-                        deleteTeam(team).then(() => navigate("/teams"))
-                      }
-                    >
-                      {(openModal) => (
-                        <Button
-                          icon={<TrashAltIcon className="pf-v6-u-mr-sm" />}
-                          variant="danger"
-                          size="sm"
-                          onClick={openModal}
-                        >
-                          Delete this team
-                        </Button>
-                      )}
-                    </ConfirmDeleteModal>
-                  </div>
-                </DangerZoneRow>
-              </DangerZone>
+              <Content
+                component="p"
+                style={{ color: t_global_color_status_danger_default.value }}
+              >
+                Once you delete a team, there is no going back. Please be
+                certain.
+              </Content>
+
+              <ConfirmDeleteModal
+                title={`Delete team ${team.name}`}
+                message={`Are you sure you want to delete ${team.name} team?`}
+                onOk={() => deleteTeam(team).then(() => navigate("/teams"))}
+              >
+                {(openModal) => (
+                  <Button
+                    icon={<TrashAltIcon className="pf-v6-u-mr-sm" />}
+                    variant="danger"
+                    onClick={openModal}
+                  >
+                    Delete this team
+                  </Button>
+                )}
+              </ConfirmDeleteModal>
             </CardBody>
           </Card>
         </GridItem>
@@ -284,6 +270,6 @@ export default function TeamPage() {
           <TeamComponentsPermissions className="pf-v6-u-mt-lg" team={team} />
         </GridItem>
       </Grid>
-    </MainPage>
+    </PageSection>
   );
 }

@@ -10,6 +10,8 @@ import {
   CodeBlockCode,
   CodeBlockAction,
   CardTitle,
+  PageSection,
+  Content,
 } from "@patternfly/react-core";
 import { Breadcrumb, CopyButton, EmptyState, StateLabel } from "ui";
 import { ITopic } from "types";
@@ -17,12 +19,12 @@ import { useParams } from "react-router-dom";
 import CardLine from "ui/CardLine";
 import { useGetTopicQuery, useUpdateTopicMutation } from "./topicsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
-import MainPage from "pages/MainPage";
 import EditTopicModal from "./EditTopicModal";
 import { useListProductsQuery } from "products/productsApi";
 import ComponentsTableWithToolbar from "./ComponentsTableWithToolbar";
 import { fromNow } from "services/date";
 import { useAuth } from "auth/authSelectors";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 function TopicDetails({ topic }: { topic: ITopic }) {
   const [seeData, setSeeData] = useState(false);
@@ -80,7 +82,6 @@ function TopicDetails({ topic }: { topic: ITopic }) {
                 onClick={() => setSeeData(false)}
                 type="button"
                 variant="tertiary"
-                size="sm"
               >
                 hide content
               </Button>
@@ -89,7 +90,6 @@ function TopicDetails({ topic }: { topic: ITopic }) {
                 onClick={() => setSeeData(true)}
                 type="button"
                 variant="tertiary"
-                size="sm"
               >
                 see content
               </Button>
@@ -126,50 +126,48 @@ export default function TopicPage() {
   const { data: topic, isLoading } = useGetTopicQuery(
     topic_id ? topic_id : skipToken,
   );
-  const { data: dataProducts, isLoading: isLoadingProducts } =
-    useListProductsQuery();
+  const { data: dataProducts } = useListProductsQuery();
 
-  if (!topic_id || !topic || !dataProducts) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (!topic) {
+    return (
+      <EmptyState
+        title="There is no topic"
+        info={`There is not topic with id ${topic_id}`}
+      />
+    );
+  }
+
+  if (!dataProducts) {
+    return <EmptyState title="There is no products" />;
+  }
 
   return (
-    <MainPage
-      title={topic ? `Topic ${topic.name}` : "Topic"}
-      description={
-        topic ? `Details page for topic ${topic.name}` : "Details page"
-      }
-      loading={isLoading && isLoadingProducts}
-      HeaderButton={
-        currentUser?.isSuperAdmin && topic ? (
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/topics", title: "Topics" },
+          { to: `/topics/${topic_id}/components`, title: topic_id },
+        ]}
+      />
+      <Content component="h1">{`Topic ${topic.name}`}</Content>
+      <Content component="p">{`Details page for topic ${topic.name}`}</Content>
+      {currentUser?.isSuperAdmin ? (
+        <div className="pf-v6-u-mb-md">
           <EditTopicModal
             products={dataProducts.products}
             topic={topic}
             onSubmit={updateTopic}
             isDisabled={isUpdating}
           />
-        ) : null
-      }
-      EmptyComponent={
-        <EmptyState
-          title="There is no topic"
-          info={`There is not topic with id ${topic_id}`}
-        />
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/topics", title: "Topics" },
-            { to: `/topics/${topic_id}/components`, title: topic_id },
-          ]}
-        />
-      }
-    >
-      {topic === null ? null : (
-        <>
-          <TopicDetails topic={topic} />
-          <ComponentsTableWithToolbar topic={topic} />
-        </>
-      )}
-    </MainPage>
+        </div>
+      ) : null}
+      <TopicDetails topic={topic} />
+      <ComponentsTableWithToolbar topic={topic} />
+    </PageSection>
   );
 }

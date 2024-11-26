@@ -1,31 +1,10 @@
-export type IResourceName =
-  | "jobstate"
-  | "team"
-  | "remoteci"
-  | "user"
-  | "product"
-  | "topic"
-  | "feeder"
-  | "job";
-
-export type IResourcesName =
-  | IResourceName
-  | "jobstates"
-  | "teams"
-  | "remotecis"
-  | "users"
-  | "products"
-  | "topics"
-  | "feeders"
-  | "jobs";
-
-export interface Resource {
+interface Resource {
   id: string;
   etag: string;
   name: string;
 }
 
-export type dataField = {
+type dataField = {
   [x: string]: any;
 };
 
@@ -40,27 +19,11 @@ export interface ITeam extends Resource {
   topics: ITopic[];
 }
 
-export interface ITeamsById {
-  [id: string]: ITeam;
-}
-
-export interface IEnhancedTeam extends ITeam {
-  from_now: string | null;
-}
-
 export interface IProduct extends Resource {
   label: string;
   description: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface IProductsById {
-  [id: string]: IProduct;
-}
-
-export interface IEnhancedProduct extends IProduct {
-  from_now: string | null;
 }
 
 export interface IRemoteci extends Resource {
@@ -71,15 +34,6 @@ export interface IRemoteci extends Resource {
   api_secret: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface IRemotecisById {
-  [id: string]: IRemoteci;
-}
-
-export interface IEnhancedRemoteci extends IRemoteci {
-  team: ITeam | null;
-  from_now: string | null;
 }
 
 export interface ITopic extends Resource {
@@ -93,16 +47,9 @@ export interface ITopic extends Resource {
   next_topic_id: string | null;
 }
 
-export interface ITopicsById {
-  [id: string]: ITopic;
-}
 export interface IEnhancedTopic extends ITopic {
   product: IProduct | null;
   from_now: string | null;
-}
-
-export interface ITopicWithTeams extends ITopic {
-  teams: ITeam[];
 }
 
 export interface IUser extends Resource {
@@ -116,14 +63,6 @@ export interface IUser extends Resource {
   password: string;
 }
 
-export interface IUsersById {
-  [id: string]: IUser;
-}
-
-export interface IEnhancedUser extends IUser {
-  from_now: string | null;
-}
-
 export interface IFeeder extends Resource {
   team_id: string;
   created_at: string;
@@ -131,15 +70,6 @@ export interface IFeeder extends Resource {
   api_secret: string;
   data: dataField;
   state: state;
-}
-
-export interface IFeedersById {
-  [id: string]: IFeeder;
-}
-
-export interface IEnhancedFeeder extends IFeeder {
-  team: ITeam;
-  from_now: string | null;
 }
 
 export const JobStatuses = [
@@ -156,41 +86,6 @@ export const JobStatuses = [
 export type IJobStatus = (typeof JobStatuses)[number];
 
 export const FinalJobStatuses = ["success", "failure", "error", "killed"];
-
-export type IFinalJobStatuses = (typeof FinalJobStatuses)[number];
-
-export interface IPaginationFilters {
-  page: number;
-  perPage: number;
-}
-
-export interface IJobFilters extends IPaginationFilters {
-  team_id: string | null;
-  product_id: string | null;
-  topic_id: string | null;
-  remoteci_id: string | null;
-  configuration: string | null;
-  tags: string[];
-  status: IJobStatus | null;
-  name: string | null;
-  query: string | null;
-}
-
-export interface IUserFilters extends IPaginationFilters {
-  email: string | null;
-  sort?: string;
-}
-
-export type PatternflyFilters = {
-  teams: string[];
-  products: string[];
-  topics: string[];
-  remotecis: string[];
-  tags: string[];
-  status: IJobStatus[];
-  page: number;
-  perPage: number;
-};
 
 export interface IIdentityTeam {
   has_pre_release_access: boolean;
@@ -230,15 +125,7 @@ export type ICurrentUserWithPasswordsFields = ICurrentUser & {
   new_password: string;
 };
 
-export type DCIListParams = {
-  limit: number;
-  offset: number;
-  where?: string;
-  sort?: string;
-  query?: string;
-};
-
-export type StatJob = {
+type StatJob = {
   created_at: string;
   id: string;
   remoteci_name: string;
@@ -294,7 +181,7 @@ export interface ITestCase {
   value: string;
 }
 
-export interface ITestSuite {
+interface ITestSuite {
   additions: number;
   deletions: number;
   unchanged: number;
@@ -399,7 +286,7 @@ export interface IResult {
 
 export interface IPipeline extends Resource {}
 
-export interface IKeyValue {
+interface IKeyValue {
   key: string;
   value: number;
 }
@@ -443,10 +330,6 @@ export interface JobNode extends IJob {
   index: number;
 }
 
-export interface IJobsById {
-  [id: string]: IJob;
-}
-
 export interface IComponent {
   id: string;
   etag: string;
@@ -463,27 +346,6 @@ export interface IComponent {
   created_at: string;
   updated_at: string;
   released_at: string;
-}
-
-export interface IEmbedJob {
-  id: string;
-  etag: string;
-  data: string;
-  client_version: string | null;
-  comment: string | null;
-  duration: number;
-  previous_job_id: string | null;
-  product_id: string;
-  remoteci_id: string;
-  state: string;
-  status: IJobStatus;
-  tags: string[] | null;
-  team_id: string;
-  topic_id: string;
-  update_previous_job_id: string | null;
-  created_at: string;
-  updated_at: string;
-  user_agent: string;
 }
 
 export interface IComponentWithJobs extends IComponent {
@@ -508,17 +370,6 @@ export interface IAlert {
 export interface IToken {
   type: "Bearer" | "Basic";
   value: string;
-}
-
-export interface IAlertsState {
-  [x: string]: IAlert;
-}
-
-export interface IApiState {
-  byId: { [x: string]: any };
-  allIds: string[];
-  isFetching: boolean;
-  count: number;
 }
 
 export interface IDataFromES {

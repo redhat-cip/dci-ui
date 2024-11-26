@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import MainPage from "pages/MainPage";
-import { getStats, JobPerRemoteciStats } from "./latestJobStatusActions";
-import { isEmpty } from "lodash";
+import { getStats, JobPerRemoteciStat } from "./latestJobStatusActions";
 import {
   Gallery,
   GalleryItem,
@@ -11,14 +9,17 @@ import {
   Grid,
   GridItem,
   Icon,
+  PageSection,
+  Content,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
 import { getProductIcon } from "ui/icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import LoadingPageSection from "ui/LoadingPageSection";
 
-export const ProductTitle = styled.h3`
+const ProductTitle = styled.h3`
   display: flex;
   align-items: center;
   margin-bottom: 1em;
@@ -26,7 +27,7 @@ export const ProductTitle = styled.h3`
 
 export default function LatestJobStatusPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState<JobPerRemoteciStats>({});
+  const [products, setProducts] = useState<JobPerRemoteciStat[]>([]);
 
   useEffect(() => {
     getStats().then((products) => {
@@ -35,66 +36,68 @@ export default function LatestJobStatusPage() {
     });
   }, []);
 
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
   return (
-    <MainPage
-      title="Latest jobs status"
-      description="See the latest jobs status per topic and per remoteci"
-      loading={isLoading && isEmpty(products)}
-      empty={!isLoading && isEmpty(products)}
-      EmptyComponent={
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          { title: "Latest Jobs Status" },
+        ]}
+      />
+      <Content component="h1">Latest jobs status</Content>
+      <Content component="p">
+        See the latest jobs status per topic and per remoteci
+      </Content>
+      {products.length === 0 ? (
         <EmptyState
           title="This page is empty"
           info="There is no information to display in this page at the moment. If you think this is an error contact the DCI team."
         />
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            { title: "Latest Jobs Status" },
-          ]}
-        />
-      }
-    >
-      <Grid hasGutter>
-        {Object.values(products).map((product) => {
-          const ProductIcon = getProductIcon(product.name);
-          return (
-            <GridItem key={product.id} span={12} className="pf-v6-u-mb-xl">
-              <ProductTitle>
-                <span className="pf-v6-u-mr-xs">
-                  <Icon size="md">
-                    <ProductIcon />
-                  </Icon>
-                </span>
-                {product.name}
-              </ProductTitle>
-              <Gallery hasGutter key={product.id}>
-                {product.stats.map((stat, index) => (
-                  <GalleryItem key={index}>
-                    <Card
-                      title="Click to see detailed stats for this topic"
-                      className="pointer"
-                    >
-                      <CardBody>
-                        <Title headingLevel="h6" size="md">
-                          <Link
-                            to={`/analytics/latest_jobs_status/${stat.topic.name}`}
-                          >
-                            {stat.topic.name}
-                          </Link>
-                        </Title>
-                        <NbOfJobsChart stat={stat} />
-                      </CardBody>
-                    </Card>
-                  </GalleryItem>
-                ))}
-              </Gallery>
-            </GridItem>
-          );
-        })}
-      </Grid>
-    </MainPage>
+      ) : (
+        <Grid hasGutter>
+          {products.map((product) => {
+            const ProductIcon = getProductIcon(product.name);
+            return (
+              <GridItem key={product.id} span={12} className="pf-v6-u-mb-xl">
+                <ProductTitle>
+                  <span className="pf-v6-u-mr-xs">
+                    <Icon size="md">
+                      <ProductIcon />
+                    </Icon>
+                  </span>
+                  {product.name}
+                </ProductTitle>
+                <Gallery hasGutter key={product.id}>
+                  {product.stats.map((stat, index) => (
+                    <GalleryItem key={index}>
+                      <Card
+                        title="Click to see detailed stats for this topic"
+                        className="pointer"
+                      >
+                        <CardBody>
+                          <Title headingLevel="h6" size="md">
+                            <Link
+                              to={`/analytics/latest_jobs_status/${stat.topic.name}`}
+                            >
+                              {stat.topic.name}
+                            </Link>
+                          </Title>
+                          <NbOfJobsChart stat={stat} />
+                        </CardBody>
+                      </Card>
+                    </GalleryItem>
+                  ))}
+                </Gallery>
+              </GridItem>
+            );
+          })}
+        </Grid>
+      )}
+    </PageSection>
   );
 }

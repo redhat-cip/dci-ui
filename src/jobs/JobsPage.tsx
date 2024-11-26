@@ -1,15 +1,13 @@
 import { useEffect, useState, useRef } from "react";
-import { EmptyState, Breadcrumb, BlinkLogo } from "ui";
+import { EmptyState, Breadcrumb } from "ui";
 import JobsTableList from "./jobsTableList/JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Bullseye,
-  PageSection,
-  PageSectionVariants,
   Pagination,
   PaginationVariant,
   Content,
+  PageSection,
 } from "@patternfly/react-core";
 import { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
@@ -23,6 +21,7 @@ import {
   getDefaultFilters,
 } from "services/filters";
 import { useListJobsQuery } from "./jobsApi";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function JobsPage() {
   const { currentUser } = useAuth();
@@ -64,77 +63,62 @@ export default function JobsPage() {
   );
   useTitle("DCI > Jobs");
 
-  if (!data || currentUser === null) return null;
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (!data) {
+    return <EmptyState title="No job" info="There is no job at the moment." />;
+  }
 
   const count = data._meta.count;
 
   return (
-    <div ref={jobsPageDivRef}>
-      <section className="pf-v6-c-page__main-breadcrumb">
-        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
-      </section>
-      <PageSection hasBodyWrapper={false}>
-        <Content>
-          <Content component="h1">Jobs</Content>
-        </Content>
-      </PageSection>
-      <PageSection hasBodyWrapper={false} variant={PageSectionVariants.default}>
-        <JobsToolbar
-          jobsCount={count}
-          filters={filters}
-          setFilters={setFilters}
-          clearAllFilters={() => setFilters(getDefaultFilters())}
-          refresh={refetch}
-          tableViewColumns={tableViewColumns}
-          setTableViewColumns={setTableViewColumns}
+    <PageSection ref={jobsPageDivRef}>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
+      <Content component="h1">Jobs</Content>
+      <JobsToolbar
+        jobsCount={count}
+        filters={filters}
+        setFilters={setFilters}
+        clearAllFilters={() => setFilters(getDefaultFilters())}
+        refresh={refetch}
+        tableViewColumns={tableViewColumns}
+        setTableViewColumns={setTableViewColumns}
+      />
+      {count === 0 ? (
+        <EmptyState
+          title="No job"
+          info="No results match the filter criteria. Clear all filters and try again."
         />
-        {isLoading && (
-          <PageSection
-            hasBodyWrapper={false}
-            variant={PageSectionVariants.default}
-            style={{ height: "80vh" }}
-            isFilled={true}
-          >
-            <Bullseye>
-              <BlinkLogo />
-            </Bullseye>
-          </PageSection>
-        )}
-        {!isLoading && count === 0 && (
-          <EmptyState
-            title="No job"
-            info="There is no job at the moment. Edit your filters to restart a search."
+      ) : (
+        <div>
+          <JobsTableList
+            filters={filters}
+            setFilters={setFilters}
+            jobs={data.jobs}
+            columns={tableViewColumns}
           />
-        )}
-        <JobsTableList
-          filters={filters}
-          setFilters={setFilters}
-          jobs={data.jobs}
-          columns={tableViewColumns}
-        />
-        {count > 0 && (
-          <div>
-            <Pagination
-              className="pf-v6-u-px-md"
-              perPage={filters.limit}
-              page={offsetAndLimitToPage(filters.offset, filters.limit)}
-              itemCount={count}
-              variant={PaginationVariant.bottom}
-              onSetPage={(e, newPage) => {
-                jobsPageDivRef?.current?.scrollIntoView();
-                setFilters({
-                  ...filters,
-                  offset: pageAndLimitToOffset(newPage, filters.limit),
-                });
-              }}
-              onPerPageSelect={(e, newPerPage) => {
-                jobsPageDivRef?.current?.scrollIntoView();
-                setFilters({ ...filters, limit: newPerPage });
-              }}
-            />
-          </div>
-        )}
-      </PageSection>
-    </div>
+          <Pagination
+            className="pf-v6-u-px-md"
+            perPage={filters.limit}
+            page={offsetAndLimitToPage(filters.offset, filters.limit)}
+            itemCount={count}
+            variant={PaginationVariant.bottom}
+            onSetPage={(e, newPage) => {
+              jobsPageDivRef?.current?.scrollIntoView();
+              setFilters({
+                ...filters,
+                offset: pageAndLimitToOffset(newPage, filters.limit),
+              });
+            }}
+            onPerPageSelect={(e, newPerPage) => {
+              jobsPageDivRef?.current?.scrollIntoView();
+              setFilters({ ...filters, limit: newPerPage });
+            }}
+          />
+        </div>
+      )}
+    </PageSection>
   );
 }

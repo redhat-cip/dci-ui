@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import MainPage from "pages/MainPage";
 import {
   CardBody,
   Card,
@@ -8,9 +7,9 @@ import {
   Label,
   Content,
   ContentVariants,
+  PageSection,
 } from "@patternfly/react-core";
 import { useParams, Link } from "react-router-dom";
-import { isEmpty } from "lodash";
 import { IStat } from "types";
 import { getStat } from "./latestJobStatusActions";
 import { EmptyState, Breadcrumb } from "ui";
@@ -25,6 +24,7 @@ import {
   Tbody,
   Td,
 } from "@patternfly/react-table";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 type StatHeaderCardProps = {
   title: string;
@@ -140,61 +140,60 @@ export default function LatestJobStatusDetailsPage() {
 
   if (!topic_name) return null;
 
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
   return (
-    <MainPage
-      title={`Latest stats for ${topic_name}`}
-      description=""
-      loading={isLoading && isEmpty(stat)}
-      empty={!isLoading && isEmpty(stat)}
-      EmptyComponent={
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          {
+            to: "/analytics/latest_jobs_status",
+            title: "Latest Jobs Status",
+          },
+          { title: topic_name },
+        ]}
+      />
+      <Content component="h1">{`Latest stats for ${topic_name}`}</Content>
+      {stat === null ? (
         <EmptyState
           title={`There is no stats for ${topic_name}`}
           info="Add some jobs to see some info for this topic"
         />
-      }
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            {
-              to: "/analytics/latest_jobs_status",
-              title: "Latest Jobs Status",
-            },
-            { title: topic_name },
-          ]}
-        />
-      }
-    >
-      <Grid hasGutter>
-        <GridItem span={4}>
-          {stat && (
-            <StatHeaderCard
-              title={stat.nbOfJobs.toString()}
-              subTitle="Number of jobs"
-            />
-          )}
-        </GridItem>
-        <GridItem span={4}>
-          {stat && (
-            <StatHeaderCard
-              title={`${stat.percentageOfSuccess}%`}
-              subTitle="Percentage of successful jobs"
-            />
-          )}
-        </GridItem>
-        <GridItem span={4}>
-          {stat && (
-            <StatHeaderCard
-              title={fromNow(stat.jobs[0].created_at) || ""}
-              subTitle="Latest run"
-            />
-          )}
-        </GridItem>
-        <GridItem span={12}>
-          <ListOfJobsCard stat={stat} />
-        </GridItem>
-      </Grid>
-    </MainPage>
+      ) : (
+        <Grid hasGutter>
+          <GridItem span={4}>
+            {stat && (
+              <StatHeaderCard
+                title={stat.nbOfJobs.toString()}
+                subTitle="Number of jobs"
+              />
+            )}
+          </GridItem>
+          <GridItem span={4}>
+            {stat && (
+              <StatHeaderCard
+                title={`${stat.percentageOfSuccess}%`}
+                subTitle="Percentage of successful jobs"
+              />
+            )}
+          </GridItem>
+          <GridItem span={4}>
+            {stat && (
+              <StatHeaderCard
+                title={fromNow(stat.jobs[0].created_at) || ""}
+                subTitle="Latest run"
+              />
+            )}
+          </GridItem>
+          <GridItem span={12}>
+            <ListOfJobsCard stat={stat} />
+          </GridItem>
+        </Grid>
+      )}
+    </PageSection>
   );
 }

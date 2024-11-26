@@ -82,7 +82,6 @@ export default function AddUserToTeamModal({
                   <Td>{user.email}</Td>
                   <Td className="pf-v6-c-table__action">
                     <Button
-                      size="sm"
                       variant="primary"
                       onClick={() => {
                         onClear();

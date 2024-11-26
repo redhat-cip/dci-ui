@@ -41,7 +41,6 @@ export default function File({ file }: FileProps) {
       <Td>{file.mime}</Td>
       <Td className="text-center">
         <Button
-          size="sm"
           variant="primary"
           icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
           onClick={() => {
@@ -62,7 +61,6 @@ export default function File({ file }: FileProps) {
           download
         </Button>
         <Button
-          size="sm"
           variant="secondary"
           icon={<ExternalLinkAltIcon />}
           className="pf-v6-u-mr-xs"
@@ -76,7 +74,6 @@ export default function File({ file }: FileProps) {
         <SeeFileContentModal file={file}>
           {(show) => (
             <Button
-              size="sm"
               variant="secondary"
               icon={<EyeIcon />}
               onClick={show}

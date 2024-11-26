@@ -1,29 +1,41 @@
-import { Grid, GridItem, Card, CardBody } from "@patternfly/react-core";
-import MainPage from "pages/MainPage";
+import {
+  Grid,
+  GridItem,
+  Card,
+  CardBody,
+  PageSection,
+  Content,
+} from "@patternfly/react-core";
 import CreateFeederForm from "./CreateFeederForm";
 import { useNavigate } from "react-router-dom";
-import { Breadcrumb } from "ui";
+import { Breadcrumb, EmptyState } from "ui";
 import { useListTeamsQuery } from "teams/teamsApi";
 import { useCreateFeederMutation } from "feeders/feedersApi";
+import LoadingPageSection from "ui/LoadingPageSection";
 
 export default function CreateFeederPage() {
-  const [createFeeder, { isLoading: isCreating }] = useCreateFeederMutation();
+  const [createFeeder] = useCreateFeederMutation();
   const { data: dataTeams, isLoading: isLoadingTeams } = useListTeamsQuery();
   const navigate = useNavigate();
 
-  if (!dataTeams) return null;
+  if (isLoadingTeams) {
+    return <LoadingPageSection />;
+  }
+
+  if (!dataTeams) {
+    return <EmptyState title="There is no teams" />;
+  }
 
   return (
-    <MainPage
-      title="Create a feeder"
-      description=""
-      isLoading={isLoadingTeams || isCreating}
-      Breadcrumb={
-        <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "Create a feeder" }]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/feeders", title: "Feeders" },
+          { title: "Create a feeder" },
+        ]}
+      />
+      <Content component="h1">Create a feeder</Content>
       <Grid hasGutter>
         <GridItem span={6}>
           <Card>
@@ -38,6 +50,6 @@ export default function CreateFeederPage() {
           </Card>
         </GridItem>
       </Grid>
-    </MainPage>
+    </PageSection>
   );
 }

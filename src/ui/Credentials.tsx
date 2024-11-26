@@ -99,7 +99,6 @@ export function SeeAuthentificationFileModal({
         </div>
       </Modal>
       <Button
-        size="sm"
         variant="secondary"
         onClick={() => setShow(true)}
         className={className}

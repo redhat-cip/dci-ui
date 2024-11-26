@@ -218,5 +218,3 @@ export const injectDeleteEndpoint = <T extends { id: string; etag: string }>(
   });
   return entityApi;
 };
-
-export default api;

@@ -7,7 +7,7 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import { isEmpty, values } from "lodash";
+import { values } from "lodash";
 import {
   Nav,
   NavGroup,
@@ -46,14 +46,13 @@ import {
   BarsIcon,
   QuestionCircleIcon,
   UserIcon,
-  UsersIcon,
 } from "@patternfly/react-icons";
 import { useTheme } from "ui/Theme/themeContext";
 import NotAuthenticatedLoadingPage from "./NotAuthenticatedLoadingPage";
 import { loggedOut } from "auth/authSlice";
 import { useAppDispatch } from "store";
 import { useAuth } from "auth/authSelectors";
-import { useGetCurrentUserQuery } from "auth/authApi";
+import { changeCurrentTeam, useGetCurrentUserQuery } from "auth/authApi";
 
 function UserDropdownMenuMobile() {
   const dispatch = useAppDispatch();
@@ -105,7 +104,6 @@ function UserDropdownMenu() {
   const navigate = useNavigate();
 
   if (currentUser === null) return null;
-  const hasMultipleTeams = currentUser.teams.length > 1;
 
   return (
     <Dropdown
@@ -127,17 +125,10 @@ function UserDropdownMenu() {
           <Content component={ContentVariants.small}>Email:</Content>
           <Content component="p">{currentUser.email}</Content>
         </DropdownItem>
-        <DropdownItem
-          key="team"
-          onClick={() => hasMultipleTeams && alert("change me")}
-          isDisabled={!hasMultipleTeams}
-          style={{
-            cursor: hasMultipleTeams ? "cursor" : "default",
-          }}
-        >
+        <DropdownItem key="team" component="div" isDisabled>
           <Content component={ContentVariants.small}>Team:</Content>
           <Content component="p">
-            {currentUser.team ? currentUser.team.name : ""}
+            {currentUser.team ? currentUser.team.name : "no team"}
           </Content>
         </DropdownItem>
         <Divider component="li" />
@@ -160,6 +151,62 @@ function UserDropdownMenu() {
         </DropdownItem>
       </DropdownList>
     </Dropdown>
+  );
+}
+
+function UserTeamToolbarItem() {
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (currentUser === null) return null;
+  if (currentUser.teams.length === 0) return null;
+
+  const currentTeam = currentUser.team;
+  if (currentUser.teams.length === 1) {
+    return (
+      <ToolbarItem style={{ padding: "0.5rem" }}>
+        Team {currentTeam?.name}
+      </ToolbarItem>
+    );
+  }
+
+  return (
+    <ToolbarItem>
+      <Dropdown
+        isOpen={isOpen}
+        onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
+        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          <MenuToggle
+            isFullHeight
+            ref={toggleRef}
+            onClick={() => setIsOpen(!isOpen)}
+            isExpanded={isOpen}
+          >
+            Team {currentTeam?.name}
+          </MenuToggle>
+        )}
+      >
+        <DropdownList>
+          <DropdownItem component="div" isDisabled>
+            <Content component={ContentVariants.small}>Change team:</Content>
+          </DropdownItem>
+          {currentUser.teams.map((team) => (
+            <DropdownItem
+              key={team.id}
+              isDisabled={currentTeam?.id === team.id}
+              component="button"
+              onClick={() => {
+                changeCurrentTeam(team);
+                navigate(0);
+              }}
+            >
+              {team.name}
+            </DropdownItem>
+          ))}
+        </DropdownList>
+      </Dropdown>
+    </ToolbarItem>
   );
 }
 
@@ -186,11 +233,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
   const { isDark, toggleColor } = useTheme();
   const { currentUser } = useAuth();
 
-  if (currentUser === null) {
-    return null;
-  }
-  const hasAtLeastOneTeam = currentUser.teams.length >= 1;
-  const hasMultipleTeams = currentUser.teams.length > 1;
+  if (currentUser === null) return null;
 
   return (
     <>
@@ -230,15 +273,6 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 <ToolbarItem>
                   <DCIDocLinkIcon />
                 </ToolbarItem>
-                {hasMultipleTeams && (
-                  <ToolbarItem>
-                    <Button
-                      icon={<UsersIcon />}
-                      variant="plain"
-                      onClick={() => alert("change me and bottom also v")}
-                    />
-                  </ToolbarItem>
-                )}
                 <ToolbarItem>
                   <UserDropdownMenuMobile />
                 </ToolbarItem>
@@ -291,20 +325,7 @@ function Header({ toggleSidebarVisibility }: HeaderProps) {
                 <ToolbarItem>
                   <DCIDocLinkIcon />
                 </ToolbarItem>
-                {hasAtLeastOneTeam && (
-                  <ToolbarItem>
-                    <Button
-                      icon={currentUser.team?.name}
-                      variant="plain"
-                      onClick={() =>
-                        hasMultipleTeams && alert("change me and top also v")
-                      }
-                      style={{
-                        cursor: hasMultipleTeams ? "cursor" : "default",
-                      }}
-                    />
-                  </ToolbarItem>
-                )}
+                <UserTeamToolbarItem />
                 <ToolbarItem>
                   <UserDropdownMenu />
                 </ToolbarItem>
@@ -354,7 +375,7 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         <DCINavItem to="/products">Products</DCINavItem>
         <DCINavItem to="/topics">Topics</DCINavItem>
         <DCINavItem to="/components">Components</DCINavItem>
-        {isEmpty(currentUserTeams) ? null : (
+        {currentUserTeams.length === 0 ? null : (
           <DCINavItem to="/remotecis">Remotecis</DCINavItem>
         )}
       </NavGroup>

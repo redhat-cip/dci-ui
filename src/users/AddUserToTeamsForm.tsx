@@ -51,7 +51,7 @@ export default function AddUserToTeamForm({
               <FlexItem>team</FlexItem>
               <FlexItem>
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   type="submit"
                   isDisabled={!(isValid && dirty)}
                   {...props}

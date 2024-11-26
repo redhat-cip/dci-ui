@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardBody,
+  Content,
   Drawer,
   DrawerActions,
   DrawerCloseButton,
@@ -13,6 +14,7 @@ import {
   DrawerPanelContent,
   Label,
   LabelGroup,
+  PageSection,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -28,7 +30,6 @@ import { IComponentCoverageESData, ITopic, IComponentCoverage } from "types";
 import { buildComponentCoverage } from "./componentCoverage";
 import http from "services/http";
 import { showAPIError } from "alerts/alertsSlice";
-import MainPage from "pages/MainPage";
 import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
 import {
   InfoCircleIcon,
@@ -75,7 +76,7 @@ export function createCoverageSearchFromFilters(filters: ICoverageFilters) {
   );
 }
 
-export function getAllComponentTypes(topic: ITopic) {
+function getAllComponentTypes(topic: ITopic) {
   // tasks_components_coverage returns latest components one per type
   return http
     .get(`/api/v1/analytics/tasks_components_coverage?topic_id=${topic.id}`)
@@ -168,19 +169,19 @@ export default function ComponentCoveragePage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <MainPage
-      title="Component coverage"
-      description="See which components has been tested. Table of components and associated jobs."
-      Breadcrumb={
-        <Breadcrumb
-          links={[
-            { to: "/", title: "DCI" },
-            { to: "/analytics", title: "Analytics" },
-            { title: "Component coverage" },
-          ]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb
+        links={[
+          { to: "/", title: "DCI" },
+          { to: "/analytics", title: "Analytics" },
+          { title: "Component coverage" },
+        ]}
+      />
+      <Content component="h1">Component coverage</Content>
+      <Content component="p">
+        See which components has been tested. Table of components and associated
+        jobs.
+      </Content>
       <Card>
         <CardBody>
           <Toolbar
@@ -498,6 +499,6 @@ export default function ComponentCoveragePage() {
           )}
         </CardBody>
       </Card>
-    </MainPage>
+    </PageSection>
   );
 }

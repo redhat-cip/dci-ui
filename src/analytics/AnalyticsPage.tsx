@@ -1,4 +1,3 @@
-import MainPage from "pages/MainPage";
 import {
   Card,
   Gallery,
@@ -6,6 +5,8 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
+  PageSection,
+  Content,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { useNavigate } from "react-router-dom";
@@ -24,15 +25,13 @@ export default function AnalyticsPage() {
   if (currentUser === null) return null;
 
   return (
-    <MainPage
-      title="Analytics"
-      description="DCI Analytics is a service offered by DCI that helps you understand your data."
-      Breadcrumb={
-        <Breadcrumb
-          links={[{ to: "/", title: "DCI" }, { title: "Analytics" }]}
-        />
-      }
-    >
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Analytics" }]} />
+      <Content component="h1">Analytics</Content>
+      <Content component="p">
+        DCI Analytics is a service offered by DCI that helps you understand your
+        data.
+      </Content>
       <Gallery hasGutter>
         {currentUser.hasReadOnlyRole && (
           <GalleryItem>
@@ -155,6 +154,6 @@ export default function AnalyticsPage() {
           </Card>
         </GalleryItem>
       </Gallery>
-    </MainPage>
+    </PageSection>
   );
 }
