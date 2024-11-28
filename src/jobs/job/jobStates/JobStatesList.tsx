@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import JobStateRow from "./JobStateFile";
 import { EmptyState } from "ui";
 import { getFileContent } from "jobs/job/files/filesActions";
-import { IEnhancedJob } from "types";
+import { IEnhancedJob, IJobStateWithDuration } from "types";
 import { humanizeDuration } from "services/date";
 import {
   Button,
@@ -17,6 +17,7 @@ import {
   CodeBlock,
   CodeBlockAction,
   CodeBlockCode,
+  Content,
 } from "@patternfly/react-core";
 import {
   SortAmountDownIcon,
@@ -27,7 +28,19 @@ import {
 import JobStateStepper from "./JobStateStepper";
 import { showError } from "alerts/alertsSlice";
 import { useAppDispatch } from "store";
-type AnsibleTaskFilter = "date" | "duration";
+
+function JobStateName(jobstate: IJobStateWithDuration) {
+  let jobStateName = `Job state ${jobstate.status}`;
+  if (jobstate.duration > 0) {
+    jobStateName += ` (${humanizeDuration(jobstate.duration * 1000)})`;
+  }
+
+  return (
+    <span title={`${Math.round(jobstate.duration)} seconds`}>
+      {jobStateName}
+    </span>
+  );
+}
 
 interface JobStatesListProps {
   job: IEnhancedJob;
@@ -36,6 +49,8 @@ interface JobStatesListProps {
 export default function JobStatesList({ job }: JobStatesListProps) {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  type AnsibleTaskFilter = "date" | "duration";
   const [sort, setSort] = useState<AnsibleTaskFilter>(
     (searchParams.get("sort") as AnsibleTaskFilter) || "date",
   );
@@ -76,12 +91,10 @@ export default function JobStatesList({ job }: JobStatesListProps) {
     );
   }
 
-  const jobStates = addDuration(addPipelineStatus(job.jobstates)).filter(
-    (jobState) => jobState.files.length !== 0,
-  );
+  const jobStates = addDuration(addPipelineStatus(job.jobstates));
 
   const seeRawLogAction = (
-    <CodeBlockAction>
+    <CodeBlockAction key="raw-log-action">
       <Button
         variant="plain"
         aria-label="Play icon"
@@ -110,7 +123,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
   );
 
   const sortAction = (
-    <CodeBlockAction>
+    <CodeBlockAction key="sort-action">
       <Button
         variant="plain"
         aria-label="Play icon"
@@ -125,7 +138,7 @@ export default function JobStatesList({ job }: JobStatesListProps) {
           }
         }}
       >
-        {sort === "date" ? "Filter by date" : "Filter by duration"}
+        {sort === "date" ? "Filter by duration" : "Filter by date"}
       </Button>
     </CodeBlockAction>
   );
@@ -150,18 +163,9 @@ export default function JobStatesList({ job }: JobStatesListProps) {
             {sort === "date" ? (
               jobStates.map((jobstate, i) => (
                 <div key={i}>
-                  <div
-                    style={{
-                      fontSize: 14,
-                      marginBottom: ".5em",
-                    }}
-                  >
-                    <span title={`${Math.round(jobstate.duration)} seconds`}>
-                      {`Job state ${jobstate.status} (~${humanizeDuration(
-                        jobstate.duration * 1000,
-                      )})`}
-                    </span>
-                  </div>
+                  <Content component="h6">{JobStateName(jobstate)}</Content>
+                  {jobstate.files.length === 0 &&
+                    "This job state does not contain any tasks."}
                   <ul style={{ listStyle: "none" }} className="pf-v6-u-mb-md">
                     {jobstate.files.map((file, j) => (
                       <JobStateRow
@@ -181,22 +185,24 @@ export default function JobStatesList({ job }: JobStatesListProps) {
                 </div>
               ))
             ) : (
-              <ul style={{ listStyle: "none" }} className="pf-v6-u-mb-md">
-                {getLongerTaskFirst(jobStates).map((file, j) => (
-                  <JobStateRow
-                    key={j}
-                    file={file}
-                    isSelected={selectedTaskId === file.id}
-                    onClick={(seeDetails) => {
-                      if (seeDetails) {
-                        setSelectedTaskId(file.id);
-                      } else {
-                        setSelectedTaskId(null);
-                      }
-                    }}
-                  />
-                ))}
-              </ul>
+              <div>
+                <ul style={{ listStyle: "none" }} className="pf-v6-u-mb-md">
+                  {getLongerTaskFirst(jobStates).map((file, j) => (
+                    <JobStateRow
+                      key={j}
+                      file={file}
+                      isSelected={selectedTaskId === file.id}
+                      onClick={(seeDetails) => {
+                        if (seeDetails) {
+                          setSelectedTaskId(file.id);
+                        } else {
+                          setSelectedTaskId(null);
+                        }
+                      }}
+                    />
+                  ))}
+                </ul>
+              </div>
             )}
           </CodeBlockCode>
         </CodeBlock>

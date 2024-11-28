@@ -27,12 +27,12 @@ export default function JobStateStepper({
               key={i}
               variant={jobState.pipelineStatus}
               id={jobState.status}
+              titleId={`${jobState.status}-title`}
             >
               <Button
                 variant="link"
-                onClick={() => {
-                  jobStateSelected(jobState);
-                }}
+                isDisabled={jobState.files.length === 0}
+                onClick={() => jobStateSelected(jobState)}
               >
                 {jobState.status}
               </Button>

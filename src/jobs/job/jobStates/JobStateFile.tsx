@@ -20,7 +20,7 @@ import {
   t_global_text_color_nonstatus_on_red_default,
 } from "@patternfly/react-tokens";
 
-const TaskButton = styled.li`
+const TaskButton = styled.span`
   display: flex;
   justify-content: space-between;
   padding: 0;
@@ -62,7 +62,7 @@ export default function JobStateRow({
   isSelected,
   onClick,
 }: JobStateRowProps) {
-  const divRef = useRef<HTMLDivElement>(null);
+  const liRef = useRef<HTMLLIElement>(null);
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
@@ -87,16 +87,16 @@ export default function JobStateRow({
   useEffect(() => {
     if (isSelected) {
       setSeeDetails(true);
-      divRef.current?.scrollIntoView();
+      liRef.current?.scrollIntoView();
     }
-  }, [isSelected, setSeeDetails, divRef]);
+  }, [isSelected, setSeeDetails, liRef]);
 
   const title = buildFileTitle(file.name);
   const fileDuration = `${Math.round(file.duration)}s`;
   const fileIsEmpty = isFileEmpty(file);
   const fileStatus = getFileStatus(file);
   return (
-    <div id={file.id} ref={divRef}>
+    <li id={file.id} ref={liRef}>
       <TaskButton
         onClick={() => {
           if (!fileIsEmpty) {
@@ -144,6 +144,6 @@ export default function JobStateRow({
                   .map((line, i) => <div key={i}>{line}</div>)}
         </div>
       ) : null}
-    </div>
+    </li>
   );
 }
