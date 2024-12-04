@@ -6,9 +6,12 @@ import {
   injectUpdateEndpoint,
   api,
 } from "api";
-import type { IEnhancedJob, IJob, ITest } from "../types";
-import { getResults } from "./job/tests/testsApi";
-import { getJobStatesWithFiles } from "./job/jobStates/jobStatesApi";
+import type {
+  IEnhancedJob,
+  IGetJobStates,
+  IGetTestsResults,
+  IJob,
+} from "../types";
 import { sortByName } from "services/sort";
 
 const resource = "Job";
@@ -18,25 +21,32 @@ export const { useDeleteJobMutation } = injectDeleteEndpoint<IJob>(resource);
 export const { useListJobsQuery } = injectListEndpoint<IJob>(resource);
 export const { useUpdateJobMutation } = injectUpdateEndpoint<IJob>(resource);
 export const { useGetEnhancedJobQuery } = api
-  .enhanceEndpoints({
-    addTagTypes: ["EnhancedJob", resource],
-  })
+  .enhanceEndpoints({ addTagTypes: ["EnhancedJob", resource] })
   .injectEndpoints({
     endpoints: (builder) => ({
       getEnhancedJob: builder.query<IEnhancedJob, string>({
         async queryFn(jobId, _queryApi, _extraOptions, fetchWithBQ) {
-          const getJob = await fetchWithBQ(`/jobs/${jobId}`);
-          if (getJob.error)
-            return { error: getJob.error as FetchBaseQueryError };
           try {
+            const getJob = await fetchWithBQ(`/jobs/${jobId}`);
+            if (getJob.error) {
+              return { error: getJob.error as FetchBaseQueryError };
+            }
             const data = getJob.data as { job: IJob };
             const job = data.job;
-            const q1 = await getResults(job);
-            const q2 = await getJobStatesWithFiles(job);
+            const getResults = await fetchWithBQ(`/jobs/${job.id}/results`);
+            if (getResults.error) {
+              return { error: getResults.error as FetchBaseQueryError };
+            }
+            const resultsData = getResults.data as IGetTestsResults;
+            const getJobState = await fetchWithBQ(`/jobs/${job.id}/jobstates`);
+            if (getJobState.error) {
+              return { error: getJobState.error as FetchBaseQueryError };
+            }
+            const jobStatesData = getJobState.data as IGetJobStates;
             const enhancedJob = {
               ...job,
-              tests: sortByName<ITest>(q1.data.results),
-              jobstates: q2.data.jobstates,
+              tests: sortByName(resultsData.results),
+              jobstates: jobStatesData.jobstates,
             };
             return { data: enhancedJob as IEnhancedJob };
           } catch (error: unknown) {

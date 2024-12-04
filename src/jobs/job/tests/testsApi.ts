@@ -1,10 +1,12 @@
-import { AxiosPromise } from "axios";
-import http from "services/http";
-import { IJob, IGetTestsResults } from "types";
+import { api } from "api";
+import { IGetJunitTestSuites } from "types";
 
-export function getResults(job: IJob): AxiosPromise<IGetTestsResults> {
-  return http({
-    method: "get",
-    url: `/api/v1/jobs/${job.id}/results`,
+export const { useGetJunitQuery } = api
+  .enhanceEndpoints({ addTagTypes: ["Tests", "File"] })
+  .injectEndpoints({
+    endpoints: (builder) => ({
+      getJunit: builder.query<IGetJunitTestSuites, string>({
+        query: (id) => `/files/${id}/junit`,
+      }),
+    }),
   });
-}

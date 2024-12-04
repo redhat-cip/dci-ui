@@ -12,7 +12,7 @@ import { Mutex } from "async-mutex";
 import { manager } from "auth/sso";
 import { loggedOut } from "auth/authSlice";
 
-const baseUrl =
+export const baseUrl =
   process.env.REACT_APP_BACKEND_HOST || "https://api.distributed-ci.io";
 
 const mutex = new Mutex();
@@ -82,14 +82,13 @@ export const injectListEndpoint = <T extends { id: string }>(
   resourceName: Resource,
 ) => {
   const route = `${resourceName.toLowerCase()}s`;
-  const enhancedApi = api.enhanceEndpoints({ addTagTypes: [resourceName] });
   interface Api<T> {
     [route: string]: T[];
   }
   type ListResponse<T> = Api<T> & {
     _meta: { count: number };
   };
-  const entityApi = enhancedApi.injectEndpoints({
+  return api.enhanceEndpoints({ addTagTypes: [resourceName] }).injectEndpoints({
     endpoints: (builder) => ({
       [`list${resourceName}s`]: builder.query<
         ListResponse<T>,
@@ -113,7 +112,6 @@ export const injectListEndpoint = <T extends { id: string }>(
       }),
     }),
   });
-  return entityApi;
 };
 
 export const injectCreateEndpoint = <T extends { id: string }>(
@@ -121,11 +119,10 @@ export const injectCreateEndpoint = <T extends { id: string }>(
 ) => {
   const resourceNameLowercase = resourceName.toLowerCase();
   const route = `${resourceNameLowercase}s`;
-  const enhancedApi = api.enhanceEndpoints({ addTagTypes: [resourceName] });
   interface ApiGet<T> {
     [resourceNameLowercase: string]: T;
   }
-  const entityApi = enhancedApi.injectEndpoints({
+  return api.enhanceEndpoints({ addTagTypes: [resourceName] }).injectEndpoints({
     endpoints: (builder) => ({
       [`create${resourceName}`]: builder.mutation<T, Partial<T>>({
         query(body) {
@@ -141,7 +138,6 @@ export const injectCreateEndpoint = <T extends { id: string }>(
       }),
     }),
   });
-  return entityApi;
 };
 
 export const injectGetEndpoint = <T extends { id: string }>(
@@ -152,8 +148,7 @@ export const injectGetEndpoint = <T extends { id: string }>(
   interface ApiGet<T> {
     [resourceNameLowercase: string]: T;
   }
-  const enhancedApi = api.enhanceEndpoints({ addTagTypes: [resourceName] });
-  const entityApi = enhancedApi.injectEndpoints({
+  return api.enhanceEndpoints({ addTagTypes: [resourceName] }).injectEndpoints({
     endpoints: (builder) => ({
       [`get${resourceName}`]: builder.query<T, string | null>({
         query: (id) => `/${route}/${id}`,
@@ -164,15 +159,13 @@ export const injectGetEndpoint = <T extends { id: string }>(
       }),
     }),
   });
-  return entityApi;
 };
 
 export const injectUpdateEndpoint = <T extends { id: string; etag: string }>(
   resourceName: Resource,
 ) => {
   const route = `${resourceName.toLowerCase()}s`;
-  const enhancedApi = api.enhanceEndpoints({ addTagTypes: [resourceName] });
-  const entityApi = enhancedApi.injectEndpoints({
+  return api.enhanceEndpoints({ addTagTypes: [resourceName] }).injectEndpoints({
     endpoints: (builder) => ({
       [`update${resourceName}`]: builder.mutation<T, Partial<T>>({
         query(data) {
@@ -190,15 +183,13 @@ export const injectUpdateEndpoint = <T extends { id: string; etag: string }>(
       }),
     }),
   });
-  return entityApi;
 };
 
 export const injectDeleteEndpoint = <T extends { id: string; etag: string }>(
   resourceName: Resource,
 ) => {
   const route = `${resourceName.toLowerCase()}s`;
-  const enhancedApi = api.enhanceEndpoints({ addTagTypes: [resourceName] });
-  const entityApi = enhancedApi.injectEndpoints({
+  return api.enhanceEndpoints({ addTagTypes: [resourceName] }).injectEndpoints({
     endpoints: (builder) => ({
       [`delete${resourceName}`]: builder.mutation<
         { success: boolean; id: string },
@@ -216,5 +207,4 @@ export const injectDeleteEndpoint = <T extends { id: string; etag: string }>(
       }),
     }),
   });
-  return entityApi;
 };

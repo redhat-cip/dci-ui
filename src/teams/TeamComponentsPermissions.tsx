@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -11,11 +10,6 @@ import {
   EmptyStateBody,
   Content,
 } from "@patternfly/react-core";
-import {
-  addRemoteTeamPermissionForTheTeam,
-  getComponentsPermissions,
-  removeRemoteTeamPermissionForTheTeam,
-} from "./teamsApi";
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal } from "ui";
 import { useAppDispatch } from "store";
@@ -25,34 +19,93 @@ import AddRemoteTeamPermissionModal from "./AddRemoteTeamPermissionModal";
 import { sortByName } from "services/sort";
 import { showError, showSuccess } from "alerts/alertsSlice";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import {
+  useAddTeamPermissionForTeamMutation,
+  useGetComponentsPermissionsQuery,
+  useRemoveTeamPermissionForTeamMutation,
+} from "./teamsApi";
+
+function TeamComponentsPermissionsTable({ team }: { team: ITeam }) {
+  const { data, isLoading, isFetching } = useGetComponentsPermissionsQuery(
+    team.id,
+  );
+  const [removeRemoteTeamPermissionForTheTeam] =
+    useRemoveTeamPermissionForTeamMutation();
+  if (isLoading || isFetching) {
+    return (
+      <Skeleton screenreaderText="Loading team's components permissions" />
+    );
+  }
+
+  if (!data) {
+    return (
+      <Bullseye>
+        <EmptyState variant={EmptyStateVariant.sm}>
+          <EmptyStateBody>
+            {`The ${team.name} team does not have any special access.`}
+          </EmptyStateBody>
+        </EmptyState>
+      </Bullseye>
+    );
+  }
+
+  return (
+    <>
+      <Content component="p">
+        The {team.name} team has access to the components of the following
+        teams:
+      </Content>
+      <Table borders={false}>
+        <Thead>
+          <Tr>
+            <Th>Team name</Th>
+            <Th screenReaderText="Actions" />
+          </Tr>
+        </Thead>
+        <Tbody>
+          {sortByName(data).map((remoteTeam) => (
+            <Tr key={remoteTeam.id}>
+              <Td>
+                <Link to={`/teams/${remoteTeam.id}`}>{remoteTeam.name}</Link>
+              </Td>
+              <Td isActionCell>
+                <ConfirmDeleteModal
+                  title={`Remove ${remoteTeam.name} access to ${team.name}`}
+                  message={`Are you sure you want to remove user ${remoteTeam.name} access? ${team.name} will not be able to see ${remoteTeam.name} component.`}
+                  onOk={() => {
+                    removeRemoteTeamPermissionForTheTeam({ remoteTeam, team });
+                  }}
+                >
+                  {(openModal) => (
+                    <Button
+                      icon={<MinusCircleIcon />}
+                      variant="danger"
+                      onClick={openModal}
+                    ></Button>
+                  )}
+                </ConfirmDeleteModal>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </>
+  );
+}
 
 export default function TeamComponentsPermissions({
   team,
-  className = "",
+  ...props
 }: {
   team: ITeam;
-  className?: string;
+  [k: string]: any;
 }) {
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(true);
-  const [teamsTheTeamHasAccessTo, setTeamsTheTeamHasAccessTo] = useState<
-    ITeam[]
-  >([]);
-
-  const _getComponentsPermissions = useCallback((team: ITeam) => {
-    getComponentsPermissions(team)
-      .then(setTeamsTheTeamHasAccessTo)
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    _getComponentsPermissions(team);
-  }, [team, _getComponentsPermissions]);
+  const [addRemoteTeamPermissionForTheTeam] =
+    useAddTeamPermissionForTeamMutation();
 
   return (
-    <Card className={className}>
+    <Card {...props}>
       <CardTitle>
         <div
           style={{
@@ -66,9 +119,8 @@ export default function TeamComponentsPermissions({
             <AddRemoteTeamPermissionModal
               team={team}
               onTeamSelected={(remoteTeam) => {
-                addRemoteTeamPermissionForTheTeam(remoteTeam, team)
+                addRemoteTeamPermissionForTheTeam({ remoteTeam, team })
                   .then((response) => {
-                    _getComponentsPermissions(team);
                     dispatch(
                       showSuccess(
                         `${team.name} team can see component of ${remoteTeam.name} team.`,
@@ -101,67 +153,7 @@ export default function TeamComponentsPermissions({
         </div>
       </CardTitle>
       <CardBody>
-        {isLoading ? (
-          <Skeleton screenreaderText="Loading team's components permissions" />
-        ) : (
-          <>
-            {teamsTheTeamHasAccessTo.length === 0 ? (
-              <Bullseye>
-                <EmptyState variant={EmptyStateVariant.sm}>
-                  <EmptyStateBody>
-                    {`The ${team.name} team does not have any special access.`}{" "}
-                  </EmptyStateBody>
-                </EmptyState>
-              </Bullseye>
-            ) : (
-              <>
-                <Content component="p">
-                  The {team.name} team has access to the following team
-                  components:
-                </Content>
-                <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
-                  <Thead>
-                    <Tr>
-                      <Th>Team name</Th>
-                      <Th />
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {sortByName(teamsTheTeamHasAccessTo).map((remoteTeam) => (
-                      <Tr key={remoteTeam.id}>
-                        <Td>
-                          <Link to={`/teams/${remoteTeam.id}`}>
-                            {remoteTeam.name}
-                          </Link>
-                        </Td>
-                        <Td className="pf-v6-c-table__action">
-                          <ConfirmDeleteModal
-                            title={`Remove ${remoteTeam.name} access to ${team.name}`}
-                            message={`Are you sure you want to remove user ${remoteTeam.name} access? ${team.name} will not be able to see ${remoteTeam.name} component.`}
-                            onOk={() => {
-                              removeRemoteTeamPermissionForTheTeam(
-                                remoteTeam,
-                                team,
-                              ).then(() => _getComponentsPermissions(team));
-                            }}
-                          >
-                            {(openModal) => (
-                              <Button
-                                icon={<MinusCircleIcon />}
-                                variant="danger"
-                                onClick={openModal}
-                              ></Button>
-                            )}
-                          </ConfirmDeleteModal>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </>
-            )}
-          </>
-        )}
+        <TeamComponentsPermissionsTable team={team} />
       </CardBody>
     </Card>
   );

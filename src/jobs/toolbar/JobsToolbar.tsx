@@ -30,7 +30,7 @@ import TableViewColumnsSelect from "./TableViewColumnsSelect";
 import { offsetAndLimitToPage, pageAndLimitToOffset } from "services/filters";
 import { isUUID } from "services/utils";
 
-export const Categories = [
+const Categories = [
   "Remoteci",
   "Team",
   "Product",

@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { ITestCase, ITestCaseActionState, ITestCaseActionType } from "types";
 import { CopyButton } from "ui";
 
-export function TestCaseIcon({ action }: { action: ITestCaseActionType }) {
+function TestCaseIcon({ action }: { action: ITestCaseActionType }) {
   switch (action) {
     case "skipped":
       return (

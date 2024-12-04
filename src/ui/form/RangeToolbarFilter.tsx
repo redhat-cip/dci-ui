@@ -69,6 +69,7 @@ export default function RangeToolbarFilter({
               <DatePicker
                 value={after}
                 placeholder="Created after"
+                appendTo={() => document.body}
                 onChange={(e, newAfterDate) =>
                   onChange(range, newAfterDate, before)
                 }
@@ -76,6 +77,7 @@ export default function RangeToolbarFilter({
               <DatePicker
                 value={before}
                 placeholder="Before"
+                appendTo={() => document.body}
                 onChange={(e, newBeforeDate) =>
                   onChange(range, after, newBeforeDate)
                 }

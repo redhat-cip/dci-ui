@@ -3,7 +3,7 @@ import { Button, SearchInput } from "@patternfly/react-core";
 import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
-import { searchUserBy } from "users/usersApi";
+import { useLazySearchUserQuery } from "users/usersApi";
 import { Link } from "react-router-dom";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
@@ -18,17 +18,10 @@ export default function AddUserToTeamModal({
   onUserSelected,
   children,
 }: AddUserToTeamModalProps) {
+  const [searchUser, { data, isLoading }] = useLazySearchUserQuery();
   const { isOpen, show, hide } = useModal(false);
   const [searchEmail, setSearchEmail] = useState("");
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [touched, setTouched] = useState(false);
-
-  const onClear = () => {
-    setSearchEmail("");
-    setTouched(false);
-    setUsers([]);
-  };
+  const onClear = () => setSearchEmail("");
   return (
     <>
       <Modal
@@ -47,42 +40,48 @@ export default function AddUserToTeamModal({
           value={searchEmail}
           onChange={(e, value) => setSearchEmail(value)}
           onSearch={(e, value) => {
-            setTouched(true);
-            setIsFetching(true);
-            setUsers([]);
-            searchUserBy("email", `${value}*`)
-              .then((response) => setUsers(response.data.users))
-              .finally(() => setIsFetching(false));
+            const email = value.endsWith("*") ? value : `${value}*`;
+            searchUser(email);
           }}
           onClear={onClear}
         />
-        {touched && (
-          <Table
-            variant="compact"
-            className="pf-v6-c-table"
-            style={{ border: "0" }}
-          >
-            <Thead>
+        <Table borders={false}>
+          <Thead>
+            <Tr>
+              <Th>Email</Th>
+              <Th>Login</Th>
+              <Th>Full name</Th>
+              <Th screenReaderText="Actions" />
+            </Tr>
+          </Thead>
+          <Tbody>
+            {isLoading ? (
               <Tr>
-                <Th>Login</Th>
-                <Th>Full name</Th>
-                <Th>Email</Th>
-                <Th />
+                <Td colSpan={4}>...loading</Td>
               </Tr>
-            </Thead>
-            <Tbody>
-              {users.map((user) => (
+            ) : data === undefined ? (
+              searchEmail === "" ? (
+                <Tr>
+                  <Td colSpan={4}>Search a user by email</Td>
+                </Tr>
+              ) : (
+                <Tr>
+                  <Td colSpan={4}>No user matching your search</Td>
+                </Tr>
+              )
+            ) : (
+              data.users.map((user) => (
                 <Tr key={user.id}>
                   <Td>
                     <Link to={`/users/${user.id}`} tabIndex={-1}>
-                      {user.name}
+                      {user.email}
                     </Link>
                   </Td>
+                  <Td>{user.name}</Td>
                   <Td>{user.fullname}</Td>
-                  <Td>{user.email}</Td>
-                  <Td className="pf-v6-c-table__action">
+                  <Td isActionCell>
                     <Button
-                      variant="primary"
+                      variant="secondary"
                       onClick={() => {
                         onClear();
                         hide();
@@ -93,23 +92,10 @@ export default function AddUserToTeamModal({
                     </Button>
                   </Td>
                 </Tr>
-              ))}
-              {isFetching && users.length === 0 && (
-                <Tr>
-                  <Td colSpan={4}>...loading</Td>
-                </Tr>
-              )}
-              {!isFetching &&
-                users.length === 0 &&
-                searchEmail !== "" &&
-                touched && (
-                  <Tr>
-                    <Td colSpan={4}>No user matching your search</Td>
-                  </Tr>
-                )}
-            </Tbody>
-          </Table>
-        )}
+              ))
+            )}
+          </Tbody>
+        </Table>
       </Modal>
       {children(show)}
     </>

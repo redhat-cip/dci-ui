@@ -52,7 +52,7 @@ export default function FeedersPage() {
           info="Do you want to create one?"
         />
       ) : (
-        <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
+        <Table>
           <Thead>
             <Tr>
               <Th className="text-center">ID</Th>
@@ -72,7 +72,7 @@ export default function FeedersPage() {
               );
               return (
                 <Tr key={`${feeder.id}.${feeder.etag}`}>
-                  <Td className="text-center">
+                  <Td isActionCell>
                     <CopyButton text={feeder.id} />
                   </Td>
                   <Td>

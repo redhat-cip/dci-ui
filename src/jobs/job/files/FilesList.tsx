@@ -12,11 +12,11 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import { useMemo, useState } from "react";
-import { getFileContent } from "./filesActions";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 import { humanFileSize } from "./filesGetters";
 import { Table, Thead, Tr, Th, Tbody } from "@patternfly/react-table";
+import { getFileContentAsBlob } from "./filesApi";
 
 interface FilesListProps {
   job: IEnhancedJob;
@@ -78,12 +78,7 @@ export default function FilesList({ job }: FilesListProps) {
                   const zip = new JSZip();
                   for (let i = 0; i < filesFiltered.length; i++) {
                     const file = filesFiltered[i];
-                    const content = await getFileContent(file, {
-                      responseType: "blob",
-                    });
-                    const blob = new Blob([content], {
-                      type: file.mime || undefined,
-                    });
+                    const blob = await getFileContentAsBlob(file);
                     zip.file(file.name, blob);
                   }
                   zip
@@ -113,7 +108,7 @@ export default function FilesList({ job }: FilesListProps) {
             info="There are no files attached to this search. Change your search."
           />
         ) : (
-          <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
+          <Table>
             <Thead>
               <Tr>
                 <Th>Filename</Th>

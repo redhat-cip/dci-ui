@@ -1,4 +1,3 @@
-import http from "services/http";
 import {
   injectCreateEndpoint,
   injectGetEndpoint,
@@ -6,7 +5,7 @@ import {
   injectUpdateEndpoint,
   api,
 } from "api";
-import type { IComponent, ITopic } from "../types";
+import type { ITopic } from "../types";
 
 const resource = "Topic";
 
@@ -22,9 +21,7 @@ export const {
   useUnsubscribeFromATopicMutation,
   useListSubscribedTopicsQuery,
 } = api
-  .enhanceEndpoints({
-    addTagTypes: ["CurrentUserTopic"],
-  })
+  .enhanceEndpoints({ addTagTypes: ["CurrentUserTopic"] })
   .injectEndpoints({
     endpoints: (builder) => ({
       listSubscribedTopics: builder.query<
@@ -61,20 +58,3 @@ export const {
       }),
     }),
   });
-
-interface IFetchComponents {
-  data: {
-    components: IComponent[];
-    _meta: { count: number };
-  };
-}
-
-export function fetchComponents(
-  topic_id: string,
-  search: string,
-): Promise<IFetchComponents> {
-  return http({
-    method: "get",
-    url: `/api/v1/topics/${topic_id}/components${search}`,
-  });
-}

@@ -1,6 +1,6 @@
 import {
-  t_global_color_nonstatus_red_200,
-  t_global_color_nonstatus_green_200,
+  t_global_color_status_danger_default,
+  t_global_color_status_success_default,
 } from "@patternfly/react-tokens";
 import { IStat } from "types";
 import { PieChart, Pie, Cell, Tooltip, Label } from "recharts";
@@ -35,8 +35,8 @@ export default function NbOfJobsChart({ stat }: NbOfJobsChartProps) {
     { x: "Number of failed jobs", y: 100 - stat.percentageOfSuccess },
   ];
   const colors = [
-    t_global_color_nonstatus_green_200.value,
-    t_global_color_nonstatus_red_200.value,
+    t_global_color_status_success_default.value,
+    t_global_color_status_danger_default.value,
   ];
   return (
     <PieChart width={212} height={278}>

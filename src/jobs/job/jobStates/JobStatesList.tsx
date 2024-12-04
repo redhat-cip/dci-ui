@@ -7,7 +7,6 @@ import {
 import { useSearchParams } from "react-router-dom";
 import JobStateRow from "./JobStateFile";
 import { EmptyState } from "ui";
-import { getFileContent } from "jobs/job/files/filesActions";
 import { IEnhancedJob, IJobStateWithDuration } from "types";
 import { humanizeDuration } from "services/date";
 import {
@@ -26,8 +25,7 @@ import {
   ListIcon,
 } from "@patternfly/react-icons";
 import JobStateStepper from "./JobStateStepper";
-import { showError } from "alerts/alertsSlice";
-import { useAppDispatch } from "store";
+import FileContent from "../files/FileContent";
 
 function JobStateName(jobstate: IJobStateWithDuration) {
   let jobStateName = `Job state ${jobstate.status}`;
@@ -47,7 +45,6 @@ interface JobStatesListProps {
 }
 
 export default function JobStatesList({ job }: JobStatesListProps) {
-  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   type AnsibleTaskFilter = "date" | "duration";
@@ -58,7 +55,6 @@ export default function JobStatesList({ job }: JobStatesListProps) {
     searchParams.get("task"),
   );
   const [seeRawLog, setSeeRawLog] = useState(false);
-  const [rawLog, setRawLog] = useState<string | null>(null);
 
   useEffect(() => {
     searchParams.set("sort", sort);
@@ -102,19 +98,6 @@ export default function JobStatesList({ job }: JobStatesListProps) {
         isDisabled={!hasRawLogFile}
         onClick={() => {
           setSeeRawLog(!seeRawLog);
-          if (rawLog === null && hasRawLogFile) {
-            getFileContent(rawLogFile)
-              .then((content) => {
-                setRawLog(content);
-              })
-              .catch(() =>
-                dispatch(
-                  showError(
-                    "We can't get the raw log. Can you try again in a few minutes or contact an administrator? ",
-                  ),
-                ),
-              );
-          }
         }}
       >
         {seeRawLog ? "hide raw log" : "view raw log"}
@@ -153,9 +136,11 @@ export default function JobStatesList({ job }: JobStatesListProps) {
         }}
         className="pf-v6-u-mb-md"
       />
-      {seeRawLog ? (
+      {seeRawLog && rawLogFile !== undefined ? (
         <CodeBlock actions={[seeRawLogAction]}>
-          <CodeBlockCode>{rawLog}</CodeBlockCode>
+          <CodeBlockCode>
+            <FileContent file={rawLogFile} />
+          </CodeBlockCode>
         </CodeBlock>
       ) : (
         <CodeBlock actions={[sortAction, seeRawLogAction]}>

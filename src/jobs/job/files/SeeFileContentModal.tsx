@@ -1,8 +1,8 @@
-import { useState, useEffect, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Modal } from "@patternfly/react-core/deprecated";
 import { IFile } from "types";
 import useModal from "hooks/useModal";
-import { getFileContent } from "./filesActions";
+import FileContent from "./FileContent";
 
 interface SeeFileContentModalProps {
   file: IFile;
@@ -14,20 +14,6 @@ export default function SeeFileContentModal({
   children,
 }: SeeFileContentModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fileContent, setFileContent] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      getFileContent(file)
-        .then((content) => {
-          setFileContent(content);
-        })
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
-    }
-  }, [file, isOpen]);
-
   return (
     <>
       <Modal
@@ -38,16 +24,7 @@ export default function SeeFileContentModal({
         onClose={hide}
         variant="large"
       >
-        {isLoading ? (
-          "loading...."
-        ) : (
-          <div
-            className="pf-v6-u-p-md"
-            style={{ fontSize: "0.7rem", overflow: "auto" }}
-          >
-            <pre>{fileContent}</pre>
-          </div>
-        )}
+        <FileContent file={file} />
       </Modal>
       {children(show)}
     </>

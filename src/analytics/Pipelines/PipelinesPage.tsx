@@ -32,20 +32,18 @@ import {
   getRangeDates,
   humanizeDurationShort,
 } from "services/date";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import TeamsToolbarFilter from "jobs/toolbar/TeamsToolbarFilter";
 import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
 import { Link, useSearchParams } from "react-router-dom";
-import http from "services/http";
-import { showAPIError } from "alerts/alertsSlice";
 import { IJobStatus, IPipelines, RangeOptionValue } from "types";
 import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
 import { ComponentsList } from "jobs/components";
 import { notEmpty } from "services/utils";
-import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { useLazyGetPipelineStatusQuery } from "./pipelinesApi";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -187,7 +185,7 @@ function PipelineCard({
         </CardTitle>
       </CardHeader>
       <CardBody style={{ overflow: "auto" }}>
-        <Table variant="compact" className="pf-v6-c-table pf-m-grid-md">
+        <Table>
           <Thead>
             <Tr>
               <Th>pipeline</Th>
@@ -289,10 +287,52 @@ function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
   );
 }
 
+function Pipelines({
+  teamsIds,
+  before,
+  after,
+  pipelinesNames,
+}: {
+  teamsIds: string[];
+  before: string;
+  after: string;
+  pipelinesNames: string[];
+}) {
+  const [getPipelineStatus, { data: pipelines, isLoading }] =
+    useLazyGetPipelineStatusQuery();
+
+  useEffect(() => {
+    getPipelineStatus({
+      start_date: after,
+      end_date: before,
+      teams_ids: teamsIds,
+      pipelines_names: pipelinesNames,
+    });
+  }, [after, before, teamsIds, pipelinesNames, getPipelineStatus]);
+
+  if (isLoading) {
+    return <LoadingPageSection />;
+  }
+
+  if (!pipelines) {
+    return (
+      <EmptyState
+        headingLevel="h4"
+        titleText="Display pipeline jobs"
+        variant={EmptyStateVariant.xs}
+      >
+        <EmptyStateBody>
+          You can fill in the filters to view your team's pipelines.
+        </EmptyStateBody>
+      </EmptyState>
+    );
+  }
+
+  return <PipelinesTable pipelines={pipelines} />;
+}
+
 export default function PipelinesPage() {
-  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
   const [pipelinesNames, setPipelinesNames] = useState<string[]>(
     searchParams.get("pipelines_names")?.split(",") || [],
   );
@@ -310,61 +350,42 @@ export default function PipelinesPage() {
   const [before, setBefore] = useState(
     searchParams.get("end_date") || dates.before,
   );
-  const [pipelines, setPipelines] = useState<IPipelines | null>(null);
 
-  const updateUrlWithParams = () => {
-    searchParams.set("teams_ids", teamsIds.join(","));
+  useEffect(() => {
+    if (teamsIds.length > 0) {
+      searchParams.set("teams_ids", teamsIds.join(","));
+    } else {
+      searchParams.delete("teams_ids");
+    }
+    setSearchParams(searchParams);
+  }, [teamsIds, searchParams, setSearchParams]);
+
+  useEffect(() => {
     if (pipelinesNames.length > 0) {
       searchParams.set("pipelines_names", pipelinesNames.join(","));
     } else {
       searchParams.delete("pipelines_names");
     }
-    if (after === "" || range !== "custom") {
-      searchParams.delete("start_date");
-    } else {
-      searchParams.set("start_date", after);
-    }
+    setSearchParams(searchParams);
+  }, [pipelinesNames, searchParams, setSearchParams]);
+
+  useEffect(() => {
     if (before === "" || range !== "custom") {
       searchParams.delete("end_date");
     } else {
       searchParams.set("end_date", before);
     }
-    searchParams.set("range", range);
-    setSearchParams(searchParams, { replace: true });
-  };
-
-  const memoizedGetPipelines = useCallback(() => {
-    if (teamsIds.length > 0) {
-      setIsLoading(true);
-      const data: {
-        start_date: string;
-        end_date: string;
-        teams_ids: string[];
-        pipelines_names?: string[];
-      } = {
-        start_date: after,
-        end_date: before,
-        teams_ids: teamsIds,
-      };
-      if (pipelinesNames.length > 0) {
-        data.pipelines_names = pipelinesNames;
-      }
-      http
-        .post("/api/v1/analytics/pipelines_status", data)
-        .then((response) => {
-          setPipelines(response.data as IPipelines);
-        })
-        .catch((error) => {
-          dispatch(showAPIError(error));
-          return error;
-        })
-        .then(() => setIsLoading(false));
-    }
-  }, [teamsIds, after, before, pipelinesNames, dispatch]);
+    setSearchParams(searchParams);
+  }, [before, range, searchParams, setSearchParams]);
 
   useEffect(() => {
-    memoizedGetPipelines();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (after === "" || range !== "custom") {
+      searchParams.delete("start_date");
+    } else {
+      searchParams.set("start_date", after);
+    }
+    setSearchParams(searchParams);
+  }, [after, range, searchParams, setSearchParams]);
 
   useEffect(() => {
     if (range !== "custom") {
@@ -372,11 +393,9 @@ export default function PipelinesPage() {
       setAfter(dates.after);
       setBefore(dates.before);
     }
-  }, [range]);
-
-  if (isLoading) {
-    return <LoadingPageSection />;
-  }
+    searchParams.set("range", range);
+    setSearchParams(searchParams);
+  }, [range, searchParams, setSearchParams]);
 
   return (
     <PageSection>
@@ -453,39 +472,22 @@ export default function PipelinesPage() {
                     ]}
                   />
                 </ToolbarItem>
-                <ToolbarItem>
-                  <Button
-                    variant="primary"
-                    isDisabled={teamsIds.length === 0}
-                    onClick={() => {
-                      memoizedGetPipelines();
-                      updateUrlWithParams();
-                    }}
-                  >
-                    Show pipelines
-                  </Button>
-                </ToolbarItem>
               </ToolbarGroup>
             </ToolbarContent>
           </Toolbar>
         </CardBody>
       </Card>
-      {pipelines === null ? (
+      {teamsIds.length > 0 && (
         <Card className="pf-v6-u-mt-md">
           <CardBody>
-            <EmptyState
-              headingLevel="h4"
-              titleText="Display pipeline jobs"
-              variant={EmptyStateVariant.xs}
-            >
-              <EmptyStateBody>
-                You can fill in the filters to view your team's pipelines.
-              </EmptyStateBody>
-            </EmptyState>
+            <Pipelines
+              teamsIds={teamsIds}
+              pipelinesNames={pipelinesNames}
+              before={before}
+              after={after}
+            />
           </CardBody>
         </Card>
-      ) : (
-        <PipelinesTable pipelines={pipelines} />
       )}
     </PageSection>
   );

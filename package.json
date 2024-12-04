@@ -16,7 +16,6 @@
     "@patternfly/react-tokens": "^6.0.0",
     "@reduxjs/toolkit": "^2.3.0",
     "async-mutex": "^0.5.0",
-    "axios": "^1.7.7",
     "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "humanize-duration": "^3.32.1",

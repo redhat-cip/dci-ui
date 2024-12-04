@@ -46,7 +46,7 @@ export default function RHELComponentsTable({
   }
 
   return (
-    <Table aria-label="RHEL components table" variant="compact">
+    <Table aria-label="RHEL components table">
       <Thead>
         <Tr>
           <Th className="text-center pf-m-width-10">ID</Th>
@@ -68,7 +68,7 @@ export default function RHELComponentsTable({
 
           return (
             <Tr key={`${component.id}.${component.etag}`}>
-              <Td className="text-center">
+              <Td isActionCell>
                 <CopyButton text={component.id} />
               </Td>
               <Td>

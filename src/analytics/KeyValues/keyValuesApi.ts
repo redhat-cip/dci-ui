@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { api } from "api";
 
 interface IKeyValue {
   job_id: string;
@@ -50,7 +51,7 @@ export interface IGraphKeyValue {
   };
 }
 
-export interface IGraphKeyValues {
+interface IGraphKeyValues {
   [key: string]: IGraphKeyValue[];
 }
 
@@ -88,3 +89,16 @@ export function extractKeyValues(
     return {};
   }
 }
+
+export const { useLazyGetAnalyticJobsQuery } = api
+  .enhanceEndpoints({ addTagTypes: ["Analytics"] })
+  .injectEndpoints({
+    endpoints: (builder) => ({
+      getAnalyticJobs: builder.query<IGraphKeyValues, string>({
+        query: (params) => `/analytics/jobs${params}`,
+        transformResponse: (response: IKeyValueResponse) =>
+          extractKeyValues(response),
+        providesTags: ["Analytics"],
+      }),
+    }),
+  });

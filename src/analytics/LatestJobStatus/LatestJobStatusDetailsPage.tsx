@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   CardBody,
   Card,
@@ -11,7 +11,6 @@ import {
 } from "@patternfly/react-core";
 import { useParams, Link } from "react-router-dom";
 import { IStat } from "types";
-import { getStat } from "./latestJobStatusActions";
 import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";
 import { LinkIcon } from "@patternfly/react-icons";
@@ -25,6 +24,7 @@ import {
   Td,
 } from "@patternfly/react-table";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { useLazyGetStatsQuery } from "./latestJobStatusApi";
 
 type StatHeaderCardProps = {
   title: string;
@@ -60,16 +60,14 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
     <Card>
       <CardBody>
         <Table
-          className="pf-v6-c-table pf-m-grid-md"
-          role="grid"
-          aria-label="Latest Latest Jobs Status"
           id="latest-jobs-per-remoteci-table"
+          aria-label="Latest Latest Jobs Status"
         >
           <Caption>
             Latest Latest Jobs Status using {stat.topic.name} topic
           </Caption>
           <Thead>
-            <Tr role="row">
+            <Tr>
               <Th role="columnheader" scope="col">
                 Team
               </Th>
@@ -89,7 +87,7 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
           </Thead>
           <Tbody>
             {stat.jobs.map((job, i) => (
-              <Tr key={i} role="row">
+              <Tr key={i}>
                 <Td role="cell" data-label="Team name">
                   {job.team_name}
                 </Td>
@@ -124,25 +122,75 @@ function ListOfJobsCard({ stat }: ListOfJobsCardProps) {
   );
 }
 
-export default function LatestJobStatusDetailsPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [stat, setStat] = useState<IStat | null>(null);
-  const { topic_name } = useParams();
+function LatestJobStatusDetails({ topic_name }: { topic_name: string }) {
+  const [getStats, { data: products, isLoading }] = useLazyGetStatsQuery();
 
   useEffect(() => {
-    if (topic_name) {
-      getStat(topic_name)
-        .then(setStat)
-        .catch(console.error)
-        .then(() => setIsLoading(false));
-    }
-  }, [topic_name]);
-
-  if (!topic_name) return null;
+    getStats();
+  }, [getStats]);
 
   if (isLoading) {
     return <LoadingPageSection />;
   }
+
+  if (!products) {
+    return (
+      <EmptyState
+        title="There is no stats"
+        info="Add some jobs to see some info for this topic"
+      />
+    );
+  }
+
+  const stat = products
+    .flatMap((product) => product.stats)
+    .find((stat) => stat.topic.name === topic_name);
+
+  if (!stat) {
+    return (
+      <EmptyState
+        title={`There is no stats for ${topic_name}`}
+        info="Add some jobs to see some info for this topic"
+      />
+    );
+  }
+
+  return (
+    <Grid hasGutter>
+      <GridItem span={4}>
+        {stat && (
+          <StatHeaderCard
+            title={stat.nbOfJobs.toString()}
+            subTitle="Number of jobs"
+          />
+        )}
+      </GridItem>
+      <GridItem span={4}>
+        {stat && (
+          <StatHeaderCard
+            title={`${stat.percentageOfSuccess}%`}
+            subTitle="Percentage of successful jobs"
+          />
+        )}
+      </GridItem>
+      <GridItem span={4}>
+        {stat && (
+          <StatHeaderCard
+            title={fromNow(stat.jobs[0].created_at) || ""}
+            subTitle="Latest run"
+          />
+        )}
+      </GridItem>
+      <GridItem span={12}>
+        <ListOfJobsCard stat={stat} />
+      </GridItem>
+    </Grid>
+  );
+}
+
+export default function LatestJobStatusDetailsPage() {
+  const { topic_name } = useParams();
+  if (!topic_name) return null;
 
   return (
     <PageSection>
@@ -158,42 +206,7 @@ export default function LatestJobStatusDetailsPage() {
         ]}
       />
       <Content component="h1">{`Latest stats for ${topic_name}`}</Content>
-      {stat === null ? (
-        <EmptyState
-          title={`There is no stats for ${topic_name}`}
-          info="Add some jobs to see some info for this topic"
-        />
-      ) : (
-        <Grid hasGutter>
-          <GridItem span={4}>
-            {stat && (
-              <StatHeaderCard
-                title={stat.nbOfJobs.toString()}
-                subTitle="Number of jobs"
-              />
-            )}
-          </GridItem>
-          <GridItem span={4}>
-            {stat && (
-              <StatHeaderCard
-                title={`${stat.percentageOfSuccess}%`}
-                subTitle="Percentage of successful jobs"
-              />
-            )}
-          </GridItem>
-          <GridItem span={4}>
-            {stat && (
-              <StatHeaderCard
-                title={fromNow(stat.jobs[0].created_at) || ""}
-                subTitle="Latest run"
-              />
-            )}
-          </GridItem>
-          <GridItem span={12}>
-            <ListOfJobsCard stat={stat} />
-          </GridItem>
-        </Grid>
-      )}
+      <LatestJobStatusDetails topic_name={topic_name} />
     </PageSection>
   );
 }

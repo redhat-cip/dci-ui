@@ -160,11 +160,7 @@ export default function TestSuites({ junit }: TestsCasesProps) {
               <Content className="pf-v6-u-my-md" component={ContentVariants.h4}>
                 Properties
               </Content>
-              <Table
-                role="grid"
-                aria-label="Properties table"
-                variant="compact"
-              >
+              <Table aria-label="Properties table">
                 <Tbody>
                   {testsuite.properties.map((property, i) => (
                     <Tr key={i}>
@@ -203,9 +199,9 @@ export default function TestSuites({ junit }: TestsCasesProps) {
               </Flex>
             </Banner>
           ) : (
-            <Table role="grid" aria-label="Testsuite table" variant="compact">
+            <Table aria-label="Testsuite table">
               <Thead>
-                <Tr role="row">
+                <Tr>
                   <Th modifier="fitContent"></Th>
                   <Th>Name</Th>
                   <Th

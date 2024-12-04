@@ -6,6 +6,7 @@ import {
   Content,
   DatePicker,
   PageSection,
+  Skeleton,
   Toolbar,
   ToolbarContent,
   ToolbarFilter,
@@ -15,9 +16,7 @@ import {
 import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
 import RemoteciToolbarFilter from "jobs/toolbar/RemoteciToolbarFilter";
 import { useEffect, useState } from "react";
-import { IDataFromES, IGraphData, IRefArea } from "types";
-import http from "services/http";
-import { showAPIError } from "alerts/alertsSlice";
+import { IGraphData, IRefArea } from "types";
 import {
   LineChart,
   Line,
@@ -28,12 +27,12 @@ import {
   ReferenceArea,
 } from "recharts";
 import { formatDate, humanizeDuration } from "services/date";
-import { getDomain, transform } from "./tasksDurationPerJob";
-import { Link } from "react-router-dom";
+import { getDomain } from "./tasksDurationPerJob";
+import { Link, useSearchParams } from "react-router-dom";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
-import { useAppDispatch } from "store";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
+import { useLazyGetTasksDurationCumulatedQuery } from "./tasksDurationPerJobApi";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -162,36 +161,31 @@ function Graph({ data }: { data: IGraphData[] }) {
   );
 }
 
-export default function TasksDurationPerJobPage() {
-  const dispatch = useAppDispatch();
-  const [topicId, setTopicId] = useState<string | null>(null);
-  const [remoteciId, setRemoteciId] = useState<string | null>(null);
-  const [data, setData] = useState<IGraphData[]>([]);
-  const [after, setAfter] = useState<string | null>(null);
-  const [before, setBefore] = useState<string | null>(null);
-
-  function clearAllFilters() {
-    setTopicId(null);
-    setRemoteciId(null);
-    setAfter(null);
-    setBefore(null);
-  }
+function TasksDurationPerJob({
+  remoteciId,
+  topicId,
+  after,
+  before,
+}: {
+  remoteciId: string;
+  topicId: string;
+  after: string | null;
+  before: string | null;
+}) {
+  const [getTasksDurationCumulated, { data, isLoading }] =
+    useLazyGetTasksDurationCumulatedQuery();
 
   useEffect(() => {
-    if (topicId && remoteciId) {
-      http
-        .get(
-          `/api/v1/analytics/tasks_duration_cumulated?remoteci_id=${remoteciId}&topic_id=${topicId}`,
-        )
-        .then((response) => {
-          setData(transform(response.data as IDataFromES));
-        })
-        .catch((error) => {
-          dispatch(showAPIError(error));
-          return error;
-        });
-    }
-  }, [topicId, remoteciId, dispatch]);
+    getTasksDurationCumulated({ remoteciId, topicId });
+  }, [remoteciId, topicId, getTasksDurationCumulated]);
+
+  if (isLoading) {
+    return <Skeleton screenreaderText="Loading get tasks duration cumulated" />;
+  }
+
+  if (!data) {
+    return null;
+  }
 
   const maxJobs = 7;
   const filteredData = data
@@ -208,6 +202,125 @@ export default function TasksDurationPerJobPage() {
       return true;
     })
     .slice(-maxJobs);
+
+  return (
+    <>
+      <div style={{ width: "100%", minHeight: "400px", height: "400px" }}>
+        <Graph data={filteredData} />
+      </div>
+      <div className="pf-v6-u-p-xl">
+        <Table aria-label="Job Legend">
+          <Thead>
+            <Tr>
+              <Th role="columnheader" scope="col">
+                id
+              </Th>
+              <Th role="columnheader" scope="col">
+                name
+              </Th>
+              <Th role="columnheader" scope="col">
+                status
+              </Th>
+              <Th role="columnheader" scope="col">
+                created
+              </Th>
+              <Th className="text-center" role="columnheader" scope="col">
+                Job link
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {filteredData.map((d, i) => (
+              <Tr key={i}>
+                <Td
+                  role="cell"
+                  data-label="Job id"
+                  style={{ color: colors[i % colors.length] }}
+                >
+                  {d.id}
+                </Td>
+                <Td role="cell" data-label="Job name">
+                  {d.name}
+                </Td>
+                <Td role="cell" data-label="Job status">
+                  {d.status}
+                </Td>
+                <Td role="cell" data-label="Job created at">
+                  <time title={d.created_at} dateTime={d.created_at}>
+                    {formatDate(d.created_at)}
+                  </time>
+                </Td>
+                <Td className="text-center" role="cell" data-label="Job status">
+                  <Link to={`/jobs/${d.id}/jobStates`}>
+                    <LinkIcon />
+                  </Link>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </div>
+    </>
+  );
+}
+
+export default function TasksDurationPerJobPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [topicId, setTopicId] = useState<string | null>(
+    searchParams.get("topic_id"),
+  );
+  const [remoteciId, setRemoteciId] = useState<string | null>(
+    searchParams.get("remoteci_id"),
+  );
+  const [before, setBefore] = useState<string | null>(
+    searchParams.get("end_date"),
+  );
+  const [after, setAfter] = useState<string | null>(
+    searchParams.get("start_date"),
+  );
+
+  useEffect(() => {
+    if (topicId) {
+      searchParams.set("topic_id", topicId);
+    } else {
+      searchParams.delete("topic_id");
+    }
+    setSearchParams(searchParams);
+  }, [topicId, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (remoteciId) {
+      searchParams.set("remoteci_id", remoteciId);
+    } else {
+      searchParams.delete("remoteci_id");
+    }
+    setSearchParams(searchParams);
+  }, [remoteciId, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (before) {
+      searchParams.set("end_date", before);
+    } else {
+      searchParams.delete("end_date");
+    }
+    setSearchParams(searchParams);
+  }, [before, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (after) {
+      searchParams.set("start_date", after);
+    } else {
+      searchParams.delete("start_date");
+    }
+    setSearchParams(searchParams);
+  }, [after, searchParams, setSearchParams]);
+
+  function clearAllFilters() {
+    setTopicId(null);
+    setRemoteciId(null);
+    setAfter(null);
+    setBefore(null);
+  }
 
   return (
     <PageSection>
@@ -258,6 +371,7 @@ export default function TasksDurationPerJobPage() {
                       value={after || ""}
                       placeholder="Created after"
                       onChange={(e, str) => setAfter(str)}
+                      appendTo={() => document.body}
                     />
                   </ToolbarFilter>
                 </ToolbarItem>
@@ -272,6 +386,7 @@ export default function TasksDurationPerJobPage() {
                       value={before || ""}
                       placeholder="Created before"
                       onChange={(e, str) => setBefore(str)}
+                      appendTo={() => document.body}
                     />
                   </ToolbarFilter>
                 </ToolbarItem>
@@ -280,73 +395,16 @@ export default function TasksDurationPerJobPage() {
           </Toolbar>
         </CardBody>
       </Card>
-      {filteredData.length === 0 ? null : (
+
+      {topicId !== null && remoteciId !== null && (
         <Card className="pf-v6-u-mt-lg">
           <CardBody>
-            <div style={{ width: "100%", minHeight: "400px", height: "400px" }}>
-              <Graph data={filteredData} />
-            </div>
-            <div className="pf-v6-u-p-xl">
-              <Table
-                variant="compact"
-                className="pf-v6-c-tablepf-m-grid-md"
-                role="grid"
-                aria-label="Job Legend"
-              >
-                <Thead>
-                  <Tr role="row">
-                    <Th role="columnheader" scope="col">
-                      id
-                    </Th>
-                    <Th role="columnheader" scope="col">
-                      name
-                    </Th>
-                    <Th role="columnheader" scope="col">
-                      status
-                    </Th>
-                    <Th role="columnheader" scope="col">
-                      created
-                    </Th>
-                    <Th className="text-center" role="columnheader" scope="col">
-                      Job link
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {filteredData.map((d, i) => (
-                    <Tr key={i} role="row">
-                      <Td
-                        role="cell"
-                        data-label="Job id"
-                        style={{ color: colors[i % colors.length] }}
-                      >
-                        {d.id}
-                      </Td>
-                      <Td role="cell" data-label="Job name">
-                        {d.name}
-                      </Td>
-                      <Td role="cell" data-label="Job status">
-                        {d.status}
-                      </Td>
-                      <Td role="cell" data-label="Job created at">
-                        <time title={d.created_at} dateTime={d.created_at}>
-                          {formatDate(d.created_at)}
-                        </time>
-                      </Td>
-                      <Td
-                        className="text-center"
-                        role="cell"
-                        data-label="Job status"
-                      >
-                        <Link to={`/jobs/${d.id}/jobStates`}>
-                          <LinkIcon />
-                        </Link>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </div>
+            <TasksDurationPerJob
+              remoteciId={remoteciId}
+              topicId={topicId}
+              before={before}
+              after={after}
+            />
           </CardBody>
         </Card>
       )}

@@ -10,7 +10,7 @@ interface UsersTableProps {
 
 export default function UsersTable({ users }: UsersTableProps) {
   return (
-    <Table aria-label="Users table" variant="compact">
+    <Table aria-label="Users table">
       <Thead>
         <Tr>
           <Th>ID</Th>
@@ -24,7 +24,7 @@ export default function UsersTable({ users }: UsersTableProps) {
       <Tbody>
         {users.map((user) => (
           <Tr key={user.id}>
-            <Td dataLabel="ID">
+            <Td dataLabel="ID" isActionCell>
               <CopyButton text={user.id} />
             </Td>
             <Td dataLabel="Login">

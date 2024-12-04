@@ -112,11 +112,7 @@ function Tests({ jobId, tests }: TestsProps) {
   );
 }
 
-interface JobConfigurationProps {
-  configuration: string;
-}
-
-export function JobConfiguration({ configuration }: JobConfigurationProps) {
+function JobConfiguration({ configuration }: { configuration: string }) {
   const navigate = useNavigate();
   return (
     <Button
@@ -129,11 +125,7 @@ export function JobConfiguration({ configuration }: JobConfigurationProps) {
   );
 }
 
-interface JobPipelineProps {
-  pipeline: IPipeline;
-}
-
-export function JobPipeline({ pipeline }: JobPipelineProps) {
+function JobPipeline({ pipeline }: { pipeline: IPipeline }) {
   const navigate = useNavigate();
   return (
     <Button

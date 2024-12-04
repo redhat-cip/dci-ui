@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Grid,
   GridItem,
@@ -7,136 +6,26 @@ import {
   Button,
   Content,
   CardTitle,
-  Divider,
   Label,
-  Skeleton,
-  Switch,
-  Popover,
   PageSection,
 } from "@patternfly/react-core";
-import { TrashAltIcon, EditAltIcon, HelpIcon } from "@patternfly/react-icons";
+import { TrashAltIcon, EditAltIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb, EmptyState } from "ui";
-import { IProduct, ITeam } from "types";
 import { useParams, useNavigate } from "react-router-dom";
 import { t_global_color_status_danger_default } from "@patternfly/react-tokens";
 import EditTeamModal from "./EditTeamModal";
 import CardLine from "ui/CardLine";
-import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { getProductIcon } from "ui/icons";
 import TeamMembers from "./TeamMembers";
 import TeamComponentsPermissions from "./TeamComponentsPermissions";
 import {
-  getProductsTeamHasAccessTo,
-  useAddProductToTeamMutation,
   useDeleteTeamMutation,
   useGetTeamQuery,
-  useRemoveProductFromTeamMutation,
   useUpdateTeamMutation,
 } from "./teamsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { useListProductsQuery } from "products/productsApi";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";
-
-function ProductsTeamHasAccessTo({ team }: { team: ITeam }) {
-  const { data, isLoading } = useListProductsQuery();
-  const [removeProductFromTeam, { isLoading: isRemoving }] =
-    useRemoveProductFromTeamMutation();
-  const [addProductToTeam, { isLoading: isLoadingAddProductToTeam }] =
-    useAddProductToTeamMutation();
-
-  const [productsIdsTeamHasAccessTo, setProductsIdsTeamHasAccessTo] = useState<
-    IProduct[]
-  >([]);
-
-  useEffect(() => {
-    if (data) {
-      getProductsTeamHasAccessTo(team, data.products).then(
-        setProductsIdsTeamHasAccessTo,
-      );
-    }
-  }, [data, team]);
-
-  if (!data) return null;
-
-  return (
-    <Card>
-      <CardTitle>
-        Product access
-        <Popover bodyContent="If a product is checked, then the team has access to all released components of the product.">
-          <Button
-            type="button"
-            variant="plain"
-            icon={<HelpIcon />}
-            aria-label="More info on product access"
-            onClick={(e) => e.preventDefault()}
-          />
-        </Popover>
-      </CardTitle>
-      <CardBody>
-        {isLoading ? (
-          <Skeleton screenreaderText="Loading products the team has access to" />
-        ) : (
-          <Table variant="compact" borders={false}>
-            <Thead>
-              <Tr>
-                <Th />
-                <Th />
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.products.length === 0 && (
-                <Tr>
-                  <Td colSpan={-1}>
-                    There is no product available. Please contact a Distributed
-                    CI administrator
-                  </Td>
-                </Tr>
-              )}
-              {data.products.map((product) => {
-                const ProductIcon = getProductIcon(product.name);
-                return (
-                  <Tr key={product.id}>
-                    <Td>
-                      <ProductIcon className="pf-v6-u-mr-xs" />
-                      {product.name}
-                    </Td>
-                    <Td className="pf-v6-c-table__action">
-                      <Switch
-                        id={`product-${product.id}-team-${team.id}-access`}
-                        aria-label={`team ${team.name} has access to ${product.name}`}
-                        isChecked={productsIdsTeamHasAccessTo
-                          .map((p) => p.id)
-                          .includes(product.id)}
-                        isDisabled={isRemoving || isLoadingAddProductToTeam}
-                        onChange={(e, hasAccessToProduct) => {
-                          if (hasAccessToProduct) {
-                            setProductsIdsTeamHasAccessTo([
-                              ...productsIdsTeamHasAccessTo,
-                              product,
-                            ]);
-                            addProductToTeam({ team, product });
-                          } else {
-                            setProductsIdsTeamHasAccessTo(
-                              productsIdsTeamHasAccessTo.filter(
-                                (p) => p.id !== product.id,
-                              ),
-                            );
-                            removeProductFromTeam({ team, product });
-                          }
-                        }}
-                      />
-                    </Td>
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
-        )}
-      </CardBody>
-    </Card>
-  );
-}
+import ProductsTeamHasAccessTo from "./ProductsTeamHasAccessTo";
 
 export default function TeamPage() {
   const { currentUser } = useAuth();
@@ -193,13 +82,11 @@ export default function TeamPage() {
             <CardTitle>Team information</CardTitle>
             <CardBody>
               <CardLine className="pf-v6-u-p-md" field="ID" value={team.id} />
-              <Divider />
               <CardLine
                 className="pf-v6-u-p-md"
                 field="Name"
                 value={team.name}
               />
-              <Divider />
               <CardLine
                 className="pf-v6-u-p-md"
                 field="State"

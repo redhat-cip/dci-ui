@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import {
   Card,
   CardBody,
@@ -24,7 +24,6 @@ import {
   IJobStatus,
 } from "types";
 import { useParams, Link } from "react-router-dom";
-import { fetchComponent } from "./componentActions";
 import { CalendarAltIcon, ClockIcon } from "@patternfly/react-icons";
 import { fromNow, formatDate } from "services/date";
 import { sortByNewestFirst } from "services/sort";
@@ -41,6 +40,7 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTeamQuery } from "teams/teamsApi";
 import { useGetTopicQuery } from "topics/topicsApi";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { useGetComponentQuery } from "components/componentsApi";
 
 interface IComponentJobProps {
   job: IJob;
@@ -287,20 +287,10 @@ function convertComponentWithJobInComponentCoverage(
 
 export default function ComponentPage() {
   const { topic_id, component_id } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [component, setComponent] = useState<IComponentWithJobs | null>(null);
 
-  const getComponentCallback = useCallback(() => {
-    if (component_id) {
-      fetchComponent(component_id)
-        .then((response) => setComponent(response.data.component))
-        .finally(() => setIsLoading(false));
-    }
-  }, [component_id, setIsLoading]);
-
-  useEffect(() => {
-    getComponentCallback();
-  }, [getComponentCallback]);
+  const { data: component, isLoading } = useGetComponentQuery(
+    component_id ? component_id : skipToken,
+  );
 
   if (isLoading) {
     return <LoadingPageSection />;

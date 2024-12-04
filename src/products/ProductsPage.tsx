@@ -98,7 +98,7 @@ export default function ProductsPage() {
       {data.products.length === 0 ? (
         <EmptyState title="There is no products" />
       ) : (
-        <Table aria-label="Products table" variant="compact">
+        <Table aria-label="Products table">
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -111,7 +111,7 @@ export default function ProductsPage() {
           <Tbody>
             {data.products.map((product) => (
               <Tr key={`${product.id}.${product.etag}`}>
-                <Td dataLabel="ID">
+                <Td dataLabel="ID" isActionCell>
                   <CopyButton text={product.id} />
                 </Td>
                 <Td dataLabel="Name">{product.name}</Td>

@@ -7,7 +7,8 @@ interface ThemeContextType {
   isDark: boolean;
   toggleColor: () => void;
 }
-export const ThemeContext = React.createContext<ThemeContextType>(null!);
+
+const ThemeContext = React.createContext<ThemeContextType>(null!);
 
 type ThemeProviderProps = {
   children: React.ReactNode;

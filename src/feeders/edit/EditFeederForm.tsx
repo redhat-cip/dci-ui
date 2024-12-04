@@ -1,8 +1,7 @@
 import { Button } from "@patternfly/react-core";
-import { Input } from "ui/formik";
+import { Input, SelectWithTypeahead } from "ui/formik";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { SelectWithTypeahead } from "ui/formik";
 import { ITeam, IFeeder } from "types";
 
 const EditFeederSchema = Yup.object().shape({

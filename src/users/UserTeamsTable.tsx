@@ -32,15 +32,11 @@ export function UserTeamsTable({ user }: { user: IUser }) {
         }}
       />
 
-      <Table
-        variant="compact"
-        borders={false}
-        className="pf-v6-c-tablepf-m-grid-md"
-      >
+      <Table borders={false}>
         <Thead>
           <Tr>
             <Th>Team name</Th>
-            <Th />
+            <Th screenReaderText="Actions" />
           </Tr>
         </Thead>
         <Tbody>
@@ -60,7 +56,7 @@ export function UserTeamsTable({ user }: { user: IUser }) {
                 <Td>
                   <Link to={`/teams/${team.id}`}>{team.name}</Link>
                 </Td>
-                <Td className="pf-v6-c-table__action">
+                <Td isActionCell>
                   <ConfirmDeleteModal
                     title={`Delete ${user.name} from ${team.name}`}
                     message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}

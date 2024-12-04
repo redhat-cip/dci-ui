@@ -28,14 +28,9 @@ export default function JobTestsPage() {
   return (
     <Card>
       <CardBody>
-        <Table
-          role="grid"
-          aria-label="List of tests"
-          id="tests-list"
-          variant="compact"
-        >
+        <Table id="tests-list" aria-label="List of tests">
           <Thead>
-            <Tr role="row">
+            <Tr>
               <Th role="columnheader" scope="col">
                 Test name
               </Th>
@@ -66,7 +61,7 @@ export default function JobTestsPage() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr role="row">
+            <Tr>
               <Td role="cell" colSpan={2}>
                 Total
               </Td>
@@ -123,7 +118,7 @@ export default function JobTestsPage() {
               </Td>
             </Tr>
             {reversedTests.map((test, i) => (
-              <Tr key={i} role="row">
+              <Tr key={i}>
                 <Td
                   role="cell"
                   data-label="Test name"

@@ -41,11 +41,7 @@ export default function JobsTableList({
   const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
 
   return (
-    <TableWithTrStyled
-      isDark={isDark}
-      variant="compact"
-      className="pf-v6-c-tablepf-m-grid-md"
-    >
+    <TableWithTrStyled isDark={isDark}>
       <Thead>
         <Tr>
           <Th></Th>

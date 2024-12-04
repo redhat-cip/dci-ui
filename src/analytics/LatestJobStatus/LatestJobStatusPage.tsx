@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { getStats, JobPerRemoteciStat } from "./latestJobStatusActions";
+import { useEffect } from "react";
 import {
   Gallery,
   GalleryItem,
@@ -18,6 +17,7 @@ import { getProductIcon } from "ui/icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { useLazyGetStatsQuery } from "./latestJobStatusApi";
 
 const ProductTitle = styled.h3`
   display: flex;
@@ -25,21 +25,68 @@ const ProductTitle = styled.h3`
   margin-bottom: 1em;
 `;
 
-export default function LatestJobStatusPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState<JobPerRemoteciStat[]>([]);
+function LatestJobStatus() {
+  const [getStats, { data: products, isLoading }] = useLazyGetStatsQuery();
 
   useEffect(() => {
-    getStats().then((products) => {
-      setProducts(products);
-      setIsLoading(false);
-    });
-  }, []);
+    getStats();
+  }, [getStats]);
 
   if (isLoading) {
     return <LoadingPageSection />;
   }
 
+  if (!products) {
+    return (
+      <EmptyState
+        title="This page is empty"
+        info="There is no information to display in this page at the moment. If you think this is an error contact the DCI team."
+      />
+    );
+  }
+  return (
+    <Grid hasGutter>
+      {products.map((product) => {
+        const ProductIcon = getProductIcon(product.name);
+        return (
+          <GridItem key={product.id} span={12} className="pf-v6-u-mb-xl">
+            <ProductTitle>
+              <span className="pf-v6-u-mr-xs">
+                <Icon size="md">
+                  <ProductIcon />
+                </Icon>
+              </span>
+              {product.name}
+            </ProductTitle>
+            <Gallery hasGutter key={product.id}>
+              {product.stats.map((stat, index) => (
+                <GalleryItem key={index}>
+                  <Card
+                    title="Click to see detailed stats for this topic"
+                    className="pointer"
+                  >
+                    <CardBody>
+                      <Title headingLevel="h6" size="md">
+                        <Link
+                          to={`/analytics/latest_jobs_status/${stat.topic.name}`}
+                        >
+                          {stat.topic.name}
+                        </Link>
+                      </Title>
+                      <NbOfJobsChart stat={stat} />
+                    </CardBody>
+                  </Card>
+                </GalleryItem>
+              ))}
+            </Gallery>
+          </GridItem>
+        );
+      })}
+    </Grid>
+  );
+}
+
+export default function LatestJobStatusPage() {
   return (
     <PageSection>
       <Breadcrumb
@@ -53,51 +100,7 @@ export default function LatestJobStatusPage() {
       <Content component="p">
         See the latest jobs status per topic and per remoteci
       </Content>
-      {products.length === 0 ? (
-        <EmptyState
-          title="This page is empty"
-          info="There is no information to display in this page at the moment. If you think this is an error contact the DCI team."
-        />
-      ) : (
-        <Grid hasGutter>
-          {products.map((product) => {
-            const ProductIcon = getProductIcon(product.name);
-            return (
-              <GridItem key={product.id} span={12} className="pf-v6-u-mb-xl">
-                <ProductTitle>
-                  <span className="pf-v6-u-mr-xs">
-                    <Icon size="md">
-                      <ProductIcon />
-                    </Icon>
-                  </span>
-                  {product.name}
-                </ProductTitle>
-                <Gallery hasGutter key={product.id}>
-                  {product.stats.map((stat, index) => (
-                    <GalleryItem key={index}>
-                      <Card
-                        title="Click to see detailed stats for this topic"
-                        className="pointer"
-                      >
-                        <CardBody>
-                          <Title headingLevel="h6" size="md">
-                            <Link
-                              to={`/analytics/latest_jobs_status/${stat.topic.name}`}
-                            >
-                              {stat.topic.name}
-                            </Link>
-                          </Title>
-                          <NbOfJobsChart stat={stat} />
-                        </CardBody>
-                      </Card>
-                    </GalleryItem>
-                  ))}
-                </Gallery>
-              </GridItem>
-            );
-          })}
-        </Grid>
-      )}
+      <LatestJobStatus />
     </PageSection>
   );
 }

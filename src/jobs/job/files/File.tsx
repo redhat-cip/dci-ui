@@ -1,7 +1,5 @@
-import { useState } from "react";
 import FileSaver from "file-saver";
 import { Button } from "@patternfly/react-core";
-import { getFileContent } from "./filesActions";
 import { humanFileSize, isATextFile } from "./filesGetters";
 import {
   FileDownloadIcon,
@@ -13,14 +11,16 @@ import { IFile } from "types";
 import { useNavigate } from "react-router-dom";
 import SeeFileContentModal from "./SeeFileContentModal";
 import { Tr, Td } from "@patternfly/react-table";
+import { useState } from "react";
+import { getFileContentAsBlob } from "./filesApi";
 
 interface FileProps {
   file: IFile;
 }
 
 export default function File({ file }: FileProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const isText = isATextFile(file);
   return (
     <Tr>
@@ -42,21 +42,15 @@ export default function File({ file }: FileProps) {
       <Td className="text-center">
         <Button
           variant="primary"
-          icon={isDownloading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
+          icon={isLoading ? <RotatingSpinnerIcon /> : <FileDownloadIcon />}
           onClick={() => {
-            setIsDownloading(true);
-            getFileContent(file, { responseType: "blob" })
-              .then((content) => {
-                const blob = new Blob([content], {
-                  type: file.mime || undefined,
-                });
-                FileSaver.saveAs(blob, `${file.name}`);
-              })
-              .catch(console.error)
-              .finally(() => setIsDownloading(false));
+            setIsLoading(true);
+            getFileContentAsBlob(file)
+              .then((blob) => FileSaver.saveAs(blob, `${file.name}`))
+              .finally(() => setIsLoading(false));
           }}
           className="pf-v6-u-mr-xs"
-          isDisabled={isDownloading}
+          isDisabled={isLoading}
         >
           download
         </Button>

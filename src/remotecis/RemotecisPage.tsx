@@ -185,7 +185,7 @@ export default function RemotecisPage() {
           }
         />
       ) : (
-        <Table variant="compact" className="pf-v6-c-tablepf-m-grid-md">
+        <Table>
           <Thead>
             <Tr>
               <Th className="text-center">ID</Th>
@@ -201,7 +201,7 @@ export default function RemotecisPage() {
           <Tbody>
             {data.remotecis.map((remoteci) => (
               <Tr key={`${remoteci.id}.${remoteci.etag}`}>
-                <Td className="text-center">
+                <Td isActionCell>
                   <CopyButton text={remoteci.id} />
                 </Td>
                 <Td>{remoteci.name}</Td>

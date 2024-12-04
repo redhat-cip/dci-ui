@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "../store";
-import { DCIError, IAlert } from "types";
-import { AxiosError } from "axios";
-import { isEmpty } from "lodash";
+import { IAlert } from "types";
 
 interface AlertsState {
   [x: string]: IAlert;
@@ -53,36 +51,6 @@ export function showSuccess(title: string, message: string = "") {
 }
 
 export function showError(title: string, message: string = "") {
-  return showAndHideAfter10s(title, message, "danger");
-}
-
-function getTitleAndMessageFromAxiosError(axiosError: AxiosError<DCIError>) {
-  const data = axiosError?.response?.data;
-  if (isEmpty(data))
-    return {
-      title: "Unknown error",
-      message:
-        "We are sorry, an unknown error occurred. Can you try again in a few minutes or contact an administrator?",
-    };
-  const titleAndMessage = {
-    title: data.message || "Request malformed",
-    message: "",
-  };
-  const payload = data.payload;
-  if (isEmpty(payload)) return titleAndMessage;
-  if (Array.isArray(payload.errors)) {
-    titleAndMessage.message = payload.errors.join("\n");
-    return titleAndMessage;
-  }
-  const error = payload.error || payload.errors || {};
-  titleAndMessage.message = (Object.keys(error) as Array<keyof typeof error>)
-    .map((k) => `${k}: ${error[k]}`)
-    .join("\n");
-  return titleAndMessage;
-}
-
-export function showAPIError(error: AxiosError<DCIError>) {
-  const { title, message } = getTitleAndMessageFromAxiosError(error);
   return showAndHideAfter10s(title, message, "danger");
 }
 

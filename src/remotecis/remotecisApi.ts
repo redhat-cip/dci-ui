@@ -25,9 +25,7 @@ export const {
   useUnsubscribeFromARemoteciMutation,
   useListSubscribedRemotecisQuery,
 } = api
-  .enhanceEndpoints({
-    addTagTypes: ["CurrentUserRemoteci"],
-  })
+  .enhanceEndpoints({ addTagTypes: ["CurrentUserRemoteci"] })
   .injectEndpoints({
     endpoints: (builder) => ({
       listSubscribedRemotecis: builder.query<

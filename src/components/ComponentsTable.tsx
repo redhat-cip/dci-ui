@@ -17,7 +17,7 @@ export default function ComponentsTable({
   setFilters: (filters: Filters) => void;
 }) {
   return (
-    <Table aria-label="Components label" variant="compact">
+    <Table aria-label="Components label">
       <Thead>
         <Tr>
           <Th className="text-center pf-m-width-10">ID</Th>
@@ -31,7 +31,7 @@ export default function ComponentsTable({
       <Tbody>
         {components.map((component) => (
           <Tr key={`${component.id}.${component.etag}`}>
-            <Td className="text-center">
+            <Td isActionCell>
               <CopyButton text={component.id} />
             </Td>
             <Td>

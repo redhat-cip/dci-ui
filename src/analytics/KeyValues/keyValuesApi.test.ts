@@ -2,7 +2,7 @@ import {
   extractKeyValues,
   IKeyValueEmptyResponse,
   IKeyValueResponse,
-} from "./keyvalues";
+} from "./keyValuesApi";
 
 test("extractKeyValues with empty data", () => {
   const emptyData: IKeyValueEmptyResponse = [];

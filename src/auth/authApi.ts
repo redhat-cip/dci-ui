@@ -51,9 +51,7 @@ export function changeCurrentTeam(team: IIdentityTeam) {
 }
 
 export const authApi = api
-  .enhanceEndpoints({
-    addTagTypes: ["Auth"],
-  })
+  .enhanceEndpoints({ addTagTypes: ["Auth"] })
   .injectEndpoints({
     endpoints: (builder) => ({
       getCurrentUser: builder.query<ICurrentUser, void>({

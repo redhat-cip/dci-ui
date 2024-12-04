@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -6,17 +5,21 @@ import {
   CardTitle,
   Skeleton,
 } from "@patternfly/react-core";
-import { fetchUsersForTeam } from "./teamsApi";
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, CopyButton } from "ui";
-import { ITeam, IUser } from "types";
+import { ITeam } from "types";
 import { Link } from "react-router-dom";
-import { addUserToTeam, deleteUserFromTeam } from "users/usersApi";
+import {
+  useAddUserToTeamMutation,
+  useListTeamsUserQuery,
+  useRemoveUserFromTeamMutation,
+} from "users/usersApi";
 import AddUserToTeamModal from "./AddUserToTeamModal";
 import { sortByName } from "services/sort";
 import { showError, showSuccess } from "alerts/alertsSlice";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useAppDispatch } from "store";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export default function TeamMembers({
   team,
@@ -26,21 +29,9 @@ export default function TeamMembers({
   className?: string;
 }) {
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(true);
-  const [teamUsers, setTeamUsers] = useState<IUser[]>([]);
-
-  const _fetchTeamUsers = useCallback((team: ITeam) => {
-    fetchUsersForTeam(team)
-      .then(setTeamUsers)
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    _fetchTeamUsers(team);
-  }, [team, _fetchTeamUsers]);
-
+  const { data, isLoading } = useListTeamsUserQuery(team ? team : skipToken);
+  const [removeUserFromTeam] = useRemoveUserFromTeamMutation();
+  const [addUserToTeam] = useAddUserToTeamMutation();
   return (
     <Card className={className}>
       <CardTitle>
@@ -57,9 +48,8 @@ export default function TeamMembers({
               team={team}
               onUserSelected={(user) => {
                 const fullname = user.fullname;
-                addUserToTeam(user.id, team)
+                addUserToTeam({ user, team })
                   .then((response) => {
-                    _fetchTeamUsers(team);
                     dispatch(
                       showSuccess(
                         `${fullname} added successfully to ${team.name} team.`,
@@ -94,25 +84,21 @@ export default function TeamMembers({
       <CardBody>
         {isLoading ? (
           <Skeleton screenreaderText="Loading team's users" />
-        ) : (
-          <Table
-            variant="compact"
-            borders={false}
-            className="pf-v6-c-tablepf-m-grid-md"
-          >
+        ) : data === undefined ? null : (
+          <Table borders={false}>
             <Thead>
               <Tr>
                 <Th>ID</Th>
                 <Th>Login</Th>
                 <Th>Full name</Th>
                 <Th>Email</Th>
-                <Th />
+                <Th screenReaderText="Actions" />
               </Tr>
             </Thead>
             <Tbody>
-              {sortByName(teamUsers).map((user) => (
+              {sortByName(data.users).map((user) => (
                 <Tr key={user.id}>
-                  <Td>
+                  <Td isActionCell>
                     <CopyButton text={user.id} />
                   </Td>
                   <Td>
@@ -120,15 +106,11 @@ export default function TeamMembers({
                   </Td>
                   <Td>{user.fullname}</Td>
                   <Td>{user.email}</Td>
-                  <Td className="pf-v6-c-table__action">
+                  <Td isActionCell>
                     <ConfirmDeleteModal
                       title={`Delete ${user.name} from ${team.name}`}
                       message={`Are you sure you want to remove user ${user.name} from team ${team.name}?`}
-                      onOk={() => {
-                        deleteUserFromTeam(user, team).then(() => {
-                          _fetchTeamUsers(team);
-                        });
-                      }}
+                      onOk={() => removeUserFromTeam({ user, team })}
                     >
                       {(openModal) => (
                         <Button

@@ -19,11 +19,19 @@ export interface ITeam extends Resource {
   topics: ITopic[];
 }
 
+export interface IGetTeams extends BaseListResponse {
+  teams: ITeam[];
+}
+
 export interface IProduct extends Resource {
   label: string;
   description: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface IGetProducts extends BaseListResponse {
+  products: IProduct[];
 }
 
 export interface IRemoteci extends Resource {
@@ -225,10 +233,6 @@ export interface IFile extends Resource {
   team_id: string;
 }
 
-export interface IGetFile {
-  file: IFile;
-}
-
 export interface IFileWithDuration extends IFile {
   duration: number;
 }
@@ -350,14 +354,6 @@ export interface IComponent {
 
 export interface IComponentWithJobs extends IComponent {
   jobs: IJob[];
-}
-
-export interface DCIError {
-  message?: string;
-  payload?: {
-    error?: { k: string };
-    errors?: string[] | { k: string };
-  };
 }
 
 export interface IAlert {

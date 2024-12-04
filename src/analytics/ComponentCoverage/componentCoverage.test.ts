@@ -1,7 +1,4 @@
-import {
-  buildComponentCoverage,
-  getComponentCoverageDomain,
-} from "./componentCoverage";
+import { buildComponentCoverage } from "./componentCoverage";
 import { createCoverageSearchFromFilters } from "./ComponentCoveragePage";
 
 test("buildComponentCoverage", () => {
@@ -122,8 +119,8 @@ test("buildComponentCoverage", () => {
         },
       ],
     }),
-  ).toEqual({
-    c1: {
+  ).toEqual([
+    {
       id: "c1",
       display_name: "c1",
       type: "ocp",
@@ -164,7 +161,7 @@ test("buildComponentCoverage", () => {
         },
       ],
     },
-    c2: {
+    {
       id: "c2",
       display_name: "c2",
       type: "ocp",
@@ -181,7 +178,7 @@ test("buildComponentCoverage", () => {
         },
       ],
     },
-    c3: {
+    {
       id: "c3",
       display_name: "c3",
       type: "ocp",
@@ -198,7 +195,7 @@ test("buildComponentCoverage", () => {
         },
       ],
     },
-    c4: {
+    {
       id: "c4",
       display_name: "c4",
       type: "ocp",
@@ -208,102 +205,7 @@ test("buildComponentCoverage", () => {
       tags: ["tag2"],
       jobs: [],
     },
-  });
-});
-
-test("getComponentCoverageDomain", () => {
-  expect(
-    getComponentCoverageDomain({
-      c1: {
-        id: "c1",
-        display_name: "c1",
-        type: "ocp",
-        nbOfSuccessfulJobs: 1,
-        nbOfJobs: 5,
-        topic_id: "to1",
-        tags: [],
-        jobs: [
-          {
-            created_at: "2022-01-14T01:19:28.198117",
-            id: "j1",
-            name: "j1",
-            status: "failure",
-          },
-          {
-            created_at: "2022-01-14T01:53:26.817058",
-            id: "j2",
-            name: "j2",
-            status: "success",
-          },
-          {
-            created_at: "2022-01-14T01:54:26.817058",
-            id: "j3",
-            name: "j3",
-            status: "failure",
-          },
-          {
-            created_at: "2022-01-14T01:45:05.186011",
-            id: "j4",
-            name: "j4",
-            status: "failure",
-          },
-          {
-            created_at: "2022-01-14T02:01:09.214449",
-            id: "j5",
-            name: "j5",
-            status: "failure",
-          },
-        ],
-      },
-      c2: {
-        id: "c2",
-        display_name: "c2",
-        type: "ocp",
-        nbOfSuccessfulJobs: 1,
-        nbOfJobs: 1,
-        topic_id: "to1",
-        tags: [],
-        jobs: [
-          {
-            created_at: "2022-01-14T01:19:28.198117",
-            id: "j6",
-            name: "j6",
-            status: "success",
-          },
-        ],
-      },
-      c3: {
-        id: "c3",
-        display_name: "c3",
-        type: "ocp",
-        nbOfSuccessfulJobs: 1,
-        nbOfJobs: 1,
-        topic_id: "to1",
-        tags: [],
-        jobs: [
-          {
-            created_at: "2022-01-14T01:19:28.198117",
-            id: "j7",
-            name: "j7",
-            status: "success",
-          },
-        ],
-      },
-      c4: {
-        id: "c4",
-        display_name: "c4",
-        type: "ocp",
-        nbOfSuccessfulJobs: 0,
-        nbOfJobs: 0,
-        topic_id: "to1",
-        tags: [],
-        jobs: [],
-      },
-    }),
-  ).toEqual({
-    nbOfJobs: { min: 0, max: 5 },
-    nbOfSuccessfulJobs: { min: 0, max: 1 },
-  });
+  ]);
 });
 
 test("create search from filters", () => {

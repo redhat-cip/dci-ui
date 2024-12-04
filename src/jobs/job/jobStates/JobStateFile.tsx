@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
-import { getFileContent } from "jobs/job/files/filesActions";
 import { IFileStatus, IFileWithDuration } from "types";
 import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
 import { Label } from "@patternfly/react-core";
@@ -19,6 +18,7 @@ import {
   t_global_text_color_nonstatus_on_orange_default,
   t_global_text_color_nonstatus_on_red_default,
 } from "@patternfly/react-tokens";
+import TaskContent from "./TaskContent";
 
 const TaskButton = styled.span`
   display: flex;
@@ -63,26 +63,7 @@ export default function JobStateRow({
   onClick,
 }: JobStateRowProps) {
   const liRef = useRef<HTMLLIElement>(null);
-  const [content, setContent] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [seeDetails, setSeeDetails] = useState(false);
-  const loadFileContentCallback = useCallback(() => {
-    setIsLoading(true);
-    getFileContent(file)
-      .then((content) => {
-        setContent(content);
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [file]);
-
-  useEffect(() => {
-    if (seeDetails) {
-      loadFileContentCallback();
-    }
-  }, [seeDetails, loadFileContentCallback]);
 
   useEffect(() => {
     if (isSelected) {
@@ -135,13 +116,7 @@ export default function JobStateRow({
             backgroundColor: t_global_color_nonstatus_gray_default.var,
           }}
         >
-          {isLoading
-            ? "loading"
-            : content === ""
-              ? `no log for "${file.name}"`
-              : content
-                  .split("\\n")
-                  .map((line, i) => <div key={i}>{line}</div>)}
+          <TaskContent file={file} />
         </div>
       ) : null}
     </li>

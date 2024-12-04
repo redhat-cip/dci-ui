@@ -14,10 +14,9 @@ import {
 import { Breadcrumb } from "ui";
 import { t_global_text_color_required } from "@patternfly/react-tokens";
 import { formatDate, getRangeDates } from "services/date";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RangeOptionValue } from "types";
 import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
-import http from "services/http";
 import qs from "qs";
 import {
   Bar,
@@ -34,15 +33,10 @@ import {
 } from "recharts";
 import MultiSelectFilter from "./MultiSelectFilter";
 import { useSearchParams } from "react-router-dom";
-import {
-  extractKeyValues,
-  IGraphKeyValue,
-  IGraphKeyValues,
-  IKeyValueResponse,
-} from "./keyvalues";
 import { DateTime } from "luxon";
 import SelectFilter from "./SelectFilter";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { IGraphKeyValue, useLazyGetAnalyticJobsQuery } from "./keyValuesApi";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -74,14 +68,32 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
+function _getParams(query: string, from: string, to: string) {
+  return qs.stringify(
+    {
+      query,
+      offset: 0,
+      limit: 200,
+      sort: "-created_at",
+      includes: "id,name,created_at,keys_values",
+      from,
+      to,
+    },
+    {
+      addQueryPrefix: true,
+      encode: true,
+      skipNulls: true,
+    },
+  );
+}
+
 type IGraphType = "bar" | "line" | "scatter";
 type IGraphTypeItem = { label: string; value: IGraphType };
 
 export default function KeyValuesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState(searchParams.get("query") || "");
-  const [keyValues, setKeyValues] = useState<IGraphKeyValues | null>(null);
+  const [getAnalyticJobs, { data, isLoading }] = useLazyGetAnalyticJobsQuery();
   const graphTypes: IGraphTypeItem[] = [
     { label: "scatter chart", value: "scatter" },
     { label: "line chart", value: "line" },
@@ -106,37 +118,11 @@ export default function KeyValuesPage() {
     searchParams.get("end_date") || dates.before,
   );
 
-  const memoizedGetKeyValues = useCallback(() => {
-    if (query === "") return;
-    setIsLoading(true);
-    const params = qs.stringify(
-      {
-        query: query,
-        offset: 0,
-        limit: 200,
-        sort: "-created_at",
-        includes: "id,name,created_at,keys_values",
-        from: after,
-        to: before,
-      },
-      {
-        addQueryPrefix: true,
-        encode: true,
-        skipNulls: true,
-      },
-    );
-    http
-      .get(`/api/v1/analytics/jobs${params}`)
-      .then((response) => {
-        setKeyValues(extractKeyValues(response.data as IKeyValueResponse));
-      })
-      .catch(console.error)
-      .then(() => setIsLoading(false));
-  }, [query, after, before]);
-
   useEffect(() => {
-    memoizedGetKeyValues();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (query !== "") {
+      getAnalyticJobs(_getParams(query, after, before));
+    }
+  }, [after, before, getAnalyticJobs, query]);
 
   const updateUrlWithParams = () => {
     if (selectedKeys.length > 0) {
@@ -239,7 +225,7 @@ export default function KeyValuesPage() {
                   <MultiSelectFilter
                     categoryName="Keys"
                     placeholder="Filter by keys"
-                    items={keyValues === null ? [] : Object.keys(keyValues)}
+                    items={data ? Object.keys(data) : []}
                     itemsSelected={selectedKeys}
                     itemRemoved={(key) =>
                       setSelectedKeys(selectedKeys.filter((t) => t !== key))
@@ -260,7 +246,6 @@ export default function KeyValuesPage() {
                     categoryName="Graph type"
                     placeholder="Select graph type"
                     onSelect={(selectedGraphType) => {
-                      console.log(selectedGraphType);
                       setGraphType(selectedGraphType as IGraphTypeItem);
                     }}
                   />
@@ -270,7 +255,7 @@ export default function KeyValuesPage() {
                     variant="primary"
                     isDisabled={query === ""}
                     onClick={() => {
-                      memoizedGetKeyValues();
+                      getAnalyticJobs(_getParams(query, after, before));
                       updateUrlWithParams();
                     }}
                   >
@@ -283,8 +268,8 @@ export default function KeyValuesPage() {
         </CardBody>
       </Card>
       <div>
-        {keyValues !== null &&
-          Object.entries(keyValues)
+        {data &&
+          Object.entries(data)
             .filter(
               ([key, _]) =>
                 selectedKeys.length === 0 || selectedKeys.indexOf(key) !== -1,
@@ -376,7 +361,7 @@ export default function KeyValuesPage() {
                 </CardBody>
               </Card>
             ))}
-        {keyValues !== null && Object.keys(keyValues).length === 0 && (
+        {data && Object.keys(data).length === 0 && (
           <Card className="pf-v6-u-mt-xs">
             <CardBody>
               There is no key values corresponding to this query: {query}
