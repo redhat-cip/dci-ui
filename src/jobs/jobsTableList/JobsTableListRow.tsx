@@ -60,7 +60,6 @@ export default function JobTableSummary({
   const config = job.configuration;
   const pipeline = job.pipeline;
   const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
-  const { isDark } = useTheme();
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
       <span>
@@ -232,9 +231,7 @@ export default function JobTableSummary({
           borderTopWidth: "1px",
           borderTopStyle: level === 0 ? "solid" : "none",
           borderBlockEndStyle: "none",
-          borderTopColor: isDark
-            ? t_global_border_color_200.value
-            : t_global_border_color_100.value,
+          borderTopColor: t_global_border_color_200.var,
         }}
       >
         <Td

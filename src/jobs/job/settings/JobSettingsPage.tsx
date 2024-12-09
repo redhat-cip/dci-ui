@@ -12,16 +12,8 @@ export default function JobSettingsPage() {
 
   return (
     <PageSection>
-      <Content
-        component="h2"
-        style={{ color: t_global_color_status_danger_default.value }}
-      >
-        Delete this job
-      </Content>
-      <Content
-        component="p"
-        style={{ color: t_global_color_status_danger_default.value }}
-      >
+      <Content component="h2">Delete this job</Content>
+      <Content component="p">
         Once you delete a job, there is no going back. Please be certain.
       </Content>
       <ConfirmDeleteModal

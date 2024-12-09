@@ -188,7 +188,7 @@ export default function TestCase({
                 <DescriptionListDescription>
                   <CodeBlock
                     actions={[
-                      <CodeBlockAction>
+                      <CodeBlockAction key="copy">
                         <CopyButton text={testcase.value} variant="plain" />
                       </CodeBlockAction>,
                     ]}

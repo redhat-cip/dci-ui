@@ -47,7 +47,7 @@ export default function JobTestPage() {
       <CardBody>
         <Content className="pf-v6-u-mb-md">
           <Content component={ContentVariants.h2}>
-            Test suites for {file_id}
+            Test suites for file id: {file_id}
           </Content>
         </Content>
         {junit !== null && <TestSuites junit={junit} />}

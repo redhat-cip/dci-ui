@@ -44,7 +44,7 @@ export default function JobsPage() {
       : { ...filters, team_id: currentUser.team?.id };
   const { data, isLoading, refetch } = useListJobsQuery(filtersWithTeamId);
 
-  const jobsPageDivRef = useRef<HTMLInputElement>(null);
+  const jobsPageDivRef = useRef<HTMLDivElement>(null);
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]
   >(
@@ -74,51 +74,53 @@ export default function JobsPage() {
   const count = data._meta.count;
 
   return (
-    <PageSection ref={jobsPageDivRef}>
-      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
-      <Content component="h1">Jobs</Content>
-      <JobsToolbar
-        jobsCount={count}
-        filters={filters}
-        setFilters={setFilters}
-        clearAllFilters={() => setFilters(getDefaultFilters())}
-        refresh={refetch}
-        tableViewColumns={tableViewColumns}
-        setTableViewColumns={setTableViewColumns}
-      />
-      {count === 0 ? (
-        <EmptyState
-          title="No job"
-          info="No results match the filter criteria. Clear all filters and try again."
+    <PageSection>
+      <div ref={jobsPageDivRef}>
+        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
+        <Content component="h1">Jobs</Content>
+        <JobsToolbar
+          jobsCount={count}
+          filters={filters}
+          setFilters={setFilters}
+          clearAllFilters={() => setFilters(getDefaultFilters())}
+          refresh={refetch}
+          tableViewColumns={tableViewColumns}
+          setTableViewColumns={setTableViewColumns}
         />
-      ) : (
-        <div>
-          <JobsTableList
-            filters={filters}
-            setFilters={setFilters}
-            jobs={data.jobs}
-            columns={tableViewColumns}
+        {count === 0 ? (
+          <EmptyState
+            title="No job"
+            info="No results match the filter criteria. Clear all filters and try again."
           />
-          <Pagination
-            className="pf-v6-u-px-md"
-            perPage={filters.limit}
-            page={offsetAndLimitToPage(filters.offset, filters.limit)}
-            itemCount={count}
-            variant={PaginationVariant.bottom}
-            onSetPage={(e, newPage) => {
-              jobsPageDivRef?.current?.scrollIntoView();
-              setFilters({
-                ...filters,
-                offset: pageAndLimitToOffset(newPage, filters.limit),
-              });
-            }}
-            onPerPageSelect={(e, newPerPage) => {
-              jobsPageDivRef?.current?.scrollIntoView();
-              setFilters({ ...filters, limit: newPerPage });
-            }}
-          />
-        </div>
-      )}
+        ) : (
+          <div>
+            <JobsTableList
+              filters={filters}
+              setFilters={setFilters}
+              jobs={data.jobs}
+              columns={tableViewColumns}
+            />
+            <Pagination
+              className="pf-v6-u-px-md"
+              perPage={filters.limit}
+              page={offsetAndLimitToPage(filters.offset, filters.limit)}
+              itemCount={count}
+              variant={PaginationVariant.bottom}
+              onSetPage={(e, newPage) => {
+                jobsPageDivRef?.current?.scrollIntoView();
+                setFilters({
+                  ...filters,
+                  offset: pageAndLimitToOffset(newPage, filters.limit),
+                });
+              }}
+              onPerPageSelect={(e, newPerPage) => {
+                jobsPageDivRef?.current?.scrollIntoView();
+                setFilters({ ...filters, limit: newPerPage });
+              }}
+            />
+          </div>
+        )}
+      </div>
     </PageSection>
   );
 }

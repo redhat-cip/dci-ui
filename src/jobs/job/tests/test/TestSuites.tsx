@@ -201,21 +201,31 @@ export default function TestSuites({ junit }: TestsCasesProps) {
   const [search, setSearch] = useState("");
   return (
     <div>
+      <Flex className="pf-v6-u-mb-md">
+        <FlexItem>
+          <SearchInput
+            placeholder="Filter by test case"
+            value={search}
+            onChange={(_event, value) => setSearch(value)}
+            onClear={() => setSearch("")}
+          />
+        </FlexItem>
+      </Flex>
       {junit.testsuites.map((testsuite, i) => (
-        <div key={i}>
+        <div key={i} className="pf-v6-u-mb-xl">
           <div>
-            <Content component={ContentVariants.h3}>Summary</Content>
+            <Content component={ContentVariants.h3}>{testsuite.name}</Content>
             {junit.previous_job !== null && (
               <Content component={ContentVariants.p}>
-                This{" "}
+                This job (
                 <Link to={`/jobs/${junit.job.id}/jobStates`}>
-                  job ({junit.job.name})
-                </Link>{" "}
-                was compared with the{" "}
-                <Link to={`/jobs/${junit.previous_job.id}/jobStates`}>
-                  previous job ({junit.previous_job.name})
+                  {junit.job.name}
                 </Link>
-                .
+                ) was compared with the previous job (
+                <Link to={`/jobs/${junit.previous_job.id}/jobStates`}>
+                  {junit.previous_job.name}
+                </Link>
+                ).
               </Content>
             )}
           </div>
@@ -255,9 +265,6 @@ export default function TestSuites({ junit }: TestsCasesProps) {
               />
             </FlexItem>
           </Flex>
-          <Content className="pf-v6-u-my-md" component={ContentVariants.h3}>
-            {testsuite.name || `test suite ${i + 1}`}
-          </Content>
           {testsuite.properties.length > 0 && (
             <>
               <Content className="pf-v6-u-my-md" component={ContentVariants.h4}>
@@ -278,16 +285,6 @@ export default function TestSuites({ junit }: TestsCasesProps) {
               </Content>
             </>
           )}
-          <Flex>
-            <FlexItem>
-              <SearchInput
-                placeholder="Find test by name"
-                value={search}
-                onChange={(_event, value) => setSearch(value)}
-                onClear={() => setSearch("")}
-              />
-            </FlexItem>
-          </Flex>
           <TestCases testcases={[...testsuite.testcases]} search={search} />
         </div>
       ))}

@@ -4,11 +4,7 @@ import { groupJobsByPipeline } from "./pipelineJobs";
 import JobsTableListRow from "./JobsTableListRow";
 import { tableViewColumnLabels } from "jobs/toolbar/TableViewColumnsSelect";
 import { styled } from "styled-components";
-import { useTheme } from "ui/Theme/themeContext";
-import {
-  t_global_border_color_100,
-  t_global_border_color_200,
-} from "@patternfly/react-tokens";
+import { t_global_border_color_200 } from "@patternfly/react-tokens";
 
 interface JobsTableListProps {
   jobs: IJob[];
@@ -17,14 +13,10 @@ interface JobsTableListProps {
   columns: JobsTableListColumn[];
 }
 
-const TableWithTrStyled = styled(Table)<{ isDark: boolean }>`
+const TableWithTrStyled = styled(Table)`
   tbody > tr {
     &:last-child {
-      border-bottom: 1px solid
-        ${(props) =>
-          props.isDark
-            ? t_global_border_color_200.value
-            : t_global_border_color_100.value} !important;
+      border-bottom: 1px solid ${t_global_border_color_200.var} !important;
     }
   }
 `;
@@ -35,16 +27,14 @@ export default function JobsTableList({
   setFilters,
   columns,
 }: JobsTableListProps) {
-  const { isDark } = useTheme();
-
   if (jobs.length === 0) return null;
   const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
 
   return (
-    <TableWithTrStyled isDark={isDark}>
+    <TableWithTrStyled>
       <Thead>
         <Tr>
-          <Th></Th>
+          <Th screenReaderText="pipeline"></Th>
           <Th>Name</Th>
           {columns.map((column, i) => (
             <Th key={i}>{tableViewColumnLabels[column]}</Th>
