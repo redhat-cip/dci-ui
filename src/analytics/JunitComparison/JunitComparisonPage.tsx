@@ -9,7 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { BlinkLogo, Breadcrumb } from "ui";
 import { useState } from "react";
-import { useLazyGetJunitQuery } from "./junitComparisonApi";
+import { useLazyGetJunitAnalyticsQuery } from "./junitComparisonApi";
 import { TrendChart } from "./TrendChart";
 import { TestListDetails } from "./TestListDetails";
 import { JunitComparisonForm } from "./JunitComparisonForm";
@@ -22,7 +22,8 @@ export default function JunitComparisonPage() {
   const [testUpperBoundary, setTestUpperBoundary] = useState<number | null>(
     null,
   );
-  const [getJunitComparison, { data, isLoading }] = useLazyGetJunitQuery();
+  const [getJunitComparison, { data, isLoading }] =
+    useLazyGetJunitAnalyticsQuery();
 
   return (
     <PageSection>

@@ -7,7 +7,7 @@ export const { useGetFileContentQuery, useLazyGetFileContentQuery } = api
   .injectEndpoints({
     endpoints: (builder) => ({
       getFileContent: builder.query<string, IFile>({
-        query: (id) => ({
+        query: ({ id }) => ({
           url: `/files/${id}/content`,
           method: "GET",
           responseHandler: "text",

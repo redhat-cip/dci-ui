@@ -41,11 +41,11 @@ export interface JunitData {
   len_jobs_topic_2: number;
 }
 
-export const { useLazyGetJunitQuery } = api
+export const { useLazyGetJunitAnalyticsQuery } = api
   .enhanceEndpoints({ addTagTypes: ["Analytics"] })
   .injectEndpoints({
     endpoints: (builder) => ({
-      getJunit: builder.query<JunitData, JunitComparisonPayload>({
+      getJunitAnalytics: builder.query<JunitData, JunitComparisonPayload>({
         query(body) {
           return {
             url: "/analytics/junit_comparison",
