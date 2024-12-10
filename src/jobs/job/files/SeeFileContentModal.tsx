@@ -1,5 +1,11 @@
 import { ReactNode } from "react";
-import { Modal } from "@patternfly/react-core/deprecated";
+import {
+  CodeBlock,
+  CodeBlockCode,
+  Modal,
+  ModalBody,
+  ModalHeader,
+} from "@patternfly/react-core";
 import { IFile } from "types";
 import useModal from "hooks/useModal";
 import FileContent from "./FileContent";
@@ -24,7 +30,14 @@ export default function SeeFileContentModal({
         onClose={hide}
         variant="large"
       >
-        <FileContent file={file} />
+        <ModalHeader title={file.name} />
+        <ModalBody className="pf-v6-u-py-md">
+          <CodeBlock>
+            <CodeBlockCode>
+              <FileContent file={file} />
+            </CodeBlockCode>
+          </CodeBlock>
+        </ModalBody>
       </Modal>
       {children(show)}
     </>
