@@ -6,44 +6,37 @@ import {
   EmptyState,
   EmptyStateBody,
   EmptyStateVariant,
-  Label,
   ProgressStep,
   ProgressStepper,
-  Toolbar,
-  ToolbarContent,
-  ToolbarItem,
-  Tooltip,
   CardHeader,
   Truncate,
-  ToolbarGroup,
   PageSection,
   Content,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import {
-  t_global_border_color_default,
-  t_global_color_nonstatus_green_100,
-  t_global_text_color_required,
-  t_global_color_nonstatus_red_100,
-} from "@patternfly/react-tokens";
+import { t_global_border_color_default } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
-import {
-  formatDate,
-  getRangeDates,
-  humanizeDurationShort,
-} from "services/date";
-import { Fragment, useEffect, useState } from "react";
-import TeamsToolbarFilter from "jobs/toolbar/TeamsToolbarFilter";
-import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
-import { Link, useSearchParams } from "react-router-dom";
-import { IJobStatus, IPipelines, RangeOptionValue } from "types";
-import RangeToolbarFilter from "ui/form/RangeToolbarFilter";
+import { formatDate } from "services/date";
+import { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
+import { IJobStatus } from "types";
 import { ComponentsList } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
-import LoadingPageSection from "ui/LoadingPageSection";
-import { useLazyGetPipelineStatusQuery } from "./pipelinesApi";
+import {
+  extractPipelinesFromAnalyticsJobs,
+  IPipelineDay,
+  IPipelineJob,
+  useLazyGetAnalyticJobsQuery,
+} from "./pipelinesApi";
+import { FilterIcon } from "@patternfly/react-icons";
+import {
+  humanizeJobDuration,
+  JobComment,
+  JobResults,
+} from "analytics/jobs/JobComponents";
+import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -63,9 +56,7 @@ function jobStatusToVariant(status: IJobStatus) {
   }
 }
 
-type PipelineJob = IPipelines["days"][0]["pipelines"][0]["jobs"][0];
-
-function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
+function PipelineJobInfo({ job, index }: { job: IPipelineJob; index: number }) {
   return (
     <>
       <Td
@@ -93,48 +84,14 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           textAlign: "center",
         }}
       >
-        <Tooltip content={<div>{job.status_reason}</div>}>
-          <span
-            style={{
-              textDecorationLine: "underline",
-              textDecorationStyle: "dashed",
-              textDecorationColor: "#000",
-            }}
-          >
-            {job.comment || ""}
-          </span>
-        </Tooltip>
+        <JobComment comment={job.comment} status_reason={job.status_reason} />
       </Td>
       <Td
         style={{
           whiteSpace: "nowrap",
         }}
       >
-        <Label
-          isCompact
-          color="green"
-          title={`${job?.tests?.success || 0} tests in success`}
-          className="pf-v6-u-mr-xs"
-        >
-          {job?.tests?.success || 0}
-        </Label>
-        <Label
-          isCompact
-          color="orange"
-          title={`${job?.tests?.skips || 0} skipped tests`}
-          className="pf-v6-u-mr-xs"
-        >
-          {job?.tests?.skips || 0}
-        </Label>
-        <Label
-          isCompact
-          color="red"
-          title={`${
-            (job?.tests?.failures || 0) + (job?.tests?.errors || 0)
-          } errors and failures tests`}
-        >
-          {(job?.tests?.failures || 0) + (job?.tests?.errors || 0)}
-        </Label>
+        <JobResults results={job.results} />
       </Td>
       <Td
         style={{
@@ -143,11 +100,7 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
           borderRight: `1px solid ${t_global_border_color_default.var}`,
         }}
       >
-        {humanizeDurationShort(job.duration * 1000, {
-          delimiter: " ",
-          round: true,
-          largest: 2,
-        })}
+        {humanizeJobDuration(job.duration)}
       </Td>
     </>
   );
@@ -155,14 +108,14 @@ function PipelineJobInfo({ job, index }: { job: PipelineJob; index: number }) {
 
 function PipelineCard({
   pipelineDay,
+  ...props
 }: {
-  pipelineDay: IPipelines["days"][0] & {
-    datetime: DateTime;
-  };
+  pipelineDay: IPipelineDay;
+  [k: string]: any;
 }) {
   const [seeJobComponents, setSeeJobComponents] = useState(false);
   return (
-    <Card className="pf-v6-u-mt-md">
+    <Card {...props}>
       <CardHeader
         actions={{
           actions: (
@@ -233,10 +186,6 @@ function PipelineCard({
                         style={{
                           borderLeft: `1px solid ${t_global_border_color_default.value}`,
                           whiteSpace: "nowrap",
-                          backgroundColor:
-                            job.status === "success"
-                              ? t_global_color_nonstatus_green_100.var
-                              : t_global_color_nonstatus_red_100.value,
                         }}
                         colSpan={4}
                       >
@@ -256,146 +205,42 @@ function PipelineCard({
   );
 }
 
-function PipelinesTable({ pipelines }: { pipelines: IPipelines }) {
-  if (pipelines.days.length === 0) {
+function PipelinesPerDay({
+  pipelinesPerDays,
+}: {
+  pipelinesPerDays: IPipelineDay[];
+}) {
+  if (pipelinesPerDays.length === 0) {
     return (
-      <EmptyState
-        headingLevel="h4"
-        titleText="No pipeline between these dates"
-        variant={EmptyStateVariant.xs}
-      >
-        <EmptyStateBody>
-          change your search parameters and try again
-        </EmptyStateBody>
-      </EmptyState>
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <EmptyState
+            variant={EmptyStateVariant.xs}
+            icon={FilterIcon}
+            titleText="No pipeline"
+            headingLevel="h4"
+          >
+            <EmptyStateBody>
+              We did not find any pipelines matching this search. Please modify
+              your search.
+            </EmptyStateBody>
+          </EmptyState>
+        </CardBody>
+      </Card>
     );
   }
 
   return (
     <div>
-      {pipelines.days
-        .map((d) => ({ ...d, datetime: DateTime.fromISO(d.date) }))
-        .sort((day1, day2) => {
-          const epoch1 = day1.datetime.toMillis();
-          const epoch2 = day2.datetime.toMillis();
-          return epoch1 < epoch2 ? 1 : epoch1 > epoch2 ? -1 : 0;
-        })
-        .map((day, index) => (
-          <PipelineCard key={index} pipelineDay={day} />
-        ))}
+      {pipelinesPerDays.map((day, index) => (
+        <PipelineCard key={index} pipelineDay={day} className="pf-v6-u-mt-md" />
+      ))}
     </div>
   );
 }
 
-function Pipelines({
-  teamsIds,
-  before,
-  after,
-  pipelinesNames,
-}: {
-  teamsIds: string[];
-  before: string;
-  after: string;
-  pipelinesNames: string[];
-}) {
-  const [getPipelineStatus, { data: pipelines, isLoading }] =
-    useLazyGetPipelineStatusQuery();
-
-  useEffect(() => {
-    getPipelineStatus({
-      start_date: after,
-      end_date: before,
-      teams_ids: teamsIds,
-      pipelines_names: pipelinesNames,
-    });
-  }, [after, before, teamsIds, pipelinesNames, getPipelineStatus]);
-
-  if (isLoading) {
-    return <LoadingPageSection />;
-  }
-
-  if (!pipelines) {
-    return (
-      <EmptyState
-        headingLevel="h4"
-        titleText="Display pipeline jobs"
-        variant={EmptyStateVariant.xs}
-      >
-        <EmptyStateBody>
-          You can fill in the filters to view your team's pipelines.
-        </EmptyStateBody>
-      </EmptyState>
-    );
-  }
-
-  return <PipelinesTable pipelines={pipelines} />;
-}
-
 export default function PipelinesPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [pipelinesNames, setPipelinesNames] = useState<string[]>(
-    searchParams.get("pipelines_names")?.split(",") || [],
-  );
-  const [teamsIds, setTeamsIds] = useState<string[]>(
-    searchParams.get("teams_ids")?.split(",") || [],
-  );
-  const defaultRangeValue: RangeOptionValue = "last7Days";
-  const [range, setRange] = useState<RangeOptionValue>(
-    (searchParams.get("range") as RangeOptionValue) || defaultRangeValue,
-  );
-  const dates = getRangeDates(range);
-  const [after, setAfter] = useState(
-    searchParams.get("start_date") || dates.after,
-  );
-  const [before, setBefore] = useState(
-    searchParams.get("end_date") || dates.before,
-  );
-
-  useEffect(() => {
-    if (teamsIds.length > 0) {
-      searchParams.set("teams_ids", teamsIds.join(","));
-    } else {
-      searchParams.delete("teams_ids");
-    }
-    setSearchParams(searchParams);
-  }, [teamsIds, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (pipelinesNames.length > 0) {
-      searchParams.set("pipelines_names", pipelinesNames.join(","));
-    } else {
-      searchParams.delete("pipelines_names");
-    }
-    setSearchParams(searchParams);
-  }, [pipelinesNames, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (before === "" || range !== "custom") {
-      searchParams.delete("end_date");
-    } else {
-      searchParams.set("end_date", before);
-    }
-    setSearchParams(searchParams);
-  }, [before, range, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (after === "" || range !== "custom") {
-      searchParams.delete("start_date");
-    } else {
-      searchParams.set("start_date", after);
-    }
-    setSearchParams(searchParams);
-  }, [after, range, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (range !== "custom") {
-      const dates = getRangeDates(range);
-      setAfter(dates.after);
-      setBefore(dates.before);
-    }
-    searchParams.set("range", range);
-    setSearchParams(searchParams);
-  }, [range, searchParams, setSearchParams]);
+  const [getAnalyticJobs, { data, isLoading }] = useLazyGetAnalyticJobsQuery();
 
   return (
     <PageSection>
@@ -407,87 +252,22 @@ export default function PipelinesPage() {
         ]}
       />
       <Content component="h1">Pipelines</Content>
-      <Card>
-        <CardBody>
-          <Toolbar
-            id="toolbar-select-jobs"
-            clearAllFilters={() => {
-              setTeamsIds([]);
-              setPipelinesNames([]);
-              setRange(defaultRangeValue);
-            }}
-            collapseListedFiltersBreakpoint="xl"
-          >
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem variant="label" id="team-label-toolbar">
-                  Teams
-                  <span style={{ color: t_global_text_color_required.var }}>
-                    *
-                  </span>
-                </ToolbarItem>
-                <ToolbarItem>
-                  <TeamsToolbarFilter
-                    ids={teamsIds}
-                    onClear={(teamId) =>
-                      setTeamsIds((oldTeamsIds) =>
-                        oldTeamsIds.filter((t) => t !== teamId),
-                      )
-                    }
-                    onSelect={(team) =>
-                      setTeamsIds((oldTeamsIds) => [...oldTeamsIds, team.id])
-                    }
-                  />
-                </ToolbarItem>
-                <ToolbarItem>
-                  <ListToolbarFilter
-                    items={pipelinesNames}
-                    categoryName="Pipelines names"
-                    placeholderText="Pipelines names"
-                    onSubmit={setPipelinesNames}
-                  />
-                </ToolbarItem>
-                <ToolbarItem variant="label" id="range-label-toolbar">
-                  Range
-                </ToolbarItem>
-                <ToolbarItem>
-                  <RangeToolbarFilter
-                    range={range}
-                    onChange={(range, after, before) => {
-                      if (range === "custom") {
-                        setAfter(after);
-                        setBefore(before);
-                      }
-                      setRange(range);
-                    }}
-                    after={after}
-                    before={before}
-                    ranges={[
-                      defaultRangeValue,
-                      "previousWeek",
-                      "currentWeek",
-                      "yesterday",
-                      "today",
-                      "custom",
-                    ]}
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-            </ToolbarContent>
-          </Toolbar>
-        </CardBody>
-      </Card>
-      {teamsIds.length > 0 && (
-        <Card className="pf-v6-u-mt-md">
-          <CardBody>
-            <Pipelines
-              teamsIds={teamsIds}
-              pipelinesNames={pipelinesNames}
-              before={before}
-              after={after}
-            />
-          </CardBody>
-        </Card>
+      <AnalyticsToolbar
+        onLoad={({ query, after, before }) => {
+          if (query !== "" && after !== "" && before !== "") {
+            getAnalyticJobs({ query, after, before });
+          }
+        }}
+        onSearch={({ query, after, before }) => {
+          getAnalyticJobs({ query, after, before });
+        }}
+        isLoading={isLoading}
+        data={data}
+      />
+      {data && (
+        <PipelinesPerDay
+          pipelinesPerDays={extractPipelinesFromAnalyticsJobs(data)}
+        />
       )}
     </PageSection>
   );

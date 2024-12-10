@@ -25,7 +25,6 @@ export default function SeeFileContentModal({
       <Modal
         id="file-content-viewer-modal"
         aria-label="File content viewer modal"
-        title={file.name}
         isOpen={isOpen}
         onClose={hide}
         variant="large"

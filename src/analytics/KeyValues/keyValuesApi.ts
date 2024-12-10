@@ -90,11 +90,11 @@ export function extractKeyValues(
   }
 }
 
-export const { useLazyGetAnalyticJobsQuery } = api
+export const { useLazyGetAnalyticKeyValuesQuery } = api
   .enhanceEndpoints({ addTagTypes: ["Analytics"] })
   .injectEndpoints({
     endpoints: (builder) => ({
-      getAnalyticJobs: builder.query<IGraphKeyValues, string>({
+      getAnalyticKeyValues: builder.query<IGraphKeyValues, string>({
         query: (params) => `/analytics/jobs${params}`,
         transformResponse: (response: IKeyValueResponse) =>
           extractKeyValues(response),

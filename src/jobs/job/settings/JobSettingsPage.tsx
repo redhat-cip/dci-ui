@@ -1,5 +1,4 @@
 import { Button, PageSection, Content } from "@patternfly/react-core";
-import { t_global_color_status_danger_default } from "@patternfly/react-tokens";
 import { ConfirmDeleteModal } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useJob } from "../jobContext";

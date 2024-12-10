@@ -22,10 +22,8 @@ import { CopyIconButton } from "ui";
 import { getPrincipalComponent } from "topics/component/componentSelector";
 import { DateTime } from "luxon";
 import { Tr, Td } from "@patternfly/react-table";
-import { useTheme } from "ui/Theme/themeContext";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import {
-  t_global_border_color_100,
   t_global_border_color_200,
   t_global_border_color_300,
 } from "@patternfly/react-tokens";

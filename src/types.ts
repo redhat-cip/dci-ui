@@ -469,50 +469,6 @@ export interface IComponentCoverage {
   tags: string[];
 }
 
-export interface IPipelines {
-  components_headers: string[];
-  days: {
-    date: string;
-    pipelines: {
-      name: string;
-      created_at: string;
-      jobs: {
-        client_version: string;
-        comment: string | null;
-        configuration: string;
-        created_at: string;
-        duration: number;
-        etag: string;
-        id: string;
-        name: string;
-        pipeline: { [k: string]: any };
-        pipeline_id: string;
-        previous_job_id: string | null;
-        product_id: string;
-        remoteci_id: string;
-        state: string;
-        status: IJobStatus;
-        status_reason: string | null;
-        tags: string[];
-        team_id: string;
-        topic_id: string;
-        update_previous_job_id: string | null;
-        updated_at: string;
-        url: string | null;
-        user_agent: string;
-        tests: {
-          errors: number;
-          failures: number;
-          success: number;
-          skips: number;
-          total: number;
-        };
-        components: (IComponent | null)[];
-      }[];
-    }[];
-  }[];
-}
-
 export type RangeOptionValue =
   | "previousWeek"
   | "previousMonth"
@@ -530,6 +486,13 @@ export type RangeOptionValue =
   | "last90Days"
   | "last365Days"
   | "custom";
+
+export interface AnalyticsToolbarFilters {
+  query: string;
+  range: RangeOptionValue;
+  after: string;
+  before: string;
+}
 
 export type colorTheme = "dark" | "light";
 
@@ -592,4 +555,57 @@ export interface SelectProps<T> {
   onClear: () => void;
   placeholder?: string;
   showToolbarItem?: boolean;
+}
+
+export interface IGetAnalyticsJobsResponse {
+  _shards: {
+    failed: number;
+    skipped: number;
+    successful: number;
+    total: number;
+  };
+  hits: {
+    hits: [
+      {
+        _id: string;
+        _index: string;
+        _score: number | null;
+        _source: IAnalyticsJob;
+        _type: string;
+        sort: string[];
+      },
+    ];
+    max_score: number | null;
+    total: {
+      relation: string;
+      value: number;
+    };
+  };
+  timed_out: boolean;
+  took: number;
+}
+export interface IAnalyticsJob {
+  id: string;
+  name: string;
+  status: IJobStatus;
+  status_reason: string | null;
+  created_at: string;
+  components: { id: string; topic_id: string; display_name: string }[];
+  comment: string | null;
+  team: {
+    id: string;
+    name: string;
+  };
+  results: {
+    errors: number;
+    failures: number;
+    success: number;
+    skips: number;
+    total: number;
+  } | null;
+  pipeline: {
+    created_at: string;
+    name: string;
+  };
+  duration: number;
 }

@@ -15,6 +15,7 @@ import {
   Content,
   ContentVariants,
   PageSection,
+  CardHeader,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
 import {
@@ -365,19 +366,15 @@ export default function ComponentPage() {
       </Card>
 
       <Card className="pf-v6-u-mt-md">
+        <CardHeader title="Jobs" />
         <CardBody>
-          <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
-            Jobs
-          </Title>
-          <div className="pf-v6-u-p-md">
-            <Grid hasGutter>
-              <GridItem span={3}>Job name</GridItem>
-              <GridItem span={2}>Status</GridItem>
-              <GridItem span={3}>tags</GridItem>
-              <GridItem span={2}>Duration</GridItem>
-              <GridItem span={2}>Created At</GridItem>
-            </Grid>
-          </div>
+          <Grid hasGutter>
+            <GridItem span={3}>Job name</GridItem>
+            <GridItem span={2}>Status</GridItem>
+            <GridItem span={3}>tags</GridItem>
+            <GridItem span={2}>Duration</GridItem>
+            <GridItem span={2}>Created At</GridItem>
+          </Grid>
           {component.jobs.length === 0 ? (
             <div className="pf-v6-u-p-md">
               <Divider /> There is no job attached to this component

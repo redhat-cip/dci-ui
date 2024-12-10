@@ -36,7 +36,10 @@ import { useSearchParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import SelectFilter from "./SelectFilter";
 import LoadingPageSection from "ui/LoadingPageSection";
-import { IGraphKeyValue, useLazyGetAnalyticJobsQuery } from "./keyValuesApi";
+import {
+  IGraphKeyValue,
+  useLazyGetAnalyticKeyValuesQuery,
+} from "./keyValuesApi";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -93,7 +96,8 @@ type IGraphTypeItem = { label: string; value: IGraphType };
 export default function KeyValuesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("query") || "");
-  const [getAnalyticJobs, { data, isLoading }] = useLazyGetAnalyticJobsQuery();
+  const [getAnalyticKeyValues, { data, isLoading }] =
+    useLazyGetAnalyticKeyValuesQuery();
   const graphTypes: IGraphTypeItem[] = [
     { label: "scatter chart", value: "scatter" },
     { label: "line chart", value: "line" },
@@ -120,9 +124,9 @@ export default function KeyValuesPage() {
 
   useEffect(() => {
     if (query !== "") {
-      getAnalyticJobs(_getParams(query, after, before));
+      getAnalyticKeyValues(_getParams(query, after, before));
     }
-  }, [after, before, getAnalyticJobs, query]);
+  }, [after, before, getAnalyticKeyValues, query]);
 
   const updateUrlWithParams = () => {
     if (selectedKeys.length > 0) {
@@ -255,7 +259,7 @@ export default function KeyValuesPage() {
                     variant="primary"
                     isDisabled={query === ""}
                     onClick={() => {
-                      getAnalyticJobs(_getParams(query, after, before));
+                      getAnalyticKeyValues(_getParams(query, after, before));
                       updateUrlWithParams();
                     }}
                   >
