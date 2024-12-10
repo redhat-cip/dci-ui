@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamForm from "./TeamForm";
 import { ITeam } from "types";
@@ -21,10 +27,20 @@ export default function CreateTeamModal({
         id="create_team_modal"
         aria-label="Create team modal"
         variant={ModalVariant.medium}
-        title="Create a new team"
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title="Create a new team" />
+        <ModalBody>
+          <TeamForm
+            id="create-team-form"
+            onSubmit={(user) => {
+              hide();
+              onSubmit(user);
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="create"
             variant="primary"
@@ -32,19 +48,11 @@ export default function CreateTeamModal({
             form="create-team-form"
           >
             Create
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <TeamForm
-          id="create-team-form"
-          onSubmit={(user) => {
-            hide();
-            onSubmit(user);
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       {children(show)}
     </>

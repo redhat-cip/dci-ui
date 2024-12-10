@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ToolbarFilter } from "@patternfly/react-core";
 import {
   Select,
   SelectOption,
   SelectList,
   MenuToggle,
   MenuToggleElement,
+  ToolbarFilter,
 } from "@patternfly/react-core";
 
 type MultiSelectFilterProps = {

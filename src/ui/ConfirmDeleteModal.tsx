@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import {
   Button,
+  Content,
+  ContentVariants,
   Modal,
   ModalBody,
   ModalFooter,
@@ -38,9 +40,12 @@ export default function ConfirmDeleteModal({
         variant={ModalVariant.small}
       >
         <ModalHeader>
-          <span style={{ color: t_global_color_status_danger_default.var }}>
+          <Content
+            component={ContentVariants.h2}
+            style={{ color: t_global_color_status_danger_default.var }}
+          >
             {title}
-          </span>
+          </Content>
         </ModalHeader>
         <ModalBody>
           <span style={{ color: t_global_color_status_danger_default.var }}>

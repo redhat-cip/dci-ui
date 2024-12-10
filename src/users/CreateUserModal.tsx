@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import CreateUserForm from "./UserForm";
 import { IUser } from "types";
@@ -21,10 +27,20 @@ export default function CreateUserModal({
         id="create_user_modal"
         aria-label="Create user modal"
         variant={ModalVariant.medium}
-        title="Create a new user"
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title="Create a new user" />
+        <ModalBody>
+          <CreateUserForm
+            id="create-user-form"
+            onSubmit={(user) => {
+              hide();
+              onSubmit(user);
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="create"
             variant="primary"
@@ -32,19 +48,11 @@ export default function CreateUserModal({
             form="create-user-form"
           >
             Create
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <CreateUserForm
-          id="create-user-form"
-          onSubmit={(user) => {
-            hide();
-            onSubmit(user);
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       {children(show)}
     </>

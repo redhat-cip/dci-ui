@@ -1,5 +1,11 @@
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
 import { IProduct, ITopic } from "types";
@@ -22,10 +28,21 @@ export default function CreateTopicModal({
         id="create_topic_modal"
         aria-label="Create topic modal"
         variant={ModalVariant.medium}
-        title="Create a new topic"
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title="Create a new topic" />
+        <ModalBody>
+          <TopicForm
+            id="create-topic-form"
+            products={products}
+            onSubmit={(topic) => {
+              hide();
+              onSubmit(topic);
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="create"
             variant="primary"
@@ -33,20 +50,11 @@ export default function CreateTopicModal({
             form="create-topic-form"
           >
             Create
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <TopicForm
-          id="create-topic-form"
-          products={products}
-          onSubmit={(topic) => {
-            hide();
-            onSubmit(topic);
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       <Button variant="primary" onClick={show} {...props}>
         Create a new topic

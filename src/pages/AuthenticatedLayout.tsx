@@ -31,8 +31,6 @@ import {
   ToggleGroup,
   ToggleGroupItem,
   Brand,
-} from "@patternfly/react-core";
-import {
   Dropdown,
   DropdownItem,
   DropdownList,

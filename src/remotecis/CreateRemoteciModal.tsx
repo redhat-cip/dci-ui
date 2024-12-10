@@ -1,7 +1,13 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
 import { IRemoteci, ITeam } from "types";
@@ -25,10 +31,14 @@ export default function CreateRemoteciModal({
         id="create_remoteci_modal"
         aria-label="Create remoteci modal"
         variant={ModalVariant.medium}
-        title="Create a new remoteci"
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title="Create a new remoteci" />
+        <ModalBody>
+          <RemoteciForm ref={formRef} teams={teams} onSubmit={onSubmit} />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="create"
             variant="primary"
@@ -42,14 +52,13 @@ export default function CreateRemoteciModal({
             }}
           >
             Create
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <RemoteciForm ref={formRef} teams={teams} onSubmit={onSubmit} />
+          </Button>
+        </ModalFooter>
       </Modal>
+
       <Button variant="primary" onClick={show} {...props}>
         Create a new remoteci
       </Button>

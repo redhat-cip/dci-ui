@@ -10,8 +10,11 @@ import {
   ContentVariants,
   CodeBlock,
   Label,
+  ModalHeader,
+  Modal,
+  ModalVariant,
+  ModalBody,
 } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
 import { QuestionCircleIcon } from "@patternfly/react-icons";
 import { useState } from "react";
 
@@ -35,11 +38,11 @@ export default function QLToolbar({
         id="advanced-search-modal"
         aria-label="Advanced search modal"
         variant={ModalVariant.medium}
-        title="Advanced searching"
         isOpen={showHelperModal}
         onClose={() => setShowHelperModal(false)}
       >
-        <Content>
+        <ModalHeader title="Advanced searching" />
+        <ModalBody>
           <Content component={ContentVariants.p}>
             The advanced search allows you to build structured queries using the
             DCI Query Language to search for jobs. You can specify criteria that
@@ -84,7 +87,7 @@ export default function QLToolbar({
           <CodeBlock>
             and( eq(name,job-name), or( eq(status,failure), eq(status,error) ) )
           </CodeBlock>
-        </Content>
+        </ModalBody>
       </Modal>
       <ToolbarItem>
         <ToolbarFilter

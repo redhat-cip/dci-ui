@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
-import { Button } from "@patternfly/react-core";
-import { Modal } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  CodeBlock,
+  CodeBlockCode,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "@patternfly/react-core";
 import copyToClipboard from "services/copyToClipboard";
 import { IFeeder, IRemoteci } from "types";
 
@@ -58,25 +65,33 @@ export function SeeAuthentificationFileModal({
       <Modal
         id="dci-credential-modal"
         aria-label="DCI credential modal"
-        title={`DCI credentials for ${resource.name}`}
         isOpen={show}
         onClose={() => setShow(false)}
         variant="large"
-        actions={[
+      >
+        <ModalHeader title={`DCI credentials for ${resource.name}`} />
+        <ModalBody>
+          <CodeBlock>
+            <CodeBlockCode>
+              {getContent(resource.id, role, api_secret, type)}
+            </CodeBlockCode>
+          </CodeBlock>
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="cancel"
             variant="secondary"
             onClick={() => setShow(false)}
           >
             close
-          </Button>,
+          </Button>
           <Button
             variant="secondary"
             key="showPassword"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? "Hide" : "Show"} API secret
-          </Button>,
+          </Button>
           <Button
             key="copy"
             onClick={(event) => {
@@ -91,12 +106,8 @@ export function SeeAuthentificationFileModal({
             }}
           >
             {copied ? "Copied!" : "Copy to clipboard"}
-          </Button>,
-        ]}
-      >
-        <div className="pf-v6-u-mb-md">
-          <pre>{getContent(resource.id, role, api_secret, type)}</pre>
-        </div>
+          </Button>
+        </ModalFooter>
       </Modal>
       <Button
         variant="secondary"

@@ -1,7 +1,13 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import ProductForm from "./ProductForm";
 import { IProduct } from "types";
@@ -23,10 +29,14 @@ export default function CreateProductModal({
         id="create_product_modal"
         aria-label="Create product modal"
         variant={ModalVariant.medium}
-        title="Create a new product"
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title="Create a new product" />
+        <ModalBody>
+          <ProductForm ref={formRef} onSubmit={onSubmit} />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="create"
             variant="primary"
@@ -40,13 +50,11 @@ export default function CreateProductModal({
             }}
           >
             Create
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <ProductForm ref={formRef} onSubmit={onSubmit} />
+          </Button>
+        </ModalFooter>
       </Modal>
       <Button variant="primary" onClick={show} {...props}>
         Create a new product

@@ -1,7 +1,13 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import ProductForm from "./ProductForm";
 import { IProduct } from "types";
@@ -26,10 +32,28 @@ export default function EditProductModal({
         id="edit_product_modal"
         aria-label="Edit product modal"
         variant={ModalVariant.medium}
-        title={`Edit ${product.name}`}
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title={`Edit ${product.name}`} />
+        <ModalBody>
+          <ProductForm
+            ref={formRef}
+            product={product}
+            onSubmit={(editedProduct) => {
+              // why ? dci-control-server api doesnt accept extra field like from_now
+              const { id, etag, name, description } =
+                editedProduct as Partial<IProduct>;
+              onSubmit({
+                id,
+                etag,
+                name,
+                description,
+              });
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="edit"
             variant="primary"
@@ -43,27 +67,11 @@ export default function EditProductModal({
             }}
           >
             Edit
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <ProductForm
-          ref={formRef}
-          product={product}
-          onSubmit={(editedProduct) => {
-            // why ? dci-control-server api doesnt accept extra field like from_now
-            const { id, etag, name, description } =
-              editedProduct as Partial<IProduct>;
-            onSubmit({
-              id,
-              etag,
-              name,
-              description,
-            });
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       <Button
         icon={<EditAltIcon aria-hidden="true" />}

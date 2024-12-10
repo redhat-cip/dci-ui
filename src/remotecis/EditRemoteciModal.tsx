@@ -1,7 +1,13 @@
 import { useRef } from "react";
 import { FormikProps } from "formik";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
 import { IRemoteci, ITeam } from "types";
@@ -28,10 +34,29 @@ export default function EditRemoteciModal({
         id="edit_remoteci_modal"
         aria-label="Edit remoteci modal"
         variant={ModalVariant.medium}
-        title={`Edit ${remoteci.name}`}
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title={`Edit ${remoteci.name}`} />
+        <ModalBody>
+          <RemoteciForm
+            ref={formRef}
+            teams={teams}
+            remoteci={remoteci}
+            onSubmit={(editedRemoteci) => {
+              // todo: why ? dci-control-server api doesnt accept extra field like from_now
+              const { id, etag, name, team_id } =
+                editedRemoteci as Partial<IRemoteci>;
+              onSubmit({
+                id,
+                etag,
+                name,
+                team_id,
+              });
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="edit"
             variant="primary"
@@ -45,28 +70,11 @@ export default function EditRemoteciModal({
             }}
           >
             Edit
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <RemoteciForm
-          ref={formRef}
-          teams={teams}
-          remoteci={remoteci}
-          onSubmit={(editedRemoteci) => {
-            // why ? dci-control-server api doesnt accept extra field like from_now
-            const { id, etag, name, team_id } =
-              editedRemoteci as Partial<IRemoteci>;
-            onSubmit({
-              id,
-              etag,
-              name,
-              team_id,
-            });
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       <Button
         icon={<EditAltIcon aria-hidden="true" />}

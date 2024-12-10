@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Button } from "@patternfly/react-core";
-import { Modal, ModalVariant } from "@patternfly/react-core/deprecated";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalVariant,
+} from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TeamForm from "./TeamForm";
 import { ITeam } from "types";
@@ -23,10 +29,21 @@ export default function EditTeamModal({
         id="edit_team_modal"
         aria-label="Edit team modal"
         variant={ModalVariant.medium}
-        title={`Edit ${team.name}`}
         isOpen={isOpen}
         onClose={hide}
-        actions={[
+      >
+        <ModalHeader title={`Edit ${team.name}`} />
+        <ModalBody>
+          <TeamForm
+            id="edit-team-form"
+            team={team}
+            onSubmit={(editedTeam) => {
+              onSubmit(editedTeam);
+              hide();
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
           <Button
             key="edit"
             variant="primary"
@@ -34,20 +51,11 @@ export default function EditTeamModal({
             form="edit-team-form"
           >
             Edit
-          </Button>,
+          </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel
-          </Button>,
-        ]}
-      >
-        <TeamForm
-          id="edit-team-form"
-          team={team}
-          onSubmit={(editedTeam) => {
-            onSubmit(editedTeam);
-            hide();
-          }}
-        />
+          </Button>
+        </ModalFooter>
       </Modal>
       {children(show)}
     </>
