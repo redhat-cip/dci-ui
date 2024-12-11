@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { extractPipelinesFromAnalyticsJobs } from "./pipelinesApi";
+import { extractPipelinesFromAnalyticsJobs } from "./pipelines";
 import { IGetAnalyticsJobsResponse } from "types";
 
 test("extractPipelinesFromAnalyticsJobs", () => {
@@ -44,6 +44,11 @@ test("extractPipelinesFromAnalyticsJobs", () => {
               },
               status: "success",
               status_reason: "",
+              keys_values: [],
+              team: {
+                id: "t1",
+                name: "Team 1",
+              },
             },
             _type: "_doc",
             sort: ["2024-12-04T14:46:24.840Z"],
@@ -54,7 +59,7 @@ test("extractPipelinesFromAnalyticsJobs", () => {
       },
       timed_out: false,
       took: 1,
-    } as IGetAnalyticsJobsResponse),
+    }),
   ).toEqual([
     {
       date: "2024-12-04",

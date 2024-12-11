@@ -6,7 +6,11 @@ import {
   Skeleton,
 } from "@patternfly/react-core";
 import QueryToolbar from "analytics/toolbar/QueryToolbar";
-import { AnalyticsToolbarFilters, IGetAnalyticsJobsResponse } from "types";
+import {
+  AnalyticsToolbarFilters,
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+} from "types";
 import AnalyticsJobsInfo from "../jobs/AnalyticsJobsInfo";
 
 export default function AnalyticsToolbar({
@@ -15,7 +19,7 @@ export default function AnalyticsToolbar({
   onSearch,
   onLoad,
 }: {
-  data: IGetAnalyticsJobsResponse | Record<string, never> | undefined;
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
   isLoading: boolean;
   onSearch: (values: AnalyticsToolbarFilters) => void;
   onLoad: (values: AnalyticsToolbarFilters) => void;

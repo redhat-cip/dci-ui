@@ -1,16 +1,16 @@
 import {
-  extractKeyValues,
-  IKeyValueEmptyResponse,
-  IKeyValueResponse,
-} from "./keyValuesApi";
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+} from "types";
+import { extractKeyValues } from "./keyValues";
 
 test("extractKeyValues with empty data", () => {
-  const emptyData: IKeyValueEmptyResponse = [];
+  const emptyData: IGetAnalyticsJobsEmptyResponse = {};
   expect(extractKeyValues(emptyData)).toEqual({});
 });
 
 test("extractKeyValues with result", () => {
-  const result: IKeyValueResponse = {
+  const result: IGetAnalyticsJobsResponse = {
     _shards: {
       failed: 0,
       skipped: 0,
@@ -34,6 +34,23 @@ test("extractKeyValues with result", () => {
                 value: 1.0,
               },
             ],
+            comment: "",
+            components: [],
+            duration: 905,
+            results: {
+              errors: 0,
+              failures: 1,
+              success: 2,
+              skips: 3,
+              total: 6,
+            },
+            pipeline: null,
+            status: "success",
+            status_reason: "",
+            team: {
+              id: "t1",
+              name: "Team 1",
+            },
           },
           _type: "_doc",
           sort: ["2024-10-17T14:38:41.696Z"],

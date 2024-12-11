@@ -1,7 +1,9 @@
-import { api } from "api";
 import { DateTime } from "luxon";
-import qs from "qs";
-import { IGetAnalyticsJobsResponse, IJobStatus } from "types";
+import {
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+  IJobStatus,
+} from "types";
 
 export interface IPipelineJob {
   id: string;
@@ -35,7 +37,7 @@ export interface IPipelineDay {
 }
 
 export function extractPipelinesFromAnalyticsJobs(
-  data: IGetAnalyticsJobsResponse | Record<string, never>,
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
 ): IPipelineDay[] {
   if (Object.keys(data).length === 0) {
     return [];
@@ -51,6 +53,7 @@ export function extractPipelinesFromAnalyticsJobs(
   } = {};
   data.hits.hits.forEach((hit) => {
     const job = hit._source;
+    if (job.pipeline === null) return;
     const pipelineDate = job.pipeline.created_at.split("T")[0];
 
     if (!daysMap[pipelineDate]) {
@@ -101,36 +104,3 @@ export function extractPipelinesFromAnalyticsJobs(
       return epoch1 < epoch2 ? 1 : epoch1 > epoch2 ? -1 : 0;
     });
 }
-
-export const { useLazyGetAnalyticJobsQuery } = api
-  .enhanceEndpoints({ addTagTypes: ["Analytics"] })
-  .injectEndpoints({
-    endpoints: (builder) => ({
-      getAnalyticJobs: builder.query<
-        IGetAnalyticsJobsResponse,
-        { query: string; after: string; before: string }
-      >({
-        query: ({ query, after, before }) => {
-          const params = qs.stringify(
-            {
-              query,
-              offset: 0,
-              limit: 200,
-              sort: "-created_at",
-              includes:
-                "id,name,created_at,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name",
-              from: after,
-              to: before,
-            },
-            {
-              addQueryPrefix: true,
-              encode: true,
-              skipNulls: true,
-            },
-          );
-          return `/analytics/jobs${params}`;
-        },
-        providesTags: ["Analytics"],
-      }),
-    }),
-  });

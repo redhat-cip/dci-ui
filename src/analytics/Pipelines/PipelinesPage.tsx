@@ -28,8 +28,7 @@ import {
   extractPipelinesFromAnalyticsJobs,
   IPipelineDay,
   IPipelineJob,
-  useLazyGetAnalyticJobsQuery,
-} from "./pipelinesApi";
+} from "./pipelines";
 import { FilterIcon } from "@patternfly/react-icons";
 import {
   humanizeJobDuration,
@@ -37,6 +36,7 @@ import {
   JobResults,
 } from "analytics/jobs/JobComponents";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
+import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -225,12 +225,12 @@ function PipelinesPerDay({
           <EmptyState
             variant={EmptyStateVariant.xs}
             icon={FilterIcon}
-            titleText="No pipeline"
+            titleText="No job"
             headingLevel="h4"
           >
             <EmptyStateBody>
-              We did not find any pipelines matching this search. Please modify
-              your search.
+              We did not find any jobs matching this search. Please modify your
+              search.
             </EmptyStateBody>
           </EmptyState>
         </CardBody>

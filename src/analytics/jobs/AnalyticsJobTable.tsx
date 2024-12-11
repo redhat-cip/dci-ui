@@ -40,7 +40,7 @@ export default function AnalyticsJobTable({
                 <Td>
                   <Link to={`/teams/${job.team.id}`}>{job.team.name}</Link>
                 </Td>
-                <Td>{job.pipeline.name}</Td>
+                <Td>{job.pipeline?.name}</Td>
                 <Td>
                   <JobResults results={job.results} />
                 </Td>

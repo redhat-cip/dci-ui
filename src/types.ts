@@ -557,6 +557,40 @@ export interface SelectProps<T> {
   showToolbarItem?: boolean;
 }
 
+interface IAnalyticsKeyValue {
+  job_id: string;
+  key: string;
+  value: number;
+}
+
+export interface IAnalyticsJob {
+  id: string;
+  name: string;
+  status: IJobStatus;
+  status_reason: string | null;
+  keys_values: IAnalyticsKeyValue[];
+  created_at: string;
+  components: { id: string; topic_id: string; display_name: string }[];
+  comment: string | null;
+  team: {
+    id: string;
+    name: string;
+  };
+  results: {
+    errors: number;
+    failures: number;
+    success: number;
+    skips: number;
+    total: number;
+  } | null;
+  pipeline: {
+    id: string;
+    created_at: string;
+    name: string;
+  } | null;
+  duration: number;
+}
+
 export interface IGetAnalyticsJobsResponse {
   _shards: {
     failed: number;
@@ -585,29 +619,18 @@ export interface IGetAnalyticsJobsResponse {
   took: number;
 }
 
-export interface IAnalyticsJob {
-  id: string;
-  name: string;
-  status: IJobStatus;
-  status_reason: string | null;
-  created_at: string;
-  components: { id: string; topic_id: string; display_name: string }[];
-  comment: string | null;
-  team: {
+export type IGetAnalyticsJobsEmptyResponse = Record<string, never>;
+
+export interface IGraphKeyValue {
+  created_at: number;
+  value: number;
+  key: string;
+  job: {
     id: string;
     name: string;
   };
-  results: {
-    errors: number;
-    failures: number;
-    success: number;
-    skips: number;
-    total: number;
-  } | null;
-  pipeline: {
-    id: string;
-    created_at: string;
-    name: string;
-  };
-  duration: number;
+}
+
+export interface IGraphKeyValues {
+  [key: string]: IGraphKeyValue[];
 }
