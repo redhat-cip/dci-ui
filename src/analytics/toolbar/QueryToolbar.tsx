@@ -5,12 +5,14 @@ import {
   ToolbarItem,
   ButtonVariant,
   Icon,
-  TextInput,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from "@patternfly/react-core";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AnalyticsToolbarFilters, RangeOptionValue } from "types";
-import { ArrowRightIcon } from "@patternfly/react-icons";
+import { ArrowRightIcon, SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import RangeSelect from "ui/form/RangeSelect";
 import AnalyticsSaveSearchesToolbar from "./AnalyticsSaveSearchesToolbar";
 
@@ -41,7 +43,7 @@ export default function QueryToolbar({
 
   return (
     <>
-      <Toolbar id="toolbar-pipelines" style={{ paddingBlockEnd: 0 }}>
+      <Toolbar id="toolbar-pipelines">
         <form
           id="toolbar-pipelines"
           onSubmit={(e) => {
@@ -57,13 +59,26 @@ export default function QueryToolbar({
           }}
         >
           <ToolbarContent>
-            <ToolbarItem style={{ minWidth: 480 }}>
-              <TextInput
-                aria-label="input pipeline query"
-                onChange={(_event, value) => setQuery(value)}
-                value={query}
-                placeholder="Filter job with query string"
-              />
+            <ToolbarItem style={{ flex: 1 }}>
+              <TextInputGroup>
+                <TextInputGroupMain
+                  aria-label="input pipeline query"
+                  placeholder="Filter job with query string"
+                  icon={<SearchIcon />}
+                  value={query}
+                  onChange={(_event, value) => setQuery(value)}
+                />
+                {query !== "" && (
+                  <TextInputGroupUtilities>
+                    <Button
+                      variant="plain"
+                      onClick={() => setQuery("")}
+                      aria-label="Clear button and input"
+                      icon={<TimesIcon />}
+                    />
+                  </TextInputGroupUtilities>
+                )}
+              </TextInputGroup>
             </ToolbarItem>
             <ToolbarItem>
               <RangeSelect

@@ -86,11 +86,10 @@ export default function JobTableSummary({
           to={{
             pathname: "/analytics/pipelines",
             search: createSearchParams({
-              teams_ids: [job.team_id],
+              query: `team.id=${job.team_id} and pipeline.name=${pipeline.name}`,
               range: "custom" as RangeOptionValue,
-              start_date: jobCreatedAt.startOf("day").toISODate() || "",
-              end_date: jobCreatedAt.endOf("day").toISODate() || "",
-              pipelines_names: [pipeline.name],
+              after: jobCreatedAt.startOf("day").toISODate() || "",
+              before: jobCreatedAt.endOf("day").toISODate() || "",
             }).toString(),
           }}
         >

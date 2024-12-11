@@ -38,6 +38,7 @@ test("extractPipelinesFromAnalyticsJobs", () => {
                 total: 4,
               },
               pipeline: {
+                id: "p1",
                 created_at: "2024-12-04T06:42:05.836974",
                 name: "pipeline 1",
               },
@@ -60,11 +61,13 @@ test("extractPipelinesFromAnalyticsJobs", () => {
       datetime: DateTime.fromISO("2024-12-04"),
       pipelines: [
         {
+          id: "p1",
           name: "pipeline 1",
           created_at: "2024-12-04T06:42:05.836974",
           jobs: [
             {
               id: "j1",
+              datetime: DateTime.fromISO("2024-12-04T14:46:24.840989"),
               name: "test-job",
               status: "success",
               status_reason: "",

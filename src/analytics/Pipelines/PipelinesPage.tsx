@@ -173,11 +173,19 @@ function PipelineCard({
                     rowSpan={seeJobComponents ? 2 : 1}
                     style={{ verticalAlign: "middle" }}
                   >
-                    <Truncate content={pipeline.name} />
+                    <Link to={`/jobs?where=pipeline_id:${pipeline.id}`}>
+                      <Truncate content={pipeline.name} />
+                    </Link>
                   </Td>
-                  {pipeline.jobs.map((job, index) => (
-                    <PipelineJobInfo key={index} index={index} job={job} />
-                  ))}
+                  {pipeline.jobs
+                    .sort((j1, j2) => {
+                      const epoch1 = j1.datetime.toMillis();
+                      const epoch2 = j2.datetime.toMillis();
+                      return epoch1 > epoch2 ? 1 : epoch1 < epoch2 ? -1 : 0;
+                    })
+                    .map((job, index) => (
+                      <PipelineJobInfo key={index} index={index} job={job} />
+                    ))}
                 </Tr>
                 {seeJobComponents && (
                   <Tr>
@@ -240,7 +248,7 @@ function PipelinesPerDay({
 }
 
 export default function PipelinesPage() {
-  const [getAnalyticJobs, { data, isLoading }] = useLazyGetAnalyticJobsQuery();
+  const [getAnalyticJobs, { data, isFetching }] = useLazyGetAnalyticJobsQuery();
 
   return (
     <PageSection>
@@ -261,10 +269,10 @@ export default function PipelinesPage() {
         onSearch={({ query, after, before }) => {
           getAnalyticJobs({ query, after, before });
         }}
-        isLoading={isLoading}
+        isLoading={isFetching}
         data={data}
       />
-      {data && (
+      {!isFetching && data && (
         <PipelinesPerDay
           pipelinesPerDays={extractPipelinesFromAnalyticsJobs(data)}
         />

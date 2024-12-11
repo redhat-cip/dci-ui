@@ -10,6 +10,7 @@ export interface IPipelineJob {
   status_reason: string;
   components: { id: string; topic_id: string; display_name: string }[];
   comment: string;
+  datetime: DateTime;
   results: {
     errors: number;
     failures: number;
@@ -21,6 +22,7 @@ export interface IPipelineJob {
 }
 
 interface IPipeline {
+  id: string;
   name: string;
   created_at: string;
   jobs: IPipelineJob[];
@@ -63,6 +65,7 @@ export function extractPipelinesFromAnalyticsJobs(
 
     if (!daysMap[pipelineDate].pipelines[pipelineName]) {
       daysMap[pipelineDate].pipelines[pipelineName] = {
+        id: job.pipeline.id,
         name: pipelineName,
         created_at: job.pipeline.created_at,
         jobs: [],
@@ -72,6 +75,7 @@ export function extractPipelinesFromAnalyticsJobs(
     daysMap[pipelineDate].pipelines[pipelineName].jobs.push({
       id: job.id,
       name: job.name,
+      datetime: DateTime.fromISO(job.created_at),
       status: job.status,
       status_reason: job.status_reason || "",
       components: job.components,
@@ -114,7 +118,7 @@ export const { useLazyGetAnalyticJobsQuery } = api
               limit: 200,
               sort: "-created_at",
               includes:
-                "id,name,created_at,status,status_reason,comment,duration,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name",
+                "id,name,created_at,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name",
               from: after,
               to: before,
             },

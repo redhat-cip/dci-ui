@@ -31,7 +31,7 @@ export default function AnalyticsToolbar({
           </CardBody>
         </Card>
       )}
-      {data && data.hits && (
+      {!isLoading && data && data.hits && (
         <AnalyticsJobsInfo hits={data.hits} className="pf-v6-u-mt-md" />
       )}
     </div>

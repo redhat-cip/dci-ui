@@ -584,6 +584,7 @@ export interface IGetAnalyticsJobsResponse {
   timed_out: boolean;
   took: number;
 }
+
 export interface IAnalyticsJob {
   id: string;
   name: string;
@@ -604,6 +605,7 @@ export interface IAnalyticsJob {
     total: number;
   } | null;
   pipeline: {
+    id: string;
     created_at: string;
     name: string;
   };
