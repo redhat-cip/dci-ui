@@ -142,7 +142,7 @@ function PipelineCard({
           <Thead>
             <Tr>
               <Th>pipeline</Th>
-              <Th style={{ minWidth: "250px" }}>name</Th>
+              <Th style={{ minWidth: "250px" }}>pipeline name</Th>
               <Th colSpan={-1}>jobs</Th>
             </Tr>
           </Thead>

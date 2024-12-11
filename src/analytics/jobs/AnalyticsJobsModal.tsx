@@ -16,7 +16,7 @@ export default function AnalyticsJobsModal({
   return (
     <>
       <Button variant="link" isInline onClick={show} {...props}>
-        See the jobs
+        See the job{jobs.length > 1 ? "s" : ""}
       </Button>
       <Modal
         id="jobs-list-modal"

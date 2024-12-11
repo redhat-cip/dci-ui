@@ -58,6 +58,8 @@ export default function JobTableSummary({
   const config = job.configuration;
   const pipeline = job.pipeline;
   const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
+  // Analytics sync mechanism is older than one hour
+  const isOlderThanOneHour = jobCreatedAt <= DateTime.now().minus({ hours: 1 });
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
       <span>
@@ -81,20 +83,22 @@ export default function JobTableSummary({
         >
           {pipeline.name}
         </Label>
-        <Link
-          className="pf-v6-u-ml-xs"
-          to={{
-            pathname: "/analytics/pipelines",
-            search: createSearchParams({
-              query: `team.id=${job.team_id} and pipeline.name=${pipeline.name}`,
-              range: "custom" as RangeOptionValue,
-              after: jobCreatedAt.startOf("day").toISODate() || "",
-              before: jobCreatedAt.endOf("day").toISODate() || "",
-            }).toString(),
-          }}
-        >
-          <ExternalLinkAltIcon />
-        </Link>
+        {isOlderThanOneHour && (
+          <Link
+            className="pf-v6-u-ml-xs"
+            to={{
+              pathname: "/analytics/pipelines",
+              search: createSearchParams({
+                query: `(pipeline.id=${pipeline.id})`,
+                range: "custom" as RangeOptionValue,
+                after: jobCreatedAt.startOf("day").toISODate() || "",
+                before: jobCreatedAt.endOf("day").toISODate() || "",
+              }).toString(),
+            }}
+          >
+            <ExternalLinkAltIcon />
+          </Link>
+        )}
       </div>
     ) : null,
     config: config ? (
