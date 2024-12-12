@@ -9,6 +9,7 @@ import {
   FormSelect,
   FormSelectOption,
   PageSection,
+  Skeleton,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { formatDate } from "services/date";
@@ -31,7 +32,11 @@ import { extractKeyValues } from "./keyValues";
 import { FilterIcon } from "@patternfly/react-icons";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IGraphKeyValue, IGraphKeyValues } from "types";
+import {
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+  IGraphKeyValue,
+} from "types";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -71,12 +76,39 @@ const graphTypeLabels: Record<IGraphType, string> = {
   bar: "bar chart",
 };
 
-function KeyValues({ data }: { data: IGraphKeyValues }) {
+function KeyValues({
+  isLoading,
+  data,
+  ...props
+}: {
+  isLoading: boolean;
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  [k: string]: any;
+}) {
   const [graphType, setGraphType] = useState<IGraphType>("scatter");
 
-  if (Object.keys(data).length === 0) {
+  if (isLoading) {
     return (
-      <Card className="pf-v6-u-mt-md">
+      <Card {...props}>
+        <CardBody>
+          <Skeleton
+            screenreaderText="Loading analytics jobs"
+            style={{ height: 80 }}
+          />
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (!data || !data.hits) {
+    return null;
+  }
+
+  const keyValues = extractKeyValues(data);
+
+  if (Object.keys(keyValues).length === 0) {
+    return (
+      <Card {...props}>
         <CardBody>
           <EmptyState
             variant={EmptyStateVariant.xs}
@@ -95,14 +127,14 @@ function KeyValues({ data }: { data: IGraphKeyValues }) {
   }
 
   return (
-    <div>
+    <div {...props}>
       <FormSelect
         id="select-graph-type"
-        className="pf-v6-u-mt-md"
         value={graphType}
         onChange={(event, newGraph) => {
           setGraphType(newGraph as IGraphType);
         }}
+        {...props}
       >
         {(
           Object.keys(graphTypeLabels) as Array<keyof typeof graphTypeLabels>
@@ -115,7 +147,7 @@ function KeyValues({ data }: { data: IGraphKeyValues }) {
         ))}
       </FormSelect>
 
-      {Object.entries(data).map(([key, keyValue]) => (
+      {Object.entries(keyValues).map(([key, keyValue]) => (
         <Card className="pf-v6-u-mt-md">
           <CardHeader>{key}</CardHeader>
           <CardBody>
@@ -207,10 +239,8 @@ function KeyValues({ data }: { data: IGraphKeyValues }) {
 }
 
 export default function KeyValuesPage() {
-  const [getAnalyticJobs, { data, isFetching }] = useLazyGetAnalyticJobsQuery();
-  if (data && data.hits) {
-    console.log(extractKeyValues(data));
-  }
+  const [getAnalyticJobs, { data, isLoading, isFetching }] =
+    useLazyGetAnalyticJobsQuery();
   return (
     <PageSection>
       <Breadcrumb
@@ -234,9 +264,7 @@ export default function KeyValuesPage() {
         isLoading={isFetching}
         data={data}
       />
-      {!isFetching && data && data.hits && (
-        <KeyValues data={extractKeyValues(data)} />
-      )}
+      <KeyValues isLoading={isLoading} data={data} className="pf-v6-u-mt-md" />
     </PageSection>
   );
 }

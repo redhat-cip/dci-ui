@@ -2,7 +2,7 @@ import { Button, Modal, ModalHeader, ModalBody } from "@patternfly/react-core";
 
 import { IAnalyticsJob } from "types";
 import useModal from "hooks/useModal";
-import AnalyticsJobTable from "./AnalyticsJobTable";
+import AnalyticsJobTable from "../jobs/AnalyticsJobTable";
 
 export default function AnalyticsJobsModal({
   jobs,

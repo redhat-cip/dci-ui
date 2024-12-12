@@ -7,7 +7,7 @@ import {
 } from "@patternfly/react-core";
 import { RangeOptionValue } from "types";
 import { getRangeDates } from "services/date";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const rangeLabels: { [k in RangeOptionValue]: string } = {
   previousWeek: "Previous week",
@@ -37,40 +37,35 @@ export default function RangeSelect({
   onChange,
 }: {
   now?: string;
+  range: RangeOptionValue;
   ranges?: RangeOptionValue[];
-  range: RangeOptionValue | null;
-  after: string | null;
-  before: string | null;
+  after: string;
+  before: string;
   onChange: (range: RangeOptionValue, after: string, before: string) => void;
 }) {
-  const defaultRangeValue: RangeOptionValue = range || ranges[0] || "last7Days";
-  const [innerRange, setInnerRange] =
-    useState<RangeOptionValue>(defaultRangeValue);
-  const dates = getRangeDates(innerRange, now);
-  const [innerAfter, setInnerAfter] = useState(after || dates.after);
-  const [innerBefore, setInnerBefore] = useState(before || dates.before);
-  const disableDatePicker = innerRange !== "custom";
+  const showDatePicker = range === "custom";
 
   useEffect(() => {
-    if (innerRange !== "custom") {
-      onChange(innerRange, dates.after, dates.before);
+    if (range !== "custom") {
+      const dates = getRangeDates(range, now);
+      onChange(range, dates.after, dates.before);
     }
-  }, [onChange, innerRange, dates.after, dates.before]);
-
-  useEffect(() => {
-    if (innerRange === "custom") {
-      onChange(innerRange, innerAfter, innerBefore);
-    }
-  }, [onChange, innerRange, innerAfter, innerBefore]);
+  }, [onChange, range, now]);
 
   return (
     <Flex columnGap={{ default: "columnGapXs" }}>
       <FlexItem>
         <FormSelect
           id="select-range-option"
-          value={innerRange}
+          value={range}
           onChange={(event, newRange) => {
-            setInnerRange(newRange as RangeOptionValue);
+            const r = newRange as RangeOptionValue;
+            if (r === "custom") {
+              onChange(r, after, before);
+            } else {
+              const dates = getRangeDates(r, now);
+              onChange(r, dates.after, dates.before);
+            }
           }}
           style={{ width: 150 }}
         >
@@ -83,28 +78,34 @@ export default function RangeSelect({
           ))}
         </FormSelect>
       </FlexItem>
-      <FlexItem>
-        <DatePicker
-          value={innerAfter}
-          placeholder="After"
-          aria-label="After input date picker"
-          buttonAriaLabel="Toggle after date picker"
-          appendTo={() => document.body}
-          onChange={(e, newAfterDate) => setInnerAfter(newAfterDate)}
-          isDisabled={disableDatePicker}
-        />
-      </FlexItem>
-      <FlexItem>
-        <DatePicker
-          value={innerBefore}
-          aria-label="Before input date picker"
-          buttonAriaLabel="Toggle before date picker"
-          placeholder="Before"
-          appendTo={() => document.body}
-          onChange={(e, newBeforeDate) => setInnerBefore(newBeforeDate)}
-          isDisabled={disableDatePicker}
-        />
-      </FlexItem>
+      {showDatePicker && (
+        <>
+          <FlexItem>
+            <DatePicker
+              value={after}
+              placeholder="After"
+              aria-label="After input date picker"
+              buttonAriaLabel="Toggle after date picker"
+              appendTo={() => document.body}
+              onChange={(e, newAfterDate) => {
+                onChange(range, newAfterDate, before);
+              }}
+            />
+          </FlexItem>
+          <FlexItem>
+            <DatePicker
+              value={before}
+              aria-label="Before input date picker"
+              buttonAriaLabel="Toggle before date picker"
+              placeholder="Before"
+              appendTo={() => document.body}
+              onChange={(e, newBeforeDate) => {
+                onChange(range, after, newBeforeDate);
+              }}
+            />
+          </FlexItem>
+        </>
+      )}
     </Flex>
   );
 }

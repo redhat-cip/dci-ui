@@ -12,6 +12,7 @@ import {
   Truncate,
   PageSection,
   Content,
+  Skeleton,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { t_global_border_color_default } from "@patternfly/react-tokens";
@@ -19,7 +20,11 @@ import { DateTime } from "luxon";
 import { formatDate } from "services/date";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { IJobStatus } from "types";
+import {
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+  IJobStatus,
+} from "types";
 import { ComponentsList } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
@@ -29,7 +34,14 @@ import {
   IPipelineDay,
   IPipelineJob,
 } from "./pipelines";
-import { FilterIcon } from "@patternfly/react-icons";
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  FilterIcon,
+  InProgressIcon,
+  ResourcesFullIcon,
+} from "@patternfly/react-icons";
 import {
   humanizeJobDuration,
   JobComment,
@@ -43,7 +55,8 @@ function jobStatusToVariant(status: IJobStatus) {
     case "new":
     case "pre-run":
     case "post-run":
-      return "info";
+    case "running":
+      return "pending";
     case "success":
       return "success";
     case "killed":
@@ -53,6 +66,25 @@ function jobStatusToVariant(status: IJobStatus) {
       return "danger";
     default:
       return "default";
+  }
+}
+
+function jobStatusToProgressStepIcon(status: IJobStatus) {
+  switch (status) {
+    case "new":
+    case "pre-run":
+    case "post-run":
+    case "running":
+      return <InProgressIcon />;
+    case "success":
+      return <CheckCircleIcon />;
+    case "killed":
+      return <ExclamationTriangleIcon />;
+    case "error":
+    case "failure":
+      return <ExclamationCircleIcon />;
+    default:
+      return <ResourcesFullIcon />;
   }
 }
 
@@ -154,10 +186,7 @@ function PipelineCard({
                     borderTop: `1px solid ${t_global_border_color_default.var}`,
                   }}
                 >
-                  <Td
-                    rowSpan={seeJobComponents ? 2 : 1}
-                    style={{ verticalAlign: "middle" }}
-                  >
+                  <Td rowSpan={seeJobComponents ? 2 : 1}>
                     <ProgressStepper isCompact>
                       {pipeline.jobs.map((job) => (
                         <ProgressStep
@@ -165,6 +194,7 @@ function PipelineCard({
                           variant={jobStatusToVariant(job.status)}
                           id={job.name}
                           titleId={job.name}
+                          icon={jobStatusToProgressStepIcon(job.status)}
                         />
                       ))}
                     </ProgressStepper>
@@ -177,15 +207,9 @@ function PipelineCard({
                       <Truncate content={pipeline.name} />
                     </Link>
                   </Td>
-                  {pipeline.jobs
-                    .sort((j1, j2) => {
-                      const epoch1 = j1.datetime.toMillis();
-                      const epoch2 = j2.datetime.toMillis();
-                      return epoch1 > epoch2 ? 1 : epoch1 < epoch2 ? -1 : 0;
-                    })
-                    .map((job, index) => (
-                      <PipelineJobInfo key={index} index={index} job={job} />
-                    ))}
+                  {pipeline.jobs.map((job, index) => (
+                    <PipelineJobInfo key={index} index={index} job={job} />
+                  ))}
                 </Tr>
                 {seeJobComponents && (
                   <Tr>
@@ -214,13 +238,33 @@ function PipelineCard({
 }
 
 function PipelinesPerDay({
-  pipelinesPerDays,
+  isLoading,
+  data,
+  ...props
 }: {
-  pipelinesPerDays: IPipelineDay[];
+  isLoading: boolean;
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  [k: string]: any;
 }) {
+  if (isLoading) {
+    return (
+      <Card {...props}>
+        <CardBody>
+          <Skeleton
+            screenreaderText="Loading analytics jobs"
+            style={{ height: 80 }}
+          />
+        </CardBody>
+      </Card>
+    );
+  }
+  if (!data || !data.hits) {
+    return null;
+  }
+  const pipelinesPerDays = extractPipelinesFromAnalyticsJobs(data);
   if (pipelinesPerDays.length === 0) {
     return (
-      <Card className="pf-v6-u-mt-md">
+      <Card {...props}>
         <CardBody>
           <EmptyState
             variant={EmptyStateVariant.xs}
@@ -237,18 +281,18 @@ function PipelinesPerDay({
       </Card>
     );
   }
-
   return (
     <div>
       {pipelinesPerDays.map((day, index) => (
-        <PipelineCard key={index} pipelineDay={day} className="pf-v6-u-mt-md" />
+        <PipelineCard key={index} pipelineDay={day} {...props} />
       ))}
     </div>
   );
 }
 
 export default function PipelinesPage() {
-  const [getAnalyticJobs, { data, isFetching }] = useLazyGetAnalyticJobsQuery();
+  const [getAnalyticJobs, { data, isLoading, isFetching }] =
+    useLazyGetAnalyticJobsQuery();
 
   return (
     <PageSection>
@@ -261,6 +305,8 @@ export default function PipelinesPage() {
       />
       <Content component="h1">Pipelines</Content>
       <AnalyticsToolbar
+        isLoading={isFetching}
+        data={data}
         onLoad={({ query, after, before }) => {
           if (query !== "" && after !== "" && before !== "") {
             getAnalyticJobs({ query, after, before });
@@ -269,14 +315,12 @@ export default function PipelinesPage() {
         onSearch={({ query, after, before }) => {
           getAnalyticJobs({ query, after, before });
         }}
-        isLoading={isFetching}
-        data={data}
       />
-      {!isFetching && data && (
-        <PipelinesPerDay
-          pipelinesPerDays={extractPipelinesFromAnalyticsJobs(data)}
-        />
-      )}
+      <PipelinesPerDay
+        isLoading={isLoading}
+        data={data}
+        className="pf-v6-u-mt-md"
+      />
     </PageSection>
   );
 }

@@ -487,7 +487,7 @@ export type RangeOptionValue =
   | "last365Days"
   | "custom";
 
-export interface AnalyticsToolbarFilters {
+export interface AnalyticsToolbarSearch {
   query: string;
   range: RangeOptionValue;
   after: string;
@@ -599,16 +599,14 @@ export interface IGetAnalyticsJobsResponse {
     total: number;
   };
   hits: {
-    hits: [
-      {
-        _id: string;
-        _index: string;
-        _score: number | null;
-        _source: IAnalyticsJob;
-        _type: string;
-        sort: string[];
-      },
-    ];
+    hits: {
+      _id: string;
+      _index: string;
+      _score: number | null;
+      _source: IAnalyticsJob;
+      _type: string;
+      sort: string[];
+    }[];
     max_score: number | null;
     total: {
       relation: string;

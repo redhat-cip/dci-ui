@@ -106,6 +106,9 @@ function UserDropdownMenu() {
   return (
     <Dropdown
       isOpen={isOpen}
+      popperProps={{
+        position: "right",
+      }}
       onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
       toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
         <MenuToggle

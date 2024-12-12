@@ -51,7 +51,7 @@ export function extractPipelinesFromAnalyticsJobs(
       };
     };
   } = {};
-  data.hits.hits.forEach((hit) => {
+  [...data.hits.hits].reverse().forEach((hit) => {
     const job = hit._source;
     if (job.pipeline === null) return;
     const pipelineDate = job.pipeline.created_at.split("T")[0];

@@ -16,7 +16,6 @@ test("Should display remotecis in remotecis page", async () => {
       } as RemoteciListResponse);
     }),
   );
-  const { findByText, debug } = renderWithProviders(<RemotecisPage />);
-  debug();
+  const { findByText } = renderWithProviders(<RemotecisPage />);
   await findByText("Remoteci admin");
 });

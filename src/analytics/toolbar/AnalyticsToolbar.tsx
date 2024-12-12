@@ -1,17 +1,12 @@
-import {
-  Card,
-  CardBody,
-  Hint,
-  HintBody,
-  Skeleton,
-} from "@patternfly/react-core";
+import { Card, CardBody } from "@patternfly/react-core";
 import QueryToolbar from "analytics/toolbar/QueryToolbar";
 import {
-  AnalyticsToolbarFilters,
+  AnalyticsToolbarSearch,
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
 } from "types";
-import AnalyticsJobsInfo from "../jobs/AnalyticsJobsInfo";
+import QueryToolbarInfo from "./QueryToolbarInfo";
+import QueryToolbarSavedSearches from "./QueryToolbarSavedSearches";
 
 export default function AnalyticsToolbar({
   data,
@@ -21,36 +16,20 @@ export default function AnalyticsToolbar({
 }: {
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
   isLoading: boolean;
-  onSearch: (values: AnalyticsToolbarFilters) => void;
-  onLoad: (values: AnalyticsToolbarFilters) => void;
+  onSearch: (values: AnalyticsToolbarSearch) => void;
+  onLoad: (values: AnalyticsToolbarSearch) => void;
 }) {
   return (
-    <div>
-      <Card>
-        <CardBody>
-          <QueryToolbar onSearch={onSearch} onLoad={onLoad} />
-        </CardBody>
-      </Card>
-      {isLoading && (
-        <>
-          <Hint className="pf-v6-u-mt-md">
-            <HintBody>
-              <Skeleton screenreaderText="Loading jobs hint" />
-            </HintBody>
-          </Hint>
-          <Card className="pf-v6-u-mt-md">
-            <CardBody>
-              <Skeleton
-                screenreaderText="Loading analytics jobs"
-                style={{ height: 80 }}
-              />
-            </CardBody>
-          </Card>
-        </>
-      )}
-      {!isLoading && data && data.hits && (
-        <AnalyticsJobsInfo hits={data.hits} className="pf-v6-u-mt-md" />
-      )}
-    </div>
+    <Card>
+      <CardBody>
+        <QueryToolbar
+          onSearch={onSearch}
+          onLoad={onLoad}
+          style={{ paddingBlockEnd: 0 }}
+        />
+        <QueryToolbarSavedSearches className="pf-v6-u-mb-md pf-v6-u-mt-xs" />
+        <QueryToolbarInfo isLoading={isLoading} data={data} />
+      </CardBody>
+    </Card>
   );
 }

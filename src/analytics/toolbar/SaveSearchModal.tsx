@@ -10,72 +10,37 @@ import {
   HelperText,
   HelperTextItem,
   FormGroup,
-  Toolbar,
-  ToolbarContent,
-  ToolbarItem,
   ActionGroup,
   Label,
   LabelGroup,
-  Tooltip,
 } from "@patternfly/react-core";
-import { AnalyticsToolbarFilters } from "types";
 import useModal from "hooks/useModal";
 import { useState } from "react";
 import useLocalStorage from "hooks/useLocalStorage";
-import { SearchIcon } from "@patternfly/react-icons";
 import { rangeLabels } from "ui/form/RangeSelect";
+import { AnalyticsToolbarSearch } from "types";
+import { useNavigate } from "react-router-dom";
 
-function LoadAnalyticSearchModal({
-  searches,
-  onLoad,
-  onDelete,
-  ...props
-}: {
-  searches: Record<string, AnalyticsToolbarFilters>;
-  onLoad: (searchName: string) => void;
-  onDelete: (searchName: string) => void;
-  [k: string]: any;
-}) {
-  const searchKeys = Object.keys(searches);
-  const categoryName =
-    searchKeys.length > 1 ? "Saved searches" : "Saved search";
-  return (
-    <LabelGroup categoryName={categoryName} numLabels={10} {...props}>
-      {searchKeys.map((searchName) => (
-        <Tooltip content={searches[searchName].query}>
-          <Label
-            color="green"
-            icon={<SearchIcon />}
-            title={searches[searchName].query}
-            onClick={() => onLoad(searchName)}
-            onClose={() => onDelete(searchName)}
-          >
-            {searchName}
-          </Label>
-        </Tooltip>
-      ))}
-    </LabelGroup>
-  );
-}
-
-function SaveAnalyticSearch({
+export default function SaveSearchModal({
   search,
-  searchesNames,
-  onSave,
   ...props
 }: {
-  search: AnalyticsToolbarFilters;
-  searchesNames: string[];
-  onSave: (name: string) => void;
+  search: AnalyticsToolbarSearch;
   [k: string]: any;
 }) {
+  const navigate = useNavigate();
   const { isOpen, show, hide } = useModal(false);
   const [name, setName] = useState("");
+  const [searches, setSearches] = useLocalStorage<
+    Record<string, AnalyticsToolbarSearch>
+  >("userAnalyticsFilters", {});
+
+  const searchesNames = Object.keys(searches);
 
   return (
     <>
       <Button variant="link" onClick={show} {...props}>
-        Save this search
+        Save
       </Button>
       <Modal
         id="save-analytic-search-modal"
@@ -89,7 +54,11 @@ function SaveAnalyticSearch({
           <Form
             onSubmit={(e) => {
               e.preventDefault();
-              onSave(name);
+              setSearches({
+                ...searches,
+                [name]: search,
+              });
+              navigate(0);
               hide();
             }}
           >
@@ -146,7 +115,10 @@ function SaveAnalyticSearch({
                   {searchesNames.map((searchName) => (
                     <Label
                       onClick={() => {
-                        onSave(searchName);
+                        setSearches({
+                          ...searches,
+                          [searchName]: search,
+                        });
                         hide();
                       }}
                       color="green"
@@ -166,50 +138,5 @@ function SaveAnalyticSearch({
         </ModalBody>
       </Modal>
     </>
-  );
-}
-
-export default function AnalyticsSaveSearchesToolbar({
-  search,
-  onLoad,
-  ...props
-}: {
-  search: AnalyticsToolbarFilters;
-  onLoad: (search: AnalyticsToolbarFilters) => void;
-  [k: string]: any;
-}) {
-  const [searches, setSearches] = useLocalStorage<
-    Record<string, AnalyticsToolbarFilters>
-  >("userAnalyticsFilters", {});
-
-  return (
-    <Toolbar id="toolbar-load-search-pipelines" {...props}>
-      <ToolbarContent>
-        <ToolbarItem>
-          {search.query !== "" && (
-            <SaveAnalyticSearch
-              search={search}
-              searchesNames={Object.keys(searches)}
-              onSave={(name) => setSearches({ ...searches, [name]: search })}
-            />
-          )}
-          {Object.keys(searches).length !== 0 && (
-            <LoadAnalyticSearchModal
-              searches={searches}
-              onLoad={(searchName) => {
-                onLoad(searches[searchName]);
-              }}
-              onDelete={(searchName) => {
-                const newSearches = {
-                  ...searches,
-                };
-                delete newSearches[searchName];
-                setSearches(newSearches);
-              }}
-            />
-          )}
-        </ToolbarItem>
-      </ToolbarContent>
-    </Toolbar>
   );
 }
