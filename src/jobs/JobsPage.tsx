@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { EmptyState, Breadcrumb } from "ui";
 import JobsTableList from "./jobsTableList/JobsTableList";
 import JobsToolbar from "./toolbar/JobsToolbar";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import {
   Pagination,
   PaginationVariant,

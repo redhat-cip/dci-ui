@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { JobProvider } from "./jobContext";
 
 export default function JobPage() {

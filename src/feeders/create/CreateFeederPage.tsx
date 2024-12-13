@@ -7,7 +7,7 @@ import {
   Content,
 } from "@patternfly/react-core";
 import CreateFeederForm from "./CreateFeederForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Breadcrumb, EmptyState } from "ui";
 import { useListTeamsQuery } from "teams/teamsApi";
 import { useCreateFeederMutation } from "feeders/feedersApi";

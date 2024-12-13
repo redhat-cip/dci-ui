@@ -28,7 +28,7 @@ import {
 } from "recharts";
 import { formatDate, humanizeDuration } from "services/date";
 import { getDomain } from "./tasksDurationPerJob";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";

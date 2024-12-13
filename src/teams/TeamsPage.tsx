@@ -12,7 +12,7 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useAuth } from "auth/authSelectors";
 import { Filters } from "types";

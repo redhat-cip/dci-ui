@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { PageSection } from "@patternfly/react-core";
 import { useLazyGetFileContentQuery } from "./filesApi";
 import { EmptyState } from "ui";

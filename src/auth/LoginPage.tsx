@@ -8,7 +8,7 @@ import {
 import Logo from "logo.black.svg";
 import { BackgroundImage } from "ui";
 import { manager, SSOUrl } from "./sso";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { useAppDispatch } from "store";
 import { showError } from "alerts/alertsSlice";
 

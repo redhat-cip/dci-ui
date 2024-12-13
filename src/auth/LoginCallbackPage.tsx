@@ -1,6 +1,6 @@
 import NotAuthenticatedLoadingPage from "pages/NotAuthenticatedLoadingPage";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useAppDispatch } from "store";
 import { setJWT } from "services/localStorage";
 import { showError } from "alerts/alertsSlice";

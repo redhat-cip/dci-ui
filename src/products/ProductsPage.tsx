@@ -19,7 +19,7 @@ import {
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { Filters } from "types";
 import {
   createSearchFromFilters,

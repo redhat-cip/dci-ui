@@ -4,7 +4,7 @@ import { Button } from "@patternfly/react-core";
 import * as Yup from "yup";
 import { setBasicToken } from "services/localStorage";
 import { hideAllAlerts, showError } from "alerts/alertsSlice";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import { useAppDispatch } from "store";
 
 const LogInSchema = Yup.object().shape({

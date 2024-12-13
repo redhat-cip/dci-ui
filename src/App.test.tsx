@@ -1,6 +1,6 @@
 import { act } from "react";
 import { render } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";

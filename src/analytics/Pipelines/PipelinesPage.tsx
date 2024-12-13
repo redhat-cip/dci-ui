@@ -19,7 +19,7 @@ import { t_global_border_color_default } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
 import { formatDate } from "services/date";
 import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,

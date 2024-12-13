@@ -7,7 +7,7 @@ import {
   Content,
 } from "@patternfly/react-core";
 import EditFeederForm from "./EditFeederForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { Breadcrumb, EmptyState } from "ui";
 import { useListTeamsQuery } from "teams/teamsApi";
 import { skipToken } from "@reduxjs/toolkit/query";

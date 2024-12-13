@@ -9,7 +9,7 @@ import {
   ContentVariants,
   PageSection,
 } from "@patternfly/react-core";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { IStat } from "types";
 import { EmptyState, Breadcrumb } from "ui";
 import { fromNow } from "services/date";

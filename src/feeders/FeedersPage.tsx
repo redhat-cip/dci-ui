@@ -1,7 +1,7 @@
 import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { TrashIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { Button, Content, PageSection } from "@patternfly/react-core";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import { SeeAuthentificationFileModal } from "ui/Credentials";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useDeleteFeederMutation, useListFeedersQuery } from "./feedersApi";

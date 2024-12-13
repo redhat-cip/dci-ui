@@ -21,7 +21,7 @@ import RemoteciSelect from "jobs/toolbar/RemoteciSelect";
 import TopicSelect from "jobs/toolbar/TopicSelect";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import ListInputWithChip from "ui/form/ListInputWithChip";
 import type {
   JunitComparisonPayload,

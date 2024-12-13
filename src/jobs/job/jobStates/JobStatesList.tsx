@@ -4,7 +4,7 @@ import {
   addPipelineStatus,
   getLongerTaskFirst,
 } from "./jobStatesActions";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import JobStateRow from "./JobStateFile";
 import { EmptyState } from "ui";
 import { IEnhancedJob, IJobStateWithDuration } from "types";

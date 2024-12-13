@@ -2,7 +2,7 @@ import { Skeleton, Button } from "@patternfly/react-core";
 import { MinusCircleIcon } from "@patternfly/react-icons";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { IUser, ITeam } from "types";
 import { ConfirmDeleteModal } from "ui";
 import AddUserToTeamForm from "./AddUserToTeamsForm";

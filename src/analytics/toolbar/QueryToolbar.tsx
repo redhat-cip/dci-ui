@@ -8,7 +8,7 @@ import {
   TextInputGroupUtilities,
 } from "@patternfly/react-core";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { AnalyticsToolbarSearch, RangeOptionValue } from "types";
 import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import RangeSelect from "ui/form/RangeSelect";

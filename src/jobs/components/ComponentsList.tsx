@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { sortByName } from "services/sort";
 import { IComponent } from "types";
 

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router";
 import "ui/styles";
 import JobsPage from "jobs/JobsPage";
 import JobPage from "jobs/job/JobPage";

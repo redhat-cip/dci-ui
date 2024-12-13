@@ -1,6 +1,6 @@
 import { Breadcrumb, BreadcrumbItem } from "@patternfly/react-core";
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 interface ILink {
   to?: string;

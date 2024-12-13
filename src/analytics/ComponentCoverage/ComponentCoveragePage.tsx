@@ -34,7 +34,7 @@ import {
   SearchIcon,
   WarningTriangleIcon,
 } from "@patternfly/react-icons";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import { JobStatusLabel } from "jobs/components";

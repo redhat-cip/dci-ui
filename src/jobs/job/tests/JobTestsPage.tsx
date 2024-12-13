@@ -2,7 +2,7 @@ import { Card, CardBody, Label } from "@patternfly/react-core";
 import { useJob } from "../jobContext";
 import { EmptyState } from "ui";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   BugIcon,
   CheckCircleIcon,

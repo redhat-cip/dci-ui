@@ -15,7 +15,7 @@ import {
 } from "@patternfly/react-core";
 import { Breadcrumb, CopyButton, EmptyState, StateLabel } from "ui";
 import { ITopic } from "types";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import CardLine from "ui/CardLine";
 import { useGetTopicQuery, useUpdateTopicMutation } from "./topicsApi";
 import { skipToken } from "@reduxjs/toolkit/query";

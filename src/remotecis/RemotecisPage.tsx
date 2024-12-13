@@ -32,7 +32,7 @@ import {
   Td,
   ThProps,
 } from "@patternfly/react-table";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import {
   createSearchFromFilters,
   offsetAndLimitToPage,

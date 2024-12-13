@@ -5,7 +5,7 @@ import { setupStore } from "../store";
 import type { RenderOptions } from "@testing-library/react";
 import type { AppStore, RootState } from "../store";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { currentUser } from "__tests__/data";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {

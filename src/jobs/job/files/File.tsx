@@ -8,7 +8,7 @@ import {
 } from "@patternfly/react-icons";
 import { RotatingSpinnerIcon } from "ui";
 import { IFile } from "types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import SeeFileContentModal from "./SeeFileContentModal";
 import { Tr, Td } from "@patternfly/react-table";
 import { useState } from "react";

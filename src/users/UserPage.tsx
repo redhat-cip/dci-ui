@@ -11,7 +11,7 @@ import {
 import UserForm from "./UserForm";
 import { TrashAltIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, Breadcrumb, EmptyState } from "ui";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import { t_global_color_status_danger_default } from "@patternfly/react-tokens";
 import {
   useDeleteUserMutation,

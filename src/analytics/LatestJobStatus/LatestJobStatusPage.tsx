@@ -15,7 +15,7 @@ import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
 import { getProductIcon } from "ui/icons";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import LoadingPageSection from "ui/LoadingPageSection";
 import { useLazyGetStatsQuery } from "./latestJobStatusApi";
 

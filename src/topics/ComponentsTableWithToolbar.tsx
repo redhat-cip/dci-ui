@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle } from "@patternfly/react-core";
 import { ITopic } from "types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import {
   createSearchFromFilters,
   parseFiltersFromSearch,

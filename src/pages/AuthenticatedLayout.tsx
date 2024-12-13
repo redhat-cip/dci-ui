@@ -6,7 +6,7 @@ import {
   useLocation,
   Outlet,
   Navigate,
-} from "react-router-dom";
+} from "react-router";
 import { values } from "lodash";
 import {
   Nav,

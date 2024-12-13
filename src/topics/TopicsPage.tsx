@@ -9,7 +9,7 @@ import {
   PageSection,
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { groupTopicsPerProduct, sortTopicWithSemver } from "./topicsActions";
 import CreateTopicModal from "./CreateTopicModal";
 import { getProductIcon } from "ui/icons";

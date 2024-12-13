@@ -10,7 +10,7 @@ import { IGetJunitTestSuites, ITestCase, ITestCaseActionType } from "types";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import TestCase, { TestCaseState } from "./TestCase";
 import { InfoCircleIcon } from "@patternfly/react-icons";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import { useState } from "react";
 import {
   t_global_color_nonstatus_green_default,

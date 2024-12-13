@@ -9,7 +9,7 @@ import {
   Content,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
 import ComponentCoverageImage from "./ComponentCoverage/component_coverage.png";

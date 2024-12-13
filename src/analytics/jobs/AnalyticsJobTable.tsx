@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@patternfly/react-core";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { IAnalyticsJob } from "types";
 import { humanizeJobDuration, JobComment, JobResults } from "./JobComponents";
 

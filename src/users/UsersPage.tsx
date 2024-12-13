@@ -21,7 +21,7 @@ import {
   pageAndLimitToOffset,
   parseFiltersFromSearch,
 } from "services/filters";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { useCreateUserMutation, useListUsersQuery } from "./usersApi";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";

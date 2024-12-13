@@ -1,5 +1,5 @@
 import { Tooltip, Label } from "@patternfly/react-core";
-import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router";
 import useLocalStorage from "hooks/useLocalStorage";
 import { AnalyticsToolbarSearch } from "types";
 

@@ -1,7 +1,7 @@
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { CopyButton, StateLabel } from "ui";
 import { sort } from "services/sort";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Label } from "@patternfly/react-core";
 import { formatDate } from "services/date";
 import { DateTime } from "luxon";

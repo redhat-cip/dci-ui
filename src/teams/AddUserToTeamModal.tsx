@@ -10,7 +10,7 @@ import {
 import { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
 import { useLazySearchUserQuery } from "users/usersApi";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 interface AddUserToTeamModalProps {

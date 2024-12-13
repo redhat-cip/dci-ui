@@ -8,7 +8,7 @@ import {
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal, CopyButton } from "ui";
 import { ITeam } from "types";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   useAddUserToTeamMutation,
   useListTeamsUserQuery,

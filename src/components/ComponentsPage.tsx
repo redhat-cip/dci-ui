@@ -1,6 +1,6 @@
 import { useListComponentsQuery } from "./componentsApi";
 import { EmptyState, Breadcrumb } from "ui";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import {
   createSearchFromFilters,

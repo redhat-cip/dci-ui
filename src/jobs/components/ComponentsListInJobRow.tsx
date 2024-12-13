@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Label } from "@patternfly/react-core";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { CubesIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
 import { IComponent } from "types";

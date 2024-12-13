@@ -19,7 +19,7 @@ import { useState } from "react";
 import useLocalStorage from "hooks/useLocalStorage";
 import { rangeLabels } from "ui/form/RangeSelect";
 import { AnalyticsToolbarSearch } from "types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export default function SaveSearchModal({
   search,

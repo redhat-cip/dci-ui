@@ -24,7 +24,7 @@ import {
   IJob,
   IJobStatus,
 } from "types";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { CalendarAltIcon, ClockIcon } from "@patternfly/react-icons";
 import { fromNow, formatDate } from "services/date";
 import { sortByNewestFirst } from "services/sort";

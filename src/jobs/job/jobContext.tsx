@@ -14,7 +14,7 @@ import {
   EmptyStateFooter,
   EmptyStateVariant,
 } from "@patternfly/react-core";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 type JobContextProps = {
   job: IEnhancedJob;
