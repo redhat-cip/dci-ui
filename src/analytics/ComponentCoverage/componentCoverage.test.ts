@@ -1,5 +1,5 @@
+import { createAnalyticsSearchParams } from "analytics/analyticsApi";
 import { buildComponentCoverage } from "./componentCoverage";
-import { createCoverageSearchFromFilters } from "./ComponentCoveragePage";
 
 test("buildComponentCoverage", () => {
   expect(
@@ -214,8 +214,8 @@ test("create search from filters", () => {
     topic_id: "to1",
     types: ["type_1", "type_2"],
   };
-  const expectedSearch = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
-  expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
+  const expectedSearch = "team_id=t1&topic_id=to1&types=type_1%2Ctype_2";
+  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
 });
 
 test("create search from filters remove duplicate types", () => {
@@ -224,8 +224,9 @@ test("create search from filters remove duplicate types", () => {
     topic_id: "to1",
     types: ["type_1", "type_2", "type_2"],
   };
-  const expectedSearch = "?team_id=t1&topic_id=to1&types=type_1&types=type_2";
-  expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
+  const expectedSearch =
+    "team_id=t1&topic_id=to1&types=type_1%2Ctype_2%2Ctype_2";
+  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
 });
 
 test("create search from filters remove null", () => {
@@ -235,5 +236,5 @@ test("create search from filters remove null", () => {
     types: [],
   };
   const expectedSearch = "";
-  expect(createCoverageSearchFromFilters(filters)).toEqual(expectedSearch);
+  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
 });

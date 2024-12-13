@@ -18,7 +18,7 @@ export default function QueryToolbarSavedSearches({
   return (
     <div {...props}>
       {searchKeys.map((searchName) => (
-        <Tooltip content={searches[searchName].query}>
+        <Tooltip content={searches[searchName].query} key={searchName}>
           <Label
             color="green"
             className="pf-v6-u-mr-xs"

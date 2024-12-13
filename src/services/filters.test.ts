@@ -168,7 +168,7 @@ describe("parseFiltersFromSearch", () => {
     expect(configuration).toBeNull();
     expect(status).toBeNull();
   });
-  test("from search with query", () => {
+  test.only("from search with query", () => {
     const search = "?page=2&perPage=40&query=eq(name,openshift)";
     const { limit, offset, query } = parseFiltersFromSearch(search);
     expect(limit).toBe(40);

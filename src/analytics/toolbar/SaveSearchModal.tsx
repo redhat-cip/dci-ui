@@ -114,6 +114,7 @@ export default function SaveSearchModal({
                 <LabelGroup>
                   {searchesNames.map((searchName) => (
                     <Label
+                      key={searchName}
                       onClick={() => {
                         setSearches({
                           ...searches,

@@ -1,6 +1,6 @@
+import { createAnalyticsSearchParams } from "analytics/analyticsApi";
 import { api } from "api";
 import { IComponentCoverageESData } from "types";
-import { createCoverageSearchFromFilters } from "./ComponentCoveragePage";
 
 export const {
   useLazyGetAllComponentTypesQuery,
@@ -24,12 +24,12 @@ export const {
       }
     >({
       query: ({ teamId, topicId, selectedTypes }) => {
-        const newSearch = createCoverageSearchFromFilters({
+        const newSearch = createAnalyticsSearchParams({
           team_id: teamId,
           topic_id: topicId,
           types: selectedTypes,
         });
-        return `/analytics/tasks_components_coverage${newSearch}`;
+        return `/analytics/tasks_components_coverage?${newSearch}`;
       },
 
       providesTags: ["Analytics"],

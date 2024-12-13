@@ -1,4 +1,3 @@
-import qs from "qs";
 import { state, Filters, WhereFilters } from "types";
 
 function _extractWhereFilter(filters: Filters): WhereFilters {
@@ -7,11 +6,11 @@ function _extractWhereFilter(filters: Filters): WhereFilters {
 }
 
 function _parseWhere(
-  where: string | string[] | qs.ParsedQs | qs.ParsedQs[] | undefined,
+  where: string | null,
   _defaultFilters: Filters,
 ): WhereFilters {
   const defaultWhereFilters = _extractWhereFilter(_defaultFilters);
-  if (typeof where !== "string" || where === undefined) {
+  if (where === null) {
     return { ...defaultWhereFilters };
   }
   return where.split(",").reduce(
@@ -84,38 +83,37 @@ export function parseFiltersFromSearch(
   search: string,
   initialFilters: Partial<Filters> = {},
 ): Filters {
+  const params = new URLSearchParams(search);
   const defaultWithInitialFilters: Filters = {
     ...getDefaultFilters(),
     ...initialFilters,
   };
-  const {
-    limit: limitParam,
-    offset: offsetParam,
-    page: pageString,
-    perPage: perPageString,
-    sort: sortString,
-    query: queryString,
-    where: whereString,
-  } = qs.parse(search.replace(/^\?/, ""));
+  const limitParam = params.get("limit");
+  const offsetParam = params.get("offset");
+  const pageString = params.get("page");
+  const perPageString = params.get("perPage");
+  const sortString = params.get("sort");
+  const queryString = params.get("query");
+  const whereString = params.get("where");
   const limit =
-    limitParam === undefined
-      ? perPageString === undefined
+    limitParam === null
+      ? perPageString === null
         ? defaultWithInitialFilters.limit
         : parseInt(perPageString as string, 10)
       : parseInt(limitParam as string, 10);
   const offset =
-    offsetParam === undefined
-      ? pageString === undefined
+    offsetParam === null
+      ? pageString === null
         ? defaultWithInitialFilters.offset
         : pageAndLimitToOffset(parseInt(pageString as string, 10), limit)
       : parseInt(offsetParam as string, 10);
   const whereFilters = _parseWhere(whereString, defaultWithInitialFilters);
   const sort =
-    sortString === undefined
+    sortString === null
       ? defaultWithInitialFilters.sort
       : (sortString as string);
   const query =
-    queryString === undefined
+    queryString === null
       ? defaultWithInitialFilters.query
       : (queryString as string);
   return {

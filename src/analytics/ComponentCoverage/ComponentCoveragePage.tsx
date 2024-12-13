@@ -39,7 +39,6 @@ import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import { JobStatusLabel } from "jobs/components";
 import TypesFilter from "./TypesFilter";
-import qs from "qs";
 import TeamToolbarFilter from "jobs/toolbar/TeamToolbarFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 import {
@@ -55,27 +54,6 @@ import {
   useLazyGetAllComponentTypesQuery,
   useLazyGetTasksComponentsCoverageQuery,
 } from "./componentCoverageApi";
-
-interface ICoverageFilters {
-  topic_id: string | null;
-  types: string[];
-  team_id: string | null;
-}
-
-export function createCoverageSearchFromFilters(filters: ICoverageFilters) {
-  return qs.stringify(
-    {
-      ...filters,
-      types: [...new Set(filters.types)],
-    },
-    {
-      addQueryPrefix: true,
-      encode: false,
-      arrayFormat: "repeat",
-      skipNulls: true,
-    },
-  );
-}
 
 function ComponentCoverage({
   topicId,
