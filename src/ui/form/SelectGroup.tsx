@@ -37,7 +37,7 @@ export default function SelectGroup({
   isRequired?: boolean;
   hasError?: boolean;
   errorMessage?: string;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   return (
     <FormGroup label={label} isRequired={isRequired} fieldId={id}>

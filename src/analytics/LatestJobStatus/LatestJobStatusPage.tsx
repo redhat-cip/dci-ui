@@ -13,11 +13,11 @@ import {
 } from "@patternfly/react-core";
 import { EmptyState, Breadcrumb } from "ui";
 import NbOfJobsChart from "./NbOfJobsChart";
-import { getProductIcon } from "ui/icons";
 import styled from "styled-components";
 import { Link } from "react-router";
 import LoadingPageSection from "ui/LoadingPageSection";
 import { useLazyGetStatsQuery } from "./latestJobStatusApi";
+import ProductIcon from "products/ProductIcon";
 
 const ProductTitle = styled.h3`
   display: flex;
@@ -47,13 +47,12 @@ function LatestJobStatus() {
   return (
     <Grid hasGutter>
       {products.map((product) => {
-        const ProductIcon = getProductIcon(product.name);
         return (
           <GridItem key={product.id} span={12} className="pf-v6-u-mb-xl">
             <ProductTitle>
               <span className="pf-v6-u-mr-xs">
                 <Icon size="md">
-                  <ProductIcon />
+                  <ProductIcon name={product.name} />
                 </Icon>
               </span>
               {product.name}

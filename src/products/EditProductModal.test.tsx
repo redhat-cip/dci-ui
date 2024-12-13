@@ -13,11 +13,11 @@ test("test edit product form submit the correct values", async () => {
     description: "",
     from_now: "",
   } as unknown as IProduct;
-  const { baseElement, getByRole, getByTestId } = render(
+  const { baseElement, getAllByRole, getByRole, getByTestId } = render(
     <EditProductModal product={product} onSubmit={mockOnSubmit} />,
   );
 
-  const showModal = getByRole("button", { name: /Edit RHEL/i });
+  const showModal = getAllByRole("button", { name: /Edit/i })[0];
 
   fireEvent.click(showModal);
 

@@ -79,7 +79,7 @@ export default function EditProductModal({
         onClick={show}
         {...props}
       >
-        <span className="sr-only">Edit {product.name}</span>
+        Edit
       </Button>
     </>
   );

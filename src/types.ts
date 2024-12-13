@@ -502,11 +502,11 @@ interface BaseListResponse {
   };
 }
 
-export interface ComponentListResponse extends BaseListResponse {
+export interface IGetComponents extends BaseListResponse {
   components: IComponent[];
 }
 
-export interface RemoteciListResponse extends BaseListResponse {
+export interface IGetRemotecis extends BaseListResponse {
   remotecis: IRemoteci[];
 }
 

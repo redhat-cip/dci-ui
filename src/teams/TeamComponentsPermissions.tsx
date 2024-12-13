@@ -98,7 +98,7 @@ export default function TeamComponentsPermissions({
   ...props
 }: {
   team: ITeam;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const dispatch = useAppDispatch();
   const [addRemoteTeamPermissionForTheTeam] =

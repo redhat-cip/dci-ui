@@ -143,7 +143,7 @@ function PipelineCard({
   ...props
 }: {
   pipelineDay: IPipelineDay;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const [seeJobComponents, setSeeJobComponents] = useState(false);
   return (
@@ -244,7 +244,7 @@ function PipelinesPerDay({
 }: {
   isLoading: boolean;
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   if (isLoading) {
     return (

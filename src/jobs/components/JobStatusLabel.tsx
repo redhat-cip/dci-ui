@@ -13,7 +13,7 @@ export default function JobStatusLabel({
   ...props
 }: {
   status: IJobStatus;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   switch (status) {
     case "success":

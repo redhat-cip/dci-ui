@@ -8,20 +8,23 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
-import { IProduct, ITopic } from "types";
+import { ITopic } from "types";
+import { useListProductsQuery } from "products/productsApi";
 
 interface CreateTopicModalProps {
-  products: IProduct[];
   onSubmit: (topic: Partial<ITopic>) => void;
   [x: string]: any;
 }
 
 export default function CreateTopicModal({
-  products,
   onSubmit,
   ...props
 }: CreateTopicModalProps) {
+  const { data } = useListProductsQuery();
   const { isOpen, show, hide } = useModal(false);
+  if (!data) {
+    return null;
+  }
   return (
     <>
       <Modal
@@ -35,7 +38,7 @@ export default function CreateTopicModal({
         <ModalBody>
           <TopicForm
             id="create-topic-form"
-            products={products}
+            products={data.products}
             onSubmit={(topic) => {
               hide();
               onSubmit(topic);

@@ -1,22 +1,36 @@
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 import CreateTopicModal from "./CreateTopicModal";
-import { IProduct } from "types";
-import { render } from "__tests__/renders";
+import { IGetProducts, IProduct } from "types";
+import { renderWithProviders } from "__tests__/renders";
 import { vi } from "vitest";
+import { server } from "__tests__/node";
+import { http, HttpResponse } from "msw";
+import { products } from "__tests__/data";
 
 test("test create topic form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
-  const products = [
-    { id: "p1", name: "product 1" },
-    { id: "p2", name: "product 2" },
-  ] as IProduct[];
-
-  const { user, getByRole, getByTestId } = render(
-    <CreateTopicModal onSubmit={mockOnSubmit} products={products} />,
+  server.use(
+    http.get("https://api.distributed-ci.io/api/v1/products", () => {
+      return HttpResponse.json({
+        _meta: {
+          count: products.length,
+        },
+        products,
+      } as IGetProducts);
+    }),
+  );
+  const { user, getByRole, getByTestId } = renderWithProviders(
+    <CreateTopicModal onSubmit={mockOnSubmit} />,
   );
 
-  const showModal = getByRole("button", { name: /Create a new topic/i });
+  await waitFor(() => {
+    expect(
+      getByRole("button", { name: /Create a new topic/i }),
+    ).toBeInTheDocument();
+  });
+
+  const showModal = await getByRole("button", { name: /Create a new topic/i });
 
   user.click(showModal);
 

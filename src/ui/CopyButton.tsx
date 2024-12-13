@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { ClipboardCopyButton } from "@patternfly/react-core/dist/js/components/ClipboardCopy/ClipboardCopyButton";
-import { TooltipPosition } from "@patternfly/react-core";
+import { Button, Tooltip, TooltipPosition } from "@patternfly/react-core";
 import copyToClipboard from "services/copyToClipboard";
+import { CopyIcon } from "@patternfly/react-icons";
 
 interface CopyButtonProps {
   text: string;
   position?: TooltipPosition;
-  [k: string]: any;
+  [key: string]: any;
 }
 
 export default function CopyButton({
@@ -24,20 +24,22 @@ export default function CopyButton({
     };
   }, [copied, setCopied]);
   return (
-    <ClipboardCopyButton
-      exitDelay={1600}
-      entryDelay={100}
-      position={position}
-      id={`copy-button-${text}`}
-      textId={`text-input-${text}`}
-      aria-label="Copy to clipboard"
-      onClick={(event) => {
-        copyToClipboard(event, text);
-        setCopied(true);
-      }}
-      {...props}
+    <Tooltip
+      aria="none"
+      aria-live="polite"
+      content={copied ? "Copied!" : "Copy to clipboard"}
     >
-      {copied ? "Copied!" : "Copy to clipboard"}
-    </ClipboardCopyButton>
+      <Button
+        variant="control"
+        id={`copy-button-${text}`}
+        aria-label="Copy to clipboard"
+        onClick={(event) => {
+          copyToClipboard(event, text);
+          setCopied(true);
+        }}
+        icon={<CopyIcon />}
+        {...props}
+      />
+    </Tooltip>
   );
 }

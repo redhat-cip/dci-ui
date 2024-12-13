@@ -36,12 +36,12 @@ import CardLine from "ui/CardLine";
 import LastComponentsJobsBarChart from "analytics/ComponentCoverage/LastComponentsJobsBarChart";
 import { DateTime } from "luxon";
 import { useAuth } from "auth/authSelectors";
-import { getTopicIcon } from "ui/icons";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTeamQuery } from "teams/teamsApi";
 import { useGetTopicQuery } from "topics/topicsApi";
 import LoadingPageSection from "ui/LoadingPageSection";
 import { useGetComponentQuery } from "components/componentsApi";
+import TopicIcon from "topics/TopicIcon";
 
 interface IComponentJobProps {
   job: IJob;
@@ -98,10 +98,9 @@ function TopicLink({ topic_id }: { topic_id: string }) {
 
   if (!topic) return null;
 
-  const TopicIcon = getTopicIcon(topic.name);
   return (
     <Link to={`/topics/${topic.id}/components`}>
-      <TopicIcon className="pf-v6-u-mr-xs" />
+      <TopicIcon name={topic.name} className="pf-v6-u-mr-xs" />
       {topic.name}
     </Link>
   );

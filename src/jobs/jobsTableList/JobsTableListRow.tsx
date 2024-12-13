@@ -11,7 +11,7 @@ import {
   IPipeline,
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
-import { getTopicIcon } from "ui/icons";
+import TopicIcon from "topics/TopicIcon";
 import { getBackgroundColor } from "jobs/jobUtils";
 import {
   TestsLabels,
@@ -27,6 +27,7 @@ import {
   t_global_border_color_200,
   t_global_border_color_300,
 } from "@patternfly/react-tokens";
+
 interface JobTableSummaryProps {
   job: JobNode;
   level: number;
@@ -53,7 +54,6 @@ export default function JobTableSummary({
   columns,
 }: JobTableSummaryProps) {
   const jobDuration = humanizeDuration(job.duration * 1000);
-  const TopicIcon = getTopicIcon(job.topic?.name);
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
   const pipeline = job.pipeline;
@@ -146,7 +146,7 @@ export default function JobTableSummary({
         <Link
           to={`/topics/${principalComponent.topic_id}/components/${principalComponent.id}`}
         >
-          <TopicIcon className="pf-v6-u-mr-xs" />
+          <TopicIcon name={job.topic?.name} className="pf-v6-u-mr-xs" />
           {principalComponent.display_name}
         </Link>
       ),

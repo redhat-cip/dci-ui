@@ -27,12 +27,12 @@ import { isEmpty } from "lodash";
 import TextAreaEditableOnHover from "../TextAreaEditableOnHover";
 import { Markup } from "interweave";
 import { sortByOldestFirst } from "services/sort";
-import { getTopicIcon } from "ui/icons";
 import { convertLinksToHtml, getLabelColor } from "jobs/jobUtils";
 import { JobStatusLabel, TestLabels } from "jobs/components";
 import { useGetJobQuery, useUpdateJobMutation } from "jobs/jobsApi";
 import { sumTests } from "jobs/components/TestsLabels";
 import { ComponentsList } from "../../components/ComponentsList";
+import TopicIcon from "topics/TopicIcon";
 
 interface TestsProps {
   jobId: string;
@@ -166,7 +166,6 @@ export default function JobDetailsHeader({
   const [updateJob] = useUpdateJobMutation();
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
-  const TopicIcon = getTopicIcon(job.topic?.name);
   const navigate = useNavigate();
   return (
     <Card {...props}>
@@ -266,7 +265,7 @@ export default function JobDetailsHeader({
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTerm icon={<TopicIcon />}>
+            <DescriptionListTerm icon={<TopicIcon name={job.topic?.name} />}>
               Topic
             </DescriptionListTerm>
             <DescriptionListDescription>

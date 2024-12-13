@@ -83,7 +83,7 @@ function KeyValues({
 }: {
   isLoading: boolean;
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const [graphType, setGraphType] = useState<IGraphType>("scatter");
 

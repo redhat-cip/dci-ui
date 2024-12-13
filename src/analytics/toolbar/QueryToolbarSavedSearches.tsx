@@ -6,7 +6,7 @@ import { AnalyticsToolbarSearch } from "types";
 export default function QueryToolbarSavedSearches({
   ...props
 }: {
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const location = useLocation();
   const navigate = useNavigate();

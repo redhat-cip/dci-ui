@@ -21,7 +21,7 @@ export default function QueryToolbar({
 }: {
   onLoad: (values: AnalyticsToolbarSearch) => void;
   onSearch: (values: AnalyticsToolbarSearch) => void;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("query") || "");

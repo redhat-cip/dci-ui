@@ -1,30 +1,15 @@
-import { useEffect, useState } from "react";
-import {
-  CopyButton,
-  EmptyState,
-  ConfirmDeleteModal,
-  Breadcrumb,
-  InputFilter,
-} from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import CreateProductModal from "./CreateProductModal";
 import EditProductModal from "./EditProductModal";
 import {
   Button,
   Content,
+  InputGroup,
+  InputGroupItem,
   PageSection,
-  Toolbar,
-  ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { useLocation, useNavigate } from "react-router";
-import { Filters } from "types";
-import {
-  createSearchFromFilters,
-  parseFiltersFromSearch,
-} from "services/filters";
 import {
   useCreateProductMutation,
   useDeleteProductMutation,
@@ -33,33 +18,87 @@ import {
 } from "./productsApi";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";
+import ProductIcon from "./ProductIcon";
 
-export default function ProductsPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [filters, setFilters] = useState<Filters>(
-    parseFiltersFromSearch(location.search),
-  );
-  const { currentUser } = useAuth();
-  const { data, isLoading } = useListProductsQuery(filters);
-  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+function ProductsTable() {
+  const { data, isLoading } = useListProductsQuery();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
+  const { currentUser } = useAuth();
 
-  useEffect(() => {
-    const newSearch = createSearchFromFilters(filters);
-    navigate(`/products${newSearch}`, { replace: true });
-  }, [navigate, filters]);
+  if (currentUser === null) return null;
 
   if (isLoading) {
     return <LoadingPageSection />;
   }
 
-  if (currentUser === null) return null;
-
   if (!data) {
     return <EmptyState title="There is no products" />;
   }
+
+  return (
+    <Table aria-label="Products table">
+      <Thead>
+        <Tr>
+          <Th>ID</Th>
+          <Th>Name</Th>
+          <Th>Description</Th>
+          <Th textCenter> {currentUser.isSuperAdmin ? "Actions" : ""}</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.products.map((product) => (
+          <Tr key={`${product.id}.${product.etag}`}>
+            <Td dataLabel="ID" isActionCell>
+              <CopyButton text={product.id} />
+            </Td>
+            <Td dataLabel="Name">
+              <ProductIcon name={product.name} className="pf-v6-u-mr-xs" />
+              {product.name}
+            </Td>
+            <Td dataLabel="Description">{product.description}</Td>
+            <Td className="text-right" isActionCell>
+              {currentUser.isSuperAdmin ? (
+                <InputGroup>
+                  <InputGroupItem>
+                    <EditProductModal
+                      onSubmit={updateProduct}
+                      product={product}
+                      isDisabled={isUpdating}
+                    />
+                  </InputGroupItem>
+                  <InputGroupItem>
+                    <ConfirmDeleteModal
+                      title={`Delete product ${product.name}`}
+                      message={`Are you sure you want to delete ${product.name}?`}
+                      onOk={() => deleteProduct(product)}
+                    >
+                      {(openModal) => (
+                        <Button
+                          icon={<TrashIcon />}
+                          variant="danger"
+                          onClick={openModal}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </ConfirmDeleteModal>
+                  </InputGroupItem>
+                </InputGroup>
+              ) : null}
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  );
+}
+
+export default function ProductsPage() {
+  const { currentUser } = useAuth();
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+
+  if (currentUser === null) return null;
 
   return (
     <PageSection>
@@ -77,76 +116,7 @@ export default function ProductsPage() {
           />
         </div>
       )}
-      <Toolbar id="toolbar-products" collapseListedFiltersBreakpoint="xl">
-        <ToolbarContent>
-          <ToolbarGroup>
-            <ToolbarItem>
-              <InputFilter
-                search={filters.name || ""}
-                placeholder="Search a product"
-                onSearch={(name) => {
-                  setFilters({
-                    ...filters,
-                    name,
-                  });
-                }}
-              />
-            </ToolbarItem>
-          </ToolbarGroup>
-        </ToolbarContent>
-      </Toolbar>
-      {data.products.length === 0 ? (
-        <EmptyState title="There is no products" />
-      ) : (
-        <Table aria-label="Products table">
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Name</Th>
-              <Th>Label</Th>
-              <Th>Description</Th>
-              <Th textCenter> {currentUser.isSuperAdmin ? "Actions" : ""}</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.products.map((product) => (
-              <Tr key={`${product.id}.${product.etag}`}>
-                <Td dataLabel="ID" isActionCell>
-                  <CopyButton text={product.id} />
-                </Td>
-                <Td dataLabel="Name">{product.name}</Td>
-                <Td dataLabel="Label">{product.label}</Td>
-                <Td dataLabel="Description">{product.description}</Td>
-                <Td className="text-center">
-                  {currentUser.isSuperAdmin ? (
-                    <>
-                      <EditProductModal
-                        className="pf-v6-u-mr-xs"
-                        onSubmit={updateProduct}
-                        product={product}
-                        isDisabled={isUpdating}
-                      />
-                      <ConfirmDeleteModal
-                        title={`Delete product ${product.name}`}
-                        message={`Are you sure you want to delete ${product.name}?`}
-                        onOk={() => deleteProduct(product)}
-                      >
-                        {(openModal) => (
-                          <Button
-                            icon={<TrashIcon />}
-                            variant="danger"
-                            onClick={openModal}
-                          ></Button>
-                        )}
-                      </ConfirmDeleteModal>
-                    </>
-                  ) : null}
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      )}
+      <ProductsTable />
     </PageSection>
   );
 }

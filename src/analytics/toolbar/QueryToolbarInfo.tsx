@@ -12,7 +12,7 @@ export default function AnalyticsJobsInfo({
 }: {
   isLoading: boolean;
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   if (isLoading) {
     return <Skeleton screenreaderText="Loading jobs hint" />;

@@ -26,7 +26,7 @@ export default function SaveSearchModal({
   ...props
 }: {
   search: AnalyticsToolbarSearch;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const navigate = useNavigate();
   const { isOpen, show, hide } = useModal(false);

@@ -9,7 +9,7 @@ export default function AnalyticsJobsModal({
   ...props
 }: {
   jobs: IAnalyticsJob[];
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const { isOpen, show, hide } = useModal(false);
 

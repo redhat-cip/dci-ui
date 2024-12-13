@@ -10,13 +10,13 @@ import {
 import { HelpIcon } from "@patternfly/react-icons";
 import { ITeam } from "types";
 import { Table, Tr, Tbody, Td } from "@patternfly/react-table";
-import { getProductIcon } from "ui/icons";
 import {
   useAddProductToTeamMutation,
   useGetProductIdsTeamHasAccessToQuery,
   useRemoveProductFromTeamMutation,
 } from "./teamsApi";
 import { useListProductsQuery } from "products/productsApi";
+import ProductIcon from "products/ProductIcon";
 
 function ProductsTeamHasAccessToTable({ team }: { team: ITeam }) {
   const { data, isLoading } = useListProductsQuery();
@@ -50,36 +50,33 @@ function ProductsTeamHasAccessToTable({ team }: { team: ITeam }) {
             </Td>
           </Tr>
         )}
-        {data.products.map((product) => {
-          const ProductIcon = getProductIcon(product.name);
-          return (
-            <Tr key={product.id}>
-              <Td>
-                <ProductIcon className="pf-v6-u-mr-xs" />
-                {product.name}
-              </Td>
-              <Td isActionCell>
-                <Switch
-                  id={`product-${product.id}-team-${team.id}-access`}
-                  aria-label={`team ${team.name} has access to ${product.name}`}
-                  isChecked={productsIdsTeamHasAccessTo.includes(product.id)}
-                  isDisabled={
-                    isRemoving ||
-                    isLoadingAddProductToTeam ||
-                    isLoadingTeamHasAccessTo
+        {data.products.map((product) => (
+          <Tr key={product.id}>
+            <Td>
+              <ProductIcon name={product.name} className="pf-v6-u-mr-xs" />
+              {product.name}
+            </Td>
+            <Td isActionCell>
+              <Switch
+                id={`product-${product.id}-team-${team.id}-access`}
+                aria-label={`team ${team.name} has access to ${product.name}`}
+                isChecked={productsIdsTeamHasAccessTo.includes(product.id)}
+                isDisabled={
+                  isRemoving ||
+                  isLoadingAddProductToTeam ||
+                  isLoadingTeamHasAccessTo
+                }
+                onChange={(e, hasAccessToProduct) => {
+                  if (hasAccessToProduct) {
+                    addProductToTeam({ team, product });
+                  } else {
+                    removeProductFromTeam({ team, product });
                   }
-                  onChange={(e, hasAccessToProduct) => {
-                    if (hasAccessToProduct) {
-                      addProductToTeam({ team, product });
-                    } else {
-                      removeProductFromTeam({ team, product });
-                    }
-                  }}
-                />
-              </Td>
-            </Tr>
-          );
-        })}
+                }}
+              />
+            </Td>
+          </Tr>
+        ))}
       </Tbody>
     </Table>
   );

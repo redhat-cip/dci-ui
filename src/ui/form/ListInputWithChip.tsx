@@ -19,7 +19,7 @@ export default function ListInputWithChip({
   items: string[];
   setItems: (items: string[]) => void;
   placeholder?: string;
-  [k: string]: any;
+  [key: string]: any;
 }) {
   const [inputValue, setInputValue] = useState("");
 

@@ -10,7 +10,7 @@ export default function AnalyticsJobTable({
   ...props
 }: {
   jobs: IAnalyticsJob[];
-  [k: string]: any;
+  [key: string]: any;
 }) {
   return (
     <Card {...props}>

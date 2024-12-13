@@ -24,14 +24,16 @@ export default function DCIEmptyState({
   return (
     <Bullseye>
       <EmptyState
-        headingLevel="h4"
         icon={icon ? icon : SearchIcon}
-        title={title}
+        titleText={title}
+        headingLevel="h4"
       >
         <EmptyStateBody>{info}</EmptyStateBody>
-        <EmptyStateFooter>
-          {action && <EmptyStateActions>{action}</EmptyStateActions>}
-        </EmptyStateFooter>
+        {action && (
+          <EmptyStateFooter>
+            <EmptyStateActions>{action}</EmptyStateActions>
+          </EmptyStateFooter>
+        )}
       </EmptyState>
     </Bullseye>
   );
