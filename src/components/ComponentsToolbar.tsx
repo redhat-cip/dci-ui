@@ -1,4 +1,3 @@
-import { useListComponentsQuery } from "./componentsApi";
 import {
   Dropdown,
   DropdownItem,
@@ -28,9 +27,11 @@ const Categories = ["Name", "Type", "Tag"] as const;
 type Category = (typeof Categories)[number];
 
 export default function ComponentsToolbar({
+  nbOfComponents,
   filters,
   setFilters,
 }: {
+  nbOfComponents: number;
   filters: Filters;
   setFilters: (filters: Filters) => void;
 }) {
@@ -44,9 +45,6 @@ export default function ComponentsToolbar({
     setFilters(getDefaultFilters());
   }
 
-  const { data } = useListComponentsQuery(filters);
-  if (!data) return null;
-  const count = data._meta.count;
   return (
     <Toolbar
       id="toolbar-components"
@@ -96,16 +94,26 @@ export default function ComponentsToolbar({
               <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Name"}
                 categoryName="Name"
-                name={filters.display_name}
-                onSubmit={(display_name) =>
-                  setFilters({ ...filters, display_name })
-                }
+                value={filters.display_name}
+                onSubmit={(display_name) => {
+                  if (display_name.trim().endsWith("*")) {
+                    setFilters({
+                      ...filters,
+                      display_name,
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      display_name: `${display_name}*`,
+                    });
+                  }
+                }}
                 onClear={() => setFilters({ ...filters, display_name: null })}
               />
               <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Type"}
                 categoryName="Type"
-                name={filters.type}
+                value={filters.type}
                 onSubmit={(type) => setFilters({ ...filters, type })}
                 onClear={() => setFilters({ ...filters, type: null })}
               />
@@ -121,11 +129,11 @@ export default function ComponentsToolbar({
         </ToolbarGroup>
         <ToolbarGroup style={{ flex: "1" }}>
           <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
-            {count === 0 ? null : (
+            {nbOfComponents === 0 ? null : (
               <Pagination
                 perPage={filters.limit}
                 page={offsetAndLimitToPage(filters.offset, filters.limit)}
-                itemCount={count}
+                itemCount={nbOfComponents}
                 onSetPage={(e, newPage) => {
                   setFilters({
                     ...filters,

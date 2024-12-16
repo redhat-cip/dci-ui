@@ -34,8 +34,10 @@ export default function DCISelect<T extends Item>({
   const [selected, setSelected] = useState<string>(placeholder);
 
   useEffect(() => {
-    setSelected(item?.label || placeholder);
-  }, [item, placeholder]);
+    if (item) {
+      setSelected(item.label);
+    }
+  }, [item]);
 
   const toggleSetIsOpen = () => {
     setIsOpen(!isOpen);
@@ -47,6 +49,7 @@ export default function DCISelect<T extends Item>({
       isExpanded={isOpen}
       onClick={toggleSetIsOpen}
       isFullWidth
+      aria-label={placeholder}
       badge={
         !!item &&
         onClear !== undefined && (

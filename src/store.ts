@@ -10,7 +10,7 @@ import { rtkQueryErrorLogger } from "middleware";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "services/localStorage";
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   alerts: alertsReducer,
   auth: authReducer,
   [api.reducerPath]: api.reducer,

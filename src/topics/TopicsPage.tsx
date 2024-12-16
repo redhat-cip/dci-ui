@@ -16,6 +16,7 @@ import { useListProductsQuery } from "products/productsApi";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";
 import ProductIcon from "products/ProductIcon";
+import { sortByName } from "services/sort";
 
 function TopicsList() {
   const navigate = useNavigate();
@@ -27,8 +28,12 @@ function TopicsList() {
     return <LoadingPageSection />;
   }
 
-  if (!data || !dataProducts) {
+  if (!data || data.topics.length === 0) {
     return <EmptyState title="There is no topics" />;
+  }
+
+  if (!dataProducts || dataProducts.products.length === 0) {
+    return <EmptyState title="There is no products" />;
   }
 
   const topicsPerProduct = groupTopicsPerProduct(
@@ -38,7 +43,7 @@ function TopicsList() {
 
   return (
     <div>
-      {topicsPerProduct.map((product) => (
+      {sortByName(topicsPerProduct).map((product) => (
         <div key={product.id} className="pf-v6-u-mb-xl">
           <Content component={ContentVariants.h2}>
             <ProductIcon name={product.name} className="pf-v6-u-mr-sm" />

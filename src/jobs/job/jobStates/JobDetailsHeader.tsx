@@ -7,6 +7,7 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   Label,
+  Skeleton,
 } from "@patternfly/react-core";
 import { Link, useNavigate } from "react-router";
 import {
@@ -163,7 +164,7 @@ export default function JobDetailsHeader({
   job,
   ...props
 }: JobDetailsHeaderProps) {
-  const [updateJob] = useUpdateJobMutation();
+  const [updateJob, { isLoading }] = useUpdateJobMutation();
   const jobDuration = humanizeDuration(job.duration * 1000);
   const startedSince = fromNow(job.created_at);
   const navigate = useNavigate();
@@ -394,10 +395,14 @@ export default function JobDetailsHeader({
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "stretch",
                   }}
                 >
-                  <Markup content={convertLinksToHtml(job.comment)} />
+                  {isLoading ? (
+                    <Skeleton style={{ width: "100%", minHeight: "50px" }} />
+                  ) : (
+                    <Markup content={convertLinksToHtml(job.comment)} />
+                  )}
                 </div>
               </TextAreaEditableOnHover>
             </DescriptionListDescription>

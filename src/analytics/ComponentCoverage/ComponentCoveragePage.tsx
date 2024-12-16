@@ -28,7 +28,7 @@ import {
 import { Breadcrumb, EmptyState } from "ui";
 import { IComponentCoverage } from "types";
 import { buildComponentCoverage } from "./componentCoverage";
-import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
+import TopicToolbarFilter from "topics/form/TopicToolbarFilter";
 import {
   InfoCircleIcon,
   SearchIcon,
@@ -39,7 +39,7 @@ import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import { JobStatusLabel } from "jobs/components";
 import TypesFilter from "./TypesFilter";
-import TeamToolbarFilter from "jobs/toolbar/TeamToolbarFilter";
+import TeamToolbarFilter from "teams/form/TeamToolbarFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 import {
   Table,

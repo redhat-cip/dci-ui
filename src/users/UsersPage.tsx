@@ -8,10 +8,10 @@ import {
   Toolbar,
   PageSection,
   Content,
+  SearchInput,
 } from "@patternfly/react-core";
 import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
 import { EmptyState, Breadcrumb } from "ui";
-import EmailsFilter from "./EmailsFilter";
 import { Filters } from "types";
 import CreateUserModal from "./CreateUserModal";
 import UsersTable from "./UsersTable";
@@ -26,26 +26,24 @@ import { useCreateUserMutation, useListUsersQuery } from "./usersApi";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";
 
-export default function UsersPage() {
-  const { currentUser } = useAuth();
+function User() {
   const location = useLocation();
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>(
     parseFiltersFromSearch(location.search),
   );
+  const [inputSearch, setInputSearch] = useState<string>("");
+
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/users${newSearch}`, { replace: true });
   }, [navigate, filters]);
 
   const { data, isLoading } = useListUsersQuery(filters);
-  const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
 
   if (isLoading) {
     return <LoadingPageSection />;
   }
-
-  if (currentUser === null) return null;
 
   if (!data) {
     return (
@@ -56,37 +54,27 @@ export default function UsersPage() {
   const count = data._meta.count;
 
   return (
-    <PageSection>
-      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
-      <Content component="h1">Users</Content>
-      <Content component="p">List of DCI users.</Content>
-      {currentUser.isSuperAdmin && (
-        <div className="pf-v6-u-mb-md">
-          <CreateUserModal onSubmit={createUser}>
-            {(openModal) => (
-              <Button
-                icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
-                variant="primary"
-                onClick={openModal}
-                isDisabled={isCreating}
-              >
-                Create a new user
-              </Button>
-            )}
-          </CreateUserModal>
-        </div>
-      )}
+    <div>
       <Toolbar id="toolbar-users" collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup>
             <ToolbarItem>
-              <EmailsFilter
-                search={filters.email || ""}
-                onSearch={(email) => {
-                  setFilters({
-                    ...filters,
-                    email,
-                  });
+              <SearchInput
+                placeholder="Search by email"
+                value={inputSearch}
+                onChange={(e, search) => setInputSearch(search)}
+                onSearch={(e, email) => {
+                  if (email.trim().endsWith("*")) {
+                    setFilters({
+                      ...filters,
+                      email,
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      email: `${email}*`,
+                    });
+                  }
                 }}
               />
             </ToolbarItem>
@@ -144,6 +132,38 @@ export default function UsersPage() {
       ) : (
         <UsersTable users={data.users} />
       )}
+    </div>
+  );
+}
+
+export default function UsersPage() {
+  const { currentUser } = useAuth();
+  const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+
+  if (currentUser === null) return null;
+
+  return (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Users" }]} />
+      <Content component="h1">Users</Content>
+      <Content component="p">List of DCI users.</Content>
+      {currentUser.isSuperAdmin && (
+        <div className="pf-v6-u-mb-md">
+          <CreateUserModal onSubmit={createUser}>
+            {(openModal) => (
+              <Button
+                icon={<PlusCircleIcon className="pf-v6-u-mr-xs" />}
+                variant="primary"
+                onClick={openModal}
+                isDisabled={isCreating}
+              >
+                Create a new user
+              </Button>
+            )}
+          </CreateUserModal>
+        </div>
+      )}
+      <User />
     </PageSection>
   );
 }

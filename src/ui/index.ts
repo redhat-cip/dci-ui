@@ -7,4 +7,3 @@ export { default as BackgroundImage } from "./BackgroundImage";
 export { default as ConfirmDeleteModal } from "./ConfirmDeleteModal";
 export { default as Breadcrumb } from "./Breadcrumb";
 export { default as StateLabel } from "./StateLabel";
-export { default as InputFilter } from "./toolbar/InputFilter";

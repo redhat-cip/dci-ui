@@ -1,14 +1,21 @@
 import { useState } from "react";
 import * as React from "react";
-import { Button, InputGroup, InputGroupItem } from "@patternfly/react-core";
+import {
+  Button,
+  Form,
+  InputGroup,
+  InputGroupItem,
+  TextArea,
+} from "@patternfly/react-core";
 import { TimesIcon, CheckIcon } from "@patternfly/react-icons";
 import * as Yup from "yup";
-import { Form, Formik, Field } from "formik";
 import styled from "styled-components";
 import {
   t_global_border_color_100,
   t_global_border_color_hover,
 } from "@patternfly/react-tokens";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface TextAreaEditableOnHoverProps {
   text: string;
@@ -38,62 +45,70 @@ export default function TextAreaEditableOnHover({
   ...props
 }: TextAreaEditableOnHoverProps) {
   const [editModeOn, setEditModeOne] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, isDirty },
+  } = useForm<{ text?: string }>({
+    resolver: yupResolver(TextAreaEditableOnHoverSchema),
+  });
+
   return editModeOn ? (
-    <Formik
-      initialValues={{ text }}
-      validationSchema={TextAreaEditableOnHoverSchema}
-      onSubmit={(v) => {
+    <Form
+      onSubmit={handleSubmit(({ text }) => {
         setEditModeOne(false);
-        onSubmit(v.text);
-      }}
+        if (text) {
+          onSubmit(text);
+        }
+      })}
+      {...props}
     >
-      {({ isValid, dirty }) => (
-        <Form {...props}>
-          <div>
-            <div>
-              <Field
-                id="text"
-                name="text"
-                as="textarea"
-                style={{
-                  width: "100%",
-                  maxWidth: "100%",
-                  resize: "none",
-                  padding: "0.2em",
-                  outline: "none",
-                  borderColor: t_global_border_color_hover.value,
-                  borderRadius: "5px",
-                }}
-                cols={50}
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus
-              />
-            </div>
-            <InputGroup>
-              <InputGroupItem>
-                <Button
-                  icon={<CheckIcon />}
-                  variant="primary"
-                  type="submit"
-                  isInline
-                  isDisabled={!(isValid && dirty)}
-                ></Button>
-              </InputGroupItem>
-              <InputGroupItem>
-                <Button
-                  icon={<TimesIcon />}
-                  variant="secondary"
-                  type="button"
-                  isInline
-                  onClick={() => setEditModeOne(false)}
-                  className="pf-v6-u-ml-xs"
-                ></Button>
-              </InputGroupItem>
-            </InputGroup>
-          </div>
-        </Form>
-      )}
-    </Formik>
+      <div>
+        <div>
+          <TextArea
+            id="text"
+            style={{
+              width: "100%",
+              maxWidth: "100%",
+              resize: "none",
+              padding: "0.25em 0.3em",
+              outline: "none",
+              borderColor: t_global_border_color_hover.value,
+              borderRadius: "5px",
+              minHeight: "56px",
+              fontSize: "0.8em",
+            }}
+            defaultValue={text}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            {...register("text")}
+          />
+        </div>
+        <InputGroup className="pf-v6-u-mt-xs">
+          <InputGroupItem>
+            <Button
+              icon={<CheckIcon />}
+              variant="control"
+              size="sm"
+              type="submit"
+              isInline
+              isDisabled={!(isValid && isDirty)}
+            ></Button>
+          </InputGroupItem>
+          <InputGroupItem>
+            <Button
+              icon={<TimesIcon />}
+              variant="control"
+              size="sm"
+              type="button"
+              isInline
+              onClick={() => setEditModeOne(false)}
+              className="pf-v6-u-ml-xs"
+            ></Button>
+          </InputGroupItem>
+        </InputGroup>
+      </div>
+    </Form>
   ) : (
     <TextAreaEditable
       {...props}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ToolbarFilter, SearchInput } from "@patternfly/react-core";
+import { ToolbarFilter } from "@patternfly/react-core";
+import TextInput from "./TextInput";
 
 type ListToolbarFilterProps = {
   showToolbarItem?: boolean;
@@ -14,7 +15,6 @@ export default function ListToolbarFilter({
   items,
   onSubmit,
   categoryName,
-  placeholderText,
 }: ListToolbarFilterProps) {
   const [value, setValue] = useState("");
   const uniqItems = [...new Set(items)];
@@ -29,20 +29,15 @@ export default function ListToolbarFilter({
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
-      <SearchInput
-        placeholder={placeholderText}
-        aria-label="search item"
-        onChange={(e, value) => setValue(value)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            if (uniqItems?.indexOf(value) === -1) {
-              onSubmit(uniqItems.concat(value));
-              setValue("");
-            }
+      <TextInput
+        value={value}
+        name={categoryName.toLowerCase()}
+        onClick={(newValue) => {
+          if (uniqItems?.indexOf(newValue) === -1) {
+            onSubmit(uniqItems.concat(newValue));
+            setValue("");
           }
         }}
-        value={value}
-        onClear={() => setValue("")}
       />
     </ToolbarFilter>
   );

@@ -8,18 +8,16 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
-import { ITopic, IProduct } from "types";
+import { ITopic } from "types";
 import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditTopicModalProps {
-  products: IProduct[];
   topic: ITopic;
   onSubmit: (topic: ITopic | Partial<ITopic>) => void;
   [x: string]: any;
 }
 
 export default function EditTopicModal({
-  products,
   topic,
   onSubmit,
   ...props
@@ -38,7 +36,6 @@ export default function EditTopicModal({
         <ModalBody>
           <TopicForm
             id="edit-topic-form"
-            products={products}
             topic={topic}
             onSubmit={(topic) => {
               hide();

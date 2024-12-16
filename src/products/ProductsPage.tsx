@@ -32,7 +32,7 @@ function ProductsTable() {
     return <LoadingPageSection />;
   }
 
-  if (!data) {
+  if (!data || data.products.length === 0) {
     return <EmptyState title="There is no products" />;
   }
 
@@ -76,7 +76,8 @@ function ProductsTable() {
                       {(openModal) => (
                         <Button
                           icon={<TrashIcon />}
-                          variant="danger"
+                          variant="secondary"
+                          isDanger
                           onClick={openModal}
                         >
                           Delete

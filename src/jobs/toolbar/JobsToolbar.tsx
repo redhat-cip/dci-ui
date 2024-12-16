@@ -15,10 +15,9 @@ import {
   MenuToggleElement,
 } from "@patternfly/react-core";
 import { SyncAltIcon } from "@patternfly/react-icons";
-import RemoteciToolbarFilter from "./RemoteciToolbarFilter";
-import ProductToolbarFilter from "./ProductToolbarFilter";
-import TopicToolbarFilter from "./TopicToolbarFilter";
-import TeamToolbarFilter from "./TeamToolbarFilter";
+import ProductToolbarFilter from "products/form/ProductToolbarFilter";
+import TopicToolbarFilter from "topics/form/TopicToolbarFilter";
+import TeamToolbarFilter from "teams/form/TeamToolbarFilter";
 import StatusToolbarFilter from "./StatusToolbarFilter";
 import ListToolbarFilter from "./ListToolbarFilter";
 import TextInputToolbarFilter from "./TextInputToolbarFilter";
@@ -27,6 +26,7 @@ import QLToolbar from "./QLToolbar";
 import TableViewColumnsSelect from "./TableViewColumnsSelect";
 import { offsetAndLimitToPage, pageAndLimitToOffset } from "services/filters";
 import { isUUID } from "services/utils";
+import RemoteciToolbarFilter from "remotecis/form/RemoteciToolbarFilter";
 
 const Categories = [
   "Remoteci",
@@ -156,7 +156,7 @@ export default function JobsToolbar({
               <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Config"}
                 categoryName="Config"
-                name={filters.configuration}
+                value={filters.configuration}
                 onSubmit={(configuration) =>
                   setFilters({ ...filters, configuration })
                 }
@@ -165,14 +165,14 @@ export default function JobsToolbar({
               <TextInputToolbarFilter
                 categoryName="Name"
                 showToolbarItem={currentCategory === "Name"}
-                name={filters.name}
+                value={filters.name}
                 onSubmit={(name) => setFilters({ ...filters, name })}
                 onClear={() => setFilters({ ...filters, name: null })}
               />
               <TextInputToolbarFilter
                 categoryName="Pipeline id"
                 showToolbarItem={currentCategory === "Pipeline id"}
-                name={filters.pipeline_id}
+                value={filters.pipeline_id}
                 onSubmit={(pipeline_id) => {
                   if (isUUID(pipeline_id)) {
                     setFilters({ ...filters, pipeline_id });

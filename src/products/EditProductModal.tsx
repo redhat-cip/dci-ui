@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { FormikProps } from "formik";
 import {
   Button,
   Modal,
@@ -25,7 +23,6 @@ export default function EditProductModal({
   ...props
 }: EditProductModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<IProduct | Partial<IProduct>>>(null);
   return (
     <>
       <Modal
@@ -38,7 +35,7 @@ export default function EditProductModal({
         <ModalHeader title={`Edit ${product.name}`} />
         <ModalBody>
           <ProductForm
-            ref={formRef}
+            id="edit-product-form"
             product={product}
             onSubmit={(editedProduct) => {
               // why ? dci-control-server api doesnt accept extra field like from_now
@@ -57,14 +54,8 @@ export default function EditProductModal({
           <Button
             key="edit"
             variant="primary"
-            onClick={() => {
-              if (formRef.current) {
-                if (formRef.current.isValid) {
-                  hide();
-                }
-                formRef.current.handleSubmit();
-              }
-            }}
+            type="submit"
+            form="edit-product-form"
           >
             Edit
           </Button>

@@ -65,19 +65,7 @@ export const authApi = api
         },
         transformErrorResponse: () => undefined,
       }),
-      updateCurrentUser: builder.mutation<ICurrentUser, ICurrentUser>({
-        query(currentUser) {
-          return {
-            url: `/identity`,
-            method: "PUT",
-            body: currentUser,
-            headers: { "If-Match": currentUser.etag },
-          };
-        },
-        transformResponse: (response: { user: ICurrentUser }, meta, arg) =>
-          response.user,
-      }),
     }),
   });
 
-export const { useGetCurrentUserQuery, useUpdateCurrentUserMutation } = authApi;
+export const { useGetCurrentUserQuery } = authApi;

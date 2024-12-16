@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EmptyState, Breadcrumb, CopyButton, InputFilter } from "ui";
+import { EmptyState, Breadcrumb, CopyButton } from "ui";
 import CreateTeamModal from "./CreateTeamModal";
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   Label,
   PageSection,
   Pagination,
+  SearchInput,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -26,13 +27,13 @@ import { useCreateTeamMutation, useListTeamsQuery } from "./teamsApi";
 import { fromNow } from "services/date";
 import LoadingPageSection from "ui/LoadingPageSection";
 
-export default function TeamsPage() {
-  const { currentUser } = useAuth();
+function Teams() {
   const location = useLocation();
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>(
     parseFiltersFromSearch(location.search),
   );
+  const [inputSearch, setInputSearch] = useState<string>("");
 
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
@@ -40,13 +41,10 @@ export default function TeamsPage() {
   }, [navigate, filters]);
 
   const { data, isLoading } = useListTeamsQuery(filters);
-  const [createTeam, { isLoading: isCreating }] = useCreateTeamMutation();
 
   if (isLoading) {
     return <LoadingPageSection />;
   }
-
-  if (currentUser === null) return null;
 
   if (!data) {
     return (
@@ -55,54 +53,28 @@ export default function TeamsPage() {
   }
 
   const count = data._meta.count;
-
-  const partners = data.teams.filter((t) => t.external && t.state === "active");
-
   return (
-    <PageSection>
-      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
-      <Content component="h1">Teams</Content>
-      <Content component="p">
-        {partners.length > 0
-          ? `List of DCI teams. There are ${partners.length} active partners.`
-          : "List of DCI teams."}
-      </Content>
-      {currentUser.hasEPMRole && (
-        <div className="pf-v6-u-mb-md">
-          <CreateTeamModal
-            onSubmit={async (team) => {
-              try {
-                const newTeam = await createTeam(team).unwrap();
-                navigate(`/teams/${newTeam.id}`);
-              } catch (error) {
-                console.error("rejected", error);
-              }
-            }}
-          >
-            {(openModal) => (
-              <Button
-                variant="primary"
-                onClick={openModal}
-                isDisabled={isCreating}
-              >
-                Create a new team
-              </Button>
-            )}
-          </CreateTeamModal>
-        </div>
-      )}
+    <div>
       <Toolbar id="toolbar-teams" collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup>
             <ToolbarItem>
-              <InputFilter
-                search={filters.name || ""}
+              <SearchInput
                 placeholder="Search a team"
-                onSearch={(name) => {
-                  setFilters({
-                    ...filters,
-                    name,
-                  });
+                value={inputSearch}
+                onChange={(e, search) => setInputSearch(search)}
+                onSearch={(e, name) => {
+                  if (name.trim().endsWith("*")) {
+                    setFilters({
+                      ...filters,
+                      name,
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      name: `${name}*`,
+                    });
+                  }
                 }}
               />
             </ToolbarItem>
@@ -170,6 +142,45 @@ export default function TeamsPage() {
           </Tbody>
         </Table>
       )}
+    </div>
+  );
+}
+
+export default function TeamsPage() {
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [createTeam, { isLoading: isCreating }] = useCreateTeamMutation();
+  if (currentUser === null) return null;
+  return (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Teams" }]} />
+      <Content component="h1">Teams</Content>
+      <Content component="p">List of DCI teams.</Content>
+      {currentUser.hasEPMRole && (
+        <div className="pf-v6-u-mb-md">
+          <CreateTeamModal
+            onSubmit={async (team) => {
+              try {
+                const newTeam = await createTeam(team).unwrap();
+                navigate(`/teams/${newTeam.id}`);
+              } catch (error) {
+                console.error("rejected", error);
+              }
+            }}
+          >
+            {(openModal) => (
+              <Button
+                variant="primary"
+                onClick={openModal}
+                isDisabled={isCreating}
+              >
+                Create a new team
+              </Button>
+            )}
+          </CreateTeamModal>
+        </div>
+      )}
+      <Teams />
     </PageSection>
   );
 }

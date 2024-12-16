@@ -6,6 +6,7 @@ import {
   IProduct,
   IRemoteci,
   ITeam,
+  ITopic,
   IUser,
 } from "types";
 
@@ -103,6 +104,24 @@ export const products: IProduct[] = [
     updated_at: "2017-08-21T12:27:00.909914",
   },
 ];
+
+export const topic: ITopic = {
+  component_types: ["ocp"],
+  component_types_optional: [],
+  created_at: "2024-12-19T15:07:08.141819",
+  data: {
+    test: "ok",
+  },
+  etag: "97c3b94349bec92e1e3a616e6781f959",
+  export_control: true,
+  id: "9324f4a0-07df-448a-b66e-949546666d3e",
+  name: "OCP-4.16",
+  next_topic_id: null,
+  product: products[0],
+  product_id: "p1",
+  state: "active",
+  updated_at: "2024-12-19T15:08:17.423460",
+};
 
 export const components: IComponent[] = [
   {

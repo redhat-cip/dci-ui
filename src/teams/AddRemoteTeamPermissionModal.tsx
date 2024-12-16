@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -7,7 +6,7 @@ import {
 } from "@patternfly/react-core";
 import { ITeam } from "types";
 import useModal from "hooks/useModal";
-import TeamSelect from "jobs/toolbar/TeamSelect";
+import TeamSelect from "teams/form/TeamSelect";
 
 interface AddRemoteTeamPermissionModalProps {
   team: ITeam;
@@ -21,11 +20,6 @@ export default function AddRemoteTeamPermissionModal({
   children,
 }: AddRemoteTeamPermissionModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const [teamId, setTeamId] = useState<string | null>(null);
-
-  const onClear = () => {
-    setTeamId(null);
-  };
 
   return (
     <>
@@ -35,7 +29,6 @@ export default function AddRemoteTeamPermissionModal({
         variant={ModalVariant.medium}
         isOpen={isOpen}
         onClose={() => {
-          onClear();
           hide();
         }}
       >
@@ -44,11 +37,11 @@ export default function AddRemoteTeamPermissionModal({
         />
         <ModalBody>
           <TeamSelect
-            id={teamId}
-            onClear={() => onClear()}
             onSelect={(team) => {
               hide();
-              onTeamSelected(team);
+              if (team) {
+                onTeamSelected(team);
+              }
             }}
           />
         </ModalBody>

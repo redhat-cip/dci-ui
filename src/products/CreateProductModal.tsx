@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { FormikProps } from "formik";
 import {
   Button,
   Modal,
@@ -22,7 +20,6 @@ export default function CreateProductModal({
   ...props
 }: CreateProductModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<Partial<IProduct>>>(null);
   return (
     <>
       <Modal
@@ -34,20 +31,20 @@ export default function CreateProductModal({
       >
         <ModalHeader title="Create a new product" />
         <ModalBody>
-          <ProductForm ref={formRef} onSubmit={onSubmit} />
+          <ProductForm
+            id="create-product-form"
+            onSubmit={(product) => {
+              hide();
+              onSubmit(product);
+            }}
+          />
         </ModalBody>
         <ModalFooter>
           <Button
             key="create"
             variant="primary"
-            onClick={() => {
-              if (formRef.current) {
-                if (formRef.current.isValid) {
-                  hide();
-                }
-                formRef.current.handleSubmit();
-              }
-            }}
+            type="submit"
+            form="create-product-form"
           >
             Create
           </Button>

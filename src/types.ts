@@ -46,6 +46,7 @@ export interface IRemoteci extends Resource {
 
 export interface ITopic extends Resource {
   component_types: string[];
+  component_types_optional: string[];
   data: dataField;
   state: state;
   created_at: string;
@@ -53,10 +54,10 @@ export interface ITopic extends Resource {
   export_control: boolean;
   product_id: string;
   next_topic_id: string | null;
+  product: IProduct;
 }
 
 export interface IEnhancedTopic extends ITopic {
-  product: IProduct | null;
   from_now: string | null;
 }
 
@@ -544,7 +545,7 @@ export type WhereFilters = Pick<
   | "type"
 >;
 
-export interface SelectProps<T> {
+export interface IToolbarFilterProps<T> {
   id: string | null;
   onSelect: (item: T) => void;
   onClear: () => void;
@@ -626,4 +627,13 @@ export interface IGraphKeyValue {
 
 export interface IGraphKeyValues {
   [key: string]: IGraphKeyValue[];
+}
+
+export interface FormGroupProps {
+  id: string;
+  label: string;
+  name: string;
+  isRequired?: boolean;
+  placeholder?: string;
+  [key: string]: any;
 }

@@ -8,6 +8,7 @@ import {
   PaginationVariant,
   Content,
   PageSection,
+  Skeleton,
 } from "@patternfly/react-core";
 import { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
@@ -23,7 +24,7 @@ import {
 import { useListJobsQuery } from "./jobsApi";
 import LoadingPageSection from "ui/LoadingPageSection";
 
-export default function JobsPage() {
+function Jobs() {
   const { currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ export default function JobsPage() {
     filters.team_id !== null
       ? { ...filters }
       : { ...filters, team_id: currentUser.team?.id };
-  const { data, isLoading, refetch } = useListJobsQuery(filtersWithTeamId);
+  const { data, isLoading, isFetching, refetch } =
+    useListJobsQuery(filtersWithTeamId);
 
   const jobsPageDivRef = useRef<HTMLDivElement>(null);
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
@@ -67,60 +69,69 @@ export default function JobsPage() {
     return <LoadingPageSection />;
   }
 
-  if (!data) {
+  if (!data || data.jobs.length === 0) {
     return <EmptyState title="No job" info="There is no job at the moment." />;
   }
 
   const count = data._meta.count;
 
   return (
-    <PageSection>
-      <div ref={jobsPageDivRef}>
-        <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
-        <Content component="h1">Jobs</Content>
-        <JobsToolbar
-          jobsCount={count}
-          filters={filters}
-          setFilters={setFilters}
-          clearAllFilters={() => setFilters(getDefaultFilters())}
-          refresh={refetch}
-          tableViewColumns={tableViewColumns}
-          setTableViewColumns={setTableViewColumns}
+    <div ref={jobsPageDivRef}>
+      <JobsToolbar
+        jobsCount={count}
+        filters={filters}
+        setFilters={setFilters}
+        clearAllFilters={() => setFilters(getDefaultFilters())}
+        refresh={refetch}
+        tableViewColumns={tableViewColumns}
+        setTableViewColumns={setTableViewColumns}
+      />
+      {count === 0 ? (
+        <EmptyState
+          title="No job"
+          info="No results match the filter criteria. Clear all filters and try again."
         />
-        {count === 0 ? (
-          <EmptyState
-            title="No job"
-            info="No results match the filter criteria. Clear all filters and try again."
+      ) : isFetching ? (
+        <Skeleton />
+      ) : (
+        <div>
+          <JobsTableList
+            filters={filters}
+            setFilters={setFilters}
+            jobs={data.jobs}
+            columns={tableViewColumns}
           />
-        ) : (
-          <div>
-            <JobsTableList
-              filters={filters}
-              setFilters={setFilters}
-              jobs={data.jobs}
-              columns={tableViewColumns}
-            />
-            <Pagination
-              className="pf-v6-u-px-md"
-              perPage={filters.limit}
-              page={offsetAndLimitToPage(filters.offset, filters.limit)}
-              itemCount={count}
-              variant={PaginationVariant.bottom}
-              onSetPage={(e, newPage) => {
-                jobsPageDivRef?.current?.scrollIntoView();
-                setFilters({
-                  ...filters,
-                  offset: pageAndLimitToOffset(newPage, filters.limit),
-                });
-              }}
-              onPerPageSelect={(e, newPerPage) => {
-                jobsPageDivRef?.current?.scrollIntoView();
-                setFilters({ ...filters, limit: newPerPage });
-              }}
-            />
-          </div>
-        )}
-      </div>
+          <Pagination
+            className="pf-v6-u-px-md"
+            perPage={filters.limit}
+            page={offsetAndLimitToPage(filters.offset, filters.limit)}
+            itemCount={count}
+            variant={PaginationVariant.bottom}
+            onSetPage={(e, newPage) => {
+              jobsPageDivRef?.current?.scrollIntoView();
+              setFilters({
+                ...filters,
+                offset: pageAndLimitToOffset(newPage, filters.limit),
+              });
+            }}
+            onPerPageSelect={(e, newPerPage) => {
+              jobsPageDivRef?.current?.scrollIntoView();
+              setFilters({ ...filters, limit: newPerPage });
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function JobsPage() {
+  useTitle("DCI > Jobs");
+  return (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Jobs" }]} />
+      <Content component="h1">Jobs</Content>
+      <Jobs />
     </PageSection>
   );
 }

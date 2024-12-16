@@ -17,8 +17,7 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
 } from "@patternfly/react-icons";
-import RemoteciSelect from "jobs/toolbar/RemoteciSelect";
-import TopicSelect from "jobs/toolbar/TopicSelect";
+import RemoteciSelect from "remotecis/form/RemoteciSelect";
 import { DateTime } from "luxon";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
@@ -27,6 +26,7 @@ import type {
   JunitComparisonPayload,
   JunitComputationMode,
 } from "./junitComparisonApi";
+import TopicSelect from "topics/form/TopicSelect";
 
 export function JunitComparisonForm({
   isLoading,
@@ -86,19 +86,23 @@ export function JunitComparisonForm({
             <Form>
               <FormGroup label="Reference topic" isRequired fieldId="topic1">
                 <TopicSelect
-                  id={topicId1}
-                  onClear={() => setTopicId1(null)}
-                  onSelect={(topic) => setTopicId1(topic.id)}
+                  onSelect={(topic) => {
+                    if (topic) {
+                      setTopicId1(topic.id);
+                    } else {
+                      setTopicId1(null);
+                    }
+                  }}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  id={remoteciId1}
-                  onClear={() => setRemoteciId1(null)}
                   onSelect={(remoteci) => {
-                    setRemoteciId1(remoteci.id);
-                    if (remoteciId2 === null) {
-                      setRemoteciId2(remoteci.id);
+                    if (remoteci) {
+                      setRemoteciId1(remoteci.id);
+                      if (remoteciId2 === null) {
+                        setRemoteciId2(remoteci.id);
+                      }
                     }
                   }}
                 />
@@ -207,19 +211,23 @@ export function JunitComparisonForm({
             <Form>
               <FormGroup label="Target topic" isRequired fieldId="topic2">
                 <TopicSelect
-                  id={topicId2}
-                  onClear={() => setTopicId2(null)}
-                  onSelect={(topic) => setTopicId2(topic.id)}
+                  onSelect={(topic) => {
+                    if (topic) {
+                      setTopicId2(topic.id);
+                    } else {
+                      setTopicId2(null);
+                    }
+                  }}
                 />
               </FormGroup>
               <FormGroup label="Remoteci" isRequired fieldId="remoteci1">
                 <RemoteciSelect
-                  id={remoteciId2}
-                  onClear={() => setRemoteciId2(null)}
                   onSelect={(remoteci) => {
-                    setRemoteciId2(remoteci.id);
-                    if (remoteciId1 === null) {
-                      setRemoteciId1(remoteci.id);
+                    if (remoteci) {
+                      setRemoteciId2(remoteci.id);
+                      if (remoteciId1 === null) {
+                        setRemoteciId1(remoteci.id);
+                      }
                     }
                   }}
                 />

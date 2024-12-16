@@ -18,8 +18,6 @@ import TeamsPage from "teams/TeamsPage";
 import TeamPage from "teams/TeamPage";
 import UsersPage from "users/UsersPage";
 import UserPage from "users/UserPage";
-import CreateFeederPage from "feeders/create/CreateFeederPage";
-import EditFeederPage from "feeders/edit/EditFeederPage";
 import NotificationsPage from "notifications/NotificationsPage";
 import LoginPage from "auth/LoginPage";
 import LoginCallbackPage from "auth/LoginCallbackPage";
@@ -102,11 +100,7 @@ export default function App() {
             </Route>
             <Route path="components" element={<ComponentsPage />} />
             <Route path="remotecis" element={<RemotecisPage />} />
-            <Route path="feeders">
-              <Route index element={<FeedersPage />} />
-              <Route path="create" element={<CreateFeederPage />} />
-              <Route path=":feeder_id" element={<EditFeederPage />} />
-            </Route>
+            <Route path="feeders" element={<FeedersPage />} />
             <Route path="teams">
               <Route index element={<TeamsPage />} />
               <Route path=":team_id" element={<TeamPage />} />

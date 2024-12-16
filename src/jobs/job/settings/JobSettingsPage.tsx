@@ -21,7 +21,7 @@ export default function JobSettingsPage() {
         onOk={() => deleteJob(job).then(() => navigate("/jobs"))}
       >
         {(openModal) => (
-          <Button variant="danger" onClick={openModal}>
+          <Button variant="secondary" isDanger onClick={openModal}>
             Delete this job
           </Button>
         )}

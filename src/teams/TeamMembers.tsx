@@ -48,7 +48,7 @@ export default function TeamMembers({
               team={team}
               onUserSelected={(user) => {
                 const fullname = user.fullname;
-                addUserToTeam({ user, team })
+                addUserToTeam({ user_id: user.id, team_id: team.id })
                   .then((response) => {
                     dispatch(
                       showSuccess(

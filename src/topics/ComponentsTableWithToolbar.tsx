@@ -43,7 +43,11 @@ export default function ComponentsTableWithToolbar({
     <Card className="pf-v6-u-mt-md">
       <CardTitle>Components</CardTitle>
       <CardBody>
-        <ComponentsToolbar filters={filters} setFilters={setFilters} />
+        <ComponentsToolbar
+          filters={filters}
+          setFilters={setFilters}
+          nbOfComponents={data._meta.count}
+        />
         <ComponentsTable
           components={data.components}
           filters={filters}

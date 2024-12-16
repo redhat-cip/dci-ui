@@ -20,7 +20,6 @@ import CardLine from "ui/CardLine";
 import { useGetTopicQuery, useUpdateTopicMutation } from "./topicsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 import EditTopicModal from "./EditTopicModal";
-import { useListProductsQuery } from "products/productsApi";
 import ComponentsTableWithToolbar from "./ComponentsTableWithToolbar";
 import { fromNow } from "services/date";
 import { useAuth } from "auth/authSelectors";
@@ -126,7 +125,6 @@ export default function TopicPage() {
   const { data: topic, isLoading } = useGetTopicQuery(
     topic_id ? topic_id : skipToken,
   );
-  const { data: dataProducts } = useListProductsQuery();
 
   if (isLoading) {
     return <LoadingPageSection />;
@@ -139,10 +137,6 @@ export default function TopicPage() {
         info={`There is not topic with id ${topic_id}`}
       />
     );
-  }
-
-  if (!dataProducts) {
-    return <EmptyState title="There is no products" />;
   }
 
   return (
@@ -159,7 +153,6 @@ export default function TopicPage() {
       {currentUser?.isSuperAdmin ? (
         <div className="pf-v6-u-mb-md">
           <EditTopicModal
-            products={dataProducts.products}
             topic={topic}
             onSubmit={updateTopic}
             isDisabled={isUpdating}

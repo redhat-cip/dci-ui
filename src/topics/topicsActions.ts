@@ -1,4 +1,4 @@
-import { IEnhancedTopic, IProduct, ITopic } from "types";
+import { IProduct, ITopic } from "types";
 import { padStart } from "lodash";
 
 export function sortTopicWithSemver(t1: ITopic, t2: ITopic): number {
@@ -6,20 +6,6 @@ export function sortTopicWithSemver(t1: ITopic, t2: ITopic): number {
   const paddedName2 = t2.name.replace(/\d+/g, (n) => padStart(n, 6));
   if (paddedName1 > paddedName2) return -1;
   if (paddedName1 < paddedName2) return 1;
-  return 0;
-}
-
-export function sortTopicPerProduct(
-  t1: IEnhancedTopic,
-  t2: IEnhancedTopic,
-): number {
-  const lowercaseProductsOrder = ["openshift", "rhel", "openstack"];
-  const product1LowerName = (t1.product?.name || "").toLocaleLowerCase();
-  const product2LowerName = (t2.product?.name || "").toLocaleLowerCase();
-  const indexProduct1 = lowercaseProductsOrder.indexOf(product1LowerName);
-  const indexProduct2 = lowercaseProductsOrder.indexOf(product2LowerName);
-  if (indexProduct1 < indexProduct2) return -1;
-  if (indexProduct1 > indexProduct2) return 1;
   return 0;
 }
 

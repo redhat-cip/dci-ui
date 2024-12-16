@@ -12,7 +12,7 @@ import ComponentsTable from "./ComponentsTable";
 import LoadingPageSection from "ui/LoadingPageSection";
 import { Content, PageSection } from "@patternfly/react-core";
 
-export default function ComponentsPage() {
+function Components() {
   const location = useLocation();
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>(
@@ -20,6 +20,10 @@ export default function ComponentsPage() {
       sort: "-released_at",
     }),
   );
+  const isFiltered =
+    filters.display_name !== "" ||
+    filters.type !== "" ||
+    filters.tags?.length !== 0;
 
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
@@ -36,6 +40,36 @@ export default function ComponentsPage() {
     return <EmptyState title="There is no components" />;
   }
 
+  const nbComponents = data._meta.count;
+
+  return (
+    <div>
+      <ComponentsToolbar
+        filters={filters}
+        setFilters={setFilters}
+        nbOfComponents={nbComponents}
+      />
+      {nbComponents === 0 ? (
+        isFiltered ? (
+          <EmptyState
+            title="There is no components"
+            info="There is no components matching your search. Please update your search"
+          />
+        ) : (
+          <EmptyState title="There is no components" />
+        )
+      ) : (
+        <ComponentsTable
+          components={data.components}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      )}
+    </div>
+  );
+}
+
+export default function ComponentsPage() {
   return (
     <PageSection>
       <Breadcrumb
@@ -46,19 +80,7 @@ export default function ComponentsPage() {
         A component is the main abstraction that describe a Red Hat component
         (RHEL, OpenStack, Openshift).
       </Content>
-      <ComponentsToolbar filters={filters} setFilters={setFilters} />
-      {data.components.length === 0 ? (
-        <EmptyState
-          title="There is no components"
-          info="You need some permissions to see components on the user interface. Please contact a Distributed CI administrator."
-        />
-      ) : (
-        <ComponentsTable
-          components={data.components}
-          filters={filters}
-          setFilters={setFilters}
-        />
-      )}
+      <Components />
     </PageSection>
   );
 }

@@ -101,7 +101,8 @@ export default function UserPage() {
                 {(openModal) => (
                   <Button
                     icon={<TrashAltIcon className="pf-v6-u-mr-sm" />}
-                    variant="danger"
+                    variant="secondary"
+                    isDanger
                     onClick={openModal}
                   >
                     Delete this user

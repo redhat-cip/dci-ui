@@ -50,16 +50,18 @@ export const {
       query: (team) => `/teams/${team.id}/users`,
       providesTags: [{ type: "UserTeam", id: "LIST" }],
     }),
-    addUserToTeam: builder.mutation<void, { user: IUser; team: ITeam }>({
-      query({ user, team }) {
-        return {
-          url: `/teams/${team.id}/users/${user.id}`,
-          method: "POST",
-          body: {},
-        };
+    addUserToTeam: builder.mutation<void, { user_id: string; team_id: string }>(
+      {
+        query({ user_id, team_id }) {
+          return {
+            url: `/teams/${team_id}/users/${user_id}`,
+            method: "POST",
+            body: {},
+          };
+        },
+        invalidatesTags: ["UserTeam"],
       },
-      invalidatesTags: ["UserTeam"],
-    }),
+    ),
     removeUserFromTeam: builder.mutation<
       { success: boolean; id: string },
       { user: IUser; team: ITeam }

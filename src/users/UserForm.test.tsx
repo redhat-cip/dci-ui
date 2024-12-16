@@ -1,63 +1,103 @@
 import { waitFor } from "@testing-library/react";
-import { render } from "__tests__/renders";
+import { renderWithProviders } from "__tests__/renders";
 import UserForm from "./UserForm";
-import { IUser } from "types";
 import { vi } from "vitest";
+import { users } from "__tests__/data";
+import { Button } from "@patternfly/react-core";
 
-test("test UserForm with existing user", async () => {
+test("test create UserForm submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
-  const { user, getByRole, getByTestId } = render(
-    <div>
-      <UserForm
-        id="edit-user-form"
-        user={
-          {
-            id: "u1",
-            name: "user 1",
-            fullname: "my full name",
-            email: "u1@example.org",
-            password: "",
-          } as IUser
-        }
-        onSubmit={mockOnSubmit}
-      />
-      <button type="submit" form="edit-user-form">
-        Edit
-      </button>
-    </div>,
+  const { user, getByRole, getByLabelText } = renderWithProviders(
+    <>
+      <UserForm id="create-user-form" onSubmit={mockOnSubmit} />
+      <Button variant="primary" type="submit" form="create-user-form">
+        Create a user
+      </Button>
+    </>,
   );
 
-  const login = getByRole("textbox", { name: /Login/i });
-  expect(login).toHaveValue("user 1");
-  await user.clear(login);
-  await user.type(login, "user");
+  const login = getByLabelText(/Login/i);
+  await user.type(login, "login");
 
-  const fullname = getByRole("textbox", { name: /Full name/i });
-  expect(fullname).toHaveValue("my full name");
-  await user.clear(fullname);
-  await user.type(fullname, "Full name");
+  const fullname = getByLabelText(/Full name/i);
+  await user.type(fullname, "fullname");
 
-  const email = getByRole("textbox", { name: /Email/i });
-  expect(email).toHaveValue("u1@example.org");
-  await user.clear(email);
-  await user.type(email, "user@example.org");
+  const email = getByLabelText(/Email/i);
+  await user.type(email, "distributed-ci@redhat.com");
 
-  // reason type="password" don't have a role: https://github.com/w3c/aria/issues/935
-  const password = getByTestId("user-form-password");
-  expect(password).toHaveValue("");
+  const password = getByLabelText(/Password/i);
   expect(password).toHaveAttribute("type", "password");
   await user.type(password, "password");
 
-  user.click(getByRole("button", { name: "Edit" }));
+  const createButton = getByRole("button", { name: /Create a user/i });
+  await user.click(createButton);
 
   await waitFor(() => {
     expect(mockOnSubmit.mock.calls.length).toBe(1);
     expect(mockOnSubmit.mock.calls[0][0]).toEqual({
-      id: "u1",
-      name: "user",
-      fullname: "Full name",
-      email: "user@example.org",
+      name: "login",
+      fullname: "fullname",
+      email: "distributed-ci@redhat.com",
       password: "password",
     });
+  });
+});
+
+test("test edit UserForm submit the correct values", async () => {
+  const mockOnSubmit = vi.fn();
+  const { user, getByRole, getByLabelText } = renderWithProviders(
+    <>
+      <UserForm id="edit-user-form" user={users[0]} onSubmit={mockOnSubmit} />
+      <Button variant="primary" type="submit" form="edit-user-form">
+        Edit
+      </Button>
+    </>,
+  );
+  const login = getByLabelText(/Login/i);
+  await user.type(login, "2");
+
+  const fullname = getByLabelText(/Full name/i);
+  await user.clear(fullname);
+  await user.type(fullname, "fullname");
+
+  const password = getByLabelText(/Password/i);
+  expect(password).toHaveAttribute("type", "password");
+  await user.type(password, "password2");
+
+  const editButton = getByRole("button", { name: /Edit/i });
+  await user.click(editButton);
+
+  await waitFor(() => {
+    expect(mockOnSubmit.mock.calls.length).toBe(1);
+    expect(mockOnSubmit.mock.calls[0][0]).toEqual({
+      ...users[0],
+      name: "u12",
+      fullname: "fullname",
+      email: users[0].email,
+      password: "password2",
+    });
+  });
+});
+
+test("test UserForm display error message", async () => {
+  const mockOnSubmit = vi.fn();
+  const { user, getByRole, getByText } = renderWithProviders(
+    <>
+      <UserForm id="create-user-form" onSubmit={mockOnSubmit} />
+      <Button variant="primary" type="submit" form="create-user-form">
+        Create a user
+      </Button>
+    </>,
+  );
+
+  const createButton = getByRole("button", { name: /Create a user/i });
+  await user.click(createButton);
+
+  await waitFor(() => {
+    expect(mockOnSubmit.mock.calls.length).toBe(0);
+    expect(getByText("User name is required")).toBeVisible();
+    expect(getByText("Full name is required")).toBeVisible();
+    expect(getByText("Email is required")).toBeVisible();
+    expect(getByText("User password is required")).toBeVisible();
   });
 });

@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  CopyButton,
-  EmptyState,
-  ConfirmDeleteModal,
-  Breadcrumb,
-  InputFilter,
-} from "ui";
+import { CopyButton, EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
 import { SeeAuthentificationFileModal } from "ui/Credentials";
 import {
   Button,
@@ -13,6 +7,8 @@ import {
   Label,
   PageSection,
   Pagination,
+  SearchInput,
+  Skeleton,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -21,17 +17,8 @@ import {
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
-import { useAuth } from "auth/authSelectors";
-import { Filters, ITeam } from "types";
-import {
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  ThProps,
-} from "@patternfly/react-table";
+import { Filters, IIdentityTeam } from "types";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useLocation, useNavigate } from "react-router";
 import {
   createSearchFromFilters,
@@ -47,59 +34,23 @@ import {
 } from "./remotecisApi";
 import { fromNow } from "services/date";
 import LoadingPageSection from "ui/LoadingPageSection";
+import { useAuth } from "auth/authSelectors";
 
-export default function RemotecisPage() {
-  const { currentUser } = useAuth();
+function RemotecisSection({ team }: { team: IIdentityTeam }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [filters, setFilters] = useState<Filters>(
-    parseFiltersFromSearch(location.search),
-  );
-
-  const sort = (column: string): ThProps["sort"] => {
-    const sortColumns: { [key: string]: number } = {
-      name: 1,
-      created_at: 2,
-    };
-    const sortColumnKey = filters.sort.replace("-", "");
-    const sortByIndex =
-      sortColumnKey in sortColumns ? sortColumns[sortColumnKey] : undefined;
-    const sortDirection = filters.sort.indexOf("-") === -1 ? "asc" : "desc";
-    return {
-      sortBy: {
-        index: sortByIndex,
-        direction: sortDirection,
-      },
-      onSort: (_event, index, direction) => {
-        const sort = `${sortDirection === "asc" ? "-" : ""}${column}`;
-        setFilters({ ...filters, sort });
-      },
-      columnIndex: sortColumns[column],
-    };
-  };
+  const [filters, setFilters] = useState<Filters>({
+    ...parseFiltersFromSearch(location.search),
+    team_id: team.id,
+  });
+  const [inputSearch, setInputSearch] = useState(filters.name || "");
 
   useEffect(() => {
     const newSearch = createSearchFromFilters(filters);
     navigate(`/remotecis${newSearch}`, { replace: true });
   }, [navigate, filters]);
 
-  useEffect(() => {
-    setFilters((f) => {
-      if (currentUser && currentUser.team) {
-        return {
-          ...f,
-          team_id: currentUser.team.id,
-        };
-      }
-      return f;
-    });
-  }, [currentUser]);
-
-  const { data, isLoading } = useListRemotecisQuery(filters, {
-    skip: filters.team_id === null,
-  });
-  const [createRemoteci, { isLoading: isCreating }] =
-    useCreateRemoteciMutation();
+  const { data, isLoading, isFetching } = useListRemotecisQuery(filters);
   const [updateRemoteci, { isLoading: isUpdating }] =
     useUpdateRemoteciMutation();
   const [deleteRemoteci] = useDeleteRemoteciMutation();
@@ -108,58 +59,44 @@ export default function RemotecisPage() {
     return <LoadingPageSection />;
   }
 
-  if (currentUser === null) return null;
-
   if (!data) {
-    return (
-      <EmptyState
-        title="There is no remotecis"
-        info="Do you want to create one?"
-      />
-    );
+    return <EmptyState title="There is no remotecis" />;
   }
 
-  const count = data._meta.count;
+  const remotecisCount = data._meta.count;
   return (
-    <PageSection>
-      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Remotecis" }]} />
-      <Content component="h1">Remotecis</Content>
-      <Content component="p">
-        The remote ci will host the agent. It is recommended to create a remote
-        ci per lab.
-      </Content>
-      {currentUser.team && (
-        <div className="pf-v6-u-mb-md">
-          <CreateRemoteciModal
-            teams={Object.values(currentUser.teams) as ITeam[]}
-            onSubmit={createRemoteci}
-            isDisabled={isCreating}
-          />
-        </div>
-      )}
+    <>
       <Toolbar id="toolbar-remotecis" collapseListedFiltersBreakpoint="xl">
         <ToolbarContent>
           <ToolbarGroup>
             <ToolbarItem>
-              <InputFilter
-                search={filters.name || ""}
+              <SearchInput
                 placeholder="Search a remoteci"
-                onSearch={(name) => {
-                  setFilters({
-                    ...filters,
-                    name,
-                  });
+                value={inputSearch}
+                onChange={(e, search) => setInputSearch(search)}
+                onSearch={(e, name) => {
+                  if (name.trim().endsWith("*")) {
+                    setFilters({
+                      ...filters,
+                      name,
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      name: `${name}*`,
+                    });
+                  }
                 }}
               />
             </ToolbarItem>
           </ToolbarGroup>
           <ToolbarGroup style={{ flex: "1" }}>
             <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
-              {count === 0 ? null : (
+              {remotecisCount === 0 ? null : (
                 <Pagination
                   perPage={filters.limit}
                   page={offsetAndLimitToPage(filters.offset, filters.limit)}
-                  itemCount={count}
+                  itemCount={remotecisCount}
                   onSetPage={(e, newPage) => {
                     setFilters({
                       ...filters,
@@ -175,26 +112,31 @@ export default function RemotecisPage() {
           </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
-      {count === 0 ? (
-        <EmptyState
-          title="There is no remotecis"
-          info={
-            currentUser.team
-              ? `There is no remotecis in ${currentUser.team.name} team. Do you want to create one?`
-              : "Apparently you are not on any team. Contact your EPM or DCI team if you think this is an error."
-          }
-        />
+      {isFetching ? (
+        <Skeleton />
+      ) : data.remotecis.length === 0 ? (
+        inputSearch === "" ? (
+          <EmptyState
+            title="There is no remotecis"
+            info="Do you want to create one?"
+          />
+        ) : (
+          <EmptyState
+            title="There is no remotecis"
+            info="There is no remotecis matching your search. Please update your search."
+          />
+        )
       ) : (
         <Table>
           <Thead>
             <Tr>
               <Th className="text-center">ID</Th>
-              <Th sort={sort("name")}>Name</Th>
+              <Th>Name</Th>
               <Th className="text-center">Status</Th>
               <Th className="text-center" title="Authentication">
                 <UserSecretIcon className="pf-v6-u-mr-xs" /> Authentication
               </Th>
-              <Th sort={sort("created_at")}>Created</Th>
+              <Th>Created</Th>
               <Th className="text-center">Actions</Th>
             </Tr>
           </Thead>
@@ -230,7 +172,6 @@ export default function RemotecisPage() {
                   <EditRemoteciModal
                     className="pf-v6-u-mr-xs"
                     remoteci={remoteci}
-                    teams={Object.values(currentUser.teams) as ITeam[]}
                     onSubmit={updateRemoteci}
                     isDisabled={isUpdating}
                   />
@@ -242,7 +183,8 @@ export default function RemotecisPage() {
                     {(openModal) => (
                       <Button
                         icon={<TrashIcon />}
-                        variant="danger"
+                        variant="secondary"
+                        isDanger
                         onClick={openModal}
                       ></Button>
                     )}
@@ -252,6 +194,36 @@ export default function RemotecisPage() {
             ))}
           </Tbody>
         </Table>
+      )}
+    </>
+  );
+}
+
+export default function RemotecisPage() {
+  const { currentUser } = useAuth();
+  const [createRemoteci, { isLoading: isCreating }] =
+    useCreateRemoteciMutation();
+
+  if (!currentUser) return null;
+
+  return (
+    <PageSection>
+      <Breadcrumb links={[{ to: "/", title: "DCI" }, { title: "Remotecis" }]} />
+      <Content component="h1">Remotecis</Content>
+      <Content component="p">
+        The remote ci will host the agent. It is recommended to create a remote
+        ci per lab.
+      </Content>
+      <div className="pf-v6-u-mb-md">
+        <CreateRemoteciModal
+          onSubmit={createRemoteci}
+          isDisabled={isCreating}
+        />
+      </div>
+      {currentUser.team === null ? (
+        <EmptyState title="Apparently you are not on any team." />
+      ) : (
+        <RemotecisSection team={currentUser.team} />
       )}
     </PageSection>
   );

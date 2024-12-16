@@ -3,14 +3,14 @@ import TextInput from "./TextInput";
 
 type TextInputToolbarFilterProps = {
   categoryName: string;
-  name: string | null;
+  value: string | null;
   onSubmit: (name: string) => void;
   onClear: () => void;
   showToolbarItem?: boolean;
 };
 
 export default function TextInputToolbarFilter({
-  name,
+  value,
   showToolbarItem,
   onSubmit,
   onClear,
@@ -18,17 +18,12 @@ export default function TextInputToolbarFilter({
 }: TextInputToolbarFilterProps) {
   return (
     <ToolbarFilter
-      labels={name === null ? [] : [name]}
+      labels={value === null ? [] : [value]}
       deleteLabel={onClear}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >
-      <TextInput
-        initialValue={name || ""}
-        categoryName={categoryName}
-        onSubmit={onSubmit}
-        onClear={onClear}
-      />
+      <TextInput value={value} name={categoryName} onClick={onSubmit} />
     </ToolbarFilter>
   );
 }

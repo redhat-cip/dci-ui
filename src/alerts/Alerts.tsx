@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux";
 import { isEmpty } from "lodash";
 import { hideAlert, selectAlerts } from "./alertsSlice";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
 
 export default function Alerts() {
-  const alerts = useSelector(selectAlerts);
+  const alerts = useAppSelector(selectAlerts);
   const dispatch = useAppDispatch();
 
   const alertsArray = Object.values(alerts);

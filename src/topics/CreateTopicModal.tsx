@@ -9,7 +9,6 @@ import {
 import useModal from "hooks/useModal";
 import TopicForm from "./TopicForm";
 import { ITopic } from "types";
-import { useListProductsQuery } from "products/productsApi";
 
 interface CreateTopicModalProps {
   onSubmit: (topic: Partial<ITopic>) => void;
@@ -20,11 +19,7 @@ export default function CreateTopicModal({
   onSubmit,
   ...props
 }: CreateTopicModalProps) {
-  const { data } = useListProductsQuery();
   const { isOpen, show, hide } = useModal(false);
-  if (!data) {
-    return null;
-  }
   return (
     <>
       <Modal
@@ -38,7 +33,6 @@ export default function CreateTopicModal({
         <ModalBody>
           <TopicForm
             id="create-topic-form"
-            products={data.products}
             onSubmit={(topic) => {
               hide();
               onSubmit(topic);

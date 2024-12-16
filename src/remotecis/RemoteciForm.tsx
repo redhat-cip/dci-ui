@@ -1,52 +1,62 @@
-import { forwardRef } from "react";
 import * as Yup from "yup";
-import { Form, Formik, FormikProps } from "formik";
-import { Input, SelectWithTypeahead } from "ui/formik";
-import { IRemoteci, ITeam } from "types";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Form, FormGroup } from "@patternfly/react-core";
+import TeamSelect from "teams/form/TeamSelect";
+import TextInputFormGroup from "ui/form/TextInputFormGroup";
+import FormErrorMessage from "ui/form/FormErrorMessage";
+import { IRemoteci } from "types";
 
 const RemoteciSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, "Remoteci name is too short!")
-    .required("Remoteci name is required"),
+    .required("Remoteci name is required")
+    .min(2, "Remoteci name is too short!"),
   team_id: Yup.string().nullable().required("Team is required"),
 });
 
-interface RemoteciFormProps {
+export default function RemoteciForm({
+  id,
+  remoteci,
+  onSubmit,
+  ...props
+}: {
+  id: string;
   remoteci?: IRemoteci;
-  teams: ITeam[];
-  onSubmit: (remoteci: IRemoteci | Partial<IRemoteci>) => void;
+  onSubmit: (values: { name: string; team_id: string }) => void;
+  [key: string]: any;
+}) {
+  const methods = useForm({
+    resolver: yupResolver(RemoteciSchema),
+    defaultValues: remoteci || { name: "", team_id: "" },
+  });
+  const teamIdError = methods.formState.errors.team_id;
+  return (
+    <FormProvider {...methods}>
+      <Form id={id} onSubmit={methods.handleSubmit(onSubmit)} {...props}>
+        <TextInputFormGroup
+          label="Name"
+          id="remoteci_form__name"
+          name="name"
+          isRequired
+        />
+        <FormGroup label="Team" isRequired fieldId="remoteci_form__team_id">
+          <TeamSelect
+            id="remoteci_form__team_id"
+            value={remoteci ? remoteci.team_id : undefined}
+            placeholder="Select a team"
+            hasError={teamIdError !== undefined}
+            onSelect={(item) => {
+              if (item) {
+                methods.setValue("team_id", item.id, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+          />
+          <FormErrorMessage error={teamIdError} />
+        </FormGroup>
+      </Form>
+    </FormProvider>
+  );
 }
-
-const RemoteciForm = forwardRef<
-  FormikProps<IRemoteci | Partial<IRemoteci>>,
-  RemoteciFormProps
->(({ remoteci, teams, onSubmit }, formRef) => (
-  <Formik
-    innerRef={formRef}
-    initialValues={
-      remoteci || { name: "", team_id: teams.length > 0 ? teams[0].id : "" }
-    }
-    validationSchema={RemoteciSchema}
-    onSubmit={onSubmit}
-  >
-    <Form id="remoteci_form" className="pf-v6-c-form">
-      <Input
-        id="remoteci_form__name"
-        data-testid="remoteci_form__name"
-        label="Name"
-        name="name"
-        isRequired
-      />
-      <SelectWithTypeahead
-        id="remoteci_form__team_id"
-        label="Team Owner"
-        placeholder="Team Owner"
-        name="team_id"
-        options={teams.map((t) => ({ label: t.name, value: t.id }))}
-        isRequired
-      />
-    </Form>
-  </Formik>
-));
-
-export default RemoteciForm;

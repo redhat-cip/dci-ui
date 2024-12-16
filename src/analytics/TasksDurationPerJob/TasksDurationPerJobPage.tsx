@@ -13,8 +13,7 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from "@patternfly/react-core";
-import TopicToolbarFilter from "jobs/toolbar/TopicToolbarFilter";
-import RemoteciToolbarFilter from "jobs/toolbar/RemoteciToolbarFilter";
+import TopicToolbarFilter from "topics/form/TopicToolbarFilter";
 import { useEffect, useState } from "react";
 import { IGraphData, IRefArea } from "types";
 import {
@@ -33,6 +32,7 @@ import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useLazyGetTasksDurationCumulatedQuery } from "./tasksDurationPerJobApi";
+import RemoteciToolbarFilter from "remotecis/form/RemoteciToolbarFilter";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {

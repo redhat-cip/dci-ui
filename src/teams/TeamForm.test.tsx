@@ -1,13 +1,13 @@
 import { waitFor } from "@testing-library/react";
-import { ITeam } from "types";
 import { render } from "__tests__/renders";
 import TeamForm from "./TeamForm";
 import { vi } from "vitest";
+import { teams } from "__tests__/data";
 
 test("test create team form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
 
-  const { user, getByRole, getByTestId } = render(
+  const { user, getByRole } = render(
     <div>
       <TeamForm id="create-team-form" onSubmit={mockOnSubmit} />
       <button type="submit" form="create-team-form">
@@ -21,8 +21,7 @@ test("test create team form submit the correct values", async () => {
   await user.clear(name);
   await user.type(name, "RHEL");
 
-  expect(getByTestId("team-form-state")).toHaveValue("active");
-  await user.selectOptions(getByTestId("team-form-state"), "inactive");
+  await user.selectOptions(getByRole("combobox"), "inactive");
 
   const partner = getByRole("checkbox", { name: "Partner" });
   expect(partner).toBeChecked();
@@ -50,21 +49,9 @@ test("test create team form submit the correct values", async () => {
 test("test edit team form submit the correct values", async () => {
   const mockOnSubmit = vi.fn();
 
-  const { user, getByRole, getByTestId } = render(
+  const { user, getByRole } = render(
     <div>
-      <TeamForm
-        id="edit-team-form"
-        team={
-          {
-            id: "t1",
-            name: "team 1",
-            state: "inactive",
-            external: false,
-            has_pre_release_access: true,
-          } as unknown as ITeam
-        }
-        onSubmit={mockOnSubmit}
-      />
+      <TeamForm id="edit-team-form" team={teams[0]} onSubmit={mockOnSubmit} />
       <button type="submit" form="edit-team-form">
         Edit
       </button>
@@ -72,7 +59,7 @@ test("test edit team form submit the correct values", async () => {
   );
 
   const name = getByRole("textbox", { name: /Name/i });
-  expect(name).toHaveValue("team 1");
+  expect(name).toHaveValue(teams[0].name);
 
   const partner = getByRole("checkbox", { name: "Partner" });
   expect(partner).not.toBeChecked();
@@ -84,16 +71,14 @@ test("test edit team form submit the correct values", async () => {
   expect(has_pre_release_access).toBeChecked();
   user.click(has_pre_release_access);
 
-  expect(getByTestId("team-form-state")).toHaveValue("inactive");
-  await user.selectOptions(getByTestId("team-form-state"), "active");
+  await user.selectOptions(getByRole("combobox"), "active");
 
   user.click(getByRole("button", { name: "Edit" }));
 
   await waitFor(() => {
     expect(mockOnSubmit.mock.calls.length).toBe(1);
     expect(mockOnSubmit.mock.calls[0][0]).toEqual({
-      id: "t1",
-      name: "team 1",
+      ...teams[0],
       state: "active",
       external: true,
       has_pre_release_access: false,

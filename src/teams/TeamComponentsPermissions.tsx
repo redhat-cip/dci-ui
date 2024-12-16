@@ -79,7 +79,8 @@ function TeamComponentsPermissionsTable({ team }: { team: ITeam }) {
                   {(openModal) => (
                     <Button
                       icon={<MinusCircleIcon />}
-                      variant="danger"
+                      variant="secondary"
+                      isDanger
                       onClick={openModal}
                     ></Button>
                   )}

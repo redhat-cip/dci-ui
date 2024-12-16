@@ -1,12 +1,12 @@
-import { Button, Flex, FlexItem } from "@patternfly/react-core";
-import { SelectWithTypeahead } from "ui/formik";
+import { Button, Flex, FlexItem, Form } from "@patternfly/react-core";
 import * as Yup from "yup";
-import { ITeam } from "types";
-import { Formik, Form } from "formik";
-import { useListTeamsQuery } from "teams/teamsApi";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import TeamSelect from "teams/form/TeamSelect";
+import FormErrorMessage from "ui/form/FormErrorMessage";
 
 interface AddUserToTeamFormProps {
-  onSubmit: (team: ITeam) => void;
+  onSubmit: (values: { team_id: string }) => void;
   [key: string]: any;
 }
 
@@ -18,51 +18,49 @@ export default function AddUserToTeamForm({
   onSubmit,
   ...props
 }: AddUserToTeamFormProps) {
-  const { data } = useListTeamsQuery({ limit: 200 });
-
-  if (!data) return null;
+  const methods = useForm({
+    resolver: yupResolver(AddUserToTeamSchema),
+    defaultValues: { team_id: "" },
+  });
+  const { isDirty, isValid } = methods.formState;
+  const teamIdError = methods.formState.errors.team_id;
 
   return (
-    <Formik
-      initialValues={{ team_id: "" }}
-      validationSchema={AddUserToTeamSchema}
-      onSubmit={(v) => {
-        const selectedTeam = data.teams.find((t) => t.id === v.team_id);
-        if (selectedTeam) {
-          onSubmit(selectedTeam);
-        }
-      }}
+    <Form
+      id="add_user_to_team_form"
+      onSubmit={methods.handleSubmit(onSubmit)}
+      {...props}
     >
-      {({ isValid, dirty }) => (
-        <Form id="add_user_to_team_form" className="pf-v6-c-form">
-          <div>
-            <Flex>
-              <FlexItem>Add user in</FlexItem>
-              <FlexItem>
-                <SelectWithTypeahead
-                  id="add_user_to_team_formadd_user_to_team_form__team_id"
-                  name="team_id"
-                  options={data.teams.map((t) => ({
-                    label: t.name,
-                    value: t.id,
-                  }))}
-                />
-              </FlexItem>
-              <FlexItem>team</FlexItem>
-              <FlexItem>
-                <Button
-                  variant="secondary"
-                  type="submit"
-                  isDisabled={!(isValid && dirty)}
-                  {...props}
-                >
-                  Add
-                </Button>
-              </FlexItem>
-            </Flex>
-          </div>
-        </Form>
-      )}
-    </Formik>
+      <Flex>
+        <FlexItem>Add user in</FlexItem>
+        <FlexItem>
+          <TeamSelect
+            id="add_user_to_team_form__team_id"
+            placeholder="Select a team"
+            hasError={teamIdError !== undefined}
+            onSelect={(item) => {
+              if (item) {
+                methods.setValue("team_id", item.id, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+          />
+          <FormErrorMessage error={teamIdError} />
+        </FlexItem>
+        <FlexItem>team</FlexItem>
+        <FlexItem>
+          <Button
+            variant="secondary"
+            type="submit"
+            isDisabled={!(isValid && isDirty)}
+            form="add_user_to_team_form"
+          >
+            Add
+          </Button>
+        </FlexItem>
+      </Flex>
+    </Form>
   );
 }

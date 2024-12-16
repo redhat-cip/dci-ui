@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { FormikProps } from "formik";
 import {
   Button,
   Modal,
@@ -10,24 +8,21 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
-import { IRemoteci, ITeam } from "types";
+import { IRemoteci } from "types";
 import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditRemoteciModalProps {
-  teams: ITeam[];
   remoteci: IRemoteci;
   onSubmit: (remoteci: Partial<IRemoteci>) => void;
   [x: string]: any;
 }
 
 export default function EditRemoteciModal({
-  teams,
   remoteci,
   onSubmit,
   ...props
 }: EditRemoteciModalProps) {
   const { isOpen, show, hide } = useModal(false);
-  const formRef = useRef<FormikProps<IRemoteci | Partial<IRemoteci>>>(null);
   return (
     <>
       <Modal
@@ -40,10 +35,10 @@ export default function EditRemoteciModal({
         <ModalHeader title={`Edit ${remoteci.name}`} />
         <ModalBody>
           <RemoteciForm
-            ref={formRef}
-            teams={teams}
+            id="edit-remoteci-form"
             remoteci={remoteci}
             onSubmit={(editedRemoteci) => {
+              hide();
               // todo: why ? dci-control-server api doesnt accept extra field like from_now
               const { id, etag, name, team_id } =
                 editedRemoteci as Partial<IRemoteci>;
@@ -60,14 +55,8 @@ export default function EditRemoteciModal({
           <Button
             key="edit"
             variant="primary"
-            onClick={() => {
-              if (formRef.current) {
-                if (formRef.current.isValid) {
-                  hide();
-                }
-                formRef.current.handleSubmit();
-              }
-            }}
+            type="submit"
+            form="edit-remoteci-form"
           >
             Edit
           </Button>
@@ -82,7 +71,7 @@ export default function EditRemoteciModal({
         onClick={show}
         {...props}
       >
-        Edit remoteci
+        Edit
       </Button>
     </>
   );
