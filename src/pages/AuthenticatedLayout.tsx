@@ -42,6 +42,7 @@ import Logo from "logo.black.svg";
 import LogoWhite from "logo.white.svg";
 import {
   BarsIcon,
+  ExternalLinkAltIcon,
   QuestionCircleIcon,
   UserIcon,
 } from "@patternfly/react-icons";
@@ -51,6 +52,7 @@ import { loggedOut } from "auth/authSlice";
 import { useAppDispatch } from "store";
 import { useAuth } from "auth/authSelectors";
 import { changeCurrentTeam, useGetCurrentUserQuery } from "auth/authApi";
+import { ProfilePageUrl } from "auth/sso";
 
 function UserDropdownMenuMobile() {
   const dispatch = useAppDispatch();
@@ -76,9 +78,9 @@ function UserDropdownMenuMobile() {
         <DropdownItem
           key="dropdown_kebab_settings"
           component="button"
-          onClick={() => navigate("/currentUser/settings")}
+          onClick={() => navigate(ProfilePageUrl)}
         >
-          My profile
+          My profile <ExternalLinkAltIcon style={{ height: "0.8em" }} />
         </DropdownItem>
         <DropdownItem
           key="dropdown_kebab_logout"
@@ -136,9 +138,9 @@ function UserDropdownMenu() {
         <DropdownItem
           key="dropdown_user_settings"
           component="button"
-          onClick={() => navigate("/currentUser/settings")}
+          onClick={() => navigate(ProfilePageUrl)}
         >
-          My profile
+          My profile <ExternalLinkAltIcon style={{ height: "0.8em" }} />
         </DropdownItem>
         <DropdownItem
           key="dropdown_user_logout"
@@ -381,8 +383,12 @@ function Sidebar({ isNavOpen }: SidebarProps) {
         )}
       </NavGroup>
       <NavGroup title=" User Preferences">
-        <DCINavItem to="/currentUser/settings">My profile</DCINavItem>
-        <DCINavItem to="/currentUser/notifications">Notifications</DCINavItem>
+        <NavItem>
+          <a target="_blank" rel="noopener noreferrer" href={ProfilePageUrl}>
+            My profile <ExternalLinkAltIcon style={{ height: "0.8em" }} />
+          </a>
+        </NavItem>
+        <DCINavItem to="/notifications">Notifications</DCINavItem>
       </NavGroup>
       {currentUser.hasEPMRole && (
         <NavGroup title="Administration">

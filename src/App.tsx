@@ -20,7 +20,6 @@ import UsersPage from "users/UsersPage";
 import UserPage from "users/UserPage";
 import CreateFeederPage from "feeders/create/CreateFeederPage";
 import EditFeederPage from "feeders/edit/EditFeederPage";
-import SettingsPage from "settings/SettingsPage";
 import NotificationsPage from "notifications/NotificationsPage";
 import LoginPage from "auth/LoginPage";
 import LoginCallbackPage from "auth/LoginCallbackPage";
@@ -116,10 +115,7 @@ export default function App() {
               <Route index element={<UsersPage />} />
               <Route path=":user_id" element={<UserPage />} />
             </Route>
-            <Route path="currentUser">
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="notifications" element={<NotificationsPage />} />
-            </Route>
+            <Route path="notifications" element={<NotificationsPage />} />
           </Route>
           <Route path="*" element={<Page404 />} />
         </Route>

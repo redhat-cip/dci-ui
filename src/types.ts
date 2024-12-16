@@ -128,11 +128,6 @@ export interface ICurrentUser {
   isReadOnly: boolean;
 }
 
-export type ICurrentUserWithPasswordsFields = ICurrentUser & {
-  current_password: string;
-  new_password: string;
-};
-
 type StatJob = {
   created_at: string;
   id: string;

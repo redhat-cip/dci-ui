@@ -1,7 +1,7 @@
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 import CreateTopicModal from "./CreateTopicModal";
-import { IGetProducts, IProduct } from "types";
+import { IGetProducts } from "types";
 import { renderWithProviders } from "__tests__/renders";
 import { vi } from "vitest";
 import { server } from "__tests__/node";

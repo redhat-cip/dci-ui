@@ -7,9 +7,12 @@ const SSOScope = (process.env.REACT_APP_SSO_SCOPE || "api.dci")
   .split(",")
   .join(" ");
 
+const SSOAuthorityURL = `${SSOUrl}/auth/realms/${SSORealm}`;
+export const ProfilePageUrl = `${SSOAuthorityURL}/account/`;
+
 const origin = window.location.origin;
 const settings = {
-  authority: `${SSOUrl}/auth/realms/${SSORealm}`,
+  authority: SSOAuthorityURL,
   client_id: SSOClientId,
   redirect_uri: `${origin}/login_callback`,
   post_logout_redirect_uri: `${origin}/login`,
