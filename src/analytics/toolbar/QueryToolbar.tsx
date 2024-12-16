@@ -13,6 +13,7 @@ import { AnalyticsToolbarSearch, RangeOptionValue } from "types";
 import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import RangeSelect from "ui/form/RangeSelect";
 import SaveSearchModal from "./SaveSearchModal";
+import { getRangeDates } from "services/date";
 
 export default function QueryToolbar({
   onLoad,
@@ -32,11 +33,12 @@ export default function QueryToolbar({
   const [before, setBefore] = useState(searchParams.get("before") || "");
 
   useEffect(() => {
+    const dates = getRangeDates(range);
     onLoad({
       query,
       range,
-      after,
-      before,
+      after: dates.after,
+      before: dates.before,
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
