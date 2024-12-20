@@ -55,6 +55,8 @@ const baseQueryWithReauth: BaseQueryFn<
         } else {
           api.dispatch(loggedOut());
         }
+      } catch (error) {
+        api.dispatch(loggedOut());
       } finally {
         release();
       }
