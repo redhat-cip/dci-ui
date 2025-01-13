@@ -47,7 +47,6 @@ export default function TypeaheadSelect<T extends Item>({
   const [inputSearch, setInputSearch] = useState<string>("");
   const debouncedSearch = useDebouncedValue(inputSearch, 500);
   const textInputRef = useRef<HTMLInputElement>(null);
-  const [focusedItemIndex, setFocusedItemIndex] = useState<number | null>(null);
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(inputSearch.toLowerCase()),
   );
@@ -89,47 +88,6 @@ export default function TypeaheadSelect<T extends Item>({
             setInputSearch(v);
             if (!isOpen) {
               setIsOpen(true);
-            }
-          }}
-          onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-            switch (event.key) {
-              case "Enter":
-                event.preventDefault();
-                if (isOpen && focusedItemIndex !== null) {
-                  const selectedItem = filteredItems[focusedItemIndex];
-                  onSelect(selectedItem);
-                  setInputSearch("");
-                  setInputValue(selectedItem.name);
-                }
-                setIsOpen((prevIsOpen) => !prevIsOpen);
-                setFocusedItemIndex(null);
-                break;
-              case "Tab":
-              case "Escape":
-                setIsOpen(false);
-                setFocusedItemIndex(null);
-                break;
-              case "ArrowUp":
-                event.preventDefault();
-                setIsOpen(true);
-                if (focusedItemIndex === null || focusedItemIndex <= 0) {
-                  setFocusedItemIndex(filteredItems.length - 1);
-                } else {
-                  setFocusedItemIndex(focusedItemIndex - 1);
-                }
-                break;
-              case "ArrowDown":
-                event.preventDefault();
-                setIsOpen(true);
-                if (
-                  focusedItemIndex === null ||
-                  focusedItemIndex >= filteredItems.length - 1
-                ) {
-                  setFocusedItemIndex(0);
-                } else {
-                  setFocusedItemIndex(focusedItemIndex + 1);
-                }
-                break;
             }
           }}
           id={`toggle-${id}`}
@@ -190,7 +148,6 @@ export default function TypeaheadSelect<T extends Item>({
             id={`${id}[${index}]`}
             key={filteredItem.id}
             value={filteredItem.id}
-            isFocused={focusedItemIndex === index}
             isSelected={filteredItem.id === item?.id}
           >
             {filteredItem.name}

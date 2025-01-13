@@ -124,36 +124,36 @@ test("test TypeaheadSelect when user click arrow down or up, it select the team"
   await user.keyboard("[ArrowDown]");
   await waitFor(() => {
     const option = getByRole("option", { name: teams[0].name });
-    expect(option.parentElement?.classList.contains("pf-m-focus")).toBe(true);
+    expect(option.tabIndex).toBe(0);
     const option2 = getByRole("option", { name: teams[1].name });
-    expect(option2.parentElement?.classList.contains("pf-m-focus")).toBe(false);
+    expect(option2.tabIndex).toBe(-1);
   });
 
   // go down select second
   await user.keyboard("[ArrowDown]");
   await waitFor(() => {
     const option = getByRole("option", { name: teams[0].name });
-    expect(option.parentElement?.classList.contains("pf-m-focus")).toBe(false);
+    expect(option.tabIndex).toBe(-1);
     const option2 = getByRole("option", { name: teams[1].name });
-    expect(option2.parentElement?.classList.contains("pf-m-focus")).toBe(true);
+    expect(option2.tabIndex).toBe(0);
   });
 
   // go up select first
   await user.keyboard("[ArrowUp]");
   await waitFor(() => {
     const option = getByRole("option", { name: teams[0].name });
-    expect(option.parentElement?.classList.contains("pf-m-focus")).toBe(true);
+    expect(option.tabIndex).toBe(0);
     const option2 = getByRole("option", { name: teams[1].name });
-    expect(option2.parentElement?.classList.contains("pf-m-focus")).toBe(false);
+    expect(option2.tabIndex).toBe(-1);
   });
 
   // go up select last
   await user.keyboard("[ArrowUp]");
   await waitFor(() => {
     const option = getByRole("option", { name: teams[0].name });
-    expect(option.parentElement?.classList.contains("pf-m-focus")).toBe(false);
+    expect(option.tabIndex).toBe(-1);
     const option2 = getByRole("option", { name: teams[1].name });
-    expect(option2.parentElement?.classList.contains("pf-m-focus")).toBe(true);
+    expect(option2.tabIndex).toBe(0);
   });
 });
 
