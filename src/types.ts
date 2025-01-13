@@ -615,18 +615,18 @@ export interface IGetAnalyticsJobsResponse {
 
 export type IGetAnalyticsJobsEmptyResponse = Record<string, never>;
 
-export interface IGraphKeyValue {
+export interface IJobKeysValues {
+  id: string;
+  name: string;
   created_at: number;
-  value: number;
-  key: string;
-  job: {
-    id: string;
-    name: string;
+  keysValues: {
+    [key: string]: number;
   };
 }
 
-export interface IGraphKeyValues {
-  [key: string]: IGraphKeyValue[];
+export interface IGraphKeysValues {
+  keys: string[];
+  data: IJobKeysValues[];
 }
 
 export interface FormGroupProps {

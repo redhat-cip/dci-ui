@@ -2,14 +2,14 @@ import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
 } from "types";
-import { extractKeyValues } from "./keyValues";
+import { extractKeysValues } from "./keyValues";
 
-test("extractKeyValues with empty data", () => {
+test("extractKeysValues with empty data", () => {
   const emptyData: IGetAnalyticsJobsEmptyResponse = {};
-  expect(extractKeyValues(emptyData)).toEqual({});
+  expect(extractKeysValues(emptyData)).toEqual({ keys: [], data: [] });
 });
 
-test("extractKeyValues with result", () => {
+test("extractKeysValues with result", () => {
   const result: IGetAnalyticsJobsResponse = {
     _shards: {
       failed: 0,
@@ -65,15 +65,15 @@ test("extractKeyValues with result", () => {
     timed_out: false,
     took: 668,
   };
-  expect(extractKeyValues(result)).toEqual({
-    workarounds: [
+  expect(extractKeysValues(result)).toEqual({
+    keys: ["workarounds"],
+    data: [
       {
+        id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+        name: "job1",
         created_at: 1729175921696,
-        value: 1.0,
-        key: "workarounds",
-        job: {
-          id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-          name: "job1",
+        keysValues: {
+          workarounds: 1.0,
         },
       },
     ],

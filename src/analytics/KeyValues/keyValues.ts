@@ -2,40 +2,44 @@ import { DateTime } from "luxon";
 import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
-  IGraphKeyValues,
+  IJobKeysValues,
+  IGraphKeysValues,
 } from "types";
 
-export function extractKeyValues(
+export function extractKeysValues(
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
-): IGraphKeyValues {
+): IGraphKeysValues {
   try {
     if (Object.keys(data).length === 0) {
-      return {};
+      return { keys: [], data: [] };
     }
-    return data.hits.hits.reduce((acc, hit) => {
-      const created_at = DateTime.fromISO(hit._source.created_at).toMillis();
-      const keyValues = hit._source.keys_values;
-      const job_id = hit._source.id;
-      const job_name = hit._source.name;
-      for (let i = 0; i < keyValues.length; i++) {
-        const keyValue = keyValues[i];
-        const key = keyValue.key;
-        const value = keyValue.value;
-        const tmpKeyValues = acc[key] ?? [];
-        tmpKeyValues.push({
-          created_at,
-          value,
-          job: {
-            id: job_id,
-            name: job_name,
-          },
-          key,
-        });
-        acc[key] = tmpKeyValues;
-      }
-      return acc;
-    }, {} as IGraphKeyValues);
+    return data.hits.hits.reduce(
+      (acc, hit) => {
+        const jobId = hit._source.id;
+        const jobName = hit._source.name;
+        const createdAt = DateTime.fromISO(hit._source.created_at).toMillis();
+        const d: IJobKeysValues = {
+          id: jobId,
+          name: jobName,
+          created_at: createdAt,
+          keysValues: {},
+        };
+        const keyValues = hit._source.keys_values;
+        for (let i = 0; i < keyValues.length; i++) {
+          const keyValue = keyValues[i];
+          const key = keyValue.key;
+          const value = keyValue.value;
+          if (acc.keys.indexOf(key) === -1) {
+            acc.keys.push(key);
+          }
+          d.keysValues[key] = value;
+        }
+        acc.data.push(d);
+        return acc;
+      },
+      { keys: [], data: [] } as IGraphKeysValues,
+    );
   } catch (error) {
-    return {};
+    return { keys: [], data: [] };
   }
 }

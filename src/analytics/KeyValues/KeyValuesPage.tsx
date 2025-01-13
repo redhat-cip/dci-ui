@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -6,18 +7,17 @@ import {
   EmptyState,
   EmptyStateBody,
   EmptyStateVariant,
-  FormSelect,
-  FormSelectOption,
   PageSection,
   Skeleton,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { formatDate } from "services/date";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -28,19 +28,28 @@ import {
   YAxis,
 } from "recharts";
 import { DateTime } from "luxon";
-import { extractKeyValues } from "./keyValues";
-import { FilterIcon } from "@patternfly/react-icons";
+import { extractKeysValues } from "./keyValues";
+import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
-  IGraphKeyValue,
+  IGraphKeysValues,
 } from "types";
+import KeyValuesAddGraphModal, {
+  IKeyValueGraph,
+} from "./KeyValuesAddGraphModal";
+import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
+import { useNavigate, useSearchParams } from "react-router";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
-    const jobName = payload[0].payload.job.name;
+    const jobName = payload[0].payload.name;
+    const createdAt = formatDate(
+      DateTime.fromMillis(payload[0].payload.created_at),
+      DateTime.DATE_MED,
+    );
     return (
       <div
         style={{
@@ -49,14 +58,17 @@ const CustomTooltip = ({ active, payload }: any) => {
           padding: "1em",
         }}
       >
+        <p>{`Created on ${createdAt}`}</p>
         <p>{`Job ${jobName}`}</p>
         {payload.map(
-          (p: { name: string; value: number; payload: IGraphKeyValue }) => (
+          (p: {
+            name: string;
+            value: number;
+            payload: IGraphKeysValues["data"][0];
+          }) => (
             <div key={p.name}>
               <p>
-                {p.name === "created_at"
-                  ? `Created on ${formatDate(DateTime.fromMillis(p.value), DateTime.DATE_MED)}`
-                  : `${p.payload.key}: ${p.value}`}
+                {p.name}: {p.value}
               </p>
             </div>
           ),
@@ -68,13 +80,158 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-type IGraphType = "bar" | "line" | "scatter";
+const tickFormatter = (timestamp: number) =>
+  DateTime.fromMillis(timestamp).toFormat("dd MMM yyyy");
 
-const graphTypeLabels: Record<IGraphType, string> = {
-  scatter: "scatter chart",
-  line: "line chart",
-  bar: "bar chart",
-};
+function KeyValueGraph({
+  graph,
+  data,
+  onDelete,
+}: {
+  graph: IKeyValueGraph;
+  data: IGraphKeysValues;
+  onDelete: () => void;
+}) {
+  const keys = graph.keys.map((k) => k.key);
+  const keysValuesData = [...data.data]
+    .filter((obj) => keys.some((key) => key in obj.keysValues))
+    .sort((a, b) => a.created_at - b.created_at);
+  return (
+    <Card className="pf-v6-u-mt-md">
+      <CardHeader>
+        Graph {keys.join(" ")}
+        <Button
+          onClick={() => {
+            onDelete();
+          }}
+          variant="plain"
+          className="pf-v6-u-ml-md"
+        >
+          <TrashAltIcon />
+        </Button>
+      </CardHeader>
+      <CardBody>
+        {graph.graphType === "line" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={keysValuesData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
+              <YAxis />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3" }}
+                content={<CustomTooltip />}
+              />
+              <Legend />
+              {graph.keys.map((key, i) => (
+                <Line
+                  key={i}
+                  name={key.key}
+                  dataKey={`keysValues.${key.key}`}
+                  stroke={key.color}
+                  connectNulls
+                  type="monotone"
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+        {graph.graphType === "bar" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={keysValuesData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
+              <YAxis />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3" }}
+                content={<CustomTooltip />}
+              />
+              <Legend />
+              {graph.keys.map((key, i) => (
+                <Bar
+                  key={i}
+                  name={key.key}
+                  dataKey={`keysValues.${key.key}`}
+                  fill={key.color}
+                  scale="time"
+                />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+        {graph.graphType === "scatter" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <ScatterChart data={keysValuesData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
+              <YAxis />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3" }}
+                content={<CustomTooltip />}
+              />
+              <Legend />
+              {graph.keys.map((key, i) => (
+                <Scatter
+                  key={i}
+                  name={key.key}
+                  dataKey={`keysValues.${key.key}`}
+                  fill={key.color}
+                  scale="time"
+                />
+              ))}
+            </ScatterChart>
+          </ResponsiveContainer>
+        )}
+      </CardBody>
+    </Card>
+  );
+}
+
+function KeyValuesGraphs({
+  data,
+  ...props
+}: {
+  data: IGraphKeysValues;
+  [key: string]: any;
+}) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [graphs, setGraphs] = useState<IKeyValueGraph[]>(
+    parseGraphsFromSearch(searchParams.get("graphs")),
+  );
+
+  useEffect(() => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+    const graphSearch = createSearchFromGraphs(graphs);
+    if (graphSearch) {
+      updatedSearchParams.set("graphs", graphSearch);
+    } else {
+      updatedSearchParams.delete("graphs");
+    }
+    navigate(`?${updatedSearchParams.toString()}`);
+  }, [graphs, graphs.length, navigate, searchParams]);
+
+  return (
+    <div {...props}>
+      <KeyValuesAddGraphModal
+        keys={data.keys}
+        onSubmit={(newGraph) => {
+          setGraphs((oldGraphs) => [...oldGraphs, newGraph]);
+        }}
+        className="pf-v6-u-mt-md"
+      />
+      {graphs.map((graph, index) => (
+        <KeyValueGraph
+          key={index}
+          graph={graph}
+          data={data}
+          onDelete={() =>
+            setGraphs((oldGraphs) => oldGraphs.filter((g, i) => index !== i))
+          }
+        />
+      ))}
+    </div>
+  );
+}
 
 function KeyValues({
   isLoading,
@@ -85,8 +242,6 @@ function KeyValues({
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
   [key: string]: any;
 }) {
-  const [graphType, setGraphType] = useState<IGraphType>("scatter");
-
   if (isLoading) {
     return (
       <Card {...props}>
@@ -104,9 +259,8 @@ function KeyValues({
     return null;
   }
 
-  const keyValues = extractKeyValues(data);
-
-  if (Object.keys(keyValues).length === 0) {
+  const keysValues = extractKeysValues(data);
+  if (keysValues.keys.length === 0) {
     return (
       <Card {...props}>
         <CardBody>
@@ -126,116 +280,7 @@ function KeyValues({
     );
   }
 
-  return (
-    <div {...props}>
-      <FormSelect
-        id="select-graph-type"
-        value={graphType}
-        onChange={(event, newGraph) => {
-          setGraphType(newGraph as IGraphType);
-        }}
-        {...props}
-      >
-        {(
-          Object.keys(graphTypeLabels) as Array<keyof typeof graphTypeLabels>
-        ).map((gT, index) => (
-          <FormSelectOption
-            key={index}
-            value={gT}
-            label={graphTypeLabels[gT]}
-          />
-        ))}
-      </FormSelect>
-
-      {Object.entries(keyValues).map(([key, keyValue]) => (
-        <Card className="pf-v6-u-mt-md">
-          <CardHeader>{key}</CardHeader>
-          <CardBody>
-            {graphType === "scatter" && (
-              <ResponsiveContainer width="100%" height={400}>
-                <ScatterChart
-                  margin={{
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 20,
-                  }}
-                >
-                  <CartesianGrid />
-                  <XAxis
-                    dataKey="created_at"
-                    type="number"
-                    domain={["auto", "auto"]}
-                    scale="time"
-                    hide
-                  />
-                  <YAxis dataKey="value" />
-                  <Tooltip
-                    cursor={{ strokeDasharray: "3 3" }}
-                    content={<CustomTooltip />}
-                  />
-                  <Scatter name={key} data={keyValue} fill="#3E8635" />
-                </ScatterChart>
-              </ResponsiveContainer>
-            )}
-            {graphType === "bar" && (
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart
-                  width={500}
-                  height={400}
-                  margin={{
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 20,
-                  }}
-                  data={keyValue}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="created_at" hide />
-                  <YAxis />
-                  <Tooltip
-                    cursor={{ strokeDasharray: "3 3" }}
-                    content={<CustomTooltip />}
-                  />
-                  <Bar dataKey="value" fill="#3E8635" />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-            {graphType === "line" && (
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart
-                  width={500}
-                  height={400}
-                  margin={{
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 20,
-                  }}
-                  data={keyValue}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="created_at" hide />
-                  <YAxis />
-                  <Tooltip
-                    cursor={{ strokeDasharray: "3 3" }}
-                    content={<CustomTooltip />}
-                  />
-                  <Line
-                    dot={false}
-                    type="monotone"
-                    dataKey="value"
-                    fill="#3E8635"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </CardBody>
-        </Card>
-      ))}
-    </div>
-  );
+  return <KeyValuesGraphs data={keysValues} />;
 }
 
 export default function KeyValuesPage() {
