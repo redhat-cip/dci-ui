@@ -36,6 +36,7 @@ import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
   IGraphKeysValues,
+  IJob,
 } from "types";
 import KeyValuesAddGraphModal, {
   IKeyValueGraph,
@@ -96,6 +97,14 @@ function KeyValueGraph({
   const keysValuesData = [...data.data]
     .filter((obj) => keys.some((key) => key in obj.keysValues))
     .sort((a, b) => a.created_at - b.created_at);
+
+  const openJob = (payload: any) => {
+    if ("payload" in payload) {
+      const job = payload.payload as IJob;
+      window.open(`/jobs/${job.id}/jobStates`);
+    }
+  };
+
   return (
     <Card className="pf-v6-u-mt-md">
       <CardHeader>
@@ -130,6 +139,13 @@ function KeyValueGraph({
                   stroke={key.color}
                   connectNulls
                   type="monotone"
+                  activeDot={{
+                    r: 6,
+                    cursor: "pointer",
+                    onClick: (event, payload) => {
+                      openJob(payload);
+                    },
+                  }}
                 />
               ))}
             </LineChart>
@@ -153,6 +169,8 @@ function KeyValueGraph({
                   dataKey={`keysValues.${key.key}`}
                   fill={key.color}
                   scale="time"
+                  cursor="pointer"
+                  onClick={openJob}
                 />
               ))}
             </BarChart>
@@ -176,6 +194,8 @@ function KeyValueGraph({
                   dataKey={`keysValues.${key.key}`}
                   fill={key.color}
                   scale="time"
+                  cursor="pointer"
+                  onClick={openJob}
                 />
               ))}
             </ScatterChart>
