@@ -15,7 +15,7 @@ import {
   WarningTriangleIcon,
 } from "@patternfly/react-icons";
 import { Tbody, Td, Tr } from "@patternfly/react-table";
-import humanizeDuration from "humanize-duration";
+import { humanizeDuration } from "services/date";
 import { useEffect, useRef, useState } from "react";
 import { ITestCase, ITestCaseActionState, ITestCaseActionType } from "types";
 import { CopyButton } from "ui";
@@ -86,23 +86,6 @@ export function TestCaseState({
   }
 }
 
-const shortEnglishHumanizer = humanizeDuration.humanizer({
-  language: "shortEn",
-  delimiter: " ",
-  languages: {
-    shortEn: {
-      y: () => "y",
-      mo: () => "mo",
-      w: () => "w",
-      d: () => "d",
-      h: () => "h",
-      m: () => "min",
-      s: () => "s",
-      ms: () => "ms",
-    },
-  },
-});
-
 interface TestCaseProps {
   isExpanded?: boolean;
   expand: (isExpanded: boolean) => void;
@@ -157,10 +140,8 @@ export default function TestCase({
           <TestCaseIcon action={testcase.action} />
         </Td>
         <Td textCenter modifier="fitContent">
-          <Label isCompact title={testcase.time.toString()}>
-            {shortEnglishHumanizer(testcase.time * 1000, {
-              maxDecimalPoints: 2,
-            })}
+          <Label isCompact title={`${testcase.time} seconds`}>
+            {humanizeDuration(testcase.time, { maxDecimalPoints: 2 })}
           </Label>
         </Td>
         <Td modifier="fitContent">{testcase.classname}</Td>

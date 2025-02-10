@@ -75,7 +75,7 @@ function ComponentJob({ job }: IComponentJobProps) {
         <GridItem span={2}>
           <span title={`Duration in seconds ${job.duration}`}>
             <ClockIcon className="pf-v6-u-mr-xs" />
-            {humanizeDuration(job.duration * 1000)}
+            {humanizeDuration(job.duration)}
           </span>
         </GridItem>
         <GridItem span={2}>

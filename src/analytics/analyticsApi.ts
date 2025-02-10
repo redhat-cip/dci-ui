@@ -21,7 +21,7 @@ export function createAnalyticsSearchParams(
   ).toString();
 }
 
-export const { useLazyGetAnalyticJobsQuery } = api
+export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
   .enhanceEndpoints({ addTagTypes: ["Analytics"] })
   .injectEndpoints({
     endpoints: (builder) => ({

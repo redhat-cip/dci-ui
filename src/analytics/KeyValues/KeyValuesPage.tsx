@@ -17,6 +17,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Label,
   Legend,
   Line,
   LineChart,
@@ -28,9 +29,9 @@ import {
   YAxis,
 } from "recharts";
 import { DateTime } from "luxon";
-import { extractKeysValues } from "./keyValues";
+import { extractKeysValues, getTicksInRange } from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
-import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
+import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import {
   IGetAnalyticsJobsEmptyResponse,
@@ -38,11 +39,12 @@ import {
   IGraphKeysValues,
   IJob,
 } from "types";
-import KeyValuesAddGraphModal, {
-  IKeyValueGraph,
-} from "./KeyValuesAddGraphModal";
+import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
 import { useNavigate, useSearchParams } from "react-router";
+import { IKeyValueGraph } from "./keyValuesTypes";
+import KeyValuesEditGraphModal from "./KeyValuesEditGraphModal";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -81,40 +83,49 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-const tickFormatter = (timestamp: number) =>
-  DateTime.fromMillis(timestamp).toFormat("dd MMM yyyy");
+function tickFormatter(timestamp: number) {
+  return DateTime.fromMillis(timestamp).toFormat("dd MMM yyyy");
+}
 
 function KeyValueGraph({
   graph,
   data,
+  ticks,
+  onEdit,
   onDelete,
 }: {
   graph: IKeyValueGraph;
   data: IGraphKeysValues;
+  ticks: number[];
+  onEdit: (newGraph: IKeyValueGraph) => void;
   onDelete: () => void;
 }) {
   const keys = graph.keys.map((k) => k.key);
   const keysValuesData = [...data.data]
     .filter((obj) => keys.some((key) => key in obj.keysValues))
     .sort((a, b) => a.created_at - b.created_at);
-
   const openJob = (payload: any) => {
     if ("payload" in payload) {
       const job = payload.payload as IJob;
       window.open(`/jobs/${job.id}/jobStates`);
     }
   };
-
   return (
     <Card className="pf-v6-u-mt-md">
       <CardHeader>
         Graph {keys.join(" ")}
+        <KeyValuesEditGraphModal
+          keys={data.keys}
+          graph={graph}
+          className="pf-v6-u-ml-md"
+          onSubmit={onEdit}
+        />
         <Button
           onClick={() => {
             onDelete();
           }}
           variant="plain"
-          className="pf-v6-u-ml-md"
+          className="pf-v6-u-ml-xs"
         >
           <TrashAltIcon />
         </Button>
@@ -124,8 +135,26 @@ function KeyValueGraph({
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={keysValuesData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
-              <YAxis />
+              <XAxis
+                dataKey="created_at"
+                tickFormatter={tickFormatter}
+                ticks={ticks}
+                domain={[ticks[0], ticks[ticks.length - 1]]}
+                type="number"
+              />
+              {graph.keys.map((key, i) => (
+                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
+                  <Label
+                    value={key.key}
+                    position={
+                      key.axis === "left" ? "insideLeft" : "insideRight"
+                    }
+                    angle={-90}
+                    fill={key.color}
+                    style={{ textAnchor: "middle" }}
+                  />
+                </YAxis>
+              ))}
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
                 content={<CustomTooltip />}
@@ -135,6 +164,7 @@ function KeyValueGraph({
                 <Line
                   key={i}
                   name={key.key}
+                  yAxisId={key.axis}
                   dataKey={`keysValues.${key.key}`}
                   stroke={key.color}
                   connectNulls
@@ -155,8 +185,26 @@ function KeyValueGraph({
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={keysValuesData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
-              <YAxis />
+              <XAxis
+                dataKey="created_at"
+                tickFormatter={tickFormatter}
+                ticks={ticks}
+                domain={[ticks[0], ticks[ticks.length - 1]]}
+                type="number"
+              />
+              {graph.keys.map((key, i) => (
+                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
+                  <Label
+                    value={key.key}
+                    position={
+                      key.axis === "left" ? "insideLeft" : "insideRight"
+                    }
+                    angle={-90}
+                    fill={key.color}
+                    style={{ textAnchor: "middle" }}
+                  />
+                </YAxis>
+              ))}
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
                 content={<CustomTooltip />}
@@ -167,6 +215,7 @@ function KeyValueGraph({
                   key={i}
                   name={key.key}
                   dataKey={`keysValues.${key.key}`}
+                  yAxisId={key.axis}
                   fill={key.color}
                   scale="time"
                   cursor="pointer"
@@ -180,8 +229,26 @@ function KeyValueGraph({
           <ResponsiveContainer width="100%" height={400}>
             <ScatterChart data={keysValuesData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="created_at" tickFormatter={tickFormatter} />
-              <YAxis />
+              <XAxis
+                dataKey="created_at"
+                tickFormatter={tickFormatter}
+                ticks={ticks}
+                domain={[ticks[0], ticks[ticks.length - 1]]}
+                type="number"
+              />
+              {graph.keys.map((key, i) => (
+                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
+                  <Label
+                    value={key.key}
+                    position={
+                      key.axis === "left" ? "insideLeft" : "insideRight"
+                    }
+                    angle={-90}
+                    fill={key.color}
+                    style={{ textAnchor: "middle" }}
+                  />
+                </YAxis>
+              ))}
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
                 content={<CustomTooltip />}
@@ -192,6 +259,7 @@ function KeyValueGraph({
                   key={i}
                   name={key.key}
                   dataKey={`keysValues.${key.key}`}
+                  yAxisId={key.axis}
                   fill={key.color}
                   scale="time"
                   cursor="pointer"
@@ -208,9 +276,11 @@ function KeyValueGraph({
 
 function KeyValuesGraphs({
   data,
+  ticks,
   ...props
 }: {
   data: IGraphKeysValues;
+  ticks: number[];
   [key: string]: any;
 }) {
   const navigate = useNavigate();
@@ -235,7 +305,7 @@ function KeyValuesGraphs({
       <KeyValuesAddGraphModal
         keys={data.keys}
         onSubmit={(newGraph) => {
-          setGraphs((oldGraphs) => [...oldGraphs, newGraph]);
+          setGraphs((oldGraphs) => [newGraph, ...oldGraphs]);
         }}
         className="pf-v6-u-mt-md"
       />
@@ -244,6 +314,14 @@ function KeyValuesGraphs({
           key={index}
           graph={graph}
           data={data}
+          ticks={ticks}
+          onEdit={(newGraph) =>
+            setGraphs((oldGraphs) =>
+              oldGraphs.map((g, i) =>
+                index === i ? { ...newGraph } : { ...g },
+              ),
+            )
+          }
           onDelete={() =>
             setGraphs((oldGraphs) => oldGraphs.filter((g, i) => index !== i))
           }
@@ -256,10 +334,14 @@ function KeyValuesGraphs({
 function KeyValues({
   isLoading,
   data,
+  after,
+  before,
   ...props
 }: {
   isLoading: boolean;
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  before: string;
+  after: string;
   [key: string]: any;
 }) {
   if (isLoading) {
@@ -280,6 +362,7 @@ function KeyValues({
   }
 
   const keysValues = extractKeysValues(data);
+  const ticks = getTicksInRange({ after, before });
   if (keysValues.keys.length === 0) {
     return (
       <Card {...props}>
@@ -299,13 +382,24 @@ function KeyValues({
       </Card>
     );
   }
-
-  return <KeyValuesGraphs data={keysValues} />;
+  return <KeyValuesGraphs data={keysValues} ticks={ticks} />;
 }
 
 export default function KeyValuesPage() {
-  const [getAnalyticJobs, { data, isLoading, isFetching }] =
-    useLazyGetAnalyticJobsQuery();
+  const [params, setParams] = useState<{
+    query: string;
+    after: string;
+    before: string;
+  }>({
+    query: "",
+    after: "",
+    before: "",
+  });
+  const { query, after, before } = params;
+  const shouldSearch = query !== "" && after !== "" && before !== "";
+  const { data, isLoading, isFetching } = useGetAnalyticJobsQuery(
+    shouldSearch ? params : skipToken,
+  );
   return (
     <PageSection>
       <Breadcrumb
@@ -318,18 +412,18 @@ export default function KeyValuesPage() {
       <Content component="h1">Key Values</Content>
       <Content component="p">Graph the key values of your jobs</Content>
       <AnalyticsToolbar
-        onLoad={({ query, after, before }) => {
-          if (query !== "" && after !== "" && before !== "") {
-            getAnalyticJobs({ query, after, before });
-          }
-        }}
-        onSearch={({ query, after, before }) => {
-          getAnalyticJobs({ query, after, before });
-        }}
+        onLoad={setParams}
+        onSearch={setParams}
         isLoading={isFetching}
         data={data}
       />
-      <KeyValues isLoading={isLoading} data={data} className="pf-v6-u-mt-md" />
+      <KeyValues
+        isLoading={isLoading}
+        data={data}
+        after={after}
+        before={before}
+        className="pf-v6-u-mt-md"
+      />
     </PageSection>
   );
 }

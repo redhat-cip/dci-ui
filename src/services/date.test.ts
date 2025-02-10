@@ -1,11 +1,11 @@
 import * as date from "./date";
 
 test("humanizeDuration", () => {
-  expect(date.humanizeDuration(0)).toBe("0 seconds");
-  expect(date.humanizeDuration(60 * 1000)).toBe("1 minute");
-  expect(date.humanizeDuration(61 * 1000)).toBe("1 minute");
-  expect(date.humanizeDuration(null)).toBe("0 seconds");
-  expect(date.humanizeDuration(28958 * 1000)).toBe("8 hours");
+  expect(date.humanizeDuration(0)).toBe("0 s");
+  expect(date.humanizeDuration(60)).toBe("1 m");
+  expect(date.humanizeDuration(61)).toBe("1 m");
+  expect(date.humanizeDuration(null)).toBe("0 s");
+  expect(date.humanizeDuration(28958)).toBe("8 h");
 });
 
 test("formatDate", () => {

@@ -23,7 +23,6 @@ export default function AnalyticsJobsModal({
         aria-label="Analytics jobs list"
         isOpen={isOpen}
         onClose={hide}
-        width="80%"
       >
         <ModalHeader title="Jobs list" />
         <ModalBody>

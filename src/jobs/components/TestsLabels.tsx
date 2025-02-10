@@ -7,15 +7,15 @@ export function TestLabels({
   skips,
   errors,
   failures,
-  successfixes,
-  regressions,
+  successfixes = 0,
+  regressions = 0,
 }: {
   success: number;
   skips: number;
   errors: number;
   failures: number;
-  successfixes: number;
-  regressions: number;
+  successfixes?: number;
+  regressions?: number;
 }) {
   return (
     <LabelGroup numLabels={5}>

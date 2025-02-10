@@ -32,7 +32,7 @@ import { convertLinksToHtml, getLabelColor } from "jobs/jobUtils";
 import { JobStatusLabel, TestLabels } from "jobs/components";
 import { useGetJobQuery, useUpdateJobMutation } from "jobs/jobsApi";
 import { sumTests } from "jobs/components/TestsLabels";
-import { ComponentsList } from "../../components/ComponentsList";
+import { ComponentsList } from "jobs/components/ComponentsList";
 import TopicIcon from "topics/TopicIcon";
 
 interface TestsProps {
@@ -165,7 +165,7 @@ export default function JobDetailsHeader({
   ...props
 }: JobDetailsHeaderProps) {
   const [updateJob, { isLoading }] = useUpdateJobMutation();
-  const jobDuration = humanizeDuration(job.duration * 1000);
+  const jobDuration = humanizeDuration(job.duration);
   const startedSince = fromNow(job.created_at);
   const navigate = useNavigate();
   return (
@@ -368,11 +368,11 @@ export default function JobDetailsHeader({
               {job.status === "new" ||
               job.status === "pre-run" ||
               job.status === "running" ? (
-                <span title={`Job duration in seconds ${job.duration}`}>
+                <span title={`${job.duration} seconds`}>
                   Started {startedSince}
                 </span>
               ) : (
-                <span title={`Job duration in seconds ${job.duration}`}>
+                <span title={`${job.duration} seconds`}>
                   Ran for {jobDuration}
                 </span>
               )}

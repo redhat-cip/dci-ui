@@ -3,7 +3,8 @@ import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
 import { Link } from "react-router";
 import { IAnalyticsJob } from "types";
-import { humanizeJobDuration, JobComment, JobResults } from "./JobComponents";
+import { humanizeDuration } from "services/date";
+import JobKeysValues from "jobs/components/JobKeysValues";
 
 export default function AnalyticsJobTable({
   jobs,
@@ -18,14 +19,13 @@ export default function AnalyticsJobTable({
         <Table variant="compact">
           <Thead>
             <Tr>
-              <Th>Status</Th>
-              <Th>Name</Th>
-              <Th>Team</Th>
-              <Th>Pipeline</Th>
-              <Th>Tests</Th>
-              <Th>Comment</Th>
-              <Th>Duration</Th>
-              <Th>Created</Th>
+              <Th width={10}>Status</Th>
+              <Th width={10}>Name</Th>
+              <Th width={10}>Team</Th>
+              <Th width={10}>Pipeline</Th>
+              <Th width={30}>Key values</Th>
+              <Th width={10}>Duration</Th>
+              <Th width={20}>Created</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -42,15 +42,9 @@ export default function AnalyticsJobTable({
                 </Td>
                 <Td>{job.pipeline?.name}</Td>
                 <Td>
-                  <JobResults results={job.results} />
+                  <JobKeysValues keys_values={job.keys_values} />
                 </Td>
-                <Td>
-                  <JobComment
-                    comment={job.comment}
-                    status_reason={job.status_reason}
-                  />
-                </Td>
-                <Td>{humanizeJobDuration(job.duration)}</Td>
+                <Td>{humanizeDuration(job.duration)}</Td>
                 <Td>{job.created_at}</Td>
               </Tr>
             ))}

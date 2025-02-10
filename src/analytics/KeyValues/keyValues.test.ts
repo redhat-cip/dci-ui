@@ -2,7 +2,7 @@ import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
 } from "types";
-import { extractKeysValues } from "./keyValues";
+import { extractKeysValues, getTicksInRange } from "./keyValues";
 
 test("extractKeysValues with empty data", () => {
   const emptyData: IGetAnalyticsJobsEmptyResponse = {};
@@ -78,4 +78,11 @@ test("extractKeysValues with result", () => {
       },
     ],
   });
+});
+
+test("getTicksInRange", () => {
+  const range = { after: "2024-10-14", before: "2024-10-18" };
+  expect(getTicksInRange(range)).toEqual([
+    1728864000000, 1728950400000, 1729036800000, 1729123200000, 1729209600000,
+  ]);
 });

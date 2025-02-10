@@ -30,7 +30,7 @@ import FileContent from "../files/FileContent";
 function JobStateName(jobstate: IJobStateWithDuration) {
   let jobStateName = `Job state ${jobstate.status}`;
   if (jobstate.duration > 0) {
-    jobStateName += ` (${humanizeDuration(jobstate.duration * 1000)})`;
+    jobStateName += ` (${humanizeDuration(jobstate.duration)})`;
   }
 
   return (

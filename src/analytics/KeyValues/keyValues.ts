@@ -6,6 +6,28 @@ import {
   IGraphKeysValues,
 } from "types";
 
+type DateRange = {
+  after: string;
+  before: string;
+};
+
+export function getTicksInRange(range: DateRange): number[] {
+  const afterDate = DateTime.fromISO(range.after);
+  const beforeDate = DateTime.fromISO(range.before);
+  if (afterDate > beforeDate) {
+    throw new Error(
+      "The 'after' date must be before or equal to the 'before' date.",
+    );
+  }
+  const ticks: number[] = [];
+  let currentDate = afterDate;
+  while (currentDate <= beforeDate) {
+    ticks.push(currentDate.toMillis());
+    currentDate = currentDate.plus({ days: 1 });
+  }
+  return ticks;
+}
+
 export function extractKeysValues(
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
 ): IGraphKeysValues {

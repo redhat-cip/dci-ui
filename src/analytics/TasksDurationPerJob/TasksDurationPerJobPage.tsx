@@ -52,7 +52,7 @@ const CustomTooltip = ({ active, payload }: any) => {
                 p.payload.name
               }`}</p>
               <p style={{ color: p.stroke }}>{`${humanizeDuration(
-                p.value * 1000,
+                p.value,
               )} (${p.value}s)`}</p>
             </div>
           ))}

@@ -12,11 +12,16 @@ export function fromNow(
 }
 
 export function humanizeDuration(
-  durationInMs: number | null,
+  duration: number | null,
   option: humanize.Options = {},
 ) {
-  if (durationInMs === null) return "0 seconds";
-  return humanize(durationInMs, { round: true, largest: 1, ...option });
+  const durationInMs = (duration || 0) * 1000;
+  return humanizeDurationShort(durationInMs, {
+    delimiter: " ",
+    round: true,
+    largest: 1,
+    ...option,
+  });
 }
 
 export function formatDate(

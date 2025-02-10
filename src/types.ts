@@ -286,7 +286,7 @@ export interface IResult {
 
 export interface IPipeline extends Resource {}
 
-interface IKeyValue {
+export interface IKeyValue {
   key: string;
   value: number;
 }
