@@ -3,10 +3,13 @@ import { IKeyValueGraph, IKeyValueGraphV1 } from "./keyValuesTypes";
 function convertGraphTov2Graph(
   graphs: (IKeyValueGraph | IKeyValueGraphV1)[],
 ): IKeyValueGraph[] {
-  return graphs.map((g) => ({
-    ...g,
-    keys: g.keys.map((k) => ({ axis: "left", ...k })),
-  }));
+  return graphs.map((graph) => {
+    return {
+      name: `Graph ${graph.keys.map((key) => key.key).join(" ")}`,
+      ...graph,
+      keys: graph.keys.map((key) => ({ axis: "left", ...key })),
+    };
+  });
 }
 
 export function parseGraphsFromSearch(

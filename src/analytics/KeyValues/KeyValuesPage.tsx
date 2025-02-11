@@ -113,7 +113,7 @@ function KeyValueGraph({
   return (
     <Card className="pf-v6-u-mt-md">
       <CardHeader>
-        Graph {keys.join(" ")}
+        {graph.name}
         <KeyValuesEditGraphModal
           keys={data.keys}
           graph={graph}

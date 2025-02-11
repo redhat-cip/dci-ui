@@ -4,6 +4,7 @@ import {
   FormGroup,
   FormSelect,
   FormSelectOption,
+  TextInput,
 } from "@patternfly/react-core";
 import {
   CheckCircleIcon,
@@ -40,16 +41,21 @@ export default function KeyValuesChartForm({
     : {
         keys: [{ key: keys[0], color: randomColor, axis: "left" }],
         graphType: graphTypes[0],
+        name: `${keys[0]} graph`,
       };
-  const { control, handleSubmit, setValue, watch } = useForm<IKeyValueGraph>({
-    defaultValues: graph,
-  });
+  const { control, handleSubmit, setValue, watch, register } =
+    useForm<IKeyValueGraph>({
+      defaultValues: graph,
+    });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "keys",
   });
   return (
     <Form id={id} onSubmit={handleSubmit(onSubmit)} {...props}>
+      <FormGroup label="Graph name" isRequired fieldId="graph-name-field">
+        <TextInput id={id} {...register("name")} />
+      </FormGroup>
       <FormGroup label="Graph type" isRequired fieldId="graph-type-field">
         <Controller
           name="graphType"
@@ -148,7 +154,7 @@ export default function KeyValuesChartForm({
             </div>
           </div>
         ))}
-        <div className="pf-v6-u-mt-sm text-right">
+        <div className="pf-v6-u-my-sm">
           <Button
             variant="control"
             icon={<PlusIcon aria-hidden="true" />}
@@ -160,9 +166,8 @@ export default function KeyValuesChartForm({
               });
             }}
             title="Add another key"
-            style={{ height: "35px" }}
           >
-            New key
+            Add a new key
           </Button>
         </div>
       </FormGroup>

@@ -109,6 +109,7 @@ export interface IKeyValueGraphKey {
 }
 
 export interface IKeyValueGraph {
+  name: string;
   keys: IKeyValueGraphKey[];
   graphType: IGraphType;
 }

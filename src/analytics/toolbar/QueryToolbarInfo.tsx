@@ -19,7 +19,15 @@ export default function AnalyticsJobsInfo({
   }
 
   if (!data || !data.hits) {
-    return null;
+    return (
+      <div {...props}>
+        <HelperText>
+          <HelperTextItem>
+            There are no jobs that match your search.
+          </HelperTextItem>
+        </HelperText>
+      </div>
+    );
   }
 
   const jobs = data.hits.hits.map((h) => h._source);

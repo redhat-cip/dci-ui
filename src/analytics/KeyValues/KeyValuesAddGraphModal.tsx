@@ -44,7 +44,6 @@ export default function KeyValuesAddGraphModal({
         </ModalBody>
         <ModalFooter>
           <Button
-            icon={<PlusIcon aria-hidden="true" />}
             key="create"
             variant="primary"
             type="submit"
