@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   Card,
   CardBody,
   Content,
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateVariant,
   Drawer,
   DrawerActions,
   DrawerCloseButton,
@@ -15,31 +18,24 @@ import {
   LabelGroup,
   PageSection,
   Skeleton,
-  Toolbar,
-  ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
 } from "@patternfly/react-core";
 import {
   t_global_color_nonstatus_red_200,
   chart_color_green_300,
   chart_color_red_orange_300,
 } from "@patternfly/react-tokens";
-import { Breadcrumb, EmptyState } from "ui";
-import { IComponentCoverage } from "types";
-import { buildComponentCoverage } from "./componentCoverage";
-import TopicToolbarFilter from "topics/form/TopicToolbarFilter";
+import { Breadcrumb } from "ui";
 import {
-  InfoCircleIcon,
-  SearchIcon,
-  WarningTriangleIcon,
-} from "@patternfly/react-icons";
-import { Link, useSearchParams } from "react-router";
+  IComponentCoverage,
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+} from "types";
+import { buildComponentCoverage } from "./componentCoverage";
+import { FilterIcon, WarningTriangleIcon } from "@patternfly/react-icons";
+import { Link } from "react-router";
 import { sortByNewestFirst } from "services/sort";
 import { formatDate } from "services/date";
 import { JobStatusLabel } from "jobs/components";
-import TypesFilter from "./TypesFilter";
-import TeamToolbarFilter from "teams/form/TeamToolbarFilter";
 import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
 import {
   Table,
@@ -50,54 +46,58 @@ import {
   Tbody,
   Td,
 } from "@patternfly/react-table";
-import {
-  useLazyGetAllComponentTypesQuery,
-  useLazyGetTasksComponentsCoverageQuery,
-} from "./componentCoverageApi";
+import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
+import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 
-function ComponentCoverage({
-  topicId,
-  teamId,
-  selectedTypes,
+function ComponentsCoverage({
+  isLoading,
+  data,
+  ...props
 }: {
-  topicId: string;
-  teamId: string;
-  selectedTypes: string[];
+  isLoading: boolean;
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  [key: string]: any;
 }) {
   const [componentDetails, setComponentDetails] =
     useState<IComponentCoverage | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const drawerIsExpanded = componentDetails !== null;
-  const [getTasksComponentsCoverage, { data, isLoading }] =
-    useLazyGetTasksComponentsCoverageQuery();
-
-  useEffect(() => {
-    getTasksComponentsCoverage({ topicId, teamId, selectedTypes });
-  }, [topicId, teamId, selectedTypes, getTasksComponentsCoverage]);
 
   if (isLoading) {
-    return <Skeleton screenreaderText="Loading get tasks duration cumulated" />;
-  }
-
-  if (!data) {
     return (
-      <EmptyState
-        title="No results found"
-        info="No results match the filter criteria. Clear all filters and try again."
-        icon={SearchIcon}
-      />
+      <Card {...props}>
+        <CardBody>
+          <Skeleton
+            screenreaderText="Loading components coverage data"
+            style={{ height: 80 }}
+          />
+        </CardBody>
+      </Card>
     );
+  }
+  if (!data || !data.hits) {
+    return null;
   }
 
   const components = buildComponentCoverage(data);
 
   if (components.length === 0) {
     return (
-      <EmptyState
-        title="No components"
-        info="There is no components for this topic and/or this team"
-        icon={InfoCircleIcon}
-      />
+      <Card {...props}>
+        <CardBody>
+          <EmptyState
+            variant={EmptyStateVariant.xs}
+            icon={FilterIcon}
+            titleText="No job"
+            headingLevel="h4"
+          >
+            <EmptyStateBody>
+              We did not find any jobs matching this search. Please modify your
+              search.
+            </EmptyStateBody>
+          </EmptyState>
+        </CardBody>
+      </Card>
     );
   }
 
@@ -318,58 +318,8 @@ function ComponentCoverage({
 }
 
 export default function ComponentCoveragePage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [topicId, setTopicId] = useState<string | null>(
-    searchParams.get("topic_id"),
-  );
-  const [teamId, setTeamId] = useState<string | null>(
-    searchParams.get("team_id"),
-  );
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(
-    searchParams.get("types")?.split(",") || [],
-  );
-  const [getAllComponentTypes, { data: types }] =
-    useLazyGetAllComponentTypesQuery();
-
-  useEffect(() => {
-    if (topicId) {
-      searchParams.set("topic_id", topicId);
-    } else {
-      searchParams.delete("topic_id");
-    }
-    setSearchParams(searchParams);
-  }, [topicId, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (teamId) {
-      searchParams.set("team_id", teamId);
-    } else {
-      searchParams.delete("team_id");
-    }
-    setSearchParams(searchParams);
-  }, [teamId, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    if (selectedTypes.length > 0) {
-      searchParams.set("types", selectedTypes.join(","));
-    } else {
-      searchParams.delete("types");
-    }
-    setSearchParams(searchParams);
-  }, [selectedTypes, searchParams, setSearchParams]);
-
-  const clearAllFilters = () => {
-    setTopicId(null);
-    setTeamId(null);
-    setSelectedTypes([]);
-  };
-
-  useEffect(() => {
-    if (topicId) {
-      getAllComponentTypes(topicId);
-    }
-  }, [topicId, getAllComponentTypes]);
-
+  const [getAnalyticJobs, { data, isLoading, isFetching }] =
+    useLazyGetAnalyticJobsQuery();
   return (
     <PageSection>
       <Breadcrumb
@@ -384,66 +334,23 @@ export default function ComponentCoveragePage() {
         See which components has been tested. Table of components and associated
         jobs.
       </Content>
-      <Card>
-        <CardBody>
-          <Toolbar
-            id="toolbar-select-jobs"
-            clearAllFilters={clearAllFilters}
-            collapseListedFiltersBreakpoint="xl"
-          >
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem variant="label">Choose a topic</ToolbarItem>
-                <ToolbarItem>
-                  <TopicToolbarFilter
-                    id={topicId}
-                    onClear={() => setTopicId(null)}
-                    onSelect={(topic) => setTopicId(topic.id)}
-                  />
-                </ToolbarItem>
-                <ToolbarItem variant="label">Filter by team</ToolbarItem>
-                <ToolbarItem>
-                  <TeamToolbarFilter
-                    id={teamId}
-                    onClear={() => setTeamId(null)}
-                    onSelect={(team) => setTeamId(team.id)}
-                  />
-                </ToolbarItem>
-                <ToolbarItem variant="label">Filter by types</ToolbarItem>
-                <ToolbarItem>
-                  <TypesFilter
-                    types={types || []}
-                    typesSelected={selectedTypes}
-                    deleteChip={(type) =>
-                      setSelectedTypes(selectedTypes.filter((t) => t !== type))
-                    }
-                    onSelect={(type) => {
-                      if (selectedTypes.indexOf(type) === -1) {
-                        setSelectedTypes([...selectedTypes, type]);
-                      } else {
-                        setSelectedTypes(
-                          selectedTypes.filter((t) => t !== type),
-                        );
-                      }
-                    }}
-                  />
-                </ToolbarItem>
-              </ToolbarGroup>
-            </ToolbarContent>
-          </Toolbar>
-        </CardBody>
-      </Card>
-      {topicId !== null && teamId !== null && (
-        <Card className="pf-v6-u-mt-lg">
-          <CardBody>
-            <ComponentCoverage
-              teamId={teamId}
-              topicId={topicId}
-              selectedTypes={selectedTypes}
-            />
-          </CardBody>
-        </Card>
-      )}
+      <AnalyticsToolbar
+        onLoad={({ query, after, before }) => {
+          if (query !== "" && after !== "" && before !== "") {
+            getAnalyticJobs({ query, after, before });
+          }
+        }}
+        onSearch={({ query, after, before }) => {
+          getAnalyticJobs({ query, after, before });
+        }}
+        isLoading={isFetching}
+        data={data}
+      />
+      <ComponentsCoverage
+        isLoading={isLoading}
+        data={data}
+        className="pf-v6-u-mt-md"
+      />
     </PageSection>
   );
 }

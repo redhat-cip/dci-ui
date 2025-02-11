@@ -1,33 +1,57 @@
 import { sortByOldestFirst } from "services/sort";
-import { IComponentCoverageESData, IComponentCoverage } from "types";
+import {
+  IComponentCoverage,
+  IGetAnalyticsJobsResponse,
+  IGetAnalyticsJobsEmptyResponse,
+} from "types";
 
-export function buildComponentCoverage(data: IComponentCoverageESData | null) {
-  if (data === null) return [];
-  const components = data.hits.reduce(
-    (acc, d) => {
-      const componentId = d._source.id;
-      const componentStats = acc[componentId] || {
-        id: componentId,
-        display_name: d._source.display_name,
-        type: d._source.type,
-        nbOfSuccessfulJobs: 0,
-        nbOfJobs: 0,
-        topic_id: d._source.topic_id,
-        tags: d._source.tags,
-        jobs: sortByOldestFirst([
-          ...d._source.success_jobs.map((j) => ({ ...j, status: "success" })),
-          ...d._source.failed_jobs.map((j) => ({ ...j, status: "failure" })),
-        ]),
-      };
-      componentStats.nbOfSuccessfulJobs += d._source.success_jobs.length;
-      componentStats.nbOfJobs +=
-        d._source.success_jobs.length + d._source.failed_jobs.length;
-      acc[componentId] = componentStats;
+type IComponentCoverageById = {
+  [componentId: string]: IComponentCoverage;
+};
+
+export function buildComponentCoverage(
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
+): IComponentCoverage[] {
+  try {
+    if (Object.keys(data).length === 0) {
+      return [];
+    }
+    const initialAccumulator: IComponentCoverageById = {};
+    const components = data.hits.hits.reduce((acc, hit) => {
+      const job = hit._source;
+      const components = hit._source.components;
+      for (let i = 0; i < components.length; i++) {
+        const component = components[i];
+        const componentId = component.id;
+        const componentStats = acc[componentId] || {
+          id: componentId,
+          display_name: component.display_name,
+          type: component.type,
+          nbOfSuccessfulJobs: 0,
+          nbOfJobs: 0,
+          topic_id: component.topic_id,
+          tags: job.tags,
+          jobs: [],
+        };
+        componentStats.nbOfJobs += 1;
+        if (job.status === "success") {
+          componentStats.nbOfSuccessfulJobs += 1;
+        }
+        componentStats.jobs.push({
+          id: job.id,
+          name: job.name,
+          created_at: job.created_at,
+          status: job.status,
+        });
+        acc[componentId] = componentStats;
+      }
       return acc;
-    },
-    {} as {
-      [componentId: string]: IComponentCoverage;
-    },
-  );
-  return Object.values(components);
+    }, initialAccumulator);
+    return Object.values(components).map((c) => ({
+      ...c,
+      jobs: sortByOldestFirst(c.jobs),
+    }));
+  } catch (error) {
+    return [];
+  }
 }

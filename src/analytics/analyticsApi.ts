@@ -36,7 +36,7 @@ export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
             limit: 200,
             sort: "-created_at",
             includes:
-              "id,name,created_at,keys_values,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name",
+              "id,name,created_at,tags,keys_values,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name",
             from: after,
             to: before,
           });

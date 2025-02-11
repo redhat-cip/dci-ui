@@ -12,17 +12,20 @@ test("extractPipelinesFromAnalyticsJobs", () => {
             _index: "jobs",
             _score: null,
             _source: {
+              tags: [],
               comment: "",
               components: [
                 {
                   display_name: "python3-kubernetes 11.0.0-6.el8",
                   id: "c1",
                   topic_id: "t1",
+                  type: "rpm",
                 },
                 {
                   display_name: "ansible 2.9.27-1.el8ae",
                   id: "c2",
                   topic_id: "t1",
+                  type: "rpm",
                 },
               ],
               created_at: "2024-12-04T16:32:24.840989",
@@ -57,17 +60,20 @@ test("extractPipelinesFromAnalyticsJobs", () => {
             _index: "jobs",
             _score: null,
             _source: {
+              tags: [],
               comment: "",
               components: [
                 {
                   display_name: "python3-kubernetes 11.0.0-6.el8",
                   id: "c1",
                   topic_id: "t1",
+                  type: "rpm",
                 },
                 {
                   display_name: "ansible 2.9.27-1.el8ae",
                   id: "c2",
                   topic_id: "t1",
+                  type: "rpm",
                 },
               ],
               created_at: "2024-12-04T14:46:24.840989",
@@ -125,11 +131,13 @@ test("extractPipelinesFromAnalyticsJobs", () => {
                   display_name: "python3-kubernetes 11.0.0-6.el8",
                   id: "c1",
                   topic_id: "t1",
+                  type: "rpm",
                 },
                 {
                   display_name: "ansible 2.9.27-1.el8ae",
                   id: "c2",
                   topic_id: "t1",
+                  type: "rpm",
                 },
               ],
               comment: "",
@@ -153,11 +161,13 @@ test("extractPipelinesFromAnalyticsJobs", () => {
                   display_name: "python3-kubernetes 11.0.0-6.el8",
                   id: "c1",
                   topic_id: "t1",
+                  type: "rpm",
                 },
                 {
                   display_name: "ansible 2.9.27-1.el8ae",
                   id: "c2",
                   topic_id: "t1",
+                  type: "rpm",
                 },
               ],
               comment: "",

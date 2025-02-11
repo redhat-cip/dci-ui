@@ -1,240 +1,106 @@
-import { createAnalyticsSearchParams } from "analytics/analyticsApi";
 import { buildComponentCoverage } from "./componentCoverage";
+import { IGetAnalyticsJobsResponse } from "types";
 
-test("buildComponentCoverage", () => {
-  expect(
-    buildComponentCoverage({
-      total: {
-        value: 8,
-        relation: "eq",
-      },
-      max_score: null,
+test("buildComponentCoverage with result", () => {
+  const result: IGetAnalyticsJobsResponse = {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
       hits: [
         {
-          _id: "es1",
-          _index: "tasks_components_coverage",
-          _score: 1.0,
+          _id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+          _index: "jobs",
+          _score: null,
           _source: {
-            id: "c1",
-            display_name: "c1",
-            type: "ocp",
-            failed_jobs: [
+            created_at: "2024-10-17T14:38:41.696112",
+            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+            name: "job1",
+            keys_values: [],
+            comment: "",
+            components: [
               {
-                created_at: "2022-01-14T01:19:28.198117",
-                id: "j1",
-                name: "j1",
+                display_name:
+                  "dci-pipeline 0.9.0-1.202501231706git952ef0d6.el8",
+                type: "rpm",
+                id: "4f3c9d1b-72a9-41db-b2f3-507e5c1a8574",
+                topic_id: "a9e82f3e-c1fd-4a21-81b3-56d4e3fa104f",
               },
               {
-                created_at: "2022-01-14T01:54:26.817058",
-                id: "j3",
-                name: "j3",
-              },
-              {
-                created_at: "2022-01-14T01:55:05.186011",
-                id: "j4",
-                name: "j4",
-              },
-              {
-                created_at: "2022-01-14T02:01:09.214449",
-                id: "j5",
-                name: "j5",
+                display_name:
+                  "python3-kubernetes 26.1.0-4.202412131927git8cf7ce6a.el8",
+                id: "73b01e3d-f9f6-4377-97d0-e18b455276aa",
+                topic_id: "c5f764d3-bd71-48d9-b75c-dc08c2de5e71",
+                type: "rpm",
               },
             ],
-            product_id: "p1",
-            success_jobs: [
-              {
-                created_at: "2022-01-14T01:53:26.817058",
-                id: "j2",
-                name: "j2",
-              },
-            ],
-            tags: ["tag1", "tag2"],
-            team_id: "red_hat",
-            topic_id: "to1",
+            duration: 905,
+            results: {
+              errors: 0,
+              failures: 1,
+              success: 2,
+              skips: 3,
+              total: 6,
+            },
+            pipeline: null,
+            status: "success",
+            status_reason: "",
+            team: {
+              id: "t1",
+              name: "Team 1",
+            },
+            tags: ["tag1", "tag 2"],
           },
           _type: "_doc",
-        },
-        {
-          _id: "3b8ea5e8-3756-4ce9-afd1-573fd2b57816",
-          _index: "tasks_components_coverage",
-          _score: 1.0,
-          _source: {
-            id: "c2",
-            display_name: "c2",
-            type: "ocp",
-            failed_jobs: [],
-            product_id: "p1",
-            success_jobs: [
-              {
-                created_at: "2022-01-14T01:19:28.198117",
-                id: "j6",
-                name: "j6",
-              },
-            ],
-            tags: ["tag1", "tag2"],
-            team_id: "red_hat",
-            topic_id: "to1",
-          },
-          _type: "_doc",
-        },
-        {
-          _id: "es3",
-          _index: "tasks_components_coverage",
-          _score: 1.0,
-          _source: {
-            id: "c3",
-            display_name: "c3",
-            type: "ocp",
-            failed_jobs: [],
-            product_id: "p1",
-            success_jobs: [
-              {
-                created_at: "2022-01-14T01:19:28.198117",
-                id: "j7",
-                name: "j7",
-              },
-            ],
-            tags: ["tag1", "tag2"],
-            team_id: "red_hat",
-            topic_id: "to1",
-          },
-          _type: "_doc",
-        },
-        {
-          _id: "es5",
-          _index: "tasks_components_coverage",
-          _score: 1.0,
-          _source: {
-            id: "c4",
-            display_name: "c4",
-            type: "ocp",
-            failed_jobs: [],
-            product_id: "p1",
-            success_jobs: [],
-            tags: ["tag2"],
-            team_id: "red_hat",
-            topic_id: "to1",
-          },
-          _type: "_doc",
+          sort: ["2024-10-17T14:38:41.696Z"],
         },
       ],
-    }),
-  ).toEqual([
-    {
-      id: "c1",
-      display_name: "c1",
-      type: "ocp",
-      nbOfSuccessfulJobs: 1,
-      nbOfJobs: 5,
-      topic_id: "to1",
-      tags: ["tag1", "tag2"],
-      jobs: [
-        {
-          created_at: "2022-01-14T01:19:28.198117",
-          id: "j1",
-          name: "j1",
-          status: "failure",
-        },
-        {
-          created_at: "2022-01-14T01:53:26.817058",
-          id: "j2",
-          name: "j2",
-          status: "success",
-        },
-        {
-          created_at: "2022-01-14T01:54:26.817058",
-          id: "j3",
-          name: "j3",
-          status: "failure",
-        },
-        {
-          created_at: "2022-01-14T01:55:05.186011",
-          id: "j4",
-          name: "j4",
-          status: "failure",
-        },
-        {
-          created_at: "2022-01-14T02:01:09.214449",
-          id: "j5",
-          name: "j5",
-          status: "failure",
-        },
-      ],
+      max_score: null,
+      total: {
+        relation: "eq",
+        value: 684,
+      },
     },
+    timed_out: false,
+    took: 668,
+  };
+  expect(buildComponentCoverage(result)).toEqual([
     {
-      id: "c2",
-      display_name: "c2",
-      type: "ocp",
+      id: "4f3c9d1b-72a9-41db-b2f3-507e5c1a8574",
+      display_name: "dci-pipeline 0.9.0-1.202501231706git952ef0d6.el8",
+      type: "rpm",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
-      topic_id: "to1",
-      tags: ["tag1", "tag2"],
+      topic_id: "a9e82f3e-c1fd-4a21-81b3-56d4e3fa104f",
       jobs: [
         {
-          created_at: "2022-01-14T01:19:28.198117",
-          id: "j6",
-          name: "j6",
+          id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+          created_at: "2024-10-17T14:38:41.696112",
           status: "success",
+          name: "job1",
         },
       ],
+      tags: ["tag1", "tag 2"],
     },
     {
-      id: "c3",
-      display_name: "c3",
-      type: "ocp",
+      id: "73b01e3d-f9f6-4377-97d0-e18b455276aa",
+      display_name: "python3-kubernetes 26.1.0-4.202412131927git8cf7ce6a.el8",
+      type: "rpm",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
-      topic_id: "to1",
-      tags: ["tag1", "tag2"],
+      topic_id: "c5f764d3-bd71-48d9-b75c-dc08c2de5e71",
       jobs: [
         {
-          created_at: "2022-01-14T01:19:28.198117",
-          id: "j7",
-          name: "j7",
+          id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+          created_at: "2024-10-17T14:38:41.696112",
           status: "success",
+          name: "job1",
         },
       ],
-    },
-    {
-      id: "c4",
-      display_name: "c4",
-      type: "ocp",
-      nbOfSuccessfulJobs: 0,
-      nbOfJobs: 0,
-      topic_id: "to1",
-      tags: ["tag2"],
-      jobs: [],
+      tags: ["tag1", "tag 2"],
     },
   ]);
-});
-
-test("create search from filters", () => {
-  const filters = {
-    team_id: "t1",
-    topic_id: "to1",
-    types: ["type_1", "type_2"],
-  };
-  const expectedSearch = "team_id=t1&topic_id=to1&types=type_1%2Ctype_2";
-  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
-});
-
-test("create search from filters remove duplicate types", () => {
-  const filters = {
-    team_id: "t1",
-    topic_id: "to1",
-    types: ["type_1", "type_2", "type_2"],
-  };
-  const expectedSearch =
-    "team_id=t1&topic_id=to1&types=type_1%2Ctype_2%2Ctype_2";
-  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
-});
-
-test("create search from filters remove null", () => {
-  const filters = {
-    team_id: null,
-    topic_id: null,
-    types: [],
-  };
-  const expectedSearch = "";
-  expect(createAnalyticsSearchParams(filters)).toEqual(expectedSearch);
 });

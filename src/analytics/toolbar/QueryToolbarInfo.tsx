@@ -18,6 +18,10 @@ export default function AnalyticsJobsInfo({
     return <Skeleton screenreaderText="Loading jobs hint" />;
   }
 
+  if (data === undefined) {
+    return null;
+  }
+
   if (!data || !data.hits) {
     return (
       <div {...props}>

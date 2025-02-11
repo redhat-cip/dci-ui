@@ -566,7 +566,12 @@ export interface IAnalyticsJob {
   status_reason: string | null;
   keys_values: IAnalyticsKeyValue[];
   created_at: string;
-  components: { id: string; topic_id: string; display_name: string }[];
+  components: {
+    id: string;
+    topic_id: string;
+    display_name: string;
+    type: string;
+  }[];
   comment: string | null;
   team: {
     id: string;
@@ -585,6 +590,7 @@ export interface IAnalyticsJob {
     name: string;
   } | null;
   duration: number;
+  tags: string[];
 }
 
 export interface IGetAnalyticsJobsResponse {

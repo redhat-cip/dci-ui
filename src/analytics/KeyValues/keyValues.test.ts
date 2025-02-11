@@ -51,6 +51,7 @@ test("extractKeysValues with result", () => {
               id: "t1",
               name: "Team 1",
             },
+            tags: [],
           },
           _type: "_doc",
           sort: ["2024-10-17T14:38:41.696Z"],
