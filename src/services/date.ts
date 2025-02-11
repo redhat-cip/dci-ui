@@ -11,6 +11,22 @@ export function fromNow(
     .toRelative();
 }
 
+const humanizeDurationShort = humanize.humanizer({
+  language: "shortEn",
+  languages: {
+    shortEn: {
+      y: () => "y",
+      mo: () => "mo",
+      w: () => "w",
+      d: () => "d",
+      h: () => "h",
+      m: () => "m",
+      s: () => "s",
+      ms: () => "ms",
+    },
+  },
+});
+
 export function humanizeDuration(
   duration: number | null,
   option: humanize.Options = {},
@@ -37,22 +53,6 @@ export function formatDate(
   }
   return _datetime.setZone(timezone).toLocaleString(format);
 }
-
-export const humanizeDurationShort = humanize.humanizer({
-  language: "shortEn",
-  languages: {
-    shortEn: {
-      y: () => "y",
-      mo: () => "mo",
-      w: () => "w",
-      d: () => "d",
-      h: () => "h",
-      m: () => "m",
-      s: () => "s",
-      ms: () => "ms",
-    },
-  },
-});
 
 export function getRangeDates(range: RangeOptionValue, now?: string) {
   const today = now ? DateTime.fromISO(now) : DateTime.now();

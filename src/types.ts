@@ -57,10 +57,6 @@ export interface ITopic extends Resource {
   product: IProduct;
 }
 
-export interface IEnhancedTopic extends ITopic {
-  from_now: string | null;
-}
-
 export interface IUser extends Resource {
   email: string;
   fullname: string;
@@ -401,39 +397,6 @@ export interface IGraphData {
 export interface IRefArea {
   left: number | null;
   right: number | null;
-}
-
-export interface IComponentCoverageESData {
-  total: {
-    value: number;
-    relation: string;
-  };
-  max_score: number | null;
-  hits: {
-    _id: string;
-    _index: string;
-    _score: number;
-    _source: {
-      id: string;
-      display_name: string;
-      failed_jobs: {
-        created_at: string;
-        id: string;
-        name: string;
-      }[];
-      product_id: string;
-      success_jobs: {
-        created_at: string;
-        id: string;
-        name: string;
-      }[];
-      tags: string[];
-      team_id: string | null;
-      topic_id: string;
-      type: string;
-    };
-    _type: string;
-  }[];
 }
 
 const JobsTableListColumns = [

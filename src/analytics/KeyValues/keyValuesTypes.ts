@@ -21,12 +21,12 @@ export const graphTypeLabels: Record<IGraphType, string> = {
   bar: "bar chart",
 };
 
-export const graphFrontColors = [
+const graphFrontColors = [
   chart_global_Fill_Color_white.value,
   chart_global_Fill_Color_900.value,
 ] as const;
 type IGraphFrontColor = (typeof graphFrontColors)[number];
-export const graphBackColors = [
+const graphBackColors = [
   chart_color_blue_200.value,
   chart_color_blue_400.value,
   chart_color_purple_200.value,
