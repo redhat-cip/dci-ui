@@ -52,7 +52,7 @@ export default function KeyValuesEditGraphModal({
             type="submit"
             form="edit-key-value-graph"
           >
-            Edit
+            Save
           </Button>
           <Button key="cancel" variant="link" onClick={hide}>
             Cancel

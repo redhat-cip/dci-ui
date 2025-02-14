@@ -67,10 +67,11 @@ const CustomTooltip = ({ active, payload }: any) => {
           (p: {
             name: string;
             value: number;
+            stroke: string;
             payload: IGraphKeysValues["data"][0];
           }) => (
             <div key={p.name}>
-              <p>
+              <p style={{ color: p.stroke }}>
                 {p.name}: {p.value}
               </p>
             </div>
