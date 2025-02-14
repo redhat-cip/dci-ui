@@ -183,7 +183,12 @@ export default function JobTableSummary({
         {formatDate(job.created_at)}
       </span>
     ),
-    duration: <span title={`${job.duration} seconds`}>{jobDuration}</span>,
+    duration:
+      job.status === "new" ||
+      job.status === "pre-run" ||
+      job.status === "running" ? null : (
+        <span title={`${job.duration} seconds`}>{jobDuration}</span>
+      ),
     started: (
       <span title={`Created at ${job.created_at}`}>
         {fromNow(job.created_at)}

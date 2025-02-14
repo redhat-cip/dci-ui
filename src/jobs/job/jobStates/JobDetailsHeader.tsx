@@ -368,7 +368,7 @@ export default function JobDetailsHeader({
               {job.status === "new" ||
               job.status === "pre-run" ||
               job.status === "running" ? (
-                <span title={`${job.duration} seconds`}>
+                <span title={`Started ${job.created_at}`}>
                   Started {startedSince}
                 </span>
               ) : (
