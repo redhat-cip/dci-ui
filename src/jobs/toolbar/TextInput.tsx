@@ -26,6 +26,12 @@ export default function DCITextInput({ value, onClick, name }: TextInputProps) {
           aria-label={`${name} filter`}
           onChange={(_event, val) => setInnerValue(val)}
           value={innerValue}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              onClick(innerValue);
+            }
+          }}
           placeholder={`Filter by ${name}`}
           isRequired
         />
