@@ -6,6 +6,7 @@ function convertGraphTov2Graph(
   return graphs.map((graph) => {
     return {
       name: `Graph ${graph.keys.map((key) => key.key).join(" ")}`,
+      group_by: "",
       ...graph,
       keys: graph.keys.map((key) => ({ axis: "left", ...key })),
     };

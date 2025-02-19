@@ -6,7 +6,17 @@ import { extractKeysValues, getTicksInRange } from "./keyValues";
 
 test("extractKeysValues with empty data", () => {
   const emptyData: IGetAnalyticsJobsEmptyResponse = {};
-  expect(extractKeysValues(emptyData)).toEqual({ keys: [], data: [] });
+  expect(extractKeysValues(emptyData)).toEqual({
+    keys: [],
+    data: [],
+    groupByKeys: {
+      name: [],
+      status: [],
+      team: [],
+      topic: [],
+      pipeline: [],
+    },
+  });
 });
 
 test("extractKeysValues with result", () => {
@@ -20,18 +30,23 @@ test("extractKeysValues with result", () => {
     hits: {
       hits: [
         {
-          _id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+          _id: "j1",
           _index: "jobs",
           _score: null,
           _source: {
             created_at: "2024-10-17T14:38:41.696112",
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            name: "job1",
+            id: "j1",
+            name: "job.1",
             keys_values: [
               {
-                job_id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+                job_id: "j1",
                 key: "workarounds",
                 value: 1.0,
+              },
+              {
+                job_id: "j1",
+                key: "reboots",
+                value: 0,
               },
             ],
             comment: "",
@@ -51,6 +66,9 @@ test("extractKeysValues with result", () => {
               id: "t1",
               name: "Team 1",
             },
+            topic: {
+              name: "Topic 1",
+            },
             tags: [],
           },
           _type: "_doc",
@@ -67,17 +85,33 @@ test("extractKeysValues with result", () => {
     took: 668,
   };
   expect(extractKeysValues(result)).toEqual({
-    keys: ["workarounds"],
+    keys: ["workarounds", "reboots"],
     data: [
       {
-        id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-        name: "job1",
+        id: "j1",
+        name: "job.1",
         created_at: 1729175921696,
         keysValues: {
           workarounds: 1.0,
+          job_1_workarounds: 1.0,
+          success_workarounds: 1.0,
+          team_1_workarounds: 1.0,
+          topic_1_workarounds: 1.0,
+          reboots: 0,
+          job_1_reboots: 0,
+          success_reboots: 0,
+          team_1_reboots: 0,
+          topic_1_reboots: 0,
         },
       },
     ],
+    groupByKeys: {
+      name: ["job_1_workarounds", "job_1_reboots"],
+      status: ["success_workarounds", "success_reboots"],
+      team: ["team_1_workarounds", "team_1_reboots"],
+      topic: ["topic_1_workarounds", "topic_1_reboots"],
+      pipeline: [],
+    },
   });
 });
 

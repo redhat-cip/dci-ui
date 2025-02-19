@@ -51,6 +51,9 @@ test("extractPipelinesFromAnalyticsJobs", () => {
                 id: "t1",
                 name: "Team 1",
               },
+              topic: {
+                name: "Topic 1",
+              },
             },
             _type: "_doc",
             sort: ["2024-12-04T14:46:24.840Z"],
@@ -98,6 +101,9 @@ test("extractPipelinesFromAnalyticsJobs", () => {
               team: {
                 id: "t1",
                 name: "Team 1",
+              },
+              topic: {
+                name: "Topic 1",
               },
             },
             _type: "_doc",

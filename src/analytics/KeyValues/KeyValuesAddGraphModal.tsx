@@ -11,13 +11,14 @@ import { PlusIcon } from "@patternfly/react-icons";
 import useModal from "hooks/useModal";
 import KeyValuesChartForm from "./KeyValuesChartForm";
 import { IKeyValueGraph } from "./keyValuesTypes";
+import { IGraphKeysValues } from "types";
 
 export default function KeyValuesAddGraphModal({
-  keys,
+  data,
   onSubmit,
   ...props
 }: {
-  keys: string[];
+  data: IGraphKeysValues;
   onSubmit: (data: IKeyValueGraph) => void;
   [key: string]: any;
 }) {
@@ -35,7 +36,7 @@ export default function KeyValuesAddGraphModal({
         <ModalBody>
           <KeyValuesChartForm
             id="add-key-value-graph"
-            keys={keys}
+            data={data}
             onSubmit={(values) => {
               hide();
               onSubmit(values);

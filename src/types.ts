@@ -540,6 +540,9 @@ export interface IAnalyticsJob {
     id: string;
     name: string;
   };
+  topic: {
+    name: string;
+  };
   results: {
     errors: number;
     failures: number;
@@ -596,6 +599,13 @@ export interface IJobKeysValues {
 export interface IGraphKeysValues {
   keys: string[];
   data: IJobKeysValues[];
+  groupByKeys: {
+    name: string[];
+    status: string[];
+    team: string[];
+    topic: string[];
+    pipeline: string[];
+  };
 }
 
 export interface FormGroupProps {

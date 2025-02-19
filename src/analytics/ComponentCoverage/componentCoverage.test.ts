@@ -52,6 +52,9 @@ test("buildComponentCoverage with result", () => {
               id: "t1",
               name: "Team 1",
             },
+            topic: {
+              name: "Topic 1",
+            },
             tags: ["tag1", "tag 2"],
           },
           _type: "_doc",

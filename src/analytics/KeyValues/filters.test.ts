@@ -26,13 +26,14 @@ describe("parseGraphsFromSearch", () => {
           },
         ],
         graphType: "line",
+        group_by: "",
         name: "Graph workarounds packet_loss_total_perc",
       },
     ]);
   });
   test("parse graphs from search", () => {
     const graphs = parseGraphsFromSearch(
-      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%22%7D%5D",
+      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22group_by%22%3A%22topic.id%22%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%22%7D%5D",
     );
     expect(graphs).toEqual([
       {
@@ -48,6 +49,7 @@ describe("parseGraphsFromSearch", () => {
             axis: "left",
           },
         ],
+        group_by: "topic.id",
         graphType: "bar",
         name: "Graph",
       },
@@ -75,12 +77,13 @@ describe("createSearchFromGraphs", () => {
               axis: "left",
             },
           ],
+          group_by: "topic.id",
           graphType: "bar",
           name: "Graph",
         },
       ]),
     ).toBe(
-      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%22%7D%5D",
+      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22group_by%22%3A%22topic.id%22%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%22%7D%5D",
     );
   });
   test("create search from two graphs", () => {
@@ -99,6 +102,7 @@ describe("createSearchFromGraphs", () => {
               axis: "left",
             },
           ],
+          group_by: "",
           graphType: "line",
           name: "Graph 1",
         },
@@ -110,12 +114,13 @@ describe("createSearchFromGraphs", () => {
               axis: "left",
             },
           ],
+          group_by: "topic.id",
           graphType: "bar",
           name: "Graph 2",
         },
       ]),
     ).toBe(
-      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22graphType%22%3A%22line%22%2C%22name%22%3A%22Graph%201%22%7D%2C%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%202%22%7D%5D",
+      "%5B%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%2C%7B%22key%22%3A%22packet_loss_total_perc%22%2C%22color%22%3A%22%23f5921b%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22group_by%22%3A%22%22%2C%22graphType%22%3A%22line%22%2C%22name%22%3A%22Graph%201%22%7D%2C%7B%22keys%22%3A%5B%7B%22key%22%3A%22workarounds%22%2C%22color%22%3A%22%234394e5%22%2C%22axis%22%3A%22left%22%7D%5D%2C%22group_by%22%3A%22topic.id%22%2C%22graphType%22%3A%22bar%22%2C%22name%22%3A%22Graph%202%22%7D%5D",
     );
   });
 });
