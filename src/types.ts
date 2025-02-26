@@ -428,30 +428,34 @@ export interface IComponentCoverage {
   tags: string[];
 }
 
-export type RangeOptionValue =
-  | "previousWeek"
-  | "previousMonth"
-  | "previousQuarter"
-  | "lastMonth"
-  | "lastYear"
-  | "yesterday"
-  | "today"
-  | "currentWeek"
-  | "currentMonth"
-  | "currentQuarter"
-  | "currentYear"
-  | "last7Days"
-  | "last30Days"
-  | "last90Days"
-  | "last365Days"
-  | "custom";
+export const TimeRanges = [
+  "previousWeek",
+  "previousMonth",
+  "previousQuarter",
+  "lastMonth",
+  "lastYear",
+  "yesterday",
+  "today",
+  "currentWeek",
+  "currentMonth",
+  "currentQuarter",
+  "currentYear",
+  "last7Days",
+  "last30Days",
+  "last90Days",
+  "last365Days",
+  "custom",
+] as const;
+export type TimeRange = (typeof TimeRanges)[number];
 
 export interface AnalyticsToolbarSearch {
   query: string;
-  range: RangeOptionValue;
+  range: TimeRange;
   after: string;
   before: string;
 }
+
+export type AnalyticsToolbarSearches = Record<string, AnalyticsToolbarSearch>;
 
 export type colorTheme = "dark" | "light";
 

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import humanize from "humanize-duration";
-import { RangeOptionValue } from "types";
+import { TimeRange } from "types";
 
 export function fromNow(
   dateString: string,
@@ -54,7 +54,7 @@ export function formatDate(
   return _datetime.setZone(timezone).toLocaleString(format);
 }
 
-export function getRangeDates(range: RangeOptionValue, now?: string) {
+export function getRangeDates(range: TimeRange, now?: string) {
   const today = now ? DateTime.fromISO(now) : DateTime.now();
   const yesterday = today.minus({
     day: 1,

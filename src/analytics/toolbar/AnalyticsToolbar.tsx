@@ -7,6 +7,7 @@ import {
 } from "types";
 import QueryToolbarInfo from "./QueryToolbarInfo";
 import QueryToolbarSavedSearches from "./QueryToolbarSavedSearches";
+import useLocalStorage from "hooks/useLocalStorage";
 
 export default function AnalyticsToolbar({
   data,
@@ -19,6 +20,10 @@ export default function AnalyticsToolbar({
   onSearch: (values: AnalyticsToolbarSearch) => void;
   onLoad: (values: AnalyticsToolbarSearch) => void;
 }) {
+  const [searches, setSearches] = useLocalStorage<
+    Record<string, AnalyticsToolbarSearch>
+  >("userAnalyticsFilters", {});
+
   return (
     <Card>
       <CardBody>
@@ -26,8 +31,14 @@ export default function AnalyticsToolbar({
           onSearch={onSearch}
           onLoad={onLoad}
           style={{ paddingBlockEnd: 0 }}
+          searches={searches}
+          setSearches={setSearches}
         />
-        <QueryToolbarSavedSearches className="pf-v6-u-mb-md pf-v6-u-mt-xs" />
+        <QueryToolbarSavedSearches
+          searches={searches}
+          setSearches={setSearches}
+          className="pf-v6-u-mb-md pf-v6-u-mt-xs"
+        />
         <QueryToolbarInfo isLoading={isLoading} data={data} />
       </CardBody>
     </Card>

@@ -5,11 +5,10 @@ import {
   FormSelect,
   FormSelectOption,
 } from "@patternfly/react-core";
-import { RangeOptionValue } from "types";
+import { TimeRange } from "types";
 import { getRangeDates } from "services/date";
-import { useEffect } from "react";
 
-export const rangeLabels: { [k in RangeOptionValue]: string } = {
+export const rangeLabels: { [k in TimeRange]: string } = {
   previousWeek: "Previous week",
   previousMonth: "Previous month",
   currentWeek: "Current week",
@@ -37,20 +36,13 @@ export default function RangeSelect({
   onChange,
 }: {
   now?: string;
-  range: RangeOptionValue;
-  ranges?: RangeOptionValue[];
+  range: TimeRange;
+  ranges?: TimeRange[];
   after: string;
   before: string;
-  onChange: (range: RangeOptionValue, after: string, before: string) => void;
+  onChange: (range: TimeRange, after: string, before: string) => void;
 }) {
   const showDatePicker = range === "custom";
-
-  useEffect(() => {
-    if (range !== "custom") {
-      const dates = getRangeDates(range, now);
-      onChange(range, dates.after, dates.before);
-    }
-  }, [onChange, range, now]);
 
   return (
     <Flex columnGap={{ default: "columnGapXs" }}>
@@ -59,7 +51,7 @@ export default function RangeSelect({
           id="select-range-option"
           value={range}
           onChange={(event, newRange) => {
-            const r = newRange as RangeOptionValue;
+            const r = newRange as TimeRange;
             if (r === "custom") {
               onChange(r, after, before);
             } else {

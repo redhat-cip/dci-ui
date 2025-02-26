@@ -16,26 +16,31 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import { useState } from "react";
-import useLocalStorage from "hooks/useLocalStorage";
 import { rangeLabels } from "ui/form/RangeSelect";
-import { AnalyticsToolbarSearch } from "types";
-import { useNavigate } from "react-router";
+import { AnalyticsToolbarSearch, AnalyticsToolbarSearches } from "types";
 
 export default function SaveSearchModal({
   search,
+  searches,
+  setSearches,
   ...props
 }: {
   search: AnalyticsToolbarSearch;
+  searches: AnalyticsToolbarSearches;
+  setSearches: (newSearches: AnalyticsToolbarSearches) => void;
   [key: string]: any;
 }) {
-  const navigate = useNavigate();
   const { isOpen, show, hide } = useModal(false);
   const [name, setName] = useState("");
-  const [searches, setSearches] = useLocalStorage<
-    Record<string, AnalyticsToolbarSearch>
-  >("userAnalyticsFilters", {});
 
   const searchesNames = Object.keys(searches);
+  const saveSearch = (search: AnalyticsToolbarSearch, name: string) => {
+    setSearches({
+      ...searches,
+      [name]: search,
+    });
+    hide();
+  };
 
   return (
     <>
@@ -54,12 +59,7 @@ export default function SaveSearchModal({
           <Form
             onSubmit={(e) => {
               e.preventDefault();
-              setSearches({
-                ...searches,
-                [name]: search,
-              });
-              navigate(0);
-              hide();
+              saveSearch(search, name);
             }}
           >
             <FormGroup label="Search name" isRequired fieldId="search-name">
@@ -116,11 +116,7 @@ export default function SaveSearchModal({
                     <Label
                       key={searchName}
                       onClick={() => {
-                        setSearches({
-                          ...searches,
-                          [searchName]: search,
-                        });
-                        hide();
+                        saveSearch(search, searchName);
                       }}
                       color="green"
                     >

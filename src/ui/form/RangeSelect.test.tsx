@@ -3,28 +3,6 @@ import { render } from "__tests__/renders";
 import { vi } from "vitest";
 import RangeSelect from "./RangeSelect";
 
-test("test RangeSelect use range to update after and before", async () => {
-  const mockOnChange = vi.fn();
-  render(
-    <RangeSelect
-      now="2024-12-10"
-      range="last7Days"
-      after=""
-      before=""
-      onChange={mockOnChange}
-      ranges={["last7Days", "custom"]}
-    />,
-  );
-  await waitFor(() => {
-    expect(mockOnChange.mock.calls.length).toBe(1);
-    expect(mockOnChange.mock.calls[0]).toEqual([
-      "last7Days",
-      "2024-12-03",
-      "2024-12-10",
-    ]);
-  });
-});
-
 test("test RangeSelect datepicker after", async () => {
   const mockOnChange = vi.fn();
   const { user, getByRole } = render(

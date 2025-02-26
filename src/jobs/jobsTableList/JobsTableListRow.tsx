@@ -7,7 +7,7 @@ import {
   ITeam,
   ITopic,
   JobsTableListColumn,
-  RangeOptionValue,
+  TimeRange,
   IPipeline,
 } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
@@ -91,7 +91,7 @@ export default function JobTableSummary({
               pathname: "/analytics/pipelines",
               search: createSearchParams({
                 query: `(pipeline.id=${pipeline.id})`,
-                range: "custom" as RangeOptionValue,
+                range: "custom" as TimeRange,
                 after: jobCreatedAt.startOf("day").toISODate() || "",
                 before: jobCreatedAt.endOf("day").toISODate() || "",
               }).toString(),
