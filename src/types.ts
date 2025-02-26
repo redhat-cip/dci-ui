@@ -553,7 +553,7 @@ export interface IAnalyticsJob {
     success: number;
     skips: number;
     total: number;
-  } | null;
+  }[];
   pipeline: {
     id: string;
     created_at: string;

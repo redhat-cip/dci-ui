@@ -1,122 +1,9 @@
 import { DateTime } from "luxon";
 import { extractPipelinesFromAnalyticsJobs } from "./pipelines";
+import { analyticsTwoJobs } from "analytics/analyticsTestData";
 
 test("extractPipelinesFromAnalyticsJobs", () => {
-  expect(
-    extractPipelinesFromAnalyticsJobs({
-      _shards: { failed: 0, skipped: 0, successful: 1, total: 1 },
-      hits: {
-        hits: [
-          {
-            _id: "h2",
-            _index: "jobs",
-            _score: null,
-            _source: {
-              tags: [],
-              comment: "",
-              components: [
-                {
-                  display_name: "python3-kubernetes 11.0.0-6.el8",
-                  id: "c1",
-                  topic_id: "t1",
-                  type: "rpm",
-                },
-                {
-                  display_name: "ansible 2.9.27-1.el8ae",
-                  id: "c2",
-                  topic_id: "t1",
-                  type: "rpm",
-                },
-              ],
-              created_at: "2024-12-04T16:32:24.840989",
-              duration: 804,
-              id: "j2",
-              name: "job 2",
-              results: {
-                errors: 1,
-                failures: 1,
-                success: 1,
-                skips: 3,
-                total: 6,
-              },
-              pipeline: {
-                id: "p1",
-                created_at: "2024-12-04T06:42:05.836974",
-                name: "pipeline",
-              },
-              status: "success",
-              status_reason: "",
-              keys_values: [],
-              team: {
-                id: "t1",
-                name: "Team 1",
-              },
-              topic: {
-                name: "Topic 1",
-              },
-            },
-            _type: "_doc",
-            sort: ["2024-12-04T14:46:24.840Z"],
-          },
-          {
-            _id: "h1",
-            _index: "jobs",
-            _score: null,
-            _source: {
-              tags: [],
-              comment: "",
-              components: [
-                {
-                  display_name: "python3-kubernetes 11.0.0-6.el8",
-                  id: "c1",
-                  topic_id: "t1",
-                  type: "rpm",
-                },
-                {
-                  display_name: "ansible 2.9.27-1.el8ae",
-                  id: "c2",
-                  topic_id: "t1",
-                  type: "rpm",
-                },
-              ],
-              created_at: "2024-12-04T14:46:24.840989",
-              duration: 905,
-              id: "j1",
-              name: "job 1",
-              results: {
-                errors: 0,
-                failures: 1,
-                success: 2,
-                skips: 3,
-                total: 6,
-              },
-              pipeline: {
-                id: "p1",
-                created_at: "2024-12-04T06:42:05.836974",
-                name: "pipeline",
-              },
-              status: "success",
-              status_reason: "",
-              keys_values: [],
-              team: {
-                id: "t1",
-                name: "Team 1",
-              },
-              topic: {
-                name: "Topic 1",
-              },
-            },
-            _type: "_doc",
-            sort: ["2024-12-04T14:46:24.840Z"],
-          },
-        ],
-        max_score: null,
-        total: { relation: "eq", value: 2 },
-      },
-      timed_out: false,
-      took: 1,
-    }),
-  ).toEqual([
+  expect(extractPipelinesFromAnalyticsJobs(analyticsTwoJobs)).toEqual([
     {
       date: "2024-12-04",
       datetime: DateTime.fromISO("2024-12-04"),
@@ -127,9 +14,9 @@ test("extractPipelinesFromAnalyticsJobs", () => {
           created_at: "2024-12-04T06:42:05.836974",
           jobs: [
             {
-              id: "j1",
-              datetime: DateTime.fromISO("2024-12-04T14:46:24.840989"),
-              name: "job 1",
+              id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
+              datetime: DateTime.fromISO("2024-10-17T14:38:41.696112"),
+              name: "job1",
               status: "success",
               status_reason: "",
               components: [
@@ -157,9 +44,9 @@ test("extractPipelinesFromAnalyticsJobs", () => {
               duration: 905,
             },
             {
-              id: "j2",
+              id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
               datetime: DateTime.fromISO("2024-12-04T16:32:24.840989"),
-              name: "job 2",
+              name: "job2",
               status: "success",
               status_reason: "",
               components: [
@@ -184,7 +71,7 @@ test("extractPipelinesFromAnalyticsJobs", () => {
                 skips: 3,
                 total: 6,
               },
-              duration: 804,
+              duration: 905,
             },
           ],
         },

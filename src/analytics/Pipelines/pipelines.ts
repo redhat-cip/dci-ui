@@ -64,18 +64,17 @@ export function extractPipelinesFromAnalyticsJobs(
       };
     }
 
-    const pipelineName = job.pipeline.name;
+    const pipelineId = job.pipeline.id;
 
-    if (!daysMap[pipelineDate].pipelines[pipelineName]) {
-      daysMap[pipelineDate].pipelines[pipelineName] = {
-        id: job.pipeline.id,
-        name: pipelineName,
+    if (!daysMap[pipelineDate].pipelines[pipelineId]) {
+      daysMap[pipelineDate].pipelines[pipelineId] = {
+        id: pipelineId,
+        name: job.pipeline.name,
         created_at: job.pipeline.created_at,
         jobs: [],
       };
     }
-
-    daysMap[pipelineDate].pipelines[pipelineName].jobs.push({
+    daysMap[pipelineDate].pipelines[pipelineId].jobs.push({
       id: job.id,
       name: job.name,
       datetime: DateTime.fromISO(job.created_at),
@@ -83,13 +82,23 @@ export function extractPipelinesFromAnalyticsJobs(
       status_reason: job.status_reason || "",
       components: job.components,
       comment: job.comment || "",
-      results: job.results || {
-        errors: 0,
-        failures: 0,
-        success: 0,
-        skips: 0,
-        total: 0,
-      },
+      results: job.results.reduce(
+        (acc, result) => {
+          acc.errors += result.errors;
+          acc.failures += result.failures;
+          acc.success += result.success;
+          acc.skips += result.skips;
+          acc.total += result.total;
+          return acc;
+        },
+        {
+          errors: 0,
+          failures: 0,
+          success: 0,
+          skips: 0,
+          total: 0,
+        },
+      ),
       duration: job.duration,
     });
   });
