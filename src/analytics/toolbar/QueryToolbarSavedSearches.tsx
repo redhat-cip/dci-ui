@@ -1,4 +1,4 @@
-import { Tooltip, Label } from "@patternfly/react-core";
+import { Label } from "@patternfly/react-core";
 import { createSearchParams, useLocation, useNavigate } from "react-router";
 import { AnalyticsToolbarSearches } from "types";
 
@@ -18,32 +18,31 @@ export default function QueryToolbarSavedSearches({
   return (
     <div {...props}>
       {searchKeys.map((searchName) => (
-        <Tooltip content={searches[searchName].query} key={searchName}>
-          <Label
-            color="green"
-            className="pf-v6-u-mr-xs"
-            isCompact
-            title={searches[searchName].query}
-            onClick={() => {
-              navigate({
-                pathname: location.pathname,
-                search: createSearchParams({
-                  ...searches[searchName],
-                }).toString(),
-              });
-              navigate(0);
-            }}
-            onClose={() => {
-              const newSearches = {
-                ...searches,
-              };
-              delete newSearches[searchName];
-              setSearches(newSearches);
-            }}
-          >
-            {searchName}
-          </Label>
-        </Tooltip>
+        <Label
+          key={searchName}
+          color="green"
+          className="pf-v6-u-mr-xs"
+          isCompact
+          title={searches[searchName].query}
+          onClick={() => {
+            navigate({
+              pathname: location.pathname,
+              search: createSearchParams({
+                ...searches[searchName],
+              }).toString(),
+            });
+            navigate(0);
+          }}
+          onClose={() => {
+            const newSearches = {
+              ...searches,
+            };
+            delete newSearches[searchName];
+            setSearches(newSearches);
+          }}
+        >
+          {searchName}
+        </Label>
       ))}
     </div>
   );
