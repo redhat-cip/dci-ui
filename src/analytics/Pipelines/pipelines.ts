@@ -82,7 +82,7 @@ export function extractPipelinesFromAnalyticsJobs(
       status_reason: job.status_reason || "",
       components: job.components,
       comment: job.comment || "",
-      results: job.results.reduce(
+      results: (job.results || []).reduce(
         (acc, result) => {
           acc.errors += result.errors;
           acc.failures += result.failures;

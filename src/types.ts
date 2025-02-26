@@ -547,7 +547,7 @@ export interface IAnalyticsJob {
   topic: {
     name: string;
   };
-  results: {
+  results?: {
     errors: number;
     failures: number;
     success: number;
