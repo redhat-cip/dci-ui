@@ -22,8 +22,8 @@ test("buildComponentCoverage with result", () => {
     },
     {
       id: "c2",
-      display_name: "ansible 2.9.27-1.el8ae",
-      type: "rpm",
+      display_name: "OpenShift 4.14.48",
+      type: "ocp",
       nbOfSuccessfulJobs: 1,
       nbOfJobs: 1,
       topic_id: "t1",

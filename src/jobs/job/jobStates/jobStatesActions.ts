@@ -71,7 +71,7 @@ export function addPipelineStatus(jobStates: IJobState[]) {
     } else {
       const nextStatus = arr[i + 1].status;
       const nextStatusIsFinalJobStatus =
-        FinalJobStatuses.indexOf(nextStatus) !== -1;
+        (FinalJobStatuses as readonly string[]).indexOf(nextStatus) !== -1;
       if (isThePenultimate && nextStatusIsFinalJobStatus) {
         pipelineStatus = getFinalPipelineStatus(nextStatus);
       }

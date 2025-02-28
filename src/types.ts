@@ -90,7 +90,14 @@ export const JobStatuses = [
 
 export type IJobStatus = (typeof JobStatuses)[number];
 
-export const FinalJobStatuses = ["success", "failure", "error", "killed"];
+export const FinalJobStatuses = [
+  "success",
+  "failure",
+  "error",
+  "killed",
+] as const;
+
+export type IFinalJobStatus = (typeof FinalJobStatuses)[number];
 
 export interface IIdentityTeam {
   has_pre_release_access: boolean;
@@ -124,23 +131,6 @@ export interface ICurrentUser {
   hasReadOnlyRole: boolean;
   isReadOnly: boolean;
 }
-
-type StatJob = {
-  created_at: string;
-  id: string;
-  remoteci_name: string;
-  status: string;
-  team_name: string;
-};
-
-export type IStat = {
-  jobs: StatJob[];
-  percentageOfSuccess: number;
-  nbOfSuccessfulJobs: number;
-  nbOfJobs: number;
-  product: IProduct;
-  topic: ITopic;
-};
 
 export interface ITest {
   errors: number;

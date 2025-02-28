@@ -1,4 +1,7 @@
-import { IGetAnalyticsJobsResponse } from "types";
+import {
+  IGetAnalyticsJobsEmptyResponse,
+  IGetAnalyticsJobsResponse,
+} from "types";
 
 export const analyticsOneJob: IGetAnalyticsJobsResponse = {
   _shards: {
@@ -38,10 +41,10 @@ export const analyticsOneJob: IGetAnalyticsJobsResponse = {
               type: "rpm",
             },
             {
-              display_name: "ansible 2.9.27-1.el8ae",
+              display_name: "OpenShift 4.14.48",
               id: "c2",
               topic_id: "t1",
-              type: "rpm",
+              type: "ocp",
             },
           ],
           duration: 905,
@@ -111,10 +114,10 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
               type: "rpm",
             },
             {
-              display_name: "ansible 2.9.27-1.el8ae",
+              display_name: "OpenShift 4.14.48",
               id: "c2",
               topic_id: "t1",
-              type: "rpm",
+              type: "ocp",
             },
           ],
           duration: 905,
@@ -157,3 +160,5 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
   timed_out: false,
   took: 718,
 };
+
+export const analyticsEmptyData: IGetAnalyticsJobsEmptyResponse = {};

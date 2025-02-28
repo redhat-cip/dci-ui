@@ -1,6 +1,6 @@
-import { IComponent } from "types";
-
-export function getPrincipalComponent(components: IComponent[]) {
+export function getPrincipalComponent<T extends { display_name: string }>(
+  components: T[],
+) {
   return (
     components.find((component) => {
       const name = component.display_name.toLowerCase();

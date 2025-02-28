@@ -26,8 +26,7 @@ import AdminLoginPage from "auth/AdminLoginPage";
 import Page404 from "pages/Page404";
 import TasksDurationPerJobPage from "analytics/TasksDurationPerJob/TasksDurationPerJobPage";
 import AnalyticsPage from "analytics/AnalyticsPage";
-import LatestJobStatusPage from "analytics/LatestJobStatus/LatestJobStatusPage";
-import LatestJobStatusDetailsPage from "analytics/LatestJobStatus/LatestJobStatusDetailsPage";
+import JobStatsPage from "analytics/jobsStats/JobStatsPage";
 import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
 import JunitComparisonPage from "analytics/JunitComparison/JunitComparisonPage";
 import Alerts from "alerts/Alerts";
@@ -64,14 +63,7 @@ export default function App() {
                 path="tasks_duration_per_job"
                 element={<TasksDurationPerJobPage />}
               />
-              <Route
-                path="latest_jobs_status"
-                element={<LatestJobStatusPage />}
-              />
-              <Route
-                path="latest_jobs_status/:topic_name"
-                element={<LatestJobStatusDetailsPage />}
-              />
+              <Route path="job_stats" element={<JobStatsPage />} />
               <Route path="pipelines" element={<PipelinesPage />} />
               <Route path="keyvalues" element={<KeyValuesPage />} />
             </Route>

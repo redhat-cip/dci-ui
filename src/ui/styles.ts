@@ -17,7 +17,7 @@ import "@patternfly/patternfly/utilities/Spacing/spacing.css";
 // import "@patternfly/patternfly/utilities/Alignment/alignment.css";
 // import "@patternfly/patternfly/utilities/BoxShadow/box-shadow.css";
 import "@patternfly/patternfly/utilities/Display/display.css";
-// import "@patternfly/patternfly/utilities/Text/text.css";
+import "@patternfly/patternfly/utilities/Text/text.css";
 // import "@patternfly/patternfly/utilities/Text/themes/dark/text.css";
 // import "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
 // import "@patternfly/patternfly/utilities/Flex/flex.css";
