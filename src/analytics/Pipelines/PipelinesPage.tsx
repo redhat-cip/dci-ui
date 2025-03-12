@@ -18,7 +18,7 @@ import { Breadcrumb } from "ui";
 import { t_global_border_color_default } from "@patternfly/react-tokens";
 import { DateTime } from "luxon";
 import { formatDate } from "services/date";
-import { Fragment, useState } from "react";
+import { createRef, Fragment, useState } from "react";
 import { Link } from "react-router";
 import {
   IGetAnalyticsJobsEmptyResponse,
@@ -46,6 +46,7 @@ import { humanizeDuration } from "services/date";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import JobComment from "jobs/components/JobComment";
+import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 
 function jobStatusToVariant(status: IJobStatus) {
   switch (status) {
@@ -243,6 +244,8 @@ function PipelinesPerDay({
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
   [key: string]: any;
 }) {
+  const graphRef = createRef<HTMLDivElement>();
+
   if (isLoading) {
     return (
       <Card {...props}>
@@ -280,9 +283,14 @@ function PipelinesPerDay({
   }
   return (
     <div>
-      {pipelinesPerDays.map((day, index) => (
-        <PipelineCard key={index} pipelineDay={day} {...props} />
-      ))}
+      <div className="pf-v6-u-pt-md flex items-center justify-end">
+        <ScreeshotNodeButton node={graphRef} filename="pipeline-charts.png" />
+      </div>
+      <div ref={graphRef} className="pf-v6-u-pb-md">
+        {pipelinesPerDays.map((day, index) => (
+          <PipelineCard key={index} pipelineDay={day} {...props} />
+        ))}
+      </div>
     </div>
   );
 }

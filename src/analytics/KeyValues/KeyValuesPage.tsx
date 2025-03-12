@@ -12,7 +12,7 @@ import {
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { formatDate } from "services/date";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -45,6 +45,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { IKeyValueGraph } from "./keyValuesTypes";
 import KeyValuesEditGraphModal from "./KeyValuesEditGraphModal";
 import { skipToken } from "@reduxjs/toolkit/query";
+import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -284,6 +285,7 @@ function KeyValuesGraphs({
   ticks: number[];
   [key: string]: any;
 }) {
+  const graphRef = createRef<HTMLDivElement>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [graphs, setGraphs] = useState<IKeyValueGraph[]>(
@@ -303,31 +305,42 @@ function KeyValuesGraphs({
 
   return (
     <div {...props}>
-      <KeyValuesAddGraphModal
-        data={data}
-        onSubmit={(newGraph) => {
-          setGraphs((oldGraphs) => [newGraph, ...oldGraphs]);
-        }}
-        className="pf-v6-u-mt-md"
-      />
-      {graphs.map((graph, index) => (
-        <KeyValueGraph
-          key={index}
-          graph={graph}
-          data={data}
-          ticks={ticks}
-          onEdit={(newGraph) =>
-            setGraphs((oldGraphs) =>
-              oldGraphs.map((g, i) =>
-                index === i ? { ...newGraph } : { ...g },
-              ),
-            )
-          }
-          onDelete={() =>
-            setGraphs((oldGraphs) => oldGraphs.filter((g, i) => index !== i))
-          }
-        />
-      ))}
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <div className="flex items-center justify-between">
+            <KeyValuesAddGraphModal
+              data={data}
+              onSubmit={(newGraph) => {
+                setGraphs((oldGraphs) => [newGraph, ...oldGraphs]);
+              }}
+            />
+            <ScreeshotNodeButton
+              node={graphRef}
+              filename="key-values-charts.png"
+            />
+          </div>
+        </CardBody>
+      </Card>
+      <div ref={graphRef} className="pf-v6-u-pb-md">
+        {graphs.map((graph, index) => (
+          <KeyValueGraph
+            key={index}
+            graph={graph}
+            data={data}
+            ticks={ticks}
+            onEdit={(newGraph) =>
+              setGraphs((oldGraphs) =>
+                oldGraphs.map((g, i) =>
+                  index === i ? { ...newGraph } : { ...g },
+                ),
+              )
+            }
+            onDelete={() =>
+              setGraphs((oldGraphs) => oldGraphs.filter((g, i) => index !== i))
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 }

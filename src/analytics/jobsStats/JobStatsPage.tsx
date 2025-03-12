@@ -9,7 +9,7 @@ import {
   Skeleton,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { useMemo, useState } from "react";
+import { createRef, useMemo, useState } from "react";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import {
@@ -27,6 +27,7 @@ import {
 } from "./jobStats";
 import JobStatChart from "./JobStatChart";
 import useLocalStorage from "hooks/useLocalStorage";
+import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 
 function JobStatsGraphs({
   data,
@@ -35,6 +36,7 @@ function JobStatsGraphs({
   data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse;
   [key: string]: any;
 }) {
+  const graphRef = createRef<HTMLDivElement>();
   const [groupByKey, setGroupByKey] = useLocalStorage<IGroupByKey>(
     "jobStatsGroupByKey",
     "topic",
@@ -43,44 +45,53 @@ function JobStatsGraphs({
     () => getJobStats(data, groupByKey),
     [data, groupByKey],
   );
-
   return (
-    <Card className="pf-v6-u-mt-md" {...props}>
-      <CardBody>
-        <Gallery hasGutter className="pf-v6-u-mt-md">
-          <Form>
-            <FormGroup label="Group by">
-              <Select
-                onSelect={(selection) => {
-                  if (selection) {
-                    setGroupByKey(selection.value);
-                  }
-                }}
-                item={{
-                  value: groupByKey,
-                  label: groupByKeysWithLabel[groupByKey],
-                }}
-                items={groupByKeys.map((key) => ({
-                  value: key,
-                  label: groupByKeysWithLabel[key],
-                }))}
-              />
-            </FormGroup>
-          </Form>
-        </Gallery>
-        <Gallery hasGutter className="pf-v6-u-mt-md">
-          {Object.entries(jobStats).map(([name, stat], index) => (
-            // <GalleryItem key={index}>
-            <Card key={index}>
-              <CardBody>
-                <JobStatChart name={name} stat={stat} />
-              </CardBody>
-            </Card>
-            // </GalleryItem>
-          ))}
-        </Gallery>
-      </CardBody>
-    </Card>
+    <div {...props}>
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <div className="flex items-center justify-between">
+            <Form>
+              <FormGroup label="Group by">
+                <Select
+                  onSelect={(selection) => {
+                    if (selection) {
+                      setGroupByKey(selection.value);
+                    }
+                  }}
+                  item={{
+                    value: groupByKey,
+                    label: groupByKeysWithLabel[groupByKey],
+                  }}
+                  items={groupByKeys.map((key) => ({
+                    value: key,
+                    label: groupByKeysWithLabel[key],
+                  }))}
+                />
+              </FormGroup>
+            </Form>
+            <ScreeshotNodeButton
+              node={graphRef}
+              filename="job-stat-charts.png"
+            />
+          </div>
+        </CardBody>
+      </Card>
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <div ref={graphRef}>
+            <Gallery hasGutter className="pf-v6-u-py-md">
+              {Object.entries(jobStats).map(([name, stat], index) => (
+                <Card key={index}>
+                  <CardBody>
+                    <JobStatChart name={name} stat={stat} />
+                  </CardBody>
+                </Card>
+              ))}
+            </Gallery>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
   );
 }
 
