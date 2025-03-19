@@ -12,12 +12,24 @@ import {
 } from "@patternfly/react-tokens";
 import { getPrincipalComponent } from "topics/component/componentSelector";
 
-export const groupByKeys = ["topic", "pipeline", "component"] as const;
+export const groupByKeys = [
+  "topic",
+  "pipeline",
+  "component",
+  "name",
+  "remoteci",
+  "team",
+  "configuration",
+] as const;
 export type IGroupByKey = (typeof groupByKeys)[number];
 export const groupByKeysWithLabel: Record<IGroupByKey, string> = {
   topic: "Topic name",
   pipeline: "Pipeline name",
   component: "Component name",
+  name: "Job name",
+  team: "Team name",
+  remoteci: "Remoteci name",
+  configuration: "Configuration",
 };
 
 export type IJobStat = Record<
@@ -44,6 +56,18 @@ function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
     case "component":
       key = getPrincipalComponent(job.components)?.display_name || null;
       break;
+    case "name":
+      key = job.name;
+      break;
+    case "remoteci":
+      key = job.remoteci.name;
+      break;
+    case "team":
+      key = job.team.name;
+      break;
+    case "configuration":
+      key = job.configuration;
+      break;
     default:
       const exhaustiveCheck: never = groupByKey;
       throw new Error(`Unhandled groupByKey: ${exhaustiveCheck}`);
@@ -66,7 +90,7 @@ export function getJobStats(
         if (!(FinalJobStatuses as readonly string[]).includes(jobStatus))
           return acc;
         const key = getJobKey(hit._source, groupByKey);
-        if (key === null) return acc;
+        if (key === null || key === "") return acc;
         const finalJobStatus = jobStatus as IFinalJobStatus;
         const stat = acc[key] || {
           success: {

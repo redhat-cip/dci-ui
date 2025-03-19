@@ -530,11 +530,15 @@ export interface IAnalyticsJob {
     type: string;
   }[];
   comment: string | null;
+  configuration: string | null;
   team: {
     id: string;
     name: string;
   };
   topic: {
+    name: string;
+  };
+  remoteci: {
     name: string;
   };
   results?: {

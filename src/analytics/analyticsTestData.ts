@@ -17,6 +17,7 @@ export const analyticsOneJob: IGetAnalyticsJobsResponse = {
         _index: "jobs",
         _score: null,
         _source: {
+          configuration: null,
           created_at: "2024-10-17T14:38:41.696112",
           id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
           name: "job1",
@@ -71,6 +72,9 @@ export const analyticsOneJob: IGetAnalyticsJobsResponse = {
           topic: {
             name: "Topic 1",
           },
+          remoteci: {
+            name: "Remoteci 1",
+          },
           tags: ["tag1", "tag 2"],
         },
         _type: "_doc",
@@ -101,6 +105,7 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
         _index: "jobs",
         _score: null,
         _source: {
+          configuration: null,
           created_at: "2024-12-04T16:32:24.840989",
           id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
           name: "job2",
@@ -143,6 +148,9 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
           },
           topic: {
             name: "Topic 1",
+          },
+          remoteci: {
+            name: "Remoteci 1",
           },
           tags: ["tag1", "tag 2"],
         },
