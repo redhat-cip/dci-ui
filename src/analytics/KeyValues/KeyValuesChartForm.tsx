@@ -23,17 +23,17 @@ import {
   getRandomGraphColor,
   IKeyValueGraphKey,
 } from "./keyValuesTypes";
-import { IGraphKeysValues } from "types";
+import { groupByKeys, groupByKeysWithLabel, IGroupByKey } from "types";
 
 export default function KeyValuesChartForm({
   id,
-  data,
+  keys,
   defaultValues,
   onSubmit,
   ...props
 }: {
   id: string;
-  data: IGraphKeysValues;
+  keys: string[];
   onSubmit: (data: IKeyValueGraph) => void;
   defaultValues?: IKeyValueGraph;
   [key: string]: any;
@@ -43,10 +43,17 @@ export default function KeyValuesChartForm({
     ? { ...defaultValues }
     : {
         group_by: "",
-        keys: [{ key: data.keys[0], color: randomColor, axis: "left" }],
+        keys: [
+          {
+            key: keys[0],
+            color: randomColor,
+            axis: "left",
+          },
+        ],
         graphType: graphTypes[0],
         name: `Key value graph`,
       };
+
   const { control, handleSubmit, setValue, watch, register } =
     useForm<IKeyValueGraph>({
       defaultValues: graph,
@@ -55,12 +62,6 @@ export default function KeyValuesChartForm({
     control,
     name: "keys",
   });
-
-  const groupByValue = watch("group_by");
-  const graphKeys =
-    groupByValue === undefined || groupByValue === ""
-      ? data.keys
-      : data.groupByKeys[groupByValue as keyof typeof data.groupByKeys];
 
   return (
     <Form id={id} onSubmit={handleSubmit(onSubmit)} {...props}>
@@ -94,12 +95,16 @@ export default function KeyValuesChartForm({
             render={({ field }) => (
               <FormSelect
                 id="select-group-by"
-                onChange={(_, v) => setValue(`group_by`, v)}
+                onChange={(_, v) => setValue(`group_by`, v as IGroupByKey)}
                 value={field.value}
               >
                 <FormSelectOption value="" label="" />
-                {Object.keys(data.groupByKeys).map((key, index) => (
-                  <FormSelectOption key={index} value={key} label={key} />
+                {groupByKeys.map((key, index) => (
+                  <FormSelectOption
+                    key={index}
+                    value={key}
+                    label={groupByKeysWithLabel[key]}
+                  />
                 ))}
               </FormSelect>
             )}
@@ -122,7 +127,7 @@ export default function KeyValuesChartForm({
                         onChange={(_, v) => setValue(`keys.${index}.key`, v)}
                         value={field.value}
                       >
-                        {graphKeys.map((key, index) => (
+                        {keys.map((key, index) => (
                           <FormSelectOption
                             key={index}
                             value={key}
@@ -154,7 +159,14 @@ export default function KeyValuesChartForm({
                     )}
                   />
                 </div>
-                <div style={{ display: "flex", gap: "1px", flex: "0 0 auto" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1px",
+                    flex: "0 0 auto",
+                    alignItems: "center",
+                  }}
+                >
                   {Object.values(graphColors).map(
                     ({ backgroundColor, color }, i) => (
                       <button
@@ -172,6 +184,7 @@ export default function KeyValuesChartForm({
                           cursor: "pointer",
                           aspectRatio: "1 / 1",
                           width: "35px",
+                          height: "35px",
                           outline: "none",
                           border: "none",
                           borderRadius: c_button_BorderRadius.value,
@@ -197,7 +210,7 @@ export default function KeyValuesChartForm({
                 icon={<PlusIcon aria-hidden="true" />}
                 onClick={() => {
                   append({
-                    key: data.keys[0],
+                    key: keys[0],
                     color: randomColor,
                     axis: "left",
                   });

@@ -109,7 +109,13 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
           created_at: "2024-12-04T16:32:24.840989",
           id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
           name: "job2",
-          keys_values: [],
+          keys_values: [
+            {
+              job_id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
+              key: "workarounds",
+              value: 2.0,
+            },
+          ],
           comment: "",
           components: [
             {
@@ -147,7 +153,7 @@ export const analyticsTwoJobs: IGetAnalyticsJobsResponse = {
             name: "Team 1",
           },
           topic: {
-            name: "Topic 1",
+            name: "Topic 2",
           },
           remoteci: {
             name: "Remoteci 1",

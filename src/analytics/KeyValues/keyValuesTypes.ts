@@ -12,9 +12,10 @@ import {
   chart_global_Fill_Color_white,
   chart_global_Fill_Color_900,
 } from "@patternfly/react-tokens";
+import { IGroupByKey } from "types";
 
 export const graphTypes = ["line", "bar", "scatter"] as const;
-type IGraphType = (typeof graphTypes)[number];
+export type IGraphType = (typeof graphTypes)[number];
 export const graphTypeLabels: Record<IGraphType, string> = {
   scatter: "scatter chart",
   line: "line chart",
@@ -38,7 +39,7 @@ const graphBackColors = [
   chart_color_black_400.value,
   chart_color_black_500.value,
 ] as const;
-type IGraphBackColor = (typeof graphBackColors)[number];
+export type IGraphBackColor = (typeof graphBackColors)[number];
 type IKeyValueGraphColor = {
   backgroundColor: IGraphBackColor;
   color: IGraphFrontColor;
@@ -110,7 +111,16 @@ export interface IKeyValueGraphKey {
 
 export interface IKeyValueGraph {
   name: string;
-  group_by: string;
+  group_by: IGroupByKey | "";
   keys: IKeyValueGraphKey[];
   graphType: IGraphType;
+}
+
+export function hashStringToGraphBackgroundColor(input: string) {
+  let hash = 0;
+  const commonPrimeMultiplierForHashing = 31;
+  for (let i = 0; i < input.length; i++) {
+    hash = (hash * commonPrimeMultiplierForHashing + input.charCodeAt(i)) >>> 0;
+  }
+  return graphBackColors[hash % graphBackColors.length] as IGraphBackColor;
 }

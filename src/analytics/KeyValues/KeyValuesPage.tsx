@@ -15,28 +15,27 @@ import { formatDate } from "services/date";
 import { createRef, useEffect, useState } from "react";
 import {
   Bar,
-  BarChart,
   CartesianGrid,
+  ComposedChart,
   Label,
   Legend,
   Line,
-  LineChart,
   ResponsiveContainer,
   Scatter,
-  ScatterChart,
   Tooltip,
   XAxis,
+  XAxisProps,
   YAxis,
 } from "recharts";
 import { DateTime } from "luxon";
-import { extractKeysValues, getTicksInRange } from "./keyValues";
+import { timeDay } from "d3-time";
+import { extractKeys, extractKeysValues, IGraphKeysValues } from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import {
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
-  IGraphKeysValues,
   IJob,
 } from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
@@ -46,6 +45,7 @@ import { IKeyValueGraph } from "./keyValuesTypes";
 import KeyValuesEditGraphModal from "./KeyValuesEditGraphModal";
 import { skipToken } from "@reduxjs/toolkit/query";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
+import { scaleTime } from "d3-scale";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -85,194 +85,102 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-function tickFormatter(timestamp: number) {
-  return DateTime.fromMillis(timestamp).toFormat("dd MMM yyyy");
-}
-
 function KeyValueGraph({
-  graph,
   data,
-  ticks,
-  onEdit,
-  onDelete,
+  graph,
 }: {
-  graph: IKeyValueGraph;
   data: IGraphKeysValues;
-  ticks: number[];
-  onEdit: (newGraph: IKeyValueGraph) => void;
-  onDelete: () => void;
+  graph: IKeyValueGraph;
 }) {
-  const keys = graph.keys.map((k) => k.key);
-  const keysValuesData = [...data.data]
-    .filter((obj) => keys.some((key) => key in obj.keysValues))
-    .sort((a, b) => a.created_at - b.created_at);
   const openJob = (payload: any) => {
     if ("payload" in payload) {
       const job = payload.payload as IJob;
       window.open(`/jobs/${job.id}/jobStates`);
     }
   };
+
+  const timeValues = data.data.map((row) => row.created_at);
+  const timeScale = scaleTime()
+    .domain([Math.min(...timeValues), Math.max(...timeValues)])
+    .nice();
+  const xAxisArgs: XAxisProps = {
+    domain: timeScale.domain().map((date) => date.valueOf()),
+    scale: graph.graphType === "bar" ? "auto" : timeScale,
+    type: graph.graphType === "bar" ? "category" : "number",
+    ticks: timeScale.ticks(timeDay).map((date) => date.valueOf()),
+    tickFormatter: (timestamp: number) =>
+      DateTime.fromMillis(timestamp).toFormat("dd MMM yyyy"),
+  };
   return (
-    <Card className="pf-v6-u-mt-md">
-      <CardHeader>
-        {graph.name}
-        <KeyValuesEditGraphModal
-          data={data}
-          graph={graph}
-          className="pf-v6-u-ml-md"
-          onSubmit={onEdit}
-        />
-        <Button
-          onClick={() => {
-            onDelete();
-          }}
-          variant="plain"
-          className="pf-v6-u-ml-xs"
+    <div style={{ overflow: "auto" }}>
+      <ResponsiveContainer width="100%" height={400}>
+        <ComposedChart
+          data={data.data}
+          margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
         >
-          <TrashAltIcon />
-        </Button>
-      </CardHeader>
-      <CardBody>
-        {graph.graphType === "line" && (
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={keysValuesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="created_at"
-                tickFormatter={tickFormatter}
-                ticks={ticks}
-                domain={[ticks[0], ticks[ticks.length - 1]]}
-                type="number"
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="created_at" {...xAxisArgs} />
+          {data.yAxis.map((axis) => (
+            <YAxis
+              orientation={axis.orientation}
+              yAxisId={axis.orientation}
+            >
+              <Label
+                value={axis.label}
+                position={axis.orientation}
+                angle={axis.orientation === "right" ? 90 : -90}
+                style={{ textAnchor: "middle", fill: axis.color }}
               />
-              {graph.keys.map((key, i) => (
-                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
-                  <Label
-                    value={key.key}
-                    position={
-                      key.axis === "left" ? "insideLeft" : "insideRight"
-                    }
-                    angle={-90}
-                    fill={key.color}
-                    style={{ textAnchor: "middle" }}
-                  />
-                </YAxis>
-              ))}
-              <Tooltip
-                cursor={{ strokeDasharray: "3 3" }}
-                content={<CustomTooltip />}
+            </YAxis>
+          ))}
+          <Tooltip
+            cursor={{ strokeDasharray: "3 3" }}
+            content={<CustomTooltip />}
+          />
+          <Legend />
+          {data.keys.map((key, i) =>
+            key.graphType === "line" ? (
+              <Line
+                type="monotone"
+                key={i}
+                connectNulls
+                name={key.label}
+                yAxisId={key.axis}
+                dataKey={`keysValues.${key.key}`}
+                stroke={key.color}
+                activeDot={{
+                  r: 6,
+                  cursor: "pointer",
+                  onClick: (event, payload) => {
+                    openJob(payload);
+                  },
+                }}
               />
-              <Legend />
-              {graph.keys.map((key, i) => (
-                <Line
-                  key={i}
-                  name={key.key}
-                  yAxisId={key.axis}
-                  dataKey={`keysValues.${key.key}`}
-                  stroke={key.color}
-                  connectNulls
-                  type="monotone"
-                  activeDot={{
-                    r: 6,
-                    cursor: "pointer",
-                    onClick: (event, payload) => {
-                      openJob(payload);
-                    },
-                  }}
-                />
-              ))}
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-        {graph.graphType === "bar" && (
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={keysValuesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="created_at"
-                tickFormatter={tickFormatter}
-                ticks={ticks}
-                domain={[ticks[0], ticks[ticks.length - 1]]}
-                type="number"
+            ) : key.graphType === "scatter" ? (
+              <Scatter
+                key={i}
+                name={key.label}
+                yAxisId={key.axis}
+                dataKey={`keysValues.${key.key}`}
+                fill={key.color}
+                cursor="pointer"
+                onClick={openJob}
               />
-              {graph.keys.map((key, i) => (
-                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
-                  <Label
-                    value={key.key}
-                    position={
-                      key.axis === "left" ? "insideLeft" : "insideRight"
-                    }
-                    angle={-90}
-                    fill={key.color}
-                    style={{ textAnchor: "middle" }}
-                  />
-                </YAxis>
-              ))}
-              <Tooltip
-                cursor={{ strokeDasharray: "3 3" }}
-                content={<CustomTooltip />}
+            ) : (
+              <Bar
+                key={i}
+                name={key.label}
+                yAxisId={key.axis}
+                dataKey={`keysValues.${key.key}`}
+                fill={key.color}
+                cursor="pointer"
+                onClick={openJob}
               />
-              <Legend />
-              {graph.keys.map((key, i) => (
-                <Bar
-                  key={i}
-                  name={key.key}
-                  dataKey={`keysValues.${key.key}`}
-                  yAxisId={key.axis}
-                  fill={key.color}
-                  scale="time"
-                  cursor="pointer"
-                  onClick={openJob}
-                />
-              ))}
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-        {graph.graphType === "scatter" && (
-          <ResponsiveContainer width="100%" height={400}>
-            <ScatterChart data={keysValuesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="created_at"
-                tickFormatter={tickFormatter}
-                ticks={ticks}
-                domain={[ticks[0], ticks[ticks.length - 1]]}
-                type="number"
-              />
-              {graph.keys.map((key, i) => (
-                <YAxis key={i} yAxisId={key.axis} orientation={key.axis}>
-                  <Label
-                    value={key.key}
-                    position={
-                      key.axis === "left" ? "insideLeft" : "insideRight"
-                    }
-                    angle={-90}
-                    fill={key.color}
-                    style={{ textAnchor: "middle" }}
-                  />
-                </YAxis>
-              ))}
-              <Tooltip
-                cursor={{ strokeDasharray: "3 3" }}
-                content={<CustomTooltip />}
-              />
-              <Legend />
-              {graph.keys.map((key, i) => (
-                <Scatter
-                  key={i}
-                  name={key.key}
-                  dataKey={`keysValues.${key.key}`}
-                  yAxisId={key.axis}
-                  fill={key.color}
-                  scale="time"
-                  cursor="pointer"
-                  onClick={openJob}
-                />
-              ))}
-            </ScatterChart>
-          </ResponsiveContainer>
-        )}
-      </CardBody>
-    </Card>
+            ),
+          )}
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -281,8 +189,7 @@ function KeyValuesGraphs({
   ticks,
   ...props
 }: {
-  data: IGraphKeysValues;
-  ticks: number[];
+  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse;
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
@@ -303,13 +210,35 @@ function KeyValuesGraphs({
     navigate(`?${updatedSearchParams.toString()}`);
   }, [graphs, graphs.length, navigate, searchParams]);
 
+  const keys = extractKeys(data);
+
+  if (keys.length === 0) {
+    return (
+      <Card {...props}>
+        <CardBody>
+          <EmptyState
+            variant={EmptyStateVariant.xs}
+            icon={FilterIcon}
+            titleText="No job"
+            headingLevel="h4"
+          >
+            <EmptyStateBody>
+              We did not find any jobs with key values matching this search.
+              Please modify your search.
+            </EmptyStateBody>
+          </EmptyState>
+        </CardBody>
+      </Card>
+    );
+  }
+
   return (
     <div {...props}>
       <Card className="pf-v6-u-mt-md">
         <CardBody>
           <div className="flex items-center justify-between">
             <KeyValuesAddGraphModal
-              data={data}
+              keys={keys}
               onSubmit={(newGraph) => {
                 setGraphs((oldGraphs) => [newGraph, ...oldGraphs]);
               }}
@@ -323,22 +252,40 @@ function KeyValuesGraphs({
       </Card>
       <div ref={graphRef} className="pf-v6-u-pb-md">
         {graphs.map((graph, index) => (
-          <KeyValueGraph
-            key={index}
-            graph={graph}
-            data={data}
-            ticks={ticks}
-            onEdit={(newGraph) =>
-              setGraphs((oldGraphs) =>
-                oldGraphs.map((g, i) =>
-                  index === i ? { ...newGraph } : { ...g },
-                ),
-              )
-            }
-            onDelete={() =>
-              setGraphs((oldGraphs) => oldGraphs.filter((g, i) => index !== i))
-            }
-          />
+          <Card className="pf-v6-u-mt-md" key={index}>
+            <CardHeader>
+              {graph.name}
+              <KeyValuesEditGraphModal
+                keys={keys}
+                graph={graph}
+                className="pf-v6-u-ml-md"
+                onSubmit={(newGraph) =>
+                  setGraphs((oldGraphs) =>
+                    oldGraphs.map((g, i) =>
+                      index === i ? { ...newGraph } : { ...g },
+                    ),
+                  )
+                }
+              />
+              <Button
+                onClick={() =>
+                  setGraphs((oldGraphs) =>
+                    oldGraphs.filter((g, i) => index !== i),
+                  )
+                }
+                variant="plain"
+                className="pf-v6-u-ml-xs"
+              >
+                <TrashAltIcon />
+              </Button>
+            </CardHeader>
+            <CardBody>
+              <KeyValueGraph
+                data={extractKeysValues(graph, data)}
+                graph={graph}
+              />
+            </CardBody>
+          </Card>
         ))}
       </div>
     </div>
@@ -375,28 +322,7 @@ function KeyValues({
     return null;
   }
 
-  const keysValues = extractKeysValues(data);
-  const ticks = getTicksInRange({ after, before });
-  if (keysValues.keys.length === 0) {
-    return (
-      <Card {...props}>
-        <CardBody>
-          <EmptyState
-            variant={EmptyStateVariant.xs}
-            icon={FilterIcon}
-            titleText="No job"
-            headingLevel="h4"
-          >
-            <EmptyStateBody>
-              We did not find any jobs with key values matching this search.
-              Please modify your search.
-            </EmptyStateBody>
-          </EmptyState>
-        </CardBody>
-      </Card>
-    );
-  }
-  return <KeyValuesGraphs data={keysValues} ticks={ticks} />;
+  return <KeyValuesGraphs data={data} />;
 }
 
 export default function KeyValuesPage() {

@@ -585,27 +585,6 @@ export interface IGetAnalyticsJobsResponse {
 
 export type IGetAnalyticsJobsEmptyResponse = Record<string, never>;
 
-export interface IJobKeysValues {
-  id: string;
-  name: string;
-  created_at: number;
-  keysValues: {
-    [key: string]: number;
-  };
-}
-
-export interface IGraphKeysValues {
-  keys: string[];
-  data: IJobKeysValues[];
-  groupByKeys: {
-    name: string[];
-    status: string[];
-    team: string[];
-    topic: string[];
-    pipeline: string[];
-  };
-}
-
 export interface FormGroupProps {
   id: string;
   label: string;
@@ -614,3 +593,25 @@ export interface FormGroupProps {
   placeholder?: string;
   [key: string]: any;
 }
+
+export const groupByKeys = [
+  "topic",
+  "pipeline",
+  "component",
+  "name",
+  "remoteci",
+  "team",
+  "configuration",
+] as const;
+
+export type IGroupByKey = (typeof groupByKeys)[number];
+
+export const groupByKeysWithLabel: Record<IGroupByKey, string> = {
+  topic: "Topic name",
+  pipeline: "Pipeline name",
+  component: "Component name",
+  name: "Job name",
+  team: "Team name",
+  remoteci: "Remoteci name",
+  configuration: "Configuration",
+};
