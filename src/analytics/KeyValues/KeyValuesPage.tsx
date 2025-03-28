@@ -33,11 +33,7 @@ import { extractKeys, extractKeysValues, IGraphKeysValues } from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import {
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-  IJob,
-} from "types";
+import { IAnalyticsJob, IJob } from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
 import { useNavigate, useSearchParams } from "react-router";
@@ -121,10 +117,7 @@ function KeyValueGraph({
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="created_at" {...xAxisArgs} />
           {data.yAxis.map((axis) => (
-            <YAxis
-              orientation={axis.orientation}
-              yAxisId={axis.orientation}
-            >
+            <YAxis orientation={axis.orientation} yAxisId={axis.orientation}>
               <Label
                 value={axis.label}
                 position={axis.orientation}
@@ -189,7 +182,7 @@ function KeyValuesGraphs({
   ticks,
   ...props
 }: {
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse;
+  data: IAnalyticsJob[];
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
@@ -300,7 +293,7 @@ function KeyValues({
   ...props
 }: {
   isLoading: boolean;
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  data: IAnalyticsJob[] | undefined;
   before: string;
   after: string;
   [key: string]: any;
@@ -318,7 +311,7 @@ function KeyValues({
     );
   }
 
-  if (!data || !data.hits) {
+  if (data === undefined || data.length === 0) {
     return null;
   }
 

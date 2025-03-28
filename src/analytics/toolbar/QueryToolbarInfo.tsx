@@ -1,7 +1,4 @@
-import {
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-} from "types";
+import { IAnalyticsJob } from "types";
 import AnalyticsJobsModal from "./AnalyticsJobsModal";
 import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
 
@@ -11,7 +8,7 @@ export default function AnalyticsJobsInfo({
   ...props
 }: {
   isLoading: boolean;
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  data: IAnalyticsJob[] | undefined;
   [key: string]: any;
 }) {
   if (isLoading) {
@@ -21,8 +18,8 @@ export default function AnalyticsJobsInfo({
   if (data === undefined) {
     return null;
   }
-
-  if (!data || !data.hits) {
+  const nbOfJobs = data.length;
+  if (nbOfJobs === 0) {
     return (
       <div {...props}>
         <HelperText>
@@ -33,10 +30,6 @@ export default function AnalyticsJobsInfo({
       </div>
     );
   }
-
-  const jobs = data.hits.hits.map((h) => h._source);
-  const nbOfJobs = data.hits.total.value;
-  const showWarning = nbOfJobs > 200;
   return (
     <div {...props}>
       <HelperText>
@@ -46,8 +39,7 @@ export default function AnalyticsJobsInfo({
             {nbOfJobs} job{nbOfJobs > 1 ? "s" : ""}
           </b>{" "}
           that match your search.
-          {showWarning ? " Only 200 are returned by the API." : ""}
-          <AnalyticsJobsModal className="pf-v6-u-ml-xs" jobs={jobs} />
+          <AnalyticsJobsModal className="pf-v6-u-ml-xs" jobs={data} />
         </HelperTextItem>
       </HelperText>
     </div>

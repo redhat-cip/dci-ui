@@ -1,25 +1,20 @@
 import { sortByOldestFirst } from "services/sort";
-import {
-  IComponentCoverage,
-  IGetAnalyticsJobsResponse,
-  IGetAnalyticsJobsEmptyResponse,
-} from "types";
+import { IComponentCoverage, IAnalyticsJob } from "types";
 
 type IComponentCoverageById = {
   [componentId: string]: IComponentCoverage;
 };
 
 export function buildComponentCoverage(
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
+  data: IAnalyticsJob[],
 ): IComponentCoverage[] {
   try {
     if (Object.keys(data).length === 0) {
       return [];
     }
     const initialAccumulator: IComponentCoverageById = {};
-    const components = data.hits.hits.reduce((acc, hit) => {
-      const job = hit._source;
-      const components = hit._source.components;
+    const components = data.reduce((acc, job) => {
+      const components = job.components;
       for (let i = 0; i < components.length; i++) {
         const component = components[i];
         const componentId = component.id;

@@ -81,8 +81,5 @@ test("extractPipelinesFromAnalyticsJobs", () => {
 });
 
 test("extractPipelinesFromAnalyticsJobs from 404 not found", () => {
-  const payloadReturnedByApiWhenNotFound = {};
-  expect(
-    extractPipelinesFromAnalyticsJobs(payloadReturnedByApiWhenNotFound),
-  ).toEqual([]);
+  expect(extractPipelinesFromAnalyticsJobs([])).toEqual([]);
 });

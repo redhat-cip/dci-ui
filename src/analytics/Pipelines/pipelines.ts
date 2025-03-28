@@ -1,9 +1,5 @@
 import { DateTime } from "luxon";
-import {
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-  IJobStatus,
-} from "types";
+import { IAnalyticsJob, IJobStatus } from "types";
 
 export interface IPipelineJob {
   id: string;
@@ -37,9 +33,9 @@ export interface IPipelineDay {
 }
 
 export function extractPipelinesFromAnalyticsJobs(
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
+  data: IAnalyticsJob[],
 ): IPipelineDay[] {
-  if (Object.keys(data).length === 0) {
+  if (data.length === 0) {
     return [];
   }
   const daysMap: {
@@ -51,8 +47,7 @@ export function extractPipelinesFromAnalyticsJobs(
       };
     };
   } = {};
-  [...data.hits.hits].reverse().forEach((hit) => {
-    const job = hit._source;
+  [...data].reverse().forEach((job) => {
     if (job.pipeline === null) return;
     const pipelineDate = job.pipeline.created_at.split("T")[0];
 

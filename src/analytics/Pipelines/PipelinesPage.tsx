@@ -20,11 +20,7 @@ import { DateTime } from "luxon";
 import { formatDate } from "services/date";
 import { createRef, Fragment, useState } from "react";
 import { Link } from "react-router";
-import {
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-  IJobStatus,
-} from "types";
+import { IAnalyticsJob, IJobStatus } from "types";
 import { ComponentsList, TestLabels } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
@@ -241,7 +237,7 @@ function PipelinesPerDay({
   ...props
 }: {
   isLoading: boolean;
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse | undefined;
+  data: IAnalyticsJob[] | undefined;
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
@@ -258,7 +254,7 @@ function PipelinesPerDay({
       </Card>
     );
   }
-  if (!data || !data.hits) {
+  if (data === undefined || data.length === 0) {
     return null;
   }
   const pipelinesPerDays = extractPipelinesFromAnalyticsJobs(data);

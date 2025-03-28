@@ -1,10 +1,4 @@
-import {
-  FinalJobStatuses,
-  IAnalyticsJob,
-  IFinalJobStatus,
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-} from "types";
+import { FinalJobStatuses, IAnalyticsJob, IFinalJobStatus } from "types";
 import {
   t_global_color_status_danger_default,
   t_global_color_status_warning_default,
@@ -76,20 +70,20 @@ function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
 }
 
 export function getJobStats(
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
+  data: IAnalyticsJob[],
   groupByKey: IGroupByKey,
 ): Record<string, IJobStat> {
   const emptyJobStat = {} as Record<string, IJobStat>;
   try {
-    if (Object.keys(data).length === 0) {
+    if (data.length === 0) {
       return emptyJobStat;
     }
-    return data.hits.hits.reduce(
-      (acc, hit) => {
-        const jobStatus = hit._source.status;
+    return data.reduce(
+      (acc, job) => {
+        const jobStatus = job.status;
         if (!(FinalJobStatuses as readonly string[]).includes(jobStatus))
           return acc;
-        const key = getJobKey(hit._source, groupByKey);
+        const key = getJobKey(job, groupByKey);
         if (key === null || key === "") return acc;
         const finalJobStatus = jobStatus as IFinalJobStatus;
         const stat = acc[key] || {

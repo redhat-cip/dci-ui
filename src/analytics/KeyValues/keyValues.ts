@@ -1,8 +1,5 @@
 import { DateTime } from "luxon";
-import {
-  IGetAnalyticsJobsEmptyResponse,
-  IGetAnalyticsJobsResponse,
-} from "types";
+import { IAnalyticsJob } from "types";
 import {
   IGraphBackColor,
   IGraphType,
@@ -20,15 +17,13 @@ function generateKey(key1: string, key2: string): string {
     .replace(/^_|_$/g, "");
 }
 
-export function extractKeys(
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
-): string[] {
+export function extractKeys(data: IAnalyticsJob[]): string[] {
   try {
     if (Object.keys(data).length === 0) {
       return [];
     }
-    return data.hits.hits.reduce((acc, hit) => {
-      const keyValues = hit._source.keys_values;
+    return data.reduce((acc, job) => {
+      const keyValues = job.keys_values;
       for (let i = 0; i < keyValues.length; i++) {
         const keyValue = keyValues[i];
         const key = keyValue.key;
@@ -80,7 +75,7 @@ const emptyKeyValuesGraph: IGraphKeysValues = {
 
 export function extractKeysValues(
   graph: IKeyValueGraph,
-  data: IGetAnalyticsJobsResponse | IGetAnalyticsJobsEmptyResponse,
+  data: IAnalyticsJob[],
 ): IGraphKeysValues {
   try {
     if (Object.keys(data).length === 0) {
@@ -88,11 +83,11 @@ export function extractKeysValues(
         ...emptyKeyValuesGraph,
       };
     }
-    const kv = data.hits.hits.reduce(
-      (acc, hit) => {
-        const jobId = hit._source.id;
-        const jobName = hit._source.name;
-        const createdAt = DateTime.fromISO(hit._source.created_at).toMillis();
+    const kv = data.reduce(
+      (acc, job) => {
+        const jobId = job.id;
+        const jobName = job.name;
+        const createdAt = DateTime.fromISO(job.created_at).toMillis();
         const d: IGraphKeysValuesData = {
           id: jobId,
           name: jobName,
@@ -109,12 +104,12 @@ export function extractKeysValues(
             label,
             color,
           };
-          const matchingKeyValue = hit._source.keys_values.find(
+          const matchingKeyValue = job.keys_values.find(
             (keyValue) => keyValue.key === key,
           );
           if (!matchingKeyValue) continue;
           if (graph.group_by !== "") {
-            const groupByKey = getJobKey(hit._source, graph.group_by);
+            const groupByKey = getJobKey(job, graph.group_by);
             if (groupByKey) {
               label = `${key} - ${groupByKey}`;
               key = generateKey(key, groupByKey);
