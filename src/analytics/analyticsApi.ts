@@ -1,4 +1,4 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { api } from "api";
 import { createSearchParams } from "react-router";
 import {
@@ -26,6 +26,54 @@ export function createAnalyticsSearchParams(
   ).toString();
 }
 
+async function getAnalyticsJobs(
+  args: {
+    query: string;
+    after: string;
+    before: string;
+    includes: string;
+  },
+  fetchWithBQ: (arg: Parameters<BaseQueryFn>[0]) => ReturnType<BaseQueryFn>,
+) {
+  const { query, after, before, includes } = args;
+  let offset = 0;
+  const limit = 200;
+  let allHits: IAnalyticsJob[] = [];
+  let total = Infinity;
+
+  try {
+    while (offset < total) {
+      const params = createAnalyticsSearchParams({
+        query,
+        offset,
+        limit,
+        sort: "-created_at",
+        includes,
+        from: after,
+        to: before,
+      });
+
+      const response = await fetchWithBQ(`/analytics/jobs?${params}`);
+      if (response.error) {
+        return { error: response.error as FetchBaseQueryError };
+      }
+
+      const data = response.data as
+        | IGetAnalyticsJobsResponse
+        | IGetAnalyticsJobsEmptyResponse;
+      if (!data.hits) break;
+      allHits = [...allHits, ...data.hits.hits.map((h) => h._source)];
+      total = data.hits.total.value;
+      offset += limit;
+    }
+    return {
+      data: allHits,
+    };
+  } catch (error) {
+    return { error: error as FetchBaseQueryError };
+  }
+}
+
 export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
   .enhanceEndpoints({ addTagTypes: ["Analytics"] })
   .injectEndpoints({
@@ -35,44 +83,14 @@ export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
         { query: string; after: string; before: string }
       >({
         async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-          const { query, after, before } = _arg;
-          let offset = 0;
-          const limit = 200;
-          let allHits: IAnalyticsJob[] = [];
-          let total = Infinity;
-
-          try {
-            while (offset < total) {
-              const params = createAnalyticsSearchParams({
-                query,
-                offset,
-                limit,
-                sort: "-created_at",
-                includes:
-                  "id,name,configuration,created_at,tags,keys_values,topic.name,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name,remoteci.name",
-                from: after,
-                to: before,
-              });
-
-              const response = await fetchWithBQ(`/analytics/jobs?${params}`);
-              if (response.error) {
-                return { error: response.error as FetchBaseQueryError };
-              }
-
-              const data = response.data as
-                | IGetAnalyticsJobsResponse
-                | IGetAnalyticsJobsEmptyResponse;
-              if (!data.hits) break;
-              allHits = [...allHits, ...data.hits.hits.map((h) => h._source)];
-              total = data.hits.total.value;
-              offset += limit;
-            }
-            return {
-              data: allHits,
-            };
-          } catch (error) {
-            return { error: error as FetchBaseQueryError };
-          }
+          return getAnalyticsJobs(
+            {
+              ..._arg,
+              includes:
+                "id,name,configuration,created_at,tags,keys_values,topic.name,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name,remoteci.name",
+            },
+            fetchWithBQ,
+          );
         },
         providesTags: ["Analytics"],
       }),

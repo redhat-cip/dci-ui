@@ -7,26 +7,28 @@ interface ComponentsListProps {
 }
 
 export function ComponentsList({ components }: ComponentsListProps) {
-  const sortedComponents = sortByName(
-    components.map((c) => ({ ...c, name: c.display_name })),
-  );
   return (
     <div>
-      {sortedComponents.map((component) => (
-        <div
-          key={component.id}
-          className="pf-v6-u-mt-xs"
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
-            {component.display_name}
-          </Link>
-        </div>
-      ))}
+      {components
+        .map((c) => ({ ...c, name: c.display_name }))
+        .sort(sortByName)
+        .map((component) => (
+          <div
+            key={component.id}
+            className="pf-v6-u-mt-xs"
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            <Link
+              to={`/topics/${component.topic_id}/components/${component.id}`}
+            >
+              {component.display_name}
+            </Link>
+          </div>
+        ))}
     </div>
   );
 }

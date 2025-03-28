@@ -1,16 +1,15 @@
-import { sortBy } from "lodash";
 import { DateTime } from "luxon";
 
-export function sort(items: string[]) {
-  return sortBy(items, [(e) => e.toLowerCase()]);
+export function sort(s1: string, s2: string) {
+  return s1.localeCompare(s2);
 }
 
 export function sortByName<
   T extends {
     name: string;
   },
->(items: T[]): T[] {
-  return sortBy(items, [(e) => e.name.toLowerCase()]);
+>(element1: T, element2: T) {
+  return sort(element1.name, element2.name);
 }
 
 interface IItemWithCreatedAtAndReleasedAtAndUpdatedAt {
@@ -59,7 +58,7 @@ export function sortByMainComponentType<
   },
 >(items: T[]): T[] {
   const componentTypesOrderReversed = ["ocp", "compose-noinstall", "compose"];
-  return sortByName(items).sort((item1, item2) => {
+  return items.sort(sortByName).sort((item1, item2) => {
     return (
       componentTypesOrderReversed.indexOf(item2.type) -
       componentTypesOrderReversed.indexOf(item1.type)

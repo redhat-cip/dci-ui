@@ -24,6 +24,7 @@ import {
 import JobStatChart from "./JobStatChart";
 import useLocalStorage from "hooks/useLocalStorage";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
+import { sort } from "services/sort";
 
 function JobStatsGraphs({
   data,
@@ -72,21 +73,20 @@ function JobStatsGraphs({
           </div>
         </CardBody>
       </Card>
-      <Card className="pf-v6-u-mt-md">
-        <CardBody>
-          <div ref={graphRef}>
-            <Gallery hasGutter className="pf-v6-u-py-md">
-              {Object.entries(jobStats).map(([name, stat], index) => (
-                <Card key={index}>
-                  <CardBody>
-                    <JobStatChart name={name} stat={stat} />
-                  </CardBody>
-                </Card>
-              ))}
-            </Gallery>
-          </div>
-        </CardBody>
-      </Card>
+
+      <div ref={graphRef}>
+        <Gallery hasGutter className="pf-v6-u-py-md">
+          {Object.entries(jobStats)
+            .sort(([name1], [name2]) => sort(name1, name2))
+            .map(([name, stat], index) => (
+              <Card key={index}>
+                <CardBody>
+                  <JobStatChart name={name} stat={stat} />
+                </CardBody>
+              </Card>
+            ))}
+        </Gallery>
+      </div>
     </div>
   );
 }

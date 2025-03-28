@@ -45,7 +45,7 @@ export default function ComponentsTable({
               <span>
                 {component.tags !== null &&
                   component.tags.length !== 0 &&
-                  sort(component.tags).map((tag, i) => (
+                  component.tags.sort(sort).map((tag, i) => (
                     <Label
                       isCompact
                       key={i}

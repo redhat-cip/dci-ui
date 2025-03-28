@@ -43,7 +43,7 @@ function TopicsList() {
 
   return (
     <div>
-      {sortByName(topicsPerProduct).map((product) => (
+      {topicsPerProduct.sort(sortByName).map((product) => (
         <div key={product.id} className="pf-v6-u-mb-xl">
           <Content component={ContentVariants.h2}>
             <ProductIcon name={product.name} className="pf-v6-u-mr-sm" />

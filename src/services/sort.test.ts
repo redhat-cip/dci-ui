@@ -7,7 +7,7 @@ import {
 
 test("sortByName", () => {
   expect(
-    sortByName([
+    [
       {
         id: "1",
         name: "b",
@@ -16,7 +16,7 @@ test("sortByName", () => {
         id: "2",
         name: "A",
       },
-    ]),
+    ].sort(sortByName),
   ).toEqual([
     {
       id: "2",

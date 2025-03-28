@@ -45,7 +45,7 @@ export const { useGetEnhancedJobQuery } = api
             const jobStatesData = getJobState.data as IGetJobStates;
             const enhancedJob = {
               ...job,
-              tests: sortByName(resultsData.results),
+              tests: resultsData.results.sort(sortByName),
               jobstates: jobStatesData.jobstates,
             };
             return { data: enhancedJob as IEnhancedJob };
