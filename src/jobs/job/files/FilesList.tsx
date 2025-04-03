@@ -23,9 +23,9 @@ interface FilesListProps {
 }
 
 export default function FilesList({ job }: FilesListProps) {
-  const filesNotAssociatedWithJobState = job.files
-    .filter((f) => f.jobstate_id === null)
-    .sort(sortByName);
+  const filesNotAssociatedWithJobState = sortByName(
+    job.files.filter((f) => f.jobstate_id === null),
+  );
   const [textSearch, setTextSearch] = useState("");
   const [isDownloading, setIsDownloading] = useState(false);
 

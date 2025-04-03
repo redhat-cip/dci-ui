@@ -5,12 +5,14 @@ import { setupStore } from "../store";
 import type { RenderOptions } from "@testing-library/react";
 import type { AppStore, RootState } from "../store";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router";
+import { MemoryRouter } from "react-router";
 import { currentUser } from "__tests__/data";
+import { ThemeProvider } from "ui/Theme/themeContext";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
   store?: AppStore;
+  initialEntries?: string[];
 }
 
 export function renderWithProviders(
@@ -18,16 +20,19 @@ export function renderWithProviders(
   {
     preloadedState = { auth: { currentUser } },
     store = setupStore(preloadedState),
+    initialEntries = ["/"],
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return (
-      <Provider store={store}>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-          {children}
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={initialEntries}>
+            {children}
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
   }
   return {

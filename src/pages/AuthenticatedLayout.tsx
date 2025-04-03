@@ -7,7 +7,6 @@ import {
   Outlet,
   Navigate,
 } from "react-router";
-import { values } from "lodash";
 import {
   Nav,
   NavGroup,
@@ -63,6 +62,9 @@ function UserDropdownMenuMobile() {
     <Dropdown
       isPlain
       isOpen={isOpen}
+      popperProps={{
+        position: "right",
+      }}
       onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
       toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
         <MenuToggle
@@ -77,10 +79,11 @@ function UserDropdownMenuMobile() {
       <DropdownList>
         <DropdownItem
           key="dropdown_kebab_settings"
-          component="button"
-          onClick={() => navigate(ProfilePageUrl)}
+          component="a"
+          isExternalLink
+          to={ProfilePageUrl}
         >
-          My profile <ExternalLinkAltIcon style={{ height: "0.8em" }} />
+          My profile
         </DropdownItem>
         <DropdownItem
           key="dropdown_kebab_logout"
@@ -137,10 +140,11 @@ function UserDropdownMenu() {
         <Divider component="li" />
         <DropdownItem
           key="dropdown_user_settings"
-          component="button"
-          onClick={() => navigate(ProfilePageUrl)}
+          component="a"
+          isExternalLink
+          to={ProfilePageUrl}
         >
-          My profile <ExternalLinkAltIcon style={{ height: "0.8em" }} />
+          My profile
         </DropdownItem>
         <DropdownItem
           key="dropdown_user_logout"
@@ -369,7 +373,7 @@ interface SidebarProps {
 function Sidebar({ isNavOpen }: SidebarProps) {
   const { currentUser } = useAuth();
   if (currentUser === null) return null;
-  const currentUserTeams = values(currentUser.teams);
+  const currentUserTeams = Object.values(currentUser.teams);
   const PageNav = (
     <Nav aria-label="Nav">
       <NavGroup title="DCI">

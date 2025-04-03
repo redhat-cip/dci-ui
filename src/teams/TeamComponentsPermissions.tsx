@@ -63,7 +63,7 @@ function TeamComponentsPermissionsTable({ team }: { team: ITeam }) {
           </Tr>
         </Thead>
         <Tbody>
-          {data.sort(sortByName).map((remoteTeam) => (
+          {sortByName(data).map((remoteTeam) => (
             <Tr key={remoteTeam.id}>
               <Td>
                 <Link to={`/teams/${remoteTeam.id}`}>{remoteTeam.name}</Link>

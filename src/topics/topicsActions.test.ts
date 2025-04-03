@@ -1,30 +1,5 @@
-import { sortTopicWithSemver, groupTopicsPerProduct } from "./topicsActions";
+import { groupTopicsPerProduct } from "./topicsActions";
 import { IProduct, ITopic } from "types";
-
-test("sortTopicWithSemver", () => {
-  expect([].sort(sortTopicWithSemver)).toEqual([]);
-  expect(
-    [
-      { name: "OSP16.2" } as ITopic,
-      { name: "OSP10" } as ITopic,
-      { name: "OSP16.1" } as ITopic,
-    ].sort(sortTopicWithSemver),
-  ).toEqual([{ name: "OSP16.2" }, { name: "OSP16.1" }, { name: "OSP10" }]);
-  expect(
-    [
-      { name: "OCP-4.10" } as ITopic,
-      { name: "OCP-4.4" } as ITopic,
-      { name: "OCP-4.5" } as ITopic,
-    ].sort(sortTopicWithSemver),
-  ).toEqual([{ name: "OCP-4.10" }, { name: "OCP-4.5" }, { name: "OCP-4.4" }]);
-  expect(
-    [
-      { name: "RHEL-8.1" } as ITopic,
-      { name: "RHEL-8.0" } as ITopic,
-      { name: "RHEL-8.5" } as ITopic,
-    ].sort(sortTopicWithSemver),
-  ).toEqual([{ name: "RHEL-8.5" }, { name: "RHEL-8.1" }, { name: "RHEL-8.0" }]);
-});
 
 test("groupTopicsPerProduct", () => {
   const topic1 = {

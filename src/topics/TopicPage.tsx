@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { isEmpty } from "lodash";
 import {
   Card,
   CardBody,
@@ -25,11 +24,17 @@ import { fromNow } from "services/date";
 import { useAuth } from "auth/authSelectors";
 import LoadingPageSection from "ui/LoadingPageSection";
 
+function stringifyTopicData(topic: ITopic) {
+  try {
+    return JSON.stringify(topic.data, null, 2);
+  } catch (error) {
+    return "{}";
+  }
+}
+
 function TopicDetails({ topic }: { topic: ITopic }) {
   const [seeData, setSeeData] = useState(false);
-  const topicData = isEmpty(topic.data)
-    ? "{}"
-    : JSON.stringify(topic?.data, null, 2);
+  const topicData = stringifyTopicData(topic);
 
   return (
     <Card>

@@ -96,7 +96,7 @@ export default function TeamMembers({
               </Tr>
             </Thead>
             <Tbody>
-              {data.users.sort(sortByName).map((user) => (
+              {sortByName(data.users).map((user) => (
                 <Tr key={user.id}>
                   <Td isActionCell>
                     <CopyButton text={user.id} />

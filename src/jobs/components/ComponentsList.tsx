@@ -9,10 +9,8 @@ interface ComponentsListProps {
 export function ComponentsList({ components }: ComponentsListProps) {
   return (
     <div>
-      {components
-        .map((c) => ({ ...c, name: c.display_name }))
-        .sort(sortByName)
-        .map((component) => (
+      {sortByName(components.map((c) => ({ ...c, name: c.display_name }))).map(
+        (component) => (
           <div
             key={component.id}
             className="pf-v6-u-mt-xs"
@@ -28,7 +26,8 @@ export function ComponentsList({ components }: ComponentsListProps) {
               {component.display_name}
             </Link>
           </div>
-        ))}
+        ),
+      )}
     </div>
   );
 }

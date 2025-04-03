@@ -1,13 +1,15 @@
+import { ITopic } from "types";
 import {
   sortByName,
   sortByNewestFirst,
   sortByOldestFirst,
   sortByMainComponentType,
+  sortWithSemver,
 } from "./sort";
 
 test("sortByName", () => {
   expect(
-    [
+    sortByName([
       {
         id: "1",
         name: "b",
@@ -16,7 +18,7 @@ test("sortByName", () => {
         id: "2",
         name: "A",
       },
-    ].sort(sortByName),
+    ]),
   ).toEqual([
     {
       id: "2",
@@ -174,4 +176,29 @@ test("sortByMainComponentType", () => {
       type: "rpm",
     },
   ]);
+});
+
+test("sortWithSemver", () => {
+  expect([].sort(sortWithSemver)).toEqual([]);
+  expect(
+    [
+      { name: "OSP16.2" } as ITopic,
+      { name: "OSP10" } as ITopic,
+      { name: "OSP16.1" } as ITopic,
+    ].sort(sortWithSemver),
+  ).toEqual([{ name: "OSP16.2" }, { name: "OSP16.1" }, { name: "OSP10" }]);
+  expect(
+    [
+      { name: "OCP-4.10" } as ITopic,
+      { name: "OCP-4.4" } as ITopic,
+      { name: "OCP-4.5" } as ITopic,
+    ].sort(sortWithSemver),
+  ).toEqual([{ name: "OCP-4.10" }, { name: "OCP-4.5" }, { name: "OCP-4.4" }]);
+  expect(
+    [
+      { name: "RHEL-8.1" } as ITopic,
+      { name: "RHEL-8.0" } as ITopic,
+      { name: "RHEL-8.5" } as ITopic,
+    ].sort(sortWithSemver),
+  ).toEqual([{ name: "RHEL-8.5" }, { name: "RHEL-8.1" }, { name: "RHEL-8.0" }]);
 });

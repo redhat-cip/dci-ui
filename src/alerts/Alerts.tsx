@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import { hideAlert, selectAlerts } from "./alertsSlice";
 import { useAppDispatch, useAppSelector } from "store";
 import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
@@ -8,7 +7,7 @@ export default function Alerts() {
   const dispatch = useAppDispatch();
 
   const alertsArray = Object.values(alerts);
-  if (isEmpty(alertsArray)) return null;
+  if (alertsArray.length === 0) return null;
   return (
     <div
       style={{

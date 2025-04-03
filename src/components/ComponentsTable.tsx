@@ -1,6 +1,6 @@
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { CopyButton, StateLabel } from "ui";
-import { sort } from "services/sort";
+import { sortAlphabetically } from "services/sort";
 import { Link } from "react-router";
 import { Label } from "@patternfly/react-core";
 import { formatDate } from "services/date";
@@ -45,7 +45,7 @@ export default function ComponentsTable({
               <span>
                 {component.tags !== null &&
                   component.tags.length !== 0 &&
-                  [...component.tags].sort(sort).map((tag, i) => (
+                  sortAlphabetically(component.tags).map((tag, i) => (
                     <Label
                       isCompact
                       key={i}

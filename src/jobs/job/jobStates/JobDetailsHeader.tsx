@@ -24,7 +24,6 @@ import {
 } from "@patternfly/react-icons";
 import { IEnhancedJob, IResult, IPipeline } from "types";
 import { formatDate, fromNow, humanizeDuration } from "services/date";
-import { isEmpty } from "lodash";
 import TextAreaEditableOnHover from "../TextAreaEditableOnHover";
 import { Markup } from "interweave";
 import { sortByOldestFirst } from "services/sort";
@@ -302,7 +301,7 @@ export default function JobDetailsHeader({
           <DescriptionListGroup>
             <DescriptionListTerm>Tags</DescriptionListTerm>
             <DescriptionListDescription>
-              {isEmpty(job.tags)
+              {job.tags?.length === 0
                 ? null
                 : job.tags?.map((tag, index) => (
                     <Label
@@ -319,7 +318,7 @@ export default function JobDetailsHeader({
                   ))}
             </DescriptionListDescription>
           </DescriptionListGroup>
-          {isEmpty(job.keys_values) ? null : (
+          {job.keys_values.length === 0 ? null : (
             <DescriptionListGroup>
               <DescriptionListTerm>Keys values</DescriptionListTerm>
               <DescriptionListDescription>

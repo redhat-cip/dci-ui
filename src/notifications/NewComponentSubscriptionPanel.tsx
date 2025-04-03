@@ -1,4 +1,4 @@
-import { sortTopicWithSemver } from "topics/topicsActions";
+import { sortWithSemver } from "services/sort";
 import {
   useListSubscribedTopicsQuery,
   useListTopicsQuery,
@@ -36,7 +36,7 @@ export default function NewComponentSubscriptionPanel() {
     .filter((topic) =>
       topic.name.toLowerCase().includes(searchTopics.toLowerCase()),
     )
-    .sort(sortTopicWithSemver);
+    .sort(sortWithSemver);
 
   const canSubscribeToSelectedTopic =
     selectedTopic !== null && subscribedTopicsIds.includes(selectedTopic.id);

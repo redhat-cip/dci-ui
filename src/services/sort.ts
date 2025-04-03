@@ -4,12 +4,18 @@ export function sort(s1: string, s2: string) {
   return s1.localeCompare(s2);
 }
 
+export function sortAlphabetically(items: string[]): string[] {
+  return [...items].sort(sort);
+}
+
 export function sortByName<
   T extends {
     name: string;
   },
->(element1: T, element2: T) {
-  return sort(element1.name, element2.name);
+>(items: T[]): T[] {
+  return [...items].sort((element1: T, element2: T) =>
+    sort(element1.name, element2.name),
+  );
 }
 
 interface IItemWithCreatedAtAndReleasedAtAndUpdatedAt {
@@ -58,10 +64,27 @@ export function sortByMainComponentType<
   },
 >(items: T[]): T[] {
   const componentTypesOrderReversed = ["ocp", "compose-noinstall", "compose"];
-  return items.sort(sortByName).sort((item1, item2) => {
+  return sortByName(items).sort((item1, item2) => {
     return (
       componentTypesOrderReversed.indexOf(item2.type) -
       componentTypesOrderReversed.indexOf(item1.type)
     );
   });
+}
+
+export function sortWithSemver<
+  T extends {
+    name: string;
+  },
+>(item1: T, item2: T): number {
+  const paddedName1 = item1.name.replace(/\d+/g, (n: string) =>
+    n.padStart(6, "0"),
+  );
+  const paddedName2 = item2.name.replace(/\d+/g, (n: string) =>
+    n.padStart(6, "0"),
+  );
+
+  if (paddedName1 > paddedName2) return -1;
+  if (paddedName1 < paddedName2) return 1;
+  return 0;
 }

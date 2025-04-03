@@ -1,5 +1,4 @@
 import { ICurrentUser, IIdentity, IIdentityTeam } from "types";
-import { values } from "lodash";
 import { readValue, saveValue } from "services/localStorage";
 import { api } from "api";
 
@@ -30,7 +29,9 @@ export function buildCurrentUser(
   identity: IIdentity,
   defaultTeam: IIdentityTeam | null,
 ): ICurrentUser {
-  const teams = values(identity.teams).filter((team) => team.id !== null);
+  const teams = Object.values(identity.teams).filter(
+    (team) => team.id !== null,
+  );
   const firstTeam = teams.length === 0 ? null : teams[0];
   const team =
     defaultTeam === null || !(defaultTeam.id in identity.teams)

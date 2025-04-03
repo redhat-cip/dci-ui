@@ -69,6 +69,19 @@ export const users: IUser[] = [
     timezone: "UTC",
     password: "",
   },
+  {
+    email: "u2@redhat.com",
+    etag: "9996cb96d416cd386558de5d49919153",
+    fullname: "Second User",
+    id: "u2",
+    name: "u2",
+    state: "active",
+    sso_username: "u2",
+    created_at: "2024-10-25T10:32:17.548051+00:00",
+    updated_at: "2024-10-25T10:32:17.548051+00:00",
+    timezone: "UTC",
+    password: "",
+  },
 ];
 
 export const currentUser = buildCurrentUser(identity, null);
@@ -132,7 +145,7 @@ export const components: IComponent[] = [
     id: "914120f6-f33c-41b9-8245-19f9ff1f4c03",
     released_at: "2023-12-05T09:42:14.008496",
     state: "active",
-    tags: [],
+    tags: ["tag 2", "tag 1"],
     team_id: null,
     topic_id: "4d61a6ce-1d7c-41fb-911e-075bc4216090",
     type: "compose",

@@ -68,6 +68,10 @@ export interface IUser extends Resource {
   password: string;
 }
 
+export interface IGetUsers extends BaseListResponse {
+  users: IUser[];
+}
+
 export interface IFeeder extends Resource {
   team_id: string;
   created_at: string;

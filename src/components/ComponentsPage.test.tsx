@@ -10,7 +10,7 @@ test("Should display components in components page", async () => {
     http.get("https://api.distributed-ci.io/api/v1/components", () => {
       return HttpResponse.json({
         _meta: {
-          count: 2,
+          count: components.length,
         },
         components,
       } as IGetComponents);

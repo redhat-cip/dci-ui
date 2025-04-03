@@ -37,11 +37,11 @@ export default function TeamPage() {
   const [updateTeam, { isLoading: isUpdating }] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
 
+  if (currentUser === null) return null;
+
   if (isLoading) {
     return <LoadingPageSection />;
   }
-
-  if (currentUser === null) return null;
 
   if (!team) {
     return <EmptyState title="No team" info={`Team ${team_id} not found`} />;

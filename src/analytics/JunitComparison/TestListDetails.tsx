@@ -1,6 +1,5 @@
 import { Card, CardTitle, Button, CardBody } from "@patternfly/react-core";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { round } from "lodash";
 import type { JunitData } from "./junitComparisonApi";
 
 export function TestListDetails({
@@ -63,7 +62,7 @@ export function TestListDetails({
                   <Td>{detail.testcase}</Td>
                   <Td style={{ textAlign: "center" }}>
                     <span title={detail.value.toString()}>
-                      {round(detail.value, 2)}%
+                      {Math.round(detail.value * 100) / 100}%
                     </span>
                   </Td>
                 </Tr>
