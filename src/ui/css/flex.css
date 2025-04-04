@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .justify-between {
   justify-content: space-between;
 }
@@ -16,4 +20,8 @@
 
 .flex-col {
   flex-direction: column;
+}
+
+.gap-md {
+  gap: 1em;
 }
