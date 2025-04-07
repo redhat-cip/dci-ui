@@ -2,14 +2,14 @@ import {
   Card,
   Gallery,
   GalleryItem,
-  CardBody,
   Content,
   ContentVariants,
   PageSection,
   Button,
+  CardTitle,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb } from "ui";
-import { useLocation, useNavigate } from "react-router";
+import { EmptyState, Breadcrumb, CardSecondaryTitle, Truncate } from "ui";
+import { Link, useLocation, useNavigate } from "react-router";
 import { groupTopicsPerProduct } from "./topicsActions";
 import { sortWithSemver } from "services/sort";
 import CreateTopicModal from "./CreateTopicModal";
@@ -63,17 +63,6 @@ function TopicsList() {
 
   return (
     <div>
-      {filters.query !== null && (
-        <div className="pf-v6-u-mb-md">
-          <Button
-            variant="secondary"
-            onClick={() => setFilters((f) => ({ ...f, query: null }))}
-          >
-            See other topics
-          </Button>
-        </div>
-      )}
-
       <div>
         {topicsPerProduct.map((product) => (
           <div key={product.id} className="pf-v6-u-mb-xl">
@@ -84,19 +73,15 @@ function TopicsList() {
             <Gallery hasGutter key={product.id}>
               {product.topics.sort(sortWithSemver).map((topic) => (
                 <GalleryItem key={topic.id}>
-                  <Card
-                    onClick={() => navigate(`/topics/${topic.id}/components`)}
-                    title="Click to see components"
-                    className="pointer"
-                  >
-                    <CardBody>
-                      <Content component={ContentVariants.h4}>
+                  <Card isCompact isDisabled={topic.state !== "active"}>
+                    <CardTitle>
+                      <Link to={`/topics/${topic.id}/components`}>
                         {topic.name}
-                      </Content>
-                      <Content component={ContentVariants.p}>
-                        {topic.id}
-                      </Content>
-                    </CardBody>
+                      </Link>
+                    </CardTitle>
+                    <CardSecondaryTitle className="pf-v6-u-font-family-monospace">
+                      <Truncate>{topic.id}</Truncate>
+                    </CardSecondaryTitle>
                   </Card>
                 </GalleryItem>
               ))}
@@ -104,6 +89,16 @@ function TopicsList() {
           </div>
         ))}
       </div>
+      {filters.product_id !== null && (
+        <div>
+          <Button
+            variant="link"
+            onClick={() => setFilters((f) => ({ ...f, product_id: null }))}
+          >
+            See other topics
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

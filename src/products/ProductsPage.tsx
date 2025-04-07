@@ -1,4 +1,10 @@
-import { EmptyState, ConfirmDeleteModal, Breadcrumb } from "ui";
+import {
+  EmptyState,
+  ConfirmDeleteModal,
+  Breadcrumb,
+  Truncate,
+  CardSecondaryTitle,
+} from "ui";
 import CreateProductModal from "./CreateProductModal";
 import EditProductModal from "./EditProductModal";
 import {
@@ -82,13 +88,17 @@ function ProductsGallery() {
             <ProductIcon name={product.name} style={{ fontSize: "1.2rem" }} />
           </CardHeader>
           <CardTitle>{product.name}</CardTitle>
+          <CardSecondaryTitle className="pf-v6-u-font-family-monospace">
+            <Truncate>{product.id}</Truncate>
+          </CardSecondaryTitle>
           <CardBody className="flex flex-col justify-between gap-md">
             <p>{product.description}</p>
             <div>
               <Button
                 variant="link"
+                isInline
                 onClick={() =>
-                  navigate(`/topics?query=eq(product_id,${product.id})`)
+                  navigate(`/topics?where=product_id:${product.id}`)
                 }
               >
                 View topics
