@@ -4,8 +4,6 @@ import {
   ToolbarContent,
   ToolbarItem,
   TextInputGroup,
-  TextInputGroupMain,
-  TextInputGroupUtilities,
 } from "@patternfly/react-core";
 import { useSearchParams } from "react-router";
 import {
@@ -14,7 +12,6 @@ import {
   TimeRange,
   TimeRanges,
 } from "types";
-import { SearchIcon, TimesIcon } from "@patternfly/react-icons";
 import RangeSelect from "ui/form/RangeSelect";
 import SaveSearchModal from "./SaveSearchModal";
 import { getRangeDates } from "services/date";
@@ -22,6 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
+import QueryToolBarInputSearch from "./QueryToolBarInputSearch";
 
 const ToolbarSearchSchema = Yup.object<AnalyticsToolbarSearch>().shape({
   query: Yup.string().required(),
@@ -97,29 +95,8 @@ export default function QueryToolbar({
               <Controller
                 control={control}
                 name="query"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <>
-                    <TextInputGroupMain
-                      aria-label="input pipeline query"
-                      placeholder="Filter job with query string"
-                      icon={<SearchIcon />}
-                      value={value}
-                      onChange={(e, v) => {
-                        onChange(v);
-                      }}
-                      onBlur={onBlur}
-                    />
-                    {value !== "" && (
-                      <TextInputGroupUtilities>
-                        <Button
-                          variant="plain"
-                          onClick={() => onChange("")}
-                          aria-label="Clear button and input"
-                          icon={<TimesIcon />}
-                        />
-                      </TextInputGroupUtilities>
-                    )}
-                  </>
+                render={({ field: { onChange, value } }) => (
+                  <QueryToolBarInputSearch value={value} onChange={onChange} />
                 )}
               />
             </TextInputGroup>
