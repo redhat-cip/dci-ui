@@ -15,13 +15,15 @@ import {
   Content,
   ContentVariants,
   PageSection,
-  CardHeader,
+  EmptyState,
+  EmptyStateVariant,
+  EmptyStateBody,
 } from "@patternfly/react-core";
-import { EmptyState, Breadcrumb, CopyButton, StateLabel } from "ui";
+import { Breadcrumb, CopyButton, StateLabel } from "ui";
 import {
+  IComponent,
   IComponentCoverage,
   IComponentWithJobs,
-  IJob,
   IJobStatus,
 } from "types";
 import { useParams, Link } from "react-router";
@@ -42,52 +44,7 @@ import LoadingPageSection from "ui/LoadingPageSection";
 import { useGetComponentQuery } from "components/componentsApi";
 import TopicIcon from "topics/TopicIcon";
 import StatHeaderCard from "./StatHeaderCard";
-
-interface IComponentJobProps {
-  job: IJob;
-}
-
-function ComponentJob({ job }: IComponentJobProps) {
-  return (
-    <div>
-      <Grid hasGutter>
-        <GridItem span={3}>
-          <Link to={`/jobs/${job.id}/jobStates`}>{job.name || job.id}</Link>
-        </GridItem>
-        <GridItem span={2}>
-          <JobStatusLabel status={job.status} />
-        </GridItem>
-        <GridItem span={3}>
-          <div>
-            {job.tags &&
-              job.tags.map((tag, index) => (
-                <Label
-                  isCompact
-                  key={index}
-                  color="blue"
-                  className="pf-v6-u-mr-xs pf-v6-u-mt-xs"
-                >
-                  <small>{tag}</small>
-                </Label>
-              ))}
-          </div>
-        </GridItem>
-        <GridItem span={2}>
-          <span title={`Duration in seconds ${job.duration}`}>
-            <ClockIcon className="pf-v6-u-mr-xs" />
-            {humanizeDuration(job.duration)}
-          </span>
-        </GridItem>
-        <GridItem span={2}>
-          <span title={`Created at ${job.created_at}`}>
-            <CalendarAltIcon className="pf-v6-u-mr-xs" />
-            {formatDate(job.created_at)}
-          </span>
-        </GridItem>
-      </Grid>
-    </div>
-  );
-}
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 
 function TopicLink({ topic_id }: { topic_id: string }) {
   const { data: topic, isLoading } = useGetTopicQuery(topic_id);
@@ -106,7 +63,13 @@ function TopicLink({ topic_id }: { topic_id: string }) {
   );
 }
 
-function ComponentDetails({ component }: { component: IComponentWithJobs }) {
+function ComponentDetails({
+  component,
+  className,
+}: {
+  component: IComponentWithJobs;
+  className?: string;
+}) {
   const [seeData, setSeeData] = useState(false);
   const { data: team } = useGetTeamQuery(
     component.team_id ? component.team_id : skipToken,
@@ -115,137 +78,264 @@ function ComponentDetails({ component }: { component: IComponentWithJobs }) {
   const componentData = JSON.stringify(component.data, null, 2);
 
   return (
-    <div>
-      <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
-        Component information
-      </Title>
-      <Divider />
-      <CardLine className="pf-v6-u-p-md" field="ID" value={component.id} />
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Name"
-        value={component.display_name}
-      />
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Version"
-        value={component.version}
-      />
-      <Divider />
-      {component.uid !== "" && (
-        <>
+    <Card className={className}>
+      <CardBody>
+        <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
+          Component information
+        </Title>
+        <Divider />
+        <CardLine className="pf-v6-u-p-md" field="ID" value={component.id} />
+        <Divider />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Name"
+          value={component.display_name}
+        />
+        <Divider />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Version"
+          value={component.version}
+        />
+        <Divider />
+        {component.uid !== "" && (
+          <>
+            <CardLine
+              className="pf-v6-u-p-md"
+              field="Unique id"
+              value={component.uid}
+            />
+            <Divider />
+          </>
+        )}
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Topic"
+          value={<TopicLink topic_id={component.topic_id} />}
+        />
+        <Divider />
+        {currentUser?.hasReadOnlyRole && component.url !== "" && (
+          <>
+            <CardLine
+              className="pf-v6-u-p-md"
+              field="Url"
+              value={
+                <a
+                  href={component.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {component.url}
+                </a>
+              }
+            />
+            <Divider />
+          </>
+        )}
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Type"
+          value={component.type}
+        />
+        <Divider />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Data"
+          value={
+            seeData ? (
+              <Button
+                onClick={() => setSeeData(false)}
+                type="button"
+                variant="tertiary"
+              >
+                hide content
+              </Button>
+            ) : (
+              <Button
+                onClick={() => setSeeData(true)}
+                type="button"
+                variant="tertiary"
+              >
+                see content
+              </Button>
+            )
+          }
+        />
+        {seeData && (
+          <>
+            <CodeBlock
+              actions={[
+                <CodeBlockAction>
+                  <CopyButton text={componentData} variant="plain" />
+                </CodeBlockAction>,
+              ]}
+            >
+              <CodeBlockCode id="component.data">{componentData}</CodeBlockCode>
+            </CodeBlock>
+          </>
+        )}
+        <Divider />
+        {team !== undefined && (
+          <>
+            <CardLine
+              className="pf-v6-u-p-md"
+              field="Team"
+              value={<Link to={`/teams/${team.id}`}>{team.name}</Link>}
+            />
+            <Divider />
+          </>
+        )}
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Tags"
+          value={
+            component.tags && component.tags.length > 0
+              ? component.tags.map((tag, i) => (
+                  <Label
+                    key={i}
+                    className="pf-v6-u-mt-xs pf-v6-u-mr-xs"
+                    color="blue"
+                  >
+                    {tag}
+                  </Label>
+                ))
+              : "no tags"
+          }
+        />
+        <Divider />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="State"
+          value={<StateLabel state={component.state} />}
+        />
+        <Divider />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Created"
+          value={fromNow(component.created_at)}
+        />
+        <CardLine
+          className="pf-v6-u-p-md"
+          field="Release date"
+          value={formatDate(component.released_at, DateTime.DATE_MED)}
+        />
+      </CardBody>
+    </Card>
+  );
+}
+
+function GetImageInstruction({ component }: { component: IComponent }) {
+  const { data: topic, isLoading } = useGetTopicQuery(component.topic_id);
+
+  if (isLoading) {
+    return <Skeleton screenreaderText="Loading get this image instruction" />;
+  }
+
+  if (!topic) return null;
+
+  const getThisImageTxt = `dcictl download-pull-secret --topic ${topic.name} --destination /tmp/auth.json
+podman pull --authfile /tmp/auth.json ${component.url}:${component.version}`;
+
+  return (
+    <CodeBlock>
+      <CodeBlockCode id="getThisImage">{getThisImageTxt}</CodeBlockCode>
+    </CodeBlock>
+  );
+}
+
+function ContainerComponent({
+  component,
+  className,
+}: {
+  component: IComponent;
+  className?: string;
+}) {
+  const { data: team } = useGetTeamQuery(
+    component.team_id ? component.team_id : skipToken,
+  );
+
+  return (
+    <>
+      <Card className={className}>
+        <CardBody>
+          <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
+            Container information
+          </Title>
+          <Divider />
+          <CardLine className="pf-v6-u-p-md" field="ID" value={component.id} />
+          <Divider />
           <CardLine
             className="pf-v6-u-p-md"
-            field="Unique id"
-            value={component.uid}
+            field="Name"
+            value={component.display_name}
           />
           <Divider />
-        </>
-      )}
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Topic"
-        value={<TopicLink topic_id={component.topic_id} />}
-      />
-      <Divider />
-      {currentUser?.hasReadOnlyRole && component.url !== "" && (
-        <>
           <CardLine
             className="pf-v6-u-p-md"
             field="Url"
-            value={
-              <a href={component.url} target="_blank" rel="noopener noreferrer">
-                {component.url}
-              </a>
-            }
+            value={component.url}
           />
-          <Divider />
-        </>
-      )}
-      <CardLine className="pf-v6-u-p-md" field="Type" value={component.type} />
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Data"
-        value={
-          seeData ? (
-            <Button
-              onClick={() => setSeeData(false)}
-              type="button"
-              variant="tertiary"
-            >
-              hide content
-            </Button>
-          ) : (
-            <Button
-              onClick={() => setSeeData(true)}
-              type="button"
-              variant="tertiary"
-            >
-              see content
-            </Button>
-          )
-        }
-      />
-      {team !== undefined && (
-        <>
           <Divider />
           <CardLine
             className="pf-v6-u-p-md"
-            field="Team"
-            value={<Link to={`/teams/${team.id}`}>{team.name}</Link>}
+            field="Container tag"
+            value={component.version}
           />
-        </>
-      )}
-      {seeData && (
-        <CodeBlock
-          actions={[
-            <CodeBlockAction>
-              <CopyButton text={componentData} variant="plain" />
-            </CodeBlockAction>,
-          ]}
-        >
-          <CodeBlockCode id="component.data">{componentData}</CodeBlockCode>
-        </CodeBlock>
-      )}
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Tags"
-        value={
-          component.tags && component.tags.length > 0
-            ? component.tags.map((tag, i) => (
-                <Label
-                  key={i}
-                  className="pf-v6-u-mt-xs pf-v6-u-mr-xs"
-                  color="blue"
-                >
-                  {tag}
-                </Label>
-              ))
-            : "no tags"
-        }
-      />
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="State"
-        value={<StateLabel state={component.state} />}
-      />
-      <Divider />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Created"
-        value={fromNow(component.created_at)}
-      />
-      <CardLine
-        className="pf-v6-u-p-md"
-        field="Release date"
-        value={formatDate(component.released_at, DateTime.DATE_MED)}
-      />
-    </div>
+          <Divider />
+          {component.uid !== "" && (
+            <>
+              <CardLine
+                className="pf-v6-u-p-md"
+                field="Image Digest"
+                value={component.uid}
+              />
+              <Divider />
+            </>
+          )}
+          {team !== undefined && (
+            <>
+              <CardLine
+                className="pf-v6-u-p-md"
+                field="Team"
+                value={<Link to={`/teams/${team.id}`}>{team.name}</Link>}
+              />
+              <Divider />
+            </>
+          )}
+          <CardLine
+            className="pf-v6-u-p-md"
+            field="Topic"
+            value={<TopicLink topic_id={component.topic_id} />}
+          />
+          <Divider />
+          <CardLine
+            className="pf-v6-u-p-md"
+            field="State"
+            value={<StateLabel state={component.state} />}
+          />
+          <Divider />
+          <CardLine
+            className="pf-v6-u-p-md"
+            field="Created"
+            value={fromNow(component.created_at)}
+          />
+          <Divider />
+          <CardLine
+            className="pf-v6-u-p-md"
+            field="Release date"
+            value={formatDate(component.released_at, DateTime.DATE_MED)}
+          />
+        </CardBody>
+      </Card>
+      <Card className={className}>
+        <CardBody>
+          <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
+            Get this image
+          </Title>
+          <GetImageInstruction component={component} />
+        </CardBody>
+      </Card>
+    </>
   );
 }
 
@@ -299,9 +389,14 @@ export default function ComponentPage() {
   if (!component) {
     return (
       <EmptyState
-        title="There is no component"
-        info={`There is not component with id ${component_id}`}
-      />
+        variant={EmptyStateVariant.xs}
+        titleText="No component"
+        headingLevel="h4"
+      >
+        <EmptyStateBody>
+          {`There is not component with id ${component_id}`}
+        </EmptyStateBody>
+      </EmptyState>
     );
   }
 
@@ -357,36 +452,87 @@ export default function ComponentPage() {
           </Card>
         </GridItem>
       </Grid>
-
+      {component.type === "container" ? (
+        <ContainerComponent
+          key={component.etag}
+          component={component}
+          className="pf-v6-u-mt-md"
+        />
+      ) : (
+        <ComponentDetails
+          key={component.etag}
+          component={component}
+          className="pf-v6-u-mt-md"
+        />
+      )}
       <Card className="pf-v6-u-mt-md">
         <CardBody>
-          <ComponentDetails key={component.etag} component={component} />
-        </CardBody>
-      </Card>
-
-      <Card className="pf-v6-u-mt-md">
-        <CardHeader title="Jobs" />
-        <CardBody>
-          <Grid hasGutter>
-            <GridItem span={3}>Job name</GridItem>
-            <GridItem span={2}>Status</GridItem>
-            <GridItem span={3}>tags</GridItem>
-            <GridItem span={2}>Duration</GridItem>
-            <GridItem span={2}>Created At</GridItem>
-          </Grid>
+          <Title headingLevel="h3" size="xl" className="pf-v6-u-p-md">
+            Jobs
+          </Title>
           {component.jobs.length === 0 ? (
-            <div className="pf-v6-u-p-md">
-              <Divider /> There is no job attached to this component
-            </div>
+            <EmptyState
+              variant={EmptyStateVariant.xs}
+              titleText="No job"
+              headingLevel="h4"
+            >
+              <EmptyStateBody>
+                We did not find any jobs attached to this component.
+              </EmptyStateBody>
+            </EmptyState>
           ) : (
-            sortByNewestFirst(component.jobs).map((job, index) => (
-              <div key={index}>
-                <Divider />
-                <div className="pf-v6-u-p-md">
-                  <ComponentJob job={job} />
-                </div>
-              </div>
-            ))
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Job name</Th>
+                  <Th className="text-center">Status</Th>
+                  <Th className="text-center">tags</Th>
+                  <Th className="text-center">Duration</Th>
+                  <Th className="text-center">Created At</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {sortByNewestFirst(component.jobs).map((job, index) => (
+                  <Tr key={index}>
+                    <Td>
+                      <Link to={`/jobs/${job.id}/jobStates`}>
+                        {job.name || job.id}
+                      </Link>
+                    </Td>
+                    <Td className="text-center">
+                      <JobStatusLabel status={job.status} />
+                    </Td>
+                    <Td className="text-center">
+                      <div>
+                        {job.tags &&
+                          job.tags.map((tag, index) => (
+                            <Label
+                              isCompact
+                              key={index}
+                              color="blue"
+                              className="pf-v6-u-mr-xs pf-v6-u-mt-xs"
+                            >
+                              <small>{tag}</small>
+                            </Label>
+                          ))}
+                      </div>
+                    </Td>
+                    <Td className="text-center">
+                      <span title={`Duration in seconds ${job.duration}`}>
+                        <ClockIcon className="pf-v6-u-mr-xs" />
+                        {humanizeDuration(job.duration)}
+                      </span>
+                    </Td>
+                    <Td className="text-center">
+                      <span title={`Created at ${job.created_at}`}>
+                        <CalendarAltIcon className="pf-v6-u-mr-xs" />
+                        {formatDate(job.created_at)}
+                      </span>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
           )}
         </CardBody>
       </Card>
