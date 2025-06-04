@@ -33,7 +33,7 @@ import { extractKeys, extractKeysValues, IGraphKeysValues } from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsJob, IJob } from "types";
+import { IAnalyticsData, IAnalyticsJob, IJob } from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
 import { useNavigate, useSearchParams } from "react-router";
@@ -293,7 +293,7 @@ function KeyValues({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsJob[] | undefined;
+  data: IAnalyticsData | undefined;
   before: string;
   after: string;
   [key: string]: any;
@@ -311,11 +311,11 @@ function KeyValues({
     );
   }
 
-  if (data === undefined || data.length === 0) {
+  if (data === undefined) {
     return null;
   }
 
-  return <KeyValuesGraphs data={data} />;
+  return <KeyValuesGraphs data={data.jobs} />;
 }
 
 export default function KeyValuesPage() {

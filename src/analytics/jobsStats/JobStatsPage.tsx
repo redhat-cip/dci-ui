@@ -15,7 +15,7 @@ import { Breadcrumb } from "ui";
 import { createRef, useMemo, useState } from "react";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsJob } from "types";
+import { IAnalyticsData, IAnalyticsJob } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import Select from "ui/form/Select";
 import {
@@ -198,7 +198,7 @@ function JobStats({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsJob[] | undefined;
+  data: IAnalyticsData | undefined;
   before: string;
   after: string;
   [key: string]: any;
@@ -216,11 +216,11 @@ function JobStats({
     );
   }
 
-  if (data === undefined || data.length === 0) {
+  if (data === undefined) {
     return null;
   }
 
-  return <JobStatsGraphs data={data} />;
+  return <JobStatsGraphs data={data.jobs} />;
 }
 
 export default function JobStatsPage() {

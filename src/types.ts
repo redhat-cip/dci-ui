@@ -567,7 +567,13 @@ export interface IAnalyticsJob {
   tags: string[];
 }
 
+export interface IAnalyticsData {
+  jobs: IAnalyticsJob[];
+  _meta: { first_sync_date: string; last_sync_date: string };
+}
+
 export interface IGetAnalyticsJobsResponse {
+    _meta: { first_sync_date: string; last_sync_date: string };
   _shards: {
     failed: number;
     skipped: number;

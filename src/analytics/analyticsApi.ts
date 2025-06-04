@@ -2,7 +2,7 @@ import { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { api } from "api";
 import { createSearchParams } from "react-router";
 import {
-  IAnalyticsJob,
+  IAnalyticsData,
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
 } from "types";
@@ -38,7 +38,10 @@ async function getAnalyticsJobs(
   const { query, after, before, includes } = args;
   let offset = 0;
   const limit = 200;
-  let allHits: IAnalyticsJob[] = [];
+  const analyticsJobs: IAnalyticsData = {
+    jobs: [],
+    _meta: { first_sync_date: "", last_sync_date: "" },
+  };
   let total = Infinity;
 
   try {
@@ -61,13 +64,17 @@ async function getAnalyticsJobs(
       const data = response.data as
         | IGetAnalyticsJobsResponse
         | IGetAnalyticsJobsEmptyResponse;
+      analyticsJobs._meta = data._meta
       if (!data.hits) break;
-      allHits = [...allHits, ...data.hits.hits.map((h) => h._source)];
+      analyticsJobs.jobs = [
+        ...analyticsJobs.jobs,
+        ...data.hits.hits.map((h) => h._source),
+      ];
       total = data.hits.total.value;
       offset += limit;
     }
     return {
-      data: allHits,
+      data: analyticsJobs,
     };
   } catch (error) {
     return { error: error as FetchBaseQueryError };
@@ -79,8 +86,8 @@ export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
   .injectEndpoints({
     endpoints: (builder) => ({
       getAnalyticJobs: builder.query<
-        IAnalyticsJob[],
-        { query: string; after: string; before: string }
+        IAnalyticsData,
+        { query: string; after: string; before: string; includes?: string }
       >({
         async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
           return getAnalyticsJobs(

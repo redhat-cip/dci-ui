@@ -1,6 +1,6 @@
 import { Card, CardBody } from "@patternfly/react-core";
 import QueryToolbar from "analytics/toolbar/QueryToolbar";
-import { AnalyticsToolbarSearch, IAnalyticsJob } from "types";
+import { AnalyticsToolbarSearch, IAnalyticsData } from "types";
 import QueryToolbarInfo from "./QueryToolbarInfo";
 import QueryToolbarSavedSearches from "./QueryToolbarSavedSearches";
 import useLocalStorage from "hooks/useLocalStorage";
@@ -11,7 +11,7 @@ export default function AnalyticsToolbar({
   onSearch,
   onLoad,
 }: {
-  data: IAnalyticsJob[] | undefined;
+  data: IAnalyticsData | undefined;
   isLoading: boolean;
   onSearch: (values: AnalyticsToolbarSearch) => void;
   onLoad: (values: AnalyticsToolbarSearch) => void;
