@@ -274,7 +274,12 @@ export interface IResult {
   total: number;
 }
 
-export interface IPipeline extends Resource {}
+export interface IPipeline extends Resource {
+  created_at: string;
+  updated_at: string;
+  state: state;
+  team_id: string;
+}
 
 export interface IKeyValue {
   key: string;

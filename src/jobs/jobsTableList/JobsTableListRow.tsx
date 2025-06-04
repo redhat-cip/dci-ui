@@ -42,6 +42,28 @@ interface JobTableSummaryProps {
   columns: JobsTableListColumn[];
 }
 
+function PipelineLink({ pipeline }: { pipeline: IPipeline }) {
+  const pipelineCreatedAt = DateTime.fromISO(pipeline.created_at, {
+    zone: "utc",
+  });
+  return (
+    <Link
+      className="pf-v6-u-ml-xs"
+      to={{
+        pathname: "/analytics/pipelines",
+        search: createSearchParams({
+          query: `(pipeline.id='${pipeline.id}')`,
+          range: "custom" as TimeRange,
+          after: pipelineCreatedAt.startOf("day").toISODate() || "",
+          before: pipelineCreatedAt.endOf("day").toISODate() || "",
+        }).toString(),
+      }}
+    >
+      <ExternalLinkAltIcon />
+    </Link>
+  );
+}
+
 export default function JobTableSummary({
   job,
   level,
@@ -58,9 +80,6 @@ export default function JobTableSummary({
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
   const pipeline = job.pipeline;
-  const jobCreatedAt = DateTime.fromISO(job.created_at, { zone: "utc" });
-  // Analytics sync mechanism is older than one hour
-  const isOlderThanOneHour = jobCreatedAt <= DateTime.now().minus({ hours: 1 });
   const columnTds: { [k in JobsTableListColumn]: React.ReactNode } = {
     id: (
       <span>
@@ -84,22 +103,7 @@ export default function JobTableSummary({
         >
           {pipeline.name}
         </Label>
-        {isOlderThanOneHour && (
-          <Link
-            className="pf-v6-u-ml-xs"
-            to={{
-              pathname: "/analytics/pipelines",
-              search: createSearchParams({
-                query: `(pipeline.id=${pipeline.id})`,
-                range: "custom" as TimeRange,
-                after: jobCreatedAt.startOf("day").toISODate() || "",
-                before: jobCreatedAt.endOf("day").toISODate() || "",
-              }).toString(),
-            }}
-          >
-            <ExternalLinkAltIcon />
-          </Link>
-        )}
+        <PipelineLink pipeline={pipeline} />
       </div>
     ) : null,
     config: config ? (
