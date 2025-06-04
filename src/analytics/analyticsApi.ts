@@ -87,7 +87,7 @@ export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
             {
               ..._arg,
               includes:
-                "id,name,configuration,created_at,tags,keys_values,topic.name,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name,remoteci.name",
+                "id,name,configuration,created_at,tags,keys_values,topic.name,url,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name,remoteci.name",
             },
             fetchWithBQ,
           );

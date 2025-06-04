@@ -2,11 +2,14 @@ import {
   Card,
   CardBody,
   Content,
+  Flex,
+  FlexItem,
   Form,
   FormGroup,
   Gallery,
   PageSection,
   Skeleton,
+  TextInput,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { createRef, useMemo, useState } from "react";
@@ -18,8 +21,12 @@ import Select from "ui/form/Select";
 import {
   getJobStats,
   IGroupByKey,
+  IStat,
   groupByKeys,
   groupByKeysWithLabel,
+  ISliceByKey,
+  sliceByKeys,
+  sliceByKeysWithLabel,
 } from "./jobStats";
 import JobStatChart from "./JobStatChart";
 import useLocalStorage from "hooks/useLocalStorage";
@@ -38,39 +45,131 @@ function JobStatsGraphs({
     "jobStatsGroupByKey",
     "topic",
   );
-  const jobStats = useMemo(
-    () => getJobStats(data, groupByKey),
-    [data, groupByKey],
+  const [sliceByKey, setSliceByKey] = useLocalStorage<ISliceByKey>(
+    "jobStatsSliceByKey",
+    "status",
   );
+  const [groupFilterRegex, setGroupFilterRegex] = useLocalStorage<string>(
+    "jobStatsGroupFilter",
+    "",
+  );
+  const [sliceFilterRegex, setSliceFilterRegex] = useLocalStorage<string>(
+    "jobStatsSliceFilter",
+    "",
+  );
+  const jobStats = useMemo(() => {
+    let filteredData = data;
+    const rawStats = getJobStats(filteredData, groupByKey, sliceByKey);
+    let groupRegex: RegExp | null = null;
+    try {
+      if (groupFilterRegex) {
+        groupRegex = new RegExp(groupFilterRegex, "i");
+      }
+    } catch {
+      groupRegex = null;
+    }
+    let sliceRegex: RegExp | null = null;
+    try {
+      if (sliceFilterRegex) {
+        sliceRegex = new RegExp(sliceFilterRegex, "i");
+      }
+    } catch {
+      sliceRegex = null;
+    }
+    const result: Record<string, Record<string, IStat>> = {};
+    for (const [groupName, slices] of Object.entries(rawStats)) {
+      if (groupRegex && !groupRegex.test(groupName)) {
+        continue;
+      }
+      const filteredSlices: Record<string, IStat> = {};
+      for (const [sliceName, stat] of Object.entries(slices)) {
+        if (!sliceRegex || sliceRegex.test(sliceName)) {
+          filteredSlices[sliceName] = stat;
+        }
+      }
+      if (Object.keys(filteredSlices).length > 0) {
+        result[groupName] = filteredSlices;
+      }
+    }
+    return result;
+  }, [data, groupByKey, sliceByKey, groupFilterRegex, sliceFilterRegex]);
   return (
     <div {...props}>
       <Card className="pf-v6-u-mt-md">
         <CardBody>
-          <div className="flex items-center justify-between">
-            <Form>
-              <FormGroup label="Group by">
-                <Select
-                  onSelect={(selection) => {
-                    if (selection) {
-                      setGroupByKey(selection.value);
-                    }
-                  }}
-                  item={{
-                    value: groupByKey,
-                    label: groupByKeysWithLabel[groupByKey],
-                  }}
-                  items={groupByKeys.map((key) => ({
-                    value: key,
-                    label: groupByKeysWithLabel[key],
-                  }))}
-                />
-              </FormGroup>
-            </Form>
-            <ScreeshotNodeButton
-              node={graphRef}
-              filename="job-stat-charts.png"
-            />
-          </div>
+          <Form>
+            <Flex
+              columnGap={{ default: "columnGap2xl" }}
+              direction={{ default: "column", lg: "row" }}
+              justifyContent={{ default: "justifyContentSpaceBetween" }}
+            >
+              <Flex
+                flex={{ default: "flex_1" }}
+                columnGap={{ default: "columnGapXl" }}
+              >
+                <FormGroup label="Group by">
+                  <Select
+                    onSelect={(selection) => {
+                      if (selection) {
+                        setGroupByKey(selection.value);
+                      }
+                    }}
+                    item={{
+                      value: groupByKey,
+                      label: groupByKeysWithLabel[groupByKey],
+                    }}
+                    items={groupByKeys.map((key) => ({
+                      value: key,
+                      label: groupByKeysWithLabel[key],
+                    }))}
+                  />
+                </FormGroup>
+                <FormGroup label="Filter groups">
+                  <TextInput
+                    id="jobStats-group-filter"
+                    type="text"
+                    value={groupFilterRegex}
+                    onChange={(_event, value) => setGroupFilterRegex(value)}
+                    placeholder="Regexp to filter groups"
+                  />
+                </FormGroup>
+                <FormGroup label="Slice by">
+                  <Select
+                    onSelect={(selection) => {
+                      if (selection) {
+                        setSliceByKey(selection.value);
+                      }
+                    }}
+                    item={{
+                      value: sliceByKey,
+                      label: sliceByKeysWithLabel[sliceByKey],
+                    }}
+                    items={sliceByKeys.map((key) => ({
+                      value: key,
+                      label: sliceByKeysWithLabel[key],
+                    }))}
+                  />
+                </FormGroup>
+                <FormGroup label="Filter slices">
+                  <TextInput
+                    id="jobStats-slice-filter"
+                    type="text"
+                    value={sliceFilterRegex}
+                    onChange={(_event, value) => setSliceFilterRegex(value)}
+                    placeholder="Regexp to filter slices"
+                  />
+                </FormGroup>
+              </Flex>
+              <Flex alignSelf={{ default: "alignSelfFlexEnd" }}>
+                <FlexItem>
+                  <ScreeshotNodeButton
+                    node={graphRef}
+                    filename="job-stat-charts.png"
+                  />
+                </FlexItem>
+              </Flex>
+            </Flex>
+          </Form>
         </CardBody>
       </Card>
 

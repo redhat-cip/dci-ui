@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ToolbarFilter } from "@patternfly/react-core";
+import { ToolbarFilter, type ToolbarLabel } from "@patternfly/react-core";
 import TextInput from "./TextInput";
 
 type ListToolbarFilterProps = {
@@ -9,6 +9,16 @@ type ListToolbarFilterProps = {
   placeholderText: string;
   onSubmit: (items: string[]) => void;
 };
+
+/**
+ * Remove a specified chip (string or ToolbarLabel) from a list of items,
+ * ensuring unique items first.
+ */
+export function deleteListItem(items: string[], chip: string | ToolbarLabel): string[] {
+  const chipValue = typeof chip === "string" ? chip : chip.key?.toString() ?? "";
+  const uniqItems = [...new Set(items)];
+  return uniqItems.filter((f) => f !== chipValue);
+}
 
 export default function ListToolbarFilter({
   showToolbarItem = true,
@@ -21,11 +31,7 @@ export default function ListToolbarFilter({
   return (
     <ToolbarFilter
       labels={uniqItems}
-      deleteLabel={(key, value) => {
-        if (key) {
-          onSubmit(uniqItems?.filter((f) => f !== value));
-        }
-      }}
+      deleteLabel={(_category, chip) => onSubmit(deleteListItem(items, chip))}
       categoryName={categoryName}
       showToolbarItem={showToolbarItem}
     >

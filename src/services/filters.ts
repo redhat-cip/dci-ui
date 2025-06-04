@@ -32,9 +32,12 @@ function _parseWhere(
         case "type":
           acc[key] = value;
           break;
-        case "tags":
-          acc.tags?.push(value);
+        case "tags": {
+          // tags filter may include multiple values separated by '|'
+          const values = value.split("|");
+          acc.tags?.push(...values);
           break;
+        }
         case "state":
           acc[key] = (value as state) || "active";
           break;
@@ -151,9 +154,11 @@ function _getWhereFromFilters(filters: Filters) {
     }
     if (key === "tags" && value) {
       const tags = value as string[];
-      keyValues = keyValues.concat(
-        [...new Set(tags)].map((t: string) => `tags:${t}`),
-      );
+      const uniqTags = [...new Set(tags)];
+      if (uniqTags.length > 0) {
+        // combine tags into a single filter segment using '|' for OR semantics
+        keyValues.push(`tags:${uniqTags.join("|")}`);
+      }
     }
   });
   return keyValues.join(",");

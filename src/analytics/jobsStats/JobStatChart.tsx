@@ -6,7 +6,7 @@ import {
   ResponsiveContainer,
   PieLabelRenderProps,
 } from "recharts";
-import { IJobStat } from "./jobStats";
+import { IStat } from "./jobStats";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -64,7 +64,7 @@ export default function JobStatChart({
   stat,
 }: {
   name: string;
-  stat: IJobStat;
+  stat: Record<string, IStat>;
 }) {
   const nbJobs = Object.values(stat).reduce((acc, status) => {
     acc += status.total;

@@ -1,6 +1,6 @@
 import { JobStatuses } from "types";
 
-export const FIELDS = [
+const FIELDS = [
   "name",
   "tags",
   "comment",

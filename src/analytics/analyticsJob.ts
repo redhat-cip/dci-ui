@@ -28,6 +28,18 @@ export function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
     case "configuration":
       key = job.configuration;
       break;
+    case "url":
+      key = job.url;
+      break;
+    case "status":
+      key = job.status;
+      break;
+    case "status_reason":
+      key = job.status_reason;
+      break;
+    case "comment":
+      key = job.comment;
+      break;
     default:
       const exhaustiveCheck: never = groupByKey;
       throw new Error(`Unhandled groupByKey: ${exhaustiveCheck}`);

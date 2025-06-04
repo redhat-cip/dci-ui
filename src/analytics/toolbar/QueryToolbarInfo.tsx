@@ -2,7 +2,7 @@ import { IAnalyticsJob } from "types";
 import AnalyticsJobsModal from "./AnalyticsJobsModal";
 import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
 
-export default function AnalyticsJobsInfo({
+export default function QueryToolbarInfo({
   isLoading,
   data,
   ...props

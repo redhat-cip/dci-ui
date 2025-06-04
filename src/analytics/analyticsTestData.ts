@@ -6,6 +6,7 @@ export const analyticsOneJob: IAnalyticsJob[] = [
     created_at: "2024-10-17T14:38:41.696112",
     id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
     name: "job1",
+    url: "",
     keys_values: [
       {
         job_id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
@@ -70,6 +71,7 @@ export const analyticsTwoJobs: IAnalyticsJob[] = [
     created_at: "2024-12-04T16:32:24.840989",
     id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
     name: "job2",
+    url: "",
     keys_values: [
       {
         job_id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
