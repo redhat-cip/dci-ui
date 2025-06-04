@@ -2,13 +2,8 @@ import { DateTime } from "luxon";
 import humanize from "humanize-duration";
 import { TimeRange } from "types";
 
-export function fromNow(
-  dateString: string,
-  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
-) {
-  return DateTime.fromISO(dateString, { zone: "utc" })
-    .setZone(timezone)
-    .toRelative();
+export function fromNow(dateString: string) {
+  return DateTime.fromISO(dateString, { zone: "utc" }).toRelative();
 }
 
 const humanizeDurationShort = humanize.humanizer({
@@ -43,7 +38,6 @@ export function humanizeDuration(
 export function formatDate(
   datetime: string | DateTime,
   format = DateTime.DATETIME_MED_WITH_SECONDS,
-  timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ) {
   let _datetime: DateTime;
   if (typeof datetime === "string") {
@@ -51,7 +45,7 @@ export function formatDate(
   } else {
     _datetime = datetime;
   }
-  return _datetime.setZone(timezone).toLocaleString(format);
+  return _datetime.toLocaleString(format);
 }
 
 export function getRangeDates(range: TimeRange, now?: string) {
