@@ -4,13 +4,12 @@ import { JobStatusLabel } from "jobs/components";
 import { Link } from "react-router";
 import { IAnalyticsJob } from "types";
 import { humanizeDuration } from "services/date";
-import JobKeysValues from "jobs/components/JobKeysValues";
 
-export default function AnalyticsJobTable({
+export default function AnalyticsJobTable<T extends IAnalyticsJob>({
   jobs,
   ...props
 }: {
-  jobs: IAnalyticsJob[];
+  jobs: T[];
   [key: string]: any;
 }) {
   return (
@@ -23,9 +22,8 @@ export default function AnalyticsJobTable({
               <Th width={10}>Name</Th>
               <Th width={10}>Team</Th>
               <Th width={10}>Pipeline</Th>
-              <Th width={30}>Key values</Th>
               <Th width={10}>Duration</Th>
-              <Th width={20}>Created</Th>
+              <Th width={10}>Created</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -41,9 +39,6 @@ export default function AnalyticsJobTable({
                   <Link to={`/teams/${job.team.id}`}>{job.team.name}</Link>
                 </Td>
                 <Td>{job.pipeline?.name}</Td>
-                <Td>
-                  <JobKeysValues keys_values={job.keys_values} />
-                </Td>
                 <Td>{humanizeDuration(job.duration)}</Td>
                 <Td>{job.created_at}</Td>
               </Tr>

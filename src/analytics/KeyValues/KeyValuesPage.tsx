@@ -31,9 +31,9 @@ import { DateTime } from "luxon";
 import { timeDay } from "d3-time";
 import { extractKeys, extractKeysValues, IGraphKeysValues } from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
-import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
+import { useGetAnalyticsKeysValuesJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsData, IAnalyticsJob, IJob } from "types";
+import { IAnalyticsKeysValuesJob, IGenericAnalyticsData, IJob } from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
 import { useNavigate, useSearchParams } from "react-router";
@@ -182,7 +182,7 @@ function KeyValuesGraphs({
   ticks,
   ...props
 }: {
-  data: IAnalyticsJob[];
+  data: IAnalyticsKeysValuesJob[];
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
@@ -293,7 +293,7 @@ function KeyValues({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsData | undefined;
+  data: IGenericAnalyticsData<IAnalyticsKeysValuesJob> | undefined;
   before: string;
   after: string;
   [key: string]: any;
@@ -330,7 +330,7 @@ export default function KeyValuesPage() {
   });
   const { query, after, before } = params;
   const shouldSearch = query !== "" && after !== "" && before !== "";
-  const { data, isLoading, isFetching } = useGetAnalyticJobsQuery(
+  const { data, isLoading, isFetching } = useGetAnalyticsKeysValuesJobsQuery(
     shouldSearch ? params : skipToken,
   );
   return (

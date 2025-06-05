@@ -15,15 +15,18 @@ import { Breadcrumb } from "ui";
 import { createRef, useMemo, useState } from "react";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsData, IAnalyticsJob } from "types";
+import {
+  groupByKeys,
+  groupByKeysWithLabel,
+  IAnalyticsJob,
+  IGenericAnalyticsData,
+} from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import Select from "ui/form/Select";
 import {
   getJobStats,
   IGroupByKey,
   IStat,
-  groupByKeys,
-  groupByKeysWithLabel,
   ISliceByKey,
   sliceByKeys,
   sliceByKeysWithLabel,
@@ -198,7 +201,7 @@ function JobStats({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsData | undefined;
+  data: IGenericAnalyticsData<IAnalyticsJob> | undefined;
   before: string;
   after: string;
   [key: string]: any;

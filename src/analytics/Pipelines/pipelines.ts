@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { IAnalyticsJob, IJobStatus } from "types";
+import { IAnalyticsResultsJob, IJobStatus } from "types";
 
 export interface IPipelineJob {
   id: string;
@@ -33,7 +33,7 @@ export interface IPipelineDay {
 }
 
 export function extractPipelinesFromAnalyticsJobs(
-  data: IAnalyticsJob[],
+  data: IAnalyticsResultsJob[],
 ): IPipelineDay[] {
   if (data.length === 0) {
     return [];

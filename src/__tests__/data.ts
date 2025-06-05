@@ -52,7 +52,7 @@ export const identity = {
       name: "First Team",
     } as IIdentityTeam,
   },
-  timezone: "UTC"
+  timezone: "UTC",
 };
 
 export const users: IUser[] = [

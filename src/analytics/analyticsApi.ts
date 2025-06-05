@@ -2,7 +2,10 @@ import { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { api } from "api";
 import { createSearchParams } from "react-router";
 import {
-  IAnalyticsData,
+  IAnalyticsJob,
+  IAnalyticsKeysValuesJob,
+  IAnalyticsResultsJob,
+  IGenericAnalyticsData,
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
 } from "types";
@@ -26,7 +29,7 @@ export function createAnalyticsSearchParams(
   ).toString();
 }
 
-async function getAnalyticsJobs(
+async function getAnalyticsJobs<T>(
   args: {
     query: string;
     after: string;
@@ -38,7 +41,7 @@ async function getAnalyticsJobs(
   const { query, after, before, includes } = args;
   let offset = 0;
   const limit = 200;
-  const analyticsJobs: IAnalyticsData = {
+  const analyticsJobs: IGenericAnalyticsData<T> = {
     jobs: [],
     _meta: { first_sync_date: "", last_sync_date: "" },
   };
@@ -62,9 +65,9 @@ async function getAnalyticsJobs(
       }
 
       const data = response.data as
-        | IGetAnalyticsJobsResponse
+        | IGetAnalyticsJobsResponse<T>
         | IGetAnalyticsJobsEmptyResponse;
-      analyticsJobs._meta = data._meta
+      analyticsJobs._meta = data._meta;
       if (!data.hits) break;
       analyticsJobs.jobs = [
         ...analyticsJobs.jobs,
@@ -81,25 +84,61 @@ async function getAnalyticsJobs(
   }
 }
 
-export const { useLazyGetAnalyticJobsQuery, useGetAnalyticJobsQuery } = api
-  .enhanceEndpoints({ addTagTypes: ["Analytics"] })
-  .injectEndpoints({
-    endpoints: (builder) => ({
-      getAnalyticJobs: builder.query<
-        IAnalyticsData,
-        { query: string; after: string; before: string; includes?: string }
-      >({
-        async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-          return getAnalyticsJobs(
-            {
-              ..._arg,
-              includes:
-                "id,name,configuration,created_at,tags,keys_values,topic.name,url,status,status_reason,comment,duration,pipeline.id,pipeline.created_at,pipeline.name,components.id,components.topic_id,components.display_name,components.type,results.errors,results.failures,results.success,results.failures,results.skips,results.total,team.id,team.name,remoteci.name",
-            },
-            fetchWithBQ,
-          );
-        },
-        providesTags: ["Analytics"],
-      }),
+const genericIncludes =
+  "id,name,status,created_at,duration,configuration,url,status_reason,comment,pipeline.id,pipeline.created_at,pipeline.name,team.id,team.name,topic.name,components.id,components.topic_id,components.display_name,components.type,remoteci.name";
+
+export const {
+  useLazyGetAnalyticJobsQuery,
+  useLazyGetAnalyticsResultsJobsQuery,
+  useGetAnalyticJobsQuery,
+  useGetAnalyticsKeysValuesJobsQuery,
+  useGetAnalyticsResultsJobsQuery,
+} = api.enhanceEndpoints({ addTagTypes: ["Analytics"] }).injectEndpoints({
+  endpoints: (builder) => ({
+    getAnalyticJobs: builder.query<
+      IGenericAnalyticsData<IAnalyticsJob>,
+      { query: string; after: string; before: string; includes?: string }
+    >({
+      async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+        return getAnalyticsJobs<IAnalyticsJob>(
+          {
+            ..._arg,
+            includes: genericIncludes,
+          },
+          fetchWithBQ,
+        );
+      },
+      providesTags: ["Analytics"],
     }),
-  });
+    getAnalyticsKeysValuesJobs: builder.query<
+      IGenericAnalyticsData<IAnalyticsKeysValuesJob>,
+      { query: string; after: string; before: string }
+    >({
+      async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+        return getAnalyticsJobs<IAnalyticsKeysValuesJob>(
+          {
+            ..._arg,
+            includes: `${genericIncludes},keys_values`,
+          },
+          fetchWithBQ,
+        );
+      },
+      providesTags: ["Analytics"],
+    }),
+    getAnalyticsResultsJobs: builder.query<
+      IGenericAnalyticsData<IAnalyticsResultsJob>,
+      { query: string; after: string; before: string }
+    >({
+      async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+        return getAnalyticsJobs<IAnalyticsResultsJob>(
+          {
+            ..._arg,
+            includes: `${genericIncludes},results.errors,results.failures,results.success,results.failures,results.skips,results.total`,
+          },
+          fetchWithBQ,
+        );
+      },
+      providesTags: ["Analytics"],
+    }),
+  }),
+});

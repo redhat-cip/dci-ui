@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { IAnalyticsJob } from "types";
+import { IAnalyticsKeysValuesJob } from "types";
 import {
   IGraphBackColor,
   IGraphType,
@@ -17,7 +17,7 @@ function generateKey(key1: string, key2: string): string {
     .replace(/^_|_$/g, "");
 }
 
-export function extractKeys(data: IAnalyticsJob[]): string[] {
+export function extractKeys(data: IAnalyticsKeysValuesJob[]): string[] {
   try {
     if (Object.keys(data).length === 0) {
       return [];
@@ -75,7 +75,7 @@ const emptyKeyValuesGraph: IGraphKeysValues = {
 
 export function extractKeysValues(
   graph: IKeyValueGraph,
-  data: IAnalyticsJob[],
+  data: IAnalyticsKeysValuesJob[],
 ): IGraphKeysValues {
   try {
     if (Object.keys(data).length === 0) {

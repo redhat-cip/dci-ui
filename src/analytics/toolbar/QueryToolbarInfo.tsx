@@ -1,4 +1,4 @@
-import { IAnalyticsData } from "types";
+import { IAnalyticsJob, IGenericAnalyticsData } from "types";
 import AnalyticsJobsModal from "./AnalyticsJobsModal";
 import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
 import { formatDate } from "services/date";
@@ -15,13 +15,13 @@ function LastSyncInfo({
   );
 }
 
-export default function QueryToolbarInfo({
+export default function QueryToolbarInfo<T extends IAnalyticsJob>({
   isLoading,
   data,
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsData | undefined;
+  data: IGenericAnalyticsData<T> | undefined;
   [key: string]: any;
 }) {
   if (isLoading) {

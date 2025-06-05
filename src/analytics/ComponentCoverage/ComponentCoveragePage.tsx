@@ -25,7 +25,11 @@ import {
   chart_color_red_orange_300,
 } from "@patternfly/react-tokens";
 import { Breadcrumb } from "ui";
-import { IAnalyticsData, IComponentCoverage } from "types";
+import {
+  IAnalyticsJob,
+  IComponentCoverage,
+  IGenericAnalyticsData,
+} from "types";
 import { buildComponentCoverage } from "./componentCoverage";
 import { FilterIcon, WarningTriangleIcon } from "@patternfly/react-icons";
 import { Link } from "react-router";
@@ -52,7 +56,7 @@ function ComponentsCoverage({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsData | undefined;
+  data: IGenericAnalyticsData<IAnalyticsJob> | undefined;
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLTableElement>();

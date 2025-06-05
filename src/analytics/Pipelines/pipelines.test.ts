@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import { extractPipelinesFromAnalyticsJobs } from "./pipelines";
-import { analyticsTwoJobs } from "analytics/analyticsTestData";
+import { analyticsTwoResultsJobs } from "analytics/analyticsTestData";
 
 test("extractPipelinesFromAnalyticsJobs", () => {
-  expect(extractPipelinesFromAnalyticsJobs(analyticsTwoJobs)).toEqual([
+  expect(extractPipelinesFromAnalyticsJobs(analyticsTwoResultsJobs)).toEqual([
     {
       date: "2024-12-04",
       datetime: DateTime.fromISO("2024-12-04"),

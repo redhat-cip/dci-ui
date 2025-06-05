@@ -1,4 +1,10 @@
-import { FinalJobStatuses, IAnalyticsJob, IFinalJobStatus } from "types";
+import {
+  FinalJobStatuses,
+  groupByKeys,
+  groupByKeysWithLabel,
+  IAnalyticsJob,
+  IFinalJobStatus,
+} from "types";
 import {
   chart_color_blue_300,
   chart_color_teal_300,
@@ -8,37 +14,9 @@ import {
   chart_color_purple_300,
   chart_color_yellow_300,
 } from "@patternfly/react-tokens";
-import { getPrincipalComponent } from "topics/component/componentSelector";
+import { getJobKey } from "analytics/analyticsJob";
 
-export const groupByKeys = [
-  "status",
-  "topic",
-  "pipeline",
-  "component",
-  "name",
-  "remoteci",
-  "team",
-  "configuration",
-  "comment",
-  "url",
-  "status_reason",
-  "tags",
-] as const;
 export type IGroupByKey = (typeof groupByKeys)[number];
-export const groupByKeysWithLabel: Record<IGroupByKey, string> = {
-  status: "Status",
-  topic: "Topic name",
-  pipeline: "Pipeline name",
-  component: "Component name",
-  name: "Job name",
-  team: "Team name",
-  remoteci: "Remoteci name",
-  configuration: "Configuration",
-  comment: "Comments",
-  url: "URL",
-  status_reason: "Status reason",
-  tags: "Tags",
-};
 
 // Keys for slicing data inside each group (pie chart slices)
 export type ISliceByKey = IGroupByKey;
@@ -52,55 +30,6 @@ export interface IStat {
   color: string;
   total: number;
   label: string;
-}
-
-function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
-  let key: string | null = null;
-
-  switch (groupByKey) {
-    case "topic":
-      key = job.topic.name;
-      break;
-    case "pipeline":
-      if (job.pipeline !== null) {
-        key = job.pipeline.name;
-      }
-      break;
-    case "component":
-      key = getPrincipalComponent(job.components)?.display_name || null;
-      break;
-    case "name":
-      key = job.name;
-      break;
-    case "remoteci":
-      key = job.remoteci.name;
-      break;
-    case "team":
-      key = job.team.name;
-      break;
-    case "configuration":
-      key = job.configuration;
-      break;
-    case "comment":
-      key = job.comment;
-      break;
-    case "url":
-      key = job.url;
-      break;
-    case "status":
-      key = job.status;
-      break;
-    case "status_reason":
-      key = job.status_reason;
-      break;
-    case "tags":
-      key = job.tags.join("|");
-      break;
-    default:
-      const exhaustiveCheck: never = groupByKey;
-      throw new Error(`Unhandled groupByKey: ${exhaustiveCheck}`);
-  }
-  return key;
 }
 
 /**

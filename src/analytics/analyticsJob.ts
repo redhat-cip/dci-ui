@@ -1,7 +1,10 @@
 import { getPrincipalComponent } from "topics/component/componentSelector";
 import { IAnalyticsJob, IGroupByKey } from "types";
 
-export function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
+export function getJobKey<T extends IAnalyticsJob>(
+  job: T,
+  groupByKey: IGroupByKey,
+) {
   let key: string | null = null;
 
   switch (groupByKey) {
@@ -39,6 +42,9 @@ export function getJobKey(job: IAnalyticsJob, groupByKey: IGroupByKey) {
       break;
     case "comment":
       key = job.comment;
+      break;
+    case "tags":
+      key = job.tags.join("|");
       break;
     default:
       const exhaustiveCheck: never = groupByKey;

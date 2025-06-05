@@ -1,17 +1,12 @@
 import { getJobStats, IGroupByKey, ISliceByKey } from "./jobStats";
-
-import {
-  analyticsEmptyData,
-  analyticsOneJob,
-  analyticsTwoJobs,
-} from "analytics/analyticsTestData";
+import { analyticsOneJob, analyticsTwoJobs } from "analytics/analyticsTestData";
 
 describe("getJobStats with sliceByKey 'tags'", () => {
   const groupByKey: IGroupByKey = "topic";
   const sliceByKey: ISliceByKey = "tags";
 
   test("returns empty object when no data", () => {
-    expect(getJobStats(analyticsEmptyData, groupByKey, sliceByKey)).toEqual({});
+    expect(getJobStats([], groupByKey, sliceByKey)).toEqual({});
   });
 
   test("splits tags into individual slices for a single job", () => {

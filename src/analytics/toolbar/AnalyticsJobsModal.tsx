@@ -4,11 +4,11 @@ import { IAnalyticsJob } from "types";
 import useModal from "hooks/useModal";
 import AnalyticsJobTable from "../jobs/AnalyticsJobTable";
 
-export default function AnalyticsJobsModal({
+export default function AnalyticsJobsModal<T extends IAnalyticsJob>({
   jobs,
   ...props
 }: {
-  jobs: IAnalyticsJob[];
+  jobs: T[];
   [key: string]: any;
 }) {
   const { isOpen, show, hide } = useModal(false);

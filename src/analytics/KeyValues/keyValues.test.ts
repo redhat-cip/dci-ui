@@ -1,21 +1,26 @@
 import { extractKeys, extractKeysValues } from "./keyValues";
 import {
-  analyticsOneJob,
-  analyticsTwoJobs,
-  analyticsEmptyData,
+  analyticsOneKeysValuesJob,
+  analyticsTwoKeysValuesJobs,
 } from "analytics/analyticsTestData";
 import { IKeyValueGraph } from "./keyValuesTypes";
 
 test("extractKeys with empty data", () => {
-  expect(extractKeys(analyticsEmptyData)).toEqual([]);
+  expect(extractKeys([])).toEqual([]);
 });
 
 test("extractKeys with one analytic job", () => {
-  expect(extractKeys(analyticsOneJob)).toEqual(["workarounds", "reboots"]);
+  expect(extractKeys(analyticsOneKeysValuesJob)).toEqual([
+    "workarounds",
+    "reboots",
+  ]);
 });
 
 test("extractKeys with two analytic jobs", () => {
-  expect(extractKeys(analyticsTwoJobs)).toEqual(["workarounds", "reboots"]);
+  expect(extractKeys(analyticsTwoKeysValuesJobs)).toEqual([
+    "workarounds",
+    "reboots",
+  ]);
 });
 
 test("extractKeysValues with empty data", () => {
@@ -31,7 +36,7 @@ test("extractKeysValues with empty data", () => {
     group_by: "",
     name: "Graph",
   };
-  expect(extractKeysValues(graph, analyticsEmptyData)).toEqual({
+  expect(extractKeysValues(graph, [])).toEqual({
     yAxis: [],
     keys: [],
     data: [],
@@ -51,7 +56,7 @@ test("extractKeysValues with one analytic job no group_by", () => {
     group_by: "",
     name: "Graph",
   };
-  expect(extractKeysValues(graph, analyticsOneJob)).toEqual({
+  expect(extractKeysValues(graph, analyticsOneKeysValuesJob)).toEqual({
     yAxis: [
       {
         orientation: "left",
@@ -92,7 +97,7 @@ test("extractKeysValues with two analytic jobs and grouped by topic", () => {
     group_by: "topic",
     name: "Graph",
   };
-  expect(extractKeysValues(graph, analyticsTwoJobs)).toEqual({
+  expect(extractKeysValues(graph, analyticsTwoKeysValuesJobs)).toEqual({
     yAxis: [
       {
         orientation: "left",

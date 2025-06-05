@@ -20,7 +20,7 @@ import { DateTime } from "luxon";
 import { formatDate } from "services/date";
 import { createRef, Fragment, useState } from "react";
 import { Link } from "react-router";
-import { IAnalyticsData, IJobStatus } from "types";
+import { IAnalyticsResultsJob, IGenericAnalyticsData, IJobStatus } from "types";
 import { ComponentsList, TestLabels } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
@@ -40,7 +40,7 @@ import {
 } from "@patternfly/react-icons";
 import { humanizeDuration } from "services/date";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
+import { useLazyGetAnalyticsResultsJobsQuery } from "analytics/analyticsApi";
 import JobComment from "jobs/components/JobComment";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 
@@ -237,7 +237,7 @@ function PipelinesPerDay({
   ...props
 }: {
   isLoading: boolean;
-  data: IAnalyticsData | undefined;
+  data: IGenericAnalyticsData<IAnalyticsResultsJob> | undefined;
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
@@ -293,7 +293,7 @@ function PipelinesPerDay({
 
 export default function PipelinesPage() {
   const [getAnalyticJobs, { data, isLoading, isFetching }] =
-    useLazyGetAnalyticJobsQuery();
+    useLazyGetAnalyticsResultsJobsQuery();
 
   return (
     <PageSection>

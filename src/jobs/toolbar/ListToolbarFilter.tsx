@@ -14,8 +14,12 @@ type ListToolbarFilterProps = {
  * Remove a specified chip (string or ToolbarLabel) from a list of items,
  * ensuring unique items first.
  */
-export function deleteListItem(items: string[], chip: string | ToolbarLabel): string[] {
-  const chipValue = typeof chip === "string" ? chip : chip.key?.toString() ?? "";
+export function deleteListItem(
+  items: string[],
+  chip: string | ToolbarLabel,
+): string[] {
+  const chipValue =
+    typeof chip === "string" ? chip : (chip.key?.toString() ?? "");
   const uniqItems = [...new Set(items)];
   return uniqItems.filter((f) => f !== chipValue);
 }

@@ -530,7 +530,6 @@ export interface IAnalyticsJob {
   name: string;
   status: IJobStatus;
   status_reason: string | null;
-  keys_values: IAnalyticsKeyValue[];
   created_at: string;
   url: string;
   components: {
@@ -551,13 +550,6 @@ export interface IAnalyticsJob {
   remoteci: {
     name: string;
   };
-  results?: {
-    errors: number;
-    failures: number;
-    success: number;
-    skips: number;
-    total: number;
-  }[];
   pipeline: {
     id: string;
     created_at: string;
@@ -567,13 +559,27 @@ export interface IAnalyticsJob {
   tags: string[];
 }
 
-export interface IAnalyticsData {
-  jobs: IAnalyticsJob[];
+export interface IAnalyticsKeysValuesJob extends IAnalyticsJob {
+  keys_values: IAnalyticsKeyValue[];
+}
+
+export interface IAnalyticsResultsJob extends IAnalyticsJob {
+  results: {
+    errors: number;
+    failures: number;
+    success: number;
+    skips: number;
+    total: number;
+  }[];
+}
+
+export interface IGenericAnalyticsData<T> {
+  jobs: T[];
   _meta: { first_sync_date: string; last_sync_date: string };
 }
 
-export interface IGetAnalyticsJobsResponse {
-    _meta: { first_sync_date: string; last_sync_date: string };
+export interface IGetAnalyticsJobsResponse<T> {
+  _meta: { first_sync_date: string; last_sync_date: string };
   _shards: {
     failed: number;
     skipped: number;
@@ -585,7 +591,7 @@ export interface IGetAnalyticsJobsResponse {
       _id: string;
       _index: string;
       _score: number | null;
-      _source: IAnalyticsJob;
+      _source: T;
       _type: string;
       sort: string[];
     }[];
@@ -622,6 +628,7 @@ export const groupByKeys = [
   "url",
   "status",
   "status_reason",
+  "tags",
 ] as const;
 
 export type IGroupByKey = (typeof groupByKeys)[number];
@@ -638,4 +645,5 @@ export const groupByKeysWithLabel: Record<IGroupByKey, string> = {
   url: "URL",
   status: "Status",
   status_reason: "Status reason",
+  tags: "Tags",
 };
