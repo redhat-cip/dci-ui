@@ -84,51 +84,39 @@ function jobStatusToProgressStepIcon(status: IJobStatus) {
 
 function PipelineJobInfo({ job, index }: { job: IPipelineJob; index: number }) {
   return (
-    <>
-      <Td
-        style={{
-          borderLeft:
-            index === 0
-              ? `1px solid ${t_global_border_color_default.var}`
-              : "none",
-          whiteSpace: "nowrap",
-        }}
-      >
-        <Link to={`/jobs/${job.id}/jobStates`}>
+    <Td
+      style={{
+        whiteSpace: "nowrap",
+        borderRight: `1px solid ${t_global_border_color_default.var}`,
+        borderLeft:
+          index === 0
+            ? `1px solid ${t_global_border_color_default.var}`
+            : "none",
+        paddingInlineEnd: "1rem",
+      }}
+    >
+      <div className="flex items-center gap-md">
+        <div style={{ width: "80px" }}>
           <JobStatusLabel
             status={job.status}
             className="pf-v6-u-mr-xs"
             style={{ zIndex: 1 }}
           />
-
-          {job.name}
-        </Link>
-      </Td>
-      <Td
-        style={{
-          whiteSpace: "nowrap",
-          textAlign: "center",
-        }}
-      >
-        <JobComment comment={job.comment} status_reason={job.status_reason} />
-      </Td>
-      <Td
-        style={{
-          whiteSpace: "nowrap",
-        }}
-      >
-        <TestLabels {...job.results} />
-      </Td>
-      <Td
-        style={{
-          whiteSpace: "nowrap",
-          textAlign: "center",
-          borderRight: `1px solid ${t_global_border_color_default.var}`,
-        }}
-      >
-        {humanizeDuration(job.duration)}
-      </Td>
-    </>
+        </div>
+        <div style={{ width: "160px" }}>
+          <Link to={`/jobs/${job.id}/jobStates`}>{job.name}</Link>
+        </div>
+        <div style={{ width: "70px" }}>
+          <JobComment comment={job.comment} status_reason={job.status_reason} />
+        </div>
+        <div style={{ width: "120px", textAlign: "center" }}>
+          <TestLabels {...job.results} />
+        </div>
+        <div style={{ textAlign: "right", width: "60px" }}>
+          {humanizeDuration(job.duration)}
+        </div>
+      </div>
+    </Td>
   );
 }
 
@@ -177,10 +165,12 @@ function PipelineCard({
               <Fragment key={index}>
                 <Tr
                   style={{
-                    borderTop: `1px solid ${t_global_border_color_default.var}`,
+                    border: `1px solid ${t_global_border_color_default.var}`,
+                    verticalAlign: "middle",
+                   
                   }}
                 >
-                  <Td rowSpan={seeJobComponents ? 2 : 1}>
+                  <Td rowSpan={seeJobComponents ? 2 : 1} style={{  paddingInlineStart: "1rem",}}>
                     <ProgressStepper isCompact>
                       {pipeline.jobs.map((job) => (
                         <ProgressStep
@@ -206,14 +196,18 @@ function PipelineCard({
                   ))}
                 </Tr>
                 {seeJobComponents && (
-                  <Tr>
+                  <Tr
+                    style={{
+                      border: `1px solid ${t_global_border_color_default.var}`,
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {pipeline.jobs.map((job) => (
                       <Td
                         style={{
                           borderLeft: `1px solid ${t_global_border_color_default.value}`,
                           whiteSpace: "nowrap",
                         }}
-                        colSpan={4}
                       >
                         <ComponentsList
                           components={job.components.filter(notEmpty)}
