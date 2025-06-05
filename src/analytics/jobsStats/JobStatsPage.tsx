@@ -32,7 +32,6 @@ import {
   sliceByKeysWithLabel,
 } from "./jobStats";
 import JobStatChart from "./JobStatChart";
-import useLocalStorage from "hooks/useLocalStorage";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 import { sort } from "services/sort";
 
@@ -44,22 +43,10 @@ function JobStatsGraphs({
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
-  const [groupByKey, setGroupByKey] = useLocalStorage<IGroupByKey>(
-    "jobStatsGroupByKey",
-    "topic",
-  );
-  const [sliceByKey, setSliceByKey] = useLocalStorage<ISliceByKey>(
-    "jobStatsSliceByKey",
-    "status",
-  );
-  const [groupFilterRegex, setGroupFilterRegex] = useLocalStorage<string>(
-    "jobStatsGroupFilter",
-    "",
-  );
-  const [sliceFilterRegex, setSliceFilterRegex] = useLocalStorage<string>(
-    "jobStatsSliceFilter",
-    "",
-  );
+  const [groupByKey, setGroupByKey] = useState<IGroupByKey>("topic");
+  const [sliceByKey, setSliceByKey] = useState<ISliceByKey>("status");
+  const [groupFilterRegex, setGroupFilterRegex] = useState<string>("");
+  const [sliceFilterRegex, setSliceFilterRegex] = useState<string>("");
   const jobStats = useMemo(() => {
     let filteredData = data;
     const rawStats = getJobStats(filteredData, groupByKey, sliceByKey);

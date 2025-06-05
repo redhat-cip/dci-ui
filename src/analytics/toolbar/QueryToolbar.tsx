@@ -76,19 +76,18 @@ export default function QueryToolbar({
     onLoad(defaultValues);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const searchJobs = (values: AnalyticsToolbarSearch) => {
+    const params = {
+      ...values,
+      range: values.range,
+    };
+    setSearchParams(params);
+    onSearch(params);
+  };
+
   return (
     <Toolbar id="toolbar-pipelines" {...props}>
-      <form
-        id="toolbar-pipelines"
-        onSubmit={handleSubmit((values) => {
-          const params = {
-            ...values,
-            range: values.range,
-          };
-          setSearchParams(params);
-          onSearch(params);
-        })}
-      >
+      <form id="toolbar-pipelines" onSubmit={handleSubmit(searchJobs)}>
         <ToolbarContent>
           <ToolbarItem style={{ flex: 1 }}>
             <TextInputGroup>
@@ -96,7 +95,11 @@ export default function QueryToolbar({
                 control={control}
                 name="query"
                 render={({ field: { onChange, value } }) => (
-                  <QueryToolBarInputSearch value={value} onChange={onChange} />
+                  <QueryToolBarInputSearch
+                    value={value}
+                    onChange={onChange}
+                    onSubmit={handleSubmit(searchJobs)}
+                  />
                 )}
               />
             </TextInputGroup>

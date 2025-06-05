@@ -17,11 +17,13 @@ export interface QueryToolBarInputSearchProps
   extends Omit<React.HTMLProps<HTMLInputElement>, "onChange"> {
   value: string;
   onChange: (value: string) => void;
+  onSubmit: () => void;
 }
 
 export default function QueryToolBarInputSearch({
   value,
   onChange,
+  onSubmit,
 }: QueryToolBarInputSearchProps) {
   const [cursor, setCursor] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
@@ -89,6 +91,9 @@ export default function QueryToolBarInputSearch({
           const completion = completions[focusedIndex];
           _applyCompletion(value, cursor, completion);
         }
+      }
+      if (event.key === "Enter" && focusedIndex === null) {
+        onSubmit();
       }
     };
     window.addEventListener("keydown", handleMenuKeys);

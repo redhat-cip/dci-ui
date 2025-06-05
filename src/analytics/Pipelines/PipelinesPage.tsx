@@ -167,10 +167,12 @@ function PipelineCard({
                   style={{
                     border: `1px solid ${t_global_border_color_default.var}`,
                     verticalAlign: "middle",
-                   
                   }}
                 >
-                  <Td rowSpan={seeJobComponents ? 2 : 1} style={{  paddingInlineStart: "1rem",}}>
+                  <Td
+                    rowSpan={seeJobComponents ? 2 : 1}
+                    style={{ paddingInlineStart: "1rem" }}
+                  >
                     <ProgressStepper isCompact>
                       {pipeline.jobs.map((job) => (
                         <ProgressStep
