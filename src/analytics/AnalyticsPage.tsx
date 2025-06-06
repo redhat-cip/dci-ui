@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
 import ComponentCoverageHeaderImage from "./ComponentCoverage/component_coverage.png";
+import TestingTrendHeaderImage from "./TestingTrend/testing_trend.jpg";
 import JobStatsHeaderImage from "./jobsStats/job_stats.png";
 import PipelinesHeaderImage from "./Pipelines/pipelines.png";
 import KeyValuesHeaderImage from "./KeyValues/keyvalues.png";
@@ -37,6 +38,28 @@ export default function AnalyticsPage() {
       >
         <Card
           className="pointer"
+          onClick={() => navigate("/analytics/testing_trend")}
+        >
+          <CardHeader>
+            <img
+              src={TestingTrendHeaderImage}
+              alt="Testing trend"
+              height={100}
+              width="auto"
+            />
+          </CardHeader>
+          <CardTitle>
+            Testing Trend
+            <DisplayIfBefore date="2025-08-01">
+              <Label color="green" isCompact className="pf-v6-u-ml-xs">
+                new
+              </Label>
+            </DisplayIfBefore>
+          </CardTitle>
+          <CardBody>See testing trend and detect flaky tests.</CardBody>
+        </Card>
+        <Card
+          className="pointer"
           onClick={() => navigate("/analytics/job_stats")}
         >
           <CardHeader>
@@ -57,7 +80,6 @@ export default function AnalyticsPage() {
           </CardTitle>
           <CardBody>Build a statistical view of your jobs!</CardBody>
         </Card>
-
         <Card
           className="pointer"
           onClick={() => {
@@ -75,7 +97,6 @@ export default function AnalyticsPage() {
           <CardTitle>Key values</CardTitle>
           <CardBody>Graph key values attached to your jobs</CardBody>
         </Card>
-
         <Card
           className="pointer"
           onClick={() => {
@@ -93,7 +114,6 @@ export default function AnalyticsPage() {
           <CardTitle>Pipelines</CardTitle>
           <CardBody>View pipelines from the past few days</CardBody>
         </Card>
-
         <Card
           className="pointer"
           onClick={() => navigate("/analytics/component_coverage")}
@@ -112,7 +132,6 @@ export default function AnalyticsPage() {
             associated jobs.
           </CardBody>
         </Card>
-
         <Card
           className="pointer"
           onClick={() => navigate("/analytics/junit_comparison")}
@@ -131,7 +150,6 @@ export default function AnalyticsPage() {
             performance.
           </CardBody>
         </Card>
-
         <Card
           className="pointer"
           onClick={() => navigate("/analytics/tasks_duration_per_job")}

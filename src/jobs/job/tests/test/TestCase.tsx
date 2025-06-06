@@ -46,6 +46,12 @@ function TestCaseIcon({ action }: { action: ITestCaseActionType }) {
           Pass
         </Label>
       );
+    default:
+      return (
+        <Label isCompact color="grey">
+          Unknown
+        </Label>
+      );
   }
 }
 

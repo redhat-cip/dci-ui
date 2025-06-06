@@ -5,6 +5,7 @@ import {
   IAnalyticsJob,
   IAnalyticsKeysValuesJob,
   IAnalyticsResultsJob,
+  IAnalyticsTestsJob,
   IGenericAnalyticsData,
   IGetAnalyticsJobsEmptyResponse,
   IGetAnalyticsJobsResponse,
@@ -29,7 +30,7 @@ export function createAnalyticsSearchParams(
   ).toString();
 }
 
-async function getAnalyticsJobs<T>(
+async function getAllAnalyticsJobs<T>(
   args: {
     query: string;
     after: string;
@@ -84,6 +85,54 @@ async function getAnalyticsJobs<T>(
   }
 }
 
+async function getAnalyticsJobs<T>(
+  args: {
+    query: string;
+    after: string;
+    before: string;
+    includes: string;
+    offset?: number;
+    limit?: number;
+  },
+  fetchWithBQ: (arg: Parameters<BaseQueryFn>[0]) => ReturnType<BaseQueryFn>,
+) {
+  const { query, after, before, includes, offset = 0, limit = 200 } = args;
+
+  const analyticsJobs: IGenericAnalyticsData<T> = {
+    jobs: [],
+    _meta: { first_sync_date: "", last_sync_date: "" },
+  };
+
+  try {
+    const params = createAnalyticsSearchParams({
+      query,
+      offset,
+      limit,
+      sort: "-created_at",
+      includes,
+      from: after,
+      to: before,
+    });
+
+    const response = await fetchWithBQ(`/analytics/jobs?${params}`);
+    if (response.error) {
+      return { error: response.error as FetchBaseQueryError };
+    }
+
+    const data = response.data as
+      | IGetAnalyticsJobsResponse<T>
+      | IGetAnalyticsJobsEmptyResponse;
+    analyticsJobs._meta = data._meta;
+    if (data.hits) {
+      analyticsJobs.jobs = [...data.hits.hits.map((h) => h._source)];
+    }
+    return {
+      data: analyticsJobs,
+    };
+  } catch (error) {
+    return { error: error as FetchBaseQueryError };
+  }
+}
 const genericIncludes =
   "id,name,status,created_at,duration,configuration,url,status_reason,comment,pipeline.id,pipeline.created_at,pipeline.name,team.id,team.name,topic.name,components.id,components.topic_id,components.display_name,components.type,remoteci.name,tags";
 
@@ -93,6 +142,7 @@ export const {
   useGetAnalyticJobsQuery,
   useGetAnalyticsKeysValuesJobsQuery,
   useGetAnalyticsResultsJobsQuery,
+  useGetAnalyticsTestsJobsQuery,
 } = api.enhanceEndpoints({ addTagTypes: ["Analytics"] }).injectEndpoints({
   endpoints: (builder) => ({
     getAnalyticJobs: builder.query<
@@ -100,7 +150,7 @@ export const {
       { query: string; after: string; before: string; includes?: string }
     >({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-        return getAnalyticsJobs<IAnalyticsJob>(
+        return getAllAnalyticsJobs<IAnalyticsJob>(
           {
             ..._arg,
             includes: genericIncludes,
@@ -115,7 +165,7 @@ export const {
       { query: string; after: string; before: string }
     >({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-        return getAnalyticsJobs<IAnalyticsKeysValuesJob>(
+        return getAllAnalyticsJobs<IAnalyticsKeysValuesJob>(
           {
             ..._arg,
             includes: `${genericIncludes},keys_values`,
@@ -130,10 +180,26 @@ export const {
       { query: string; after: string; before: string }
     >({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-        return getAnalyticsJobs<IAnalyticsResultsJob>(
+        return getAllAnalyticsJobs<IAnalyticsResultsJob>(
           {
             ..._arg,
             includes: `${genericIncludes},results.errors,results.failures,results.success,results.failures,results.skips,results.total`,
+          },
+          fetchWithBQ,
+        );
+      },
+      providesTags: ["Analytics"],
+    }),
+    getAnalyticsTestsJobs: builder.query<
+      IGenericAnalyticsData<IAnalyticsTestsJob>,
+      { query: string; after: string; before: string }
+    >({
+      async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+        return getAnalyticsJobs<IAnalyticsTestsJob>(
+          {
+            ..._arg,
+            limit: 20,
+            includes: `${genericIncludes},tests.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
           },
           fetchWithBQ,
         );

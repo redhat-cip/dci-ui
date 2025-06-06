@@ -573,6 +573,23 @@ export interface IAnalyticsResultsJob extends IAnalyticsJob {
   }[];
 }
 
+export interface IAnalyticsTestsuite {
+  testcases?: {
+    action: ITestCaseActionType;
+    classname: string;
+    name: string;
+  }[];
+}
+
+export interface IAnalyticsTest {
+  name: string;
+  testsuites?: IAnalyticsTestsuite[];
+}
+
+export interface IAnalyticsTestsJob extends IAnalyticsJob {
+  tests: IAnalyticsTest[];
+}
+
 export interface IGenericAnalyticsData<T> {
   jobs: T[];
   _meta: { first_sync_date: string; last_sync_date: string };
