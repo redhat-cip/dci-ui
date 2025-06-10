@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
 import ComponentCoverageHeaderImage from "./ComponentCoverage/component_coverage.png";
-import TestingTrendHeaderImage from "./TestingTrend/testing_trend.jpg";
+import TestsAnalysisHeaderImage from "./TestsAnalysis/TestsAnalysisHeaderImage.jpg";
 import JobStatsHeaderImage from "./jobsStats/job_stats.png";
 import PipelinesHeaderImage from "./Pipelines/pipelines.png";
 import KeyValuesHeaderImage from "./KeyValues/keyvalues.png";
@@ -36,27 +36,24 @@ export default function AnalyticsPage() {
           default: "1fr",
         }}
       >
-        <Card
-          className="pointer"
-          onClick={() => navigate("/analytics/testing_trend")}
-        >
+        <Card className="pointer" onClick={() => navigate("/analytics/tests")}>
           <CardHeader>
             <img
-              src={TestingTrendHeaderImage}
-              alt="Testing trend"
+              src={TestsAnalysisHeaderImage}
+              alt="Tests Analysis"
               height={100}
               width="auto"
             />
           </CardHeader>
           <CardTitle>
-            Testing Trend
+            Tests Analysis
             <DisplayIfBefore date="2025-08-01">
               <Label color="green" isCompact className="pf-v6-u-ml-xs">
                 new
               </Label>
             </DisplayIfBefore>
           </CardTitle>
-          <CardBody>See testing trend and detect flaky tests.</CardBody>
+          <CardBody>Analyze your tests and detect flaky ones.</CardBody>
         </Card>
         <Card
           className="pointer"

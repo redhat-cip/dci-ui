@@ -1,10 +1,10 @@
 import { IAnalyticsTestsJob } from "types";
-import { getTestingTrend } from "./testingTrend";
+import { analyseTests } from "./testsAnalysis";
 import { analyticsTwoJobs } from "analytics/analyticsTestData";
 
 describe("getTestingTrend", () => {
   test("getTestingTrend no data", () => {
-    expect(getTestingTrend([])).toEqual([]);
+    expect(analyseTests([])).toEqual([]);
   });
 
   test("get testing trend with 2 jobs", () => {
@@ -76,7 +76,7 @@ describe("getTestingTrend", () => {
       },
     ];
 
-    const trend = getTestingTrend(jobs);
+    const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
         name: "class1::testcase 1",
@@ -168,7 +168,7 @@ describe("getTestingTrend", () => {
       },
     ];
 
-    const trend = getTestingTrend(jobs);
+    const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
         name: "class1::testcase 1",

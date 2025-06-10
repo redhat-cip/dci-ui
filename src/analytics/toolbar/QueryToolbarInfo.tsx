@@ -4,14 +4,19 @@ import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
 import { formatDate } from "services/date";
 
 function LastSyncInfo({
+  firstSyncDate,
   lastSyncDate,
   className,
 }: {
+  firstSyncDate: string;
   lastSyncDate: string;
   className?: string;
 }) {
   return (
-    <span className={className}>Last sync: {formatDate(lastSyncDate)}.</span>
+    <span className={className}>
+      {/* From {formatDate(firstSyncDate)} to {formatDate(lastSyncDate)}. */}
+      Last sync {formatDate(lastSyncDate)}.
+    </span>
   );
 }
 
@@ -39,6 +44,7 @@ export default function QueryToolbarInfo<T extends IAnalyticsJob>({
           <HelperTextItem>
             There are no jobs that match your search.
             <LastSyncInfo
+              firstSyncDate={data._meta.first_sync_date || ""}
               lastSyncDate={data._meta.last_sync_date}
               className="pf-v6-u-ml-xs"
             />
@@ -57,6 +63,7 @@ export default function QueryToolbarInfo<T extends IAnalyticsJob>({
           </b>{" "}
           that match your search.
           <LastSyncInfo
+            firstSyncDate={data._meta.first_sync_date || ""}
             lastSyncDate={data._meta.last_sync_date}
             className="pf-v6-u-ml-xs"
           />

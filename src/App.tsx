@@ -34,7 +34,8 @@ import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import JobTestPage from "jobs/job/tests/test/JobTestPage";
 import PipelinesPage from "analytics/Pipelines/PipelinesPage";
 import KeyValuesPage from "analytics/KeyValues/KeyValuesPage";
-import TestingTrendPage from "analytics/TestingTrend/TestingTrendPage";
+import TestsAnalysisPage from "analytics/TestsAnalysis/TestsAnalysisPage";
+import Redirect from "Redirect";
 
 export default function App() {
   return (
@@ -67,7 +68,11 @@ export default function App() {
               <Route path="job_stats" element={<JobStatsPage />} />
               <Route path="pipelines" element={<PipelinesPage />} />
               <Route path="keyvalues" element={<KeyValuesPage />} />
-              <Route path="testing_trend" element={<TestingTrendPage />} />
+              <Route
+                path="testing_trend"
+                element={<Redirect to="/analytics/tests" replace />}
+              />
+              <Route path="tests" element={<TestsAnalysisPage />} />
             </Route>
             <Route path="jobs">
               <Route index element={<JobsPage />} />

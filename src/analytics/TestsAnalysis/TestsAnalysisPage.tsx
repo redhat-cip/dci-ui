@@ -16,38 +16,64 @@ import { useGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import { IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { getTestingTrend, TestcaseEntry } from "./testingTrend";
+import { analyseTests, TestcaseEntry } from "./testsAnalysis";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import {
   chart_color_black_200,
   chart_color_green_300,
-  chart_color_orange_300,
+  chart_color_orange_200,
   chart_color_red_orange_300,
+  chart_color_red_orange_400,
 } from "@patternfly/react-tokens";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
+import { Link } from "react-router";
 
 const statusColorMap: Record<string, string> = {
   success: chart_color_green_300.var,
+  skipped: chart_color_orange_200.var,
   failure: chart_color_red_orange_300.var,
-  skipped: chart_color_orange_300.var,
-  error: chart_color_red_orange_300.var,
+  error: chart_color_red_orange_400.var,
   absent: chart_color_black_200.var,
 };
 
 function JobsFlaskyGraph({ jobs }: { jobs: TestcaseEntry["jobs"] }) {
   return (
-    <div className="flex gap-1" style={{ gap: "1px", width: "350px" }}>
+    <div className="flex" style={{ gap: "1px" }}>
       {jobs.map((job) => (
-        <div
+        <Link
           key={job.id}
+          target="_blank"
+          rel="noopener noreferrer"
           title={`Job: ${job.id}\nStatus: ${job.status}`}
+          to={`/jobs/${job.id}/jobStates`}
           style={{
-            width: "8px",
+            flex: 1,
             height: "20px",
             backgroundColor:
               statusColorMap[job.status] || statusColorMap.absent,
           }}
         />
+      ))}
+    </div>
+  );
+}
+
+function Legend() {
+  return (
+    <div className="flex" style={{ gap: "1px" }}>
+      {Object.keys(statusColorMap).map((colorKey) => (
+        <div
+          key={colorKey}
+          style={{
+            padding: "0 .2em",
+            flex: 1,
+            fontSize: "12px",
+            backgroundColor: statusColorMap[colorKey],
+            textAlign: "center",
+          }}
+        >
+          {colorKey}
+        </div>
       ))}
     </div>
   );
@@ -63,9 +89,13 @@ function TestingTrendGraph({
   const graphRef = createRef<HTMLDivElement>();
   const [testcaseFilter, setTestcaseFilter] = useState("");
 
-  const trend = useMemo(() => {
-    return getTestingTrend(data);
+  const tests = useMemo(() => {
+    return analyseTests(data);
   }, [data]);
+
+  const filteredTests = tests.filter((tc) =>
+    tc.name.toLowerCase().includes(testcaseFilter.toLowerCase()),
+  );
 
   return (
     <div {...props}>
@@ -107,24 +137,37 @@ function TestingTrendGraph({
         <CardBody>
           <Table>
             <Thead>
-              <Tr>
-                <Th>Jobs</Th>
-                <Th>Testcase</Th>
+              <Tr style={{ marginTop: "-10em" }}>
+                <Th width={20}>Status</Th>
+                <Th width={80}>
+                  Classname::Name (
+                  {filteredTests.length === tests.length
+                    ? `${tests.length} tests`
+                    : `${filteredTests.length} / ${tests.length} tests`}
+                  )
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
-              {trend
-                .filter((tc) =>
-                  tc.name.toLowerCase().includes(testcaseFilter.toLowerCase()),
-                )
-                .map((testcase) => (
-                  <Tr key={`${testcase.name}`}>
-                    <Td>
-                      <JobsFlaskyGraph jobs={testcase.jobs} />
-                    </Td>
-                    <Td style={{ verticalAlign: "middle" }}>{testcase.name}</Td>
-                  </Tr>
-                ))}
+              <Tr>
+                <Td>
+                  <Legend />
+                </Td>
+                <Td>Classname and testcase name separated by ::</Td>
+              </Tr>
+              {filteredTests.map((testcase) => (
+                <Tr key={`${testcase.name}`}>
+                  <Td>
+                    <JobsFlaskyGraph jobs={testcase.jobs} />
+                  </Td>
+                  <Td style={{ verticalAlign: "middle" }}>{testcase.name}</Td>
+                </Tr>
+              ))}
+              {filteredTests.length === 0 && tests.length > 0 && (
+                <Tr>
+                  <Td colSpan={2}>There is no testcase matching your search</Td>
+                </Tr>
+              )}
             </Tbody>
           </Table>
         </CardBody>
@@ -166,7 +209,7 @@ function TestingTrend({
   return <TestingTrendGraph data={data.jobs} />;
 }
 
-export default function TestingTrendPage() {
+export default function TestsAnalysisPage() {
   const [params, setParams] = useState<{
     query: string;
     after: string;
@@ -187,11 +230,11 @@ export default function TestingTrendPage() {
         links={[
           { to: "/", title: "DCI" },
           { to: "/analytics", title: "Analytics" },
-          { title: "Testing trend" },
+          { title: "Tests Analysis" },
         ]}
       />
-      <Content component="h1">Testing trend</Content>
-      <Content component="p">See testing trend and detect flaky tests.</Content>
+      <Content component="h1">Tests Analysis</Content>
+      <Content component="p">Analyze your tests and detect flaky ones.</Content>
       <AnalyticsToolbar
         onLoad={setParams}
         onSearch={setParams}

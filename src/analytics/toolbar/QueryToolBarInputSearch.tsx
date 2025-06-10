@@ -104,6 +104,7 @@ export default function QueryToolBarInputSearch({
     isAutocompleteOpen,
     focusedIndex,
     _applyCompletion,
+    onSubmit,
     value,
     cursor,
     completions,

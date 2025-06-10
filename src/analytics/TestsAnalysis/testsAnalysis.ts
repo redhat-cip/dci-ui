@@ -7,7 +7,7 @@ export type TestcaseEntry = {
   jobs: { id: string; created_at: string; status: TestCaseResult }[];
 };
 
-export function getTestingTrend(jobs: IAnalyticsTestsJob[]) {
+export function analyseTests(jobs: IAnalyticsTestsJob[]) {
   const jobMeta = jobs.map((job) => ({
     id: job.id,
     created_at: job.created_at,
