@@ -582,6 +582,7 @@ export interface IAnalyticsTestsuite {
 }
 
 export interface IAnalyticsTest {
+  file_id: string;
   name: string;
   testsuites?: IAnalyticsTestsuite[];
 }

@@ -93,10 +93,19 @@ async function getAnalyticsJobs<T>(
     includes: string;
     offset?: number;
     limit?: number;
+    sort?: string;
   },
   fetchWithBQ: (arg: Parameters<BaseQueryFn>[0]) => ReturnType<BaseQueryFn>,
 ) {
-  const { query, after, before, includes, offset = 0, limit = 200 } = args;
+  const {
+    query,
+    after,
+    before,
+    includes,
+    offset = 0,
+    limit = 200,
+    sort = "-created_at",
+  } = args;
 
   const analyticsJobs: IGenericAnalyticsData<T> = {
     jobs: [],
@@ -108,7 +117,7 @@ async function getAnalyticsJobs<T>(
       query,
       offset,
       limit,
-      sort: "-created_at",
+      sort,
       includes,
       from: after,
       to: before,
@@ -198,8 +207,9 @@ export const {
         return getAnalyticsJobs<IAnalyticsTestsJob>(
           {
             ..._arg,
-            limit: 20,
-            includes: `${genericIncludes},tests.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
+            limit: 10,
+            sort: "created_at",
+            includes: `${genericIncludes},tests.file_id,tests.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
           },
           fetchWithBQ,
         );

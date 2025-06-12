@@ -13,9 +13,11 @@ describe("getTestingTrend", () => {
         ...analyticsTwoJobs[0],
         tests: [
           {
+            file_id: "71e07cda-a17d-48be-9d9f-211732216ef9",
             name: "test without testsuites",
           },
           {
+            file_id: "84635f7f-ad47-4793-8769-0eb46c160640",
             name: "test 2",
             testsuites: [
               {
@@ -34,31 +36,13 @@ describe("getTestingTrend", () => {
               },
             ],
           },
-          {
-            name: "test 3",
-            testsuites: [
-              {
-                testcases: [
-                  {
-                    action: "success",
-                    classname: "class2",
-                    name: "testcase 1",
-                  },
-                  {
-                    action: "success",
-                    classname: "class2",
-                    name: "testcase 2",
-                  },
-                ],
-              },
-            ],
-          },
         ],
       },
       {
         ...analyticsTwoJobs[1],
         tests: [
           {
+            file_id: "7fbd3bd3-1591-43b4-8753-a5b7e3f8230f",
             name: "test 2",
             testsuites: [
               {
@@ -79,61 +63,41 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        name: "class1::testcase 1",
+        classname: "class1",
+        filename: "test 2",
+        name: "testcase 1",
+        key: "test 2|class1|testcase 1",
         jobs: [
           {
-            id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-12-04T16:32:24.840989",
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: "84635f7f-ad47-4793-8769-0eb46c160640",
             status: "success",
           },
           {
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-10-17T14:38:41.696112",
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: "7fbd3bd3-1591-43b4-8753-a5b7e3f8230f",
             status: "failure",
           },
         ],
       },
       {
-        name: "class1::testcase 2",
+        key: "test 2|class1|testcase 2",
+        classname: "class1",
+        filename: "test 2",
+        name: "testcase 2",
         jobs: [
           {
-            id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-12-04T16:32:24.840989",
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: "84635f7f-ad47-4793-8769-0eb46c160640",
             status: "failure",
           },
           {
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-10-17T14:38:41.696112",
-            status: "absent",
-          },
-        ],
-      },
-      {
-        name: "class2::testcase 1",
-        jobs: [
-          {
-            id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-12-04T16:32:24.840989",
-            status: "success",
-          },
-          {
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-10-17T14:38:41.696112",
-            status: "absent",
-          },
-        ],
-      },
-      {
-        name: "class2::testcase 2",
-        jobs: [
-          {
-            id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-12-04T16:32:24.840989",
-            status: "success",
-          },
-          {
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-10-17T14:38:41.696112",
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: null,
             status: "absent",
           },
         ],
@@ -151,6 +115,7 @@ describe("getTestingTrend", () => {
         ...analyticsTwoJobs[1],
         tests: [
           {
+            file_id: "e2e8403e-ec24-4860-bae0-5e22e78922bb",
             name: "test 2",
             testsuites: [
               {
@@ -171,16 +136,110 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        name: "class1::testcase 1",
+        key: "test 2|class1|testcase 1",
+        classname: "class1",
+        filename: "test 2",
+        name: "testcase 1",
         jobs: [
           {
-            id: "347150d9-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-12-04T16:32:24.840989",
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: null,
             status: "absent",
           },
           {
-            id: "50d93471-99e4-496b-8c6b-9c2e37fc61c3",
-            created_at: "2024-10-17T14:38:41.696112",
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: "e2e8403e-ec24-4860-bae0-5e22e78922bb",
+            status: "failure",
+          },
+        ],
+      },
+    ]);
+  });
+
+  test("nrt same testcases are per test files", () => {
+    const jobs: IAnalyticsTestsJob[] = [
+      {
+        ...analyticsTwoJobs[0],
+        tests: [
+          {
+            file_id: "fae5597a-aed0-447f-9852-d6513c8c8583",
+            name: "test 1",
+            testsuites: [
+              {
+                testcases: [
+                  {
+                    action: "failure",
+                    classname: "class1",
+                    name: "testcase 1",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        ...analyticsTwoJobs[1],
+        tests: [
+          {
+            file_id: "2b131003-b149-4d32-bf7d-b3ad5bc1fede",
+            name: "test 2",
+            testsuites: [
+              {
+                testcases: [
+                  {
+                    action: "failure",
+                    classname: "class1",
+                    name: "testcase 1",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const trend = analyseTests(jobs);
+    expect(trend).toEqual([
+      {
+        key: "test 1|class1|testcase 1",
+        classname: "class1",
+        filename: "test 1",
+        name: "testcase 1",
+        jobs: [
+          {
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: "fae5597a-aed0-447f-9852-d6513c8c8583",
+            status: "failure",
+          },
+          {
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: null,
+            status: "absent",
+          },
+        ],
+      },
+      {
+        key: "test 2|class1|testcase 1",
+        classname: "class1",
+        filename: "test 2",
+        name: "testcase 1",
+        jobs: [
+          {
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: null,
+            status: "absent",
+          },
+          {
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: "2b131003-b149-4d32-bf7d-b3ad5bc1fede",
             status: "failure",
           },
         ],

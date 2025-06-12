@@ -1,54 +1,71 @@
 import { IAnalyticsTestsJob, ITestCaseActionType } from "types";
 
-type TestCaseResult = ITestCaseActionType | "absent";
+export type TestCaseResult = ITestCaseActionType | "absent";
 
 export type TestcaseEntry = {
+  classname: string;
+  filename: string;
   name: string;
-  jobs: { id: string; created_at: string; status: TestCaseResult }[];
+  key: string;
+  jobs: {
+    id: string;
+    created_at: string;
+    fileId: string | null;
+    status: TestCaseResult;
+  }[];
 };
 
-export function analyseTests(jobs: IAnalyticsTestsJob[]) {
-  const jobMeta = jobs.map((job) => ({
-    id: job.id,
-    created_at: job.created_at,
-  }));
-
-  const testcaseMap: Map<string, Map<string, TestCaseResult>> = new Map();
+export function analyseTests(jobs: IAnalyticsTestsJob[]): TestcaseEntry[] {
+  const jobMeta = jobs.map(({ id, created_at }) => ({ id, created_at }));
+  const jobKeyFileIds: Record<string, { [key: string]: string }> = {};
+  const testcaseMap: Record<
+    string,
+    {
+      filename: string;
+      classname: string;
+      name: string;
+      jobStatuses: Record<string, TestCaseResult>;
+    }
+  > = {};
 
   for (const job of jobs) {
     const jobId = job.id;
-
-    const jobResults = new Map<string, TestCaseResult>();
     for (const test of job.tests ?? []) {
+      const fileId = test.file_id;
+      const filename = test.name;
       for (const suite of test.testsuites ?? []) {
         for (const testcase of suite.testcases ?? []) {
-          const key = `${testcase.classname}::${testcase.name}`;
-          jobResults.set(key, testcase.action);
+          const classname = testcase.classname;
+          const name = testcase.name;
+          const key = `${filename}|${classname}|${name}`;
+          if (!testcaseMap[key]) {
+            testcaseMap[key] = {
+              filename,
+              classname,
+              name,
+              jobStatuses: {},
+            };
+          }
+          if (!jobKeyFileIds[jobId]) {
+            jobKeyFileIds[jobId] = {};
+          }
+          jobKeyFileIds[jobId][key] = fileId;
+          testcaseMap[key].jobStatuses[jobId] = testcase.action;
         }
       }
     }
-
-    for (const [testcaseKey, status] of jobResults.entries()) {
-      if (!testcaseMap.has(testcaseKey)) {
-        testcaseMap.set(testcaseKey, new Map());
-      }
-      testcaseMap.get(testcaseKey)!.set(jobId, status);
-    }
   }
 
-  const result: {
-    name: string;
-    jobs: { id: string; created_at: string; status: TestCaseResult }[];
-  }[] = [];
-
-  for (const [testcaseKey, jobStatusMap] of testcaseMap.entries()) {
-    const jobsData = jobMeta.map(({ id, created_at }) => ({
+  return Object.entries(testcaseMap).map(([key, entry]) => ({
+    key,
+    filename: entry.filename,
+    classname: entry.classname,
+    name: entry.name,
+    jobs: jobMeta.map(({ id, created_at }) => ({
       id,
       created_at,
-      status: jobStatusMap.get(id) ?? "absent",
-    }));
-    result.push({ name: testcaseKey, jobs: jobsData });
-  }
-
-  return result;
+      fileId: jobKeyFileIds[id]?.[key] ?? null,
+      status: entry.jobStatuses[id] ?? "absent",
+    })),
+  }));
 }

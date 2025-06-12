@@ -2,8 +2,6 @@ import {
   Card,
   CardBody,
   Content,
-  Flex,
-  FlexItem,
   Form,
   FormGroup,
   PageSection,
@@ -16,7 +14,7 @@ import { useGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import { IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { analyseTests, TestcaseEntry } from "./testsAnalysis";
+import { analyseTests, TestcaseEntry, TestCaseResult } from "./testsAnalysis";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import {
   chart_color_black_200,
@@ -28,7 +26,7 @@ import {
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 import { Link } from "react-router";
 
-const statusColorMap: Record<string, string> = {
+const statusColorMap: Record<TestCaseResult, string> = {
   success: chart_color_green_300.var,
   skipped: chart_color_orange_200.var,
   failure: chart_color_red_orange_300.var,
@@ -36,24 +34,43 @@ const statusColorMap: Record<string, string> = {
   absent: chart_color_black_200.var,
 };
 
-function JobsFlaskyGraph({ jobs }: { jobs: TestcaseEntry["jobs"] }) {
+function JobsFlaskyGraph({
+  testcase,
+  jobs,
+}: {
+  testcase: string;
+  jobs: TestcaseEntry["jobs"];
+}) {
   return (
     <div className="flex" style={{ gap: "1px" }}>
-      {jobs.map((job) => (
-        <Link
-          key={job.id}
-          target="_blank"
-          rel="noopener noreferrer"
-          title={`Job: ${job.id}\nStatus: ${job.status}`}
-          to={`/jobs/${job.id}/jobStates`}
-          style={{
-            flex: 1,
-            height: "20px",
-            backgroundColor:
-              statusColorMap[job.status] || statusColorMap.absent,
-          }}
-        />
-      ))}
+      {jobs.map((job) => {
+        const title = `Job: ${job.id}\nStatus: ${job.status}\nCreated at: ${job.created_at}`;
+        return job.status === "absent" ? (
+          <div
+            key={job.id}
+            title={title}
+            style={{
+              flex: 1,
+              height: "20px",
+              backgroundColor: statusColorMap.absent,
+            }}
+          />
+        ) : (
+          <Link
+            key={job.id}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={title}
+            to={`/jobs/${job.id}/tests/${job.fileId}?testcase=${testcase}`}
+            style={{
+              flex: 1,
+              height: "20px",
+              backgroundColor:
+                statusColorMap[job.status] || statusColorMap.absent,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -68,7 +85,7 @@ function Legend() {
             padding: "0 .2em",
             flex: 1,
             fontSize: "12px",
-            backgroundColor: statusColorMap[colorKey],
+            backgroundColor: statusColorMap[colorKey as TestCaseResult],
             textAlign: "center",
           }}
         >
@@ -87,14 +104,20 @@ function TestingTrendGraph({
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
-  const [testcaseFilter, setTestcaseFilter] = useState("");
+  const [filter, setFilter] = useState("");
+  const tests = analyseTests(data);
 
-  const tests = useMemo(() => {
-    return analyseTests(data);
-  }, [data]);
-
-  const filteredTests = tests.filter((tc) =>
-    tc.name.toLowerCase().includes(testcaseFilter.toLowerCase()),
+  const filteredTests = useMemo(
+    () =>
+      tests.filter((tc) => {
+        const testcaseFilterLowerCase = filter.toLowerCase();
+        return (
+          tc.filename.toLowerCase().includes(testcaseFilterLowerCase) ||
+          tc.classname.toLowerCase().includes(testcaseFilterLowerCase) ||
+          tc.name.toLowerCase().includes(testcaseFilterLowerCase)
+        );
+      }),
+    [tests, filter],
   );
 
   return (
@@ -102,34 +125,26 @@ function TestingTrendGraph({
       <Card className="pf-v6-u-mt-md">
         <CardBody>
           <Form>
-            <Flex
-              columnGap={{ default: "columnGap2xl" }}
-              direction={{ default: "column", lg: "row" }}
-              justifyContent={{ default: "justifyContentSpaceBetween" }}
-            >
-              <Flex
-                flex={{ default: "flex_1" }}
-                columnGap={{ default: "columnGapXl" }}
-              >
+            <div className="flex items-center justify-between">
+              <div>
                 <FormGroup label="Filter testcases">
                   <TextInput
                     id="testing-trend-group-filter"
                     type="text"
-                    value={testcaseFilter}
-                    onChange={(_event, value) => setTestcaseFilter(value)}
-                    placeholder="Filter testcases by name"
+                    value={filter}
+                    onChange={(_event, value) => setFilter(value)}
+                    placeholder="Filter by file name, class name or testcase"
+                    style={{ minWidth: "300px" }}
                   />
                 </FormGroup>
-              </Flex>
-              <Flex alignSelf={{ default: "alignSelfFlexEnd" }}>
-                <FlexItem>
-                  <ScreeshotNodeButton
-                    node={graphRef}
-                    filename="testing-trend.png"
-                  />
-                </FlexItem>
-              </Flex>
-            </Flex>
+              </div>
+              <div>
+                <ScreeshotNodeButton
+                  node={graphRef}
+                  filename="test-analysis.png"
+                />
+              </div>
+            </div>
           </Form>
         </CardBody>
       </Card>
@@ -138,9 +153,11 @@ function TestingTrendGraph({
           <Table>
             <Thead>
               <Tr style={{ marginTop: "-10em" }}>
-                <Th width={20}>Status</Th>
-                <Th width={80}>
-                  Classname::Name (
+                <Th width={20}>Jobs status</Th>
+                <Th>File name</Th>
+                <Th>Class name</Th>
+                <Th>
+                  Test case (
                   {filteredTests.length === tests.length
                     ? `${tests.length} tests`
                     : `${filteredTests.length} / ${tests.length} tests`}
@@ -153,14 +170,19 @@ function TestingTrendGraph({
                 <Td>
                   <Legend />
                 </Td>
-                <Td>Classname and testcase name separated by ::</Td>
+                <Td colSpan={3}></Td>
               </Tr>
               {filteredTests.map((testcase) => (
-                <Tr key={`${testcase.name}`}>
+                <Tr key={`${testcase.key}`}>
                   <Td>
-                    <JobsFlaskyGraph jobs={testcase.jobs} />
+                    <JobsFlaskyGraph
+                      testcase={testcase.name}
+                      jobs={testcase.jobs}
+                    />
                   </Td>
-                  <Td style={{ verticalAlign: "middle" }}>{testcase.name}</Td>
+                  <Td>{testcase.filename}</Td>
+                  <Td>{testcase.classname}</Td>
+                  <Td>{testcase.name}</Td>
                 </Tr>
               ))}
               {filteredTests.length === 0 && tests.length > 0 && (
