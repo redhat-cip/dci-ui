@@ -6,7 +6,7 @@ export type TestcaseEntry = {
   classname: string;
   filename: string;
   name: string;
-  key: string;
+  id: string;
   jobs: {
     id: string;
     created_at: string;
@@ -57,7 +57,7 @@ export function analyseTests(jobs: IAnalyticsTestsJob[]): TestcaseEntry[] {
   }
 
   return Object.entries(testcaseMap).map(([key, entry]) => ({
-    key,
+    id: key,
     filename: entry.filename,
     classname: entry.classname,
     name: entry.name,

@@ -203,6 +203,34 @@ describe("parseFiltersFromSearch", () => {
     expect(offset).toBe(0);
     expect(sort).toBe("-created_at");
   });
+  test("Keep unknown keys", () => {
+    const filters = parseFiltersFromSearch(
+      "?query=%28name%3D%27example%27%29+and+%28status%3D%27success%27%29&range=last30Days&after=2025-05-14&before=2025-06-13",
+    );
+    expect(filters).toEqual({
+      query: "(name='example') and (status='success')",
+      range: "last30Days",
+      after: "2025-05-14",
+      before: "2025-06-13",
+      configuration: null,
+      display_name: null,
+      email: null,
+      limit: 20,
+      name: null,
+      offset: 0,
+      pipeline_id: null,
+      product_id: null,
+      remoteci_id: null,
+      sort: "-created_at",
+      sso_username: null,
+      state: "active",
+      status: null,
+      tags: [],
+      team_id: null,
+      topic_id: null,
+      type: null,
+    });
+  });
 });
 
 describe("createSearchFromFilters", () => {
@@ -260,6 +288,20 @@ describe("createSearchFromFilters", () => {
       }),
     ).toEqual(
       "?limit=200&offset=20&sort=-released_at&where=name:name1,display_name:display_name2,sso_username:sso_username1,team_id:e5147a96-7c76-4415-b01e-edefba96a9c8,pipeline_id:95491621-dd38-4ffe-8c90-88151883f559,email:test@example.org,remoteci_id:4aa1a4bb-6bb1-4953-a5c7-a3eef7b7f4e3,product_id:a129df80-50ae-47bd-a3fe-fa783f894531,topic_id:6ec27949-ecdc-4d93-9056-425b4d9f2020,tags:tag1|tag2,configuration:config1,status:success,state:active",
+    );
+  });
+  test("keep extra fields", () => {
+    expect(
+      createSearchFromFilters({
+        limit: 200,
+        offset: 20,
+        query: "(name='example') and (status='success')",
+        range: "last30Days",
+        after: "2025-05-14",
+        before: "2025-06-13",
+      }),
+    ).toEqual(
+      "?limit=200&offset=20&sort=-created_at&query=(name='example') and (status='success')&range=last30Days&after=2025-05-14&before=2025-06-13",
     );
   });
 });

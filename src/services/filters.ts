@@ -90,6 +90,7 @@ export function parseFiltersFromSearch(
   const defaultWithInitialFilters: Filters = {
     ...getDefaultFilters(),
     ...initialFilters,
+    ...Object.fromEntries(params.entries()),
   };
   const limitParam = params.get("limit");
   const offsetParam = params.get("offset");
@@ -128,10 +129,18 @@ export function parseFiltersFromSearch(
   };
 }
 
-function _getWhereFromFilters(filters: Filters) {
-  const whereFilters = _extractWhereFilter(filters);
-  let keyValues: string[] = [];
-  Object.entries(whereFilters).forEach(([key, value]) => {
+type FlexibleFilters = Partial<Filters> & { [key: string]: any };
+
+export function createSearchFromFilters(
+  partialFilters: FlexibleFilters,
+): string {
+  const filters = {
+    ...getDefaultFilters(),
+    ...partialFilters,
+  };
+  const finalFilters: FlexibleFilters = {};
+  const where: string[] = [];
+  for (const [key, value] of Object.entries(filters)) {
     if (
       [
         "name",
@@ -147,38 +156,28 @@ function _getWhereFromFilters(filters: Filters) {
         "configuration",
         "status",
         "type",
-      ].includes(key) &&
+      ].indexOf(key) !== -1 &&
       value
     ) {
-      keyValues.push(`${key}:${value}`);
-    }
-    if (key === "tags" && value) {
+      where.push(`${key}:${value}`);
+    } else if (key === "tags" && value) {
       const tags = value as string[];
       const uniqTags = [...new Set(tags)];
       if (uniqTags.length > 0) {
-        // combine tags into a single filter segment using '|' for OR semantics
-        keyValues.push(`tags:${uniqTags.join("|")}`);
+        where.push(`tags:${uniqTags.join("|")}`);
+      }
+    } else {
+      if (value !== null) {
+        finalFilters[key] = value;
       }
     }
-  });
-  return keyValues.join(",");
-}
-
-export function createSearchFromFilters(
-  partialFilters: Partial<Filters>,
-): string {
-  const filters = {
-    ...getDefaultFilters(),
-    ...partialFilters,
-  };
-  let search = `?limit=${filters.limit}&offset=${filters.offset}&sort=${filters.sort}`;
-  const where = _getWhereFromFilters(filters);
-  if ("query" in filters && filters.query) {
-    search += `&query=${filters.query}`;
-  } else {
-    if (where) {
-      search += `&where=${where}`;
-    }
   }
-  return search;
+
+  if (!("query" in finalFilters)) {
+    finalFilters["where"] = where.join(",");
+  }
+
+  return `?${Object.entries(finalFilters)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&")}`;
 }

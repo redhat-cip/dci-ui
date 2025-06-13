@@ -66,7 +66,7 @@ describe("getTestingTrend", () => {
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",
-        key: "test 2|class1|testcase 1",
+        id: "test 2|class1|testcase 1",
         jobs: [
           {
             id: analyticsTwoJobs[0].id,
@@ -83,7 +83,7 @@ describe("getTestingTrend", () => {
         ],
       },
       {
-        key: "test 2|class1|testcase 2",
+        id: "test 2|class1|testcase 2",
         classname: "class1",
         filename: "test 2",
         name: "testcase 2",
@@ -136,7 +136,7 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        key: "test 2|class1|testcase 1",
+        id: "test 2|class1|testcase 1",
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",
@@ -205,7 +205,7 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        key: "test 1|class1|testcase 1",
+        id: "test 1|class1|testcase 1",
         classname: "class1",
         filename: "test 1",
         name: "testcase 1",
@@ -225,7 +225,7 @@ describe("getTestingTrend", () => {
         ],
       },
       {
-        key: "test 2|class1|testcase 1",
+        id: "test 2|class1|testcase 1",
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",

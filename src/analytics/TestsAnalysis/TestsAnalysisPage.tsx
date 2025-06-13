@@ -4,15 +4,17 @@ import {
   Content,
   Form,
   FormGroup,
+  Label,
   PageSection,
+  Pagination,
   Skeleton,
   TextInput,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { createRef, useMemo, useState } from "react";
+import { createRef, useEffect, useMemo, useState } from "react";
 import { useGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
+import { Filters, IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { analyseTests, TestcaseEntry, TestCaseResult } from "./testsAnalysis";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
@@ -24,7 +26,16 @@ import {
   chart_color_red_orange_400,
 } from "@patternfly/react-tokens";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { Document } from "flexsearch";
+import { ExclamationTriangleIcon } from "@patternfly/react-icons";
+import { useDebounce } from "use-debounce";
+import {
+  createSearchFromFilters,
+  offsetAndLimitToPage,
+  pageAndLimitToOffset,
+  parseFiltersFromSearch,
+} from "services/filters";
 
 const statusColorMap: Record<TestCaseResult, string> = {
   success: chart_color_green_300.var,
@@ -96,35 +107,53 @@ function Legend() {
   );
 }
 
-function TestingTrendGraph({
-  data,
+function TestingTrendGraphWithIndex({
+  searchIndex,
+  tests,
   ...props
 }: {
-  data: IAnalyticsTestsJob[];
+  searchIndex: Document<TestcaseEntry>;
+  tests: TestcaseEntry[];
   [key: string]: any;
 }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search, {
+      limit: 100,
+    }),
+  );
+  const testsByIds = tests.reduce(
+    (acc, test) => {
+      acc[test.id] = test;
+      return acc;
+    },
+    {} as { [id: string]: TestcaseEntry },
+  );
   const graphRef = createRef<HTMLDivElement>();
   const [filter, setFilter] = useState("");
-  const tests = analyseTests(data);
+  const [debouncedFilter] = useDebounce(filter, 1000);
 
-  const filteredTests = useMemo(
-    () =>
-      tests.filter((tc) => {
-        const testcaseFilterLowerCase = filter.toLowerCase();
-        return (
-          tc.filename.toLowerCase().includes(testcaseFilterLowerCase) ||
-          tc.classname.toLowerCase().includes(testcaseFilterLowerCase) ||
-          tc.name.toLowerCase().includes(testcaseFilterLowerCase)
-        );
-      }),
-    [tests, filter],
-  );
+  useEffect(() => {
+    const newSearch = createSearchFromFilters(filters);
+    navigate(`/analytics/tests${newSearch}`, { replace: true });
+  }, [navigate, filters]);
+
+  const filteredTests = useMemo(() => {
+    if (!debouncedFilter)
+      return tests.slice(filters.offset, filters.offset + filters.limit);
+    const rawResults = searchIndex.search(debouncedFilter, {
+      limit: filters.limit,
+      merge: true,
+    });
+    return rawResults.flat().map((e) => testsByIds[e.id]);
+  }, [tests, debouncedFilter, searchIndex, testsByIds, filters]);
 
   return (
     <div {...props}>
       <Card className="pf-v6-u-mt-md">
         <CardBody>
-          <Form>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <div className="flex items-center justify-between">
               <div>
                 <FormGroup label="Filter testcases">
@@ -132,7 +161,10 @@ function TestingTrendGraph({
                     id="testing-trend-group-filter"
                     type="text"
                     value={filter}
-                    onChange={(_event, value) => setFilter(value)}
+                    onChange={(event, value) => {
+                      event.preventDefault();
+                      return setFilter(value);
+                    }}
                     placeholder="Filter by file name, class name or testcase"
                     style={{ minWidth: "300px" }}
                   />
@@ -148,52 +180,114 @@ function TestingTrendGraph({
           </Form>
         </CardBody>
       </Card>
-      <Card className="pf-v6-u-mt-md" ref={graphRef}>
-        <CardBody>
-          <Table>
-            <Thead>
-              <Tr style={{ marginTop: "-10em" }}>
-                <Th width={20}>Jobs status</Th>
-                <Th>File name</Th>
-                <Th>Class name</Th>
-                <Th>
-                  Test case (
-                  {filteredTests.length === tests.length
-                    ? `${tests.length} tests`
-                    : `${filteredTests.length} / ${tests.length} tests`}
-                  )
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td>
-                  <Legend />
-                </Td>
-                <Td colSpan={3}></Td>
-              </Tr>
-              {filteredTests.map((testcase) => (
-                <Tr key={`${testcase.key}`}>
-                  <Td>
-                    <JobsFlaskyGraph
-                      testcase={testcase.name}
-                      jobs={testcase.jobs}
-                    />
-                  </Td>
-                  <Td>{testcase.filename}</Td>
-                  <Td>{testcase.classname}</Td>
-                  <Td>{testcase.name}</Td>
-                </Tr>
-              ))}
-              {filteredTests.length === 0 && tests.length > 0 && (
+      <div ref={graphRef} className="pf-v6-u-pb-md">
+        <Card className="pf-v6-u-mt-md">
+          <CardBody>
+            <Pagination
+              perPage={filters.limit}
+              page={offsetAndLimitToPage(filters.offset, filters.limit)}
+              itemCount={tests.length}
+              onSetPage={(_, newPage) => {
+                setFilters({
+                  ...filters,
+                  offset: pageAndLimitToOffset(newPage, filters.limit),
+                });
+              }}
+              onPerPageSelect={(e, newPerPage) => {
+                setFilters({ ...filters, limit: newPerPage });
+              }}
+              isDisabled={debouncedFilter !== ""}
+            />
+            <Table>
+              <Thead>
                 <Tr>
-                  <Td colSpan={2}>There is no testcase matching your search</Td>
+                  <Th width={20}>Jobs status</Th>
+                  <Th width={20}>File name</Th>
+                  <Th width={20}>Class name</Th>
+                  <Th width={40}>Test case</Th>
                 </Tr>
-              )}
-            </Tbody>
-          </Table>
-        </CardBody>
-      </Card>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td>
+                    <Legend />
+                  </Td>
+                  <Td colSpan={3}>
+                    {debouncedFilter !== "" &&
+                      filteredTests.length === filters.limit && (
+                        <Label
+                          isCompact
+                          icon={<ExclamationTriangleIcon />}
+                          color="orange"
+                          className="pf-v6-u-ml-xs"
+                        >
+                          {`For performance reasons, the search only return the ${filters.limit} first matching elements. Be more specific in your search.`}
+                        </Label>
+                      )}
+                  </Td>
+                </Tr>
+                {filteredTests.map((testcase) => (
+                  <Tr key={`${testcase.id}`}>
+                    <Td>
+                      <JobsFlaskyGraph
+                        testcase={testcase.name}
+                        jobs={testcase.jobs}
+                      />
+                    </Td>
+                    <Td>{testcase.filename}</Td>
+                    <Td>{testcase.classname}</Td>
+                    <Td>{testcase.name}</Td>
+                  </Tr>
+                ))}
+                {debouncedFilter !== "" &&
+                  filteredTests.length === 0 &&
+                  tests.length > 0 && (
+                    <Tr>
+                      <Td colSpan={4}>
+                        <Label
+                          isCompact
+                          icon={<ExclamationTriangleIcon />}
+                          color="blue"
+                        >
+                          There is no testcase matching your search. For
+                          performance reasons, the search only works on an exact
+                          word. Case insentivite.
+                        </Label>
+                      </Td>
+                    </Tr>
+                  )}
+              </Tbody>
+            </Table>
+          </CardBody>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function TestingTrendGraph({
+  data,
+  ...props
+}: {
+  data: IAnalyticsTestsJob[];
+  [key: string]: any;
+}) {
+  const tests = analyseTests(data);
+  const searchIndex = useMemo(() => {
+    const idx = new Document<TestcaseEntry>({
+      document: {
+        index: ["filename", "classname", "name"],
+      },
+    });
+    tests.forEach((test) => {
+      idx.add(test);
+    });
+    return idx;
+  }, [tests]);
+
+  return (
+    <div {...props}>
+      <TestingTrendGraphWithIndex tests={tests} searchIndex={searchIndex} />
     </div>
   );
 }

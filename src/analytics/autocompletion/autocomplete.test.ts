@@ -4,6 +4,7 @@ import {
   AutoCompletionOptions,
   parseInput,
   defaultOptions,
+  AutoCompletionValues,
 } from "./autocompletion";
 
 type TestStep =
@@ -22,6 +23,9 @@ type TestStep =
 function runAutocompleteTest(
   steps: TestStep[],
   userOptions: Partial<AutoCompletionOptions> = {},
+  defaultValues: AutoCompletionValues = {
+    status: ["success", "error", "failure"],
+  },
 ) {
   const options: AutoCompletionOptions = {
     fields: [
@@ -40,9 +44,6 @@ function runAutocompleteTest(
       },
       logical: ["and", "or"],
     },
-    asyncValueCompletions: {
-      status: ["success", "error", "failure"],
-    },
     ...userOptions,
   };
   let input = "";
@@ -57,7 +58,7 @@ function runAutocompleteTest(
       }
     }
     if ("select" in step) {
-      const completions = getCompletions(input, cursor, options);
+      const completions = getCompletions(input, cursor, defaultValues, options);
       const selected = completions.find((c) => c.value === step.select);
       expect(selected).toBeDefined();
       if (selected) {
@@ -70,7 +71,7 @@ function runAutocompleteTest(
         cursor = newCursor;
       }
     }
-    const completions = getCompletions(input, cursor, options);
+    const completions = getCompletions(input, cursor, defaultValues, options);
     expect(completions.map((c) => c.value)).toEqual(step.autocomplete);
     expect(input).toEqual(step.input);
   }
@@ -170,10 +171,9 @@ describe("getCompletions: input", () => {
           autocomplete: ["and", "or"],
         },
       ],
+      {},
       {
-        asyncValueCompletions: {
-          "topic.name": ["topic 1", "topic 2"],
-        },
+        "topic.name": ["topic 1", "topic 2"],
       },
     );
   });

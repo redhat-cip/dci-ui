@@ -68,37 +68,45 @@ export default function QueryToolBarInputSearch({
   }, [completions]);
 
   useEffect(() => {
-    const handleMenuKeys = (event: KeyboardEvent) => {
-      if (isAutocompleteOpen && searchInputRef.current === event.target) {
-        if (event.key === "Escape") {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isAutocompleteOpen) {
+        setCompletions([]);
+        setFocusedIndex(null);
+      }
+
+      if (event.key === "ArrowDown" && isAutocompleteOpen) {
+        event.preventDefault();
+        setFocusedIndex((prev) => {
+          if (prev === null || prev >= completions.length - 1) return 0;
+          return prev + 1;
+        });
+      } else if (event.key === "ArrowUp" && isAutocompleteOpen) {
+        event.preventDefault();
+        setFocusedIndex((prev) => {
+          if (prev === null || prev <= 0) return completions.length - 1;
+          return prev - 1;
+        });
+      } else if (event.key === "Enter") {
+        if (focusedIndex === null) {
           setCompletions([]);
           setFocusedIndex(null);
-        }
-        if (event.key === "ArrowDown") {
-          event.preventDefault();
-          setFocusedIndex((prev) => {
-            if (prev === null || prev >= completions.length - 1) return 0;
-            return prev + 1;
-          });
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault();
-          setFocusedIndex((prev) => {
-            if (prev === null || prev <= 0) return completions.length - 1;
-            return prev - 1;
-          });
-        } else if (event.key === "Enter" && focusedIndex !== null) {
+          onSubmit();
+        } else {
           event.preventDefault();
           const completion = completions[focusedIndex];
           _applyCompletion(value, cursor, completion);
         }
       }
-      if (event.key === "Enter" && focusedIndex === null) {
-        onSubmit();
-      }
     };
-    window.addEventListener("keydown", handleMenuKeys);
+    const searchInput = searchInputRef.current;
+
+    if (searchInput) {
+      searchInput.addEventListener("keydown", handleKeydown);
+    }
     return () => {
-      window.removeEventListener("keydown", handleMenuKeys);
+      if (searchInput) {
+        searchInput.removeEventListener("keydown", handleKeydown);
+      }
     };
   }, [
     isAutocompleteOpen,
@@ -132,6 +140,7 @@ export default function QueryToolBarInputSearch({
       trigger={
         <SearchInput
           id="job-search"
+          placeholder="(name='job name') and (status='success')"
           value={value}
           onChange={(event, value) => {
             onChange(value);

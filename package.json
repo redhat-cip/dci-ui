@@ -21,6 +21,7 @@
     "d3-time": "^3.1.0",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.5",
+    "flexsearch": "^0.8.205",
     "humanize-duration": "^3.32.1",
     "interweave": "^13.1.0",
     "jszip": "^3.10.1",
@@ -35,6 +36,7 @@
     "react-scripts": "^5.0.1",
     "recharts": "^2.15.0",
     "styled-components": "^6.1.14",
+    "use-debounce": "^10.0.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {

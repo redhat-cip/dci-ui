@@ -55,8 +55,8 @@ export interface AutoCompletionOptions {
     comparison: Record<FieldType, ComparisonOperator[]>;
     logical: LogicalOperator[];
   };
-  asyncValueCompletions?: Partial<Record<FieldName, string[]>>;
 }
+export type AutoCompletionValues = Partial<Record<FieldName, string[]>>;
 export const defaultOptions: AutoCompletionOptions = {
   fields: [
     { name: "tags", type: "list" },
@@ -101,9 +101,6 @@ export const defaultOptions: AutoCompletionOptions = {
     },
     logical: ["and", "or"],
   },
-  asyncValueCompletions: {
-    status: [...JobStatuses],
-  },
 };
 
 type ParseOutput = {
@@ -136,6 +133,9 @@ export function parseInput(input: string): ParseOutput {
 export function getCompletions(
   input: string,
   cursor: number,
+  completionValues: Partial<Record<FieldName, string[]>> = {
+    status: [...JobStatuses],
+  },
   options: AutoCompletionOptions = defaultOptions,
 ): Completion[] {
   let prefix = input.slice(0, cursor).trim().toLowerCase();
@@ -170,8 +170,7 @@ export function getCompletions(
   const { field, operator, value } = parsedInput;
   const completeField = options.fields.find((f) => f.name === field) || null;
   if (completeField && operator) {
-    const asyncValues =
-      options.asyncValueCompletions?.[completeField.name] ?? [];
+    const asyncValues = completionValues[completeField.name] ?? [];
     const filteredAsyncValues =
       value === null
         ? asyncValues
