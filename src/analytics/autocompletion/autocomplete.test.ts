@@ -3,6 +3,7 @@ import {
   applyCompletion,
   AutoCompletionOptions,
   parseInput,
+  defaultOptions,
 } from "./autocompletion";
 
 type TestStep =
@@ -199,6 +200,23 @@ describe("getCompletions: input", () => {
         autocomplete: [],
       },
     ]);
+  });
+  test("tests.testsuites.testcases.*", () => {
+    runAutocompleteTest(
+      [
+        {
+          type: "(tes",
+          input: "(tes",
+          autocomplete: [
+            "tests.name",
+            "tests.testsuites.testcases.name",
+            "tests.testsuites.testcases.action",
+            "tests.testsuites.testcases.classname",
+          ],
+        },
+      ],
+      defaultOptions,
+    );
   });
 });
 

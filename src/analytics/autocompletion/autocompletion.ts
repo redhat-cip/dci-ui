@@ -29,6 +29,10 @@ const FIELDS = [
   "results.total",
   "team.id",
   "components.name",
+  "tests.name",
+  "tests.testsuites.testcases.name",
+  "tests.testsuites.testcases.action",
+  "tests.testsuites.testcases.classname",
 ] as const;
 export type FieldName = (typeof FIELDS)[number];
 export type FieldType = "string" | "number" | "boolean" | "list";
@@ -53,7 +57,7 @@ export interface AutoCompletionOptions {
   };
   asyncValueCompletions?: Partial<Record<FieldName, string[]>>;
 }
-const defaultOptions: AutoCompletionOptions = {
+export const defaultOptions: AutoCompletionOptions = {
   fields: [
     { name: "tags", type: "list" },
     { name: "components.name", type: "string" },
@@ -83,6 +87,10 @@ const defaultOptions: AutoCompletionOptions = {
     { name: "results.failures", type: "number" },
     { name: "results.skips", type: "number" },
     { name: "results.total", type: "number" },
+    { name: "tests.name", type: "string" },
+    { name: "tests.testsuites.testcases.name", type: "string" },
+    { name: "tests.testsuites.testcases.action", type: "string" },
+    { name: "tests.testsuites.testcases.classname", type: "string" },
   ],
   operators: {
     comparison: {
