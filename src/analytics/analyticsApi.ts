@@ -208,7 +208,6 @@ export const {
           {
             ..._arg,
             limit: 10,
-            sort: "created_at",
             includes: `${genericIncludes},tests.file_id,tests.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
           },
           fetchWithBQ,

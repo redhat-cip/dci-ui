@@ -36,6 +36,7 @@ import {
   pageAndLimitToOffset,
   parseFiltersFromSearch,
 } from "services/filters";
+import { sortByOldestFirst } from "services/sort";
 
 const statusColorMap: Record<TestCaseResult, string> = {
   success: chart_color_green_300.var,
@@ -54,7 +55,7 @@ function JobsFlaskyGraph({
 }) {
   return (
     <div className="flex" style={{ gap: "1px" }}>
-      {jobs.map((job) => {
+      {sortByOldestFirst(jobs).map((job) => {
         const title = `Job: ${job.id}\nStatus: ${job.status}\nCreated at: ${job.created_at}`;
         return job.status === "absent" ? (
           <div
