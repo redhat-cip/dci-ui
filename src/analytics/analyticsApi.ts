@@ -44,7 +44,7 @@ async function getAllAnalyticsJobs<T>(
   const limit = 200;
   const analyticsJobs: IGenericAnalyticsData<T> = {
     jobs: [],
-    _meta: { first_sync_date: "", last_sync_date: "" },
+    _meta: { first_sync_date: "", last_sync_date: "", total: 0 },
   };
   let total = Infinity;
 
@@ -68,7 +68,7 @@ async function getAllAnalyticsJobs<T>(
       const data = response.data as
         | IGetAnalyticsJobsResponse<T>
         | IGetAnalyticsJobsEmptyResponse;
-      analyticsJobs._meta = data._meta;
+      analyticsJobs._meta = { ...data._meta, total: data.hits.total.value };
       if (!data.hits) break;
       analyticsJobs.jobs = [
         ...analyticsJobs.jobs,
@@ -109,7 +109,7 @@ async function getAnalyticsJobs<T>(
 
   const analyticsJobs: IGenericAnalyticsData<T> = {
     jobs: [],
-    _meta: { first_sync_date: "", last_sync_date: "" },
+    _meta: { first_sync_date: "", last_sync_date: "", total: 0 },
   };
 
   try {
@@ -131,7 +131,7 @@ async function getAnalyticsJobs<T>(
     const data = response.data as
       | IGetAnalyticsJobsResponse<T>
       | IGetAnalyticsJobsEmptyResponse;
-    analyticsJobs._meta = data._meta;
+    analyticsJobs._meta = { ...data._meta, total: data.hits.total.value };
     if (data.hits) {
       analyticsJobs.jobs = [...data.hits.hits.map((h) => h._source)];
     }

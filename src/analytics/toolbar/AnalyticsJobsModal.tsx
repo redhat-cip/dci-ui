@@ -18,6 +18,7 @@ export default function AnalyticsJobsModal<T extends IAnalyticsJob>({
       <Button variant="link" isInline onClick={show} {...props}>
         See the job{jobs.length > 1 ? "s" : ""}
       </Button>
+      .
       <Modal
         id="jobs-list-modal"
         aria-label="Analytics jobs list"

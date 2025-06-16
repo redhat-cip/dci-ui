@@ -593,7 +593,7 @@ export interface IAnalyticsTestsJob extends IAnalyticsJob {
 
 export interface IGenericAnalyticsData<T> {
   jobs: T[];
-  _meta: { first_sync_date: string; last_sync_date: string };
+  _meta: { first_sync_date: string; last_sync_date: string; total: number };
 }
 
 export interface IGetAnalyticsJobsResponse<T> {
