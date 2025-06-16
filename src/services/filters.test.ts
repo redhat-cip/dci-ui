@@ -175,6 +175,15 @@ describe("parseFiltersFromSearch", () => {
     expect(offset).toBe(40);
     expect(query).toEqual("eq(name,openshift)");
   });
+  test("nrt page and perPage are removed after parsing", () => {
+    const search = "?page=2&perPage=40";
+    // @ts-expect-error
+    const { limit, offset, page, perPage } = parseFiltersFromSearch(search);
+    expect(limit).toBe(40);
+    expect(offset).toBe(40);
+    expect(page).toBe(undefined);
+    expect(perPage).toBe(undefined);
+  });
   test("nrt parse where from search where name has multiple colon", () => {
     expect(parseFiltersFromSearch("?where=name:1.2.3:5*").name).toBe(
       "1.2.3:5*",

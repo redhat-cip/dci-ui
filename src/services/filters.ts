@@ -90,7 +90,11 @@ export function parseFiltersFromSearch(
   const defaultWithInitialFilters: Filters = {
     ...getDefaultFilters(),
     ...initialFilters,
-    ...Object.fromEntries(params.entries()),
+    ...Object.fromEntries(
+      [...params.entries()].filter(
+        ([key]) => key !== "page" && key !== "perPage",
+      ),
+    ),
   };
   const limitParam = params.get("limit");
   const offsetParam = params.get("offset");
