@@ -43,7 +43,6 @@ export default function RangeSelect({
   onChange: (range: TimeRange, after: string, before: string) => void;
 }) {
   const showDatePicker = range === "custom";
-
   return (
     <Flex columnGap={{ default: "columnGapXs" }}>
       <FlexItem>

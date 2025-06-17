@@ -623,7 +623,9 @@ export interface IGetAnalyticsJobsResponse<T> {
   took: number;
 }
 
-export type IGetAnalyticsJobsEmptyResponse = Record<string, never>;
+export interface IGetAnalyticsJobsEmptyResponse {
+  _meta: { first_sync_date: string; last_sync_date: string };
+}
 
 export interface FormGroupProps {
   id: string;

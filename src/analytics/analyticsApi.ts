@@ -68,13 +68,17 @@ async function getAllAnalyticsJobs<T>(
       const data = response.data as
         | IGetAnalyticsJobsResponse<T>
         | IGetAnalyticsJobsEmptyResponse;
-      analyticsJobs._meta = { ...data._meta, total: data.hits.total.value };
-      if (!data.hits) break;
+
+      analyticsJobs._meta.first_sync_date = data._meta.first_sync_date;
+      analyticsJobs._meta.last_sync_date = data._meta.last_sync_date;
+      if (!("hits" in data)) break;
+      const nbOfJobs = data.hits.total.value;
+      analyticsJobs._meta.total = nbOfJobs;
       analyticsJobs.jobs = [
         ...analyticsJobs.jobs,
         ...data.hits.hits.map((h) => h._source),
       ];
-      total = data.hits.total.value;
+      total = nbOfJobs;
       offset += limit;
     }
     return {
@@ -131,8 +135,10 @@ async function getAnalyticsJobs<T>(
     const data = response.data as
       | IGetAnalyticsJobsResponse<T>
       | IGetAnalyticsJobsEmptyResponse;
-    analyticsJobs._meta = { ...data._meta, total: data.hits.total.value };
-    if (data.hits) {
+    analyticsJobs._meta.first_sync_date = data._meta.first_sync_date;
+    analyticsJobs._meta.last_sync_date = data._meta.last_sync_date;
+    if ("hits" in data) {
+      analyticsJobs._meta.total = data.hits.total.value;
       analyticsJobs.jobs = [...data.hits.hits.map((h) => h._source)];
     }
     return {
