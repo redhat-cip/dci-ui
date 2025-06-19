@@ -17,7 +17,7 @@ import {
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
-import { Filters, IIdentityTeam } from "types";
+import { Filters } from "types";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useLocation, useNavigate } from "react-router";
 import {
@@ -36,13 +36,12 @@ import { fromNow } from "services/date";
 import LoadingPageSection from "ui/LoadingPageSection";
 import { useAuth } from "auth/authSelectors";
 
-function RemotecisSection({ team }: { team: IIdentityTeam }) {
+function RemotecisSection() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [filters, setFilters] = useState<Filters>({
-    ...parseFiltersFromSearch(location.search),
-    team_id: team.id,
-  });
+  const [filters, setFilters] = useState<Filters>(
+    parseFiltersFromSearch(location.search),
+  );
   const [inputSearch, setInputSearch] = useState(filters.name || "");
 
   useEffect(() => {
@@ -221,9 +220,9 @@ export default function RemotecisPage() {
         />
       </div>
       {currentUser.team === null ? (
-        <EmptyState title="Apparently you are not on any team." />
+        <EmptyState title="To create a remoteci, you need to be on a team. Please contact a DCI Administrator or your EPM." />
       ) : (
-        <RemotecisSection team={currentUser.team} />
+        <RemotecisSection />
       )}
     </PageSection>
   );

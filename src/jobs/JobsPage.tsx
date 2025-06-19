@@ -12,7 +12,6 @@ import {
 } from "@patternfly/react-core";
 import { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
-import { useAuth } from "auth/authSelectors";
 import { useTitle } from "hooks/useTitle";
 import {
   createSearchFromFilters,
@@ -25,7 +24,6 @@ import { useListJobsQuery } from "./jobsApi";
 import LoadingPageSection from "ui/LoadingPageSection";
 
 function Jobs() {
-  const { currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>(
@@ -37,15 +35,7 @@ function Jobs() {
     navigate(`/jobs${newSearch}`, { replace: true });
   }, [navigate, filters]);
 
-  const filtersWithTeamId =
-    currentUser === null ||
-    currentUser.hasReadOnlyRole ||
-    filters.team_id !== null
-      ? { ...filters }
-      : { ...filters, team_id: currentUser.team?.id };
-  const { data, isLoading, isFetching, refetch } =
-    useListJobsQuery(filtersWithTeamId);
-
+  const { data, isLoading, isFetching, refetch } = useListJobsQuery(filters);
   const jobsPageDivRef = useRef<HTMLDivElement>(null);
   const [tableViewColumns, setTableViewColumns] = useLocalStorage<
     JobsTableListColumn[]

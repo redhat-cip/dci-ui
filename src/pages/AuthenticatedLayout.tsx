@@ -162,8 +162,8 @@ function UserDropdownMenu() {
 }
 
 function UserTeamToolbarItem() {
+  const location = useLocation();
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   if (currentUser === null) return null;
@@ -205,7 +205,7 @@ function UserTeamToolbarItem() {
               component="button"
               onClick={() => {
                 changeCurrentTeam(team);
-                navigate(0);
+                window.location.replace(location.pathname);
               }}
             >
               {team.name}

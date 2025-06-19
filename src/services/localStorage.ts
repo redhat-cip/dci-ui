@@ -28,7 +28,7 @@ export function readValue<T>(
   key: string,
   initialValue: T,
   version: number = 1,
-) {
+): T {
   try {
     const item = window.localStorage.getItem(key);
     if (item) {

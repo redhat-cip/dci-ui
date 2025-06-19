@@ -47,6 +47,10 @@ export function buildCurrentUser(
 
 const DEFAULT_TEAM_LOCASTORAGE_VALUE = "defaultTeam";
 
+export function getDefaultTeam() {
+  return readValue<IIdentityTeam | null>(DEFAULT_TEAM_LOCASTORAGE_VALUE, null);
+}
+
 export function changeCurrentTeam(team: IIdentityTeam) {
   saveValue(DEFAULT_TEAM_LOCASTORAGE_VALUE, team);
 }
@@ -58,10 +62,7 @@ export const authApi = api
       getCurrentUser: builder.query<ICurrentUser, void>({
         query: () => "/identity",
         transformResponse: (response: { identity: IIdentity }, meta, arg) => {
-          const defaultTeam = readValue<IIdentityTeam | null>(
-            DEFAULT_TEAM_LOCASTORAGE_VALUE,
-            null,
-          );
+          const defaultTeam = getDefaultTeam();
           return buildCurrentUser(response.identity, defaultTeam);
         },
         transformErrorResponse: () => undefined,

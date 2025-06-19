@@ -11,6 +11,7 @@ import { createSearchFromFilters } from "services/filters";
 import { Mutex } from "async-mutex";
 import { manager } from "auth/sso";
 import { loggedOut } from "auth/authSlice";
+import { getDefaultTeam } from "auth/authApi";
 
 export const baseUrl =
   process.env.REACT_APP_BACKEND_HOST || "https://api.distributed-ci.io";
@@ -19,12 +20,16 @@ const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${baseUrl}/api/v1`,
-  prepareHeaders: (headers) => {
+  prepareHeaders: (headers, { endpoint }) => {
     const token = getToken();
     if (token && !headers.has("authorization")) {
       headers.set("authorization", `${token.type} ${token.value}`);
     }
     headers.set("Content-Type", "application/json");
+    const team = getDefaultTeam();
+    if (team && endpoint !== "getCurrentUser") {
+      headers.set("X-Dci-Team-Id", team.id);
+    }
     return headers;
   },
 });
