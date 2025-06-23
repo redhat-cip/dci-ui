@@ -158,6 +158,7 @@ export const {
   useGetAnalyticsKeysValuesJobsQuery,
   useGetAnalyticsResultsJobsQuery,
   useGetAnalyticsTestsJobsQuery,
+  useLazyGetSuggestionsQuery
 } = api.enhanceEndpoints({ addTagTypes: ["Analytics"] }).injectEndpoints({
   endpoints: (builder) => ({
     getAnalyticJobs: builder.query<
@@ -218,6 +219,19 @@ export const {
           },
           fetchWithBQ,
         );
+      },
+      providesTags: ["Analytics"],
+    }),
+    getSuggestions: builder.query<string[], string>({
+      async queryFn(fieldName, _queryApi, _extraOptions, fetchWithBQ) {
+        const response = await fetchWithBQ(
+          `/analytics/jobs/autocomplete?field=${fieldName}`,
+        );
+        if (response.error) {
+          return { error: response.error as FetchBaseQueryError };
+        }
+        const data = response.data as string[];
+        return { data };
       },
       providesTags: ["Analytics"],
     }),

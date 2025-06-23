@@ -5,6 +5,7 @@ import {
   parseInput,
   defaultOptions,
   AutoCompletionValues,
+  extractAutocompleteInfo,
 } from "./autocompletion";
 
 type TestStep =
@@ -454,6 +455,91 @@ describe("applyCompletion", () => {
     ).toEqual({
       newValue: "(topic.name not_in ['topic 1'])",
       newCursor: 31,
+    });
+  });
+});
+
+describe("extractAutocompleteInfo", () => {
+  test("empty", () => {
+    expect(extractAutocompleteInfo("", 0)).toBe(null);
+  });
+
+  test("(name='", () => {
+    expect(extractAutocompleteInfo("(name='", 7)).toEqual({
+      field: "name",
+      value: "",
+    });
+  });
+
+  test("( name = '", () => {
+    expect(extractAutocompleteInfo("(name='", 7)).toEqual({
+      field: "name",
+      value: "",
+    });
+  });
+
+  test("(name='tot", () => {
+    expect(extractAutocompleteInfo("(name='tot", 10)).toEqual({
+      field: "name",
+      value: "tot",
+    });
+  });
+
+  test("(name in ['", () => {
+    expect(extractAutocompleteInfo("(name in ['", 11)).toEqual({
+      field: "name",
+      value: "",
+    });
+  });
+
+  test("(name in ['tot", () => {
+    expect(extractAutocompleteInfo("(name in ['tot", 14)).toEqual({
+      field: "name",
+      value: "tot",
+    });
+  });
+
+  test("(name in ['foo', '", () => {
+    expect(extractAutocompleteInfo("(name in ['foo', '", 18)).toEqual({
+      field: "name",
+      value: "",
+    });
+  });
+
+  test("(name in ['foo', 'bar", () => {
+    expect(extractAutocompleteInfo("(name in ['foo', 'bar", 22)).toEqual({
+      field: "name",
+      value: "bar",
+    });
+  });
+
+  test("(name='foo') and (status in ['failure', 'err", () => {
+    expect(
+      extractAutocompleteInfo(
+        "(name='foo') and (status in ['failure', 'err",
+        44,
+      ),
+    ).toEqual({ field: "status", value: "err" });
+  });
+
+  test("team.name='foo", () => {
+    expect(extractAutocompleteInfo("(team.name='foo", 15)).toEqual({
+      field: "team.name",
+      value: "foo",
+    });
+  });
+
+  test("(name!='", () => {
+    expect(extractAutocompleteInfo("(name!='", 8)).toEqual({
+      field: "name",
+      value: "",
+    });
+  });
+
+  test("(name not_in ['foo', 'bar", () => {
+    expect(extractAutocompleteInfo("(name not_in ['foo', 'bar", 25)).toEqual({
+      field: "name",
+      value: "bar",
     });
   });
 });

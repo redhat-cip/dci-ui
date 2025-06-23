@@ -1,5 +1,3 @@
-import { JobStatuses } from "types";
-
 const FIELDS = [
   "name",
   "tags",
@@ -130,12 +128,12 @@ export function parseInput(input: string): ParseOutput {
   return { lastParenthesisIndex, field, operator, value };
 }
 
+export type CompletionValues = Partial<Record<FieldName, string[]>>;
+
 export function getCompletions(
   input: string,
   cursor: number,
-  completionValues: Partial<Record<FieldName, string[]>> = {
-    status: [...JobStatuses],
-  },
+  completionValues: CompletionValues = {},
   options: AutoCompletionOptions = defaultOptions,
 ): Completion[] {
   let prefix = input.slice(0, cursor).trim().toLowerCase();
@@ -254,4 +252,30 @@ export function applyCompletion({
     newValue,
     newCursor,
   };
+}
+
+type AutocompleteInfo = { field: string; value: string } | null;
+
+export function extractAutocompleteInfo(
+  input: string,
+  cursor: number,
+): AutocompleteInfo {
+  const textUpToCursor = input.slice(0, cursor);
+
+  const patterns = [
+    /\(?([\w.]+)\s*(?:!=|=~|>=|<=|=|>|<)\s*'([^']*)$/,
+    /\(?([\w.]+)\s+(?:in|not_in)\s+\[\s*(?:'[^']*'\s*,\s*)*'([^']*)$/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = textUpToCursor.match(pattern);
+    if (match) {
+      return {
+        field: match[1],
+        value: match[2],
+      };
+    }
+  }
+
+  return null;
 }
