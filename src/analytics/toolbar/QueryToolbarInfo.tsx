@@ -17,11 +17,11 @@ function LastSyncInfo({
     <span className={className}>
       Data synchronized from{" "}
       <span title={firstSyncDate}>
-        {formatDate(firstSyncDate, DateTime.DATE_MED)}
+        {formatDate(firstSyncDate, DateTime.DATETIME_MED)}
       </span>{" "}
       to{" "}
       <span title={lastSyncDate}>
-        {formatDate(lastSyncDate, DateTime.DATE_MED)}
+        {formatDate(lastSyncDate, DateTime.DATETIME_MED)}
       </span>
       .
     </span>
