@@ -12,7 +12,7 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { createRef, useMemo, useState } from "react";
+import { createRef, useEffect, useMemo, useState } from "react";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import {
@@ -34,6 +34,7 @@ import {
 import JobStatChart from "./JobStatChart";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 import { sort } from "services/sort";
+import { useNavigate, useSearchParams } from "react-router";
 
 function JobStatsGraphs({
   data,
@@ -43,10 +44,38 @@ function JobStatsGraphs({
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
-  const [groupByKey, setGroupByKey] = useState<IGroupByKey>("topic");
-  const [sliceByKey, setSliceByKey] = useState<ISliceByKey>("status");
-  const [groupFilterRegex, setGroupFilterRegex] = useState<string>("");
-  const [sliceFilterRegex, setSliceFilterRegex] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [groupByKey, setGroupByKey] = useState<IGroupByKey>(
+    (searchParams.get("groupByKey") as IGroupByKey) || "topic",
+  );
+  const [sliceByKey, setSliceByKey] = useState<ISliceByKey>(
+    (searchParams.get("sliceByKey") as ISliceByKey) || "status",
+  );
+  const [groupFilterRegex, setGroupFilterRegex] = useState<string>(
+    searchParams.get("groupFilterRegex") || "",
+  );
+  const [sliceFilterRegex, setSliceFilterRegex] = useState<string>(
+    searchParams.get("sliceFilterRegex") || "",
+  );
+
+  useEffect(() => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+    updatedSearchParams.set("groupByKey", groupByKey);
+    updatedSearchParams.set("sliceByKey", sliceByKey);
+    if (groupFilterRegex === "") {
+      updatedSearchParams.delete("groupFilterRegex");
+    } else {
+      updatedSearchParams.set("groupFilterRegex", groupFilterRegex);
+    }
+    if (sliceFilterRegex === "") {
+      updatedSearchParams.delete("sliceFilterRegex");
+    } else {
+      updatedSearchParams.set("sliceFilterRegex", sliceFilterRegex);
+    }
+    navigate(`?${updatedSearchParams.toString()}`, { replace: true });
+  }, [groupByKey, sliceByKey, groupFilterRegex, sliceFilterRegex]);
+
   const jobStats = useMemo(() => {
     let filteredData = data;
     const rawStats = getJobStats(filteredData, groupByKey, sliceByKey);
