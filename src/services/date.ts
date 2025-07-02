@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import humanize from "humanize-duration";
-import { TimeRange } from "types";
+import type { TimeRange } from "types";
 
 export function fromNow(dateString: string) {
   return DateTime.fromISO(dateString, { zone: "utc" }).toRelative();

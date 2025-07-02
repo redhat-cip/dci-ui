@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   CodeBlock,
   CodeBlockCode,
@@ -6,7 +6,7 @@ import {
   ModalBody,
   ModalHeader,
 } from "@patternfly/react-core";
-import { IFile } from "types";
+import type { IFile } from "types";
 import useModal from "hooks/useModal";
 import FileContent from "./FileContent";
 

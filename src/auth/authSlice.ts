@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "store";
-import { ICurrentUser } from "types";
+import { type RootState } from "store";
+import type { ICurrentUser } from "types";
 import { authApi } from "./authApi";
 
 type AuthState = {

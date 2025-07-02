@@ -14,9 +14,13 @@ import { Breadcrumb } from "ui";
 import { createRef, useEffect, useMemo, useState } from "react";
 import { useGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { Filters, IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
+import type { Filters, IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { analyseTests, TestcaseEntry, TestCaseResult } from "./testsAnalysis";
+import {
+  analyseTests,
+  type TestcaseEntry,
+  type TestCaseResult,
+} from "./testsAnalysis";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 import {
   chart_color_black_200,
@@ -296,14 +300,10 @@ function TestingTrendGraph({
 function TestingTrend({
   isLoading,
   data,
-  after,
-  before,
   ...props
 }: {
   isLoading: boolean;
   data: IGenericAnalyticsData<IAnalyticsTestsJob> | undefined;
-  before: string;
-  after: string;
   [key: string]: any;
 }) {
   if (isLoading) {
@@ -361,8 +361,6 @@ export default function TestsAnalysisPage() {
       <TestingTrend
         isLoading={isLoading}
         data={data}
-        after={after}
-        before={before}
         className="pf-v6-u-mt-md"
       />
     </PageSection>

@@ -17,7 +17,7 @@ import {
 import { TrashIcon, UserSecretIcon } from "@patternfly/react-icons";
 import CreateRemoteciModal from "./CreateRemoteciModal";
 import EditRemoteciModal from "./EditRemoteciModal";
-import { Filters } from "types";
+import type { Filters } from "types";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { useLocation, useNavigate } from "react-router";
 import {
@@ -156,13 +156,13 @@ function RemotecisSection() {
                 <Td className="text-center">
                   <SeeAuthentificationFileModal
                     type="sh"
-                    role="remoteci"
+                    resourceType="remoteci"
                     resource={remoteci}
                     className="pf-v6-u-mr-xs"
                   />
                   <SeeAuthentificationFileModal
                     type="yaml"
-                    role="remoteci"
+                    resourceType="remoteci"
                     resource={remoteci}
                   />
                 </Td>

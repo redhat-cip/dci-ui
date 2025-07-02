@@ -2,7 +2,7 @@ import { renderWithProviders } from "__tests__/renders";
 import { server } from "__tests__/node";
 import { remotecis } from "__tests__/data";
 import RemotecisPage from "./RemotecisPage";
-import type { IGetRemotecis } from "../types";
+import type { IGetRemotecis } from "types";
 import { HttpResponse, http } from "msw";
 
 test("Should display remotecis in remotecis page", async () => {

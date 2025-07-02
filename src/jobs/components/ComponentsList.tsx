@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { sortByName } from "services/sort";
-import { IComponent } from "types";
+import type { IComponent } from "types";
 
 interface ComponentsListProps {
   components: Pick<IComponent, "id" | "topic_id" | "display_name">[];

@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
-import {
+import { FinalJobStatuses } from "types";
+import type {
   IJobState,
   IJobStateWithDuration,
   IFileWithDuration,
   IJobStatus,
   IPipelineStatus,
-  FinalJobStatuses,
 } from "types";
 import { sortByOldestFirst } from "services/sort";
 

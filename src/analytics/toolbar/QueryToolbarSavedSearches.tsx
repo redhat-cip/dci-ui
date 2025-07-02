@@ -1,6 +1,6 @@
 import { Label } from "@patternfly/react-core";
 import { createSearchParams, useLocation, useNavigate } from "react-router";
-import { AnalyticsToolbarSearches } from "types";
+import type { AnalyticsToolbarSearches } from "types";
 
 export default function QueryToolbarSavedSearches({
   searches,

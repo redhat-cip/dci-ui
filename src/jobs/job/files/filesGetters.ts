@@ -1,4 +1,4 @@
-import { IFile } from "types";
+import type { IFile } from "types";
 
 export function humanFileSize(size: number) {
   if (!size) return "0 B";

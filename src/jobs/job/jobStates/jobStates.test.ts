@@ -1,5 +1,5 @@
 import { getFileStatus, buildFileTitle } from "./jobStates";
-import { IFile } from "types";
+import type { IFile } from "types";
 
 test("getFileStatus", () => {
   expect(

@@ -1,4 +1,4 @@
-import { IAnalyticsJob, IGenericAnalyticsData } from "types";
+import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
 import AnalyticsJobsModal from "./AnalyticsJobsModal";
 import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
 import { formatDate } from "services/date";

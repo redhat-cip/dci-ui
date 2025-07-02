@@ -35,7 +35,7 @@ import {
   DropdownList,
   Divider,
   MenuToggle,
-  MenuToggleElement,
+  type MenuToggleElement,
 } from "@patternfly/react-core";
 import Logo from "logo.black.svg";
 import LogoWhite from "logo.white.svg";
@@ -50,8 +50,9 @@ import NotAuthenticatedLoadingPage from "./NotAuthenticatedLoadingPage";
 import { loggedOut } from "auth/authSlice";
 import { useAppDispatch } from "store";
 import { useAuth } from "auth/authSelectors";
-import { changeCurrentTeam, useGetCurrentUserQuery } from "auth/authApi";
+import { useGetCurrentUserQuery } from "auth/authApi";
 import { ProfilePageUrl } from "auth/sso";
+import { changeCurrentTeam } from "teams/teamLocalStorage";
 
 function UserDropdownMenuMobile() {
   const dispatch = useAppDispatch();

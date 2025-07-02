@@ -1,4 +1,4 @@
-import { IJob } from "types";
+import type { IJob } from "types";
 import { groupJobsByPipeline } from "./pipelineJobs";
 
 test("groupJobByPipeline of jobs with no jobs", () => {

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { ITopic } from "types";
+import type { ITopic } from "types";
 import { Form, FormGroup } from "@patternfly/react-core";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +15,7 @@ function isValidJSON(value: string | null | undefined) {
     if (value) {
       JSON.parse(value);
     }
-  } catch (e) {
+  } catch {
     return false;
   }
   return true;

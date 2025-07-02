@@ -3,14 +3,15 @@ import { Button } from "@patternfly/react-core";
 import { CameraIcon } from "@patternfly/react-icons";
 import FileSaver from "file-saver";
 
-export default function ScreeshotNodeButton({
+export default function ScreenshotNodeButton<T extends HTMLElement>({
   node,
   filename,
   ...props
 }: {
-  node: React.RefObject<HTMLDivElement>;
+  node: React.RefObject<T | null>;
   filename: string;
 }) {
+  if (node === null) return null;
   return (
     <Button
       {...props}

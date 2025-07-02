@@ -1,5 +1,5 @@
 import { Tooltip } from "@patternfly/react-core";
-import { IJob } from "types";
+import type { IJob } from "types";
 
 export default function JobComment({
   comment,

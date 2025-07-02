@@ -50,7 +50,7 @@ function ProductsGallery() {
 
   return (
     <Gallery hasGutter>
-      {data.products.map((product, key) => (
+      {data.products.map((product) => (
         <Card isCompact key={product.id} id={product.id}>
           <CardHeader
             actions={{

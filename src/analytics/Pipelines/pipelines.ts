@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { IAnalyticsResultsJob, IJobStatus } from "types";
+import type { IAnalyticsResultsJob, IJobStatus } from "types";
 
 export interface IPipelineJob {
   id: string;

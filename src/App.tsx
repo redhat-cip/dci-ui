@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router";
-import "ui/styles";
+import Alerts from "alerts/Alerts";
 import JobsPage from "jobs/JobsPage";
 import JobPage from "jobs/job/JobPage";
 import JobStatesPage from "jobs/job/jobStates/JobStatesPage";
@@ -7,11 +7,12 @@ import JobTestsPage from "jobs/job/tests/JobTestsPage";
 import JobFilesPage from "jobs/job/files/JobFilesPage";
 import JobSettingsPage from "jobs/job/settings/JobSettingsPage";
 import FilePage from "jobs/job/files/FilePage";
+import JobTestPage from "jobs/job/tests/test/JobTestPage";
 import ProductsPage from "products/ProductsPage";
 import TopicsPage from "topics/TopicsPage";
 import TopicPage from "topics/TopicPage";
-import ComponentsPage from "components/ComponentsPage";
 import ComponentPage from "topics/component/ComponentPage";
+import ComponentsPage from "components/ComponentsPage";
 import RemotecisPage from "remotecis/RemotecisPage";
 import FeedersPage from "feeders/FeedersPage";
 import TeamsPage from "teams/TeamsPage";
@@ -24,18 +25,16 @@ import LoginCallbackPage from "auth/LoginCallbackPage";
 import SilentRedirectPage from "auth/SilentRedirectPage";
 import AdminLoginPage from "auth/AdminLoginPage";
 import Page404 from "pages/Page404";
+import RedirectPage from "pages/RedirectPage";
+import AuthenticatedLayout from "pages/AuthenticatedLayout";
 import TasksDurationPerJobPage from "analytics/TasksDurationPerJob/TasksDurationPerJobPage";
 import AnalyticsPage from "analytics/AnalyticsPage";
 import JobStatsPage from "analytics/jobsStats/JobStatsPage";
 import ComponentCoveragePage from "analytics/ComponentCoverage/ComponentCoveragePage";
 import JunitComparisonPage from "analytics/JunitComparison/JunitComparisonPage";
-import Alerts from "alerts/Alerts";
-import AuthenticatedLayout from "pages/AuthenticatedLayout";
-import JobTestPage from "jobs/job/tests/test/JobTestPage";
 import PipelinesPage from "analytics/Pipelines/PipelinesPage";
 import KeyValuesPage from "analytics/KeyValues/KeyValuesPage";
 import TestsAnalysisPage from "analytics/TestsAnalysis/TestsAnalysisPage";
-import Redirect from "Redirect";
 
 export default function App() {
   return (
@@ -70,7 +69,7 @@ export default function App() {
               <Route path="keyvalues" element={<KeyValuesPage />} />
               <Route
                 path="testing_trend"
-                element={<Redirect to="/analytics/tests" replace />}
+                element={<RedirectPage to="/analytics/tests" replace />}
               />
               <Route path="tests" element={<TestsAnalysisPage />} />
             </Route>

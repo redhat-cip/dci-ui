@@ -25,7 +25,7 @@ import {
   chart_color_red_orange_300,
 } from "@patternfly/react-tokens";
 import { Breadcrumb } from "ui";
-import {
+import type {
   IAnalyticsJob,
   IComponentCoverage,
   IGenericAnalyticsData,
@@ -111,7 +111,7 @@ function ComponentsCoverage({
         <Drawer
           isExpanded={drawerIsExpanded}
           onExpand={() => {
-            drawerRef.current && drawerRef.current.focus();
+            drawerRef.current?.focus();
           }}
         >
           <DrawerContent

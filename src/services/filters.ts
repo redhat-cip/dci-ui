@@ -1,6 +1,7 @@
-import { state, Filters, WhereFilters } from "types";
+import type { state, Filters, WhereFilters } from "types";
 
 function _extractWhereFilter(filters: Filters): WhereFilters {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { limit, offset, sort, query, ...whereFilters } = filters;
   return whereFilters;
 }

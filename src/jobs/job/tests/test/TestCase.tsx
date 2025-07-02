@@ -17,7 +17,11 @@ import {
 import { Tbody, Td, Tr } from "@patternfly/react-table";
 import { humanizeDuration } from "services/date";
 import { useEffect, useRef, useState } from "react";
-import { ITestCase, ITestCaseActionState, ITestCaseActionType } from "types";
+import type {
+  ITestCase,
+  ITestCaseActionState,
+  ITestCaseActionType,
+} from "types";
 import { CopyButton } from "ui";
 
 function TestCaseIcon({ action }: { action: ITestCaseActionType }) {
@@ -112,7 +116,7 @@ export default function TestCase({
     if (defaultIsExpanded) {
       divRef.current?.scrollIntoView();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Tbody isExpanded={isExpanded}>
@@ -194,7 +198,7 @@ export default function TestCase({
                 <DescriptionListDescription>
                   <CodeBlock
                     actions={[
-                      <CodeBlockAction>
+                      <CodeBlockAction key="copyStdout">
                         <CopyButton text={testcase.stdout} variant="plain" />
                       </CodeBlockAction>,
                     ]}
@@ -212,7 +216,7 @@ export default function TestCase({
                 <DescriptionListDescription>
                   <CodeBlock
                     actions={[
-                      <CodeBlockAction>
+                      <CodeBlockAction key="copyStderr">
                         <CopyButton text={testcase.stderr} variant="plain" />
                       </CodeBlockAction>,
                     ]}

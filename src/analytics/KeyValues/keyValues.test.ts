@@ -3,7 +3,7 @@ import {
   analyticsOneKeysValuesJob,
   analyticsTwoKeysValuesJobs,
 } from "analytics/analyticsTestData";
-import { IKeyValueGraph } from "./keyValuesTypes";
+import type { IKeyValueGraph } from "./keyValuesTypes";
 
 test("extractKeys with empty data", () => {
   expect(extractKeys([])).toEqual([]);

@@ -3,7 +3,7 @@ import { server } from "__tests__/node";
 import { products, teams, users } from "__tests__/data";
 import { HttpResponse, http } from "msw";
 import App from "App";
-import { IGetProducts, IGetUsers } from "types";
+import type { IGetProducts, IGetUsers } from "types";
 
 test("Should display teams in team page", async () => {
   const team = teams[0];

@@ -1,4 +1,4 @@
-import { IJobStatus, JobStatuses } from "types";
+import { JobStatuses, type IJobStatus } from "types";
 import { ToolbarFilter } from "@patternfly/react-core";
 import Select from "ui/form/Select";
 

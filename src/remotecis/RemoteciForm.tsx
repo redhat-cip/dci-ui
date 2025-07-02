@@ -5,7 +5,7 @@ import { Form, FormGroup } from "@patternfly/react-core";
 import TeamSelect from "teams/form/TeamSelect";
 import TextInputFormGroup from "ui/form/TextInputFormGroup";
 import FormErrorMessage from "ui/form/FormErrorMessage";
-import { IRemoteci } from "types";
+import type { IRemoteci } from "types";
 
 const RemoteciSchema = Yup.object().shape({
   name: Yup.string()

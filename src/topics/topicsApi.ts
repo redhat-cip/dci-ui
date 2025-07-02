@@ -5,7 +5,7 @@ import {
   injectUpdateEndpoint,
   api,
 } from "api";
-import type { ITopic } from "../types";
+import type { ITopic } from "types";
 
 const resource = "Topic";
 

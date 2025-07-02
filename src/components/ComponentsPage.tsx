@@ -6,7 +6,7 @@ import {
   createSearchFromFilters,
   parseFiltersFromSearch,
 } from "services/filters";
-import { Filters } from "types";
+import type { Filters } from "types";
 import ComponentsToolbar from "./ComponentsToolbar";
 import ComponentsTable from "./ComponentsTable";
 import LoadingPageSection from "ui/LoadingPageSection";

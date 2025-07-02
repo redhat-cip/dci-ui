@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@patternfly/react-core";
-import FilesList from "jobs/job/files/FilesList";
+import FilesList from "./FilesList";
 import { useJob } from "../jobContext";
 
 export default function JobFilesPage() {

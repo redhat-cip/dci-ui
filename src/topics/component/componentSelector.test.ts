@@ -1,4 +1,4 @@
-import { IComponent } from "types";
+import type { IComponent } from "types";
 import { getPrincipalComponent } from "./componentSelector";
 
 test("getPrincipalComponent OpenShift", () => {

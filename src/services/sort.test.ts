@@ -1,4 +1,4 @@
-import { ITopic } from "types";
+import type { ITopic } from "types";
 import {
   sortByName,
   sortByNewestFirst,

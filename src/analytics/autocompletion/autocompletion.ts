@@ -136,7 +136,7 @@ export function getCompletions(
   completionValues: CompletionValues = {},
   options: AutoCompletionOptions = defaultOptions,
 ): Completion[] {
-  let prefix = input.slice(0, cursor).trim().toLowerCase();
+  const prefix = input.slice(0, cursor).trim().toLowerCase();
 
   if (prefix === "") {
     return [];

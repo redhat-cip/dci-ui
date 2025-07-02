@@ -15,7 +15,7 @@ import {
 } from "@patternfly/react-core";
 import TopicToolbarFilter from "topics/form/TopicToolbarFilter";
 import { useEffect, useState } from "react";
-import { IGraphData, IRefArea } from "types";
+import type { IGraphData, IRefArea } from "types";
 import {
   LineChart,
   Line,
@@ -31,7 +31,7 @@ import { Link, useSearchParams } from "react-router";
 import { LinkIcon } from "@patternfly/react-icons";
 import { DateTime } from "luxon";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
-import { useLazyGetTasksDurationCumulatedQuery } from "./tasksDurationPerJobApi";
+import { useLazyGetTasksDurationCumulatedQuery } from "analytics/TasksDurationPerJob/tasksDurationPerJobApi";
 import RemoteciToolbarFilter from "remotecis/form/RemoteciToolbarFilter";
 
 const CustomTooltip = ({ active, payload }: any) => {

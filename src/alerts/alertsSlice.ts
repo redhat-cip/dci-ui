@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { AppDispatch, RootState } from "../store";
-import { IAlert } from "types";
+import type { AppDispatch, RootState } from "store";
+import type { IAlert } from "types";
 
 interface AlertsState {
   [x: string]: IAlert;
@@ -19,7 +19,7 @@ const alertsSlice = createSlice({
     hideAlert: (state, action: PayloadAction<IAlert>) => {
       delete state[action.payload.id];
     },
-    hideAllAlerts: (state) => {
+    hideAllAlerts: () => {
       return initialState;
     },
   },

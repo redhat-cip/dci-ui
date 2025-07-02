@@ -1,6 +1,6 @@
 import { Label, LabelGroup } from "@patternfly/react-core";
 import { createSearchParams, Link } from "react-router";
-import {
+import type {
   JobNode,
   IJobStatus,
   IRemoteci,
@@ -286,7 +286,7 @@ export default function JobTableSummary({
           </Td>
         ))}
       </Tr>
-      {job.children.map((child, i, arr) => (
+      {job.children.map((child) => (
         <JobTableSummary
           key={child.id}
           job={child}

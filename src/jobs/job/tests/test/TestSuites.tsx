@@ -6,7 +6,11 @@ import {
   Content,
   ContentVariants,
 } from "@patternfly/react-core";
-import { IGetJunitTestSuites, ITestCase, ITestCaseActionType } from "types";
+import type {
+  IGetJunitTestSuites,
+  ITestCase,
+  ITestCaseActionType,
+} from "types";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import TestCase, { TestCaseState } from "./TestCase";
 import { InfoCircleIcon } from "@patternfly/react-icons";

@@ -8,7 +8,7 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import ProductForm from "./ProductForm";
-import { IProduct } from "types";
+import type { IProduct } from "types";
 import { EditAltIcon } from "@patternfly/react-icons";
 
 interface EditProductModalProps {

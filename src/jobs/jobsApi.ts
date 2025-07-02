@@ -1,4 +1,4 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import {
   injectDeleteEndpoint,
   injectListEndpoint,
@@ -11,7 +11,7 @@ import type {
   IGetJobStates,
   IGetTestsResults,
   IJob,
-} from "../types";
+} from "types";
 import { sortByName } from "services/sort";
 
 const resource = "Job";

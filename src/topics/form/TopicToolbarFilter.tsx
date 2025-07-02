@@ -1,6 +1,6 @@
 import { ToolbarFilter } from "@patternfly/react-core";
 import TopicSelect from "./TopicSelect";
-import { ITopic, IToolbarFilterProps } from "types";
+import type { ITopic, IToolbarFilterProps } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTopicQuery } from "topics/topicsApi";
 

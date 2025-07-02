@@ -1,11 +1,11 @@
 import {
   getCompletions,
   applyCompletion,
-  AutoCompletionOptions,
   parseInput,
   defaultOptions,
-  AutoCompletionValues,
   extractAutocompleteInfo,
+  type AutoCompletionOptions,
+  type AutoCompletionValues,
 } from "./autocompletion";
 
 type TestStep =

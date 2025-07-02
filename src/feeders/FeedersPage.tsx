@@ -66,7 +66,7 @@ function FeedersTable() {
                 <InputGroupItem>
                   <SeeAuthentificationFileModal
                     type="sh"
-                    role="feeder"
+                    resourceType="feeder"
                     resource={feeder}
                     className="pf-v6-u-mr-xs"
                   />
@@ -74,7 +74,7 @@ function FeedersTable() {
                 <InputGroupItem>
                   <SeeAuthentificationFileModal
                     type="yaml"
-                    role="feeder"
+                    resourceType="feeder"
                     resource={feeder}
                   />
                 </InputGroupItem>

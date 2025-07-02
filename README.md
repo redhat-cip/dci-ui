@@ -10,7 +10,7 @@ To run the app in development mode follow those steps:
 - clone this repository
 - ensure DCI api is listening on localhost:5000. See `dci-dev-env`.
 - install node dependencies: `npm install`
-- run the development server : `REACT_APP_BACKEND_HOST='http://127.0.0.1:5000' npm start`
+- run the development server : `VITE_BACKEND_HOST='http://127.0.0.1:5000' npm start`
 
 ## Build tools
 

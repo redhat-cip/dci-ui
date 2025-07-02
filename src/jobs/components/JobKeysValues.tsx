@@ -1,5 +1,5 @@
 import { Label, LabelGroup } from "@patternfly/react-core";
-import { IKeyValue } from "types";
+import type { IKeyValue } from "types";
 
 export default function JobKeysValues({
   keys_values = [],

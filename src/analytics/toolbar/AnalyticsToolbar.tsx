@@ -1,6 +1,6 @@
 import { Card, CardBody } from "@patternfly/react-core";
-import QueryToolbar from "analytics/toolbar/QueryToolbar";
-import {
+import QueryToolbar from "./QueryToolbar";
+import type {
   AnalyticsToolbarSearch,
   IAnalyticsJob,
   IGenericAnalyticsData,

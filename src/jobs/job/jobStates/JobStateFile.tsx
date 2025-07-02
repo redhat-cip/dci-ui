@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { CaretDownIcon, CaretRightIcon } from "@patternfly/react-icons";
-import { IFileStatus, IFileWithDuration } from "types";
+import type { IFileStatus, IFileWithDuration } from "types";
 import { buildFileTitle, getFileStatus, isFileEmpty } from "./jobStates";
 import { Label } from "@patternfly/react-core";
 import styled from "styled-components";

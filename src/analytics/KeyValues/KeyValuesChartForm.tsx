@@ -18,12 +18,12 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
   graphTypeLabels,
   graphTypes,
-  IKeyValueGraph,
   graphColors,
   getRandomGraphColor,
-  IKeyValueGraphKey,
+  type IKeyValueGraph,
+  type IKeyValueGraphKey,
 } from "./keyValuesTypes";
-import { groupByKeys, groupByKeysWithLabel, IGroupByKey } from "types";
+import { groupByKeys, groupByKeysWithLabel, type IGroupByKey } from "types";
 
 export default function KeyValuesChartForm({
   id,

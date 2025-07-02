@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { ITeam } from "types";
+import type { ITeam } from "types";
 import { Form } from "@patternfly/react-core";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

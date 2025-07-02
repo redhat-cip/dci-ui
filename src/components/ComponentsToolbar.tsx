@@ -5,7 +5,7 @@ import {
   InputGroup,
   InputGroupItem,
   MenuToggle,
-  MenuToggleElement,
+  type MenuToggleElement,
   Pagination,
   Toolbar,
   ToolbarContent,
@@ -18,7 +18,7 @@ import {
   offsetAndLimitToPage,
   pageAndLimitToOffset,
 } from "services/filters";
-import { Filters } from "types";
+import type { Filters } from "types";
 import ListToolbarFilter from "jobs/toolbar/ListToolbarFilter";
 import TextInputToolbarFilter from "jobs/toolbar/TextInputToolbarFilter";
 

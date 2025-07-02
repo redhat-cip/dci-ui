@@ -7,7 +7,7 @@ import {
   ModalVariant,
   SearchInput,
 } from "@patternfly/react-core";
-import { ITeam, IUser } from "types";
+import type { ITeam, IUser } from "types";
 import useModal from "hooks/useModal";
 import { useLazySearchUserQuery } from "users/usersApi";
 import { Link } from "react-router";

@@ -1,5 +1,5 @@
 import { api } from "api";
-import { IGetJunitTestSuites } from "types";
+import type { IGetJunitTestSuites } from "types";
 
 export const { useGetJunitQuery } = api
   .enhanceEndpoints({ addTagTypes: ["Tests", "File"] })

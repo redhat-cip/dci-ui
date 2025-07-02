@@ -12,7 +12,7 @@ import {
   chart_global_Fill_Color_white,
   chart_global_Fill_Color_900,
 } from "@patternfly/react-tokens";
-import { IGroupByKey } from "types";
+import type { IGroupByKey } from "types";
 
 export const graphTypes = ["line", "bar", "scatter"] as const;
 export type IGraphType = (typeof graphTypes)[number];
@@ -22,7 +22,7 @@ export const graphTypeLabels: Record<IGraphType, string> = {
   bar: "bar chart",
 };
 
-const graphFrontColors = [
+export const graphFrontColors = [
   chart_global_Fill_Color_white.value,
   chart_global_Fill_Color_900.value,
 ] as const;

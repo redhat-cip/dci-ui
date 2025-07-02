@@ -15,21 +15,17 @@ import { Breadcrumb } from "ui";
 import { createRef, useEffect, useMemo, useState } from "react";
 import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import {
-  groupByKeys,
-  groupByKeysWithLabel,
-  IAnalyticsJob,
-  IGenericAnalyticsData,
-} from "types";
+import { groupByKeys, groupByKeysWithLabel } from "types";
+import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import Select from "ui/form/Select";
 import {
   getJobStats,
-  IGroupByKey,
-  IStat,
-  ISliceByKey,
   sliceByKeys,
   sliceByKeysWithLabel,
+  type IGroupByKey,
+  type IStat,
+  type ISliceByKey,
 } from "./jobStats";
 import JobStatChart from "./JobStatChart";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
@@ -77,7 +73,7 @@ function JobStatsGraphs({
   }, [groupByKey, sliceByKey, groupFilterRegex, sliceFilterRegex]);
 
   const jobStats = useMemo(() => {
-    let filteredData = data;
+    const filteredData = data;
     const rawStats = getJobStats(filteredData, groupByKey, sliceByKey);
     let groupRegex: RegExp | null = null;
     try {
@@ -212,14 +208,10 @@ function JobStatsGraphs({
 function JobStats({
   isLoading,
   data,
-  after,
-  before,
   ...props
 }: {
   isLoading: boolean;
   data: IGenericAnalyticsData<IAnalyticsJob> | undefined;
-  before: string;
-  after: string;
   [key: string]: any;
 }) {
   if (isLoading) {
@@ -274,13 +266,7 @@ export default function JobStatsPage() {
         isLoading={isFetching}
         data={data}
       />
-      <JobStats
-        isLoading={isLoading}
-        data={data}
-        after={after}
-        before={before}
-        className="pf-v6-u-mt-md"
-      />
+      <JobStats isLoading={isLoading} data={data} className="pf-v6-u-mt-md" />
     </PageSection>
   );
 }

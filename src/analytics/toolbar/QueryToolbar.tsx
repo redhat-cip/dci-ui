@@ -7,10 +7,10 @@ import {
 } from "@patternfly/react-core";
 import { useSearchParams } from "react-router";
 import {
-  AnalyticsToolbarSearch,
-  AnalyticsToolbarSearches,
-  TimeRange,
   TimeRanges,
+  type AnalyticsToolbarSearch,
+  type AnalyticsToolbarSearches,
+  type TimeRange,
 } from "types";
 import RangeSelect from "ui/form/RangeSelect";
 import SaveSearchModal from "./SaveSearchModal";
@@ -74,7 +74,7 @@ export default function QueryToolbar({
 
   useEffect(() => {
     onLoad(defaultValues);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const searchJobs = (values: AnalyticsToolbarSearch) => {
     const params = {

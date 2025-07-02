@@ -1,13 +1,11 @@
-import React, { PropsWithChildren } from "react";
-import { render as renderTL } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { setupStore } from "../store";
-import type { RenderOptions } from "@testing-library/react";
-import type { AppStore, RootState } from "../store";
-import userEvent from "@testing-library/user-event";
+import React, { type JSX, type PropsWithChildren } from "react";
 import { MemoryRouter } from "react-router";
-import { currentUser } from "__tests__/data";
+import { Provider } from "react-redux";
+import { render as renderTL, type RenderOptions } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { currentUser } from "./data";
 import { ThemeProvider } from "ui/Theme/themeContext";
+import { setupStore, type AppStore, type RootState } from "store";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
@@ -24,7 +22,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren<object>): JSX.Element {
     return (
       <ThemeProvider>
         <Provider store={store}>

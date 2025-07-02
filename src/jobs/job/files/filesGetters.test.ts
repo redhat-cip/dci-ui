@@ -1,5 +1,5 @@
 import { humanFileSize } from "./filesGetters";
-import { IFile } from "types";
+import type { IFile } from "types";
 import { isATextFile } from "./filesGetters";
 
 test("humanFileSize", () => {

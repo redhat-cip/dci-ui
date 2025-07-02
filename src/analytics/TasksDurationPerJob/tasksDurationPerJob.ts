@@ -1,4 +1,4 @@
-import { IDataFromES, IGraphData, IRefArea } from "types";
+import type { IDataFromES, IGraphData, IRefArea } from "types";
 
 export function transform(dataFromES: IDataFromES) {
   return dataFromES.hits.reduce((acc, hit) => {

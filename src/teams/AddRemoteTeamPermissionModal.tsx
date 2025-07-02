@@ -4,9 +4,9 @@ import {
   ModalHeader,
   ModalVariant,
 } from "@patternfly/react-core";
-import { ITeam } from "types";
+import type { ITeam } from "types";
 import useModal from "hooks/useModal";
-import TeamSelect from "teams/form/TeamSelect";
+import TeamSelect from "./form/TeamSelect";
 
 interface AddRemoteTeamPermissionModalProps {
   team: ITeam;

@@ -8,7 +8,7 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import RemoteciForm from "./RemoteciForm";
-import { IRemoteci } from "types";
+import type { IRemoteci } from "types";
 
 interface CreateRemoteciModalProps {
   onSubmit: (remoteci: Partial<IRemoteci>) => void;

@@ -1,10 +1,5 @@
-import {
-  FinalJobStatuses,
-  groupByKeys,
-  groupByKeysWithLabel,
-  IAnalyticsJob,
-  IFinalJobStatus,
-} from "types";
+import { FinalJobStatuses, groupByKeys, groupByKeysWithLabel } from "types";
+import type { IAnalyticsJob, IFinalJobStatus } from "types";
 import {
   chart_color_blue_300,
   chart_color_teal_300,

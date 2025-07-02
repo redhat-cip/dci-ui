@@ -78,7 +78,7 @@ export function JunitBarChart({
               </YAxis>
               <Tooltip
                 cursor={false}
-                content={({ active, payload, label }) => {
+                content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const range = data.intervals[payload[0].payload.i];
                     let message = `${payload[0].value} test${(payload[0].value as number) > 1 ? "s" : ""} with percentage deviation is `;

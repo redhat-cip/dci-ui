@@ -17,7 +17,7 @@ import {
 import useModal from "hooks/useModal";
 import { useState } from "react";
 import { rangeLabels } from "ui/form/RangeSelect";
-import { AnalyticsToolbarSearch, AnalyticsToolbarSearches } from "types";
+import type { AnalyticsToolbarSearch, AnalyticsToolbarSearches } from "types";
 
 export default function SaveSearchModal({
   search,

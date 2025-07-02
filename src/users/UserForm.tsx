@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { IUser } from "types";
+import type { IUser } from "types";
 import { Form } from "@patternfly/react-core";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

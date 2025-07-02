@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { JobsTableListColumn } from "types";
+import type { JobsTableListColumn } from "types";
 import {
   Select,
   SelectOption,
   SelectList,
   MenuToggle,
-  MenuToggleElement,
+  type MenuToggleElement,
 } from "@patternfly/react-core";
 
 export const tableViewColumnLabels: { [k in JobsTableListColumn]: string } = {

@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import TeamSelect from "teams/form/TeamSelect";
-import { IFeeder } from "types";
+import type { IFeeder } from "types";
 import FormErrorMessage from "ui/form/FormErrorMessage";
 import TextInputFormGroup from "ui/form/TextInputFormGroup";
 

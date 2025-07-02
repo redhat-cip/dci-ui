@@ -4,9 +4,9 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  PieLabelRenderProps,
+  type PieLabel,
 } from "recharts";
-import { IStat } from "./jobStats";
+import { type IStat } from "./jobStats";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -31,14 +31,21 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 const RADIAN = Math.PI / 180;
 
-const CustomLabel: React.FC<PieLabelRenderProps> = ({
+function CustomLabel({
   cx = 0,
   cy = 0,
   midAngle = 0,
   innerRadius = 0,
   outerRadius = 0,
   percent = 0,
-}) => {
+}: {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+}) {
   const cxN = Number(cx);
   const inner = Number(innerRadius);
   const outer = Number(outerRadius);
@@ -57,7 +64,7 @@ const CustomLabel: React.FC<PieLabelRenderProps> = ({
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
-};
+}
 
 export default function JobStatChart({
   name,
@@ -83,7 +90,7 @@ export default function JobStatChart({
               data={data}
               dataKey="value"
               labelLine={false}
-              label={CustomLabel}
+              label={CustomLabel as PieLabel}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />

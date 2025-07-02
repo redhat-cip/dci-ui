@@ -1,6 +1,6 @@
 import { ToolbarFilter } from "@patternfly/react-core";
 import RemoteciSelect from "./RemoteciSelect";
-import { IRemoteci, IToolbarFilterProps } from "types";
+import type { IRemoteci, IToolbarFilterProps } from "types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetRemoteciQuery } from "remotecis/remotecisApi";
 

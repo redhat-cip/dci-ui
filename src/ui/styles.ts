@@ -116,5 +116,6 @@ import "@patternfly/patternfly/utilities/Text/text.css";
 // import "@patternfly/patternfly/components/Badge/badge.css";
 
 // DCI custom css
-import "ui/css/alignment.css";
-import "ui/css/flex.css";
+import "./css/global.css";
+import "./css/alignment.css";
+import "./css/flex.css";

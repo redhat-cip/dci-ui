@@ -1,12 +1,12 @@
 import {
   FormGroup,
   TextInput,
-  TextInputProps,
   ValidatedOptions,
+  type TextInputProps,
 } from "@patternfly/react-core";
-import { FieldError, useFormContext } from "react-hook-form";
+import { useFormContext, type FieldError } from "react-hook-form";
 import FormErrorMessage from "./FormErrorMessage";
-import { FormGroupProps } from "types";
+import type { FormGroupProps } from "types";
 
 export default function TextInputFormGroup({
   id,

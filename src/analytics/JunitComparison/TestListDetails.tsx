@@ -58,7 +58,7 @@ export function TestListDetails({
                 upperBoundary ? detail.value < upperBoundary : true,
               )
               .map((detail) => (
-                <Tr>
+                <Tr key={detail.testcase}>
                   <Td>{detail.testcase}</Td>
                   <Td style={{ textAlign: "center" }}>
                     <span title={detail.value.toString()}>

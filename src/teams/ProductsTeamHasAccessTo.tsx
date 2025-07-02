@@ -8,7 +8,7 @@ import {
   Popover,
 } from "@patternfly/react-core";
 import { HelpIcon } from "@patternfly/react-icons";
-import { ITeam } from "types";
+import type { ITeam } from "types";
 import { Table, Tr, Tbody, Td } from "@patternfly/react-table";
 import {
   useAddProductToTeamMutation,

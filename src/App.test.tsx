@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
-import { ThemeProvider } from "ui/Theme/themeContext";
+import { ThemeProvider } from "./ui/Theme/themeContext";
 
 test("renders without crashing", async () => {
   await act(async () => {

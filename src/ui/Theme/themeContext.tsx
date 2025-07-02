@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as React from "react";
-import { colorTheme } from "types";
+import type { colorTheme } from "types";
 
 interface ThemeContextType {
   color: colorTheme;

@@ -24,20 +24,28 @@ import {
   Scatter,
   Tooltip,
   XAxis,
-  XAxisProps,
   YAxis,
+  type XAxisProps,
 } from "recharts";
 import { DateTime } from "luxon";
 import { timeDay } from "d3-time";
-import { extractKeys, extractKeysValues, IGraphKeysValues } from "./keyValues";
+import {
+  extractKeys,
+  extractKeysValues,
+  type IGraphKeysValues,
+} from "./keyValues";
 import { FilterIcon, TrashAltIcon } from "@patternfly/react-icons";
 import { useGetAnalyticsKeysValuesJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import { IAnalyticsKeysValuesJob, IGenericAnalyticsData, IJob } from "types";
+import type {
+  IAnalyticsKeysValuesJob,
+  IGenericAnalyticsData,
+  IJob,
+} from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
 import { useNavigate, useSearchParams } from "react-router";
-import { IKeyValueGraph } from "./keyValuesTypes";
+import type { IKeyValueGraph } from "./keyValuesTypes";
 import KeyValuesEditGraphModal from "./KeyValuesEditGraphModal";
 import { skipToken } from "@reduxjs/toolkit/query";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
@@ -101,7 +109,7 @@ function KeyValueGraph({
     .nice();
   const xAxisArgs: XAxisProps = {
     domain: timeScale.domain().map((date) => date.valueOf()),
-    scale: graph.graphType === "bar" ? "auto" : timeScale,
+    scale: graph.graphType === "bar" ? "auto" : "time",
     type: graph.graphType === "bar" ? "category" : "number",
     ticks: timeScale.ticks(timeDay).map((date) => date.valueOf()),
     tickFormatter: (timestamp: number) =>
@@ -117,7 +125,11 @@ function KeyValueGraph({
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="created_at" {...xAxisArgs} />
           {data.yAxis.map((axis) => (
-            <YAxis orientation={axis.orientation} yAxisId={axis.orientation}>
+            <YAxis
+              key={axis.orientation}
+              orientation={axis.orientation}
+              yAxisId={axis.orientation}
+            >
               <Label
                 value={axis.label}
                 position={axis.orientation}
@@ -179,7 +191,6 @@ function KeyValueGraph({
 
 function KeyValuesGraphs({
   data,
-  ticks,
   ...props
 }: {
   data: IAnalyticsKeysValuesJob[];
@@ -288,14 +299,10 @@ function KeyValuesGraphs({
 function KeyValues({
   isLoading,
   data,
-  after,
-  before,
   ...props
 }: {
   isLoading: boolean;
   data: IGenericAnalyticsData<IAnalyticsKeysValuesJob> | undefined;
-  before: string;
-  after: string;
   [key: string]: any;
 }) {
   if (isLoading) {
@@ -350,13 +357,7 @@ export default function KeyValuesPage() {
         isLoading={isFetching}
         data={data}
       />
-      <KeyValues
-        isLoading={isLoading}
-        data={data}
-        after={after}
-        before={before}
-        className="pf-v6-u-mt-md"
-      />
+      <KeyValues isLoading={isLoading} data={data} className="pf-v6-u-mt-md" />
     </PageSection>
   );
 }

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { PageSection } from "@patternfly/react-core";
 import { useLazyGetFileContentQuery } from "./filesApi";
 import { EmptyState } from "ui";
-import { IFile } from "types";
+import type { IFile } from "types";
 
 export default function FilePage() {
   const { file_id } = useParams();

@@ -1,4 +1,4 @@
-import { IAnalyticsTestsJob, ITestCaseActionType } from "types";
+import type { IAnalyticsTestsJob, ITestCaseActionType } from "types";
 
 export type TestCaseResult = ITestCaseActionType | "absent";
 

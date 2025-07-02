@@ -1,4 +1,4 @@
-import JobStatesList from "jobs/job/jobStates/JobStatesList";
+import JobStatesList from "./JobStatesList";
 import { useJob } from "../jobContext";
 import JobDetailsHeader from "./JobDetailsHeader";
 

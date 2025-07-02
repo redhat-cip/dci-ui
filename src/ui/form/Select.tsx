@@ -4,9 +4,9 @@ import {
   SelectOption,
   SelectList,
   MenuToggle,
-  MenuToggleElement,
   Button,
   Spinner,
+  type MenuToggleElement,
 } from "@patternfly/react-core";
 import { TimesIcon } from "@patternfly/react-icons";
 

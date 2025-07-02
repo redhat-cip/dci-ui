@@ -10,7 +10,7 @@ import {
   PageSection,
   Skeleton,
 } from "@patternfly/react-core";
-import { Filters, JobsTableListColumn } from "types";
+import type { Filters, JobsTableListColumn } from "types";
 import useLocalStorage from "hooks/useLocalStorage";
 import { useTitle } from "hooks/useTitle";
 import {

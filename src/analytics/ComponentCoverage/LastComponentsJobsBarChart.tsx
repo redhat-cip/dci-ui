@@ -2,7 +2,7 @@ import {
   chart_color_red_orange_300,
   chart_color_green_300,
 } from "@patternfly/react-tokens";
-import { IComponentCoverage } from "types";
+import type { IComponentCoverage } from "types";
 import { Bar, BarChart, XAxis, Tooltip } from "recharts";
 import { DateTime } from "luxon";
 

@@ -1,7 +1,7 @@
-import { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { api } from "api";
 import { createSearchParams } from "react-router";
-import {
+import type {
   IAnalyticsJob,
   IAnalyticsKeysValuesJob,
   IAnalyticsResultsJob,
@@ -158,7 +158,7 @@ export const {
   useGetAnalyticsKeysValuesJobsQuery,
   useGetAnalyticsResultsJobsQuery,
   useGetAnalyticsTestsJobsQuery,
-  useLazyGetSuggestionsQuery
+  useLazyGetSuggestionsQuery,
 } = api.enhanceEndpoints({ addTagTypes: ["Analytics"] }).injectEndpoints({
   endpoints: (builder) => ({
     getAnalyticJobs: builder.query<

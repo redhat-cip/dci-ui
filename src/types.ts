@@ -398,7 +398,7 @@ export interface IRefArea {
   right: number | null;
 }
 
-const JobsTableListColumns = [
+export const JobsTableListColumns = [
   "id",
   "pipeline",
   "config",

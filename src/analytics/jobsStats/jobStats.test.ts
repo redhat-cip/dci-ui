@@ -1,4 +1,4 @@
-import { getJobStats, IGroupByKey, ISliceByKey } from "./jobStats";
+import { getJobStats, type IGroupByKey, type ISliceByKey } from "./jobStats";
 import { analyticsOneJob, analyticsTwoJobs } from "analytics/analyticsTestData";
 
 describe("getJobStats with sliceByKey 'tags'", () => {

@@ -9,7 +9,7 @@ import {
   ModalHeader,
 } from "@patternfly/react-core";
 import copyToClipboard from "services/copyToClipboard";
-import { IFeeder, IRemoteci } from "types";
+import type { IFeeder, IRemoteci } from "types";
 
 function getContent(
   id: string,
@@ -32,14 +32,14 @@ export DCI_CS_URL`
 
 interface SeeAuthentificationFileModalProps {
   resource: IRemoteci | IFeeder;
-  role: "remoteci" | "feeder";
+  resourceType: "remoteci" | "feeder";
   type?: "sh" | "yaml";
   className?: string;
 }
 
 export function SeeAuthentificationFileModal({
   resource,
-  role,
+  resourceType,
   type = "sh",
   className = "",
 }: SeeAuthentificationFileModalProps) {
@@ -73,7 +73,7 @@ export function SeeAuthentificationFileModal({
         <ModalBody>
           <CodeBlock>
             <CodeBlockCode>
-              {getContent(resource.id, role, api_secret, type)}
+              {getContent(resource.id, resourceType, api_secret, type)}
             </CodeBlockCode>
           </CodeBlock>
         </ModalBody>
@@ -97,7 +97,7 @@ export function SeeAuthentificationFileModal({
             onClick={(event) => {
               const content = getContent(
                 resource.id,
-                role,
+                resourceType,
                 resource.api_secret,
                 type,
               );

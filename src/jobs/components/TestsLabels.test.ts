@@ -1,4 +1,4 @@
-import { IResult, ITest } from "types";
+import type { IResult, ITest } from "types";
 import { sumTests } from "./TestsLabels";
 
 test("sumTests no tests", () => {

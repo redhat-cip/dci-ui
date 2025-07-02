@@ -1,7 +1,7 @@
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useState } from "react";
 import { useGetTeamQuery, useListTeamsQuery } from "teams/teamsApi";
-import { ITeam } from "types";
+import type { ITeam } from "types";
 import TypeaheadSelect from "ui/form/TypeaheadSelect";
 
 export default function TeamSelect({

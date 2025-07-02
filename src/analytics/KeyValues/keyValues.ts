@@ -1,10 +1,10 @@
 import { DateTime } from "luxon";
-import { IAnalyticsKeysValuesJob } from "types";
-import {
+import type { IAnalyticsKeysValuesJob } from "types";
+import { hashStringToGraphBackgroundColor } from "./keyValuesTypes";
+import type {
   IGraphBackColor,
   IGraphType,
   IKeyValueGraph,
-  hashStringToGraphBackgroundColor,
 } from "./keyValuesTypes";
 import { getJobKey } from "analytics/analyticsJob";
 
@@ -33,7 +33,7 @@ export function extractKeys(data: IAnalyticsKeysValuesJob[]): string[] {
       }
       return acc;
     }, [] as string[]);
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -151,7 +151,7 @@ export function extractKeysValues(
       }),
       data: kv.data.sort((a, b) => a.created_at - b.created_at),
     };
-  } catch (error) {
+  } catch {
     return { ...emptyKeyValuesGraph };
   }
 }

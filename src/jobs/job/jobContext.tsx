@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IEnhancedJob } from "types";
+import type { IEnhancedJob } from "types";
 import { useParams } from "react-router";
 import { useGetEnhancedJobQuery } from "jobs/jobsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -53,7 +53,7 @@ function JobProvider({ children }: JobProviderProps) {
             variant={EmptyStateVariant.xs}
           >
             <EmptyStateBody>
-              We can't get the job with id {job_id}.
+              {`We can't get the job with id ${job_id}.`}
             </EmptyStateBody>
             <EmptyStateFooter>
               <EmptyStateActions>

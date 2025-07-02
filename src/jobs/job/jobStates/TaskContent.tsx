@@ -1,4 +1,4 @@
-import { IFile } from "types";
+import type { IFile } from "types";
 import { useGetFileContentQuery } from "../files/filesApi";
 
 export default function TaskContent({ file }: { file: IFile }) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Filters, JobsTableListColumn } from "types";
+import type { Filters, JobsTableListColumn } from "types";
 import {
   ToolbarItem,
   ToolbarGroup,
@@ -12,7 +12,7 @@ import {
   DropdownItem,
   DropdownList,
   MenuToggle,
-  MenuToggleElement,
+  type MenuToggleElement,
 } from "@patternfly/react-core";
 import { SyncAltIcon } from "@patternfly/react-icons";
 import ProductToolbarFilter from "products/form/ProductToolbarFilter";

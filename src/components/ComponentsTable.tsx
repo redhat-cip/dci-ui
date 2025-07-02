@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import { Label } from "@patternfly/react-core";
 import { formatDate } from "services/date";
 import { DateTime } from "luxon";
-import { Filters, IComponent } from "types";
+import type { Filters, IComponent } from "types";
 
 export default function ComponentsTable({
   filters,

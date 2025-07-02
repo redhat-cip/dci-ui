@@ -5,7 +5,7 @@ import {
   injectListEndpoint,
   injectUpdateEndpoint,
 } from "api";
-import type { IProduct } from "../types";
+import type { IProduct } from "types";
 
 const resource = "Product";
 

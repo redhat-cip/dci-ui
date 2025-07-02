@@ -1,5 +1,5 @@
 import { sortByOldestFirst } from "services/sort";
-import { IComponentCoverage, IAnalyticsJob } from "types";
+import type { IComponentCoverage, IAnalyticsJob } from "types";
 
 type IComponentCoverageById = {
   [componentId: string]: IComponentCoverage;
@@ -46,7 +46,7 @@ export function buildComponentCoverage(
       ...c,
       jobs: sortByOldestFirst(c.jobs),
     }));
-  } catch (error) {
+  } catch {
     return [];
   }
 }

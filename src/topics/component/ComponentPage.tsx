@@ -20,7 +20,7 @@ import {
   EmptyStateBody,
 } from "@patternfly/react-core";
 import { Breadcrumb, CopyButton, StateLabel } from "ui";
-import {
+import type {
   IComponent,
   IComponentCoverage,
   IComponentWithJobs,
@@ -165,7 +165,7 @@ function ComponentDetails({
           <>
             <CodeBlock
               actions={[
-                <CodeBlockAction>
+                <CodeBlockAction key="copyButton">
                   <CopyButton text={componentData} variant="plain" />
                 </CodeBlockAction>,
               ]}

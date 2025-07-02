@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useListTopicsQuery } from "topics/topicsApi";
-import { ITopic } from "types";
+import type { ITopic } from "types";
 import TypeaheadSelect from "ui/form/TypeaheadSelect";
 
 export default function TopicSelect({

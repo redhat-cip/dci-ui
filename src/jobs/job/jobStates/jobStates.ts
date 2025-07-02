@@ -1,4 +1,4 @@
-import { IFile, IFileStatus } from "types";
+import type { IFile, IFileStatus } from "types";
 
 export function getFileStatus(file: IFile): IFileStatus {
   return file.name.startsWith("failed/") || file.name.startsWith("item_failed/")
@@ -15,7 +15,9 @@ export function getFileStatus(file: IFile): IFileStatus {
 }
 
 export function buildFileTitle(fileName: string) {
-  let re = new RegExp("^((failed|unreachable|skipped|warn)/)?(PLAY|TASK)(.*)");
+  const re = new RegExp(
+    "^((failed|unreachable|skipped|warn)/)?(PLAY|TASK)(.*)",
+  );
   let title;
 
   if (re.test(fileName)) {
@@ -27,7 +29,9 @@ export function buildFileTitle(fileName: string) {
 }
 
 export function isFileEmpty(file: IFile) {
-  let re = new RegExp("^((failed|unreachable|skipped)/)?(PLAY [\\[]|PLAYBOOK)");
+  const re = new RegExp(
+    "^((failed|unreachable|skipped)/)?(PLAY [\\[]|PLAYBOOK)",
+  );
 
   return re.test(file.name);
 }

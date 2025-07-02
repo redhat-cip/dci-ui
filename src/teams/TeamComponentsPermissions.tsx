@@ -13,7 +13,7 @@ import {
 import { MinusCircleIcon, PlusCircleIcon } from "@patternfly/react-icons";
 import { ConfirmDeleteModal } from "ui";
 import { useAppDispatch } from "store";
-import { ITeam } from "types";
+import type { ITeam } from "types";
 import { Link } from "react-router";
 import AddRemoteTeamPermissionModal from "./AddRemoteTeamPermissionModal";
 import { sortByName } from "services/sort";
@@ -146,7 +146,7 @@ export default function TeamComponentsPermissions({
                   variant="secondary"
                   onClick={openModal}
                 >
-                  Add access to a team's components
+                  {`Add access to a team's components`}
                 </Button>
               )}
             </AddRemoteTeamPermissionModal>

@@ -5,7 +5,7 @@ import TeamSelect from "./TeamSelect";
 import { teams } from "__tests__/data";
 import { server } from "__tests__/node";
 import { http, HttpResponse } from "msw";
-import { IGetTeams } from "types";
+import type { IGetTeams } from "types";
 
 test("test TeamSelect when user type, a debounced request with query is made", async () => {
   const search = teams[1].name;

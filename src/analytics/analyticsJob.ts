@@ -1,5 +1,5 @@
 import { getPrincipalComponent } from "topics/component/componentSelector";
-import { IAnalyticsJob, IGroupByKey } from "types";
+import type { IAnalyticsJob, IGroupByKey } from "types";
 
 export function getJobKey<T extends IAnalyticsJob>(
   job: T,
@@ -46,9 +46,10 @@ export function getJobKey<T extends IAnalyticsJob>(
     case "tags":
       key = job.tags.join("|");
       break;
-    default:
+    default: {
       const exhaustiveCheck: never = groupByKey;
       throw new Error(`Unhandled groupByKey: ${exhaustiveCheck}`);
+    }
   }
   return key;
 }

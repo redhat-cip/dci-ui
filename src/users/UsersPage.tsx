@@ -12,7 +12,7 @@ import {
 } from "@patternfly/react-core";
 import { PlusCircleIcon, SearchIcon } from "@patternfly/react-icons";
 import { EmptyState, Breadcrumb } from "ui";
-import { Filters } from "types";
+import type { Filters } from "types";
 import CreateUserModal from "./CreateUserModal";
 import UsersTable from "./UsersTable";
 import {

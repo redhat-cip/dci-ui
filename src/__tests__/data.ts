@@ -1,5 +1,5 @@
 import { buildCurrentUser } from "auth/authApi";
-import {
+import type {
   IComponent,
   IFeeder,
   IIdentityTeam,

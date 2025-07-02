@@ -3,7 +3,7 @@ import {
   HelperText,
   HelperTextItem,
 } from "@patternfly/react-core";
-import { FieldError } from "react-hook-form";
+import type { FieldError } from "react-hook-form";
 import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 export default function FormErrorMessage({

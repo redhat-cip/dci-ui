@@ -20,15 +20,19 @@ import { DateTime } from "luxon";
 import { formatDate } from "services/date";
 import { createRef, Fragment, useState } from "react";
 import { Link } from "react-router";
-import { IAnalyticsResultsJob, IGenericAnalyticsData, IJobStatus } from "types";
+import type {
+  IAnalyticsResultsJob,
+  IGenericAnalyticsData,
+  IJobStatus,
+} from "types";
 import { ComponentsList, TestLabels } from "jobs/components";
 import { notEmpty } from "services/utils";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { JobStatusLabel } from "jobs/components";
 import {
   extractPipelinesFromAnalyticsJobs,
-  IPipelineDay,
-  IPipelineJob,
+  type IPipelineDay,
+  type IPipelineJob,
 } from "./pipelines";
 import {
   CheckCircleIcon,
@@ -206,6 +210,7 @@ function PipelineCard({
                   >
                     {pipeline.jobs.map((job) => (
                       <Td
+                        key={job.id}
                         style={{
                           borderLeft: `1px solid ${t_global_border_color_default.value}`,
                           whiteSpace: "nowrap",

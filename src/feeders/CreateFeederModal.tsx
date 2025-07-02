@@ -8,7 +8,7 @@ import {
 } from "@patternfly/react-core";
 import useModal from "hooks/useModal";
 import FeederForm from "./FeederForm";
-import { IFeeder } from "types";
+import type { IFeeder } from "types";
 
 interface CreateFeederModalProps {
   onSubmit: (feeder: Partial<IFeeder>) => void;

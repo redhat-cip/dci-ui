@@ -5,7 +5,7 @@ import { vi } from "vitest";
 import { topic, products } from "__tests__/data";
 import { server } from "__tests__/node";
 import { http, HttpResponse } from "msw";
-import { IGetProducts } from "types";
+import type { IGetProducts } from "types";
 import { Button } from "@patternfly/react-core";
 
 test("test create TopicForm submit the correct values", async () => {

@@ -4,12 +4,12 @@ import {
   SelectOption,
   SelectList,
   MenuToggle,
-  MenuToggleElement,
   TextInputGroup,
   TextInputGroupMain,
   Spinner,
   TextInputGroupUtilities,
   Button,
+  type MenuToggleElement,
 } from "@patternfly/react-core";
 import { useDebouncedValue } from "hooks/useDebouncedValue";
 import { TimesIcon } from "@patternfly/react-icons";

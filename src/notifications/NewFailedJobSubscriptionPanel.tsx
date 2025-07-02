@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ICurrentUser, IRemoteci } from "types";
+import type { ICurrentUser, IRemoteci } from "types";
 import {
   DualListSelector,
   DualListSelectorControl,
@@ -65,7 +65,7 @@ export default function NewFailedJobSubscriptionPanel({
         searchInput={
           <SearchInput
             value={searchRemotecis}
-            onChange={(e, value) => setSearchRemotecis(value)}
+            onChange={(_event, value) => setSearchRemotecis(value)}
             onClear={() => setSearchRemotecis("")}
           />
         }
@@ -75,7 +75,7 @@ export default function NewFailedJobSubscriptionPanel({
             <DualListSelectorListItem
               key={index}
               id={`composable-available-remoteci-${index}`}
-              onOptionSelect={(e) => setSelectedRemoteci(remoteci)}
+              onOptionSelect={() => setSelectedRemoteci(remoteci)}
               isSelected={remoteci.id === selectedRemoteci?.id}
             >
               {remoteci.name}
@@ -136,7 +136,7 @@ export default function NewFailedJobSubscriptionPanel({
               <DualListSelectorListItem
                 key={index}
                 id={`composable-subscribed-remoteci-${index}`}
-                onOptionSelect={(e) => setSelectedRemoteci(remoteci)}
+                onOptionSelect={() => setSelectedRemoteci(remoteci)}
                 isSelected={remoteci.id === selectedRemoteci?.id}
               >
                 {remoteci.name}

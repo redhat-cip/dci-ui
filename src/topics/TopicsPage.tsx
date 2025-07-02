@@ -20,7 +20,7 @@ import LoadingPageSection from "ui/LoadingPageSection";
 import ProductIcon from "products/ProductIcon";
 import { sortByName } from "services/sort";
 import { useEffect, useState } from "react";
-import { Filters } from "types";
+import type { Filters } from "types";
 import {
   createSearchFromFilters,
   parseFiltersFromSearch,

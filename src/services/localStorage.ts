@@ -1,4 +1,4 @@
-import { IToken } from "types";
+import type { IToken } from "types";
 
 const TOKEN = "DCI";
 

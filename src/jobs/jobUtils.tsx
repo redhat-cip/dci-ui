@@ -4,7 +4,7 @@ import {
   t_global_color_nonstatus_blue_200,
   t_global_color_nonstatus_orange_200,
 } from "@patternfly/react-tokens";
-import { LabelProps } from "@patternfly/react-core";
+import type { LabelProps } from "@patternfly/react-core";
 
 export function getBackgroundColor(status: string) {
   switch (status) {

@@ -27,6 +27,7 @@ export default function CopyButton({
     <Tooltip
       aria="none"
       aria-live="polite"
+      position={position}
       content={copied ? "Copied!" : "Copy to clipboard"}
     >
       <Button
