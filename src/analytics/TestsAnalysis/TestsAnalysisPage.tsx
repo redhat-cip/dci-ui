@@ -187,7 +187,7 @@ function TestingTrendGraphWithIndex({
       </Card>
       <div ref={graphRef} className="pf-v6-u-pb-md">
         <Card className="pf-v6-u-mt-md">
-          <CardBody>
+          <CardBody style={{ overflowX: "auto" }}>
             <Pagination
               perPage={filters.limit}
               page={offsetAndLimitToPage(filters.offset, filters.limit)}
