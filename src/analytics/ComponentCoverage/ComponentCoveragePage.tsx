@@ -25,7 +25,7 @@ function getUniqueComponentTypes(jobs: IAnalyticsJob[]): string[] {
   const typeSet = new Set<string>();
 
   for (const job of jobs) {
-    for (const component of job.components) {
+    for (const component of job.components ?? []) {
       typeSet.add(component.type);
     }
   }

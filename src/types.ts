@@ -532,12 +532,14 @@ export interface IAnalyticsJob {
   status_reason: string | null;
   created_at: string;
   url: string;
-  components: {
-    id: string;
-    topic_id: string;
-    display_name: string;
-    type: string;
-  }[];
+  components:
+    | {
+        id: string;
+        topic_id: string;
+        display_name: string;
+        type: string;
+      }[]
+    | undefined;
   comment: string | null;
   configuration: string | null;
   team: {

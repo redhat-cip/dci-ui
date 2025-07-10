@@ -78,7 +78,9 @@ export default function HeatMapTable({
               padding: "0 1em",
             }}
           >
-            <Link to={`/components/${component.id}`}>{component.display_name}</Link>
+            <Link to={`/components/${component.id}`}>
+              {component.display_name}
+            </Link>
           </div>
         ))}
       </div>

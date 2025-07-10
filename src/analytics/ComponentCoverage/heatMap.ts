@@ -21,7 +21,7 @@ export function createHeatMap(
   const targetMap = new Map<string, HeatMapComponent>();
 
   for (const job of jobs) {
-    for (const component of job.components) {
+    for (const component of job.components ?? []) {
       if (component.type === sourceType && !sourceMap.has(component.id)) {
         sourceMap.set(component.id, {
           id: component.id,
@@ -52,12 +52,12 @@ export function createHeatMap(
   let maxValue = 0;
 
   for (const job of jobs) {
-    const sourceIds = job.components
-      .filter((c) => c.type === sourceType)
-      .map((c) => c.id);
-    const targetIds = job.components
-      .filter((c) => c.type === targetType)
-      .map((c) => c.id);
+    const sourceIds =
+      job.components?.filter((c) => c.type === sourceType).map((c) => c.id) ??
+      [];
+    const targetIds =
+      job.components?.filter((c) => c.type === targetType).map((c) => c.id) ??
+      [];
 
     for (const sourceId of sourceIds) {
       const row = indexMapY.get(sourceId);
