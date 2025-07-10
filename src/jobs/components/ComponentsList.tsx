@@ -20,9 +20,7 @@ export function ComponentsList({ components }: ComponentsListProps) {
               textOverflow: "ellipsis",
             }}
           >
-            <Link
-              to={`/topics/${component.topic_id}/components/${component.id}`}
-            >
+            <Link to={`/components/${component.id}`}>
               {component.display_name}
             </Link>
           </div>

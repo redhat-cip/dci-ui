@@ -1,81 +1,188 @@
-import { createRef, useRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import {
-  Button,
   Card,
   CardBody,
   Content,
-  EmptyState,
-  EmptyStateBody,
-  EmptyStateVariant,
-  Drawer,
-  DrawerActions,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerContentBody,
-  DrawerHead,
-  DrawerPanelContent,
-  Label,
-  LabelGroup,
   PageSection,
   Skeleton,
+  Form,
+  Flex,
+  FormGroup,
+  FlexItem,
 } from "@patternfly/react-core";
-import {
-  t_global_color_nonstatus_red_200,
-  chart_color_green_300,
-  chart_color_red_orange_300,
-} from "@patternfly/react-tokens";
+
 import { Breadcrumb } from "ui";
-import type {
-  IAnalyticsJob,
-  IComponentCoverage,
-  IGenericAnalyticsData,
-} from "types";
-import { buildComponentCoverage } from "./componentCoverage";
-import { FilterIcon, WarningTriangleIcon } from "@patternfly/react-icons";
-import { Link } from "react-router";
-import { sortByNewestFirst } from "services/sort";
-import { formatDate } from "services/date";
-import { JobStatusLabel } from "jobs/components";
-import LastComponentsJobsBarChart from "./LastComponentsJobsBarChart";
-import {
-  Table,
-  Caption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-} from "@patternfly/react-table";
+import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
+import { useNavigate, useSearchParams } from "react-router";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
+import TypeaheadSelect from "ui/form/TypeaheadSelect";
+import { createHeatMap } from "./heatMap";
+import HeatMapTable from "./HeatMapTable";
+
+function getUniqueComponentTypes(jobs: IAnalyticsJob[]): string[] {
+  const typeSet = new Set<string>();
+
+  for (const job of jobs) {
+    for (const component of job.components) {
+      typeSet.add(component.type);
+    }
+  }
+
+  return Array.from(typeSet).sort();
+}
+
+function ComponentCoverageCard({
+  data,
+}: {
+  data: IGenericAnalyticsData<IAnalyticsJob>;
+}) {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const graphRef = createRef<HTMLTableElement>();
+  const [componentTypeSource, setComponentTypeSource] = useState<string>(
+    searchParams.get("componentTypeSource") || "",
+  );
+  const [search, setSearch] = useState<string>("");
+  const [componentTypeTarget, setComponentTypeTarget] = useState<string>(
+    searchParams.get("componentTypeTarget") || "",
+  );
+  const componentTypes = getUniqueComponentTypes(data.jobs);
+  const heatMap = createHeatMap(
+    data.jobs,
+    componentTypeSource,
+    componentTypeTarget,
+  );
+
+  useEffect(() => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+    updatedSearchParams.set("componentTypeSource", componentTypeSource);
+    updatedSearchParams.set("componentTypeTarget", componentTypeTarget);
+    navigate(`?${updatedSearchParams.toString()}`, { replace: true });
+  }, [componentTypeSource, componentTypeTarget]);
+
+  return (
+    <>
+      <Card className="pf-v6-u-mt-md">
+        <CardBody>
+          <Form>
+            <Flex
+              columnGap={{ default: "columnGap2xl" }}
+              direction={{ default: "column", lg: "row" }}
+              justifyContent={{ default: "justifyContentSpaceBetween" }}
+            >
+              <Flex
+                flex={{ default: "flex_1" }}
+                columnGap={{ default: "columnGapXl" }}
+              >
+                <FormGroup
+                  label="Component type source"
+                  htmlFor="component-type-source"
+                >
+                  <TypeaheadSelect
+                    id="component-type-source"
+                    name="component-type-source"
+                    isFetching={false}
+                    items={componentTypes
+                      .filter(
+                        (c) =>
+                          search.length === 0 ||
+                          c.toLowerCase().includes(search.toLowerCase()),
+                      )
+                      .slice(0, 10)
+                      .map((key) => ({
+                        id: key,
+                        name: key,
+                      }))}
+                    onSelect={(selection) => {
+                      if (selection) {
+                        setComponentTypeSource(selection.name);
+                      }
+                    }}
+                    onSearch={setSearch}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label="Component type target"
+                  htmlFor="component-type-target"
+                >
+                  <TypeaheadSelect
+                    id="component-type-target"
+                    name="component-type-target"
+                    isFetching={false}
+                    items={componentTypes
+                      .filter(
+                        (c) =>
+                          search.length === 0 ||
+                          (c.toLowerCase().includes(search.toLowerCase()) &&
+                            c !== componentTypeSource),
+                      )
+                      .slice(0, 10)
+                      .map((key) => ({
+                        id: key,
+                        name: key,
+                      }))}
+                    onSelect={(selection) => {
+                      if (selection) {
+                        setComponentTypeTarget(selection.name);
+                      }
+                    }}
+                    onSearch={setSearch}
+                  />
+                </FormGroup>
+              </Flex>
+              <Flex alignSelf={{ default: "alignSelfFlexEnd" }}>
+                <FlexItem>
+                  <ScreeshotNodeButton
+                    node={graphRef}
+                    filename="component-coverage.png"
+                  />
+                </FlexItem>
+              </Flex>
+            </Flex>
+          </Form>
+        </CardBody>
+      </Card>
+      <Card className="pf-v6-u-mt-md" ref={graphRef}>
+        <CardBody>
+          {componentTypeSource && componentTypeTarget && (
+            <HeatMapTable {...heatMap} />
+          )}
+        </CardBody>
+      </Card>
+    </>
+  );
+}
 
 function ComponentsCoverage({
   isLoading,
   data,
-  ...props
 }: {
   isLoading: boolean;
   data: IGenericAnalyticsData<IAnalyticsJob> | undefined;
-  [key: string]: any;
 }) {
-  const graphRef = createRef<HTMLTableElement>();
-
-  const [componentDetails, setComponentDetails] =
-    useState<IComponentCoverage | null>(null);
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const drawerIsExpanded = componentDetails !== null;
-
   if (isLoading) {
     return (
-      <Card {...props}>
-        <CardBody>
-          <Skeleton
-            screenreaderText="Loading components coverage data"
-            style={{ height: 80 }}
-          />
-        </CardBody>
-      </Card>
+      <>
+        <Card>
+          <CardBody>
+            <Skeleton
+              screenreaderText="Loading components coverage form"
+              style={{ height: 114 }}
+            />
+          </CardBody>
+        </Card>
+        <Card className="pf-v6-u-mt-md">
+          <CardBody>
+            <Skeleton
+              screenreaderText="Loading components coverage heat map"
+              style={{ height: 242 }}
+            />
+          </CardBody>
+        </Card>
+      </>
     );
   }
 
@@ -83,256 +190,7 @@ function ComponentsCoverage({
     return null;
   }
 
-  const components = buildComponentCoverage(data.jobs);
-
-  if (components.length === 0) {
-    return (
-      <Card {...props}>
-        <CardBody>
-          <EmptyState
-            variant={EmptyStateVariant.xs}
-            icon={FilterIcon}
-            titleText="No job"
-            headingLevel="h4"
-          >
-            <EmptyStateBody>
-              We did not find any jobs matching this search. Please modify your
-              search.
-            </EmptyStateBody>
-          </EmptyState>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  return (
-    <Card className="pf-v6-u-mt-md">
-      <CardBody>
-        <Drawer
-          isExpanded={drawerIsExpanded}
-          onExpand={() => {
-            drawerRef.current?.focus();
-          }}
-        >
-          <DrawerContent
-            panelContent={
-              <DrawerPanelContent widths={{ default: "width_66" }}>
-                <DrawerHead>
-                  <div ref={drawerRef}>
-                    <Table aria-label="jobs list">
-                      <Caption>
-                        {componentDetails && (
-                          <span>
-                            Jobs for component{" "}
-                            <Link
-                              to={`/topics/${componentDetails.topic_id}/components/${componentDetails.id}`}
-                            >
-                              {componentDetails.display_name}
-                            </Link>
-                          </span>
-                        )}
-                      </Caption>
-                      <Thead>
-                        <Tr>
-                          <Th role="columnheader" scope="col">
-                            Name
-                          </Th>
-                          <Th role="columnheader" scope="col">
-                            Status
-                          </Th>
-                          <Th role="columnheader" scope="col">
-                            Created at
-                          </Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        {componentDetails &&
-                          sortByNewestFirst(componentDetails.jobs).map(
-                            (job, i) => (
-                              <Tr key={i}>
-                                <Td role="cell" data-label="Component name">
-                                  <Link to={`/jobs/${job.id}`}>{job.name}</Link>
-                                </Td>
-                                <Td role="cell" data-label="Warning">
-                                  <JobStatusLabel status={job.status} />
-                                </Td>
-                                <Td role="cell" data-label="Warning">
-                                  {formatDate(job.created_at)}
-                                </Td>
-                              </Tr>
-                            ),
-                          )}
-                      </Tbody>
-                    </Table>
-                  </div>
-                  <DrawerActions>
-                    <DrawerCloseButton
-                      onClick={() => setComponentDetails(null)}
-                    />
-                  </DrawerActions>
-                </DrawerHead>
-              </DrawerPanelContent>
-            }
-          >
-            <DrawerContentBody>
-              <div className="flex items-center justify-end">
-                <ScreeshotNodeButton
-                  node={graphRef}
-                  filename="component-coverage-charts.png"
-                />
-              </div>
-              <Table ref={graphRef} aria-label="component coverage">
-                <Thead>
-                  <Tr>
-                    <Th role="columnheader" scope="col">
-                      Component name
-                    </Th>
-                    <Th role="columnheader" scope="col">
-                      Tags
-                    </Th>
-                    <Th role="columnheader" scope="col"></Th>
-                    <Th role="columnheader" scope="col">
-                      Percentage of successful jobs
-                    </Th>
-                    <Th role="columnheader" scope="col">
-                      Nb success/failed jobs
-                      <br />
-                      over the last 5 weeks
-                    </Th>
-                    <Th role="columnheader" scope="col" className="text-center">
-                      Actions
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {components.map((component, i) => {
-                    const percentageSuccess =
-                      component.nbOfJobs === 0
-                        ? 0
-                        : Math.round(
-                            (component.nbOfSuccessfulJobs * 100) /
-                              component.nbOfJobs,
-                          );
-                    return (
-                      <Tr key={i}>
-                        <Td role="cell" data-label="Component name">
-                          <Link
-                            to={`/topics/${component.topic_id}/components/${component.id}`}
-                          >
-                            {component.display_name}
-                          </Link>
-                        </Td>
-                        <Td role="cell" data-label="Tags">
-                          <LabelGroup numLabels={3} isCompact>
-                            {component.tags.map((tag, index) => (
-                              <Label key={index} color="blue" isCompact>
-                                {tag}
-                              </Label>
-                            ))}
-                          </LabelGroup>
-                        </Td>
-                        <Td role="cell" data-label="Warning">
-                          {component.nbOfJobs === 0 && (
-                            <span
-                              style={{
-                                color: chart_color_red_orange_300.var,
-                              }}
-                            >
-                              <WarningTriangleIcon className="pf-v6-u-mr-xs" />
-                              not tested
-                            </span>
-                          )}
-                        </Td>
-                        <Td role="cell" data-label="% success failures jobs">
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <div
-                              style={{
-                                backgroundColor:
-                                  percentageSuccess === 0
-                                    ? chart_color_red_orange_300.var
-                                    : chart_color_green_300.var,
-                                width: "200px",
-                                display: "block",
-                              }}
-                              className="pf-v6-u-mr-md"
-                            >
-                              <div
-                                style={{
-                                  height: "16px",
-                                  width: `${percentageSuccess}%`,
-                                  backgroundColor: chart_color_green_300.var,
-                                }}
-                              ></div>
-                            </div>
-                            <span
-                              style={{
-                                color:
-                                  percentageSuccess === 0
-                                    ? t_global_color_nonstatus_red_200.var
-                                    : chart_color_green_300.var,
-                                width: "35px",
-                                textAlign: "right",
-                              }}
-                              className="pf-v6-u-mr-md"
-                            >
-                              {percentageSuccess}%
-                            </span>
-                            <span
-                              style={{
-                                color:
-                                  percentageSuccess === 0
-                                    ? t_global_color_nonstatus_red_200.var
-                                    : chart_color_green_300.var,
-                                fontWeight: "bold",
-                                minWidth: "42px",
-                                textAlign: "right",
-                              }}
-                            >
-                              {component.nbOfJobs}{" "}
-                              {component.nbOfJobs > 1 ? "jobs" : "job"}
-                            </span>
-                          </div>
-                        </Td>
-                        <Td
-                          role="cell"
-                          data-label="number of successful/failed jobs over the last 5 weeks."
-                          style={{
-                            padding: 0,
-                            verticalAlign: "inherit",
-                          }}
-                        >
-                          <LastComponentsJobsBarChart component={component} />
-                        </Td>
-                        <Td
-                          role="cell"
-                          data-label="actions"
-                          className="text-center"
-                        >
-                          <Button
-                            variant="link"
-                            onClick={() => {
-                              setComponentDetails(component);
-                            }}
-                          >
-                            see jobs
-                          </Button>
-                        </Td>
-                      </Tr>
-                    );
-                  })}
-                </Tbody>
-              </Table>
-            </DrawerContentBody>
-          </DrawerContent>
-        </Drawer>
-      </CardBody>
-    </Card>
-  );
+  return <ComponentCoverageCard data={data} />;
 }
 
 export default function ComponentCoveragePage() {
@@ -349,8 +207,9 @@ export default function ComponentCoveragePage() {
       />
       <Content component="h1">Component coverage</Content>
       <Content component="p">
-        See which components has been tested. Table of components and associated
-        jobs.
+        The component coverage page gives you the coverage matrix between two
+        component types. Select a source and target component type. And check
+        how many jobs have been launched with these components.
       </Content>
       <AnalyticsToolbar
         onLoad={({ query, after, before }) => {
@@ -364,11 +223,9 @@ export default function ComponentCoveragePage() {
         isLoading={isFetching}
         data={data}
       />
-      <ComponentsCoverage
-        isLoading={isLoading}
-        data={data}
-        className="pf-v6-u-mt-md"
-      />
+      <div className="pf-v6-u-mt-md">
+        <ComponentsCoverage isLoading={isLoading} data={data} />
+      </div>
     </PageSection>
   );
 }

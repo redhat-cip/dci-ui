@@ -148,9 +148,7 @@ export default function JobTableSummary({
     ),
     component:
       principalComponent === null ? null : (
-        <Link
-          to={`/topics/${principalComponent.topic_id}/components/${principalComponent.id}`}
-        >
+        <Link to={`/components/${principalComponent.id}`}>
           <TopicIcon name={job.topic?.name} className="pf-v6-u-mr-xs" />
           {principalComponent.display_name}
         </Link>

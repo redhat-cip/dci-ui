@@ -376,7 +376,7 @@ function convertComponentWithJobInComponentCoverage(
 }
 
 export default function ComponentPage() {
-  const { topic_id, component_id } = useParams();
+  const { component_id } = useParams();
 
   const { data: component, isLoading } = useGetComponentQuery(
     component_id ? component_id : skipToken,
@@ -405,11 +405,9 @@ export default function ComponentPage() {
       <Breadcrumb
         links={[
           { to: "/", title: "DCI" },
-          { to: "/topics", title: "Topics" },
-          { to: `/topics/${topic_id}/components`, title: topic_id },
-          { to: `/topics/${topic_id}/components`, title: "Components" },
+          { to: `/components`, title: "Components" },
           {
-            to: `/topics/${topic_id}/components/${component_id}`,
+            to: `/components/${component_id}`,
             title: component_id,
           },
         ]}

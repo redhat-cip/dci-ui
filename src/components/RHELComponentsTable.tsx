@@ -72,9 +72,7 @@ export default function RHELComponentsTable({
                 <CopyButton text={component.id} />
               </Td>
               <Td>
-                <Link
-                  to={`/topics/${component.topic_id}/components/${component.id}`}
-                >
+                <Link to={`/components/${component.id}`}>
                   {component.display_name}
                 </Link>
               </Td>

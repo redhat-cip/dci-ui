@@ -96,7 +96,10 @@ export default function App() {
                 element={<ComponentPage />}
               />
             </Route>
-            <Route path="components" element={<ComponentsPage />} />
+            <Route path="components">
+              <Route index element={<ComponentsPage />} />
+              <Route path=":component_id" element={<ComponentPage />} />
+            </Route>
             <Route path="remotecis" element={<RemotecisPage />} />
             <Route path="feeders" element={<FeedersPage />} />
             <Route path="teams">

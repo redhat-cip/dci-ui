@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Label } from "@patternfly/react-core";
 import { Link } from "react-router";
-import { CubesIcon } from "@patternfly/react-icons";
+import { CubesIcon, EyeIcon, EyeSlashIcon } from "@patternfly/react-icons";
 import styled from "styled-components";
 import type { IComponent } from "types";
 import { sortByMainComponentType } from "services/sort";
@@ -29,7 +29,7 @@ export default function ComponentsListInJobRow({
     <div>
       {nFirstComponents.map((component) => (
         <Component key={component.id} className="pf-v6-u-mt-xs">
-          <Link to={`/topics/${component.topic_id}/components/${component.id}`}>
+          <Link to={`/components/${component.id}`}>
             <CubesIcon className="pf-v6-u-mr-xs" />
             {component.display_name}
           </Link>
@@ -39,9 +39,7 @@ export default function ComponentsListInJobRow({
         <>
           {remainingComponents.map((component) => (
             <Component key={component.id} className="pf-v6-u-mt-xs">
-              <Link
-                to={`/topics/${component.topic_id}/components/${component.id}`}
-              >
+              <Link to={`/components/${component.id}`}>
                 <CubesIcon className="pf-v6-u-mr-xs" />
                 {component.display_name}
               </Link>
@@ -49,20 +47,22 @@ export default function ComponentsListInJobRow({
           ))}
           <Label
             isCompact
-            onClose={() => setShowMore(false)}
+            onClick={() => setShowMore(false)}
             className="pf-v6-u-mt-xs"
+            icon={<EyeSlashIcon />}
           >
-            show less
+            Show less
           </Label>
         </>
       ) : (
         showMoreButton && (
           <Label
             isCompact
-            onClose={() => setShowMore(true)}
+            onClick={() => setShowMore(true)}
             className="pf-v6-u-mt-xs"
+            icon={<EyeIcon />}
           >
-            {remainingComponents.length} more
+            Show all
           </Label>
         )
       )}

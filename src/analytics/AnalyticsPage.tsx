@@ -12,7 +12,7 @@ import { Breadcrumb } from "ui";
 import { useNavigate } from "react-router";
 import TasksPerJobHeaderImage from "./TasksDurationPerJob/tasks_per_job.png";
 import JunitComparisonHeaderImage from "./JunitComparison/junit_comparison.png";
-import ComponentCoverageHeaderImage from "./ComponentCoverage/component_coverage.png";
+import ComponentCoverageHeaderImage from "./ComponentCoverage/component_coverage.jpg";
 import TestsAnalysisHeaderImage from "./TestsAnalysis/TestsAnalysisHeaderImage.jpg";
 import JobStatsHeaderImage from "./jobsStats/job_stats.png";
 import PipelinesHeaderImage from "./Pipelines/pipelines.png";
@@ -123,10 +123,17 @@ export default function AnalyticsPage() {
               width="auto"
             />
           </CardHeader>
-          <CardTitle>Component coverage</CardTitle>
+          <CardTitle>
+            Component coverage
+            <DisplayIfBefore date="2025-09-01">
+              <Label color="green" isCompact className="pf-v6-u-ml-xs">
+                new
+              </Label>
+            </DisplayIfBefore>
+          </CardTitle>
           <CardBody>
-            See which components has been tested. Table of components and
-            associated jobs.
+            The component coverage page gives you the coverage matrix between
+            two component types.
           </CardBody>
         </Card>
         <Card
