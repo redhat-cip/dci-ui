@@ -157,7 +157,7 @@ export default function TestCase({
         <Td modifier="fitContent">{testcase.classname}</Td>
         <Td>{testcase.type}</Td>
       </Tr>
-      <Tr isExpanded={isExpanded}>
+      <Tr isExpandable isExpanded={isExpanded}>
         <Td></Td>
         <Td colSpan={99}>
           <DescriptionList
