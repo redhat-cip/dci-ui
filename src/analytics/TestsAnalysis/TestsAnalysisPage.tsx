@@ -112,12 +112,14 @@ function Legend() {
   );
 }
 
+type SearchItem = { id: string; search: string };
+
 function TestingTrendGraphWithIndex({
   searchIndex,
   tests,
   ...props
 }: {
-  searchIndex: Document<TestcaseEntry>;
+  searchIndex: Document<SearchItem>;
   tests: TestcaseEntry[];
   [key: string]: any;
 }) {
@@ -148,10 +150,10 @@ function TestingTrendGraphWithIndex({
     if (!debouncedFilter)
       return tests.slice(filters.offset, filters.offset + filters.limit);
     const rawResults = searchIndex.search(debouncedFilter, {
+      pluck: "search",
       limit: filters.limit,
-      merge: true,
     });
-    return rawResults.flat().map((e) => testsByIds[e.id]);
+    return rawResults.map((id) => testsByIds[id]);
   }, [tests, debouncedFilter, searchIndex, testsByIds, filters]);
 
   return (
@@ -279,13 +281,17 @@ function TestingTrendGraph({
 }) {
   const tests = analyseTests(data);
   const searchIndex = useMemo(() => {
-    const idx = new Document<TestcaseEntry>({
+    const idx = new Document<SearchItem>({
       document: {
-        index: ["filename", "classname", "name"],
+        id: "id",
+        index: ["id", "search"],
       },
     });
     tests.forEach((test) => {
-      idx.add(test);
+      idx.add({
+        id: test.id,
+        search: `${test.filename} ${test.classname} ${test.name}`,
+      });
     });
     return idx;
   }, [tests]);
