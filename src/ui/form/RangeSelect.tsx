@@ -7,6 +7,7 @@ import {
 } from "@patternfly/react-core";
 import type { TimeRange } from "types";
 import { getRangeDates } from "services/date";
+import { useState } from "react";
 
 export const rangeLabels: { [k in TimeRange]: string } = {
   previousWeek: "Previous week",
@@ -29,28 +30,33 @@ export const rangeLabels: { [k in TimeRange]: string } = {
 
 export default function RangeSelect({
   now,
-  range,
-  ranges = Object.keys(rangeLabels) as Array<keyof typeof rangeLabels>,
-  after,
-  before,
+  defaultValues,
+  ranges,
   onChange,
 }: {
   now?: string;
-  range: TimeRange;
-  ranges?: TimeRange[];
-  after: string;
-  before: string;
+  defaultValues: {
+    range: TimeRange;
+    after: string;
+    before: string;
+  };
+  ranges: TimeRange[];
   onChange: (range: TimeRange, after: string, before: string) => void;
 }) {
+  const [range, setRange] = useState(defaultValues.range);
+  const [after, setAfter] = useState(defaultValues.after);
+  const [before, setBefore] = useState(defaultValues.before);
   const showDatePicker = range === "custom";
+
   return (
     <Flex columnGap={{ default: "columnGapXs" }}>
       <FlexItem>
         <FormSelect
           id="select-range-option"
           value={range}
-          onChange={(event, newRange) => {
+          onChange={(_, newRange) => {
             const r = newRange as TimeRange;
+            setRange(r);
             if (r === "custom") {
               onChange(r, after, before);
             } else {
@@ -74,11 +80,12 @@ export default function RangeSelect({
           <FlexItem>
             <DatePicker
               value={after}
-              placeholder="After"
               aria-label="After input date picker"
               buttonAriaLabel="Toggle after date picker"
+              placeholder="After"
               appendTo={() => document.body}
-              onChange={(e, newAfterDate) => {
+              onChange={(_, newAfterDate) => {
+                setAfter(newAfterDate);
                 onChange(range, newAfterDate, before);
               }}
             />
@@ -90,7 +97,8 @@ export default function RangeSelect({
               buttonAriaLabel="Toggle before date picker"
               placeholder="Before"
               appendTo={() => document.body}
-              onChange={(e, newBeforeDate) => {
+              onChange={(_, newBeforeDate) => {
+                setBefore(newBeforeDate);
                 onChange(range, after, newBeforeDate);
               }}
             />

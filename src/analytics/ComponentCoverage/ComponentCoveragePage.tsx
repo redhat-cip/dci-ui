@@ -13,7 +13,7 @@ import {
 
 import { Breadcrumb } from "ui";
 import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
@@ -38,9 +38,7 @@ function ComponentCoverageCard({
 }: {
   data: IGenericAnalyticsData<IAnalyticsJob>;
 }) {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const graphRef = createRef<HTMLTableElement>();
   const [componentTypeSource, setComponentTypeSource] = useState<string>(
     searchParams.get("componentTypeSource") || "",
@@ -57,10 +55,11 @@ function ComponentCoverageCard({
   );
 
   useEffect(() => {
-    const updatedSearchParams = new URLSearchParams(searchParams);
-    updatedSearchParams.set("componentTypeSource", componentTypeSource);
-    updatedSearchParams.set("componentTypeTarget", componentTypeTarget);
-    navigate(`?${updatedSearchParams.toString()}`, { replace: true });
+    if (componentTypeSource && componentTypeTarget) {
+      searchParams.set("componentTypeSource", componentTypeSource);
+      searchParams.set("componentTypeTarget", componentTypeTarget);
+      setSearchParams(searchParams);
+    }
   }, [componentTypeSource, componentTypeTarget]);
 
   return (

@@ -30,7 +30,7 @@ import {
 import JobStatChart from "./JobStatChart";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
 import { sort } from "services/sort";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 function JobStatsGraphs({
   data,
@@ -40,8 +40,7 @@ function JobStatsGraphs({
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [groupByKey, setGroupByKey] = useState<IGroupByKey>(
     (searchParams.get("groupByKey") as IGroupByKey) || "topic",
   );
@@ -56,20 +55,19 @@ function JobStatsGraphs({
   );
 
   useEffect(() => {
-    const updatedSearchParams = new URLSearchParams(searchParams);
-    updatedSearchParams.set("groupByKey", groupByKey);
-    updatedSearchParams.set("sliceByKey", sliceByKey);
+    searchParams.set("groupByKey", groupByKey);
+    searchParams.set("sliceByKey", sliceByKey);
     if (groupFilterRegex === "") {
-      updatedSearchParams.delete("groupFilterRegex");
+      searchParams.delete("groupFilterRegex");
     } else {
-      updatedSearchParams.set("groupFilterRegex", groupFilterRegex);
+      searchParams.set("groupFilterRegex", groupFilterRegex);
     }
     if (sliceFilterRegex === "") {
-      updatedSearchParams.delete("sliceFilterRegex");
+      searchParams.delete("sliceFilterRegex");
     } else {
-      updatedSearchParams.set("sliceFilterRegex", sliceFilterRegex);
+      searchParams.set("sliceFilterRegex", sliceFilterRegex);
     }
-    navigate(`?${updatedSearchParams.toString()}`, { replace: true });
+    setSearchParams(searchParams);
   }, [groupByKey, sliceByKey, groupFilterRegex, sliceFilterRegex]);
 
   const jobStats = useMemo(() => {

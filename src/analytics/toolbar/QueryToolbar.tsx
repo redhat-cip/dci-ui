@@ -59,16 +59,11 @@ export default function QueryToolbar({
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultValues = getDefaultValues(searchParams);
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { isDirty, isValid },
-  } = useForm<AnalyticsToolbarSearch>({
-    resolver: yupResolver(ToolbarSearchSchema),
-    defaultValues,
-  });
+  const { control, handleSubmit, setValue, watch } =
+    useForm<AnalyticsToolbarSearch>({
+      resolver: yupResolver(ToolbarSearchSchema),
+      defaultValues,
+    });
 
   const search = watch();
 
@@ -77,12 +72,18 @@ export default function QueryToolbar({
   }, []);
 
   const searchJobs = (values: AnalyticsToolbarSearch) => {
-    const params = {
-      ...values,
-      range: values.range,
-    };
+    const params = new URLSearchParams(window.location.search);
+    params.set("query", values.query);
+    params.set("range", values.range);
+    if (values.range === "custom") {
+      params.set("after", values.after);
+      params.set("before", values.before);
+    } else {
+      params.delete("after");
+      params.delete("before");
+    }
     setSearchParams(params);
-    onSearch(params);
+    onSearch(values);
   };
 
   return (
@@ -105,40 +106,27 @@ export default function QueryToolbar({
             </TextInputGroup>
           </ToolbarItem>
           <ToolbarItem>
-            <Controller
-              control={control}
-              name="range"
-              render={({ field: { onChange, value } }) => (
-                <RangeSelect
-                  range={value}
-                  onChange={(range, after, before) => {
-                    onChange(range);
-                    setValue("after", after);
-                    setValue("before", before);
-                  }}
-                  after={defaultValues.after}
-                  before={defaultValues.before}
-                  ranges={[
-                    "last7Days",
-                    "last30Days",
-                    "last90Days",
-                    "previousWeek",
-                    "currentWeek",
-                    "yesterday",
-                    "today",
-                    "custom",
-                  ]}
-                />
-              )}
+            <RangeSelect
+              defaultValues={defaultValues}
+              ranges={[
+                "last7Days",
+                "last30Days",
+                "last90Days",
+                "previousWeek",
+                "currentWeek",
+                "yesterday",
+                "today",
+                "custom",
+              ]}
+              onChange={(range, after, before) => {
+                setValue("range", range);
+                setValue("after", after);
+                setValue("before", before);
+              }}
             />
           </ToolbarItem>
           <ToolbarItem>
-            <Button
-              type="submit"
-              variant="stateful"
-              state="unread"
-              isDisabled={!isDirty || !isValid}
-            >
+            <Button type="submit" variant="stateful" state="unread">
               Search
             </Button>
           </ToolbarItem>

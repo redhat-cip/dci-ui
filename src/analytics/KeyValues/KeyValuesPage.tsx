@@ -44,7 +44,7 @@ import type {
 } from "types";
 import KeyValuesAddGraphModal from "./KeyValuesAddGraphModal";
 import { createSearchFromGraphs, parseGraphsFromSearch } from "./filters";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import type { IKeyValueGraph } from "./keyValuesTypes";
 import KeyValuesEditGraphModal from "./KeyValuesEditGraphModal";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -96,7 +96,7 @@ function KeyValueGraph({
   data: IGraphKeysValues;
   graph: IKeyValueGraph;
 }) {
-  const openJob = (payload: any) => {
+  const openJob = (payload: { payload?: IJob }) => {
     if ("payload" in payload) {
       const job = payload.payload as IJob;
       window.open(`/jobs/${job.id}/jobStates`);
@@ -156,8 +156,8 @@ function KeyValueGraph({
                 activeDot={{
                   r: 6,
                   cursor: "pointer",
-                  onClick: (event, payload) => {
-                    openJob(payload);
+                  onClick: (_, payload) => {
+                    openJob(payload as { payload?: IJob });
                   },
                 }}
               />
@@ -197,22 +197,20 @@ function KeyValuesGraphs({
   [key: string]: any;
 }) {
   const graphRef = createRef<HTMLDivElement>();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [graphs, setGraphs] = useState<IKeyValueGraph[]>(
     parseGraphsFromSearch(searchParams.get("graphs")),
   );
 
   useEffect(() => {
-    const updatedSearchParams = new URLSearchParams(searchParams);
     const graphSearch = createSearchFromGraphs(graphs);
     if (graphSearch) {
-      updatedSearchParams.set("graphs", graphSearch);
+      searchParams.set("graphs", graphSearch);
     } else {
-      updatedSearchParams.delete("graphs");
+      searchParams.delete("graphs");
     }
-    navigate(`?${updatedSearchParams.toString()}`);
-  }, [graphs, graphs.length, navigate, searchParams]);
+    setSearchParams(searchParams);
+  }, [graphs, graphs.length, searchParams]);
 
   const keys = extractKeys(data);
 
