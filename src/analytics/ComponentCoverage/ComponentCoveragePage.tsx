@@ -84,6 +84,10 @@ function ComponentCoverageCard({
                   <TypeaheadSelect
                     id="component-type-source"
                     name="component-type-source"
+                    item={{
+                      id: componentTypeSource,
+                      name: componentTypeSource,
+                    }}
                     isFetching={false}
                     items={componentTypes
                       .filter(
@@ -112,6 +116,10 @@ function ComponentCoverageCard({
                     id="component-type-target"
                     name="component-type-target"
                     isFetching={false}
+                    item={{
+                      id: componentTypeTarget,
+                      name: componentTypeTarget,
+                    }}
                     items={componentTypes
                       .filter(
                         (c) =>
