@@ -10,8 +10,8 @@ import {
 
 interface EmptyStateProps {
   title: string;
-  info?: string;
-  icon?: React.ComponentType<any>;
+  info?: React.ReactNode;
+  icon?: React.ComponentType<unknown>;
   action?: React.ReactNode;
 }
 

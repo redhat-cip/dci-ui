@@ -29,9 +29,12 @@ import {
 } from "@patternfly/react-tokens";
 import JobKeysValues from "jobs/components/JobKeysValues";
 
-interface JobTableSummaryProps {
+interface JobsTableListRowProps {
   job: JobNode;
   level: number;
+  borderColorWidth: number;
+  statusLabelIndentation: number;
+  sizeStatusLabel: number;
   onTagClicked: (tag: string) => void;
   onRemoteciClicked: (remoteci: IRemoteci) => void;
   onTeamClicked: (team: ITeam) => void;
@@ -64,9 +67,12 @@ function PipelineLink({ pipeline }: { pipeline: IPipeline }) {
   );
 }
 
-export default function JobTableSummary({
+export default function JobsTableListRow({
   job,
   level,
+  sizeStatusLabel,
+  statusLabelIndentation,
+  borderColorWidth,
   onTagClicked,
   onRemoteciClicked,
   onTeamClicked,
@@ -75,7 +81,7 @@ export default function JobTableSummary({
   onPipelineClicked,
   onStatusClicked,
   columns,
-}: JobTableSummaryProps) {
+}: JobsTableListRowProps) {
   const jobDuration = humanizeDuration(job.duration);
   const principalComponent = getPrincipalComponent(job.components);
   const config = job.configuration;
@@ -197,19 +203,17 @@ export default function JobTableSummary({
       </span>
     ),
   };
-  const distanceBetweenLeftAndStatusLabelIcon = 13;
-  const maxSizeStatusLabel = 72;
-  const statusLabelIndent = 21;
-  const horizontalPadding = statusLabelIndent * 2;
+  const paddingLeft =
+    borderColorWidth +
+    statusLabelIndentation +
+    statusLabelIndentation * 2 * level;
 
-  const BottomRightLine = () => (
+  const LeftBottomLine = () => (
     <div
       style={{
         position: "absolute",
-        left: `${
-          statusLabelIndent * level + distanceBetweenLeftAndStatusLabelIcon
-        }px`,
-        width: "15px",
+        left: `${paddingLeft - statusLabelIndentation}px`,
+        width: `${statusLabelIndentation * 2}px`,
         bottom: "50%",
         borderBottom: `1px solid ${t_global_border_color_300.value}`,
         borderLeft: `1px solid ${t_global_border_color_300.value}`,
@@ -233,14 +237,11 @@ export default function JobTableSummary({
         <Td
           style={{
             padding: 0,
-            width: `${
-              statusLabelIndent * level + maxSizeStatusLabel + horizontalPadding
-            }px`,
           }}
         >
           <div
             style={{
-              width: 5,
+              width: borderColorWidth,
               position: "absolute",
               top: 0,
               left: 0,
@@ -248,11 +249,12 @@ export default function JobTableSummary({
               backgroundColor: getBackgroundColor(job.status),
             }}
           ></div>
-          {level !== 0 && <BottomRightLine />}
+          {level !== 0 && <LeftBottomLine />}
           <div
             style={{
               position: "absolute",
-              left: `${statusLabelIndent * (level + 1)}px`,
+              left: `${paddingLeft}px`,
+              width: sizeStatusLabel,
               top: "calc(50% - 12px)",
             }}
           >
@@ -285,10 +287,13 @@ export default function JobTableSummary({
         ))}
       </Tr>
       {job.children.map((child) => (
-        <JobTableSummary
+        <JobsTableListRow
           key={child.id}
           job={child}
           level={level + 1}
+          statusLabelIndentation={statusLabelIndentation}
+          borderColorWidth={borderColorWidth}
+          sizeStatusLabel={sizeStatusLabel}
           columns={columns}
           onStatusClicked={onStatusClicked}
           onTagClicked={onTagClicked}

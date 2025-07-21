@@ -60,7 +60,16 @@ function Jobs() {
   }
 
   if (!data || data.jobs.length === 0) {
-    return <EmptyState title="No job" info="There is no job at the moment." />;
+    return (
+      <EmptyState
+        title="No job"
+        info={
+          <span>
+            There are no jobs associated with the <b>current team</b>.
+          </span>
+        }
+      />
+    );
   }
 
   const count = data._meta.count;

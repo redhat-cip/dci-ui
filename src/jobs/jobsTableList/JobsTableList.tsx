@@ -14,6 +14,7 @@ interface JobsTableListProps {
 }
 
 const TableWithTrStyled = styled(Table)`
+  overflow-x: auto;
   tbody > tr {
     &:last-child {
       border-bottom: 1px solid ${t_global_border_color_200.var} !important;
@@ -28,13 +29,30 @@ export default function JobsTableList({
   columns,
 }: JobsTableListProps) {
   if (jobs.length === 0) return null;
-  const jobsGroupedByPipeline = groupJobsByPipeline(jobs);
+  const { jobNodes: jobsGroupedByPipeline, maxLevel } =
+    groupJobsByPipeline(jobs);
+
+  const borderColorWidth = 5;
+  const statusLabelPadding = 13;
+  const leftPadding = statusLabelPadding;
+  const rightPadding = statusLabelPadding;
+  const indentationPadding = maxLevel * statusLabelPadding * 2;
+  const sizeStatusLabel = 79;
+  const pipelineWidth =
+    borderColorWidth +
+    leftPadding +
+    indentationPadding +
+    sizeStatusLabel +
+    rightPadding;
 
   return (
     <TableWithTrStyled>
       <Thead>
         <Tr>
-          <Th screenReaderText="pipeline"></Th>
+          <Th
+            screenReaderText="pipeline"
+            style={{ width: pipelineWidth, minWidth: pipelineWidth }}
+          ></Th>
           <Th>Name</Th>
           {columns.map((column, i) => (
             <Th key={i}>{tableViewColumnLabels[column]}</Th>
@@ -47,6 +65,9 @@ export default function JobsTableList({
             key={`${job.id}:${job.etag}`}
             job={job}
             level={0}
+            borderColorWidth={borderColorWidth}
+            statusLabelIndentation={statusLabelPadding}
+            sizeStatusLabel={sizeStatusLabel}
             columns={columns}
             onStatusClicked={(status) => {
               setFilters({
