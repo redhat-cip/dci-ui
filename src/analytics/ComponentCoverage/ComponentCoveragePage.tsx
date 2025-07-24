@@ -12,7 +12,11 @@ import {
 } from "@patternfly/react-core";
 
 import { Breadcrumb } from "ui";
-import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
+import type {
+  AnalyticsToolbarSearch,
+  IAnalyticsJob,
+  IGenericAnalyticsData,
+} from "types";
 import { useSearchParams } from "react-router";
 import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
@@ -203,6 +207,11 @@ function ComponentsCoverage({
 export default function ComponentCoveragePage() {
   const [getAnalyticJobs, { data, isLoading, isFetching }] =
     useLazyGetAnalyticJobsQuery();
+  const search = (values: AnalyticsToolbarSearch) => {
+    if (values.query) {
+      getAnalyticJobs(values);
+    }
+  };
   return (
     <PageSection>
       <Breadcrumb
@@ -219,14 +228,8 @@ export default function ComponentCoveragePage() {
         how many jobs have been launched with these components.
       </Content>
       <AnalyticsToolbar
-        onLoad={({ query, after, before }) => {
-          if (query !== "" && after !== "" && before !== "") {
-            getAnalyticJobs({ query, after, before });
-          }
-        }}
-        onSearch={({ query, after, before }) => {
-          getAnalyticJobs({ query, after, before });
-        }}
+        onLoad={search}
+        onSearch={search}
         isLoading={isFetching}
         data={data}
       />

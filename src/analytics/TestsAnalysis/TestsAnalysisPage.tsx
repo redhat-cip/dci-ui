@@ -11,11 +11,14 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
-import { createRef, useEffect, useMemo, useState } from "react";
-import { useGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
+import { createRef, useMemo, useState } from "react";
+import { useLazyGetAnalyticsTestsJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
-import type { Filters, IAnalyticsTestsJob, IGenericAnalyticsData } from "types";
-import { skipToken } from "@reduxjs/toolkit/query";
+import type {
+  AnalyticsToolbarSearch,
+  IAnalyticsTestsJob,
+  IGenericAnalyticsData,
+} from "types";
 import {
   analyseTests,
   type TestcaseEntry,
@@ -30,16 +33,11 @@ import {
   chart_color_red_orange_400,
 } from "@patternfly/react-tokens";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { Document } from "flexsearch";
 import { ExclamationTriangleIcon } from "@patternfly/react-icons";
 import { useDebounce } from "use-debounce";
-import {
-  createSearchFromFilters,
-  offsetAndLimitToPage,
-  pageAndLimitToOffset,
-  parseFiltersFromSearch,
-} from "services/filters";
+import { offsetAndLimitToPage, pageAndLimitToOffset } from "services/filters";
 import { sortByOldestFirst } from "services/sort";
 
 const statusColorMap: Record<TestCaseResult, string> = {
@@ -117,19 +115,18 @@ type SearchItem = { id: string; search: string };
 function TestingTrendGraphWithIndex({
   searchIndex,
   tests,
-  ...props
 }: {
   searchIndex: Document<SearchItem>;
   tests: TestcaseEntry[];
-  [key: string]: any;
 }) {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [filters, setFilters] = useState<Filters>(
-    parseFiltersFromSearch(location.search, {
-      limit: 100,
-    }),
-  );
+  const [pagination, setPagination] = useState<{
+    offset: number;
+    limit: number;
+  }>({
+    offset: 0,
+    limit: 100,
+  });
+
   const testsByIds = tests.reduce(
     (acc, test) => {
       acc[test.id] = test;
@@ -141,23 +138,21 @@ function TestingTrendGraphWithIndex({
   const [filter, setFilter] = useState("");
   const [debouncedFilter] = useDebounce(filter, 1000);
 
-  useEffect(() => {
-    const newSearch = createSearchFromFilters(filters);
-    navigate(`/analytics/tests${newSearch}`, { replace: true });
-  }, [navigate, filters]);
-
   const filteredTests = useMemo(() => {
     if (!debouncedFilter)
-      return tests.slice(filters.offset, filters.offset + filters.limit);
+      return tests.slice(
+        pagination.offset,
+        pagination.offset + pagination.limit,
+      );
     const rawResults = searchIndex.search(debouncedFilter, {
       pluck: "search",
-      limit: filters.limit,
+      limit: pagination.limit,
     });
     return rawResults.map((id) => testsByIds[id]);
-  }, [tests, debouncedFilter, searchIndex, testsByIds, filters]);
+  }, [tests, debouncedFilter, searchIndex, testsByIds, pagination]);
 
   return (
-    <div {...props}>
+    <div>
       <Card className="pf-v6-u-mt-md">
         <CardBody>
           <Form onSubmit={(e) => e.preventDefault()}>
@@ -191,17 +186,17 @@ function TestingTrendGraphWithIndex({
         <Card className="pf-v6-u-mt-md">
           <CardBody style={{ overflowX: "auto" }}>
             <Pagination
-              perPage={filters.limit}
-              page={offsetAndLimitToPage(filters.offset, filters.limit)}
+              perPage={pagination.limit}
+              page={offsetAndLimitToPage(pagination.offset, pagination.limit)}
               itemCount={tests.length}
               onSetPage={(_, newPage) => {
-                setFilters({
-                  ...filters,
-                  offset: pageAndLimitToOffset(newPage, filters.limit),
+                setPagination({
+                  ...pagination,
+                  offset: pageAndLimitToOffset(newPage, pagination.limit),
                 });
               }}
-              onPerPageSelect={(e, newPerPage) => {
-                setFilters({ ...filters, limit: newPerPage });
+              onPerPageSelect={(_, newPerPage) => {
+                setPagination({ ...pagination, limit: newPerPage });
               }}
               isDisabled={debouncedFilter !== ""}
             />
@@ -221,14 +216,14 @@ function TestingTrendGraphWithIndex({
                   </Td>
                   <Td colSpan={3}>
                     {debouncedFilter !== "" &&
-                      filteredTests.length === filters.limit && (
+                      filteredTests.length === pagination.limit && (
                         <Label
                           isCompact
                           icon={<ExclamationTriangleIcon />}
                           color="orange"
                           className="pf-v6-u-ml-xs"
                         >
-                          {`For performance reasons, the search only return the ${filters.limit} first matching elements. Be more specific in your search.`}
+                          {`For performance reasons, the search only return the ${pagination.limit} first matching elements. Be more specific in your search.`}
                         </Label>
                       )}
                   </Td>
@@ -333,20 +328,13 @@ function TestingTrend({
 }
 
 export default function TestsAnalysisPage() {
-  const [params, setParams] = useState<{
-    query: string;
-    after: string;
-    before: string;
-  }>({
-    query: "",
-    after: "",
-    before: "",
-  });
-  const { query, after, before } = params;
-  const shouldSearch = query !== "" && after !== "" && before !== "";
-  const { data, isLoading, isFetching } = useGetAnalyticsTestsJobsQuery(
-    shouldSearch ? params : skipToken,
-  );
+  const [getAnalyticsTestsJobsQuery, { data, isLoading, isFetching }] =
+    useLazyGetAnalyticsTestsJobsQuery();
+  const getTests = (values: AnalyticsToolbarSearch) => {
+    if (values.query) {
+      getAnalyticsTestsJobsQuery(values);
+    }
+  };
   return (
     <PageSection>
       <Breadcrumb
@@ -359,10 +347,13 @@ export default function TestsAnalysisPage() {
       <Content component="h1">Tests Analysis</Content>
       <Content component="p">Analyze your tests and detect flaky ones.</Content>
       <AnalyticsToolbar
-        onLoad={setParams}
-        onSearch={setParams}
+        onLoad={getTests}
+        onSearch={getTests}
         isLoading={isFetching}
         data={data}
+        initialSearches={{
+          limit: 10,
+        }}
       />
       <TestingTrend
         isLoading={isLoading}

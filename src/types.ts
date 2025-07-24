@@ -453,9 +453,19 @@ export interface AnalyticsToolbarSearch {
   range: TimeRange;
   after: string;
   before: string;
+  limit: number;
+  offset: number;
 }
 
 export type AnalyticsToolbarSearches = Record<string, AnalyticsToolbarSearch>;
+
+export type AnalyticsToolbarLocations = Record<
+  string,
+  {
+    pathname: string;
+    search: string;
+  }
+>;
 
 export type colorTheme = "dark" | "light";
 

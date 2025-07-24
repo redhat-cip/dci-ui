@@ -1,8 +1,9 @@
 import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
 import AnalyticsJobsModal from "./AnalyticsJobsModal";
-import { HelperText, HelperTextItem, Skeleton } from "@patternfly/react-core";
+import { HelperText, HelperTextItem } from "@patternfly/react-core";
 import { formatDate } from "services/date";
 import { DateTime } from "luxon";
+import { InfoIcon } from "@patternfly/react-icons";
 
 function LastSyncInfo({
   firstSyncDate,
@@ -29,28 +30,21 @@ function LastSyncInfo({
 }
 
 export default function QueryToolbarInfo<T extends IAnalyticsJob>({
-  isLoading,
   data,
-  ...props
+  className,
 }: {
-  isLoading: boolean;
   data: IGenericAnalyticsData<T> | undefined;
-  [key: string]: any;
+  className?: string;
 }) {
-  if (isLoading) {
-    return <Skeleton screenreaderText="Loading jobs hint" />;
-  }
-
   if (data === undefined) {
     return null;
   }
   const nbOfJobs = data.jobs.length;
-  const nbTotalJobs = data._meta.total;
   if (nbOfJobs === 0) {
     return (
-      <div {...props}>
+      <div className={className}>
         <HelperText>
-          <HelperTextItem>
+          <HelperTextItem icon={<InfoIcon />}>
             There are no jobs that match your search.
             <LastSyncInfo
               firstSyncDate={data._meta.first_sync_date || ""}
@@ -63,24 +57,14 @@ export default function QueryToolbarInfo<T extends IAnalyticsJob>({
     );
   }
   return (
-    <div {...props}>
+    <div className={className}>
       <HelperText>
-        <HelperTextItem>
-          {nbOfJobs < nbTotalJobs ? (
-            <span>
-              Showing <b>{`${nbOfJobs} of ${nbTotalJobs}`} jobs</b>
-            </span>
-          ) : (
-            <b>{`${nbOfJobs} job${nbOfJobs > 1 ? "s" : ""}`}</b>
-          )}{" "}
-          matching your search.
-          <AnalyticsJobsModal className="pf-v6-u-ml-xs" jobs={data.jobs} />
-        </HelperTextItem>
-        <HelperTextItem>
+        <HelperTextItem icon={<InfoIcon />}>
           <LastSyncInfo
             firstSyncDate={data._meta.first_sync_date || ""}
             lastSyncDate={data._meta.last_sync_date}
           />
+          <AnalyticsJobsModal className="pf-v6-u-ml-xs" jobs={data.jobs} />
         </HelperTextItem>
       </HelperText>
     </div>

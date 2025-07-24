@@ -13,11 +13,14 @@ import {
 } from "@patternfly/react-core";
 import { Breadcrumb } from "ui";
 import { createRef, useEffect, useMemo, useState } from "react";
-import { useGetAnalyticJobsQuery } from "analytics/analyticsApi";
+import { useLazyGetAnalyticJobsQuery } from "analytics/analyticsApi";
 import AnalyticsToolbar from "analytics/toolbar/AnalyticsToolbar";
 import { groupByKeys, groupByKeysWithLabel } from "types";
-import type { IAnalyticsJob, IGenericAnalyticsData } from "types";
-import { skipToken } from "@reduxjs/toolkit/query";
+import type {
+  AnalyticsToolbarSearch,
+  IAnalyticsJob,
+  IGenericAnalyticsData,
+} from "types";
 import Select from "ui/form/Select";
 import {
   getJobStats,
@@ -233,20 +236,13 @@ function JobStats({
 }
 
 export default function JobStatsPage() {
-  const [params, setParams] = useState<{
-    query: string;
-    after: string;
-    before: string;
-  }>({
-    query: "",
-    after: "",
-    before: "",
-  });
-  const { query, after, before } = params;
-  const shouldSearch = query !== "" && after !== "" && before !== "";
-  const { data, isLoading, isFetching } = useGetAnalyticJobsQuery(
-    shouldSearch ? params : skipToken,
-  );
+  const [getAnalyticJobsQuery, { data, isLoading, isFetching }] =
+    useLazyGetAnalyticJobsQuery();
+  const search = (values: AnalyticsToolbarSearch) => {
+    if (values.query) {
+      getAnalyticJobsQuery(values);
+    }
+  };
   return (
     <PageSection>
       <Breadcrumb
@@ -259,8 +255,8 @@ export default function JobStatsPage() {
       <Content component="h1">Job Stats</Content>
       <Content component="p">Build a statistical view of your jobs!</Content>
       <AnalyticsToolbar
-        onLoad={setParams}
-        onSearch={setParams}
+        onLoad={search}
+        onSearch={search}
         isLoading={isFetching}
         data={data}
       />

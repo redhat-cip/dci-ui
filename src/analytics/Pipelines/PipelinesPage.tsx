@@ -21,6 +21,7 @@ import { formatDate } from "services/date";
 import { createRef, Fragment, useState } from "react";
 import { Link } from "react-router";
 import type {
+  AnalyticsToolbarSearch,
   IAnalyticsResultsJob,
   IGenericAnalyticsData,
   IJobStatus,
@@ -295,7 +296,11 @@ function PipelinesPerDay({
 export default function PipelinesPage() {
   const [getAnalyticJobs, { data, isLoading, isFetching }] =
     useLazyGetAnalyticsResultsJobsQuery();
-
+  const search = (values: AnalyticsToolbarSearch) => {
+    if (values.query) {
+      getAnalyticJobs(values);
+    }
+  };
   return (
     <PageSection>
       <Breadcrumb
@@ -309,14 +314,8 @@ export default function PipelinesPage() {
       <AnalyticsToolbar
         isLoading={isFetching}
         data={data}
-        onLoad={({ query, after, before }) => {
-          if (query !== "" && after !== "" && before !== "") {
-            getAnalyticJobs({ query, after, before });
-          }
-        }}
-        onSearch={({ query, after, before }) => {
-          getAnalyticJobs({ query, after, before });
-        }}
+        onLoad={search}
+        onSearch={search}
       />
       <PipelinesPerDay
         isLoading={isLoading}

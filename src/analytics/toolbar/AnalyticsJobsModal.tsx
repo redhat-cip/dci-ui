@@ -6,19 +6,18 @@ import AnalyticsJobTable from "analytics/jobs/AnalyticsJobTable";
 
 export default function AnalyticsJobsModal<T extends IAnalyticsJob>({
   jobs,
-  ...props
+  className,
 }: {
   jobs: T[];
-  [key: string]: any;
+  className?: string;
 }) {
   const { isOpen, show, hide } = useModal(false);
 
   return (
     <>
-      <Button variant="link" isInline onClick={show} {...props}>
-        See the job{jobs.length > 1 ? "s" : ""}
+      <Button variant="link" isInline onClick={show} className={className}>
+        See the {jobs.length} job{jobs.length > 1 ? "s" : ""}
       </Button>
-      .
       <Modal
         id="jobs-list-modal"
         aria-label="Analytics jobs list"
