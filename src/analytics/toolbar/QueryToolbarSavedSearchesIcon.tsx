@@ -134,14 +134,14 @@ export default function QueryToolbarSavedSearchesIcon() {
                 </EmptyStateBody>
               </EmptyState>
             ) : (
-              <div className="pf-v6-u-display-flex pf-v6-u-flex-direction-column pf-v6-u-gap-md">
+              <div>
                 {locationKeys.map((location) => (
                   <Label
                     key={location}
                     color="green"
                     onClick={() => loadSavedLocation(location)}
                     onClose={() => deleteSavedLocation(location)}
-                    className="pf-v6-u-cursor-pointer pf-v6-u-mr-xs"
+                    className="pf-v6-u-cursor-pointer pf-v6-u-mr-xs pf-v6-u-mb-xs"
                   >
                     {location}
                   </Label>
@@ -199,7 +199,7 @@ export default function QueryToolbarSavedSearchesIcon() {
                           loadSavedLocation(location);
                         }}
                         color="green"
-                        className="pf-v6-u-cursor-pointer pf-v6-u-mr-xs"
+                        className="pf-v6-u-cursor-pointer pf-v6-u-mr-xs pf-v6-u-mb-xs"
                       >
                         {location}
                       </Label>
