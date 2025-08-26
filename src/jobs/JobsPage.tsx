@@ -59,7 +59,7 @@ function Jobs() {
     return <LoadingPageSection />;
   }
 
-  if (!data || data.jobs.length === 0) {
+  if (!data) {
     return (
       <EmptyState
         title="No job"
