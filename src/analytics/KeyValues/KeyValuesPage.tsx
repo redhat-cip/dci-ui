@@ -189,11 +189,7 @@ function KeyValueGraph({
   );
 }
 
-function KeyValuesGraphs({
-  data,
-}: {
-  data: IAnalyticsKeysValuesJob[];
-}) {
+function KeyValuesGraphs({ data }: { data: IAnalyticsKeysValuesJob[] }) {
   const graphRef = createRef<HTMLDivElement>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [graphs, setGraphs] = useState<IKeyValueGraph[]>(

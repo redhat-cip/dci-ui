@@ -54,6 +54,14 @@ function RemotecisSection() {
     useUpdateRemoteciMutation();
   const [deleteRemoteci] = useDeleteRemoteciMutation();
 
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
+
   if (isLoading) {
     return <LoadingPageSection />;
   }
@@ -75,15 +83,9 @@ function RemotecisSection() {
                 onChange={(e, search) => setInputSearch(search)}
                 onSearch={(e, name) => {
                   if (name.trim().endsWith("*")) {
-                    setFilters({
-                      ...filters,
-                      name,
-                    });
+                    setFiltersAndResetPagination({ name });
                   } else {
-                    setFilters({
-                      ...filters,
-                      name: `${name}*`,
-                    });
+                    setFiltersAndResetPagination({ name: `${name}*` });
                   }
                 }}
               />

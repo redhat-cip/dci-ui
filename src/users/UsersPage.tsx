@@ -41,6 +41,14 @@ function User() {
 
   const { data, isLoading } = useListUsersQuery(filters);
 
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
+
   if (isLoading) {
     return <LoadingPageSection />;
   }
@@ -65,15 +73,9 @@ function User() {
                 onChange={(e, search) => setInputSearch(search)}
                 onSearch={(e, email) => {
                   if (email.trim().endsWith("*")) {
-                    setFilters({
-                      ...filters,
-                      email,
-                    });
+                    setFiltersAndResetPagination({ email });
                   } else {
-                    setFilters({
-                      ...filters,
-                      email: `${email}*`,
-                    });
+                    setFiltersAndResetPagination({ email: `${email}*` });
                   }
                 }}
               />
@@ -117,10 +119,7 @@ function User() {
                 <Button
                   variant="link"
                   onClick={() =>
-                    setFilters({
-                      ...filters,
-                      email: `${filters.email}*`,
-                    })
+                    setFiltersAndResetPagination({ email: `${filters.email}*` })
                   }
                 >
                   Try {filters.email}* instead

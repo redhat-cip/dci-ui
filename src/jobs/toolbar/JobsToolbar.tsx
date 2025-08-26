@@ -70,6 +70,14 @@ export default function JobsToolbar({
     showQLToolbar,
   ]);
 
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
+
   return (
     <Toolbar
       id="toolbar-jobs"
@@ -117,33 +125,37 @@ export default function JobsToolbar({
               <TeamToolbarFilter
                 showToolbarItem={currentCategory === "Team"}
                 id={filters.team_id}
-                onClear={() => setFilters({ ...filters, team_id: null })}
+                onClear={() => setFiltersAndResetPagination({ team_id: null })}
                 onSelect={(team) =>
-                  setFilters({ ...filters, team_id: team.id })
+                  setFiltersAndResetPagination({ team_id: team.id })
                 }
               />
               <RemoteciToolbarFilter
                 showToolbarItem={currentCategory === "Remoteci"}
                 id={filters.remoteci_id}
-                onClear={() => setFilters({ ...filters, remoteci_id: null })}
+                onClear={() =>
+                  setFiltersAndResetPagination({ remoteci_id: null })
+                }
                 onSelect={(remoteci) =>
-                  setFilters({ ...filters, remoteci_id: remoteci.id })
+                  setFiltersAndResetPagination({ remoteci_id: remoteci.id })
                 }
               />
               <ProductToolbarFilter
                 showToolbarItem={currentCategory === "Product"}
                 id={filters.product_id}
-                onClear={() => setFilters({ ...filters, product_id: null })}
+                onClear={() =>
+                  setFiltersAndResetPagination({ product_id: null })
+                }
                 onSelect={(product) =>
-                  setFilters({ ...filters, product_id: product.id })
+                  setFiltersAndResetPagination({ product_id: product.id })
                 }
               />
               <TopicToolbarFilter
                 showToolbarItem={currentCategory === "Topic"}
                 id={filters.topic_id}
-                onClear={() => setFilters({ ...filters, topic_id: null })}
+                onClear={() => setFiltersAndResetPagination({ topic_id: null })}
                 onSelect={(topic) =>
-                  setFilters({ ...filters, topic_id: topic.id })
+                  setFiltersAndResetPagination({ topic_id: topic.id })
                 }
               />
               <ListToolbarFilter
@@ -151,23 +163,25 @@ export default function JobsToolbar({
                 categoryName="Tag"
                 placeholderText="Search by tag"
                 items={filters.tags ?? []}
-                onSubmit={(tags) => setFilters({ ...filters, tags })}
+                onSubmit={(tags) => setFiltersAndResetPagination({ tags })}
               />
               <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Config"}
                 categoryName="Config"
                 value={filters.configuration}
                 onSubmit={(configuration) =>
-                  setFilters({ ...filters, configuration })
+                  setFiltersAndResetPagination({ configuration })
                 }
-                onClear={() => setFilters({ ...filters, configuration: null })}
+                onClear={() =>
+                  setFiltersAndResetPagination({ configuration: null })
+                }
               />
               <TextInputToolbarFilter
                 categoryName="Name"
                 showToolbarItem={currentCategory === "Name"}
                 value={filters.name}
-                onSubmit={(name) => setFilters({ ...filters, name })}
-                onClear={() => setFilters({ ...filters, name: null })}
+                onSubmit={(name) => setFiltersAndResetPagination({ name })}
+                onClear={() => setFiltersAndResetPagination({ name: null })}
               />
               <TextInputToolbarFilter
                 categoryName="Pipeline id"
@@ -175,10 +189,12 @@ export default function JobsToolbar({
                 value={filters.pipeline_id}
                 onSubmit={(pipeline_id) => {
                   if (isUUID(pipeline_id)) {
-                    setFilters({ ...filters, pipeline_id });
+                    setFiltersAndResetPagination({ pipeline_id });
                   }
                 }}
-                onClear={() => setFilters({ ...filters, pipeline_id: null })}
+                onClear={() =>
+                  setFiltersAndResetPagination({ pipeline_id: null })
+                }
               />
             </ToolbarItem>
           </ToolbarGroup>
@@ -188,8 +204,8 @@ export default function JobsToolbar({
             <ToolbarItem>
               <StatusToolbarFilter
                 status={filters.status}
-                onSelect={(status) => setFilters({ ...filters, status })}
-                onClear={() => setFilters({ ...filters, status: null })}
+                onSelect={(status) => setFiltersAndResetPagination({ status })}
+                onClear={() => setFiltersAndResetPagination({ status: null })}
               />
             </ToolbarItem>
           </ToolbarGroup>
@@ -198,8 +214,8 @@ export default function JobsToolbar({
           <>
             <QLToolbar
               query={filters.query}
-              onSearch={(query) => setFilters({ ...filters, query })}
-              onClear={() => setFilters({ ...filters, query: null })}
+              onSearch={(query) => setFiltersAndResetPagination({ query })}
+              onClear={() => setFiltersAndResetPagination({ query: null })}
             />
             <ToolbarItem variant="separator" />
           </>
@@ -232,7 +248,7 @@ export default function JobsToolbar({
                     offset: pageAndLimitToOffset(newPage, filters.limit),
                   })
                 }
-                onPerPageSelect={(e, newPerPage) => {
+                onPerPageSelect={(_, newPerPage) => {
                   setFilters({ ...filters, limit: newPerPage });
                 }}
               />

@@ -40,16 +40,22 @@ export default function ComponentsToolbar({
     Categories[0],
   );
 
-  function clearAllFilters() {
-    setCurrentCategory(Categories[0]);
-    setFilters(getDefaultFilters());
-  }
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
 
   return (
     <Toolbar
       id="toolbar-components"
       collapseListedFiltersBreakpoint="xl"
-      clearAllFilters={clearAllFilters}
+      clearAllFilters={() => {
+        setCurrentCategory(Categories[0]);
+        setFilters(getDefaultFilters());
+      }}
     >
       <ToolbarContent>
         <ToolbarGroup>
@@ -97,32 +103,32 @@ export default function ComponentsToolbar({
                 value={filters.display_name}
                 onSubmit={(display_name) => {
                   if (display_name.trim().endsWith("*")) {
-                    setFilters({
-                      ...filters,
+                    setFiltersAndResetPagination({
                       display_name,
                     });
                   } else {
-                    setFilters({
-                      ...filters,
+                    setFiltersAndResetPagination({
                       display_name: `${display_name}*`,
                     });
                   }
                 }}
-                onClear={() => setFilters({ ...filters, display_name: null })}
+                onClear={() =>
+                  setFiltersAndResetPagination({ display_name: null })
+                }
               />
               <TextInputToolbarFilter
                 showToolbarItem={currentCategory === "Type"}
                 categoryName="Type"
                 value={filters.type}
-                onSubmit={(type) => setFilters({ ...filters, type })}
-                onClear={() => setFilters({ ...filters, type: null })}
+                onSubmit={(type) => setFiltersAndResetPagination({ type })}
+                onClear={() => setFiltersAndResetPagination({ type: null })}
               />
               <ListToolbarFilter
                 showToolbarItem={currentCategory === "Tag"}
                 categoryName="Tag"
                 placeholderText="Search by tag"
                 items={filters.tags ?? []}
-                onSubmit={(tags) => setFilters({ ...filters, tags })}
+                onSubmit={(tags) => setFiltersAndResetPagination({ tags })}
               />
             </InputGroupItem>
           </InputGroup>

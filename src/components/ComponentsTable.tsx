@@ -16,6 +16,14 @@ export default function ComponentsTable({
   filters: Filters;
   setFilters: (filters: Filters) => void;
 }) {
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
+
   return (
     <Table aria-label="Components label">
       <Thead>
@@ -51,8 +59,7 @@ export default function ComponentsTable({
                       color="blue"
                       onClick={() => {
                         if (filters.tags && filters.tags.indexOf(tag) === -1) {
-                          setFilters({
-                            ...filters,
+                          setFiltersAndResetPagination({
                             tags: [...filters.tags, tag],
                           });
                         }
@@ -68,7 +75,7 @@ export default function ComponentsTable({
                 isCompact
                 className="pointer"
                 onClick={() => {
-                  setFilters({ ...filters, type: component.type });
+                  setFiltersAndResetPagination({ type: component.type });
                 }}
               >
                 {component.type}

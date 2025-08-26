@@ -36,14 +36,19 @@ export default function RHELComponentsTable({
   filters: Filters;
   setFilters: (filters: Filters) => void;
 }) {
-  function onTagClicked(tag: string) {
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
+
+  const onTagClicked = (tag: string) => {
     if (filters.tags && filters.tags.indexOf(tag) === -1) {
-      setFilters({
-        ...filters,
-        tags: [...filters.tags, tag],
-      });
+      setFiltersAndResetPagination({ tags: [...filters.tags, tag] });
     }
-  }
+  };
 
   return (
     <Table aria-label="RHEL components table">
@@ -111,7 +116,7 @@ export default function RHELComponentsTable({
                   isCompact
                   className="pointer"
                   onClick={() => {
-                    setFilters({ ...filters, type: component.type });
+                    setFiltersAndResetPagination({ type: component.type });
                   }}
                 >
                   {component.type}

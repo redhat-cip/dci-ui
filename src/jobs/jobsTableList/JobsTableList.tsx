@@ -28,6 +28,13 @@ export default function JobsTableList({
   setFilters,
   columns,
 }: JobsTableListProps) {
+  const setFiltersAndResetPagination = (f: Partial<Filters>) => {
+    setFilters({
+      ...filters,
+      ...f,
+      offset: 0,
+    });
+  };
   if (jobs.length === 0) return null;
   const { jobNodes: jobsGroupedByPipeline, maxLevel } =
     groupJobsByPipeline(jobs);
@@ -70,47 +77,26 @@ export default function JobsTableList({
             sizeStatusLabel={sizeStatusLabel}
             columns={columns}
             onStatusClicked={(status) => {
-              setFilters({
-                ...filters,
-                status,
-              });
+              setFiltersAndResetPagination({ status });
             }}
             onTagClicked={(tag) => {
               const tags = filters.tags ?? [];
-              setFilters({
-                ...filters,
-                tags: [...tags, tag],
-              });
+              setFiltersAndResetPagination({ tags: [...tags, tag] });
             }}
             onRemoteciClicked={(remoteci) => {
-              setFilters({
-                ...filters,
-                remoteci_id: remoteci.id,
-              });
+              setFiltersAndResetPagination({ remoteci_id: remoteci.id });
             }}
             onTeamClicked={(team) => {
-              setFilters({
-                ...filters,
-                team_id: team.id,
-              });
+              setFiltersAndResetPagination({ team_id: team.id });
             }}
             onTopicClicked={(topic) => {
-              setFilters({
-                ...filters,
-                topic_id: topic.id,
-              });
+              setFiltersAndResetPagination({ topic_id: topic.id });
             }}
             onConfigurationClicked={(configuration) => {
-              setFilters({
-                ...filters,
-                configuration,
-              });
+              setFiltersAndResetPagination({ configuration });
             }}
             onPipelineClicked={(pipeline) => {
-              setFilters({
-                ...filters,
-                pipeline_id: pipeline.id,
-              });
+              setFiltersAndResetPagination({ pipeline_id: pipeline.id });
             }}
           />
         ))}
