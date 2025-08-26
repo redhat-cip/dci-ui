@@ -208,7 +208,7 @@ export const {
         return getAnalyticsJobs<IAnalyticsTestsJob>(
           {
             ...arg,
-            includes: `${genericIncludes},tests.file_id,tests.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
+            includes: `${genericIncludes},tests.file_id,tests.name,tests.testsuites.name,tests.testsuites.testcases.name,tests.testsuites.testcases.action,tests.testsuites.testcases.classname`,
           },
           fetchWithBQ,
         );

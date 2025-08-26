@@ -3,6 +3,7 @@ import type { IAnalyticsTestsJob, ITestCaseActionType } from "types";
 export type TestCaseResult = ITestCaseActionType | "absent";
 
 export type TestcaseEntry = {
+  testsuiteName: string,
   classname: string;
   filename: string;
   name: string;
@@ -21,6 +22,7 @@ export function analyseTests(jobs: IAnalyticsTestsJob[]): TestcaseEntry[] {
   const testcaseMap: Record<
     string,
     {
+      testsuiteName: string,
       filename: string;
       classname: string;
       name: string;
@@ -34,12 +36,14 @@ export function analyseTests(jobs: IAnalyticsTestsJob[]): TestcaseEntry[] {
       const fileId = test.file_id;
       const filename = test.name;
       for (const suite of test.testsuites ?? []) {
+        const testsuiteName = suite.name
         for (const testcase of suite.testcases ?? []) {
           const classname = testcase.classname;
           const name = testcase.name;
-          const key = `${filename}|${classname}|${name}`;
+          const key = `${testsuiteName}|${filename}|${classname}|${name}`;
           if (!testcaseMap[key]) {
             testcaseMap[key] = {
+              testsuiteName,
               filename,
               classname,
               name,
@@ -61,6 +65,7 @@ export function analyseTests(jobs: IAnalyticsTestsJob[]): TestcaseEntry[] {
     filename: entry.filename,
     classname: entry.classname,
     name: entry.name,
+    testsuiteName: entry.testsuiteName,
     jobs: jobMeta.map(({ id, created_at }) => ({
       id,
       created_at,

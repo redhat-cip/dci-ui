@@ -204,9 +204,10 @@ function TestingTrendGraphWithIndex({
               <Thead>
                 <Tr>
                   <Th width={20}>Jobs status</Th>
-                  <Th width={20}>File name</Th>
-                  <Th width={20}>Class name</Th>
-                  <Th width={40}>Test case</Th>
+                  <Th width={10}>Test suite</Th>
+                  <Th width={10}>File name</Th>
+                  <Th width={10}>Class name</Th>
+                  <Th width={50}>Test case</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -236,6 +237,7 @@ function TestingTrendGraphWithIndex({
                         jobs={testcase.jobs}
                       />
                     </Td>
+                    <Td>{testcase.testsuiteName}</Td>
                     <Td>{testcase.filename}</Td>
                     <Td>{testcase.classname}</Td>
                     <Td>{testcase.name}</Td>
@@ -285,7 +287,7 @@ function TestingTrendGraph({
     tests.forEach((test) => {
       idx.add({
         id: test.id,
-        search: `${test.filename} ${test.classname} ${test.name}`,
+        search: `${test.testsuiteName} ${test.filename} ${test.classname} ${test.name}`,
       });
     });
     return idx;

@@ -21,6 +21,7 @@ describe("getTestingTrend", () => {
             name: "test 2",
             testsuites: [
               {
+                name: "testsuite",
                 testcases: [
                   {
                     action: "success",
@@ -46,6 +47,7 @@ describe("getTestingTrend", () => {
             name: "test 2",
             testsuites: [
               {
+                name: "testsuite",
                 testcases: [
                   {
                     action: "failure",
@@ -63,10 +65,11 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
+        testsuiteName: "testsuite",
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",
-        id: "test 2|class1|testcase 1",
+        id: "testsuite|test 2|class1|testcase 1",
         jobs: [
           {
             id: analyticsTwoJobs[0].id,
@@ -83,7 +86,8 @@ describe("getTestingTrend", () => {
         ],
       },
       {
-        id: "test 2|class1|testcase 2",
+        testsuiteName: "testsuite",
+        id: "testsuite|test 2|class1|testcase 2",
         classname: "class1",
         filename: "test 2",
         name: "testcase 2",
@@ -119,6 +123,7 @@ describe("getTestingTrend", () => {
             name: "test 2",
             testsuites: [
               {
+                name: "testsuite",
                 testcases: [
                   {
                     action: "failure",
@@ -136,7 +141,8 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        id: "test 2|class1|testcase 1",
+        testsuiteName: "testsuite",
+        id: "testsuite|test 2|class1|testcase 1",
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",
@@ -158,7 +164,7 @@ describe("getTestingTrend", () => {
     ]);
   });
 
-  test("nrt same testcases are per test files", () => {
+  test("nrt same testcases are per test files and testsuite", () => {
     const jobs: IAnalyticsTestsJob[] = [
       {
         ...analyticsTwoJobs[0],
@@ -168,6 +174,7 @@ describe("getTestingTrend", () => {
             name: "test 1",
             testsuites: [
               {
+                name: "testsuite1",
                 testcases: [
                   {
                     action: "failure",
@@ -188,6 +195,17 @@ describe("getTestingTrend", () => {
             name: "test 2",
             testsuites: [
               {
+                name: "testsuite1",
+                testcases: [
+                  {
+                    action: "failure",
+                    classname: "class1",
+                    name: "testcase 1",
+                  },
+                ],
+              },
+              {
+                name: "testsuite2",
                 testcases: [
                   {
                     action: "failure",
@@ -205,7 +223,8 @@ describe("getTestingTrend", () => {
     const trend = analyseTests(jobs);
     expect(trend).toEqual([
       {
-        id: "test 1|class1|testcase 1",
+        testsuiteName: "testsuite1",
+        id: "testsuite1|test 1|class1|testcase 1",
         classname: "class1",
         filename: "test 1",
         name: "testcase 1",
@@ -225,7 +244,29 @@ describe("getTestingTrend", () => {
         ],
       },
       {
-        id: "test 2|class1|testcase 1",
+        testsuiteName: "testsuite1",
+        id: "testsuite1|test 2|class1|testcase 1",
+        classname: "class1",
+        filename: "test 2",
+        name: "testcase 1",
+        jobs: [
+          {
+            id: analyticsTwoJobs[0].id,
+            created_at: analyticsTwoJobs[0].created_at,
+            fileId: null,
+            status: "absent",
+          },
+          {
+            id: analyticsTwoJobs[1].id,
+            created_at: analyticsTwoJobs[1].created_at,
+            fileId: "2b131003-b149-4d32-bf7d-b3ad5bc1fede",
+            status: "failure",
+          },
+        ],
+      },
+      {
+        testsuiteName: "testsuite2",
+        id: "testsuite2|test 2|class1|testcase 1",
         classname: "class1",
         filename: "test 2",
         name: "testcase 1",

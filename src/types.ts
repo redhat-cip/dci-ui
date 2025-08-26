@@ -587,6 +587,7 @@ export interface IAnalyticsResultsJob extends IAnalyticsJob {
 }
 
 export interface IAnalyticsTestsuite {
+  name: string
   testcases?: {
     action: ITestCaseActionType;
     classname: string;
