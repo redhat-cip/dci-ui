@@ -33,7 +33,7 @@ import {
   chart_color_red_orange_400,
 } from "@patternfly/react-tokens";
 import ScreeshotNodeButton from "ui/ScreenshotNodeButton";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Document } from "flexsearch";
 import { ExclamationTriangleIcon } from "@patternfly/react-icons";
 import { useDebounce } from "use-debounce";
@@ -119,6 +119,7 @@ function TestingTrendGraphWithIndex({
   searchIndex: Document<SearchItem>;
   tests: TestcaseEntry[];
 }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [pagination, setPagination] = useState<{
     offset: number;
     limit: number;
@@ -135,8 +136,19 @@ function TestingTrendGraphWithIndex({
     {} as { [id: string]: TestcaseEntry },
   );
   const graphRef = createRef<HTMLDivElement>();
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState(searchParams.get("filter") || "");
   const [debouncedFilter] = useDebounce(filter, 1000);
+
+  const updateFilter = (newFilter: string) => {
+    setFilter(newFilter);
+    const newParams = new URLSearchParams(searchParams);
+    if (newFilter) {
+      newParams.set("filter", newFilter);
+    } else {
+      newParams.delete("filter");
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   const filteredTests = useMemo(() => {
     if (!debouncedFilter)
@@ -165,7 +177,7 @@ function TestingTrendGraphWithIndex({
                     value={filter}
                     onChange={(event, value) => {
                       event.preventDefault();
-                      return setFilter(value);
+                      return updateFilter(value);
                     }}
                     placeholder="Filter by file name, class name or testcase"
                     style={{ minWidth: "300px" }}
