@@ -1,3 +1,6 @@
+⚠️ **Note:** This project has been migrated to a new repository.
+Please visit the new location [here](https://github.com/distributedci/dci-ui).
+
 # dci-ui
 
 Source code for dci user interface. [https://distributed-ci.io](https://distributed-ci.io)
